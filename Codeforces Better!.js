@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.44
+// @version      1.45
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -2408,38 +2408,49 @@ async function translate_openai(raw) {
     var data;
     if (is_oldLatex) {
         data = {
-            prompt: "(You:请帮我将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")",
             model: "gpt-3.5-turbo",
+            messages : [{
+                role: "user",
+                content: "(请将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
+            }],
             temperature: 0.7
         };
     } else {
         data = {
-            prompt: "(You:请帮我将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")",
             model: "gpt-3.5-turbo",
+            messages : [{
+                role: "user",
+                content: "(请将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
+            }],
             temperature: 0.7
         };
     };
     return new Promise(function (resolve, reject) {
         GM_xmlhttpRequest({
             method: 'POST',
-            url: (showOpneAiAdvanced && GM_getValue("openai_proxy") !== null && GM_getValue("openai_proxy") !== "") ? GM_getValue("openai_proxy") : 'https://api.openai.com/v1/completions',
+            url: (showOpneAiAdvanced && GM_getValue("openai_proxy") !== null && GM_getValue("openai_proxy") !== "") ? GM_getValue("openai_proxy") : 'https://api.openai.com/v1/chat/completions', // Use the chat endpoint here
+
             data: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + GM_getValue("openai_key") + ''
+                'Authorization': 'Bearer ' + GM_getValue("openai_key")
             },
             responseType: 'json',
-            onload: function (res) {
-                if (res.status === 200) {
-                    openai_retext = res.response.choices[0].text;
-                    openai_retext = openai_retext.replace(/^\s+/, '');
+            onload: function (response) {
+                if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
+                    resolve("翻译出错，请重试\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
+                } else {
+                    openai_retext = response.response.choices[0].message.content;
+                    // openai_retext = openai_retext.replace(/^\s+/, '');
                     resolve(openai_retext);
                 }
-                else {
-                    resolve("翻译出错，请重试\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈\n\n报错信息：" + JSON.stringify(res.response, null, '\n'));
-                }
-            }
+            },
+            onerror: function (response) {
+                console.error(response.statusText);
+                reject(response.statusText);
+            },
         });
+
     });
 }
 
