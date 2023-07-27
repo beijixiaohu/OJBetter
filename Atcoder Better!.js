@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.00
+// @version      1.01
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -43,6 +43,7 @@ const translation = getGMValue("translation", "deepl");
 const enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
 const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
 const showLoading = getGMValue("showLoading", true);
+const loaded = getGMValue("loaded", false);
 var x_api2d_no_cache = getGMValue("x_api2d_no_cache", true);
 var showOpneAiAdvanced = getGMValue("showOpneAiAdvanced", false);
 
@@ -202,7 +203,7 @@ button.html2mdButton.AtBetter_setting.open {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 320px;
+    width: 360px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
     background-color: #edf1ff;
@@ -614,7 +615,7 @@ function getCookie(name) {
         const [cookieName, cookieValue] = cookie.split("=");
 
         if (cookieName === name) {
-            return decodeURIComponent(cookieValue); 
+            return decodeURIComponent(cookieValue);
         }
     }
     return "";
@@ -659,7 +660,7 @@ function getCookie(name) {
         onload: function (response) {
             const scriptData = JSON.parse(response.responseText);
             const skipUpdate = getCookie("skipUpdate");
-    
+
             if (
                 scriptData.name === GM_info.script.name &&
                 compareVersions(scriptData.version, GM_info.script.version) === 1 &&
@@ -690,15 +691,15 @@ function getCookie(name) {
                     </div>
                 `);
 
-                $("#skip_update").click(function() {
+                $("#skip_update").click(function () {
                     document.cookie = "skipUpdate=true; expires=session; path=/";
                     styleElement.remove();
                     $("#update_panel").remove();
                 });
             }
         }
-    });    
-    
+    });
+
 })();
 
 // 汉化替换
@@ -794,6 +795,7 @@ function getCookie(name) {
         ];
         traverseTextNodes($('.panel-title'), rules3);
         traverseTextNodes($('.h3'), rules3);
+        strictTraverseTextNodes($('h3'), rules3);
 
         const rules4 = [
             { match: 'Rated Range', replace: '限定范围' },
@@ -963,6 +965,21 @@ $(document).ready(function () {
                   </div>
                   <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
               </div>
+              <div class='AtBetter_setting_list'>
+                  <label for="loaded"><span style="font-size: 14px;">兼容选项-不等待页面资源加载</span></label>
+                  <div class="help_tip">
+                      `+ helpCircleHTML + `
+                      <div class="tip_text">
+                      <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件”</p>
+                      <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，</p>
+                      <p><u>您首先应该是否是网络问题，</u></p>
+                      <p>如果页面实际已经加载完成，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
+                      <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+                      <p><u>如果没有上述问题，请不要开启该选项</u></p>
+                      </div>
+                  </div>
+                  <input type="checkbox" id="loaded" name="loaded">
+              </div>
               <h4>翻译设置</h4>
               <hr>
               <label>
@@ -1043,6 +1060,7 @@ $(document).ready(function () {
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
+        $("#loaded").prop("checked", GM_getValue("loaded") === true);
         $("#x_api2d_no_cache").prop("checked", GM_getValue("x_api2d_no_cache") === true);
         $("#showOpneAiAdvanced").prop("checked", GM_getValue("showOpneAiAdvanced") === true);
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
@@ -1095,6 +1113,7 @@ $(document).ready(function () {
         $("#save").click(function () {
             GM_setValue("bottomZh_CN", $("#bottomZh_CN").prop("checked"));
             GM_setValue("showLoading", $("#showLoading").prop("checked"));
+            GM_setValue("loaded", $("#loaded").prop("checked"));
             GM_setValue("enableSegmentedTranslation", $("#enableSegmentedTranslation").prop("checked"));
             GM_setValue("showJumpToLuogu", $("#showJumpToLuogu").prop("checked"));
             var translation = $("input[name='translation']:checked").val();
@@ -1486,41 +1505,61 @@ async function At2luogu() {
 }
 
 $(document).ready(function () {
-    var newElement = $("<div></div>").addClass("alert alert-info").html(`
-  Atcoder Better! —— 正在等待页面资源加载……
-  `).css({
-        "margin": "1em",
-        "text-align": "center",
-        "font-weight": "600",
-        "position": "relative"
-    });
-    var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-danger").html(`
-  Atcoder Better! —— 注意！分段翻译已开启，这会造成负面效果，
-      <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>
-  `).css({
-        "margin": "1em",
-        "text-align": "center",
-        "font-weight": "600",
-        "position": "relative"
-    });
-    if (showLoading) $('#main-container').prepend(newElement);
-    // 页面完全加载完成后执行
-    window.onload = function () {
-        if (enableSegmentedTranslation) $('#main-container').prepend(tip_SegmentedTranslation); //显示分段翻译警告
+    var newElement = $("<div></div>")
+        .addClass("alert alert-info")
+        .html(`Atcoder Better! —— 正在等待页面资源加载……`)
+        .css({
+            margin: "1em",
+            "text-align": "center",
+            "font-weight": "600",
+            position: "relative",
+        });
+
+    var tip_SegmentedTranslation = $("<div></div>")
+        .addClass("alert alert-danger")
+        .html(`
+        Atcoder Better! —— 注意！分段翻译已开启，这会造成负面效果，
+        <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>
+      `)
+        .css({
+            margin: "1em",
+            "text-align": "center",
+            "font-weight": "600",
+            position: "relative",
+        });
+
+    function processPage() {
+        if (enableSegmentedTranslation)
+            $("#main-container").prepend(tip_SegmentedTranslation); //显示分段翻译警告
+
         if (showLoading) {
-            newElement.html('Atcoder Better! —— 正在处理中……');
-            newElement.removeClass('alert-info').addClass('alert-success');
+            newElement.html("Atcoder Better! —— 正在处理中……");
+            newElement.removeClass("alert-info").addClass("alert-success");
         }
+
         if (showJumpToLuogu) At2luogu();
+
         addConversionButton();
+
         if (showLoading) {
-            newElement.html('Atcoder Better! —— 加载已完成');
+            newElement.html("Atcoder Better! —— 加载已完成");
             setTimeout(function () {
                 newElement.remove();
             }, 3000);
         }
     }
-})
+
+    if (showLoading) $("#main-container").prepend(newElement);
+
+    if (loaded) {
+        processPage();
+    } else {
+        // 页面完全加载完成后执行
+        window.onload = function () {
+            processPage();
+        };
+    }
+});
 
 // 字数超限确认
 function showWordsExceededDialog(button) {
@@ -1743,31 +1782,39 @@ async function translate_openai(raw) {
     var openai_key = GM_getValue("openai_key");
     var openai_retext = "";
     var data = {
-        prompt: "(You:请帮我将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")",
         model: "gpt-3.5-turbo",
+        messages: [{
+            role: "user",
+            content: "(请将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
+        }],
         temperature: 0.7
     };
     return new Promise(function (resolve, reject) {
         GM_xmlhttpRequest({
             method: 'POST',
-            url: (showOpneAiAdvanced && GM_getValue("openai_proxy") !== null && GM_getValue("openai_proxy") !== "") ? GM_getValue("openai_proxy") : 'https://api.openai.com/v1/completions',
+            url: (showOpneAiAdvanced && GM_getValue("openai_proxy") !== null && GM_getValue("openai_proxy") !== "") ? GM_getValue("openai_proxy") : 'https://api.openai.com/v1/chat/completions', // Use the chat endpoint here
+
             data: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + GM_getValue("openai_key") + ''
+                'Authorization': 'Bearer ' + GM_getValue("openai_key")
             },
             responseType: 'json',
-            onload: function (res) {
-                if (res.status === 200) {
-                    openai_retext = res.response.choices[0].text;
-                    openai_retext = openai_retext.replace(/^\s+/, '');
+            onload: function (response) {
+                if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
+                    resolve("翻译出错，请重试\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
+                } else {
+                    openai_retext = response.response.choices[0].message.content;
+                    // openai_retext = openai_retext.replace(/^\s+/, '');
                     resolve(openai_retext);
                 }
-                else {
-                    resolve("翻译出错，请重试\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈\n\n报错信息：" + JSON.stringify(res.response, null, '\n'));
-                }
-            }
+            },
+            onerror: function (response) {
+                console.error(response.statusText);
+                reject(response.statusText);
+            },
         });
+
     });
 }
 
@@ -1956,4 +2003,3 @@ function Request(options) {
 }
 
 //--异步请求包装工具--end
-
