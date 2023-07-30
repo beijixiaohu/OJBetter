@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.45
+// @version      1.47
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -43,10 +43,12 @@ const is_acmsguru = window.location.href.includes("acmsguru");
 const is_oldLatex = $('.tex-span').length;
 const bottomZh_CN = getGMValue("bottomZh_CN", true);
 const showLoading = getGMValue("showLoading", true);
+const loaded = getGMValue("loaded", false);
 const translation = getGMValue("translation", "deepl");
 const expandFoldingblocks = getGMValue("expandFoldingblocks", true);
 const enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
 const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
+const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
 var x_api2d_no_cache = getGMValue("x_api2d_no_cache", true);
 var showOpneAiAdvanced = getGMValue("showOpneAiAdvanced", false);
 
@@ -78,6 +80,24 @@ GM_addStyle(`
 }
 span.mdViewContent {
     white-space: pre-wrap;
+}
+/*翻译区域提示*/
+.overlay {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(135deg, #97e7cacc, #97e7cacc 30px, #e9fbf1cc 0px, #e9fbf1cc 55px);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00695C;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0px 0px 2px #edfcf4;
 }
 /*翻译div*/
 .translate-problem-statement {
@@ -168,6 +188,7 @@ button.html2mdButton {
 button.html2mdButton:hover {
     color: #409eff;
     border-color: #409eff;
+    background-color: #f1f8ff;
 }
 button.html2mdButton.copied {
     background-color: #f0f9eb;
@@ -185,7 +206,6 @@ button.html2mdButton.error {
     border: 1px solid #fab6b6;
 }
 button.translated {
-    cursor: not-allowed;
     background-color: #f0f9eb;
     color: #67c23e;
     border: 1px solid #b3e19d;
@@ -643,7 +663,7 @@ function getCookie(name) {
         const [cookieName, cookieValue] = cookie.split("=");
 
         if (cookieName === name) {
-            return decodeURIComponent(cookieValue); 
+            return decodeURIComponent(cookieValue);
         }
     }
     return "";
@@ -688,7 +708,7 @@ function getCookie(name) {
         onload: function (response) {
             const scriptData = JSON.parse(response.responseText);
             const skipUpdate = getCookie("skipUpdate");
-    
+
             if (
                 scriptData.name === GM_info.script.name &&
                 compareVersions(scriptData.version, GM_info.script.version) === 1 &&
@@ -719,15 +739,15 @@ function getCookie(name) {
                     </div>
                 `);
 
-                $("#skip_update").click(function() {
+                $("#skip_update").click(function () {
                     document.cookie = "skipUpdate=true; expires=session; path=/";
                     styleElement.remove();
                     $("#update_panel").remove();
                 });
             }
         }
-    });    
-    
+    });
+
 })();
 
 // 汉化替换
@@ -775,6 +795,7 @@ function getCookie(name) {
             { match: 'Before start', replace: '距比赛开始还有' },
             { match: 'Before registration', replace: '距报名开始还有' },
             { match: 'Until closing ', replace: '距报名结束还有' },
+            { match: 'Before extra registration', replace: '额外报名还未开始' },
             { match: 'Register', replace: '报名' },
             { match: 'Registration completed', replace: '已报名' },
             { match: 'Registration closed', replace: '报名已结束' },
@@ -975,6 +996,11 @@ function getCookie(name) {
             { match: 'as an alternative way to enter.', replace: '登录' },
         ];
         traverseTextNodes($('.enterPage'), rules24);
+
+        const rules25 = [
+            { match: '\\* To view the complete list, click ', replace: '* 要查看完整列表，请点击' },
+        ];
+        traverseTextNodes($('.notice.small'), rules25);
 
     });
     // 元素选择替换
@@ -1414,7 +1440,7 @@ $(document).ready(function () {
                     <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
                 </div>
                 <div class='CFBetter_setting_list'>
-                  <label for="showLoading">显示加载信息</label>
+                  <label for="showLoading">显示加载提示信息</label>
                   <div class="help_tip">
                       `+ helpCircleHTML + `
                       <div class="tip_text">
@@ -1424,6 +1450,10 @@ $(document).ready(function () {
                       </div>
                   </div>
                   <input type="checkbox" id="showLoading" name="showLoading">
+                </div>
+                <div class='CFBetter_setting_list'>
+                  <label for="showLoading">显示目标区域范围</label>
+                  <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
                 </div>
                 <div class='CFBetter_setting_list'>
                     <label for="expandFoldingblocks">自动展开折叠块</label>
@@ -1454,6 +1484,21 @@ $(document).ready(function () {
                         </div>
                     </div>
                     <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="loaded"><span style="font-size: 14px;">兼容选项-不等待页面资源加载</span></label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件”</p>
+                        <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
+                        <p><u>您首先应该确认是否是网络问题，</u></p>
+                        <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
+                        <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+                        <p><u>如果没有上述问题，请不要开启该选项</u></p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="loaded" name="loaded">
                 </div>
                 <h3>翻译设置</h3>
                 <hr>
@@ -1536,8 +1581,10 @@ $(document).ready(function () {
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
+        $("#loaded").prop("checked", GM_getValue("loaded") === true);
         $("#x_api2d_no_cache").prop("checked", GM_getValue("x_api2d_no_cache") === true);
         $("#showOpneAiAdvanced").prop("checked", GM_getValue("showOpneAiAdvanced") === true);
+        $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
@@ -1588,9 +1635,11 @@ $(document).ready(function () {
         $("#save").click(function () {
             GM_setValue("bottomZh_CN", $("#bottomZh_CN").prop("checked"));
             GM_setValue("showLoading", $("#showLoading").prop("checked"));
+            GM_setValue("loaded", $("#loaded").prop("checked"));
             GM_setValue("expandFoldingblocks", $("#expandFoldingblocks").prop("checked"));
             GM_setValue("enableSegmentedTranslation", $("#enableSegmentedTranslation").prop("checked"));
             GM_setValue("showJumpToLuogu", $("#showJumpToLuogu").prop("checked"));
+            GM_setValue("hoverTargetAreaDisplay", $("#hoverTargetAreaDisplay").prop("checked"));
             var translation = $("input[name='translation']:checked").val();
             var openai_key = $("#openai_key").val();
             var openai_proxy = $("#openai_proxy").val();
@@ -1638,9 +1687,12 @@ var turndown = turndownService.turndown;
 turndownService.keep(['del']);
 
 // 丢弃
-turndownService.addRule('ignore-sample-tests', {
+turndownService.addRule('remove-by-class', {
     filter: function (node) {
-        return node.classList.contains('sample-tests') || node.classList.contains('header');
+        return node.classList.contains('sample-tests') ||
+            node.classList.contains('header') ||
+            node.classList.contains('overlay') ||
+            node.classList.contains('html2md-panel');
     },
     replacement: function (content, node) {
         return "";
@@ -1792,6 +1844,47 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         // 恢复删除的元素
         if (removedChildren) $(target).prepend(removedChildren);
     });
+
+    if (hoverTargetAreaDisplay) {
+        $(document).on("mouseover", ".html2md-view" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-view" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-view" + suffix).parent().parent().get(0);
+            }
+
+            $(target).append('<div class="overlay">目标转换区域</div>');
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
+            $(".html2md-view" + suffix).parent().css({
+                "position": "relative",
+                "z-index": "99999"
+            })
+        });
+
+        $(document).on("mouseout", ".html2md-view" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-view" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-view" + suffix).parent().parent().get(0);
+            }
+
+            $(target).find('.overlay').remove();
+            $(target).css({
+                "position": "",
+                "display": ""
+            });
+            $(".html2md-view" + suffix).parent().css({
+                "position": "static"
+            })
+        });
+    }
 }
 
 function addButtonWithCopy(parent, suffix, type) {
@@ -1827,16 +1920,84 @@ function addButtonWithCopy(parent, suffix, type) {
         }, 2000);
         $(target).remove();
     });
+
+    if (hoverTargetAreaDisplay) {
+        $(document).on("mouseover", ".html2md-cb" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-cb" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-cb" + suffix).parent().parent().get(0);
+            }
+
+            $(target).append('<div class="overlay">目标复制区域</div>');
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
+            $(".html2md-cb" + suffix).parent().css({
+                "position": "relative",
+                "z-index": "99999"
+            })
+        });
+
+        $(document).on("mouseout", ".html2md-cb" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-cb" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-cb" + suffix).parent().parent().get(0);
+            }
+
+            $(target).find('.overlay').remove();
+            $(target).css({
+                "position": "",
+                "display": ""
+            });
+            $(".html2md-cb" + suffix).parent().css({
+                "position": "static"
+            })
+        });
+    }
 }
 
 async function addButtonWithTranslation(parent, suffix, type) {
+    var result;
     $(document).on('click', '.translateButton' + suffix, async function () {
         $(this).removeClass("translated");
         $(this).text("翻译中");
         $(this).css("cursor", "not-allowed");
-        var target, element_node, block, result, errerNum = 0;
+        var target, element_node, block, errerNum = 0, is_x_api2d_no_cache = false;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
+
+        // 重新翻译
+        if (result) {
+            if (result.translateDiv) {
+                $(result.translateDiv).remove();
+            }
+            if (!is_oldLatex) {
+                if (result.copyDiv) {
+                    $(result.copyDiv).remove();
+                }
+                if (result.copyButton) {
+                    $(result.copyButton).remove();
+                }
+            }
+            // 重新翻译时暂时关闭 x_api2d_no_cache
+            if (x_api2d_no_cache) {
+                x_api2d_no_cache = false;
+                is_x_api2d_no_cache = true;
+            }
+            // 移除旧的事件
+            $(document).off("mouseover", ".translateButton" + suffix);
+            $(document).off("mouseout", ".translateButton" + suffix);
+            // 重新绑定悬停事件
+            if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
+        }
+
         // 分段翻译
         if (enableSegmentedTranslation) {
             var pElements = block.find("p, li");
@@ -1877,32 +2038,68 @@ async function addButtonWithTranslation(parent, suffix, type) {
         if (!errerNum) {
             $(this).addClass("translated")
                 .text("已翻译")
-                .prop("disabled", true);
+                .css("cursor", "pointer")
+                .removeClass("error");
         }
-        // 重新翻译按钮
-        if ($(this).next('.reTranslation').length === 0) {
-            const reTranslateBtn = $('<button>').addClass('html2mdButton reTranslation').html('&circlearrowright;').attr('title', '重新翻译');
-            reTranslateBtn.on('click', function () {
-                result.translateDiv.remove();
-                if (!is_oldLatex) {
-                    result.copyDiv.remove();
-                    result.copyButton.remove();
-                }
-                x_api2d_no_cache ? (x_api2d_no_cache = false, $(this).prev().prop("disabled", false), $(this).prev().click(), x_api2d_no_cache = true) : ($(this).prev().click());
-            });
-            $(this).after(reTranslateBtn);
-        } else {
-            const reTranslateBtn = $(this).next('.reTranslation');
-            reTranslateBtn.off('click').on('click', function () {
-                result.translateDiv.remove();
-                if (!is_oldLatex) {
-                    result.copyDiv.remove();
-                    result.copyButton.remove();
-                }
-                x_api2d_no_cache ? (x_api2d_no_cache = false, $(this).prev().prop("disabled", false), $(this).prev().click(), x_api2d_no_cache = true) : ($(this).prev().click());
-            });
-        }
+
+        // 恢复x_api2d_no_cache设置
+        if (is_x_api2d_no_cache) x_api2d_no_cache = true;
+
+        // 重新翻译
+        let currentText;
+        $(document).on("mouseover", ".translateButton" + suffix, function () {
+            currentText = $(this).text();
+            $(this).text("重新翻译");
+        });
+
+        $(document).on("mouseout", ".translateButton" + suffix, function () {
+            $(this).text(currentText);
+        });
     });
+
+    // 目标区域指示
+    function bindHoverEvents(suffix, type) {
+        $(document).on("mouseover", ".translateButton" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".translateButton" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".translateButton" + suffix).parent().parent().get(0);
+            }
+
+            $(target).append('<div class="overlay">目标翻译区域</div>');
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
+            $(".translateButton" + suffix).parent().css({
+                "position": "relative",
+                "z-index": "99999"
+            });
+        });
+
+        $(document).on("mouseout", ".translateButton" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".translateButton" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".translateButton" + suffix).parent().parent().get(0);
+            }
+
+            $(target).find('.overlay').remove();
+            $(target).css({
+                "position": "",
+                "display": ""
+            });
+            $(".translateButton" + suffix).parent().css({
+                "position": "static"
+            });
+        });
+    }
+
+    if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
 }
 
 // 块处理
@@ -2019,6 +2216,15 @@ function addConversionButton() {
         addButtonPanel(this, id, "this_level", true);
         addButtonWithTranslation(this, id, "this_level");
     });
+
+    $(".problem-lock-link").on("click", function () {
+        // 找到.popup中的所有子孙div，并添加按钮
+        $(".popup .content div").each(function () {
+            let id = "_popup_" + getRandomNumber(8);
+            addButtonPanel(this, id, "this_level", true);
+            addButtonWithTranslation(this, id, "this_level");
+        });
+    });
 };
 
 //弹窗翻译
@@ -2100,26 +2306,27 @@ function waitUntilIdleThenDo(callback) {
 }
 
 $(document).ready(function () {
-    var newElement = $("<div></div>").addClass("alert alert-info").html(`
-    Codeforces Better! —— 正在等待页面资源加载……
-    `).css({
-        "margin": "1em",
-        "text-align": "center",
-        "font-weight": "600",
-        "position": "relative"
-    });
-    var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-error").html(`
-        Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
-        <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>
-    `).css({
-        "margin": "1em",
-        "text-align": "center",
-        "font-weight": "600",
-        "position": "relative"
-    });
-    if (showLoading) $(".menu-box:first").next().after(newElement);
-    // 页面完全加载完成后执行
-    window.onload = function () {
+    var newElement = $("<div></div>")
+        .addClass("alert alert-info")
+        .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+        .css({
+            "margin": "1em",
+            "text-align": "center",
+            "font-weight": "600",
+            "position": "relative"
+        });
+    var tip_SegmentedTranslation = $("<div></div>")
+        .addClass("alert alert-error")
+        .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
+        <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
+        .css({
+            "margin": "1em",
+            "text-align": "center",
+            "font-weight": "600",
+            "position": "relative"
+        });
+
+    function processPage() {
         if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
         waitUntilIdleThenDo(function () {
             if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
@@ -2135,6 +2342,17 @@ $(document).ready(function () {
                 }, 3000);
             }
         });
+    }
+
+    if (showLoading) $(".menu-box:first").next().after(newElement);
+
+    if (loaded) {
+        processPage();
+    } else {
+        // 页面完全加载完成后执行
+        window.onload = function () {
+            processPage();
+        };
     }
 })
 
@@ -2409,7 +2627,7 @@ async function translate_openai(raw) {
     if (is_oldLatex) {
         data = {
             model: "gpt-3.5-turbo",
-            messages : [{
+            messages: [{
                 role: "user",
                 content: "(请将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
             }],
@@ -2418,7 +2636,7 @@ async function translate_openai(raw) {
     } else {
         data = {
             model: "gpt-3.5-turbo",
-            messages : [{
+            messages: [{
                 role: "user",
                 content: "(请将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
             }],
@@ -2642,10 +2860,8 @@ async function BaseTranslate(name, raw, options, processer) {
     return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请重试或更换翻译接口\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈\n\n报错信息：" + errtext })
 }
 
-
 function Request(options) {
     return new Promise((reslove, reject) => GM_xmlhttpRequest({ ...options, onload: reslove, onerror: reject }))
 }
 
 //--异步请求包装工具--end
-
