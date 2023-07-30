@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.49
+// @version      1.50
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -260,6 +260,7 @@ button.html2mdButton.CFBetter_setting.open {
     top: 50%;
     left: 50%;
     width: 320px;
+    max-height: 90vh;
     transform: translate(-50%, -50%);
     border-radius: 6px;
     background-color: #edf1ff;
@@ -1639,6 +1640,7 @@ $(document).ready(function () {
             GM_setValue("expandFoldingblocks", $("#expandFoldingblocks").prop("checked"));
             GM_setValue("enableSegmentedTranslation", $("#enableSegmentedTranslation").prop("checked"));
             GM_setValue("showJumpToLuogu", $("#showJumpToLuogu").prop("checked"));
+            GM_setValue("showOpneAiAdvanced", $("#showOpneAiAdvanced").prop("checked"));
             GM_setValue("hoverTargetAreaDisplay", $("#hoverTargetAreaDisplay").prop("checked"));
             var translation = $("input[name='translation']:checked").val();
             var openai_key = $("#openai_key").val();
