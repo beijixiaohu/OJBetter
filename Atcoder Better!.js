@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.03
+// @version      1.04
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -224,6 +224,7 @@ button.html2mdButton.AtBetter_setting.open {
     left: 50%;
     width: 360px;
     max-height: 90vh;
+    overflow-y: auto;
     transform: translate(-50%, -50%);
     border-radius: 6px;
     background-color: #edf1ff;
