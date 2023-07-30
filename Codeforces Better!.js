@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.48
+// @version      1.49
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -2061,7 +2061,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
     function bindHoverEvents(suffix, type) {
         $(document).on("mouseover", ".translateButton" + suffix, function () {
             var target;
-
+            
             if (type === "this_level") {
                 target = $(".translateButton" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
@@ -2105,6 +2105,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
 // 块处理
 async function blockProcessing(target, element_node, button) {
     if (is_oldLatex) {
+        $(target).find('.overlay').remove();
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
