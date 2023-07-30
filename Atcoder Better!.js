@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.01
+// @version      1.02
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -19,7 +19,7 @@
 // @grant        GM_getValue
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
-// @icon         https://atcoder-cdn.oss-cn-beijing.aliyuncs.com/atcoder.png
+// @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/atcoder.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @license      MIT
@@ -44,6 +44,7 @@ const enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", fals
 const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
 const showLoading = getGMValue("showLoading", true);
 const loaded = getGMValue("loaded", false);
+const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
 var x_api2d_no_cache = getGMValue("x_api2d_no_cache", true);
 var showOpneAiAdvanced = getGMValue("showOpneAiAdvanced", false);
 
@@ -58,6 +59,24 @@ GM_addStyle(`
 }
 span.mdViewContent {
     white-space: pre-wrap;
+}
+/*翻译区域提示*/
+.overlay {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(135deg, #97e7cacc, #97e7cacc 30px, #e9fbf1cc 0px, #e9fbf1cc 55px);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00695C;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0px 0px 2px #edfcf4;
 }
 /*翻译div*/
 .translate-problem-statement {
@@ -940,6 +959,10 @@ $(document).ready(function () {
                   <input type="checkbox" id="showLoading" name="showLoading">
               </div>
               <div class='AtBetter_setting_list'>
+                  <label for="showLoading">显示目标区域范围</label>
+                  <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+                </div>
+              <div class='AtBetter_setting_list'>
                   <label for="enableSegmentedTranslation">分段翻译</label>
                   <div class="help_tip">
                       `+ helpCircleHTML + `
@@ -1063,6 +1086,7 @@ $(document).ready(function () {
         $("#loaded").prop("checked", GM_getValue("loaded") === true);
         $("#x_api2d_no_cache").prop("checked", GM_getValue("x_api2d_no_cache") === true);
         $("#showOpneAiAdvanced").prop("checked", GM_getValue("showOpneAiAdvanced") === true);
+        $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
@@ -1116,6 +1140,7 @@ $(document).ready(function () {
             GM_setValue("loaded", $("#loaded").prop("checked"));
             GM_setValue("enableSegmentedTranslation", $("#enableSegmentedTranslation").prop("checked"));
             GM_setValue("showJumpToLuogu", $("#showJumpToLuogu").prop("checked"));
+            GM_setValue("hoverTargetAreaDisplay", $("#hoverTargetAreaDisplay").prop("checked"));
             var translation = $("input[name='translation']:checked").val();
             var openai_key = $("#openai_key").val();
             var openai_proxy = $("#openai_proxy").val();
@@ -1153,7 +1178,8 @@ turndownService.addRule('removeByClass', {
     filter: function (node) {
         return node.classList.contains('html2md-panel') ||
             node.classList.contains('div-btn-copy') ||
-            node.classList.contains('btn-copy')
+            node.classList.contains('btn-copy') ||
+            node.classList.contains('overlay')
     },
     replacement: function () {
         return '';
@@ -1274,11 +1300,52 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         // 恢复删除的元素
         if (removedChildren) $(target).prepend(removedChildren);
     });
+
+    if (hoverTargetAreaDisplay) {
+        $(document).on("mouseover", ".html2md-view" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-view" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-view" + suffix).parent().parent().get(0);
+            }
+
+            $(target).append('<div class="overlay">目标转换区域</div>');
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
+            $(".html2md-view" + suffix).parent().css({
+                "position": "relative",
+                "z-index": "99999"
+            })
+        });
+
+        $(document).on("mouseout", ".html2md-view" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-view" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-view" + suffix).parent().parent().get(0);
+            }
+
+            $(target).find('.overlay').remove();
+            $(target).css({
+                "position": "",
+                "display": ""
+            });
+            $(".html2md-view" + suffix).parent().css({
+                "position": "static"
+            })
+        });
+    }
 }
 
 function addButtonWithCopy(parent, suffix, type) {
     $(document).on("click", ".html2md-cb" + suffix, function () {
-        let target, removedChildren, text;
+        var target, removedChildren;
         if (type === "this_level") {
             target = $(".translateButton" + suffix).parent().next().eq(0).clone();
         } else if (type === "child_level") {
@@ -1300,16 +1367,82 @@ function addButtonWithCopy(parent, suffix, type) {
         }, 2000);
         $(target).remove();
     });
+
+    if (hoverTargetAreaDisplay) {
+        $(document).on("mouseover", ".html2md-cb" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-cb" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-cb" + suffix).parent().parent().get(0);
+            }
+
+            $(target).append('<div class="overlay">目标复制区域</div>');
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
+            $(".html2md-cb" + suffix).parent().css({
+                "position": "relative",
+                "z-index": "99999"
+            })
+        });
+
+        $(document).on("mouseout", ".html2md-cb" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".html2md-cb" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".html2md-cb" + suffix).parent().parent().get(0);
+            }
+
+            $(target).find('.overlay').remove();
+            $(target).css({
+                "position": "",
+                "display": ""
+            });
+            $(".html2md-cb" + suffix).parent().css({
+                "position": "static"
+            })
+        });
+    }
 }
 
 async function addButtonWithTranslation(parent, suffix, type) {
+    var result;
     $(document).on('click', '.translateButton' + suffix, async function () {
         $(this).removeClass("translated");
         $(this).text("翻译中");
         $(this).css("cursor", "not-allowed");
-        var target, element_node, block, result, errerNum = 0;
+        var target, element_node, block, errerNum = 0, is_x_api2d_no_cache = false;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
+
+        // 重新翻译
+        if (result) {
+            if (result.translateDiv) {
+                $(result.translateDiv).remove();
+            }
+            if (result.copyDiv) {
+                $(result.copyDiv).remove();
+            }
+            if (result.copyButton) {
+                $(result.copyButton).remove();
+            }
+            // 重新翻译时暂时关闭 x_api2d_no_cache
+            if (x_api2d_no_cache) {
+                x_api2d_no_cache = false;
+                is_x_api2d_no_cache = true;
+            }
+            // 移除旧的事件
+            $(document).off("mouseover", ".translateButton" + suffix);
+            $(document).off("mouseout", ".translateButton" + suffix);
+            // 重新绑定悬停事件
+            if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
+        }
+
         // 分段翻译
         if (enableSegmentedTranslation) {
             var pElements = block.find("p, li");
@@ -1335,18 +1468,14 @@ async function addButtonWithTranslation(parent, suffix, type) {
                 element_node = $(parent).find("div:last-child").get(0);
             }
             //是否跳过折叠块
-            if ($(target).find('details').length > 0) {
+            if ($(target).find('.spoiler').length > 0) {
                 const shouldSkip = await skiFoldingBlocks();
                 if (shouldSkip) {
-                    $(target).find('details').remove();
+                    $(target).find('.spoiler').remove();
                 } else {
                     $(target).find('.html2md-panel').remove();
                 }
             }
-
-            //跳过代码块
-            $(target).find('pre').remove();
-
             result = await blockProcessing(target, element_node, $(".translateButton" + suffix));
             if (result.status) errerNum += 1;
             $(target).remove();
@@ -1354,28 +1483,68 @@ async function addButtonWithTranslation(parent, suffix, type) {
         if (!errerNum) {
             $(this).addClass("translated")
                 .text("已翻译")
-                .prop("disabled", true);
+                .css("cursor", "pointer")
+                .removeClass("error");
         }
-        // 重新翻译按钮
-        if ($(this).next('.reTranslation').length === 0) {
-            const reTranslateBtn = $('<button>').addClass('html2mdButton reTranslation').html('&circlearrowright;').attr('title', '重新翻译');
-            reTranslateBtn.on('click', function () {
-                result.translateDiv.remove();
-                result.copyDiv.remove();
-                result.copyButton.remove();
-                x_api2d_no_cache ? (x_api2d_no_cache = false, $(this).prev().prop("disabled", false), $(this).prev().click(), x_api2d_no_cache = true) : ($(this).prev().click());
-            });
-            $(this).after(reTranslateBtn);
-        } else {
-            const reTranslateBtn = $(this).next('.reTranslation');
-            reTranslateBtn.off('click').on('click', function () {
-                result.translateDiv.remove();
-                result.copyDiv.remove();
-                result.copyButton.remove();
-                x_api2d_no_cache ? (x_api2d_no_cache = false, $(this).prev().prop("disabled", false), $(this).prev().click(), x_api2d_no_cache = true) : ($(this).prev().click());
-            });
-        }
+
+        // 恢复x_api2d_no_cache设置
+        if (is_x_api2d_no_cache) x_api2d_no_cache = true;
+
+        // 重新翻译
+        let currentText;
+        $(document).on("mouseover", ".translateButton" + suffix, function () {
+            currentText = $(this).text();
+            $(this).text("重新翻译");
+        });
+
+        $(document).on("mouseout", ".translateButton" + suffix, function () {
+            $(this).text(currentText);
+        });
     });
+
+    // 目标区域指示
+    function bindHoverEvents(suffix, type) {
+        $(document).on("mouseover", ".translateButton" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".translateButton" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".translateButton" + suffix).parent().parent().get(0);
+            }
+
+            $(target).append('<div class="overlay">目标翻译区域</div>');
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
+            $(".translateButton" + suffix).parent().css({
+                "position": "relative",
+                "z-index": "99999"
+            });
+        });
+
+        $(document).on("mouseout", ".translateButton" + suffix, function () {
+            var target;
+
+            if (type === "this_level") {
+                target = $(".translateButton" + suffix).parent().next().get(0);
+            } else if (type === "child_level") {
+                target = $(".translateButton" + suffix).parent().parent().get(0);
+            }
+
+            $(target).find('.overlay').remove();
+            $(target).css({
+                "position": "",
+                "display": ""
+            });
+            $(".translateButton" + suffix).parent().css({
+                "position": "static"
+            });
+        });
+    }
+
+    if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
 }
 
 // 块处理
