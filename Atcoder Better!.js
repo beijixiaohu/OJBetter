@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.04
+// @version      1.05
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -222,7 +222,7 @@ button.html2mdButton.AtBetter_setting.open {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 360px;
+    width: 500px;
     max-height: 90vh;
     overflow-y: auto;
     transform: translate(-50%, -50%);
@@ -962,6 +962,12 @@ $(document).ready(function () {
               </div>
               <div class='AtBetter_setting_list'>
                   <label for="showLoading">显示目标区域范围</label>
+                  <div class="help_tip">
+                      `+ helpCircleHTML + `
+                      <div class="tip_text">
+                      <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
+                      </div>
+                  </div>
                   <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
                 </div>
               <div class='AtBetter_setting_list'>
@@ -995,12 +1001,12 @@ $(document).ready(function () {
                   <div class="help_tip">
                       `+ helpCircleHTML + `
                       <div class="tip_text">
-                      <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件”</p>
+                      <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
                       <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，</p>
                       <p><u>您首先应该确认是否是网络问题，</u></p>
                       <p>如果页面实际已经加载完成，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
                       <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
-                      <p><u>如果没有上述问题，请不要开启该选项</u></p>
+                      <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
                       </div>
                   </div>
                   <input type="checkbox" id="loaded" name="loaded">
@@ -1053,7 +1059,7 @@ $(document).ready(function () {
                           `+ helpCircleHTML + `
                           <div class="tip_text">
                           <p>使用你指定的API来代理访问 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
-                          <p>建议你自建代理，而不是使用他人公开的代理，那是危险的</p>
+                          <p>如果你使用的是OpenAI的官方KEY，建议你自建代理，而不是使用他人公开的代理，那是危险的</p>
                           <p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行授权</strong></p>
                           </div>
                       </div>
@@ -1070,7 +1076,7 @@ $(document).ready(function () {
                       <div class="help_tip">
                           `+ helpCircleHTML + `
                           <div class="tip_text">
-                          <p>API2D 的服务器会对请求结果做缓存，如果请求文本的hash值相同，会直接返回缓存的结果。缓存命中之后，本次请求不会扣除任何点数。</p>
+                          <p>API2D 的服务器会对请求结果做缓存，如果请求体的hash值相同，会直接返回缓存的结果。缓存命中之后，本次请求不会扣除任何点数。</p>
                           <p>缓存会保存 24 小时，如果不想使用缓存，你可以关闭“使用缓存”来跳过缓存，强制 API2D 服务器发送新请求。<a target="_blank" href="https://api2d.com/wiki/doc">详请阅读官方文档</a></p>
                           </div>
                       </div>
