@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.05
+// @version      1.06
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -1201,7 +1201,9 @@ turndownService.addRule('inline-math', {
         return node.tagName.toLowerCase() == "span" && node.className == "katex";
     },
     replacement: function (content, node) {
-        return "$" + $(node).find('annotation').text() + "$";
+        var latex = $(node).find('annotation').text();
+        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return "$" + latex + "$";
     }
 });
 
@@ -1211,7 +1213,9 @@ turndownService.addRule('block-math', {
         return node.tagName.toLowerCase() == "span" && node.className == "katex-display";
     },
     replacement: function (content, node) {
-        return "\n$$\n" + $(node).find('annotation').text() + "\n$$\n";
+        var latex = $(node).find('annotation').text();
+        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return "\n$$\n" + latex + "\n$$\n";
     }
 });
 
@@ -1925,6 +1929,16 @@ async function translateProblemStatement(text, element_node, button) {
         }, 2000);
     });
     translateDiv.parentNode.insertBefore(copyButton, translateDiv);
+
+    // 替换特殊符号为字符实体
+    const ruleMap = [
+        { pattern: /(?<!\\)>(?!\s)/g, replacement: "&gt;" }, // >符号
+        { pattern: /(?<!\\)</g, replacement: "&lt;" }, // <符号
+    ];
+
+    ruleMap.forEach(({ pattern, replacement }) => {
+        translatedText = translatedText.replace(pattern, replacement);
+    });
 
     // 更新
     translateDiv.innerHTML = translatedText;

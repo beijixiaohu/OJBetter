@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.52
+// @version      1.53
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -1727,7 +1727,9 @@ turndownService.addRule('inline-math', {
         return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
     },
     replacement: function (content, node) {
-        return "$" + $(node).next().text() + "$";
+        var latex = $(node).next().text();
+        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return "$" + latex + "$";
     }
 });
 
@@ -1737,7 +1739,9 @@ turndownService.addRule('block-math', {
         return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
     },
     replacement: function (content, node) {
-        return "\n$$\n" + $(node).next().text() + "\n$$\n";
+        var latex = $(node).next().text();
+        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return "\n$$\n" + latex + "\n$$\n";
     }
 });
 
@@ -2601,6 +2605,8 @@ async function translateProblemStatement(text, element_node, button) {
         { pattern: /(\$\$[\r\n])/g, replacement: "$$$$$$$$$$$$" }, // $$ 行间
         { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$$$" }, // $ 内联
         { pattern: /&/g, replacement: "\\&" }, // &符号
+        { pattern: /(?<!\\)>(?!\s)/g, replacement: "&gt;" }, // >符号
+        { pattern: /(?<!\\)</g, replacement: "&lt;" }, // <符号
     ];
 
     ruleMap.forEach(({ pattern, replacement }) => {
