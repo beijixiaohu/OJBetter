@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Nowcoder mdCopy
 // @namespace    https://greasyfork.org/users/747162
-// @version      0.2
-// @description  Nowcoder题目题解markdown一键复制
+// @version      0.4
+// @description  牛客竞赛题目题解markdown一键复制
 // @author       北极小狐
 // @match        https://ac.nowcoder.com/*
 // @connect      greasyfork.org
@@ -273,7 +273,8 @@ turndownService.addRule('removeByClass', {
     filter: function (node) {
         return node.classList.contains('html2md-panel') ||
             node.classList.contains('div-btn-copy') ||
-            node.classList.contains('btn-copy')
+            node.classList.contains('btn-copy') ||
+            node.classList.contains('code-copy-btn')
     },
     replacement: function () {
         return '';
@@ -447,8 +448,22 @@ function addConversionButton() {
         addButtonWithCopy(this, id, "this_level");
     });
 
+    // 添加按钮到question-oi-bd部分
+    $('.question-oi-bd').each(function () {
+        let id = "_question-oi-bd_" + getRandomNumber(8);
+        addButtonPanel(this, id, "this_level");
+        addButtonWithHTML2MD(this, id, "this_level");
+        addButtonWithCopy(this, id, "this_level");
+    });
+
     // 添加按钮到pre部分
+    var selectorList = ['.question-oi-bd', '.CodeMirror'];//排除有这些祖宗节点的pre
     $('pre').each(function () {
+        for (var i = 0; i < selectorList.length; i++) {
+            if ($(this).closest(selectorList[i]).length > 0) {
+                return true;
+            }
+        }
         let id = "_pre_" + getRandomNumber(8);
         addButtonPanel(this, id, "this_level");
         addButtonWithHTML2MD(this, id, "this_level");
