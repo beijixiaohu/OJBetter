@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.53
+// @version      1.54
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -2540,13 +2540,13 @@ async function translateProblemStatement(text, element_node, button) {
                 let match = matches[i];
                 let replacement = replacements[`【${i + 1}】`];
                 let regex;
-                regex = new RegExp(`【${i + 1}】`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`\\[${i + 1}\\]`, 'g');
+                regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【${i + 1}[^】\\d]`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}[^】\\d]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`[^【\\d]${i + 1}】`, 'g');
+                regex = new RegExp(`[^【\\d]${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, " " + replacement);
             }
         } catch (e) { }

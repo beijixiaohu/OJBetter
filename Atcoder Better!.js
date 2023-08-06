@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.06
+// @version      1.07
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -1884,7 +1884,6 @@ async function translateProblemStatement(text, element_node, button) {
         translatedText = await translate_api2d(text);
     }
     if (/^翻译出错/.test(translatedText)) status = 2;
-
     // 还原latex公式
     if (translation != "api2d" && translation != "openai") {
         try {
@@ -1892,13 +1891,13 @@ async function translateProblemStatement(text, element_node, button) {
                 let match = matches[i];
                 let replacement = replacements[`【${i + 1}】`];
                 let regex;
-                regex = new RegExp(`【${i + 1}】`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`\\[${i + 1}\\]`, 'g');
+                regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【${i + 1}[^】\\d]`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}[^】\\d]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`[^【\\d]${i + 1}】`, 'g');
+                regex = new RegExp(`[^【\\d]${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, " " + replacement);
             }
         } catch (e) { }
