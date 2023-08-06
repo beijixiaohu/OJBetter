@@ -952,7 +952,8 @@ function getCookie(name) {
 
         const rules19 = [
             { match: 'Rating changes for last rounds are temporarily rolled back. They will be returned soon.', replace: '上一轮的评级变化暂时回滚。它们将很快恢复。' },
-            { match: 'Reminder: in case of any technical issues, you can use the lightweight website', replace: '提醒：如果出现任何技术问题，您可以使用轻量网站' }
+            { match: 'Reminder: in case of any technical issues, you can use the lightweight website', replace: '提醒：如果出现任何技术问题，您可以使用轻量网站' },
+            { match: 'Please subscribe to the official Codeforces channel in Telegram via the link ', replace: '请通过链接订阅Codeforces的官方Telegram频道' }
         ];
         traverseTextNodes($('.alert'), rules19);
 
@@ -2605,13 +2606,21 @@ async function translateProblemStatement(text, element_node, button) {
         { pattern: /(\$\$[\r\n])/g, replacement: "$$$$$$$$$$$$" }, // $$ 行间
         { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$$$" }, // $ 内联
         { pattern: /&/g, replacement: "\\&" }, // &符号
-        { pattern: /(?<!\\)>(?!\s)/g, replacement: "&gt;" }, // >符号
-        { pattern: /(?<!\\)</g, replacement: "&lt;" }, // <符号
     ];
-
     ruleMap.forEach(({ pattern, replacement }) => {
         translatedText = translatedText.replace(pattern, replacement);
     });
+
+    // 转义LaTex中的特殊符号
+    if (!is_oldLatex) {
+        const escapeRules = [
+            { pattern: /(?<!\\)>(?!\s)/g, replacement: "&gt;" }, // >符号
+            { pattern: /(?<!\\)</g, replacement: "&lt;" }, // <符号
+        ];
+        escapeRules.forEach(({ pattern, replacement }) => {
+            translatedText = translatedText.replace(pattern, replacement);
+        });
+    }
 
     // 更新
     if (is_oldLatex) {
