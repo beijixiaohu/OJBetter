@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.07
+// @version      1.08
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -31,7 +31,7 @@
 // 状态与初始化
 const getGMValue = (key, defaultValue) => {
     const value = GM_getValue(key);
-    if (value === undefined) {
+    if (value === undefined || value === "") {
         GM_setValue(key, defaultValue);
         return defaultValue;
     }
@@ -45,8 +45,13 @@ const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
 const showLoading = getGMValue("showLoading", true);
 const loaded = getGMValue("loaded", false);
 const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-var x_api2d_no_cache = getGMValue("x_api2d_no_cache", true);
+//openai
+const openai_model = getGMValue("openai_model", "gpt-3.5-turbo");
 var showOpneAiAdvanced = getGMValue("showOpneAiAdvanced", false);
+// api2d
+const api2d_model = getGMValue("api2d_model", "gpt-3.5-turbo");
+const api2d_request_entry = getGMValue("api2d_request_entry", "https://openai.api2d.net");
+var x_api2d_no_cache = getGMValue("x_api2d_no_cache", true);
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
@@ -80,9 +85,7 @@ span.mdViewContent {
 }
 /*翻译div*/
 .translate-problem-statement {
-    display: grid;
     justify-items: start;
-    white-space: pre-wrap;
     letter-spacing: 1.8px;
     color: #059669;
     background-color: #f9f9fa;
@@ -114,7 +117,6 @@ span.mdViewContent {
     text-decoration: none;
 }
 .translate-problem-statement p {
-    margin: 8px 0 !important;
     font-size: 14px !important;
 }
 .translate-problem-statement img {
@@ -180,10 +182,13 @@ button.html2mdButton.reTranslation {
     border: 1px solid #c8c9cc;
 }
 .translate-problem-statement table {
-    border: 1px #ccc solid;
-    border-collapse: collapse;
-    margin: 1.3571em 0 0;
-    color: #222;
+    border: 1px #ccc solid !important;
+    margin: 1.5em 0 !important;
+    color: #059669 !important;
+}
+.translate-problem-statement table thead th {
+    border: 1px #ccc solid !important;
+    color: #059669 !important;
 }
 .translate-problem-statement table td {
     border-right: 1px solid #ccc;
@@ -345,6 +350,13 @@ button.html2mdButton.AtBetter_setting.open {
 	transition: all 0.3s ease-in-out;
 }
 
+#AtBetter_setting_menu input[type="text"]:focus-visible{
+    border-width: 0.2vh;
+    border-style: solid;
+    border-color: #8bb2d9;
+    outline: -webkit-focus-ring-color auto 0px;
+}
+
 #AtBetter_setting_menu input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     position: absolute;
@@ -462,11 +474,15 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
 .help_tip {
     margin-right: auto;
 }
+span.input_label {
+    font-size: 14px;
+}
 .help_tip .tip_text {
     display: none;
     position: absolute;
     color: #697e91;
     font-weight: 400;
+    font-size: 14px;
     letter-spacing: 0px;
     background-color: #ffffff;
     padding: 10px;
@@ -492,7 +508,7 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     display: flex;
     cursor: help;
     width: 15px;
-    color: rgb(255, 153, 0);
+    color: #b4b9d4;
     margin-left: 5px;
 }
 #AtBetter_setting_menu .AtBetter_setting_menu_label_text .help_tip .help-icon {
@@ -640,6 +656,18 @@ function getCookie(name) {
         }
     }
     return "";
+}
+
+// 防抖函数
+function debounce(callback) {
+    let timer;
+    let immediateExecuted = false;
+    const delay = 500;
+    return function () {
+        clearTimeout(timer);
+        if (!immediateExecuted) { callback.call(this); immediateExecuted = true; }
+        timer = setTimeout(() => { immediateExecuted = false; }, delay);
+    };
 }
 
 // 更新检查
@@ -1032,7 +1060,7 @@ $(document).ready(function () {
                           `+ helpCircleHTML + `
                           <div class="tip_text">
                           <p><b>请确保你能够正常访问OpenAI的api</b></p>
-                          <p>Atcoder Better!使用 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
+                          <p>Atcoder Better!默认使用 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
                           <p>你需要输入自己的OpenAI KEY，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
                           </div>
                       </div>
@@ -1045,32 +1073,85 @@ $(document).ready(function () {
                           `+ helpCircleHTML + `
                           <div class="tip_text">
                           <p>api2d是国内的一家提供代理直连访问OpenAI的api的服务商，相当于OpenAI的api的套壳</p>
-                          <p>Atcoder Better!使用 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
+                          <p>Atcoder Better!默认使用 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
                           <p>你需要输入自己的api2d KEY，<a target="_blank" href="https://api2d.com/profile">官网</a></p>
                           </div>
                       </div>
                   </span>
               </label>
               <div class='AtBetter_setting_menu_input' id='openai' style='display: none;'>
-                  <label for='openai_key'>KEY:</label><input type='text' id='openai_key'>
+                    <label for='openai_model'>
+                        <div style="display: flex;align-items: center;">
+                            <span class="input_label">模型:</span>
+                            <div class="help_tip">
+                                `+ helpCircleHTML + `
+                                <div class="tip_text">
+                                <p>默认为：gpt-3.5-turbo</p>
+                                <p>如需更换，请查阅<a target="_blank" href="https://platform.openai.com/docs/models">官方文档</a></p>
+                                <p><strong>如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                    <input type='text' id='openai_model'>
+                    <label for='openai_key'>
+                        <span class="input_label">KEY:</span>
+                    </label>
+                    <input type='text' id='openai_key'>
                   <div class='AtBetter_setting_list'>
                       <label for="showOpneAiAdvanced">使用代理API</label>
                       <div class="help_tip">
                           `+ helpCircleHTML + `
                           <div class="tip_text">
-                          <p>使用你指定的API来代理访问 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
+                          <p>使用你指定的API来代理访问OpenAI进行翻译，脚本的所有请求均在本地完成</p>
                           <p>如果你使用的是OpenAI的官方KEY，建议你自建代理，而不是使用他人公开的代理，那是危险的</p>
+                          <p>如果你使用的是服务商提供的代理和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，<br>
+                            这里以<a target="_blank" href="https://console.closeai-asia.com/">CloseAI</a>为例，其提供了API Base: https://api.closeai-proxy.xyz，<br>
+                            那么这里实际应该填写的就是https://api.closeai-proxy.xyz/v1/chat/\ncompletions，而上面的KEY则应该填写CloseAI提供的API Key</p>
                           <p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行授权</strong></p>
                           </div>
                       </div>
                       <input type="checkbox" id="showOpneAiAdvanced" name="showOpneAiAdvanced">
                   </div>
                   <div id="is_showOpneAiAdvanced">
-                      <label for='openai_proxy'>Proxy API:</label><input type='text' id='openai_proxy'>
+                    <label for='openai_proxy'>
+                        <span class="input_label">Proxy API:</span>
+                    </label>
+                    <input type='text' id='openai_proxy'>
                   </div>
               </div>
               <div class='AtBetter_setting_menu_input' id='api2d' style='display: none;'>
-                  <label for='api2d_key'>KEY:</label><input type='text' id='api2d_key'>
+                <label for='api2d_model'>
+                    <div style="display: flex;align-items: center;">
+                        <span class="input_label">模型:</span>
+                        <div class="help_tip">
+                            `+ helpCircleHTML + `
+                            <div class="tip_text">
+                            <p>默认为：gpt-3.5-turbo</p>
+                            <p>如需更换，请查阅<a target="_blank" href="https://api2d.com/wiki/doc">官方文档</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </label>
+                <input type='text' id='api2d_model'>
+                <label for='api2d_key'>
+                    <span class="input_label">KEY:</span>
+                </label>
+                <input type='text' id='api2d_key'>
+                <label for='api2d_request_entry'>
+                    <div style="display: flex;align-items: center;">
+                        <span class="input_label">请求入口:</span>
+                        <div class="help_tip">
+                            `+ helpCircleHTML + `
+                            <div class="tip_text">
+                            <p>如果发现请求报错超时未响应，请查看<a target="_blank" href="https://api2d.com/wiki/doc">官方文档</a>以及<a target="_blank" href="https://support.qq.com/product/544571">API2D反馈论坛</a>尝试更换请求入口</p>
+                            <p>默认为：https://openai.api2d.net</p>
+                            <p>注意格式，末尾没有“斜杠/”</p>
+                            </div>
+                        </div>
+                    </div>
+                </label>
+                <input type='text' id='api2d_request_entry'>
                   <div class='AtBetter_setting_list'>
                       <label for="x_api2d_no_cache">使用缓存</label>
                       <div class="help_tip">
@@ -1099,12 +1180,17 @@ $(document).ready(function () {
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
             $("#openai").show();
+            $("#openai_model").val(openai_model);
             $("#openai_key").val(GM_getValue("openai_key"));
             $("#openai_proxy").val(GM_getValue("openai_proxy"));
             $("#openai_key").css("color", "gray");
+            if (showOpneAiAdvanced) $("#is_showOpneAiAdvanced").show();
+            else $("#is_showOpneAiAdvanced").hide();
         } else if (translation == "api2d") {
             $("#api2d").show();
+            $("#api2d_model").val(api2d_model);
             $("#api2d_key").val(GM_getValue("api2d_key"));
+            $("#api2d_request_entry").val(api2d_request_entry);
             $("#api2d_key").css("color", "gray");
         }
         // 当单选框被选中时，显示对应的输入框，同时隐藏其他输入框
@@ -1112,6 +1198,7 @@ $(document).ready(function () {
             var selected = $(this).val(); // 获取当前选中的值
             if (selected === "openai") {
                 $("#openai").show();
+                $("#openai_model").val(openai_model);
                 $("#openai_key").val(GM_getValue("openai_key"));
                 $("#showOpneAiAdvanced").prop("checked", showOpneAiAdvanced);
                 if (showOpneAiAdvanced) {
@@ -1122,7 +1209,9 @@ $(document).ready(function () {
                 $("#api2d").hide();
             } else if (selected === "api2d") {
                 $("#api2d").show();
+                $("#api2d_model").val(api2d_model);
                 $("#api2d_key").val(GM_getValue("api2d_key"));
+                $("#api2d_request_entry").val(api2d_request_entry);
                 $("#x_api2d_no_cache").prop("checked", GM_getValue("x_api2d_no_cache"));
                 $("#openai").hide();
             } else {
@@ -1142,30 +1231,35 @@ $(document).ready(function () {
 
         const $settingMenu = $("#AtBetter_setting_menu");
 
-        $("#save").click(function () {
-            GM_setValue("bottomZh_CN", $("#bottomZh_CN").prop("checked"));
-            GM_setValue("showLoading", $("#showLoading").prop("checked"));
-            GM_setValue("loaded", $("#loaded").prop("checked"));
-            GM_setValue("enableSegmentedTranslation", $("#enableSegmentedTranslation").prop("checked"));
-            GM_setValue("showJumpToLuogu", $("#showJumpToLuogu").prop("checked"));
-            GM_setValue("showOpneAiAdvanced", $("#showOpneAiAdvanced").prop("checked"));
-            GM_setValue("hoverTargetAreaDisplay", $("#hoverTargetAreaDisplay").prop("checked"));
-            var translation = $("input[name='translation']:checked").val();
-            var openai_key = $("#openai_key").val();
-            var openai_proxy = $("#openai_proxy").val();
-            var api2d_key = $("#api2d_key").val();
-            GM_setValue("translation", translation);
-            if (translation == "openai") {
-                GM_setValue("openai_key", openai_key);
-                GM_setValue("openai_proxy", openai_proxy);
-            } else if (translation == "api2d") {
-                GM_setValue("api2d_key", api2d_key);
+        $("#save").click(debounce(function () {
+            const settings = {
+                bottomZh_CN: $("#bottomZh_CN").prop("checked"),
+                showLoading: $("#showLoading").prop("checked"),
+                loaded: $("#loaded").prop("checked"),
+                enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
+                showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
+                showOpneAiAdvanced: $("#showOpneAiAdvanced").prop("checked"),
+                hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
+                translation: $("input[name='translation']:checked").val()
+            };
+            if (settings.translation === "openai") {
+                GM_setValue("openai_model", $("#openai_model").val());
+                GM_setValue("openai_key", $("#openai_key").val());
+                GM_setValue("openai_proxy", $("#openai_proxy").val());
+            } else if (settings.translation === "api2d") {
+                GM_setValue("api2d_model", $("#api2d_model").val());
+                GM_setValue("api2d_key", $("#api2d_key").val());
+                GM_setValue("api2d_request_entry", $("#api2d_request_entry").val());
                 GM_setValue("x_api2d_no_cache", $("#x_api2d_no_cache").prop("checked"));
             }
+            for (const [key, value] of Object.entries(settings)) {
+                GM_setValue(key, value);
+            }
+
             $settingMenu.remove();
             $(styleElement).remove();
             location.reload();
-        });
+        }));
 
         // 关闭
         $settingMenu.on("click", ".btn-close", () => {
@@ -1238,10 +1332,10 @@ turndownService.addRule('bordertable', {
                 thead = '',
                 trs = node.querySelectorAll('tr');
             if (trs.length > 0) {
-                var ths = trs[0].querySelectorAll('th');
+                var ths = trs[0].querySelectorAll('td, th');
                 if (ths.length > 0) {
                     thead = '| ' + Array.from(ths).map(th => turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
-                        + '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
+                    '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
                 }
             }
             var rows = node.querySelectorAll('tr');
@@ -1285,7 +1379,7 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
 }
 
 function addButtonWithHTML2MD(parent, suffix, type) {
-    $(document).on("click", ".html2md-view" + suffix, function () {
+    $(document).on("click", ".html2md-view" + suffix, debounce(function () {
         var target, removedChildren = $();
         if (type === "this_level") {
             target = $(".html2md-view" + suffix).parent().next().get(0);
@@ -1312,7 +1406,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         }
         // 恢复删除的元素
         if (removedChildren) $(target).prepend(removedChildren);
-    });
+    }));
 
     if (hoverTargetAreaDisplay) {
         $(document).on("mouseover", ".html2md-view" + suffix, function () {
@@ -1357,7 +1451,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 }
 
 function addButtonWithCopy(parent, suffix, type) {
-    $(document).on("click", ".html2md-cb" + suffix, function () {
+    $(document).on("click", ".html2md-cb" + suffix, debounce(function () {
         var target, removedChildren;
         if (type === "this_level") {
             target = $(".translateButton" + suffix).parent().next().eq(0).clone();
@@ -1379,7 +1473,7 @@ function addButtonWithCopy(parent, suffix, type) {
             $(this).text("Copy");
         }, 2000);
         $(target).remove();
-    });
+    }));
 
     if (hoverTargetAreaDisplay) {
         $(document).on("mouseover", ".html2md-cb" + suffix, function () {
@@ -1425,7 +1519,7 @@ function addButtonWithCopy(parent, suffix, type) {
 
 async function addButtonWithTranslation(parent, suffix, type) {
     var result;
-    $(document).on('click', '.translateButton' + suffix, async function () {
+    $(document).on('click', '.translateButton' + suffix, debounce(async function () {
         $(this).removeClass("translated");
         $(this).text("翻译中");
         $(this).css("cursor", "not-allowed");
@@ -1504,16 +1598,21 @@ async function addButtonWithTranslation(parent, suffix, type) {
         if (is_x_api2d_no_cache) x_api2d_no_cache = true;
 
         // 重新翻译
-        let currentText;
+        let currentText, is_error;
         $(document).on("mouseover", ".translateButton" + suffix, function () {
             currentText = $(this).text();
             $(this).text("重新翻译");
+            if ($(this).hasClass("error")) {
+                is_error = true;
+                $(this).removeClass("error");
+            }
         });
 
         $(document).on("mouseout", ".translateButton" + suffix, function () {
             $(this).text(currentText);
+            if (is_error) $(this).addClass("error");
         });
-    });
+    }));
 
     // 目标区域指示
     function bindHoverEvents(suffix, type) {
@@ -1579,7 +1678,9 @@ async function blockProcessing(target, element_node, button) {
     } else if (result.status == 2) {
         result.translateDiv.classList.add("error_translate");
         $(button).addClass("error")
-            .text("翻译出错");
+            .text("翻译出错")
+            .css("cursor", "pointer")
+            .prop("disabled", false);
         $(target).remove();
     }
     return result;
@@ -1868,20 +1969,30 @@ async function translateProblemStatement(text, element_node, button) {
     }
     // 翻译
     if (translation == "deepl") {
-        translateDiv.textContent = "正在翻译中……请稍等";
+        translateDiv.innerHTML = "正在翻译中……请稍等";
         translatedText = await translate_deepl(text);
     } else if (translation == "youdao") {
-        translateDiv.textContent = "正在翻译中……请稍等";
+        translateDiv.innerHTML = "正在翻译中……请稍等";
         translatedText = await translate_youdao_mobile(text);
     } else if (translation == "google") {
-        translateDiv.textContent = "正在翻译中……请稍等";
+        translateDiv.innerHTML = "正在翻译中……请稍等";
         translatedText = await translate_gg(text);
     } else if (translation == "openai") {
-        translateDiv.textContent = "正在翻译中……\n\n使用GPT（ChatGPT/api2d）进行翻译通常需要很长的时间，请耐心等待";
-        translatedText = await translate_openai(text);
+        try {
+            translateDiv.innerHTML = "正在翻译中……<br><br>使用GPT（ChatGPT/api2d）进行翻译通常需要很长的时间，请耐心等待";
+            translatedText = await translate_openai(text);
+        } catch (error) {
+            status = 2;
+            translatedText = error;
+        }
     } else if (translation == "api2d") {
-        translateDiv.textContent = "正在翻译中……\n\n使用GPT（ChatGPT/api2d）进行翻译通常需要很长的时间，请耐心等待";
-        translatedText = await translate_api2d(text);
+        try {
+            translateDiv.innerHTML = "正在翻译中……<br><br>使用GPT（ChatGPT/api2d）进行翻译通常需要很长的时间，请耐心等待";
+            translatedText = await translate_api2d(text);
+        } catch (error) {
+            status = 2;
+            translatedText = error;
+        }
     }
     if (/^翻译出错/.test(translatedText)) status = 2;
     // 还原latex公式
@@ -1912,42 +2023,52 @@ async function translateProblemStatement(text, element_node, button) {
     // 翻译复制按钮
     var copyButton = document.createElement("button");
     copyButton.textContent = "Copy";
-    $(copyButton).addClass("html2mdButton html2md-cb");
-    $(copyButton).css({
-        "float": "right",
+    var wrapperDiv = document.createElement("div");
+    $(wrapperDiv).css({
+        display: "flex",
+        justifyContent: "flex-end"
     });
+    $(wrapperDiv).append(copyButton);
+    $(copyButton).addClass("html2mdButton html2md-cb");
+
     copyButton.addEventListener("click", function () {
         var translatedText = textElement.textContent;
         GM_setClipboard(translatedText);
-        $(this).addClass("copied");
-        $(this).text("Copied");
+        $(this).addClass("copied").text("Copied");
         // 更新复制按钮文本
         setTimeout(() => {
             $(this).removeClass("copied");
             $(this).text("Copy");
         }, 2000);
     });
-    translateDiv.parentNode.insertBefore(copyButton, translateDiv);
+    translateDiv.parentNode.insertBefore(wrapperDiv, translateDiv);
 
-    // 替换特殊符号为字符实体
-    const ruleMap = [
-        { pattern: /(?<!\\)>(?!\s)/g, replacement: "&gt;" }, // >符号
-        { pattern: /(?<!\\)</g, replacement: "&lt;" }, // <符号
+    // 转义LaTex中的特殊符号
+    const escapeRules = [
+        { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
+        { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
+        { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
+        { pattern: /(?<!\\)& /g, replacement: "\\&" }, // &符号
     ];
 
-    ruleMap.forEach(({ pattern, replacement }) => {
-        translatedText = translatedText.replace(pattern, replacement);
-    });
+    let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$/g)];
 
-    // 更新
-    translateDiv.innerHTML = translatedText;
+    for (const match of latexMatches) {
+        const matchedText = match[0];
+
+        for (const rule of escapeRules) {
+            const escapedText = matchedText.replaceAll(rule.pattern, rule.replacement);
+            translatedText = translatedText.replace(matchedText, escapedText);
+        }
+    }
+
     // 渲染MarkDown
     var md = window.markdownit();
-    var html = md.render(translateDiv.innerText);
+    var html = md.render(translatedText);
     translateDiv.innerHTML = html;
     // 渲染Latex
     if (typeof renderMathInElement === 'function') {
-        renderMathInElement(document.getElementById(id), {
+        renderMathInElement(translateDiv, {
             delimiters: [{
                 left: "$$",
                 right: "$$",
@@ -1973,10 +2094,10 @@ async function translate_openai(raw) {
     var openai_key = GM_getValue("openai_key");
     var openai_retext = "";
     var data = {
-        model: "gpt-3.5-turbo",
+        model: openai_model,
         messages: [{
             role: "user",
-            content: "(请将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
+            content: "(请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
         }],
         temperature: 0.7
     };
@@ -1992,17 +2113,18 @@ async function translate_openai(raw) {
             },
             responseType: 'json',
             onload: function (response) {
-                if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
-                    resolve("翻译出错，请重试\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
+                if (!response.response) {
+                    reject("发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
+                }
+                else if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
+                    resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, ''));
                 } else {
                     openai_retext = response.response.choices[0].message.content;
-                    // openai_retext = openai_retext.replace(/^\s+/, '');
                     resolve(openai_retext);
                 }
             },
             onerror: function (response) {
-                console.error(response.statusText);
-                reject(response.statusText);
+                reject("发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
             },
         });
 
@@ -2014,15 +2136,15 @@ async function translate_api2d(raw) {
     var api2d_key = GM_getValue("api2d_key");
     var api2d_retext = "";
     var postData = JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: '请帮我将下面的文本翻译为中文，这是一个编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' + raw }],
+        model: api2d_model,
+        messages: [{ role: 'user', content: '请帮我将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' + raw }],
         temperature: 0.7
     });
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + api2d_key,
+            'Authorization': 'Bearer ' + api2d_key,
             ...(x_api2d_no_cache ? {} : { 'x-api2d-no-cache': 1 })
         },
         data: postData,
@@ -2031,21 +2153,20 @@ async function translate_api2d(raw) {
     return new Promise(function (resolve, reject) {
         GM_xmlhttpRequest({
             method: options.method,
-            url: `https://openai.api2d.net/v1/chat/completions`,
+            url: api2d_request_entry + `/v1/chat/completions`,
             headers: options.headers,
             data: options.data,
             responseType: 'json',
             onload: function (response) {
                 if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
-                    resolve("翻译出错，请重试\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
+                    resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
                 } else {
                     api2d_retext = response.response.choices[0].message.content;
                     resolve(api2d_retext);
                 }
             },
             onerror: function (response) {
-                console.error(response.statusText);
-                reject(response.statusText);
+                reject("发生了未知的错误，请检查请求入口地址是否正确，能否正常访问\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
             },
         });
     });
@@ -2185,7 +2306,7 @@ async function BaseTranslate(name, raw, options, processer) {
             }
         }
     }
-    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请重试或更换翻译接口\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈\n\n报错信息：" + errtext })
+    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈  请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
 }
 
 
