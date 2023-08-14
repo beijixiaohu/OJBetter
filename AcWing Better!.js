@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AcWing Better!
-// @version      3.23
+// @version      3.25
 // @description  AcWing界面美化，功能增强，视频时间点标记跳转，代码markdown一键复制
 // @author       北极小狐
 // @match        https://www.acwing.com/*
@@ -10,6 +10,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
+// @grant        GM_setClipboard
 // @connect      greasyfork.org
 // @run-at       document-end
 // @require      https://cdn.bootcdn.net/ajax/libs/turndown/7.1.1/turndown.min.js
@@ -106,7 +107,9 @@ if (widthAdjustment) {
     })
 }
 GM_addStyle(`
-    /* 去除没用的图标 */
+    span.mdViewContent {
+        white-space: pre-wrap;
+    }
     .file-explorer-main-field-item.file-explorer-main-field-item-desktop {
         width: 0px;
         height: 0px;
@@ -122,7 +125,6 @@ GM_addStyle(`
     footer#acwing_footer .copyright a, .links a, footer#acwing_footer .container {
         color: #fff;
     }
-
     /* 复制按钮 */
     pre.hljs {
         display: flex;
@@ -153,21 +155,28 @@ GM_addStyle(`
         width: 30px;
     }
     button.html2mdButton {
+        display: flex;
+        align-items: center;
         cursor: pointer;
-        background-color: #e6e6e6;
-        color: #727378;
-        height: 30px;
+        background-color: #ffffff;
+        color: #606266;
+        height: 22px;
         width: auto;
         font-size: 13px;
         border-radius: 0.3rem;
-        border: none;
         padding: 1px 5px;
         margin: 5px;
-        box-shadow: 0 0 1px #0000004d;
+        border: 1px solid #dcdfe6;
+    }
+    button.html2mdButton:hover {
+        color: #409eff;
+        border-color: #409eff;
+        background-color: #f1f8ff;
     }
     button.html2mdButton.copied {
-        background-color: #07e65196;
-        color: #104f2b;
+        background-color: #f0f9eb;
+        color: #67c23e;
+        border: 1px solid #b3e19d;
     }
     button.html2mdButton.html2md-view.mdViewed {
         background-color: #ff980057;
@@ -427,6 +436,10 @@ GM_addStyle(`
         background-color: #56aa56;
         color: white;
         white-space: nowrap;
+        float: right;
+        height: 30px;
+        margin: 10px;
+        border: 0px;
     }
     #ACwingBetter_setting_menu {
         z-index: 9999;
@@ -638,10 +651,29 @@ GM_addStyle(`
     });
 })();
 
+// 防抖函数
+function debounce(callback) {
+    let timer;
+    let immediateExecuted = false;
+    const delay = 500;
+    return function () {
+        clearTimeout(timer);
+        if (!immediateExecuted) { callback.call(this); immediateExecuted = true; }
+        timer = setTimeout(() => { immediateExecuted = false; }, delay);
+    };
+}
+
+// 随机数生成
+function getRandomNumber(numDigits) {
+    let min = Math.pow(10, numDigits - 1);
+    let max = Math.pow(10, numDigits) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // 设置面板
 $(document).ready(function () {
     $("#topNavBar").after(
-        "<button class='html2mdButton ACBetter_setting'>ACwingBetter设置</button>"
+        "<button class='html2mdButton ACBetter_setting'>AcWingBetter设置</button>"
     );
 });
 
@@ -652,32 +684,32 @@ $(document).ready(function () {
         $(".ACBetter_setting").css("color", "#727378");
         $(".ACBetter_setting").css("cursor", "not-allowed");
         $("body").append(`
-					<div class='checkbox-con' id='ACwingBetter_setting_menu'>
-                        <div class="tool-box">
-		                    <button class="btn-close">×</button>
-	                    </div>
-						<h3>ACwingBetter设置</h3>
-						<hr>
-						<div class='ACBetter_setting_list'>
-							<input type="checkbox" id="bottomBar" name="bottomBar" checked>
-							<label for="bottomBar">美化底栏</label>
-						</div>
-						<div class='ACBetter_setting_list'>
-							<input type="checkbox" id="bingWallpaper" name="bingWallpaper" checked>
-							<label for="bingWallpaper">Bing每日壁纸</label>
-						</div>
-						<div class='ACBetter_setting_list'>
-							<input type="checkbox" id="widthAdjustment" name="widthAdjustment" checked>
-							<label for="widthAdjustment">页面宽屏</label>
-						</div>
-						<div class='ACBetter_setting_list'>
-							<input type="checkbox" id="autoPlay" name="autoPlay" checked>
-							<label for="autoPlay">不自动播放视频</label>
-						</div>
-						<br>
-						<button id='save'>保存</button>
-					</div>
-				`);
+            <div class='checkbox-con' id='ACwingBetter_setting_menu'>
+                <div class="tool-box">
+                    <button class="btn-close">×</button>
+                </div>
+                <h3>AcWingBetter设置</h3>
+                <hr>
+                <div class='ACBetter_setting_list'>
+                    <input type="checkbox" id="bottomBar" name="bottomBar" checked>
+                    <label for="bottomBar">美化底栏</label>
+                </div>
+                <div class='ACBetter_setting_list'>
+                    <input type="checkbox" id="bingWallpaper" name="bingWallpaper" checked>
+                    <label for="bingWallpaper">Bing每日壁纸</label>
+                </div>
+                <div class='ACBetter_setting_list'>
+                    <input type="checkbox" id="widthAdjustment" name="widthAdjustment" checked>
+                    <label for="widthAdjustment">页面宽屏</label>
+                </div>
+                <div class='ACBetter_setting_list'>
+                    <input type="checkbox" id="autoPlay" name="autoPlay" checked>
+                    <label for="autoPlay">不自动播放视频</label>
+                </div>
+                <br>
+                <button id='save'>保存</button>
+            </div>
+        `);
         $("#save").click(function () {
             GM_setValue("bottomBar", $("#bottomBar").prop("checked"));
             GM_setValue("bingWallpaper", $("#bingWallpaper").prop("checked"));
@@ -700,48 +732,341 @@ $(document).ready(function () {
     });
 });
 
-// 添加复制按钮
-function addCopy() {
-    // 获取所有 .hljs 中的代码块
-    const codeBlocks = document.querySelectorAll('.hljs code');
+// html2md转换/处理规则
+let turndownService = new TurndownService();
 
-    // 循环遍历每个代码块
-    codeBlocks.forEach(codeBlock => {
-        // 创建一个 span 元素，并设置样式
-        const beforeButton = document.createElement('span');
-        beforeButton.textContent = "Copy";
-        beforeButton.className = 'copy-button';
-        // 在代码块前面插入按钮
-        codeBlock.parentNode.insertBefore(beforeButton, codeBlock.nextSibling);
-        // 为按钮添加点击事件
-        beforeButton.addEventListener('click', event => {
-            // 创建临时文本域
-            const textarea = document.createElement('textarea');
-            textarea.value = codeBlock.textContent.replace(/\n+$/, '');
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
+turndownService.keep(['del']);
 
+// 丢弃
+turndownService.addRule('remove-by-class', {
+    filter: function (node) {
+        return node.classList.contains('html2md-panel') ||
+            node.classList.contains('html2mdButton');
+    },
+    replacement: function (content, node) {
+        return "";
+    }
+});
+turndownService.addRule('remove-script', {
+    filter: function (node, options) {
+        return node.tagName.toLowerCase() == "script" && node.type.startsWith("math/tex");
+    },
+    replacement: function (content, node) {
+        return "";
+    }
+});
 
-            // 更新复制按钮文本
-            beforeButton.classList.add('copied');
-            beforeButton.textContent = "Copied";
-            setTimeout(() => {
-                beforeButton.classList.remove('copied');
-                beforeButton.textContent = "Copy";
-            }, 2000);
-        }, false);
+// code block
+turndownService.addRule('pre', {
+    filter: 'pre',
+    replacement: function (content, node) {
+        let t = $(node).attr("class").split(/\s+/).slice(-1);
+        if (t == "hljs") t = "";
+        return "```" + t + "\n" + content.trim() + "\n```";
+    }
+});
+
+// inline math
+turndownService.addRule('inline-math', {
+    filter: function (node, options) {
+        return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
+    },
+    replacement: function (content, node) {
+        return "$" + $(node).next().text() + "$";
+    }
+});
+
+// block math
+turndownService.addRule('block-math', {
+    filter: function (node, options) {
+        return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
+    },
+    replacement: function (content, node) {
+        return "\n$$\n" + $(node).next().text() + "\n$$\n";
+    }
+});
+
+// 按钮面板
+function addButtonPanel(parent, suffix, type) {
+    let htmlString = `<div class='html2md-panel'>
+    <button class='html2mdButton html2md-view${suffix}'>MarkDown视图</button>
+    <button class='html2mdButton html2md-cb${suffix}'>Copy</button>
+  </div>`;
+    if (type === "this_level") {
+        $(parent).before(htmlString);
+    } else if (type === "child_level") {
+        $(parent).prepend(htmlString);
+    }
+}
+
+function addButtonWithHTML2MD(parent, suffix, type) {
+    $(document).on("click", ".html2md-view" + suffix, function () {
+        var target, removedChildren = $();
+        if (type === "this_level") {
+            target = $(".html2md-view" + suffix).parent().next().get(0);
+        } else if (type === "child_level") {
+            target = $(".html2md-view" + suffix).parent().parent().get(0);
+            removedChildren = $(".html2md-view" + suffix).parent().parent().children(':first').detach();
+        }
+        if (target.viewmd) {
+            target.viewmd = false;
+            $(this).text("MarkDown视图");
+            $(this).removeClass("mdViewed");
+            $(target).html(target.original_html);
+        } else {
+            target.viewmd = true;
+            if (!target.original_html) {
+                target.original_html = $(target).html();
+            }
+            if (!target.markdown) {
+                target.markdown = turndownService.turndown($(target).html());
+            }
+            $(this).text("原始内容");
+            $(this).addClass("mdViewed");
+            $(target).html(`<span class="mdViewContent" oninput="$(this).parent().get(0).markdown=this.value;" style="width:auto; height:auto;">${target.markdown}</span>`);
+        }
+        // 恢复删除的元素
+        if (removedChildren) $(target).prepend(removedChildren);
     });
 }
 
-// 移除复制按钮
-function removeCopy() {
-    var elements = document.querySelectorAll('.hljs .copy-button');
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].parentNode.removeChild(elements[i]);
+function addButtonWithCopy(parent, suffix, type) {
+    $(document).on("click", ".html2md-cb" + suffix, function () {
+        let target, removedChildren, text;
+        if (type === "this_level") {
+            target = $(".html2md-cb" + suffix).parent().next().eq(0).clone();
+        } else if (type === "child_level") {
+            target = $(".html2md-cb" + suffix).parent().parent().eq(0).clone();
+            $(target).children(':first').remove();
+        }
+        if ($(target).find('.mdViewContent').length <= 0) {
+            text = turndownService.turndown($(target).html());
+        } else {
+            text = $(target).find('.mdViewContent').text();
+        }
+        GM_setClipboard(text);
+        $(this).addClass("copied");
+        $(this).text("Copied");
+        // 更新复制按钮文本
+        setTimeout(() => {
+            $(this).removeClass("copied");
+            $(this).text("Copy");
+        }, 2000);
+        $(target).remove();
+    });
+}
+
+// 代码块复制按钮
+function codeCopy() {
+    $('.hljs code').each(function () {
+        let codeBlock = $(this);
+        let id = "_" + getRandomNumber(8);
+        let beforeButton = $('<button>').text("Copy").addClass(`html2mdButton copy-button${id}`);
+        let wrapperDiv = $('<div>').addClass('copy-div');
+        $(wrapperDiv).append(beforeButton);
+        $(wrapperDiv).css({
+            display: "flex",
+            justifyContent: "flex-end"
+        });
+        codeBlock.parent().before(wrapperDiv);
+
+        $(document).on("click", `.copy-button${id}`, debounce(function () {
+            GM_setClipboard(codeBlock.text().replace(/\n+$/, ''));
+            // 更新复制按钮文本
+            var self = this;
+            $(self).addClass('copied');
+            $(self).text("Copied");
+            var self = this;
+            setTimeout(function () {
+                $(self).removeClass('copied');
+                $(self).text("Copy");
+            }, 2000);
+        }));
+    });
+}
+
+function addConversionButton() {
+    // 添加按钮到content部分
+    $('div[data-field-name="content"]').each(function () {
+        let id = "_question-oi-bd_" + getRandomNumber(8);
+        addButtonPanel(this, id, "this_level");
+        addButtonWithHTML2MD(this, id, "this_level");
+        addButtonWithCopy(this, id, "this_level");
+    });
+
+    // 为代码块添加复制按钮
+    codeCopy();
+};
+
+// 播放器添加节点标签功能
+function addPlayerBar(player_bar_video) {
+    const player = $(".prism-player");
+    const player_bar = $("<div class='player_bar'></div>").insertAfter(player);
+
+    const player_bar_list = $("<div class='player_bar_list' id='player_bar_list'></div>").appendTo(player_bar);
+    const player_bar_ul = $("<ul class='player_bar_ul' id='player_bar_ul'></ul>").appendTo(player_bar_list);
+
+    const player_bar_go = $("<div class='player_bar_go' id='player_bar_go'>Go!</div>").appendTo(player_bar);
+
+    const player_bar_list_add_div = $("<div class='player_bar_list_add_div'></div>").insertAfter(player_bar);
+    const player_bar_list_add_input = $("<input class='player_bar_list_add_input' type='text' id='player_bar_list_add_input' placeholder='在这里输入备注内容，点击Add添加一个时间点标记；选中一个标记，点击Go跳转；右键标记，修改或删除'></input>").appendTo(player_bar_list_add_div);
+    const player_bar_list_add_button = $("<button class='player_bar_list_add_button' id='player_bar_list_add_new_item_btn'>Add</button>").appendTo(player_bar_list_add_div);
+
+    // 页面路径标识
+    const PAGE_IDENTIFIER = window.location.href;
+    // 计数器
+    let counter = 0;
+
+    // 获取数据
+    function getListData() {
+        let data = GM_getValue("cookieData");
+        if (!data) {
+            data = {};
+        } else {
+            data = JSON.parse(data);
+        }
+        if (!data[PAGE_IDENTIFIER]) {
+            data[PAGE_IDENTIFIER] = [];
+        }
+        return data[PAGE_IDENTIFIER];
     }
 
+    // 保存数据
+    function saveListData(data) {
+        let cookieData = GM_getValue("cookieData");
+        if (cookieData) {
+            cookieData = JSON.parse(cookieData);
+        } else {
+            cookieData = {};
+        }
+        cookieData[PAGE_IDENTIFIER] = data;
+        GM_setValue("cookieData", JSON.stringify(cookieData));
+    }
+
+    // 创建新的li元素
+    function createListItemElement(text) {
+        const li = $("<li></li>");
+        const radio = $("<input type='radio' name='player_bar_ul'></input>").appendTo(li);
+        radio.attr("id", counter++);
+        const label = $("<label class='player_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("id")).appendTo(li);
+
+        li.on("contextmenu", (event) => {
+            event.preventDefault();
+            const menu = $("#player_bar_menu");
+            menu.css({ display: "block", left: event.pageX, top: event.pageY });
+
+            const deleteItem = $("#player_bar_menu_delete");
+            const editItem = $("#player_bar_menu_edit");
+
+            function onDelete() {
+                deleteItem.off("click", onDelete);
+                const list = $("#player_bar_ul");
+                const index = Array.from(list.children()).indexOf(li.get(0));
+                const data = getListData();
+                data.splice(index, 1);
+                saveListData(data);
+                li.remove();
+                menu.css({ display: "none" });
+            }
+
+            function onEdit() {
+                editItem.off("click", onEdit);
+                const list = $("#player_bar_ul");
+                const index = Array.from(list.children()).indexOf(li.get(0));
+                const data = getListData();
+                label.text(data[index].text);
+                const text = prompt("请输入修改后的内容", label.text());
+                if (text !== undefined && text !== null) {
+                    data[index].text = text.trim();
+                    saveListData(data);
+                }
+                renderList();
+                menu.css({ display: "none" });
+            }
+
+            deleteItem.on("click", onDelete);
+            editItem.on("click", onEdit);
+
+            $(document).on("click", (event) => {
+                if (!menu.get(0).contains(event.target)) {
+                    menu.css({ display: "none" });
+                    deleteItem.off("click", onDelete);
+                    editItem.off("click", onEdit);
+                }
+            });
+        });
+
+        return li;
+    }
+
+    // 渲染列表
+    function renderList() {
+        const listContainer = $("#player_bar_list");
+        const list = $("#player_bar_ul");
+        list.empty();
+        const data = getListData();
+        data.forEach((item) => {
+            list.append(createListItemElement(item.text));
+        });
+    }
+
+    // 新增列表项
+    function addNewItem() {
+        const input = $("#player_bar_list_add_input");
+        const text = input.val().trim();
+        if (text === "") {
+            alert("请输入内容");
+            return;
+        }
+        const data = getListData();
+        data.push({ text: text, time: player_bar_video.currentTime });
+        saveListData(data);
+        const list = $("#player_bar_ul");
+        list.append(createListItemElement(text));
+        input.val("");
+    }
+
+    // 为添加按钮添加事件处理程序
+    const player_bar_add_button = $("#player_bar_list_add_new_item_btn");
+    player_bar_add_button.on("click", () => {
+        addNewItem();
+        player_bar_add_button.addClass('added');
+        player_bar_add_button.text("Added");
+        setTimeout(() => {
+            player_bar_add_button.removeClass('added');
+            player_bar_add_button.text("Add");
+        }, 2000);
+    });
+
+    // 渲染列表
+    renderList();
+
+    // 跳转按钮
+    const click_player_bar_go = $("#player_bar_go");
+    click_player_bar_go.on("click", () => {
+        const selected = $('input[name="player_bar_ul"]:checked');
+        if (selected.length) {
+            const data = getListData();
+            const index = selected.parent().index();
+            player_bar_video.currentTime = data[index].time;
+            click_player_bar_go.addClass('gone');
+            click_player_bar_go.text("Gone");
+            setTimeout(() => {
+                click_player_bar_go.removeClass('gone');
+                click_player_bar_go.text("Go!");
+            }, 2000);
+        } else {
+            alert("请选择一项");
+        }
+    });
+
+    // 创建自定义菜单
+    const menu = $("<div id='player_bar_menu' style='display: none;'></div>");
+    menu.html(`
+        <div id='player_bar_menu_edit'>修改</div>
+        <div id='player_bar_menu_delete'>删除</div>
+    `);
+    $("body").append(menu);
 }
 
 $(document).ready(function () {
@@ -761,19 +1086,22 @@ $(document).ready(function () {
         }
     }
     // 自动恢复进度条
-    setTimeout(function () {
-        try {
-            document.querySelector('.play-jump').click();
+    (function checkAndPlay() {
+        if ($('.play-jump').length > 0) {
+            $('.play-jump').click();
             if (GM_getValue("autoPlay") === true) {
                 let player_bar_video = document.querySelector('video');
                 if (!player_bar_video.paused) player_bar_video.pause();
             }
-        } catch (error) {
-            // do nothing
+        } else {
+            setTimeout(checkAndPlay, 500);
         }
-    }, 3000);
-    // 复制按钮
-    addCopy();
+    })();
+    // 调整视频高度
+    $('.prism-player').height($('.prism-player').width() / 1.7);
+
+    // 添加按钮
+    addConversionButton();
     // 移除广告元素
     let ADidADList = ["1024-activity", "test"];
     ADtraverseDom(document.body);
@@ -792,325 +1120,7 @@ $(document).ready(function () {
         var style = window.getComputedStyle(element);
         element.style.height = "55vh";
     }
-});
 
-// MarkDown
-
-$(document).ready(function () {
-    let debug = false; // whether to enable on editor
-
-    let turndownService = new TurndownService();
-
-    turndownService.keep(['del']);
-
-    // code block
-    turndownService.addRule('pre', {
-        filter: 'pre',
-        replacement: function (content, node) {
-            let t = $(node).attr("class").split(/\s+/).slice(-1);
-            if (t == "hljs") t = "";
-            return "```" + t + "\n" + content.trim() + "\n```";
-        }
-    });
-
-    // remove <script> math
-    turndownService.addRule('remove-script', {
-        filter: function (node, options) {
-            return node.tagName.toLowerCase() == "script" && node.type.startsWith("math/tex");
-        },
-        replacement: function (content, node) {
-            return "";
-        }
-    });
-
-    // inline math
-    turndownService.addRule('inline-math', {
-        filter: function (node, options) {
-            return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
-        },
-        replacement: function (content, node) {
-            return "$" + $(node).next().text() + "$";
-        }
-    });
-
-    // block math
-    turndownService.addRule('block-math', {
-        filter: function (node, options) {
-            return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
-        },
-        replacement: function (content, node) {
-            return "\n$$\n" + $(node).next().text() + "\n$$\n";
-        }
-    });
-
-    // add buttons
-    $("div[data-tab='preview-tab-content']").each(function () {
-        if (debug || $(this).prev().attr('data-tab') != "editor-tab-content")
-            $(this).before(
-                "<div class='html2md-panel'> <button class='html2mdButton html2md-view'>MarkDown视图</button> <button class='html2mdButton html2md-cb'>Copy</button> </div>"
-            );
-    });
-
-    $(".html2md-cb").click(function () {
-        let target = $(this).parent().next().get(0);
-        if (!target.markdown) {
-            removeCopy();
-            target.markdown = turndownService.turndown($(target).html());
-            addCopy();
-        }
-        const textarea = document.createElement('textarea');
-        textarea.value = target.markdown;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        // console.log(markdown);
-        $(this).addClass("copied");
-        $(this).text("Copied");
-        // 更新复制按钮文本
-        setTimeout(() => {
-            $(this).removeClass("copied");
-            $(this).text("Copy");
-        }, 2000);
-    });
-
-    $(".html2md-view").click(function () {
-        let target = $(this).parent().next().get(0);
-        if (target.viewmd) {
-            target.viewmd = false;
-            $(this).text("MarkDown视图");
-            $(this).removeClass("mdViewed");
-            $(target).html(target.original_html);
-            addCopy();
-        } else {
-            target.viewmd = true;
-            removeCopy();
-            if (!target.original_html)
-                target.original_html = $(target).html();
-            if (!target.markdown)
-                target.markdown = turndownService.turndown($(target).html());
-            $(this).text("原始内容");
-            $(this).addClass("mdViewed");
-            $(target).html(`<span oninput="$(this).parent().get(0).markdown=this.value;" style="width:auto; height:auto; white-space: pre;">${target.markdown}</span>`);
-        }
-    });
-});
-
-
-// 播放器添加节点标签功能
-function addPlayerBar(player_bar_video) {
-    // 创建元素
-    var player = document.querySelector('.prism-player');
-    var player_bar = document.createElement('div');
-    player_bar.classList.add('player_bar');
-    player.parentNode.insertBefore(player_bar, player.nextSibling);
-
-    var player_bar_list = document.createElement('div');
-    player_bar_list.classList.add('player_bar_list');
-    player_bar_list.setAttribute("id", "player_bar_list");
-    player_bar.appendChild(player_bar_list);
-
-    var player_bar_ul = document.createElement('ul');
-    player_bar_ul.classList.add('player_bar_ul');
-    player_bar_ul.setAttribute("id", "player_bar_ul");
-    player_bar_list.appendChild(player_bar_ul);
-
-    var player_bar_go = document.createElement('div');
-    player_bar_go.classList.add('player_bar_go');
-    player_bar_go.setAttribute("id", "player_bar_go");
-    var player_bar_goText = document.createTextNode("Go!");
-    player_bar_go.appendChild(player_bar_goText);
-    player_bar.appendChild(player_bar_go);
-
-    var player_bar_list_add_div = document.createElement('div');
-    player_bar_list_add_div.classList.add('player_bar_list_add_div');
-    player_bar.parentNode.insertBefore(player_bar_list_add_div, player_bar.nextSibling);
-
-    var player_bar_list_add_input = document.createElement('input');
-    player_bar_list_add_input.classList.add('player_bar_list_add_input');
-    player_bar_list_add_input.setAttribute("type", "text");
-    player_bar_list_add_input.setAttribute("id", "player_bar_list_add_input");
-    player_bar_list_add_input.setAttribute("placeholder", "在这里输入备注内容，点击Add添加一个时间点标记；选中一个标记，点击Go跳转；右键标记，修改或删除");
-    player_bar_list_add_div.appendChild(player_bar_list_add_input);
-
-    var player_bar_list_add_button = document.createElement('button');
-    player_bar_list_add_button.classList.add('player_bar_list_add_button');
-    player_bar_list_add_button.setAttribute("id", "player_bar_list_add_new_item_btn");
-    var player_bar_list_add_buttonText = document.createTextNode("Add");
-    player_bar_list_add_button.appendChild(player_bar_list_add_buttonText);
-    player_bar_list_add_div.appendChild(player_bar_list_add_button);
-
-    //存储cookie的名称和标识符
-    const COOKIE_NAME = "listItems";
-    const PAGE_IDENTIFIER = window.location.href;
-    //计数器
-    let counter = 0;
-
-    //获取GM值中的数据
-    function getListData() {
-        let data = GM_getValue("cookieData");
-        if (!data) {
-            data = {};
-        } else {
-            data = JSON.parse(data);
-        }
-        if (!data[PAGE_IDENTIFIER]) {
-            data[PAGE_IDENTIFIER] = [];
-        }
-        return data[PAGE_IDENTIFIER];
-    }
-
-    //将数据保存到GM值中
-    function saveListData(data) {
-        let cookieData = GM_getValue("cookieData");
-        if (cookieData) {
-            cookieData = JSON.parse(cookieData);
-        } else {
-            cookieData = {};
-        }
-        cookieData[PAGE_IDENTIFIER] = data;
-        GM_setValue("cookieData", JSON.stringify(cookieData));
-    }
-
-    //创建新的li元素
-    function createListItemElement(text) {
-        const li = document.createElement("li");
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = "player_bar_ul";
-        radio.id = counter++;
-        li.appendChild(radio);
-        const label = document.createElement("label");
-        label.textContent = text;
-        label.classList.add("player_bar_ul_li_text");
-        label.setAttribute("for", radio.id);
-        li.appendChild(label);
-        li.addEventListener("contextmenu", (event) => {
-            //阻止默认右键菜单
-            event.preventDefault();
-            //显示菜单
-            menu.style.display = "block";
-            menu.style.left = event.pageX + "px";
-            menu.style.top = event.pageY + "px";
-
-            const deleteItem = document.getElementById("player_bar_menu_delete");
-            const editItem = document.getElementById("player_bar_menu_edit");
-
-            function onDelete() {
-                deleteItem.removeEventListener("click", onDelete);
-                const list = document.getElementById("player_bar_ul");
-                const index = Array.from(list.children).indexOf(li);
-                const data = getListData();
-                data.splice(index, 1);
-                saveListData(data);
-                li.remove();
-                menu.style.display = "none";
-            }
-
-            function onEdit() {
-                editItem.removeEventListener("click", onEdit);
-                const list = document.getElementById("player_bar_ul");
-                const index = Array.from(list.children).indexOf(li);
-                const data = getListData();
-                label.textContent = data[index].text;
-                const text = prompt("请输入修改后的内容", label.textContent);
-                if (text !== undefined && text !== null) {
-                    data[index].text = text.trim();
-                    saveListData(data);
-                }
-                renderList();//重新渲染
-                menu.style.display = "none";
-            }
-
-            deleteItem.addEventListener("click", onDelete);
-            editItem.addEventListener("click", onEdit);
-
-            document.addEventListener("click", (event) => {
-                //点击菜单外部，隐藏菜单并移除事件监听器
-                if (!menu.contains(event.target)) {
-                    menu.style.display = "none";
-                    // 移除所有事件监听器
-                    deleteItem.removeEventListener("click", onDelete);
-                    editItem.removeEventListener("click", onEdit);
-                }
-            });
-        });
-        return li;
-    }
-
-    //渲染列表
-    function renderList() {
-        const listContainer = document.getElementById("player_bar_list");
-        const list = document.getElementById("player_bar_ul");
-        list.innerHTML = "";
-        const data = getListData();
-        data.forEach((item) => {
-            list.appendChild(createListItemElement(item.text));
-        });
-    }
-
-    //新增列表项
-    function addNewItem() {
-        const input = document.getElementById("player_bar_list_add_input");
-        const text = input.value.trim();
-        if (text === "") {
-            alert("请输入内容");
-            return;
-        }
-        const data = getListData();
-        data.push({ text: text, time: player_bar_video.currentTime });
-        saveListData(data);
-        const list = document.getElementById("player_bar_ul");
-        list.appendChild(createListItemElement(text));
-        input.value = "";
-    }
-
-    //为添加按钮添加事件处理程序
-    var player_bar_add_button = document.getElementById("player_bar_list_add_new_item_btn")
-    player_bar_add_button.addEventListener("click", () => {
-        addNewItem();
-        player_bar_add_button.classList.add('added');
-        player_bar_add_button.textContent = "Added";
-        setTimeout(() => {
-            player_bar_add_button.classList.remove('added');
-            player_bar_add_button.textContent = "Add";
-        }, 2000);
-    });
-
-    //在页面加载时渲染列表
-    renderList();
-
-    //为跳转按钮添加事件处理程序
-    var click_player_bar_go = document.getElementById("player_bar_go");
-    click_player_bar_go.addEventListener("click", () => {
-        const selected = document.querySelector('input[name="player_bar_ul"]:checked');
-        if (selected) {
-            const data = getListData();
-            const index = Array.from(selected.parentNode.parentNode.children).indexOf(selected.parentNode);
-            player_bar_video.currentTime = data[index].time;
-            click_player_bar_go.classList.add('gone');
-            click_player_bar_go.textContent = "Gone";
-            setTimeout(() => {
-                click_player_bar_go.classList.remove('gone');
-                click_player_bar_go.textContent = "Go!";
-            }, 2000);
-        } else {
-            alert("请选择一项");
-        }
-    });
-
-    //创建自定义菜单
-    const menu = document.createElement("div");
-    menu.id = "player_bar_menu";
-    menu.style.display = "none";
-    menu.innerHTML = `
-        <div id="player_bar_menu_edit">修改</div>
-        <div id="player_bar_menu_delete">删除</div>
-    `;
-    document.body.appendChild(menu);
-}
-
-$(document).ready(function () {
     var player_bar_video = document.querySelector('video');
     if (player_bar_video != null) addPlayerBar(player_bar_video);
 });
