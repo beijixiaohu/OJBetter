@@ -1332,10 +1332,11 @@ turndownService.addRule('bordertable', {
                 thead = '',
                 trs = node.querySelectorAll('tr');
             if (trs.length > 0) {
-                var ths = trs[0].querySelectorAll('td, th');
+                var ths = trs[0].querySelectorAll('th, td');
+                console.log(ths.length);
                 if (ths.length > 0) {
                     thead = '| ' + Array.from(ths).map(th => turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
-                    '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
+                    thead += '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
                 }
             }
             var rows = node.querySelectorAll('tr');
@@ -1352,7 +1353,6 @@ turndownService.addRule('bordertable', {
         }
     }
 });
-
 
 // 随机数生成
 function getRandomNumber(numDigits) {
