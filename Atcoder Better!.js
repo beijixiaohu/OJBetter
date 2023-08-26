@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.08
+// @version      1.09
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -17,6 +17,7 @@
 // @grant        GM_info
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/atcoder.png
@@ -39,23 +40,46 @@ const getGMValue = (key, defaultValue) => {
 };
 
 const bottomZh_CN = getGMValue("bottomZh_CN", true);
-const translation = getGMValue("translation", "deepl");
 const enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
 const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
 const showLoading = getGMValue("showLoading", true);
 const loaded = getGMValue("loaded", false);
 const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
+const translation = getGMValue("translation", "deepl");
 //openai
-const openai_model = getGMValue("openai_model", "gpt-3.5-turbo");
-var showOpneAiAdvanced = getGMValue("showOpneAiAdvanced", false);
-// api2d
-const api2d_model = getGMValue("api2d_model", "gpt-3.5-turbo");
-const api2d_request_entry = getGMValue("api2d_request_entry", "https://openai.api2d.net");
-var x_api2d_no_cache = getGMValue("x_api2d_no_cache", true);
+let openai_model, openai_key, openai_proxy, openai_header, openai_data;
+const opneaiConfig = getGMValue("chatgpt-config", {
+    "choice": -1,
+    "configurations": []
+});
+if (opneaiConfig.choice !== -1) {
+    const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
+    openai_model = configAtIndex.model;
+    openai_key = configAtIndex.key;
+    openai_proxy = configAtIndex.proxy;
+    openai_header = configAtIndex._header ?
+        configAtIndex._header.split("\n").map(header => {
+            const [key, value] = header.split(":");
+            return { [key.trim()]: value.trim() };
+        }) : [];
+    openai_data = configAtIndex._data ?
+        configAtIndex._data.split("\n").map(header => {
+            const [key, value] = header.split(":");
+            return { [key.trim()]: value.trim() };
+        }) : [];
+}
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 9999; }`;
+const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 10000; }`;
+
+// 语言判断
+const isEnglishLanguage = (function () {
+    var metaElement = $('meta[http-equiv="Content-Language"]');
+    var contentValue = metaElement.attr('content');
+    return (contentValue === 'en');
+})();
 
 // 样式
 GM_addStyle(`
@@ -220,7 +244,7 @@ button.html2mdButton.AtBetter_setting.open {
   color: #727378;
   cursor: not-allowed;
 }
-#AtBetter_setting_menu {
+.AtBetter_setting_menu {
     z-index: 9999;
     box-shadow: 0px 0px 0px 4px #ffffff;
     display: grid;
@@ -239,17 +263,20 @@ button.html2mdButton.AtBetter_setting.open {
     font-family: var(--vp-font-family-base);
     padding: 10px 20px 20px 20px;
 }
-#AtBetter_setting_menu h3 {
+.AtBetter_setting_menu h4,.AtBetter_setting_menu h5 {
+    font-weight: 600;
+}
+.AtBetter_setting_menu h3 {
     margin-top: 10px;
 }
-#AtBetter_setting_menu hr {
+.AtBetter_setting_menu hr {
     border: none;
     height: 1px;
     background-color: #ccc;
     margin: 10px 0;
 }
 /*设置面板-关闭按钮*/
-#AtBetter_setting_menu .tool-box {
+.AtBetter_setting_menu .tool-box {
   position: absolute;
   display: flex;
   align-items: center;
@@ -260,7 +287,7 @@ button.html2mdButton.AtBetter_setting.open {
   right: 3px;
 }
 
-#AtBetter_setting_menu .btn-close {
+.AtBetter_setting_menu .btn-close {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -277,7 +304,7 @@ button.html2mdButton.AtBetter_setting.open {
   transition: .15s ease all;
 }
 
-#AtBetter_setting_menu .btn-close:hover {
+.AtBetter_setting_menu .btn-close:hover {
     width: 20px;
     height: 20px !important;
     font-size: 17px;
@@ -286,7 +313,7 @@ button.html2mdButton.AtBetter_setting.open {
     box-shadow: 0 5px 5px 0 #00000026;
 }
 
-#AtBetter_setting_menu .btn-close:active {
+.AtBetter_setting_menu .btn-close:active {
   width: .9rem;
   height: .9rem;
   font-size: 1px;
@@ -296,11 +323,11 @@ button.html2mdButton.AtBetter_setting.open {
 }
 
 /*设置面板-checkbox*/
-#AtBetter_setting_menu input[type=checkbox]:focus {
+.AtBetter_setting_menu input[type=checkbox]:focus {
     outline: 0px;
 }
 
-#AtBetter_setting_menu input[type="checkbox"] {
+.AtBetter_setting_menu input[type="checkbox"] {
     margin: 0px;
 	appearance: none;
     -webkit-appearance: none;
@@ -314,7 +341,7 @@ button.html2mdButton.AtBetter_setting.open {
 	box-sizing: border-box;
 }
 
-#AtBetter_setting_menu input[type="checkbox"]::before {
+.AtBetter_setting_menu input[type="checkbox"]::before {
 	content: "";
 	width: 14px;
 	height: 14px;
@@ -331,40 +358,33 @@ button.html2mdButton.AtBetter_setting.open {
     box-sizing: content-box;
 }
 
-#AtBetter_setting_menu input[type="checkbox"]::after {
+.AtBetter_setting_menu input[type="checkbox"]::after {
 	content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
 	position: absolute;
 	top: 0;
 	left: 24px;
 }
 
-#AtBetter_setting_menu input[type="checkbox"]:checked {
+.AtBetter_setting_menu input[type="checkbox"]:checked {
 	border: 1.5px solid #C5CAE9;
 	background: #E8EAF6;
 }
 
-#AtBetter_setting_menu input[type="checkbox"]:checked::before {
+.AtBetter_setting_menu input[type="checkbox"]:checked::before {
 	background: #C5CAE9;
 	border: 1.5px solid #7986CB;
 	transform: translate(122%, 2%);
 	transition: all 0.3s ease-in-out;
 }
 
-#AtBetter_setting_menu input[type="text"]:focus-visible{
-    border-width: 0.2vh;
-    border-style: solid;
-    border-color: #8bb2d9;
-    outline: -webkit-focus-ring-color auto 0px;
-}
-
-#AtBetter_setting_menu input[type="checkbox"]:checked::after {
+.AtBetter_setting_menu input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     position: absolute;
     top: 1.5px;
     left: 4.5px;
 }
 
-#AtBetter_setting_menu label {
+.AtBetter_setting_menu label {
     font-size: 16px;
     font-weight: initial;
     margin-bottom: 0px;
@@ -382,7 +402,7 @@ button.html2mdButton.AtBetter_setting.open {
 }
 
 /*设置面板-radio*/
-#AtBetter_setting_menu>label {
+.AtBetter_setting_menu>label {
     display: flex;
     list-style-type: none;
     padding-inline-start: 0px;
@@ -396,7 +416,7 @@ button.html2mdButton.AtBetter_setting.open {
 .AtBetter_setting_menu_label_text {
     display: flex;
     border: 1px dashed #00aeeccc;
-    height: 20px;
+    height: 35px;
     width: 100%;
     color: gray;
     font-weight: 300;
@@ -404,9 +424,9 @@ button.html2mdButton.AtBetter_setting.open {
     letter-spacing: 2px;
     padding: 7px;
     align-items: center;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
@@ -416,7 +436,7 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     font-weight: 500;
 }
 
-#AtBetter_setting_menu>label input[type="radio"] {
+.AtBetter_setting_menu>label input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
     list-style: none;
@@ -424,7 +444,7 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     margin: 0px;
 }
 
-#AtBetter_setting_menu input[type="text"] {
+.AtBetter_setting_menu input[type="text"] {
     display: block;
     height: 25px !important;
     width: 100%;
@@ -439,13 +459,53 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     box-shadow: 0 0 1px #0000004d;
 }
 
+.AtBetter_setting_menu input[type="text"]:focus-visible{
+    border-style: solid;
+    border-color: #3f51b5;
+    outline: none;
+}
+
 .AtBetter_setting_menu_input {
     width: 100%;
     display: grid;
     margin-top: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.AtBetter_setting_menu input.no_default::placeholder{
+    color: #BDBDBD;
+}
+.AtBetter_setting_menu input.is_null::placeholder{
+    color: red;
+}
+.AtBetter_setting_menu input.is_null{
+    border-color: red;
+}
+.AtBetter_setting_menu textarea {
+    display: block;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    color: #727378;
+    font-size: 12px;
+    padding: 1px 5px !important;
+    box-sizing: border-box;
+    margin: 5px 0px 5px 0px;
+    border: 1px solid #00aeeccc;
+    box-shadow: 0 0 1px #0000004d;
+}
+.AtBetter_setting_menu textarea:focus-visible{
+    border-style: solid;
+    border-color: #3f51b5;
+    outline: none;
+}
+.AtBetter_setting_menu textarea::placeholder{
+    color: #BDBDBD;
+    font-size: 14px;
 }
 
-#AtBetter_setting_menu #save {
+.AtBetter_setting_menu #save {
     cursor: pointer;
 	display: inline-flex;
 	padding: 0.5rem 1rem;
@@ -460,11 +520,11 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
 	border: none;
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
-#AtBetter_setting_menu button#debug_button.debug_button {
+.AtBetter_setting_menu button#debug_button.debug_button {
     width: 18%;
 }
 
-#AtBetter_setting_menu span.tip {
+.AtBetter_setting_menu span.tip {
     color: #999;
     font-size: 12px;
     font-weight: 500;
@@ -511,7 +571,7 @@ span.input_label {
     color: #b4b9d4;
     margin-left: 5px;
 }
-#AtBetter_setting_menu .AtBetter_setting_menu_label_text .help_tip .help-icon {
+.AtBetter_setting_menu .AtBetter_setting_menu_label_text .help_tip .help-icon {
     color: #7fbeb2;
 }
 .help_tip .help-icon:hover + .tip_text, .help_tip .tip_text:hover {
@@ -520,14 +580,6 @@ span.input_label {
     width: 250px;
 }
 
-/*设置面板-展开*/
-#is_showOpneAiAdvanced{
-    width: 100%;
-    background-color: aliceblue;
-    padding: 8px;
-    box-sizing: border-box;
-    border-radius: 10px;
-}
 /*确认弹窗*/
 .wordsExceeded {
     z-index: 99999;
@@ -642,6 +694,177 @@ div#update_panel #updating a {
 #skip_menu .help-icon {
     color: #f44336;
 }
+/* 配置管理 */
+.embed-responsive {
+    height: max-content;
+    padding-bottom: 0px;
+}
+.config_bar {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+li#add_button {
+    cursor: pointer;
+    height: 40px;
+    border: 1px dashed #BDBDBD;
+    border-radius: 8px;
+    background-color: #fcfbfb36;
+    color: #bdbdbd;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+}
+li#add_button:hover {
+    border: 1px dashed #03A9F4;
+    background-color: #d7f0fb8c;
+    color: #03A9F4;
+}
+div#config_bar_list {
+    display: flex;
+    width: 100%;
+    border: 1px solid #c5cae9;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+    box-sizing: border-box;
+}
+div#config_bar_list input[type="radio"] {
+    appearance: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+div#config_bar_list input[type="radio"] {
+    margin: 0px;
+}
+div#config_bar_list input[type=radio]:focus {
+    outline: 0px;
+}
+label.config_bar_ul_li_text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    height: 40px;
+    overflow-x: auto;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0px 4px;
+    padding: 3px;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,.05);
+}
+ul#config_bar_ul li button {
+    background-color: #e6e6e6;
+    color: #727378;
+    height: 23px;
+    font-size: 14px;
+    border-radius: 0.3rem;
+    padding: 1px 5px;
+    margin: 5px;
+    border: none;
+    box-shadow: 0 0 1px #0000004d;
+}
+ul#config_bar_ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    padding-inline-start: 0px;
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 0px;
+}
+ul#config_bar_ul li {
+    width: 80px;
+    display: grid;
+    margin: 4px 4px;
+    min-width: 100px;
+    box-sizing: border-box;
+}
+label.config_bar_ul_li_text:hover {
+    background-color: #eae4dc24;
+}
+input[type="radio"]:checked + .config_bar_ul_li_text {
+    background: #41b3e430;
+    border: 1px solid #5e7ce0;
+    color: #5e7ce0;
+}
+ul#config_bar_ul::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+ul#config_bar_ul::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: #d7d9e4;
+    border-radius: 8px;
+}
+ul#config_bar_ul::-webkit-scrollbar-button:start:decrement {
+    width: 4px;
+    background-color: transparent;
+}
+ul#config_bar_ul::-webkit-scrollbar-button:end:increment {
+    width: 4px;
+    background-color: transparent; 
+}
+ul#config_bar_ul::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+label.config_bar_ul_li_text::-webkit-scrollbar {
+    width: 5px;
+    height: 7px;
+    background-color: #aaa;
+}
+label.config_bar_ul_li_text::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: #d7d9e4;
+}
+label.config_bar_ul_li_text::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+.config_bar_list_add_div {
+    display: flex;
+    height: 40px;
+    margin: 4px 2px;
+}
+/* 修改菜单 */
+div#config_bar_menu {
+    z-index: 99999;
+    position: absolute;
+    width: 60px;
+    background: #ffffff;
+    box-shadow: 1px 1px 4px 0px #0000004d;
+    border: 0px solid rgba(0,0,0,0.04);
+    border-radius: 4px;
+    padding: 8px 0;
+}
+div.config_bar_menu_item {
+    cursor: pointer;
+    padding: 2px 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    color: rgba(0,0,0,0.75);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: inset 0px 0px 0px 0px #8bb2d9;
+}
+div#config_bar_menu_edit:hover {
+    background-color: #00aeec;
+    color: white;
+}
+div#config_bar_menu_delete:hover {
+    background-color: #FF5722;
+    color: white;
+}
+/* 配置页面 */
+#config_edit_menu {
+    z-index: 11000;
+    width: 450px; 
+}
 `);
 
 // 获取cookie
@@ -669,6 +892,50 @@ function debounce(callback) {
         timer = setTimeout(() => { immediateExecuted = false; }, delay);
     };
 }
+
+// 为元素添加鼠标拖动
+function addDraggable(element) {
+    let isDragging = false;
+    let initialX, initialY; // 元素的初始位置
+    let startX, startY, offsetX, offsetY; // 鼠标起始位置，移动偏移量
+    let isSpecialMouseDown = false; // 选取某些元素时不拖动
+
+    element.on('mousedown', function (e) {
+        var elem = $(this);
+        var elemOffset = elem.offset();
+        var centerX = elemOffset.left + elem.outerWidth() / 2;
+        var centerY = elemOffset.top + elem.outerHeight() / 2;
+        initialX = centerX - window.pageXOffset;
+        initialY = centerY - window.pageYOffset;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
+
+        $('body').css('cursor', 'all-scroll');
+    });
+
+
+    $(document).on('mousemove', function (e) {
+        if (!isDragging) return;
+        // 不执行拖动操作
+        if ($(e.target).is('label, p, input, textarea, span') || isSpecialMouseDown && !$(e.target).is('input, textarea')) return;
+        e.preventDefault();
+        offsetX = e.clientX - startX;
+        offsetY = e.clientY - startY;
+        element.css({ top: initialY + offsetY + 'px', left: initialX + offsetX + 'px' });
+    });
+
+    $(document).on('mouseup', function () {
+        isDragging = false;
+        isSpecialMouseDown = false;
+        $('body').css('cursor', 'default');
+    });
+}
+
+
 
 // 更新检查
 (function checkScriptVersion() {
@@ -751,6 +1018,7 @@ function debounce(callback) {
 
 })();
 
+
 // 汉化替换
 (function () {
     if (!bottomZh_CN) return;
@@ -784,6 +1052,25 @@ function debounce(callback) {
             }
         }
 
+        // 日语汉化
+        if (!isEnglishLanguage) {
+            const rules1 = [
+                { match: 'コンテスト', replace: '比赛' },
+                { match: 'Jobs', replace: '工作' },
+                { match: '検定', replace: '考试' },
+                { match: 'CareerDesign', replace: '职业规划' },
+                { match: 'マイプロフィール', replace: '我的个人资料' },
+                { match: '基本設定', replace: '基本设置' },
+                { match: 'アイコン設定', replace: '头像设置' },
+                { match: 'パスワードの変更', replace: '修改密码' },
+                { match: 'お気に入り管理', replace: '收藏夹管理' },
+                { match: 'ログアウト', replace: '注销' }
+            ];
+            traverseTextNodes($('.header-inner'), rules1);
+            return;
+        }
+
+        // 英语汉化
         const rules1 = [
             { match: 'Present Contests', replace: '目前的比赛' },
             { match: 'Past Contests', replace: '过去的比赛' },
@@ -812,7 +1099,7 @@ function debounce(callback) {
             { match: 'Remind Username', replace: '提醒用户名' },
             { match: 'Change Username', replace: '更改用户名' },
             { match: 'Delete Account', replace: '删除账户' },
-            { match: 'Change Photo', replace: '更改照片' },
+            { match: 'Change Photo', replace: '更改头像' },
             { match: 'Change Password', replace: '更改密码' },
             { match: 'Manage Fav', replace: '管理收藏' },
             { match: 'Other', replace: '其他' },
@@ -957,279 +1244,484 @@ function debounce(callback) {
 // 设置面板
 $(document).ready(function () {
     var htmlContent = "<button class='html2mdButton AtBetter_setting'>AtcoderBetter设置</button>";
-    $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
+    if (isEnglishLanguage) {
+        $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
+    } else {
+        $('.header-mypage').after(htmlContent);
+    }
 });
+
+// 配置管理函数
+function setupConfigManagement(element, configName, structure, configHTML) {
+    let counter = 0;
+    createControlBar();
+    createContextMenu();
+
+    // 获取数据
+    function getConfig() {
+        let config = GM_getValue(configName);
+        if (!config) {
+            config = {
+                "choice": -1,
+                "configurations": []
+            };
+        }
+        return config;
+    }
+
+    // 新增数据
+    function onAdd() {
+        const styleElement = createWindow();
+
+        const settingMenu = $("#config_edit_menu");
+        settingMenu.on("click", "#save", () => {
+            const config = {};
+            let allFieldsValid = true;
+            for (const key in structure) {
+                let value = $(key).val();
+                if (value || $(key).attr('require') === 'false') {
+                    config[structure[key]] = $(key).val();
+                    $(key).removeClass('is_null');
+                } else {
+                    $(key).addClass('is_null');
+                    allFieldsValid = false;
+                }
+            }
+            if (!allFieldsValid) return;
+            let existingConfig = GM_getValue(configName);
+            if (existingConfig) {
+                if (Array.isArray(existingConfig.configurations)) {
+                    existingConfig.configurations.push(config);
+                } else {
+                    existingConfig.configurations = [config];
+                }
+                GM_setValue(configName, existingConfig);
+            } else {
+                let result = {
+                    "choice": "1",
+                    "configurations": [config]
+                };
+                GM_setValue(configName, result);
+            }
+
+            const list = $("#config_bar_ul");
+            createListItemElement(config[structure['#note']]).insertBefore($('#add_button'));
+
+            settingMenu.remove();
+            $(styleElement).remove();
+        });
+
+        settingMenu.on("click", ".btn-close", () => {
+            settingMenu.remove();
+            $(styleElement).remove();
+        });
+    }
+
+    // 编辑数据
+    function onEdit() {
+        const menu = $("#config_bar_menu");
+        menu.css({ display: "none" });
+
+        const list = $("#config_bar_ul");
+        const index = Array.from(list.children()).indexOf(this);
+
+        const styleElement = createWindow();
+
+        const settingMenu = $("#config_edit_menu");
+        const config = getConfig();
+        const configAtIndex = config.configurations[index];
+
+        if (configAtIndex) {
+            for (const key in structure) {
+                $(key).val(configAtIndex[structure[key]]);
+            }
+        }
+
+        settingMenu.on("click", "#save", () => {
+            const config = {};
+            let allFieldsValid = true;
+            for (const key in structure) {
+                let value = $(key).val();
+                if (value || $(key).attr('require') === 'false') {
+                    config[structure[key]] = $(key).val();
+                    $(key).removeClass('is_null');
+                } else {
+                    $(key).addClass('is_null');
+                    allFieldsValid = false;
+                }
+            }
+            if (!allFieldsValid) return;
+            let existingConfig = getConfig();
+            existingConfig.configurations[index] = config;
+            GM_setValue(configName, existingConfig);
+
+            settingMenu.remove();
+            $(styleElement).remove();
+            menu.css({ display: "none" });
+
+            list.children().eq(index).find("label").text(config.note);
+        });
+
+        // 关闭按钮
+        settingMenu.on("click", ".btn-close", () => {
+            settingMenu.remove();
+            $(styleElement).remove();
+        });
+    }
+
+    // 删除数据
+    function onDelete() {
+        const menu = $("#config_bar_menu");
+        menu.css({ display: "none" });
+
+        const list = $("#config_bar_ul");
+        const index = Array.from(list.children()).indexOf(this);
+
+        let existingConfig = getConfig();
+        existingConfig.configurations.splice(index, 1);
+        GM_setValue(configName, existingConfig);
+
+        list.children().eq(index).remove();
+    }
+
+    // 创建编辑窗口
+    function createWindow() {
+        const styleElement = GM_addStyle(darkenPageStyle2);
+        $("body").append(configHTML);
+        addDraggable($('#config_edit_menu'));
+        return styleElement;
+    }
+
+    // 创建控制面板
+    function createControlBar() {
+        $(element).append(`
+            <div id='configControlTip' style='color:red;'></div>
+            <div class='config_bar'>
+                <div class='config_bar_list' id='config_bar_list'>
+                    <ul class='config_bar_ul' id='config_bar_ul'></ul>
+                </div>
+            </div>
+        `);
+    }
+
+    // 创建右键菜单
+    function createContextMenu() {
+        const menu = $("<div id='config_bar_menu' style='display: none;'></div>");
+        menu.html(`
+			<div class='config_bar_menu_item' id='config_bar_menu_edit'>修改</div>
+			<div class='config_bar_menu_item' id='config_bar_menu_delete'>删除</div>
+		`);
+        $("body").append(menu);
+    }
+
+    // 创建新的li元素
+    function createListItemElement(text) {
+        const li = $("<li></li>");
+        const radio = $("<input type='radio' name='config_bar_ul'></input>").appendTo(li);
+        radio.attr("id", counter++);
+        const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("id")).appendTo(li);
+
+        // 添加右键菜单
+        li.on("contextmenu", function (event) {
+            event.preventDefault();
+            const menu = $("#config_bar_menu");
+            menu.css({ display: "block", left: event.pageX, top: event.pageY });
+
+            const deleteItem = $("#config_bar_menu_delete");
+            const editItem = $("#config_bar_menu_edit");
+
+            // 移除旧事件
+            deleteItem.off("click");
+            editItem.off("click");
+
+            deleteItem.on("click", onDelete.bind(this));
+            editItem.on("click", onEdit.bind(this));
+
+            $(document).one("click", (event) => {
+                if (!menu.get(0).contains(event.target)) {
+                    menu.css({ display: "none" });
+                    deleteItem.off("click", onDelete);
+                    editItem.off("click", onEdit);
+                }
+            });
+        });
+
+
+        return li;
+    }
+
+    // 渲染列表
+    function renderList() {
+        const listContainer = $("#config_bar_list");
+        const list = $("#config_bar_ul");
+        list.empty();
+        const config = getConfig();
+        config.configurations.forEach((item) => {
+            list.append(createListItemElement(item[structure['#note']]));
+        });
+
+        list.append(`
+            <li id='add_button'>
+                <span>+ 添加</span>
+            </li>
+        `);
+        const addItem = $('#add_button');
+        addItem.on("click", onAdd);
+    };
+
+    renderList();
+}
+
+const AtBetterSettingMenuHTML = `
+    <div class='AtBetter_setting_menu' id='AtBetter_setting_menu'>
+    <div class="tool-box">
+        <button class="btn-close">×</button>
+    </div>
+    <h4>基本设置</h4>
+    <hr>
+    <div class='AtBetter_setting_list'>
+        <label for="bottomZh_CN">界面汉化</label>
+        <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
+    </div>
+    <div class='AtBetter_setting_list'>
+        <label for="showLoading">显示加载信息</label>
+        <div class="help_tip">
+            `+ helpCircleHTML + `
+            <div class="tip_text">
+            <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Atcoder Better! —— xxx”</p>
+            <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
+            <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
+            </div>
+        </div>
+        <input type="checkbox" id="showLoading" name="showLoading">
+    </div>
+    <div class='AtBetter_setting_list'>
+        <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
+        <div class="help_tip">
+            `+ helpCircleHTML + `
+            <div class="tip_text">
+            <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
+            </div>
+        </div>
+        <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+    </div>
+    <div class='AtBetter_setting_list'>
+        <label for="enableSegmentedTranslation">分段翻译</label>
+        <div class="help_tip">
+            `+ helpCircleHTML + `
+            <div class="tip_text">
+            <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
+            <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
+            <p><u>注意：开启分段翻译会产生如下问题：</u></p>
+            <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+            <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;标签</p>
+            </div>
+        </div>
+        <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
+    </div>
+    <div class='AtBetter_setting_list'>
+        <label for="showJumpToLuogu">显示跳转到洛谷</label>
+        <div class="help_tip">
+            `+ helpCircleHTML + `
+            <div class="tip_text">
+            <p>洛谷OJ上收录了Atcoder的部分题目，一些题目有翻译和题解</p>
+            <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
+            <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
+            </div>
+        </div>
+        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='AtBetter_setting_list'>
+        <label for="loaded"><span style="font-size: 14px;">兼容选项-不等待页面资源加载</span></label>
+        <div class="help_tip">
+            `+ helpCircleHTML + `
+            <div class="tip_text">
+            <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
+            <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，</p>
+            <p><u>您首先应该确认是否是网络问题，</u></p>
+            <p>如果页面实际已经加载完成，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
+            <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+            <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
+            </div>
+        </div>
+        <input type="checkbox" id="loaded" name="loaded">
+    </div>
+    <h4>翻译设置</h4>
+    <hr>
+    <label>
+        <input type='radio' name='translation' value='deepl'>
+        <span class='AtBetter_setting_menu_label_text'>deepl翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='youdao'>
+        <span class='AtBetter_setting_menu_label_text'>有道翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='google'>
+        <span class='AtBetter_setting_menu_label_text'>Google翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='openai'>
+        <span class='AtBetter_setting_menu_label_text'>使用ChatGPT翻译(API)
+            <div class="help_tip">
+                `+ helpCircleHTML + `
+                <div class="tip_text">
+                <p><b>请在下方选定你想使用的配置信息</b></p>
+                <p>脚本的所有请求均在本地完成</p>
+                </div>
+            </div>
+        </span>
+    </label>
+    <div class='AtBetter_setting_menu_input' id='openai' style='display: none;'>
+        <div id="chatgpt-config"></div>
+    </div>
+    <br>
+    <button id='save'>保存</button>
+    </div>
+`;
+
+const chatgptConfigEditHTML = `
+    <div class='AtBetter_setting_menu' id='config_edit_menu'>
+        <div class="tool-box">
+            <button class="btn-close">×</button>
+        </div>
+        <h4>配置</h4>
+        <h5>基本</h5>
+        <hr>
+        <label for='note'>
+            <span class="input_label">备注:</span>
+        </label>
+        <input type='text' id='note' class='no_default' placeholder='请为该配置取一个备注名' require = true>
+        <label for='openai_model'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">模型:</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>留空则默认为：gpt-3.5-turbo</p>
+                    <p>模型列表请查阅<a target="_blank" href="https://platform.openai.com/docs/models">OpenAI官方文档</a></p>
+                    <p><strong>此外，如果您使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='openai_model' placeholder='gpt-3.5-turbo' require = false>
+        <label for='openai_key'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">KEY:</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>您需要输入自己的OpenAI key，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
+                    <p><b>如果您使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='openai_key' class='no_default' placeholder='请输入KEY' require = true>
+        <label for='openai_proxy'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">Proxy API:</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                        <p>留空则默认为OpenAI官方API</p>
+                        <p>您也可以填写指定的API来代理访问OpenAI的API，</p>
+                        <p>如果您使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p>
+                        <p><strong>由于您指定了自定义的API，Tampermonkey会对您的跨域请求进行警告，您需要自行授权</strong></p>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='openai_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
+        <h5>高级</h5>
+        <hr>
+        <label for='_header'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">自定义header</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                        <p>格式样例：</p>
+                        <div style="border: 1px solid #795548; padding: 10px;">
+                            <p>name1 : 123,<br>name2 : cccc</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <textarea id="_header" placeholder='（选填）您可以在这里填写向请求header中额外添加的键值对' require = false></textarea>
+        <label for='_data'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">自定义data</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                        <p>格式样例：</p>
+                        <div style="border: 1px solid #795548; padding: 10px;">
+                            <p>name1 : 123,<br>name2 : cccc</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <textarea id="_data" placeholder='（选填）您可以在这里填写向请求data中额外添加的键值对' require = false></textarea>
+        <br>
+        <button id='save'>保存</button>
+    </div>
+`;
 
 $(document).ready(function () {
     const $settingBtns = $(".AtBetter_setting");
     $settingBtns.click(() => {
         const styleElement = GM_addStyle(darkenPageStyle);
         $settingBtns.prop("disabled", true).addClass("open");
-        $("body").append(`
-          <div id='AtBetter_setting_menu'>
-              <div class="tool-box">
-                  <button class="btn-close">×</button>
-              </div>
-              <h4>基本设置</h4>
-              <hr>
-              <div class='AtBetter_setting_list'>
-                  <label for="bottomZh_CN">界面汉化</label>
-                  <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
-              </div>
-              <div class='AtBetter_setting_list'>
-                  <label for="showLoading">显示加载信息</label>
-                  <div class="help_tip">
-                      `+ helpCircleHTML + `
-                      <div class="tip_text">
-                      <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Atcoder Better! —— xxx”</p>
-                      <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
-                      <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
-                      </div>
-                  </div>
-                  <input type="checkbox" id="showLoading" name="showLoading">
-              </div>
-              <div class='AtBetter_setting_list'>
-                  <label for="showLoading">显示目标区域范围</label>
-                  <div class="help_tip">
-                      `+ helpCircleHTML + `
-                      <div class="tip_text">
-                      <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
-                      </div>
-                  </div>
-                  <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
-                </div>
-              <div class='AtBetter_setting_list'>
-                  <label for="enableSegmentedTranslation">分段翻译</label>
-                  <div class="help_tip">
-                      `+ helpCircleHTML + `
-                      <div class="tip_text">
-                      <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
-                      <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
-                      <p><u>注意：开启分段翻译会产生如下问题：</u></p>
-                      <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-                      <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;标签</p>
-                      </div>
-                  </div>
-                  <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
-              </div>
-              <div class='AtBetter_setting_list'>
-                  <label for="showJumpToLuogu">显示跳转到洛谷</label>
-                  <div class="help_tip">
-                      `+ helpCircleHTML + `
-                      <div class="tip_text">
-                      <p>洛谷OJ上收录了Atcoder的部分题目，一些题目有翻译和题解</p>
-                      <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
-                      <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
-                      </div>
-                  </div>
-                  <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-              </div>
-              <div class='AtBetter_setting_list'>
-                  <label for="loaded"><span style="font-size: 14px;">兼容选项-不等待页面资源加载</span></label>
-                  <div class="help_tip">
-                      `+ helpCircleHTML + `
-                      <div class="tip_text">
-                      <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
-                      <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，</p>
-                      <p><u>您首先应该确认是否是网络问题，</u></p>
-                      <p>如果页面实际已经加载完成，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
-                      <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
-                      <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
-                      </div>
-                  </div>
-                  <input type="checkbox" id="loaded" name="loaded">
-              </div>
-              <h4>翻译设置</h4>
-              <hr>
-              <label>
-                  <input type='radio' name='translation' value='deepl'>
-                  <span class='AtBetter_setting_menu_label_text'>deepl翻译</span>
-              </label>
-              <label>
-                  <input type='radio' name='translation' value='youdao'>
-                  <span class='AtBetter_setting_menu_label_text'>有道翻译</span>
-              </label>
-              <label>
-                  <input type='radio' name='translation' value='google'>
-                  <span class='AtBetter_setting_menu_label_text'>Google翻译</span>
-              </label>
-              <label>
-                  <input type='radio' name='translation' value='openai'>
-                  <span class='AtBetter_setting_menu_label_text'>使用ChatGPT翻译(API)
-                      <div class="help_tip">
-                          `+ helpCircleHTML + `
-                          <div class="tip_text">
-                          <p><b>请确保你能够正常访问OpenAI的api</b></p>
-                          <p>Atcoder Better!默认使用 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
-                          <p>你需要输入自己的OpenAI KEY，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
-                          </div>
-                      </div>
-                  </span>
-              </label>
-              <label>
-                  <input type='radio' name='translation' value='api2d'>
-                  <span class='AtBetter_setting_menu_label_text'>使用api2d翻译(API)
-                      <div class="help_tip">
-                          `+ helpCircleHTML + `
-                          <div class="tip_text">
-                          <p>api2d是国内的一家提供代理直连访问OpenAI的api的服务商，相当于OpenAI的api的套壳</p>
-                          <p>Atcoder Better!默认使用 gpt-3.5-turbo 模型进行翻译，脚本的所有请求均在本地完成</p>
-                          <p>你需要输入自己的api2d KEY，<a target="_blank" href="https://api2d.com/profile">官网</a></p>
-                          </div>
-                      </div>
-                  </span>
-              </label>
-              <div class='AtBetter_setting_menu_input' id='openai' style='display: none;'>
-                    <label for='openai_model'>
-                        <div style="display: flex;align-items: center;">
-                            <span class="input_label">模型:</span>
-                            <div class="help_tip">
-                                `+ helpCircleHTML + `
-                                <div class="tip_text">
-                                <p>默认为：gpt-3.5-turbo</p>
-                                <p>如需更换，请查阅<a target="_blank" href="https://platform.openai.com/docs/models">官方文档</a></p>
-                                <p><strong>如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
-                                </div>
-                            </div>
-                        </div>
-                    </label>
-                    <input type='text' id='openai_model'>
-                    <label for='openai_key'>
-                        <span class="input_label">KEY:</span>
-                    </label>
-                    <input type='text' id='openai_key'>
-                  <div class='AtBetter_setting_list'>
-                      <label for="showOpneAiAdvanced">使用代理API</label>
-                      <div class="help_tip">
-                          `+ helpCircleHTML + `
-                          <div class="tip_text">
-                          <p>使用你指定的API来代理访问OpenAI进行翻译，脚本的所有请求均在本地完成</p>
-                          <p>如果你使用的是OpenAI的官方KEY，建议你自建代理，而不是使用他人公开的代理，那是危险的</p>
-                          <p>如果你使用的是服务商提供的代理和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，<br>
-                            这里以<a target="_blank" href="https://console.closeai-asia.com/">CloseAI</a>为例，其提供了API Base: https://api.closeai-proxy.xyz，<br>
-                            那么这里实际应该填写的就是https://api.closeai-proxy.xyz/v1/chat/\ncompletions，而上面的KEY则应该填写CloseAI提供的API Key</p>
-                          <p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行授权</strong></p>
-                          </div>
-                      </div>
-                      <input type="checkbox" id="showOpneAiAdvanced" name="showOpneAiAdvanced">
-                  </div>
-                  <div id="is_showOpneAiAdvanced">
-                    <label for='openai_proxy'>
-                        <span class="input_label">Proxy API:</span>
-                    </label>
-                    <input type='text' id='openai_proxy'>
-                  </div>
-              </div>
-              <div class='AtBetter_setting_menu_input' id='api2d' style='display: none;'>
-                <label for='api2d_model'>
-                    <div style="display: flex;align-items: center;">
-                        <span class="input_label">模型:</span>
-                        <div class="help_tip">
-                            `+ helpCircleHTML + `
-                            <div class="tip_text">
-                            <p>默认为：gpt-3.5-turbo</p>
-                            <p>如需更换，请查阅<a target="_blank" href="https://api2d.com/wiki/doc">官方文档</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
-                <input type='text' id='api2d_model'>
-                <label for='api2d_key'>
-                    <span class="input_label">KEY:</span>
-                </label>
-                <input type='text' id='api2d_key'>
-                <label for='api2d_request_entry'>
-                    <div style="display: flex;align-items: center;">
-                        <span class="input_label">请求入口:</span>
-                        <div class="help_tip">
-                            `+ helpCircleHTML + `
-                            <div class="tip_text">
-                            <p>如果发现请求报错超时未响应，请查看<a target="_blank" href="https://api2d.com/wiki/doc">官方文档</a>以及<a target="_blank" href="https://support.qq.com/product/544571">API2D反馈论坛</a>尝试更换请求入口</p>
-                            <p>默认为：https://openai.api2d.net</p>
-                            <p>注意格式，末尾没有“斜杠/”</p>
-                            </div>
-                        </div>
-                    </div>
-                </label>
-                <input type='text' id='api2d_request_entry'>
-                  <div class='AtBetter_setting_list'>
-                      <label for="x_api2d_no_cache">使用缓存</label>
-                      <div class="help_tip">
-                          `+ helpCircleHTML + `
-                          <div class="tip_text">
-                          <p>API2D 的服务器会对请求结果做缓存，如果请求体的hash值相同，会直接返回缓存的结果。缓存命中之后，本次请求不会扣除任何点数。</p>
-                          <p>缓存会保存 24 小时，如果不想使用缓存，你可以关闭“使用缓存”来跳过缓存，强制 API2D 服务器发送新请求。<a target="_blank" href="https://api2d.com/wiki/doc">详请阅读官方文档</a></p>
-                          </div>
-                      </div>
-                      <input type="checkbox" id="x_api2d_no_cache" name="x_api2d_no_cache">
-                  </div>
-              </div>
-              <br>
-              <button id='save'>保存</button>
-          </div>
-      `);
+        $("body").append(AtBetterSettingMenuHTML);
+
+        // 窗口初始化
+        addDraggable($('#AtBetter_setting_menu'));
+        const chatgptStructure = {
+            '#note': 'note',
+            '#openai_model': 'model',
+            '#openai_key': 'key',
+            '#openai_proxy': 'proxy',
+            '#_header': '_header',
+            '#_data': '_data',
+        }
+        setupConfigManagement('#chatgpt-config', 'chatgpt-config', chatgptStructure, chatgptConfigEditHTML);
+
+        // 状态切换
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#loaded").prop("checked", GM_getValue("loaded") === true);
-        $("#x_api2d_no_cache").prop("checked", GM_getValue("x_api2d_no_cache") === true);
-        $("#showOpneAiAdvanced").prop("checked", GM_getValue("showOpneAiAdvanced") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
             $("#openai").show();
-            $("#openai_model").val(openai_model);
-            $("#openai_key").val(GM_getValue("openai_key"));
-            $("#openai_proxy").val(GM_getValue("openai_proxy"));
-            $("#openai_key").css("color", "gray");
-            if (showOpneAiAdvanced) $("#is_showOpneAiAdvanced").show();
-            else $("#is_showOpneAiAdvanced").hide();
-        } else if (translation == "api2d") {
-            $("#api2d").show();
-            $("#api2d_model").val(api2d_model);
-            $("#api2d_key").val(GM_getValue("api2d_key"));
-            $("#api2d_request_entry").val(api2d_request_entry);
-            $("#api2d_key").css("color", "gray");
+            let config = GM_getValue('chatgpt-config');
+            if (config) {
+                $('#chatgpt-config #config_bar_ul li:eq(' + (config.choice) + ')').find('input[type="radio"]').prop('checked', true);
+            }
         }
-        // 当单选框被选中时，显示对应的输入框，同时隐藏其他输入框
+
+        // 翻译选择情况监听
         $("input[name='translation']").change(function () {
             var selected = $(this).val(); // 获取当前选中的值
             if (selected === "openai") {
                 $("#openai").show();
-                $("#openai_model").val(openai_model);
-                $("#openai_key").val(GM_getValue("openai_key"));
-                $("#showOpneAiAdvanced").prop("checked", showOpneAiAdvanced);
-                if (showOpneAiAdvanced) {
-                    $("#is_showOpneAiAdvanced").show();
-                    $("#openai_proxy").val(GM_getValue("openai_proxy"));
+                let config = GM_getValue('chatgpt-config');
+                if (config) {
+                    $('#chatgpt-config #config_bar_ul li:eq(' + (config.choice) + ')').find('input[type="radio"]').prop('checked', true);
                 }
-                else $("#is_showOpneAiAdvanced").hide();
-                $("#api2d").hide();
-            } else if (selected === "api2d") {
-                $("#api2d").show();
-                $("#api2d_model").val(api2d_model);
-                $("#api2d_key").val(GM_getValue("api2d_key"));
-                $("#api2d_request_entry").val(api2d_request_entry);
-                $("#x_api2d_no_cache").prop("checked", GM_getValue("x_api2d_no_cache"));
+            } else {
                 $("#openai").hide();
-            } else {
-                $("#openai, #api2d").hide();
             }
         });
 
-        // ChatGPT高级选项
-        $("input[name='showOpneAiAdvanced']").change(function () {
-            var isChecked = $(this).is(":checked");
-            if (isChecked) {
-                $("#is_showOpneAiAdvanced").show();
-            } else {
-                $("#is_showOpneAiAdvanced").hide();
-            }
-        });
-
-        const $settingMenu = $("#AtBetter_setting_menu");
+        const $settingMenu = $(".AtBetter_setting_menu");
 
         $("#save").click(debounce(function () {
             const settings = {
@@ -1238,19 +1730,18 @@ $(document).ready(function () {
                 loaded: $("#loaded").prop("checked"),
                 enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
-                showOpneAiAdvanced: $("#showOpneAiAdvanced").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 translation: $("input[name='translation']:checked").val()
             };
             if (settings.translation === "openai") {
-                GM_setValue("openai_model", $("#openai_model").val());
-                GM_setValue("openai_key", $("#openai_key").val());
-                GM_setValue("openai_proxy", $("#openai_proxy").val());
-            } else if (settings.translation === "api2d") {
-                GM_setValue("api2d_model", $("#api2d_model").val());
-                GM_setValue("api2d_key", $("#api2d_key").val());
-                GM_setValue("api2d_request_entry", $("#api2d_request_entry").val());
-                GM_setValue("x_api2d_no_cache", $("#x_api2d_no_cache").prop("checked"));
+                var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
+                if (selectedIndex === -1) {
+                    $('#configControlTip').text('请选择一项配置！')
+                    return;
+                }
+                let existingConfig = GM_getValue('chatgpt-config');
+                existingConfig.choice = selectedIndex;
+                GM_setValue('chatgpt-config', existingConfig);
             }
             for (const [key, value] of Object.entries(settings)) {
                 GM_setValue(key, value);
@@ -1333,7 +1824,6 @@ turndownService.addRule('bordertable', {
                 trs = node.querySelectorAll('tr');
             if (trs.length > 0) {
                 var ths = trs[0].querySelectorAll('th, td');
-                console.log(ths.length);
                 if (ths.length > 0) {
                     thead = '| ' + Array.from(ths).map(th => turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
                     thead += '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
@@ -1523,7 +2013,9 @@ async function addButtonWithTranslation(parent, suffix, type) {
         $(this).removeClass("translated");
         $(this).text("翻译中");
         $(this).css("cursor", "not-allowed");
-        var target, element_node, block, errerNum = 0, is_x_api2d_no_cache = false;
+        $(this).trigger('mouseout');
+        $(this).prop("disabled", true);
+        var target, element_node, block, errerNum = 0;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
 
@@ -1537,11 +2029,6 @@ async function addButtonWithTranslation(parent, suffix, type) {
             }
             if (result.copyButton) {
                 $(result.copyButton).remove();
-            }
-            // 重新翻译时暂时关闭 x_api2d_no_cache
-            if (x_api2d_no_cache) {
-                x_api2d_no_cache = false;
-                is_x_api2d_no_cache = true;
             }
             // 移除旧的事件
             $(document).off("mouseover", ".translateButton" + suffix);
@@ -1587,15 +2074,16 @@ async function addButtonWithTranslation(parent, suffix, type) {
             if (result.status) errerNum += 1;
             $(target).remove();
         }
+
         if (!errerNum) {
             $(this).addClass("translated")
                 .text("已翻译")
                 .css("cursor", "pointer")
-                .removeClass("error");
+                .removeClass("error")
+                .prop("disabled", false);
+        } else {
+            $(this).prop("disabled", false);
         }
-
-        // 恢复x_api2d_no_cache设置
-        if (is_x_api2d_no_cache) x_api2d_no_cache = true;
 
         // 重新翻译
         let currentText, is_error;
@@ -2091,25 +2579,26 @@ async function translateProblemStatement(text, element_node, button) {
 
 // ChatGPT
 async function translate_openai(raw) {
-    var openai_key = GM_getValue("openai_key");
     var openai_retext = "";
     var data = {
-        model: openai_model,
+        model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
         messages: [{
             role: "user",
-            content: "(请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw + ")"
+            content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
         }],
-        temperature: 0.7
+        temperature: 0.7,
+        ...Object.assign({}, ...openai_data)
     };
     return new Promise(function (resolve, reject) {
         GM_xmlhttpRequest({
             method: 'POST',
-            url: (showOpneAiAdvanced && GM_getValue("openai_proxy") !== null && GM_getValue("openai_proxy") !== "") ? GM_getValue("openai_proxy") : 'https://api.openai.com/v1/chat/completions', // Use the chat endpoint here
+            url: (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions',
 
             data: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + GM_getValue("openai_key")
+                'Authorization': 'Bearer ' + openai_key,
+                ...Object.assign({}, ...openai_header)
             },
             responseType: 'json',
             onload: function (response) {
@@ -2127,53 +2616,8 @@ async function translate_openai(raw) {
                 reject("发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
             },
         });
-
     });
 }
-
-// api2d
-async function translate_api2d(raw) {
-    var api2d_key = GM_getValue("api2d_key");
-    var api2d_retext = "";
-    var postData = JSON.stringify({
-        model: api2d_model,
-        messages: [{ role: 'user', content: '请帮我将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' + raw }],
-        temperature: 0.7
-    });
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + api2d_key,
-            ...(x_api2d_no_cache ? {} : { 'x-api2d-no-cache': 1 })
-        },
-        data: postData,
-    };
-
-    return new Promise(function (resolve, reject) {
-        GM_xmlhttpRequest({
-            method: options.method,
-            url: api2d_request_entry + `/v1/chat/completions`,
-            headers: options.headers,
-            data: options.data,
-            responseType: 'json',
-            onload: function (response) {
-                if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
-                    resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
-                } else {
-                    api2d_retext = response.response.choices[0].message.content;
-                    resolve(api2d_retext);
-                }
-            },
-            onerror: function (response) {
-                reject("发生了未知的错误，请检查请求入口地址是否正确，能否正常访问\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
-            },
-        });
-    });
-
-
-}
-//
 
 //--谷歌翻译--start
 async function translate_gg(raw) {
@@ -2315,3 +2759,42 @@ function Request(options) {
 }
 
 //--异步请求包装工具--end
+
+// 配置自动迁移代码（将在10个小版本后移除）
+if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
+    const newConfig = { "choice": -1, "configurations": [] };
+    if (GM_getValue("openai_key")) {
+        let config1 = {
+            "note": "我的配置1",
+            "model": GM_getValue("openai_model"),
+            "key": GM_getValue("openai_key"),
+            "proxy": GM_getValue("openai_proxy"),
+            "_header": "",
+            "_data": ""
+        }
+        if (GM_getValue("translation") === "openai") newConfig.choice = 0;
+        newConfig.configurations.push(config1);
+    }
+    if (GM_getValue("api2d_key")) {
+        let config2 = {
+            "note": "api2d",
+            "model": GM_getValue("api2d_model"),
+            "key": GM_getValue("api2d_key"),
+            "proxy": GM_getValue("api2d_request_entry") + '/v1/chat/completions',
+            "_header": GM_getValue("x_api2d_no_cache") ? "" : " x-api2d-no-cache : 1",
+            "_data": ""
+        }
+        if (GM_getValue("translation") === "api2d") {
+            if (GM_getValue("openai_key")) newConfig.choice = 1;
+            else newConfig.choice = 0;
+        }
+        newConfig.configurations.push(config2);
+    }
+    GM_setValue("chatgpt-config", newConfig);
+    const keysToDelete = ["openai_key", "openai_model", "openai_proxy", "api2d_key", "api2d_model", "api2d_request_entry", "x_api2d_no_cache", "showOpneAiAdvanced"];
+    keysToDelete.forEach(key => {
+        if (GM_getValue(key) != undefined) GM_deleteValue(key);
+    });
+    if (GM_getValue("translation") === "api2d") GM_setValue("translation", "openai");
+    location.reload();
+}
