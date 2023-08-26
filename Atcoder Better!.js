@@ -755,6 +755,7 @@ label.config_bar_ul_li_text {
     border: 1px solid #dedede;
     border-radius: 10px;
     box-shadow: 0px 2px 4px 0px rgba(0,0,0,.05);
+    box-sizing: border-box;
 }
 ul#config_bar_ul li button {
     background-color: #e6e6e6;
@@ -1067,6 +1068,219 @@ function addDraggable(element) {
                 { match: 'ログアウト', replace: '注销' }
             ];
             traverseTextNodes($('.header-inner'), rules1);
+
+            const rules2 = [
+                { match: 'コンテスト', replace: '比赛' },
+                { match: '最新コンテスト', replace: '最新比赛' },
+                { match: 'ランキング', replace: '排名' },
+                { match: 'お知らせ', replace: '公告' },
+                { match: 'AtCoderJobs', replace: 'AtCoder工作' },
+                { match: '検定', replace: '考试' },
+                { match: 'アルゴリズム実技検定についてはこちらから！', replace: '有关算法实际技能考试，请点击此处！' },
+                { match: '過去問公開中', replace: '过去问题公开中' },
+            ];
+            traverseTextNodes($('.a-title_ttl'), rules2);
+
+            const rules3 = [
+                { match: '詳細を見る', replace: '查看详情' },
+                { match: '求人情報を見る', replace: '查看职位信息' },
+                { match: '採用担当者の方へ', replace: '致招聘负责人' },
+                { match: '詳細ページ', replace: '详细页面' },
+                { match: 'マイページ', replace: '我的页面' },
+            ];
+            traverseTextNodes($('.a-btn_bg'), rules3);
+
+            const rules4 = [
+                { match: '解けた！を', replace: '解决了！' },
+                { match: '世界に届けたい。', replace: '给全世界。' },
+                { match: 'AtCoderは、世界最高峰の競技プログラミングサイトです。', replace: 'AtCoder是世界最高水平的竞技编程网站。' },
+                { match: 'リアルタイムのオンラインコンテストで競い合うことや、', replace: '您可以参加实时在线比赛，' },
+                { match: '5,000以上の過去問にいつでもチャレンジすることができます。', replace: '随时挑战超过5,000道历年题目。' },
+            ];
+            traverseTextNodes($('.keyvisual-grid'), rules4);
+
+            const rules5 = [
+                { match: 'コンテスト', replace: '比赛' },
+                { match: '開催中のコンテスト', replace: '进行中的比赛' },
+                { match: '常設中のコンテスト', replace: '长期持续的比赛' },
+                { match: '予定されたコンテスト', replace: '计划中的比赛' },
+                { match: '終了後のコンテスト(最新 10 件)', replace: '已结束的比赛（最新10场）' },
+                { match: '終了後のコンテスト(最新 50 件)', replace: '已结束的比赛（最新10场）' },
+                { match: 'ランキング', replace: '排名' },
+                { match: 'インフォメーション', replace: '信息' },
+                { match: '過去のコンテスト', replace: '过去的比赛' },
+                { match: '過去のコンテストを検索', replace: '搜索过去的比赛' },
+            ];
+            strictTraverseTextNodes($('.panel-title'), rules5);
+            strictTraverseTextNodes($('h3'), rules5);
+            strictTraverseTextNodes($('.h3'), rules5);
+            strictTraverseTextNodes($('h4'), rules5);
+
+            const rules6 = [
+                { match: 'ホーム', replace: '主页' },
+                { match: 'コンテスト一覧', replace: '比赛列表' },
+                { match: 'ランキング', replace: '排名' },
+                { match: '便利リンク集', replace: '实用链接' },
+            ];
+            traverseTextNodes($('.header-sub_nav'), rules6);
+            traverseTextNodes($('.h3'), rules6);
+
+            const rules7 = [
+                { match: '現在のコンテスト', replace: '现在的比赛' },
+                { match: '過去のコンテスト', replace: '过去的比赛' },
+                { match: 'Algorithm', replace: '算法' },
+                { match: 'Heuristic', replace: '启发式' },
+                { match: 'アクティブユーザのみ', replace: '仅活跃用户' },
+                { match: '全ユーザ', replace: '所有用户' },
+                { match: '新エディタテストコンテスト', replace: '新编辑器测试比赛' },
+                { match: '日本語', replace: '日语' },
+                { match: 'English', replace: '英语' },
+                { match: 'bjxh (Guest)', replace: 'bjxh（游客）' },
+                { match: 'マイプロフィール', replace: '个人资料' },
+                { match: '基本設定', replace: '基本设置' },
+                { match: 'アイコン設定', replace: '图标设置' },
+                { match: 'パスワードの変更', replace: '修改密码' },
+                { match: 'お気に入り管理', replace: '收藏管理' },
+                { match: 'ログアウト', replace: '登出' },
+                { match: 'トップ', replace: '首页' },
+                { match: '問題', replace: '问题' },
+                { match: '質問', replace: '提问' },
+                { match: '提出', replace: '提交' },
+                { match: '提出結果', replace: '提交结果' },
+                { match: 'すべての提出', replace: '所有提交' },
+                { match: '自分の提出', replace: '我的提交' },
+                { match: '自分の得点状況', replace: '我的得分情况' },
+                { match: 'バーチャル順位表', replace: '虚拟排名表' },
+                { match: '順位表', replace: '排名表' },
+                { match: 'コードテスト', replace: '代码测试' },
+                { match: '解説', replace: '题解' },
+                { match: 'すべての提交', replace: '所有提交' },
+                { match: '自分の提交', replace: '我的提交' },
+            ];
+            traverseTextNodes($('.nav'), rules7);
+
+            const rules8 = [
+                { match: 'Rated対象', replace: '限定范围' },
+                { match: 'ABCクラス', replace: 'ABC类别' },
+                { match: '(Rated上限: 1999)', replace: '(Rated上限: 1999)' },
+                { match: 'ARCクラス', replace: 'ARC类别' },
+                { match: '(Rated上限: 2799)', replace: '(Rated上限: 2799)' },
+                { match: 'AGCクラス', replace: 'AGC类别' },
+                { match: '(Rated上限なし)', replace: '(无Rated上限)' },
+                { match: 'AHCクラス', replace: 'AHC类别' },
+                { match: 'カテゴリ', replace: '分类' },
+                { match: '全て', replace: '全部' },
+                { match: 'AtCoder Typical Contest', replace: 'AtCoder经典比赛' },
+                { match: 'PAST過去問', replace: 'PAST历年问题' },
+                { match: '非公式コンテスト(unrated)', replace: '非官方比赛（未评级）' },
+                { match: 'JOI過去問', replace: 'JOI历年问题' },
+                { match: '企業コンテスト決勝', replace: '企业比赛决赛' },
+                { match: '企業オープンコンテスト(rated)', replace: '企业公开比赛（已评级）' },
+                { match: '企業オープンコンテスト(unrated)', replace: '企业公开比赛（未评级）' },
+                { match: '企業ABC', replace: '企业ABC' },
+                { match: '企業ARC', replace: '企业ARC' },
+                { match: 'ヒューリスティック', replace: '启发式' },
+                { match: '企業ヒューリスティック', replace: '企业启发式' },
+                { match: '検索', replace: '搜索' },
+                { match: 'コンテスト名', replace: '比赛名称' },
+            ];
+            strictTraverseTextNodes($('#collapse-search'), rules8);
+
+            const rules9 = [
+                { match: 'もっと見る', replace: '查看更多' },
+                { match: '自分の得点状況', replace: '我的得分情况' },
+                { match: '印刷用問題文', replace: '打印问题集' },
+                { match: '記事アーカイブ', replace: '文章存档' },
+            ];
+            strictTraverseTextNodes($('.btn-text'), rules9);
+
+            const rules10 = [
+                { match: 'ホーム', replace: '主页' },
+                { match: 'コンテスト一覧', replace: '比赛列表' },
+                { match: 'コンテスト', replace: '比赛' },
+                { match: 'ランキング', replace: '排名' },
+                { match: '便利リンク集', replace: '实用链接' },
+                { match: 'AtCoderJobs', replace: 'AtCoder职位' },
+                { match: 'AtCoderJobsトップ', replace: 'AtCoder职位首页' },
+                { match: '2024年新卒採用求人一覧', replace: '2024年应届毕业生招聘职位列表' },
+                { match: '2025年新卒採用求人一覧', replace: '2025年应届毕业生招聘职位列表' },
+                { match: '中途採用求人一覧', replace: '社会人招聘职位列表' },
+                { match: 'インターン求人一覧', replace: '实习职位列表' },
+                { match: 'アルバイト求人一覧', replace: '兼职职位列表' },
+                { match: 'その他求人一覧', replace: '其他职位列表' },
+                { match: 'AtCoder社による職業紹介求人一覧', replace: '由AtCoder公司提供的职业介绍职位列表' },
+                { match: '採用担当者の方へ', replace: '给招聘负责人的信息' },
+                { match: '検定', replace: '认证考试' },
+                { match: '検定トップ', replace: '认证考试首页' },
+                { match: 'マイページ', replace: '个人主页' },
+                { match: 'AtCoderCareerDesign', replace: 'AtCoder职业设计' },
+                { match: 'キャリアデザイントップ', replace: '职业设计首页' },
+                { match: 'About', replace: '关于' },
+                { match: '企業情報', replace: '企业信息' },
+                { match: 'よくある質問', replace: '常见问题' },
+                { match: 'お問い合わせ', replace: '联系我们' },
+                { match: '資料請求', replace: '索取资料' },
+                { match: '利用規約', replace: '使用规范' },
+                { match: 'ルール', replace: '规则' },
+                { match: '用語集', replace: '术语表' },
+                { match: 'プライバシーポリシー', replace: '隐私政策' },
+                { match: '個人情報保護方針', replace: '个人信息保护政策' },
+                { match: 'Copyright Since 2012 (C) AtCoder Inc. All rights reserved.', replace: '版权所有 © 2012年起 AtCoder公司。保留所有权利。' },
+            ];
+            strictTraverseTextNodes($('#footer'), rules10);
+            strictTraverseTextNodes($('.footer'), rules10);
+
+            const rules11 = [
+                { match: 'ファイルを開く', replace: '打开文件' },
+                { match: 'カスタマイズ', replace: '自定义' },
+                { match: 'エディタ切り替え', replace: '切换编辑器' },
+                { match: '高さ自動調節', replace: '自动调整高度' },
+            ];
+            traverseTextNodes($('.editor-buttons'), rules11);
+
+            const rules12 = [
+                { match: '問題', replace: '问题' },
+                { match: '言語', replace: '语言' },
+                { match: 'ソースコード', replace: '源代码' },
+                { match: '標準入力', replace: '标注输入' },
+                { match: '標準出力', replace: '标准输出' },
+                { match: '標準エラー出力', replace: '标准错误输出' },
+            ];
+            traverseTextNodes($('.control-label'), rules12);
+
+            const rules13 = [
+                { match: 'トップ', replace: '首页' },
+                { match: '問題', replace: '问题' },
+                { match: '質問', replace: '提问' },
+                { match: '提出', replace: '提交' },
+                { match: '提出結果', replace: '提交结果' },
+                { match: 'すべての提交', replace: '所有提交' },
+                { match: '自分の提交', replace: '我的提交' },
+                { match: '自分の得点状況', replace: '我的得分情况' },
+                { match: 'バーチャル順位表', replace: '虚拟排名表' },
+                { match: '順位表', replace: '排名表' },
+                { match: 'コードテスト', replace: '代码测试' },
+                { match: '解説', replace: '题解' },
+            ];
+            traverseTextNodes($('.h2'), rules13);
+            traverseTextNodes($('h2'), rules13);
+
+            const rules14 = [
+                { match: 'トップ', replace: '首页' },
+                { match: '問題', replace: '问题' },
+                { match: '質問', replace: '提问' },
+                { match: '提出', replace: '提交' },
+                { match: '提出結果', replace: '提交结果' },
+                { match: 'すべての提交', replace: '所有提交' },
+                { match: '自分の提交', replace: '我的提交' },
+                { match: '自分の得点状況', replace: '我的得分情况' },
+                { match: 'バーチャル順位表', replace: '虚拟排名表' },
+                { match: '順位表', replace: '排名表' },
+                { match: 'コードテスト', replace: '代码测试' },
+                { match: '解説', replace: '题解' },
+            ];
+            traverseTextNodes($('.panel-heading'), rules14);
+
             return;
         }
 
@@ -1121,7 +1335,7 @@ function addDraggable(element) {
 
         const rules3 = [
             { match: 'Search in Archive', replace: '搜索存档' },
-            { match: 'Permanent Contests', replace: '永久比赛' },
+            { match: 'Permanent Contests', replace: '长期持续的比赛' },
             { match: 'Upcoming Contests', replace: '即将举行的比赛' },
             { match: 'Recent Contests', replace: '最近的比赛' },
             { match: 'Ranking', replace: '排行' },
@@ -2423,7 +2637,7 @@ async function translateProblemStatement(text, element_node, button) {
     translateDiv.appendChild(spanElement);
     element_node.insertAdjacentElement('afterend', translateDiv);
     // 替换latex公式
-    if (translation != "api2d" && translation != "openai") {
+    if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
         let i = 0;
         // 块公式
@@ -2467,16 +2681,8 @@ async function translateProblemStatement(text, element_node, button) {
         translatedText = await translate_gg(text);
     } else if (translation == "openai") {
         try {
-            translateDiv.innerHTML = "正在翻译中……<br><br>使用GPT（ChatGPT/api2d）进行翻译通常需要很长的时间，请耐心等待";
+            translateDiv.innerHTML = "正在翻译中……<br><br>使用 ChatGPT 进行翻译通常需要很长的时间，请耐心等待";
             translatedText = await translate_openai(text);
-        } catch (error) {
-            status = 2;
-            translatedText = error;
-        }
-    } else if (translation == "api2d") {
-        try {
-            translateDiv.innerHTML = "正在翻译中……<br><br>使用GPT（ChatGPT/api2d）进行翻译通常需要很长的时间，请耐心等待";
-            translatedText = await translate_api2d(text);
         } catch (error) {
             status = 2;
             translatedText = error;
@@ -2484,7 +2690,7 @@ async function translateProblemStatement(text, element_node, button) {
     }
     if (/^翻译出错/.test(translatedText)) status = 2;
     // 还原latex公式
-    if (translation != "api2d" && translation != "openai") {
+    if (translation != "openai") {
         try {
             for (let i = 0; i < matches.length; i++) {
                 let match = matches[i];
