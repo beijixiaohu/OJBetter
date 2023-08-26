@@ -934,7 +934,7 @@ function addDraggable(element) {
         startY = e.clientY;
 
         isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
-        if(isSpecialMouseDown)return;
+        if (isSpecialMouseDown) return;
         $('body').css('cursor', 'all-scroll');
     });
 
@@ -1058,6 +1058,21 @@ function addDraggable(element) {
             }
         }
 
+        // 严格
+        function strictTraverseTextNodes(node, rules) {
+            if (!node) return;
+            if (node.nodeType === Node.TEXT_NODE) {
+                const nodeText = node.textContent.trim();
+                rules.forEach(rule => {
+                    if (nodeText === rule.match) {
+                        node.textContent = rule.replace;
+                    }
+                });
+            } else {
+                $(node).contents().each((_, child) => strictTraverseTextNodes(child, rules));
+            }
+        }
+
         const rules1 = [
             { match: 'Virtual participation', replace: '参加虚拟重现赛' },
             { match: 'Enter', replace: '进入' },
@@ -1083,14 +1098,14 @@ function addDraggable(element) {
             { match: 'Before registration', replace: '距报名开始还有' },
             { match: 'Until closing ', replace: '距报名结束还有' },
             { match: 'Before extra registration', replace: '额外报名还未开始' },
-            { match: 'Register', replace: '报名' },
+            { match: 'Register »', replace: '报名 »' },
             { match: 'Registration completed', replace: '已报名' },
             { match: 'Registration closed', replace: '报名已结束' },
             { match: 'Problems', replace: '问题集' },
             { match: 'Questions about problems', replace: '关于问题的提问' },
             { match: 'Contest status', replace: '比赛状态' },
         ];
-        traverseTextNodes($('.datatable'), rules1);
+        strictTraverseTextNodes($('.datatable'), rules1);
 
         const rules2 = [
             { match: 'Home', replace: '主页' },
@@ -1274,7 +1289,7 @@ function addDraggable(element) {
         traverseTextNodes($('#vote-reset-filterDifficultyUpperBorder'), rules22);
 
         const rules23 = [
-            { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。\n（说明：有很小概率可能是Codeforces Better!插入翻译按钮导致的）' },
+            { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。\n（说明：有极小概率可能是Codeforces Better!插入翻译按钮导致的）' },
             { match: 'View the changes.', replace: '查看更改' },
         ];
         traverseTextNodes($('.alert.alert-info'), rules23);
@@ -2414,12 +2429,16 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
   </div>`;
     if (type === "this_level") {
         $(parent).before(htmlString);
+        var block = $(".translateButton" + suffix).parent().next();
     } else if (type === "child_level") {
         $(parent).prepend(htmlString);
+        var block = $(".translateButton" + suffix).parent().parent();
     }
     if (is_simple) {
         $('.html2md-panel').find('.html2mdButton.html2md-view' + suffix + ', .html2mdButton.html2md-cb' + suffix).remove();
     }
+
+    if (block.css("display") === "none") $(".translateButton" + suffix).parent().remove();
 }
 function addButtonWithHTML2MD(parent, suffix, type) {
     if (is_oldLatex) {
@@ -2461,6 +2480,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
     }));
 
     if (hoverTargetAreaDisplay) {
+        var previousCSS;
         $(document).on("mouseover", ".html2md-view" + suffix, function () {
             var target;
 
@@ -2471,14 +2491,20 @@ function addButtonWithHTML2MD(parent, suffix, type) {
             }
 
             $(target).append('<div class="overlay">目标转换区域</div>');
+
+            previousCSS = {
+                "position": $(target).css("position"),
+                "display": $(target).css("display")
+            };
             $(target).css({
                 "position": "relative",
                 "display": "block"
             });
+
             $(".html2md-view" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "99999"
-            })
+            });
         });
 
         $(document).on("mouseout", ".html2md-view" + suffix, function () {
@@ -2491,13 +2517,10 @@ function addButtonWithHTML2MD(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css({
-                "position": "",
-                "display": ""
-            });
+            $(target).css(previousCSS);
             $(".html2md-view" + suffix).parent().css({
                 "position": "static"
-            })
+            });
         });
     }
 }
@@ -2537,6 +2560,7 @@ function addButtonWithCopy(parent, suffix, type) {
     }));
 
     if (hoverTargetAreaDisplay) {
+        var previousCSS;
         $(document).on("mouseover", ".html2md-cb" + suffix, function () {
             var target;
 
@@ -2547,6 +2571,10 @@ function addButtonWithCopy(parent, suffix, type) {
             }
 
             $(target).append('<div class="overlay">目标复制区域</div>');
+            previousCSS = {
+                "position": $(target).css("position"),
+                "display": $(target).css("display")
+            };
             $(target).css({
                 "position": "relative",
                 "display": "block"
@@ -2567,10 +2595,7 @@ function addButtonWithCopy(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css({
-                "position": "",
-                "display": ""
-            });
+            $(target).css(previousCSS);
             $(".html2md-cb" + suffix).parent().css({
                 "position": "static"
             })
@@ -2677,6 +2702,8 @@ async function addButtonWithTranslation(parent, suffix, type) {
 
     // 目标区域指示
     function bindHoverEvents(suffix, type) {
+        var previousCSS;
+
         $(document).on("mouseover", ".translateButton" + suffix, function () {
             var target;
 
@@ -2687,10 +2714,16 @@ async function addButtonWithTranslation(parent, suffix, type) {
             }
 
             $(target).append('<div class="overlay">目标翻译区域</div>');
+
+            previousCSS = {
+                "position": $(target).css("position"),
+                "display": $(target).css("display")
+            };
             $(target).css({
                 "position": "relative",
                 "display": "block"
             });
+
             $(".translateButton" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "99999"
@@ -2707,10 +2740,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css({
-                "position": "",
-                "display": ""
-            });
+            $(target).css(previousCSS);
             $(".translateButton" + suffix).parent().css({
                 "position": "static"
             });
@@ -3140,7 +3170,7 @@ async function translateProblemStatement(text, element_node, button) {
             status = 2;
             translatedText = error;
         }
-    } 
+    }
     if (/^翻译出错/.test(translatedText)) status = 2;
     // 还原latex公式
     if (is_oldLatex) {
