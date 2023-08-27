@@ -2294,7 +2294,7 @@ $(document).ready(function () {
 
 // 说明为旧的latex渲染
 if (is_oldLatex) {
-    var newElement = $("<div></div>").addClass("alert alert-warning").html(`
+    var newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert").html(`
     注意：当前页面存在使用非 MathJax 库渲染为 HTML 的 Latex 公式（这通常是一道古老的题目），这导致 CodeforcesBetter! 无法将其还原回 Latex，因此当前页面部分功能不适用。
     <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。
     `).css({
@@ -2438,7 +2438,7 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
         $('.html2md-panel').find('.html2mdButton.html2md-view' + suffix + ', .html2mdButton.html2md-cb' + suffix).remove();
     }
 
-    if (block.css("display") === "none") $(".translateButton" + suffix).parent().remove();
+    if (block.css("display") === "none" || block.hasClass('ojbetter-alert')) $(".translateButton" + suffix).parent().remove();
 }
 function addButtonWithHTML2MD(parent, suffix, type) {
     if (is_oldLatex) {
@@ -2479,7 +2479,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         if (removedChildren) $(target).prepend(removedChildren);
     }));
 
-    if (hoverTargetAreaDisplay) {
+    if (hoverTargetAreaDisplay && !is_oldLatex) {
         var previousCSS;
         $(document).on("mouseover", ".html2md-view" + suffix, function () {
             var target;
@@ -2559,7 +2559,7 @@ function addButtonWithCopy(parent, suffix, type) {
         $(target).remove();
     }));
 
-    if (hoverTargetAreaDisplay) {
+    if (hoverTargetAreaDisplay && !is_oldLatex) {
         var previousCSS;
         $(document).on("mouseover", ".html2md-cb" + suffix, function () {
             var target;
