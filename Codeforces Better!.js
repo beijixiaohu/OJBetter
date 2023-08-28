@@ -1105,7 +1105,7 @@ function addDraggable(element) {
             { match: 'Questions about problems', replace: '关于问题的提问' },
             { match: 'Contest status', replace: '比赛状态' },
         ];
-        strictTraverseTextNodes($('.datatable'), rules1);
+        traverseTextNodes($('.datatable'), rules1);
 
         const rules2 = [
             { match: 'Home', replace: '主页' },
@@ -2721,7 +2721,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
             };
             $(target).css({
                 "position": "relative",
-                "display": "block"
+                "display": ($(target).hasClass('question-response')) ? "block" : $(target).css("display")
             });
 
             $(".translateButton" + suffix).parent().css({
@@ -2741,6 +2741,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
 
             $(target).find('.overlay').remove();
             $(target).css(previousCSS);
+
             $(".translateButton" + suffix).parent().css({
                 "position": "static"
             });
@@ -2881,6 +2882,13 @@ function addConversionButton() {
         let id = "_alert_" + getRandomNumber(8);
         addButtonPanel(this, id, "this_level", true);
         addButtonWithTranslation(this, id, "this_level");
+    });
+
+    // 添加按钮到talk-text部分
+    $(".talk-text").each(function () {
+        let id = "_talk-text_" + getRandomNumber(8);
+        addButtonPanel(this, id, "child_level", true);
+        addButtonWithTranslation(this, id, "child_level");
     });
 };
 
