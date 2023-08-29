@@ -1087,8 +1087,12 @@ function addDraggable(element) {
                 { match: '採用担当者の方へ', replace: '致招聘负责人' },
                 { match: '詳細ページ', replace: '详细页面' },
                 { match: 'マイページ', replace: '我的页面' },
+                { match: 'コンテスト一覧', replace: '比赛列表' },
+                { match: 'すべて表示', replace: '显示全部' },
+                { match: '殿堂入り', replace: '名人堂' },
+                { match: 'お知らせ一覧', replace: '公告列表' },
             ];
-            traverseTextNodes($('.a-btn_bg'), rules3);
+            traverseTextNodes($('.a-btnarea'), rules3);
 
             const rules4 = [
                 { match: '解けた！を', replace: '解决了！' },
@@ -1138,7 +1142,7 @@ function addDraggable(element) {
                 { match: 'bjxh (Guest)', replace: 'bjxh（游客）' },
                 { match: 'マイプロフィール', replace: '个人资料' },
                 { match: '基本設定', replace: '基本设置' },
-                { match: 'アイコン設定', replace: '图标设置' },
+                { match: 'アイコン設定', replace: '头像设置' },
                 { match: 'パスワードの変更', replace: '修改密码' },
                 { match: 'お気に入り管理', replace: '收藏管理' },
                 { match: 'ログアウト', replace: '登出' },
@@ -1152,10 +1156,20 @@ function addDraggable(element) {
                 { match: '自分の得点状況', replace: '我的得分情况' },
                 { match: 'バーチャル順位表', replace: '虚拟排名表' },
                 { match: '順位表', replace: '排名表' },
+                { match: 'チーム戦排名表', replace: '团队比赛排名表' },
                 { match: 'コードテスト', replace: '代码测试' },
                 { match: '解説', replace: '题解' },
                 { match: 'すべての提交', replace: '所有提交' },
                 { match: '自分の提交', replace: '我的提交' },
+                { match: 'プロフィール', replace: '个人资料' },
+                { match: 'コンテスト成績表', replace: '比赛成绩表' },
+                { match: '設定', replace: '设置' },
+                { match: 'メールアドレスの更新・認証', replace: '更新/认证电子邮件地址' },
+                { match: '收藏管理', replace: '收藏管理' },
+                { match: 'ユーザ名照会', replace: '用户名查询' },
+                { match: 'ユーザ名の変更', replace: '更改用户名' },
+                { match: '退会', replace: '注销' },
+                { match: 'その他', replace: '其他' },
             ];
             traverseTextNodes($('.nav'), rules7);
 
@@ -1182,6 +1196,7 @@ function addDraggable(element) {
                 { match: 'ヒューリスティック', replace: '启发式' },
                 { match: '企業ヒューリスティック', replace: '企业启发式' },
                 { match: '検索', replace: '搜索' },
+                { match: 'リセット', replace: '重置' },
                 { match: 'コンテスト名', replace: '比赛名称' },
             ];
             strictTraverseTextNodes($('#collapse-search'), rules8);
@@ -1191,6 +1206,9 @@ function addDraggable(element) {
                 { match: '自分の得点状況', replace: '我的得分情况' },
                 { match: '印刷用問題文', replace: '打印问题集' },
                 { match: '記事アーカイブ', replace: '文章存档' },
+                { match: '詳細', replace: '详情' },
+                { match: 'すべて表示', replace: '显示全部' },
+                { match: '殿堂入り', replace: '名人堂' },
             ];
             strictTraverseTextNodes($('.btn-text'), rules9);
 
@@ -1280,6 +1298,49 @@ function addDraggable(element) {
                 { match: '解説', replace: '题解' },
             ];
             traverseTextNodes($('.panel-heading'), rules14);
+
+            const rules15 = [
+                { match: '予定', replace: '即将举行' },
+                { match: '終了', replace: '已结束' },
+            ];
+            traverseTextNodes($('.status'), rules15);
+
+            const rules16 = [
+                { match: 'コンテスト名', replace: '比赛名称' },
+                { match: 'Rated対象', replace: '计分对象' },
+                { match: '時間', replace: '时长' },
+                { match: '開始時刻', replace: '开始时间' },
+            ];
+            traverseTextNodes($('th.text-center'), rules16);
+
+            const rules17 = [
+                { match: 'コンテスト名', replace: '比赛名称' },
+                { match: '開始時刻', replace: '开始时间' },
+                { match: 'ユーザ', replace: '用户' },
+            ];
+            traverseTextNodes($('.table-responsive tr th'), rules17);
+
+            const rules18 = [
+                { match: 'バーチャル参加', replace: '虚拟参与' },
+            ];
+            traverseTextNodes($('.btn-default'), rules18);
+
+            const rules19 = [
+                { match: '問題名', replace: '问题名称' },
+                { match: '実行時間制限', replace: '执行时间限制' },
+                { match: 'メモリ制限', replace: '内存限制' },
+            ];
+            traverseTextNodes($('.table-bordered tr th'), rules19);
+
+            const rules20 = [
+                { match: 'ページトップ', replace: '返回顶部' },
+            ];
+            traverseTextNodes($('#scroll-page-top'), rules20);
+
+            const rules21 = [
+                { match: 'AtCoderホームへ戻る', replace: '返回 AtCoder 主页' },
+            ];
+            traverseTextNodes($('.back-to-home'), rules21);
 
             return;
         }
