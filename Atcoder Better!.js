@@ -52,8 +52,16 @@ const opneaiConfig = getGMValue("chatgpt-config", {
     "choice": -1,
     "configurations": []
 });
-if (opneaiConfig.choice !== -1) {
+if (opneaiConfig.choice !== -1 || opneaiConfig.configurations.length !== 0) {
     const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
+
+    if (configAtIndex == undefined) {
+        let existingConfig = GM_getValue('chatgpt-config');
+        existingConfig.choice = 0;
+        GM_setValue('chatgpt-config', existingConfig);
+        location.reload();
+    }
+    
     openai_model = configAtIndex.model;
     openai_key = configAtIndex.key;
     openai_proxy = configAtIndex.proxy;
@@ -292,9 +300,8 @@ button.html2mdButton.AtBetter_setting.open {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 10px !important;
-  width: 1px;
-  height: 1px !important;
+  width: 20px;
+  height: 20px;
   color: transparent;
   font-size: 0;
   cursor: pointer;
@@ -473,6 +480,9 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+.AtBetter_setting_menu input::placeholder {
+    color: #727378;
+}
 .AtBetter_setting_menu input.no_default::placeholder{
     color: #BDBDBD;
 }
@@ -508,10 +518,10 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
 .AtBetter_setting_menu #save {
     cursor: pointer;
 	display: inline-flex;
-	padding: 0.5rem 1rem;
+	padding: 5px;
 	background-color: #1aa06d;
 	color: #ffffff;
-	font-size: 1rem;
+	font-size: 14px;
 	line-height: 1.5rem;
 	font-weight: 500;
 	justify-content: center;
@@ -519,6 +529,7 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
 	border-radius: 0.375rem;
 	border: none;
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    margin-top: 20px
 }
 .AtBetter_setting_menu button#debug_button.debug_button {
     width: 18%;
@@ -565,11 +576,11 @@ span.input_label {
     z-index: -1;
 }
 .help-icon {
-    display: flex;
     cursor: help;
     width: 15px;
     color: #b4b9d4;
     margin-left: 5px;
+    margin-top: 3px;
 }
 .AtBetter_setting_menu .AtBetter_setting_menu_label_text .help_tip .help-icon {
     color: #7fbeb2;
@@ -659,7 +670,7 @@ div#update_panel #updating {
 	padding: 0px;
 	background-color: #1aa06d;
 	color: #ffffff;
-	font-size: 1rem;
+	font-size: 14px;
 	line-height: 1.5rem;
 	font-weight: 500;
 	justify-content: center;
@@ -1850,7 +1861,6 @@ const AtBetterSettingMenuHTML = `
     <div class='AtBetter_setting_menu_input' id='openai' style='display: none;'>
         <div id="chatgpt-config"></div>
     </div>
-    <br>
     <button id='save'>保存</button>
     </div>
 `;
@@ -1941,7 +1951,6 @@ const chatgptConfigEditHTML = `
             </div>
         </label>
         <textarea id="_data" placeholder='（选填）您可以在这里填写向请求data中额外添加的键值对' require = false></textarea>
-        <br>
         <button id='save'>保存</button>
     </div>
 `;
