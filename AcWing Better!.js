@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AcWing Better!
-// @version      3.25
+// @version      3.26
 // @description  AcWing界面美化，功能增强，视频时间点标记跳转，代码markdown一键复制
 // @author       北极小狐
 // @match        https://www.acwing.com/*
@@ -32,6 +32,10 @@ const bottomBar = getGMValue("bottomBar", true);
 const bingWallpaper = getGMValue("bingWallpaper", true);
 const widthAdjustment = getGMValue("widthAdjustment", true);
 const autoPlay = getGMValue("autoPlay", true);
+
+// 常量
+const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
+const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 9999; }`;
 
 // 样式
 if (bottomBar) {
@@ -107,358 +111,313 @@ if (widthAdjustment) {
     })
 }
 GM_addStyle(`
-    span.mdViewContent {
-        white-space: pre-wrap;
-    }
-    .file-explorer-main-field-item.file-explorer-main-field-item-desktop {
-        width: 0px;
-        height: 0px;
-        overflow: hidden;
-    }
-    .comment-conent {
-        overflow-x: auto;
-    }
-    /* 页脚 */
-    footer#acwing_footer .copyright {
-        color: #fff;
-    }
-    footer#acwing_footer .copyright a, .links a, footer#acwing_footer .container {
-        color: #fff;
-    }
-    /* 复制按钮 */
-    pre.hljs {
-        display: flex;
-        justify-content: space-between;
-    }
-    span.copy-button {
-        cursor: pointer;
-        background-color: #e6e6e6;
-        color: #727378;
-        height: 20px;
-        font-size: 13px;
-        border-radius: 0.3rem;
-        padding: 1px 5px;
-        margin: 5px;
-        box-shadow: 0 0 1px #0000004d;
-    }
-    span.copy-button.copied {
-        background-color: #07e65196;
-        color: #104f2b;
-    }
-    /* html2md */
-    .html2md-panel {
-        display: flex;
-        justify-content: flex-end;
-    }
-    button.html2mdButton {
-        height: 30px;
-        width: 30px;
-    }
-    button.html2mdButton {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        background-color: #ffffff;
-        color: #606266;
-        height: 22px;
-        width: auto;
-        font-size: 13px;
-        border-radius: 0.3rem;
-        padding: 1px 5px;
-        margin: 5px;
-        border: 1px solid #dcdfe6;
-    }
-    button.html2mdButton:hover {
-        color: #409eff;
-        border-color: #409eff;
-        background-color: #f1f8ff;
-    }
-    button.html2mdButton.copied {
-        background-color: #f0f9eb;
-        color: #67c23e;
-        border: 1px solid #b3e19d;
-    }
-    button.html2mdButton.html2md-view.mdViewed {
-        background-color: #ff980057;
-        color: #5a3a0c;
-    }
-    /* 打卡框 */
-    .ui.bottom.attached.tab.segment.active {
-        padding: 0px;
-    }
-    /* 视频bar */
-    .embed-responsive {
-        height: max-content;
-        padding-bottom: 0px;
-    }
-    .player_bar {
-        margin: 2px;
-        display: flex;
-        justify-content: space-between;
-    }
-    .player_bar_go {
-        cursor: pointer;
-        width: 50px;
-        color: #999;
-        height: auto;
-        font-size: 13px;
-        border-radius: 0.3rem;
-        padding: 1px 5px;
-        margin: 5px;
-        border: none;
-        background: linear-gradient(-225deg,#d5dbe4,#f8f8f8);
-        box-shadow: inset 0 -2px 0 0 #cdcde6,inset 0 0 1px 1px #fff,0 1px 2px 1px rgba(30,35,90,.4);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    button#player_bar_list_add_new_item_btn {
-        height: 30px;
-        width: 50px;
-        background-color: #00aeec;
-        color: #ffffff;
-        font-size: 13px;
-        border-radius: 0rem 0.5rem 0.5rem 0rem;
-        padding: 1px 5px;
-        margin: 5px 5px 5px 0px;
-        border: none;
-        box-shadow: 0 0 1px #0000004d;
-    }
-    div#player_bar_list {
-        display: grid;
-        width: 100%;
-        border-radius: 0.3rem 0rem 0rem 0.3rem;
-        margin: 5px 0px 5px 0px;
-        border: 1px solid #00aeeccc;
-    }
-    div#player_bar_list input[type="radio"] {
-        appearance: none;
-        width: 0;
-        height: 0;
-        overflow: hidden;
-    }
-    div#player_bar_list input[type=radio]:focus {
-        outline: 0px;
-    }
-    label.player_bar_ul_li_text {
-        max-width: 100%;
-        height: 90px;
-        overflow-x: auto;
-        font-weight: 400;
-        margin: 0px 4px;
-        border: 1px dashed #0000004d;
-        padding: 3px;
-    }
-    ul#player_bar_ul li button {
-        background-color: #e6e6e6;
-        color: #727378;
-        height: 23px;
-        font-size: 14px;
-        border-radius: 0.3rem;
-        padding: 1px 5px;
-        margin: 5px;
-        border: none;
-        box-shadow: 0 0 1px #0000004d;
-    }
-    ul#player_bar_ul {
-        list-style-type: none;
-        padding-inline-start: 0px;
-        display: flex;
-        overflow-x: auto;
-        max-width: 100%;
-        margin: 0px;
-    }
-    ul#player_bar_ul li {
-        height: 100px;
-        width: 80px;
-        display: grid;
-        overflow: hidden;
-        margin: 4px 4px;
-        min-width: 100px;
-    }
-    label.player_bar_ul_li_text:hover {
-        background-color: #eae4dc24;
-    }
-    input[type="radio"]:checked + .player_bar_ul_li_text {
-        background: #41e49930;
-        border: 1px solid green;
-        color: green;
-    }
+span.mdViewContent {
+    white-space: pre-wrap;
+}
+.file-explorer-main-field-item.file-explorer-main-field-item-desktop {
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+}
+.comment-conent {
+    overflow-x: auto;
+}
+/* 页脚 */
+footer#acwing_footer .copyright {
+    color: #fff;
+}
+footer#acwing_footer .copyright a, .links a, footer#acwing_footer .container {
+    color: #fff;
+}
+/* 复制按钮 */
+pre.hljs {
+    display: flex;
+    justify-content: space-between;
+}
+span.copy-button {
+    cursor: pointer;
+    background-color: #e6e6e6;
+    color: #727378;
+    height: 20px;
+    font-size: 13px;
+    border-radius: 0.3rem;
+    padding: 1px 5px;
+    margin: 5px;
+    box-shadow: 0 0 1px #0000004d;
+}
+span.copy-button.copied {
+    background-color: #07e65196;
+    color: #104f2b;
+}
+/* html2md */
+.html2md-panel {
+    display: flex;
+    justify-content: flex-end;
+}
+button.html2mdButton {
+    height: 30px;
+    width: 30px;
+}
+button.html2mdButton {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: #606266;
+    height: 22px;
+    width: auto;
+    font-size: 13px;
+    border-radius: 0.3rem;
+    padding: 1px 5px;
+    margin: 5px;
+    border: 1px solid #dcdfe6;
+}
+button.html2mdButton:hover {
+    color: #409eff;
+    border-color: #409eff;
+    background-color: #f1f8ff;
+}
+button.html2mdButton.copied {
+    background-color: #f0f9eb;
+    color: #67c23e;
+    border: 1px solid #b3e19d;
+}
+button.html2mdButton.html2md-view.mdViewed {
+    background-color: #ff980057;
+    color: #5a3a0c;
+}
+/* 打卡框 */
+.ui.bottom.attached.tab.segment.active {
+    padding: 0px;
+}
+/* 视频bar */
+.embed-responsive {
+    height: max-content;
+    padding-bottom: 0px;
+}
+.player_bar {
+    margin: 2px;
+    display: flex;
+    justify-content: space-between;
+}
+.player_bar_go {
+    cursor: pointer;
+    width: 50px;
+    color: #999;
+    height: auto;
+    font-size: 13px;
+    border-radius: 0.3rem;
+    padding: 1px 5px;
+    margin: 5px;
+    border: none;
+    background: linear-gradient(-225deg,#d5dbe4,#f8f8f8);
+    box-shadow: inset 0 -2px 0 0 #cdcde6,inset 0 0 1px 1px #fff,0 1px 2px 1px rgba(30,35,90,.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+button#player_bar_list_add_new_item_btn {
+    height: 30px;
+    width: 50px;
+    background-color: #00aeec;
+    color: #ffffff;
+    font-size: 13px;
+    border-radius: 0rem 0.5rem 0.5rem 0rem;
+    padding: 1px 5px;
+    margin: 5px 5px 5px 0px;
+    border: none;
+    box-shadow: 0 0 1px #0000004d;
+}
+div#player_bar_list {
+    display: grid;
+    width: 100%;
+    border-radius: 0.3rem 0rem 0rem 0.3rem;
+    margin: 5px 0px 5px 0px;
+    border: 1px solid #00aeeccc;
+}
+div#player_bar_list input[type="radio"] {
+    appearance: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+div#player_bar_list input[type=radio]:focus {
+    outline: 0px;
+}
+label.player_bar_ul_li_text {
+    max-width: 100%;
+    height: 90px;
+    overflow-x: auto;
+    font-weight: 400;
+    margin: 0px 4px;
+    border: 1px dashed #0000004d;
+    padding: 3px;
+}
+ul#player_bar_ul li button {
+    background-color: #e6e6e6;
+    color: #727378;
+    height: 23px;
+    font-size: 14px;
+    border-radius: 0.3rem;
+    padding: 1px 5px;
+    margin: 5px;
+    border: none;
+    box-shadow: 0 0 1px #0000004d;
+}
+ul#player_bar_ul {
+    list-style-type: none;
+    padding-inline-start: 0px;
+    display: flex;
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 0px;
+}
+ul#player_bar_ul li {
+    height: 100px;
+    width: 80px;
+    display: grid;
+    overflow: hidden;
+    margin: 4px 4px;
+    min-width: 100px;
+}
+label.player_bar_ul_li_text:hover {
+    background-color: #eae4dc24;
+}
+input[type="radio"]:checked + .player_bar_ul_li_text {
+    background: #41e49930;
+    border: 1px solid green;
+    color: green;
+}
 
-    ul#player_bar_ul::-webkit-scrollbar {
-    width: 5px;
-    height: 8px;
-    }
-    ul#player_bar_ul::-webkit-scrollbar-thumb {
-        border-radius: 2px;
-        border: 1px solid rgba(56,56,56,.3411764706);
-        background-clip: padding-box;
-        background-color: #a29bb84a;
-        background-image: -webkit-linear-gradient(45deg,hsla(0deg,0%,100%,.4) 25%,transparent 0,transparent 50%,hsla(0deg,0%,100%,.4) 0,hsla(0deg,0%,100%,.4) 75%,transparent 0,transparent);
-    }
-    ul#player_bar_ul::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    }
+ul#player_bar_ul::-webkit-scrollbar {
+width: 5px;
+height: 8px;
+}
+ul#player_bar_ul::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    border: 1px solid rgba(56,56,56,.3411764706);
+    background-clip: padding-box;
+    background-color: #a29bb84a;
+    background-image: -webkit-linear-gradient(45deg,hsla(0deg,0%,100%,.4) 25%,transparent 0,transparent 50%,hsla(0deg,0%,100%,.4) 0,hsla(0deg,0%,100%,.4) 75%,transparent 0,transparent);
+}
+ul#player_bar_ul::-webkit-scrollbar-track {
+background-color: #f1f1f1;
+border-radius: 5px;
+}
 
-    label.player_bar_ul_li_text::-webkit-scrollbar {
-    width: 5px;
-    height: 7px;
-    background-color: #aaa;
-    }
-    label.player_bar_ul_li_text::-webkit-scrollbar-thumb {
-        border: 1px solid rgba(56,56,56,.3411764706);
-        background-clip: padding-box;
-        background-color: #a29bb84a;
-    }
-    label.player_bar_ul_li_text::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-    }
-    .player_bar_list_add_div {
-        display: flex;
-        height: 40px;
-        margin: 4px 2px;
-    }
-    input#player_bar_list_add_input {
-        width: 100%;
-        height: 30px;
-        background-color: #ffffff;
-        color: #727378;
-        font-size: 13px;
-        border-radius: 0.3rem 0rem 0rem 0.3rem;
-        padding: 1px 5px;
-        margin: 5px 0px 5px 0px;
-        border: 1px solid #00aeeccc;
-        border-right: none;
-        box-shadow: 0 0 1px #0000004d;
-    }
-    input#player_bar_list_add_input:focus-visible {
-        border-width: 2px;
-        border-style: solid;
-        border-color: #8bb2d9;
-        outline: -webkit-focus-ring-color auto 0px;
-    }
-    button#player_bar_list_add_new_item_btn.added {
-        background-color: #07e65196;
-        color: #104f2b;
-    }
-    div#player_bar_go.gone {
-        color: #3f5a14;
-        font-weight: 600;
-        background: linear-gradient(-225deg,#9CCC65,#E6EE9C);
-        box-shadow: inset 0 -2px 0 0 #cde3e6, inset 0 0 1px 1px #c6fd7d, 0 1px 2px 1px rgb(30 90 44 / 40%);
-    }
-    /* bar修改菜单 */
-    div#player_bar_menu {
-        position: absolute;
-        border-width: 1px;
-        border-style: solid;
-        border-color: #8bb2d9;
-        box-shadow: 1px 1px 4px 0px #0000004d;
-    }
-    div#player_bar_menu_edit {
-        cursor: pointer;
-        background-color: #ffffff;
-        color: black;
-        box-shadow: inset 0px 0px 0px 0px #8bb2d9;
-        padding: 2px 6px;
-    }
-    div#player_bar_menu_delete {
-        cursor: pointer;
-        background-color: #ffff;
-        box-shadow: inset 0px 1px 0px 0px #8bb2d9;
-        color: black;
-        padding: 2px 6px;
-    }
-    div#player_bar_menu_edit:hover {
-        background-color: #00aeec;
-        color: white;
-    }
-    div#player_bar_menu_delete:hover {
-        background-color: #FF5722;
-        color: white;
-    }
-    /*更新检查*/
-    div#update_panel {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 240px;
-        transform: translate(-50%, -50%);
-        background-color: #fdfdfd;
-        border: 1px solid #00aeeccc;
-        border-radius: 5px;
-        box-shadow: 2px 2px 3px 1px #0000004d;
-        padding: 10px 20px 20px 20px;
-        color: #444242;
-        background-color: #ecf0ff;
-        border: 6px solid #ffffff;
-        border-radius: 16px;
-    }
-    div#update_panel #updating {
-        cursor: pointer;
-        display: inline-flex;
-        padding: 0px;
-        background-color: #1aa06d;
-        color: #ffffff;
-        font-size: 1rem;
-        line-height: 1.5rem;
-        font-weight: 500;
-        justify-content: center;
-        width: 100%;
-        border-radius: 0.375rem;
-        border: none;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    }
-    div#update_panel #updating a {
-        text-decoration: none;
-        color: white;
-        display: flex;
-        position: inherit;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 22px;
-        font-size: 14px;
-        justify-content: center;
-        align-items: center;
-    }
-    /*设置面板*/
-    div#topNavBar {
-        width: 80%;
-    }
-    nav.navbar.navbar-inverse.navbar-fixed-top.navbar-expand-lg .container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    button.html2mdButton.ACBetter_setting {
-        background-color: #56aa56;
-        color: white;
-        white-space: nowrap;
-        float: right;
-        height: 30px;
-        margin: 10px;
-        border: 0px;
-    }
-    #ACwingBetter_setting_menu {
-        z-index: 9999;
-        border-radius: 0.5rem;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        display: grid;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 270px;
-        transform: translate(-50%, -50%);
-        border-radius: 16px;
-        background-color: #ecf0ff;
-        border: 6px solid #ffffff;
-        color: #697e91;
-        padding: 10px 20px 20px 20px;
-    }
+label.player_bar_ul_li_text::-webkit-scrollbar {
+width: 5px;
+height: 7px;
+background-color: #aaa;
+}
+label.player_bar_ul_li_text::-webkit-scrollbar-thumb {
+    border: 1px solid rgba(56,56,56,.3411764706);
+    background-clip: padding-box;
+    background-color: #a29bb84a;
+}
+label.player_bar_ul_li_text::-webkit-scrollbar-track {
+background-color: #f1f1f1;
+}
+.player_bar_list_add_div {
+    display: flex;
+    height: 40px;
+    margin: 4px 2px;
+}
+input#player_bar_list_add_input {
+    width: 100%;
+    height: 30px;
+    background-color: #ffffff;
+    color: #727378;
+    font-size: 13px;
+    border-radius: 0.3rem 0rem 0rem 0.3rem;
+    padding: 1px 5px;
+    margin: 5px 0px 5px 0px;
+    border: 1px solid #00aeeccc;
+    border-right: none;
+    box-shadow: 0 0 1px #0000004d;
+}
+input#player_bar_list_add_input:focus-visible {
+    border-width: 2px;
+    border-style: solid;
+    border-color: #8bb2d9;
+    outline: -webkit-focus-ring-color auto 0px;
+}
+button#player_bar_list_add_new_item_btn.added {
+    background-color: #07e65196;
+    color: #104f2b;
+}
+div#player_bar_go.gone {
+    color: #3f5a14;
+    font-weight: 600;
+    background: linear-gradient(-225deg,#9CCC65,#E6EE9C);
+    box-shadow: inset 0 -2px 0 0 #cde3e6, inset 0 0 1px 1px #c6fd7d, 0 1px 2px 1px rgb(30 90 44 / 40%);
+}
+/* bar修改菜单 */
+div#player_bar_menu {
+    position: absolute;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #8bb2d9;
+    box-shadow: 1px 1px 4px 0px #0000004d;
+}
+div#player_bar_menu_edit {
+    cursor: pointer;
+    background-color: #ffffff;
+    color: black;
+    box-shadow: inset 0px 0px 0px 0px #8bb2d9;
+    padding: 2px 6px;
+}
+div#player_bar_menu_delete {
+    cursor: pointer;
+    background-color: #ffff;
+    box-shadow: inset 0px 1px 0px 0px #8bb2d9;
+    color: black;
+    padding: 2px 6px;
+}
+div#player_bar_menu_edit:hover {
+    background-color: #00aeec;
+    color: white;
+}
+div#player_bar_menu_delete:hover {
+    background-color: #FF5722;
+    color: white;
+}
+/*设置面板*/
+div#topNavBar {
+    width: 80%;
+}
+nav.navbar.navbar-inverse.navbar-fixed-top.navbar-expand-lg .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+button.html2mdButton.ACBetter_setting {
+    background-color: #56aa56;
+    color: white;
+    white-space: nowrap;
+    float: right;
+    height: 30px;
+    margin: 10px;
+    border: 0px;
+}
+#ACwingBetter_setting_menu {
+    z-index: 9999;
+    border-radius: 0.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: grid;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 270px;
+    transform: translate(-50%, -50%);
+    border-radius: 16px;
+    background-color: #ecf0ff;
+    border: 6px solid #ffffff;
+    color: #697e91;
+    padding: 10px 20px 20px 20px;
+}
 
-    #ACwingBetter_setting_menu .tool-box {
+#ACwingBetter_setting_menu .tool-box {
     position: absolute;
     display: flex;
     align-items: center;
@@ -467,9 +426,9 @@ GM_addStyle(`
     height: 2.5rem;
     top: 3px;
     right: 3px;
-    }
+}
 
-    #ACwingBetter_setting_menu .btn-close {
+#ACwingBetter_setting_menu .btn-close {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -484,117 +443,290 @@ GM_addStyle(`
     border: none;
     border-radius: 10px;
     transition: .2s ease all;
-    }
+}
 
-    #ACwingBetter_setting_menu .btn-close:hover {
+#ACwingBetter_setting_menu .btn-close:hover {
     width: 2rem;
     height: 2rem;
     font-size: 1rem;
     color: #ffffff;
     background-color: #ff0000cc;
     box-shadow: 0 5px 5px 0 #00000026;
-    }
+}
 
-    #ACwingBetter_setting_menu .btn-close:active {
+#ACwingBetter_setting_menu .btn-close:active {
     width: .9rem;
     height: .9rem;
     font-size: .9rem;
     color: #ffffffde;
     --shadow-btn-close: 0 3px 3px 0 #00000026;
     box-shadow: var(--shadow-btn-close);
-    }
+}
 
-    .checkbox-con {
-        margin: 10px;
-        display: flex;
-        align-items: center;
-        color: white;
-    }
+.checkbox-con {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    color: white;
+}
 
-    #ACwingBetter_setting_menu input[type=checkbox]:focus {
-        outline: 0px;
-    }
+#ACwingBetter_setting_menu input[type=checkbox]:focus {
+    outline: 0px;
+}
 
-    .checkbox-con input[type="checkbox"] {
-        margin: 0px;
-        appearance: none;
-        width: 48px;
-        height: 24px;
-        border: 2px solid #6b8092;
-        border-radius: 20px;
-        background: #f1e1e1;
-        position: relative;
-        box-sizing: border-box;
-    }
+.checkbox-con input[type="checkbox"] {
+    margin: 0px;
+    appearance: none;
+    width: 48px;
+    height: 24px;
+    border: 2px solid #6b8092;
+    border-radius: 20px;
+    background: #f1e1e1;
+    position: relative;
+    box-sizing: border-box;
+}
 
-    .checkbox-con input[type="checkbox"]::before {
-        content: "";
-        width: 16px;
-        height: 16px;
-        background: #6b80927a;
-        border: 2px solid #6b8092;
-        border-radius: 50%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(16%, 12%);
-        transition: all 0.3s ease-in-out;
-    }
+.checkbox-con input[type="checkbox"]::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: #6b80927a;
+    border: 2px solid #6b8092;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(16%, 12%);
+    transition: all 0.3s ease-in-out;
+}
 
-    .checkbox-con input[type="checkbox"]::after {
-        content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
-        position: absolute;
-        top: 0;
-        left: 24px;
-    }
+.checkbox-con input[type="checkbox"]::after {
+    content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
+    position: absolute;
+    top: 0;
+    left: 24px;
+}
 
-    .checkbox-con input[type="checkbox"]:checked {
-        border: 2px solid #02c202;
-        background: #e2f1e1;
-    }
+.checkbox-con input[type="checkbox"]:checked {
+    border: 2px solid #02c202;
+    background: #e2f1e1;
+}
 
-    .checkbox-con input[type="checkbox"]:checked::before {
-        background: rgba(2, 194, 2, 0.5);
-        border: 2px solid #02c202;
-        transform: translate(160%, 13%);
-        transition: all 0.3s ease-in-out;
-    }
+.checkbox-con input[type="checkbox"]:checked::before {
+    background: rgba(2, 194, 2, 0.5);
+    border: 2px solid #02c202;
+    transform: translate(160%, 13%);
+    transition: all 0.3s ease-in-out;
+}
 
-    .checkbox-con input[type="checkbox"]:checked::after {
-        content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='13' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2302C202' fill-opacity='0.9'/%3E%3C/svg%3E");
-        position: absolute;
-        top: 3px;
-        left: 4px;
-    }
+.checkbox-con input[type="checkbox"]:checked::after {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='13' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2302C202' fill-opacity='0.9'/%3E%3C/svg%3E");
+    position: absolute;
+    top: 3px;
+    left: 4px;
+}
 
-    .checkbox-con label {
-        margin: 0px 0px 0px 10px;
-        cursor: pointer;
-        user-select: none;
-    }
+.checkbox-con label {
+    margin: 0px 0px 0px 10px;
+    cursor: pointer;
+    user-select: none;
+}
 
-    .ACBetter_setting_list {
-        display: flex;
-        align-items: center;
-        margin-top: 18px;
-    }
+.ACBetter_setting_list {
+    display: flex;
+    align-items: center;
+    margin-top: 18px;
+}
 
-    .checkbox-con button {
-        cursor: pointer;
-        display: inline-flex;
-        padding: 0.5rem 1rem;
-        background-color: #1aa06d;
-        color: #ffffff;
-        font-size: 1rem;
-        line-height: 1.5rem;
-        font-weight: 500;
-        justify-content: center;
-        width: 100%;
-        border-radius: 0.375rem;
-        border: none;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    }
+.checkbox-con button {
+    cursor: pointer;
+    display: inline-flex;
+    padding: 0.5rem 1rem;
+    background-color: #1aa06d;
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    justify-content: center;
+    width: 100%;
+    border-radius: 0.375rem;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+/*设置面板-tip*/
+.help_tip {
+    margin-right: auto;
+}
+span.input_label {
+    font-size: 14px;
+}
+.help_tip .tip_text {
+    display: none;
+    position: absolute;
+    color: #697e91;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0px;
+    background-color: #ffffff;
+    padding: 10px;
+    margin: 5px 0px;
+    border-radius: 4px;
+    border: 1px solid #e4e7ed;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
+    z-index: 999;
+}
+.help_tip .tip_text p {
+    margin-bottom: 5px;
+}
+.help_tip .tip_text:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+    z-index: -1;
+}
+.help-icon {
+    display: flex;
+    cursor: help;
+    width: 15px;
+    color: #b4b9d4;
+    margin-left: 5px;
+}
+.AtBetter_setting_menu .AtBetter_setting_menu_label_text .help_tip .help-icon {
+    color: #7fbeb2;
+}
+.help_tip .help-icon:hover + .tip_text, .help_tip .tip_text:hover {
+    display: block;
+    cursor: help;
+    width: 250px;
+}
+/*更新检查*/
+div#update_panel {
+    z-index: 9999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 240px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 4px 0px #0000004d;
+    padding: 10px 20px 20px 20px;
+    color: #444242;
+    background-color: #f5f5f5;
+    border: 1px solid #848484;
+    border-radius: 8px;
+}
+div#update_panel #updating {
+    cursor: pointer;
+	display: inline-flex;
+	padding: 0px;
+	background-color: #1aa06d;
+	color: #ffffff;
+	font-size: 1rem;
+	line-height: 1.5rem;
+	font-weight: 500;
+	justify-content: center;
+	width: 100%;
+	border-radius: 0.375rem;
+	border: none;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+div#update_panel #updating a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    position: inherit;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 22px;
+    font-size: 14px;
+    justify-content: center;
+    align-items: center;
+}
+#skip_menu {
+    display: flex;
+    margin-top: 10px;
+    justify-content: flex-end;
+    align-items: center;
+}
+#skip_menu .help_tip {
+    margin-right: 5px;
+    margin-left: -5px;
+}
+#skip_menu .help-icon {
+    color: #f44336;
+}
 `);
+
+// 获取cookie
+function getCookie(name) {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        const [cookieName, cookieValue] = cookie.split("=");
+
+        if (cookieName === name) {
+            return decodeURIComponent(cookieValue);
+        }
+    }
+    return "";
+}
+
+// 防抖函数
+function debounce(callback) {
+    let timer;
+    let immediateExecuted = false;
+    const delay = 500;
+    return function () {
+        clearTimeout(timer);
+        if (!immediateExecuted) { callback.call(this); immediateExecuted = true; }
+        timer = setTimeout(() => { immediateExecuted = false; }, delay);
+    };
+}
+
+// 为元素添加鼠标拖动
+function addDraggable(element) {
+    let isDragging = false;
+    let initialX, initialY; // 元素的初始位置
+    let startX, startY, offsetX, offsetY; // 鼠标起始位置，移动偏移量
+    let isSpecialMouseDown = false; // 选取某些元素时不拖动
+
+    element.on('mousedown', function (e) {
+        var elem = $(this);
+        var elemOffset = elem.offset();
+        var centerX = elemOffset.left + elem.outerWidth() / 2;
+        var centerY = elemOffset.top + elem.outerHeight() / 2;
+        initialX = centerX - window.pageXOffset;
+        initialY = centerY - window.pageYOffset;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
+
+        $('body').css('cursor', 'all-scroll');
+    });
+
+
+    $(document).on('mousemove', function (e) {
+        if (!isDragging) return;
+        // 不执行拖动操作
+        if ($(e.target).is('label, p, input, textarea, span') || isSpecialMouseDown && !$(e.target).is('input, textarea')) return;
+        e.preventDefault();
+        offsetX = e.clientX - startX;
+        offsetY = e.clientY - startY;
+        element.css({ top: initialY + offsetY + 'px', left: initialX + offsetX + 'px' });
+    });
+
+    $(document).on('mouseup', function () {
+        isDragging = false;
+        isSpecialMouseDown = false;
+        $('body').css('cursor', 'default');
+    });
+}
 
 // 更新检查
 (function checkScriptVersion() {
@@ -634,34 +766,47 @@ GM_addStyle(`
         timeout: 10 * 1e3,
         onload: function (response) {
             const scriptData = JSON.parse(response.responseText);
-            if (scriptData.name === GM_info.script.name && compareVersions(scriptData.version, GM_info.script.version) === 1) {
+            const skipUpdate = getCookie("skipUpdate");
+
+            if (
+                scriptData.name === GM_info.script.name &&
+                compareVersions(scriptData.version, GM_info.script.version) === 1 &&
+                skipUpdate !== "true"
+            ) {
+                const styleElement = GM_addStyle(darkenPageStyle);
                 $("body").append(`
-					<div id='update_panel'>
-						<h3>${GM_info.script.name}有新版本！</h3>
-						<hr>
-						<div class='update_panel_menu'>
+                    <div id='update_panel'>
+                        <h3>${GM_info.script.name}有新版本！</h3>
+                        <hr>
+                        <div class='update_panel_menu'>
                             <span class ='tip'>版本信息：${GM_info.script.version} → ${scriptData.version}</span>
-						</div>
-						<br>
-						<button id='updating'><a target="_blank" href="${scriptData.url}">更新</a></button>
-					</div>
-				`);
+                        </div>
+                        <br>
+                        <div id="skip_menu">
+                            <div class="help_tip">
+                                `+ helpCircleHTML + `
+                                <div class="tip_text">
+                                    <p><b>更新遇到了问题？</b></p>
+                                    <p>由于 Greasyfork 平台的原因，当新版本刚发布时，点击 Greasyfork 上的更新按钮<u>可能</u>会出现<u>实际更新/安装的却是上一个版本</u>的情况</p>
+                                    <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可</p>
+                                    <p>你也可以<u>点击下方按钮，在本次浏览器会话期间将不再提示更新</u></p>
+                                    <button id='skip_update' class='html2mdButton'>暂不更新</button>
+                                </div>
+                            </div>
+                            <button id='updating'><a target="_blank" href="${scriptData.url}">更新</a></button>
+                        </div>
+                    </div>
+                `);
+
+                $("#skip_update").click(function () {
+                    document.cookie = "skipUpdate=true; expires=session; path=/";
+                    styleElement.remove();
+                    $("#update_panel").remove();
+                });
             }
         }
     });
 })();
-
-// 防抖函数
-function debounce(callback) {
-    let timer;
-    let immediateExecuted = false;
-    const delay = 500;
-    return function () {
-        clearTimeout(timer);
-        if (!immediateExecuted) { callback.call(this); immediateExecuted = true; }
-        timer = setTimeout(() => { immediateExecuted = false; }, delay);
-    };
-}
 
 // 随机数生成
 function getRandomNumber(numDigits) {
@@ -677,44 +822,50 @@ $(document).ready(function () {
     );
 });
 
+const ACwingBetterSettingMenuHTML = `
+    <div class='checkbox-con' id='ACwingBetter_setting_menu'>
+    <div class="tool-box">
+        <button class="btn-close">×</button>
+    </div>
+    <h3>AcWingBetter设置</h3>
+    <div class='ACBetter_setting_list'>
+        <input type="checkbox" id="bottomBar" name="bottomBar" checked>
+        <label for="bottomBar">美化底栏</label>
+    </div>
+    <div class='ACBetter_setting_list'>
+        <input type="checkbox" id="bingWallpaper" name="bingWallpaper" checked>
+        <label for="bingWallpaper">Bing每日壁纸</label>
+    </div>
+    <div class='ACBetter_setting_list'>
+        <input type="checkbox" id="widthAdjustment" name="widthAdjustment" checked>
+        <label for="widthAdjustment">页面宽屏</label>
+    </div>
+    <div class='ACBetter_setting_list'>
+        <input type="checkbox" id="autoPlay" name="autoPlay" checked>
+        <label for="autoPlay">不自动播放视频</label>
+    </div>
+    <br>
+    <button id='save'>保存</button>
+    </div>
+`;
+
 $(document).ready(function () {
     $(".ACBetter_setting").click(function () {
+        const styleElement = GM_addStyle(darkenPageStyle);
+
         $(".ACBetter_setting").attr("disabled", true);
         $(".ACBetter_setting").css("background-color", "#e6e6e6");
         $(".ACBetter_setting").css("color", "#727378");
         $(".ACBetter_setting").css("cursor", "not-allowed");
-        $("body").append(`
-            <div class='checkbox-con' id='ACwingBetter_setting_menu'>
-                <div class="tool-box">
-                    <button class="btn-close">×</button>
-                </div>
-                <h3>AcWingBetter设置</h3>
-                <hr>
-                <div class='ACBetter_setting_list'>
-                    <input type="checkbox" id="bottomBar" name="bottomBar" checked>
-                    <label for="bottomBar">美化底栏</label>
-                </div>
-                <div class='ACBetter_setting_list'>
-                    <input type="checkbox" id="bingWallpaper" name="bingWallpaper" checked>
-                    <label for="bingWallpaper">Bing每日壁纸</label>
-                </div>
-                <div class='ACBetter_setting_list'>
-                    <input type="checkbox" id="widthAdjustment" name="widthAdjustment" checked>
-                    <label for="widthAdjustment">页面宽屏</label>
-                </div>
-                <div class='ACBetter_setting_list'>
-                    <input type="checkbox" id="autoPlay" name="autoPlay" checked>
-                    <label for="autoPlay">不自动播放视频</label>
-                </div>
-                <br>
-                <button id='save'>保存</button>
-            </div>
-        `);
+        $("body").append(ACwingBetterSettingMenuHTML);
+
+        addDraggable($('#ACwingBetter_setting_menu'));
         $("#save").click(function () {
             GM_setValue("bottomBar", $("#bottomBar").prop("checked"));
             GM_setValue("bingWallpaper", $("#bingWallpaper").prop("checked"));
             GM_setValue("widthAdjustment", $("#widthAdjustment").prop("checked"));
             GM_setValue("autoPlay", $("#autoPlay").prop("checked"));
+            $(styleElement).remove();
             location.reload();
         });
         $("#bottomBar").prop("checked", GM_getValue("bottomBar"));
@@ -728,6 +879,7 @@ $(document).ready(function () {
             $(".ACBetter_setting").css("background-color", "#56aa56");
             $(".ACBetter_setting").css("color", "white");
             $(".ACBetter_setting").css("cursor", "pointer");
+            $(styleElement).remove();
         })
     });
 });
@@ -887,12 +1039,14 @@ function codeCopy() {
 
 function addConversionButton() {
     // 添加按钮到content部分
-    $('div[data-field-name="content"]').each(function () {
-        let id = "_question-oi-bd_" + getRandomNumber(8);
-        addButtonPanel(this, id, "this_level");
-        addButtonWithHTML2MD(this, id, "this_level");
-        addButtonWithCopy(this, id, "this_level");
-    });
+    if (!window.location.href.includes("update")) {
+        $('div[data-field-name="content"]').each(function () {
+            let id = "_question-oi-bd_" + getRandomNumber(8);
+            addButtonPanel(this, id, "this_level");
+            addButtonWithHTML2MD(this, id, "this_level");
+            addButtonWithCopy(this, id, "this_level");
+        });
+    }
 
     // 为代码块添加复制按钮
     codeCopy();
@@ -900,17 +1054,19 @@ function addConversionButton() {
 
 // 播放器添加节点标签功能
 function addPlayerBar(player_bar_video) {
-    const player = $(".prism-player");
-    const player_bar = $("<div class='player_bar'></div>").insertAfter(player);
-
-    const player_bar_list = $("<div class='player_bar_list' id='player_bar_list'></div>").appendTo(player_bar);
-    const player_bar_ul = $("<ul class='player_bar_ul' id='player_bar_ul'></ul>").appendTo(player_bar_list);
-
-    const player_bar_go = $("<div class='player_bar_go' id='player_bar_go'>Go!</div>").appendTo(player_bar);
-
-    const player_bar_list_add_div = $("<div class='player_bar_list_add_div'></div>").insertAfter(player_bar);
-    const player_bar_list_add_input = $("<input class='player_bar_list_add_input' type='text' id='player_bar_list_add_input' placeholder='在这里输入备注内容，点击Add添加一个时间点标记；选中一个标记，点击Go跳转；右键标记，修改或删除'></input>").appendTo(player_bar_list_add_div);
-    const player_bar_list_add_button = $("<button class='player_bar_list_add_button' id='player_bar_list_add_new_item_btn'>Add</button>").appendTo(player_bar_list_add_div);
+    $('.prism-player').after(`
+        <div class='player_bar'>
+            <div class='player_bar_list' id='player_bar_list'>
+                <ul class='player_bar_ul' id='player_bar_ul'></ul>
+            </div>
+            <div class='player_bar_go' id='player_bar_go'>Go!</div>
+        </div>
+        <div class='player_bar_list_add_div'>
+            <input class='player_bar_list_add_input' type='text' id='player_bar_list_add_input' placeholder='在这里输入备注内容，点击Add添加一个时间点标记；选中一个标记，点击Go跳转；右键标记，修改或删除'>
+            </input>
+            <button class='player_bar_list_add_button' id='player_bar_list_add_new_item_btn'>Add</button>
+        </div>
+    `);
 
     // 页面路径标识
     const PAGE_IDENTIFIER = window.location.href;
