@@ -1963,9 +1963,9 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
     // 创建新的li元素
     function createListItemElement(text) {
         const li = $("<li></li>");
-        const radio = $("<input type='radio' name='config_bar_ul'></input>").appendTo(li);
-        radio.attr("id", counter++);
-        const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("id")).appendTo(li);
+        const radio = $("<input type='radio' name='config_item'></input>").appendTo(li);
+        radio.attr("value", counter).attr("id", counter++);
+        const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("value")).appendTo(li);
 
         // 添加右键菜单
         li.on("contextmenu", function (event) {
@@ -2193,7 +2193,7 @@ const chatgptConfigEditHTML = `
                     <div class="tip_text">
                         <p>格式样例：</p>
                         <div style="border: 1px solid #795548; padding: 10px;">
-                            <p>name1 : 123,<br>name2 : cccc</p>
+                            <p>name1 : 123<br>name2 : cccc</p>
                         </div>
                     </div>
                 </div>
@@ -2208,7 +2208,7 @@ const chatgptConfigEditHTML = `
                     <div class="tip_text">
                         <p>格式样例：</p>
                         <div style="border: 1px solid #795548; padding: 10px;">
-                            <p>name1 : 123,<br>name2 : cccc</p>
+                            <p>name1 : 123<br>name2 : cccc</p>
                         </div>
                     </div>
                 </div>
@@ -2240,6 +2240,8 @@ $(document).ready(function () {
             '#_header',
             '#_data',
         ]
+
+        // 缓存配置信息
         let tempConfig = GM_getValue('chatgpt-config');
         tempConfig = setupConfigManagement('#chatgpt-config', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
 
@@ -2255,9 +2257,8 @@ $(document).ready(function () {
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
             $("#openai").show();
-            let config = GM_getValue('chatgpt-config');
-            if (config) {
-                $('#chatgpt-config #config_bar_ul li:eq(' + (config.choice) + ')').find('input[type="radio"]').prop('checked', true);
+            if (tempConfig) {
+                $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
             }
         }
 
@@ -2266,13 +2267,18 @@ $(document).ready(function () {
             var selected = $(this).val(); // 获取当前选中的值
             if (selected === "openai") {
                 $("#openai").show();
-                let config = GM_getValue('chatgpt-config');
-                if (config) {
-                    $('#chatgpt-config #config_bar_ul li:eq(' + (config.choice) + ')').find('input[type="radio"]').prop('checked', true);
+                if (tempConfig) {
+                    $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
                 }
             } else {
                 $("#openai").hide();
             }
+        });
+
+        // 配置选择情况监听
+        $("input[name='config_item']").change(function () {
+            var selected = $(this).val(); // 获取当前选中的值
+            tempConfig.choice = selected;
         });
 
         const $settingMenu = $(".CFBetter_setting_menu");
@@ -2289,14 +2295,13 @@ $(document).ready(function () {
                 translation: $("input[name='translation']:checked").val()
             };
             if (settings.translation === "openai") {
-                var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
+                var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
                 if (selectedIndex === -1) {
                     $('#configControlTip').text('请选择一项配置！')
                     return;
-                }
-                tempConfig.choice = selectedIndex;
-                GM_setValue('chatgpt-config', tempConfig);
+                }  
             }
+            GM_setValue('chatgpt-config', tempConfig);
             let refreshPage = false; // 是否需要刷新页面
             for (const [key, value] of Object.entries(settings)) {
                 if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation')) {
@@ -2304,7 +2309,7 @@ $(document).ready(function () {
                 }
                 GM_setValue(key, value);
             }
-            
+
             if (refreshPage) location.reload();
             else {
                 // 更新配置信息
