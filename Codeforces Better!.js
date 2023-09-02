@@ -294,6 +294,7 @@ button.html2mdButton.CFBetter_setting.open {
     color: #697e91;
     font-family: var(--vp-font-family-base);
     padding: 10px 20px 20px 20px;
+    box-sizing: content-box;
 }
 .CFBetter_setting_menu h3 {
     margin-top: 10px;
@@ -754,7 +755,7 @@ li#add_button:hover {
 }
 div#config_bar_list {
     display: flex;
-    width: 100%;
+    width: 480px;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
