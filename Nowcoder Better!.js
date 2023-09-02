@@ -38,16 +38,16 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
-const enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
 const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-const translation = getGMValue("translation", "deepl");
+var enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
+var translation = getGMValue("translation", "deepl");
 //openai
-let openai_model, openai_key, openai_proxy, openai_header, openai_data;
-const opneaiConfig = getGMValue("chatgpt-config", {
+var openai_model, openai_key, openai_proxy, openai_header, openai_data;
+var opneaiConfig = getGMValue("chatgpt-config", {
     "choice": -1,
     "configurations": []
 });
-if (opneaiConfig.choice !== -1 || opneaiConfig.configurations.length !== 0) {
+if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
     const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
 
     if (configAtIndex == undefined) {
@@ -254,7 +254,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 500px;
+    width: 480px;
     max-height: 90vh;
     overflow-y: auto;
     transform: translate(-50%, -50%);
@@ -265,6 +265,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     color: #697e91;
     font-family: var(--vp-font-family-base);
     padding: 10px 20px 20px 20px;
+    box-sizing: content-box;
 }
 .NowcoderBetter_setting_menu h4,.NowcoderBetter_setting_menu h5 {
     font-weight: 600;
@@ -492,6 +493,7 @@ input[type="radio"]:checked+.NowcoderBetter_setting_menu_label_text {
 }
 .NowcoderBetter_setting_menu input.is_null::placeholder{
     color: red;
+    border-width: 1.5px;
 }
 .NowcoderBetter_setting_menu input.is_null{
     border-color: red;
@@ -733,7 +735,7 @@ li#add_button:hover {
 }
 div#config_bar_list {
     display: flex;
-    width: 100%;
+    width: 480px;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
@@ -1035,21 +1037,21 @@ $(document).ready(function () {
 });
 
 // 配置管理函数
-function setupConfigManagement(element, configName, structure, configHTML) {
+function setupConfigManagement(element, tempConfig, structure, configHTML, checkable) {
     let counter = 0;
     createControlBar();
     createContextMenu();
 
-    // 获取数据
-    function getConfig() {
-        let config = GM_getValue(configName);
-        if (!config) {
-            config = {
-                "choice": -1,
-                "configurations": []
-            };
+    // 键值对校验
+    function valiKeyValue(value) {
+        const keyValuePairs = value.split('\n');
+        const regex = /^[a-zA-Z0-9_-]+\s*:\s*[a-zA-Z0-9_-]+$/;
+        for (let i = 0; i < keyValuePairs.length; i++) {
+            if (!regex.test(keyValuePairs[i])) {
+                return false;
+            }
         }
-        return config;
+        return true;
     }
 
     // 新增数据
@@ -1070,22 +1072,22 @@ function setupConfigManagement(element, configName, structure, configHTML) {
                     allFieldsValid = false;
                 }
             }
-            if (!allFieldsValid) return;
-            let existingConfig = GM_getValue(configName);
-            if (existingConfig) {
-                if (Array.isArray(existingConfig.configurations)) {
-                    existingConfig.configurations.push(config);
+
+            // 校验提示
+            for (let i = 0, len = checkable.length; i < len; i++) {
+                let value = $(checkable[i]).val();
+                if (value && !valiKeyValue(value)) {
+                    if (!$(checkable[i]).prev('span.text-error').length) {
+                        $(checkable[i]).before('<span class="text-error" style="color: red;">格式不符或存在非法字符</span>');
+                    }
+                    allFieldsValid = false;
                 } else {
-                    existingConfig.configurations = [config];
+                    $(checkable[i]).prev('span.text-error').remove();
                 }
-                GM_setValue(configName, existingConfig);
-            } else {
-                let result = {
-                    "choice": "1",
-                    "configurations": [config]
-                };
-                GM_setValue(configName, result);
             }
+
+            if (!allFieldsValid) return;
+            tempConfig.configurations.push(config);
 
             const list = $("#config_bar_ul");
             createListItemElement(config[structure['#note']]).insertBefore($('#add_button'));
@@ -1111,8 +1113,7 @@ function setupConfigManagement(element, configName, structure, configHTML) {
         const styleElement = createWindow();
 
         const settingMenu = $("#config_edit_menu");
-        const config = getConfig();
-        const configAtIndex = config.configurations[index];
+        const configAtIndex = tempConfig.configurations[index];
 
         if (configAtIndex) {
             for (const key in structure) {
@@ -1133,10 +1134,22 @@ function setupConfigManagement(element, configName, structure, configHTML) {
                     allFieldsValid = false;
                 }
             }
+            
+            // 校验提示
+            for (let i = 0, len = checkable.length; i < len; i++) {
+                let value = $(checkable[i]).val();
+                if (value && !valiKeyValue(value)) {
+                    if (!$(checkable[i]).prev('span.text-error').length) {
+                        $(checkable[i]).before('<span class="text-error" style="color: red;">格式不符或存在非法字符</span>');
+                    }
+                    allFieldsValid = false;
+                } else {
+                    $(checkable[i]).prev('span.text-error').remove();
+                }
+            }
+
             if (!allFieldsValid) return;
-            let existingConfig = getConfig();
-            existingConfig.configurations[index] = config;
-            GM_setValue(configName, existingConfig);
+            tempConfig.configurations[index] = config;
 
             settingMenu.remove();
             $(styleElement).remove();
@@ -1160,9 +1173,7 @@ function setupConfigManagement(element, configName, structure, configHTML) {
         const list = $("#config_bar_ul");
         const index = Array.from(list.children()).indexOf(this);
 
-        let existingConfig = getConfig();
-        existingConfig.configurations.splice(index, 1);
-        GM_setValue(configName, existingConfig);
+        tempConfig.configurations.splice(index, 1);
 
         list.children().eq(index).remove();
     }
@@ -1200,9 +1211,9 @@ function setupConfigManagement(element, configName, structure, configHTML) {
     // 创建新的li元素
     function createListItemElement(text) {
         const li = $("<li></li>");
-        const radio = $("<input type='radio' name='config_bar_ul'></input>").appendTo(li);
-        radio.attr("id", counter++);
-        const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("id")).appendTo(li);
+        const radio = $("<input type='radio' name='config_item'></input>").appendTo(li);
+        radio.attr("value", counter).attr("id", counter++);
+        const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("value")).appendTo(li);
 
         // 添加右键菜单
         li.on("contextmenu", function (event) {
@@ -1238,8 +1249,7 @@ function setupConfigManagement(element, configName, structure, configHTML) {
         const listContainer = $("#config_bar_list");
         const list = $("#config_bar_ul");
         list.empty();
-        const config = getConfig();
-        config.configurations.forEach((item) => {
+        tempConfig.configurations.forEach((item) => {
             list.append(createListItemElement(item[structure['#note']]));
         });
 
@@ -1253,6 +1263,7 @@ function setupConfigManagement(element, configName, structure, configHTML) {
     };
 
     renderList();
+    return tempConfig;
 }
 
 const NowcoderBetterSettingMenuHTML = `
@@ -1383,7 +1394,7 @@ const chatgptConfigEditHTML = `
                     <div class="tip_text">
                         <p>格式样例：</p>
                         <div style="border: 1px solid #795548; padding: 10px;">
-                            <p>name1 : 123,<br>name2 : cccc</p>
+                            <p>name1 : 123<br>name2 : cccc</p>
                         </div>
                     </div>
                 </div>
@@ -1398,7 +1409,7 @@ const chatgptConfigEditHTML = `
                     <div class="tip_text">
                         <p>格式样例：</p>
                         <div style="border: 1px solid #795548; padding: 10px;">
-                            <p>name1 : 123,<br>name2 : cccc</p>
+                            <p>name1 : 123<br>name2 : cccc</p>
                         </div>
                     </div>
                 </div>
@@ -1426,7 +1437,14 @@ $(document).ready(function () {
             '#_header': '_header',
             '#_data': '_data',
         }
-        setupConfigManagement('#chatgpt-config', 'chatgpt-config', chatgptStructure, chatgptConfigEditHTML);
+        const checkable = [
+            '#_header',
+            '#_data',
+        ]
+
+        // 缓存配置信息
+        let tempConfig = GM_getValue('chatgpt-config');
+        tempConfig = setupConfigManagement('#chatgpt-config', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
 
         // 状态切换
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
@@ -1435,9 +1453,8 @@ $(document).ready(function () {
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
             $("#openai").show();
-            let config = GM_getValue('chatgpt-config');
-            if (config) {
-                $('#chatgpt-config #config_bar_ul li:eq(' + (config.choice) + ')').find('input[type="radio"]').prop('checked', true);
+            if (tempConfig) {
+                $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
             }
         } 
 
@@ -1446,40 +1463,74 @@ $(document).ready(function () {
             var selected = $(this).val(); // 获取当前选中的值
             if (selected === "openai") {
                 $("#openai").show();
-                let config = GM_getValue('chatgpt-config');
-                if (config) {
-                    $('#chatgpt-config #config_bar_ul li:eq(' + (config.choice) + ')').find('input[type="radio"]').prop('checked', true);
+                if (tempConfig) {
+                    $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
                 }
             } else {
                 $("#openai").hide();
             }
+        });
+        
+        // 配置选择情况监听
+        $("input[name='config_item']").change(function () {
+            var selected = $(this).val(); // 获取当前选中的值
+            tempConfig.choice = selected;
         });
 
         const $settingMenu = $(".NowcoderBetter_setting_menu");
 
         $("#save").click(debounce(function () {
             const settings = {
-                enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
+                enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
                 translation: $("input[name='translation']:checked").val()
             };
             if (settings.translation === "openai") {
-                var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
+                var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
                 if (selectedIndex === -1) {
                     $('#configControlTip').text('请选择一项配置！')
                     return;
                 }
-                let existingConfig = GM_getValue('chatgpt-config');
-                existingConfig.choice = selectedIndex;
-                GM_setValue('chatgpt-config', existingConfig);
             }
+            GM_setValue('chatgpt-config', tempConfig);
+            let refreshPage = false; // 是否需要刷新页面
             for (const [key, value] of Object.entries(settings)) {
+                if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation')) {
+                    if (GM_getValue(key) != value) refreshPage = true;
+                }
                 GM_setValue(key, value);
+            }
+            
+            if (refreshPage) location.reload();
+            else {
+                // 更新配置信息
+                enableSegmentedTranslation = settings.enableSegmentedTranslation;
+                translation = settings.translation;
+                if (settings.translation === "openai") {
+                    var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
+                    if (selectedIndex !== opneaiConfig.choice) {
+                        opneaiConfig = GM_getValue("chatgpt-config");
+                        const configAtIndex = opneaiConfig.configurations[selectedIndex];
+                        openai_model = configAtIndex.model;
+                        openai_key = configAtIndex.key;
+                        openai_proxy = configAtIndex.proxy;
+                        openai_header = configAtIndex._header ?
+                            configAtIndex._header.split("\n").map(header => {
+                                const [key, value] = header.split(":");
+                                return { [key.trim()]: value.trim() };
+                            }) : [];
+                        openai_data = configAtIndex._data ?
+                            configAtIndex._data.split("\n").map(header => {
+                                const [key, value] = header.split(":");
+                                return { [key.trim()]: value.trim() };
+                            }) : [];
+                    }
+                }
             }
 
             $settingMenu.remove();
+            $settingBtns.prop("disabled", false).removeClass("open");
             $(styleElement).remove();
-            location.reload();
         }));
 
         // 关闭
@@ -1678,6 +1729,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
     }));
 
     if (hoverTargetAreaDisplay) {
+        var previousCSS;
         $(document).on("mouseover", ".html2md-view" + suffix, function () {
             var target;
 
@@ -1688,10 +1740,16 @@ function addButtonWithHTML2MD(parent, suffix, type) {
             }
 
             $(target).append('<div class="overlay">目标转换区域</div>');
+            
+            previousCSS = {
+                "position": $(target).css("position"),
+                "display": $(target).css("display")
+            };
             $(target).css({
                 "position": "relative",
                 "display": "block"
             });
+
             $(".html2md-view" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "99999"
@@ -1708,10 +1766,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css({
-                "position": "",
-                "display": ""
-            });
+            $(target).css(previousCSS);
             $(".html2md-view" + suffix).parent().css({
                 "position": "static"
             })
@@ -1745,6 +1800,7 @@ function addButtonWithCopy(parent, suffix, type) {
     }));
 
     if (hoverTargetAreaDisplay) {
+        var previousCSS;
         $(document).on("mouseover", ".html2md-cb" + suffix, function () {
             var target;
 
@@ -1755,6 +1811,11 @@ function addButtonWithCopy(parent, suffix, type) {
             }
 
             $(target).append('<div class="overlay">目标复制区域</div>');
+            previousCSS = {
+                "position": $(target).css("position"),
+                "display": $(target).css("display")
+            };
+
             $(target).css({
                 "position": "relative",
                 "display": "block"
@@ -1775,10 +1836,7 @@ function addButtonWithCopy(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css({
-                "position": "",
-                "display": ""
-            });
+            $(target).css(previousCSS);
             $(".html2md-cb" + suffix).parent().css({
                 "position": "static"
             })
@@ -1789,10 +1847,10 @@ function addButtonWithCopy(parent, suffix, type) {
 async function addButtonWithTranslation(parent, suffix, type) {
     var result;
     $(document).on('click', '.translateButton' + suffix, debounce(async function () {
+        $(this).trigger('mouseout');
         $(this).removeClass("translated");
         $(this).text("翻译中");
         $(this).css("cursor", "not-allowed");
-        $(this).trigger('mouseout');
         $(this).prop("disabled", true);
         var target, element_node, block, errerNum = 0;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
@@ -1882,6 +1940,8 @@ async function addButtonWithTranslation(parent, suffix, type) {
 
     // 目标区域指示
     function bindHoverEvents(suffix, type) {
+        var previousCSS;
+
         $(document).on("mouseover", ".translateButton" + suffix, function () {
             var target;
 
@@ -1892,10 +1952,10 @@ async function addButtonWithTranslation(parent, suffix, type) {
             }
 
             $(target).append('<div class="overlay">目标翻译区域</div>');
-            $(target).css({
-                "position": "relative",
-                "display": "block"
-            });
+            previousCSS = {
+                "position": $(target).css("position"),
+                "display": $(target).css("display")
+            };
             $(".translateButton" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "99999"
@@ -1912,10 +1972,9 @@ async function addButtonWithTranslation(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css({
-                "position": "",
-                "display": ""
-            });
+            if (previousCSS) {
+                $(target).css(previousCSS);
+            }
             $(".translateButton" + suffix).parent().css({
                 "position": "static"
             });
@@ -2166,7 +2225,8 @@ async function translateProblemStatement(text, element_node, button) {
         translatedText = await translate_gg(text);
     } else if (translation == "openai") {
         try {
-            translateDiv.innerHTML = "正在翻译中……<br><br>使用 ChatGPT 进行翻译通常需要很长的时间，请耐心等待";
+            translateDiv.innerHTML = "正在翻译中……" + "<br><br>正在使用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note
+                + "<br><br>使用 ChatGPT 进行翻译通常需要很长的时间，请耐心等待";
             translatedText = await translate_openai(text);
         } catch (error) {
             status = 2;
@@ -2228,6 +2288,7 @@ async function translateProblemStatement(text, element_node, button) {
         { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
         { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
         { pattern: /(?<!\\)& /g, replacement: "\\&" }, // &符号
+        { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
     ];
 
     let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$/g)];
