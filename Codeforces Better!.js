@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.56
+// @version      1.57
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -255,6 +255,9 @@ button.html2mdButton.reTranslation {
 }
 .translate-problem-statement p:not(:first-child) {
     margin: 1.5em 0 0;
+}
+.translate-problem-statement p {
+    line-height: 20px !important;
 }
 /*设置面板*/
 header .enter-or-register-box, header .languages {
@@ -2224,7 +2227,7 @@ $(document).ready(function () {
     const $settingBtns = $(".CFBetter_setting");
     $settingBtns.click(() => {
         const styleElement = GM_addStyle(darkenPageStyle);
-        $settingBtns.prop("disabled", true).addClass("open")
+        $settingBtns.prop("disabled", true).addClass("open");
         $("body").append(CFBetterSettingMenuHTML);
 
         // 窗口初始化
@@ -3321,7 +3324,7 @@ async function translateProblemStatement(text, element_node, button) {
             { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
             { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-            { pattern: /(?<!\\)&/g, replacement: "\\&" }, // &符号
+            { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
             { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
         ];
 
@@ -3570,7 +3573,7 @@ function Request(options) {
 //--异步请求包装工具--end
 
 
-// 配置自动迁移代码（将在10个小版本后移除）
+// 配置自动迁移代码（将在10个小版本后移除-1.65）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     const newConfig = { "choice": -1, "configurations": [] };
     if (GM_getValue("openai_key")) {

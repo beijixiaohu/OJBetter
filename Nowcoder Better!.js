@@ -1956,6 +1956,10 @@ async function addButtonWithTranslation(parent, suffix, type) {
                 "position": $(target).css("position"),
                 "display": $(target).css("display")
             };
+            $(target).css({
+                "position": "relative",
+                "display": "block"
+            });
             $(".translateButton" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "99999"
@@ -2215,18 +2219,19 @@ async function translateProblemStatement(text, element_node, button) {
     }
     // 翻译
     if (translation == "deepl") {
-        translateDiv.innerHTML = "正在翻译中……请稍等";
+        translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
         translatedText = await translate_deepl(text);
     } else if (translation == "youdao") {
-        translateDiv.innerHTML = "正在翻译中……请稍等";
+        translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
         translatedText = await translate_youdao_mobile(text);
     } else if (translation == "google") {
-        translateDiv.innerHTML = "正在翻译中……请稍等";
+        translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
         translatedText = await translate_gg(text);
     } else if (translation == "openai") {
         try {
-            translateDiv.innerHTML = "正在翻译中……" + "<br><br>正在使用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note
-                + "<br><br>使用 ChatGPT 进行翻译通常需要很长的时间，请耐心等待";
+            translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
+                "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
+                "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
             translatedText = await translate_openai(text);
         } catch (error) {
             status = 2;
