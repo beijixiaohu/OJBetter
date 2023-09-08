@@ -313,30 +313,34 @@ button.html2mdButton.CFBetter_setting.open {
 }
 /*设置面板-关闭按钮*/
 .CFBetter_setting_menu .tool-box {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  top: 3px;
-  right: 3px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    border-radius: 10px;
+    top: 3px;
+    right: 3px;
 }
 
 .CFBetter_setting_menu .btn-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 20px;
-  height: 20px;
-  color: transparent;
-  font-size: 0;
-  cursor: pointer;
-  background-color: #ff000080;
-  border: none;
-  border-radius: 10px;
-  transition: .15s ease all;
+    display: flex;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    color: transparent;
+    font-size: 0;
+    cursor: pointer;
+    background-color: #ff000080;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    transition: .15s ease all;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .CFBetter_setting_menu .btn-close:hover {
@@ -349,12 +353,12 @@ button.html2mdButton.CFBetter_setting.open {
 }
 
 .CFBetter_setting_menu .btn-close:active {
-  width: .9rem;
-  height: .9rem;
-  font-size: 1px;
-  color: #ffffffde;
-  --shadow-btn-close: 0 3px 3px 0 #00000026;
-  box-shadow: var(--shadow-btn-close);
+    width: 20px;
+    height: 20px;
+    font-size: 1px;
+    color: #ffffffde;
+    --shadow-btn-close: 0 3px 3px 0 #00000026;
+    box-shadow: var(--shadow-btn-close);
 }
 
 /*设置面板-checkbox*/

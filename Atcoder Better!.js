@@ -61,7 +61,7 @@ if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
         GM_setValue('chatgpt-config', existingConfig);
         location.reload();
     }
-    
+
     openai_model = configAtIndex.model;
     openai_key = configAtIndex.key;
     openai_proxy = configAtIndex.proxy;
@@ -286,30 +286,34 @@ button.html2mdButton.AtBetter_setting.open {
 }
 /*设置面板-关闭按钮*/
 .AtBetter_setting_menu .tool-box {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  top: 3px;
-  right: 3px;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    border-radius: 10px;
+    top: 3px;
+    right: 3px;
 }
 
 .AtBetter_setting_menu .btn-close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 20px;
-  height: 20px;
-  color: transparent;
-  font-size: 0;
-  cursor: pointer;
-  background-color: #ff000080;
-  border: none;
-  border-radius: 10px;
-  transition: .15s ease all;
+    display: flex;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    color: transparent;
+    font-size: 0;
+    cursor: pointer;
+    background-color: #ff000080;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    transition: .15s ease all;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .AtBetter_setting_menu .btn-close:hover {
@@ -322,12 +326,12 @@ button.html2mdButton.AtBetter_setting.open {
 }
 
 .AtBetter_setting_menu .btn-close:active {
-  width: .9rem;
-  height: .9rem;
-  font-size: 1px;
-  color: #ffffffde;
-  --shadow-btn-close: 0 3px 3px 0 #00000026;
-  box-shadow: var(--shadow-btn-close);
+    width: 20px;
+    height: 20px;
+    font-size: 1px;
+    color: #ffffffde;
+    --shadow-btn-close: 0 3px 3px 0 #00000026;
+    box-shadow: var(--shadow-btn-close);
 }
 
 /*设置面板-checkbox*/
@@ -1537,7 +1541,8 @@ $(document).ready(function () {
     if (isEnglishLanguage) {
         $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
     } else {
-        $('.header-mypage').after(htmlContent);
+        if ($('.header-mypage').length > 0) $('.header-mypage').after(htmlContent);
+        else $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
     }
 });
 
@@ -1639,7 +1644,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
                     allFieldsValid = false;
                 }
             }
-            
+
             // 校验提示
             for (let i = 0, len = checkable.length; i < len; i++) {
                 let value = $(checkable[i]).val();
@@ -2022,7 +2027,7 @@ $(document).ready(function () {
                 $("#openai").hide();
             }
         });
-        
+
         // 配置选择情况监听
         $("input[name='config_item']").change(function () {
             var selected = $(this).val(); // 获取当前选中的值
@@ -2056,7 +2061,7 @@ $(document).ready(function () {
                 }
                 GM_setValue(key, value);
             }
-            
+
             if (refreshPage) location.reload();
             else {
                 // 更新配置信息
