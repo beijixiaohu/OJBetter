@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.09
+// @version      1.10
 // @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -1313,6 +1313,7 @@ function addDraggable(element) {
             traverseTextNodes($('.panel-heading'), rules14);
 
             const rules15 = [
+                { match: '開催中', replace: '进行中' },
                 { match: '予定', replace: '即将举行' },
                 { match: '終了', replace: '已结束' },
             ];
@@ -1333,11 +1334,6 @@ function addDraggable(element) {
             ];
             traverseTextNodes($('.table-responsive tr th'), rules17);
 
-            const rules18 = [
-                { match: 'バーチャル参加', replace: '虚拟参与' },
-            ];
-            traverseTextNodes($('.btn-default'), rules18);
-
             const rules19 = [
                 { match: '問題名', replace: '问题名称' },
                 { match: '実行時間制限', replace: '执行时间限制' },
@@ -1354,6 +1350,12 @@ function addDraggable(element) {
                 { match: 'AtCoderホームへ戻る', replace: '返回 AtCoder 主页' },
             ];
             traverseTextNodes($('.back-to-home'), rules21);
+
+            const rules22 = [
+                { match: '参加登録', replace: '报名' },
+                { match: 'バーチャル参加', replace: '虚拟参与' },
+            ];
+            traverseTextNodes($('.btn'), rules22);
 
             return;
         }
@@ -2823,6 +2825,7 @@ async function translateProblemStatement(text, element_node, button) {
     }
     if (/^翻译出错/.test(translatedText)) status = 2;
     // 还原latex公式
+    translatedText = translatedText.replace(/】【/g, '】 【');
     if (translation != "openai") {
         try {
             for (let i = 0; i < matches.length; i++) {
@@ -2833,9 +2836,9 @@ async function translateProblemStatement(text, element_node, button) {
                 translatedText = translatedText.replace(regex, replacement);
                 regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}[^】\\d]`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`[^【\\d]${i + 1}\\s*】`, 'g');
+                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, " " + replacement);
             }
         } catch (e) { }
@@ -2875,7 +2878,7 @@ async function translateProblemStatement(text, element_node, button) {
         { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
         { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
         { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-        { pattern: /(?<!\\)& /g, replacement: "\\&" }, // &符号
+        { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
         { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
     ];
 
@@ -3100,7 +3103,7 @@ function Request(options) {
 
 //--异步请求包装工具--end
 
-// 配置自动迁移代码（将在10个小版本后移除）
+// 配置自动迁移代码（将在10个小版本后移除-1.19）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     const newConfig = { "choice": -1, "configurations": [] };
     if (GM_getValue("openai_key")) {

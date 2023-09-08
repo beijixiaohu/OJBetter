@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nowcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.1
+// @version      1.11
 // @description  牛客竞赛题目题解markdown一键复制
 // @author       北极小狐
 // @match        https://ac.nowcoder.com/*
@@ -2240,6 +2240,7 @@ async function translateProblemStatement(text, element_node, button) {
     } 
     if (/^翻译出错/.test(translatedText)) status = 2;
     // 还原latex公式
+    translatedText = translatedText.replace(/】【/g, '】 【');
     if (translation != "openai") {
         try {
             for (let i = 0; i < matches.length; i++) {
@@ -2250,9 +2251,9 @@ async function translateProblemStatement(text, element_node, button) {
                 translatedText = translatedText.replace(regex, replacement);
                 regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}[^】\\d]`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`[^【\\d]${i + 1}\\s*】`, 'g');
+                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, " " + replacement);
             }
         } catch (e) { }
@@ -2292,7 +2293,7 @@ async function translateProblemStatement(text, element_node, button) {
         { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
         { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
         { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-        { pattern: /(?<!\\)& /g, replacement: "\\&" }, // &符号
+        { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
         { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
     ];
 
@@ -2519,7 +2520,7 @@ function Request(options) {
 //--异步请求包装工具--end
 
 
-// 配置自动迁移代码（将在10个小版本后移除）
+// 配置自动迁移代码（将在10个小版本后移除-1.20）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     const newConfig = { "choice": -1, "configurations": [] };
     if (GM_getValue("openai_key")) {

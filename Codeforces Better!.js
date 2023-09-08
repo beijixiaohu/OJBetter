@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.57
+// @version      1.58
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -3249,6 +3249,7 @@ async function translateProblemStatement(text, element_node, button) {
     }
     if (/^翻译出错/.test(translatedText)) status = 2;
     // 还原latex公式
+    translatedText = translatedText.replace(/】【/g, '】 【');
     if (is_oldLatex) {
         translatedText = "<p>" + translatedText;
         translatedText += "</p>";
@@ -3261,9 +3262,9 @@ async function translateProblemStatement(text, element_node, button) {
                 translatedText = translatedText.replace(regex, replacement);
                 regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}[^】\\d]`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`[^【\\d]${i + 1}\\s*】`, 'g');
+                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, " " + replacement);
             }
         } catch (e) { }
@@ -3278,9 +3279,9 @@ async function translateProblemStatement(text, element_node, button) {
                 translatedText = translatedText.replace(regex, replacement);
                 regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}[^】\\d]`, 'g');
+                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
                 translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`[^【\\d]${i + 1}\\s*】`, 'g');
+                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
                 translatedText = translatedText.replace(regex, " " + replacement);
             }
         } catch (e) { }
@@ -3573,7 +3574,7 @@ function Request(options) {
 //--异步请求包装工具--end
 
 
-// 配置自动迁移代码（将在10个小版本后移除-1.65）
+// 配置自动迁移代码（将在10个小版本后移除）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     const newConfig = { "choice": -1, "configurations": [] };
     if (GM_getValue("openai_key")) {
