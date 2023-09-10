@@ -40,7 +40,7 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
-var darkMode = getGMValue("darkMode", true);
+var darkMode = getGMValue("darkMode", false);
 var is_mSite, is_acmsguru, is_oldLatex, bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks;
 var enableSegmentedTranslation, translation, openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var showJumpToLuogu, loaded;
