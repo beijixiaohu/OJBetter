@@ -5,6 +5,7 @@
 // @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
+// @run-at       document-start
 // @connect      www2.deepl.com
 // @connect      m.youdao.com
 // @connect      translate.google.com
@@ -39,46 +40,59 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
-const is_mSite = window.location.hostname.startsWith('m');
-const is_acmsguru = window.location.href.includes("acmsguru");
-const is_oldLatex = $('.tex-span').length;
-const bottomZh_CN = getGMValue("bottomZh_CN", true);
-const showLoading = getGMValue("showLoading", true);
-const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-const expandFoldingblocks = getGMValue("expandFoldingblocks", true);
-var enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
-const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
-const loaded = getGMValue("loaded", false);
-var translation = getGMValue("translation", "deepl");
-//openai
-var openai_model, openai_key, openai_proxy, openai_header, openai_data;
-var opneaiConfig = getGMValue("chatgpt-config", {
-    "choice": -1,
-    "configurations": []
-});
-if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
-    const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
-
-    if (configAtIndex == undefined) {
-        let existingConfig = GM_getValue('chatgpt-config');
-        existingConfig.choice = 0;
-        GM_setValue('chatgpt-config', existingConfig);
-        location.reload();
+var darkMode = getGMValue("darkMode", true);
+var is_mSite, is_acmsguru, is_oldLatex, bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks;
+var enableSegmentedTranslation, translation, openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
+var showJumpToLuogu, loaded;
+function init() {
+    is_mSite = window.location.hostname.startsWith('m');
+    is_acmsguru = window.location.href.includes("acmsguru");
+    is_oldLatex = $('.tex-span').length;
+    // 说明为旧的latex渲染
+    if (is_oldLatex) {
+        var newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert").html(`
+        注意：当前页面存在使用非 MathJax 库渲染为 HTML 的 Latex 公式（这通常是一道古老的题目），这导致 CodeforcesBetter! 无法将其还原回 Latex，因此当前页面部分功能不适用。
+        <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。
+        `).css({ "margin": "1em", "text-align": "center", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
     }
+    bottomZh_CN = getGMValue("bottomZh_CN", true);
+    showLoading = getGMValue("showLoading", true);
+    hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
+    expandFoldingblocks = getGMValue("expandFoldingblocks", true);
+    enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
+    showJumpToLuogu = getGMValue("showJumpToLuogu", true);
+    loaded = getGMValue("loaded", false);
+    translation = getGMValue("translation", "deepl");
+    //openai
+    opneaiConfig = getGMValue("chatgpt-config", {
+        "choice": -1,
+        "configurations": []
+    });
+    if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
+        const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
 
-    openai_model = configAtIndex.model;
-    openai_key = configAtIndex.key;
-    openai_proxy = configAtIndex.proxy;
-    openai_header = configAtIndex._header ?
-        configAtIndex._header.split("\n").map(header => {
-            const [key, value] = header.split(":");
-            return { [key.trim()]: value.trim() };
-        }) : [];
-    openai_data = configAtIndex._data ?
-        configAtIndex._data.split("\n").map(header => {
-            const [key, value] = header.split(":");
-            return { [key.trim()]: value.trim() };
-        }) : [];
+        if (configAtIndex == undefined) {
+            let existingConfig = GM_getValue('chatgpt-config');
+            existingConfig.choice = 0;
+            GM_setValue('chatgpt-config', existingConfig);
+            location.reload();
+        }
+
+        openai_model = configAtIndex.model;
+        openai_key = configAtIndex.key;
+        openai_proxy = configAtIndex.proxy;
+        openai_header = configAtIndex._header ?
+            configAtIndex._header.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
+        openai_data = configAtIndex._data ?
+            configAtIndex._data.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
+    }
 }
 
 // 常量
@@ -102,6 +116,169 @@ window.onerror = (message, source, lineno, colno, error) => {
     defaultError(message);
     return true;
 };*/
+
+// 深色模式
+(function setDark() {
+    // 初始化
+    function setDarkTheme() {
+        const htmlElement = document.querySelector('html');
+        if (htmlElement) {
+            htmlElement.setAttribute('data-theme', 'dark');
+        } else {
+            setTimeout(setDarkTheme, 100);
+        }
+    }
+    if (darkMode || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setDarkTheme();
+    }    
+
+    // 系統深色监听
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
+        if (!event.matches) {
+            var originalColor = $(this).data("original-color");
+            $(this).css("background-color", originalColor);
+        }
+    });
+    GM_addStyle(`
+        /* 文字颜色1 */
+        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, html[data-theme=dark] .ttypography .MathJax,
+        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
+        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a,
+        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
+        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
+        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, html[data-theme=dark] #pageContent,
+        html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
+        html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
+        html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
+        html[data-theme=dark] .comments label.show-archived *{
+            color: #adbac7 !important;
+        }
+        /* 文字颜色2 */
+        html[data-theme=dark] .second-level-menu-list li a,html[data-theme=dark] span, html[data-theme=dark] #footer,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
+        html[data-theme=dark] .user-admin{
+            color: #9099a3 !important;
+        }
+        /* 文字颜色3 */
+        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] input{
+            color: #6385a6 !important;
+        }
+        /* 链接颜色 */
+        html[data-theme=dark] a:link {
+            color: #3989c9;
+        }
+        html[data-theme=dark] a:visited {
+            color: #8590a6;
+        }
+        /* 按钮 */
+        html[data-theme=dark] .second-level-menu-list li.backLava {
+            border-radius: 6px;
+            overflow: hidden;
+            filter: invert(1) hue-rotate(.5turn);
+        }
+        html[data-theme=dark] input:hover{
+            background-color: #22272e !important;
+        } 
+        /* 背景层次1 */
+        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark,
+        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
+        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
+        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
+        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
+        html[data-theme=dark] textarea, html[data-theme=dark] .state{
+            background-color: #22272e !important;
+        }
+        /* 背景层次2 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
+        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
+        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
+        html[data-theme=dark] .problems .accepted-problem td.act,
+        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
+        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] .CFBetter_setting_menu hr, html[data-theme=dark] .wordsExceeded{
+            background-color: #2d333b !important;
+        }
+        /* 实线边框颜色 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td, .roundbox .rtable th,
+        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .sidebar-menu ul li,
+        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt,
+        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
+        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement{
+            border: 1px solid #424b56 !important;
+            border-radius: 2px;
+        }
+        html[data-theme=dark] .roundbox .titled {
+            border-bottom: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .roundbox .bottom-links {
+            border-top: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .topic .content {
+            border-left: 4px solid #424b56 !important;
+        }
+        /* 虚线边框颜色 */
+        html[data-theme=dark] .comment-table{
+            border: 1px dashed #424b56 !important;
+        }
+        /* focus-visible */
+        html[data-theme=dark] input:focus-visible, html[data-theme=dark] textarea{
+            border-width: 1.5px !important;
+            outline: none;
+        }
+        /* 图片调整 */
+        html[data-theme=dark] img{
+            opacity: .75; 
+        }
+        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i{
+            filter: invert(1) hue-rotate(.5turn);
+        }
+        /* 区域遮罩 */
+        html[data-theme=dark] .overlay {
+            background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
+            color: #9099a3;
+            text-shadow: 0px 0px 2px #000000;
+        }
+        /* 其他样式 */
+        html[data-theme=dark] .rated-user{
+            display: initial;
+        }
+        html[data-theme=dark] .datatable .ilt, html[data-theme=dark] .datatable .irt,
+        html[data-theme=dark] .datatable .ilb, html[data-theme=dark] .datatable .irb,
+        html[data-theme=dark] .datatable .lt, html[data-theme=dark] .datatable .rt,
+        html[data-theme=dark] .datatable .lb, html[data-theme=dark] .datatable .rb{
+            background: none;
+        }
+        html[data-theme=dark] .problems .accepted-problem td.id{
+            border-left: 6px solid #009688 !important;
+        }
+        html[data-theme=dark] .CFBetter_setting_menu{
+            box-shadow: 0px 0px 0px 4px #2d333b;
+            border: 1px solid #2d333b;
+        }
+        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list{
+            border: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .collapsible-topic.collapsed .content .collapsible-topic-options:before{
+            background-image: linear-gradient(#22272e00, #22272e);
+        }
+        html[data-theme=dark] .alert{
+            text-shadow: none;
+        }
+    `);
+    // 特殊
+
+})()
 
 // 样式
 GM_addStyle(`
@@ -958,7 +1135,6 @@ function addDraggable(element) {
         $('body').css('cursor', 'all-scroll');
     });
 
-
     $(document).on('mousemove', function (e) {
         if (!isDragging) return;
         // 不执行拖动操作
@@ -977,7 +1153,7 @@ function addDraggable(element) {
 }
 
 // 更新检查
-(function checkScriptVersion() {
+function checkScriptVersion() {
     function compareVersions(version1 = "0", version2 = "0") {
         const v1Array = String(version1).split(".");
         const v2Array = String(version2).split(".");
@@ -1055,286 +1231,284 @@ function addDraggable(element) {
         }
     });
 
-})();
+};
 
 // 汉化替换
-(function () {
+function toZH_CN() {
     if (!bottomZh_CN) return;
     // 设置语言为zh
     var htmlTag = document.getElementsByTagName("html")[0];
     htmlTag.setAttribute("lang", "zh-CN");
 
     // 文本节点遍历替换
-    $(document).ready(function () {
-        function traverseTextNodes(node, rules) {
-            if (!node) return;
-            if (node.nodeType === Node.TEXT_NODE) {
-                rules.forEach(rule => {
-                    const regex = new RegExp(rule.match, 'g');
-                    node.textContent = node.textContent.replace(regex, rule.replace);
-                });
-            } else {
-                $(node).contents().each((_, child) => traverseTextNodes(child, rules));
-            }
+    function traverseTextNodes(node, rules) {
+        if (!node) return;
+        if (node.nodeType === Node.TEXT_NODE) {
+            rules.forEach(rule => {
+                const regex = new RegExp(rule.match, 'g');
+                node.textContent = node.textContent.replace(regex, rule.replace);
+            });
+        } else {
+            $(node).contents().each((_, child) => traverseTextNodes(child, rules));
         }
+    }
 
-        // 严格
-        function strictTraverseTextNodes(node, rules) {
-            if (!node) return;
-            if (node.nodeType === Node.TEXT_NODE) {
-                const nodeText = node.textContent.trim();
-                rules.forEach(rule => {
-                    if (nodeText === rule.match) {
-                        node.textContent = rule.replace;
-                    }
-                });
-            } else {
-                $(node).contents().each((_, child) => strictTraverseTextNodes(child, rules));
-            }
+    // 严格
+    function strictTraverseTextNodes(node, rules) {
+        if (!node) return;
+        if (node.nodeType === Node.TEXT_NODE) {
+            const nodeText = node.textContent.trim();
+            rules.forEach(rule => {
+                if (nodeText === rule.match) {
+                    node.textContent = rule.replace;
+                }
+            });
+        } else {
+            $(node).contents().each((_, child) => strictTraverseTextNodes(child, rules));
         }
+    }
 
-        const rules1 = [
-            { match: 'Virtual participation', replace: '参加虚拟重现赛' },
-            { match: 'Enter', replace: '进入' },
-            { match: 'Current standings', replace: '当前榜单' },
-            { match: 'Final standings', replace: '最终榜单' },
-            { match: 'Preliminary results', replace: '初步结果' },
-            { match: 'open hacking:', replace: '公开黑客攻击中（即尝试提交数据加强，对已通过的代码重测）' },
-            { match: 'School/University/City/Region Championship', replace: '学校/大学/城市/区域比赛' },
-            { match: 'Official School Contest', replace: '学校官方比赛' },
-            { match: 'Training Contest', replace: '训练赛' },
-            { match: 'Training Camp Contest', replace: '训练营比赛' },
-            { match: 'Official ICPC Contest', replace: 'ICPC官方比赛' },
-            { match: 'Official International Personal Contest', replace: '官方国际个人赛' },
-            { match: 'China', replace: '中国' },
-            { match: 'Statements', replace: '题目描述' },
-            { match: 'in Chinese', replace: '中文' },
-            { match: 'Trainings', replace: '训练' },
-            { match: 'Prepared by', replace: '编写人' },
-            { match: 'Current or upcoming contests', replace: '当前或即将举行的比赛' },
-            { match: 'Past contests', replace: '过去的比赛' },
-            { match: 'Exclusions', replace: '排除' },
-            { match: 'Before start', replace: '距比赛开始还有' },
-            { match: 'Before registration', replace: '距报名开始还有' },
-            { match: 'Until closing ', replace: '距报名结束还有' },
-            { match: 'Before extra registration', replace: '额外报名还未开始' },
-            { match: 'Register »', replace: '报名 »' },
-            { match: 'Registration completed', replace: '已报名' },
-            { match: 'Registration closed', replace: '报名已结束' },
-            { match: 'Problems', replace: '问题集' },
-            { match: 'Questions about problems', replace: '关于问题的提问' },
-            { match: 'Contest status', replace: '比赛状态' },
-        ];
-        traverseTextNodes($('.datatable'), rules1);
+    const rules1 = [
+        { match: 'Virtual participation', replace: '参加虚拟重现赛' },
+        { match: 'Enter', replace: '进入' },
+        { match: 'Current standings', replace: '当前榜单' },
+        { match: 'Final standings', replace: '最终榜单' },
+        { match: 'Preliminary results', replace: '初步结果' },
+        { match: 'open hacking:', replace: '公开黑客攻击中（即尝试提交数据加强，对已通过的代码重测）' },
+        { match: 'School/University/City/Region Championship', replace: '学校/大学/城市/区域比赛' },
+        { match: 'Official School Contest', replace: '学校官方比赛' },
+        { match: 'Training Contest', replace: '训练赛' },
+        { match: 'Training Camp Contest', replace: '训练营比赛' },
+        { match: 'Official ICPC Contest', replace: 'ICPC官方比赛' },
+        { match: 'Official International Personal Contest', replace: '官方国际个人赛' },
+        { match: 'China', replace: '中国' },
+        { match: 'Statements', replace: '题目描述' },
+        { match: 'in Chinese', replace: '中文' },
+        { match: 'Trainings', replace: '训练' },
+        { match: 'Prepared by', replace: '编写人' },
+        { match: 'Current or upcoming contests', replace: '当前或即将举行的比赛' },
+        { match: 'Past contests', replace: '过去的比赛' },
+        { match: 'Exclusions', replace: '排除' },
+        { match: 'Before start', replace: '距比赛开始还有' },
+        { match: 'Before registration', replace: '距报名开始还有' },
+        { match: 'Until closing ', replace: '距报名结束还有' },
+        { match: 'Before extra registration', replace: '额外报名还未开始' },
+        { match: 'Register »', replace: '报名 »' },
+        { match: 'Registration completed', replace: '已报名' },
+        { match: 'Registration closed', replace: '报名已结束' },
+        { match: 'Problems', replace: '问题集' },
+        { match: 'Questions about problems', replace: '关于问题的提问' },
+        { match: 'Contest status', replace: '比赛状态' },
+    ];
+    traverseTextNodes($('.datatable'), rules1);
 
-        const rules2 = [
-            { match: 'Home', replace: '主页' },
-            { match: 'Top', replace: '热门' },
-            { match: 'Catalog', replace: '指南目录' },
-            { match: 'Contests', replace: '比赛' },
-            { match: 'Gym', replace: '训练营' },
-            { match: 'Problemset', replace: '题单' },
-            { match: 'Groups', replace: '团体' },
-            { match: 'Rating', replace: 'Rating(评级)排行榜' },
-            { match: 'Edu', replace: '培训' },
-            { match: 'Calendar', replace: '日历' },
-            { match: 'Help', replace: '帮助' }
-        ];
-        traverseTextNodes($('.menu-list.main-menu-list'), rules2);
+    const rules2 = [
+        { match: 'Home', replace: '主页' },
+        { match: 'Top', replace: '热门' },
+        { match: 'Catalog', replace: '指南目录' },
+        { match: 'Contests', replace: '比赛' },
+        { match: 'Gym', replace: '训练营' },
+        { match: 'Problemset', replace: '题单' },
+        { match: 'Groups', replace: '团体' },
+        { match: 'Rating', replace: 'Rating(评级)排行榜' },
+        { match: 'Edu', replace: '培训' },
+        { match: 'Calendar', replace: '日历' },
+        { match: 'Help', replace: '帮助' }
+    ];
+    traverseTextNodes($('.menu-list.main-menu-list'), rules2);
 
-        const rules3 = [
-            { match: 'Settings', replace: '设置' },
-            { match: 'Blog', replace: '博客' },
-            { match: 'Teams', replace: '队伍' },
-            { match: 'Submissions', replace: '提交' },
-            { match: 'Favourites', replace: '收藏' },
-            { match: 'Talks', replace: '私信' },
-            { match: 'Contests', replace: '比赛' },
-        ];
-        traverseTextNodes($('.nav-links'), rules3);
+    const rules3 = [
+        { match: 'Settings', replace: '设置' },
+        { match: 'Blog', replace: '博客' },
+        { match: 'Teams', replace: '队伍' },
+        { match: 'Submissions', replace: '提交' },
+        { match: 'Favourites', replace: '收藏' },
+        { match: 'Talks', replace: '私信' },
+        { match: 'Contests', replace: '比赛' },
+    ];
+    traverseTextNodes($('.nav-links'), rules3);
 
-        const rules4 = [
-            { match: 'Before contest', replace: '即将进行的比赛' },
-            { match: 'Contest is running', replace: '比赛进行中' },
-        ];
-        traverseTextNodes($('.contest-state-phase'), rules4);
+    const rules4 = [
+        { match: 'Before contest', replace: '即将进行的比赛' },
+        { match: 'Contest is running', replace: '比赛进行中' },
+    ];
+    traverseTextNodes($('.contest-state-phase'), rules4);
 
-        const rules5 = [
-            { match: 'has extra registration', replace: '有额外的报名时期' },
-            { match: 'If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.', replace: '如果您在比赛开始前5分钟前还未报名，您可以在额外的报名期间稍后报名。额外的报名将在比赛开始后10分钟开放，并持续25分钟。' },
-        ];
-        traverseTextNodes($('.notice'), rules5);
+    const rules5 = [
+        { match: 'has extra registration', replace: '有额外的报名时期' },
+        { match: 'If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.', replace: '如果您在比赛开始前5分钟前还未报名，您可以在额外的报名期间稍后报名。额外的报名将在比赛开始后10分钟开放，并持续25分钟。' },
+    ];
+    traverseTextNodes($('.notice'), rules5);
 
-        const rules6 = [
-            { match: 'Contribution', replace: '贡献' },
-        ];
-        traverseTextNodes($('.propertyLinks'), rules6);
+    const rules6 = [
+        { match: 'Contribution', replace: '贡献' },
+    ];
+    traverseTextNodes($('.propertyLinks'), rules6);
 
-        const rules7 = [
-            { match: 'Contest history', replace: '比赛历史' },
-        ];
-        traverseTextNodes($('.contests-table'), rules7);
+    const rules7 = [
+        { match: 'Contest history', replace: '比赛历史' },
+    ];
+    traverseTextNodes($('.contests-table'), rules7);
 
-        const rules8 = [
-            { match: 'Register now', replace: '现在报名' },
-            { match: 'No tag edit access', replace: '没有标签编辑权限' },
-            { match: 'Language:', replace: '语言:' },
-            { match: 'Choose file:', replace: '选择文件:' },
-        ];
-        traverseTextNodes($('.roundbox.sidebox.borderTopRound '), rules8);
+    const rules8 = [
+        { match: 'Register now', replace: '现在报名' },
+        { match: 'No tag edit access', replace: '没有标签编辑权限' },
+        { match: 'Language:', replace: '语言:' },
+        { match: 'Choose file:', replace: '选择文件:' },
+    ];
+    traverseTextNodes($('.roundbox.sidebox.borderTopRound '), rules8);
 
-        const rules9 = [
-            { match: 'Add to exclusions', replace: '添加到排除列表' },
-        ];
-        traverseTextNodes($('.icon-eye-close.icon-large'), rules9);
+    const rules9 = [
+        { match: 'Add to exclusions', replace: '添加到排除列表' },
+    ];
+    traverseTextNodes($('.icon-eye-close.icon-large'), rules9);
 
-        const rules10 = [
-            { match: 'Add to exclusions for gym contests filter', replace: '添加训练营过滤器的排除项' },
-        ];
-        traverseTextNodes($("._ContestFilterExclusionsManageFrame_addExclusionLink"), rules10);
+    const rules10 = [
+        { match: 'Add to exclusions for gym contests filter', replace: '添加训练营过滤器的排除项' },
+    ];
+    traverseTextNodes($("._ContestFilterExclusionsManageFrame_addExclusionLink"), rules10);
 
-        const rules11 = [
-            { match: 'Announcement', replace: '公告' },
-            { match: 'Statements', replace: '统计报表' },
-            { match: 'Tutorial', replace: '题解' },
-        ];
-        traverseTextNodes($('.roundbox.sidebox.sidebar-menu.borderTopRound '), rules11);
+    const rules11 = [
+        { match: 'Announcement', replace: '公告' },
+        { match: 'Statements', replace: '统计报表' },
+        { match: 'Tutorial', replace: '题解' },
+    ];
+    traverseTextNodes($('.roundbox.sidebox.sidebar-menu.borderTopRound '), rules11);
 
-        const rules12 = [
-            { match: 'Problems', replace: '问题' },
-            { match: 'Submit Code', replace: '提交代码' },
-            { match: 'My Submissions', replace: '我的提交' },
-            { match: 'Status', replace: '状态' },
-            { match: 'Standings', replace: '榜单' },
-            { match: 'Custom Invocation', replace: '自定义调试' },
-            { match: 'Common standings', replace: '全部排行' },
-            { match: 'Friends standings', replace: '只看朋友' },
-            { match: 'Submit', replace: '提交' },
-            { match: 'Hacks', replace: '黑客' },
-            { match: 'Room', replace: '房间' },
-            { match: 'Custom test', replace: '自定义测试' },
-            { match: 'Blog', replace: '博客' },
-            { match: 'Teams', replace: '队伍' },
-            { match: 'Submissions', replace: '提交记录' },
-            { match: 'Groups', replace: '团体' },
-            { match: 'Favourites', replace: '收藏' },
-            { match: 'Contests', replace: '比赛' },
-            { match: 'Members', replace: '成员' },
-            { match: '问题etting', replace: '参与编写的问题' },
-            { match: 'Streams', replace: '直播' },
-            { match: 'Gym', replace: '训练营' },
-            { match: 'Mashups', replace: '组合混搭' },
-            { match: 'Posts', replace: '帖子' },
-            { match: 'Comments', replace: '回复' },
-            { match: 'Main', replace: '主要的' },
-            { match: 'Settings', replace: '设置' },
-            { match: 'Lists', replace: '列表' },
-            { match: 'General', replace: '基本' },
-            { match: 'Sidebar', replace: '侧边栏' },
-            { match: 'Social', replace: '社会信息' },
-            { match: 'Address', replace: '地址' },
-            { match: 'Wallets', replace: '钱包' },
-        ];
-        traverseTextNodes($('.second-level-menu'), rules12);
-        if (is_mSite) {
-            traverseTextNodes($('nav'), rules12);
-        }
+    const rules12 = [
+        { match: 'Problems', replace: '问题' },
+        { match: 'Submit Code', replace: '提交代码' },
+        { match: 'My Submissions', replace: '我的提交' },
+        { match: 'Status', replace: '状态' },
+        { match: 'Standings', replace: '榜单' },
+        { match: 'Custom Invocation', replace: '自定义调试' },
+        { match: 'Common standings', replace: '全部排行' },
+        { match: 'Friends standings', replace: '只看朋友' },
+        { match: 'Submit', replace: '提交' },
+        { match: 'Hacks', replace: '黑客' },
+        { match: 'Room', replace: '房间' },
+        { match: 'Custom test', replace: '自定义测试' },
+        { match: 'Blog', replace: '博客' },
+        { match: 'Teams', replace: '队伍' },
+        { match: 'Submissions', replace: '提交记录' },
+        { match: 'Groups', replace: '团体' },
+        { match: 'Favourites', replace: '收藏' },
+        { match: 'Contests', replace: '比赛' },
+        { match: 'Members', replace: '成员' },
+        { match: '问题etting', replace: '参与编写的问题' },
+        { match: 'Streams', replace: '直播' },
+        { match: 'Gym', replace: '训练营' },
+        { match: 'Mashups', replace: '组合混搭' },
+        { match: 'Posts', replace: '帖子' },
+        { match: 'Comments', replace: '回复' },
+        { match: 'Main', replace: '主要的' },
+        { match: 'Settings', replace: '设置' },
+        { match: 'Lists', replace: '列表' },
+        { match: 'General', replace: '基本' },
+        { match: 'Sidebar', replace: '侧边栏' },
+        { match: 'Social', replace: '社会信息' },
+        { match: 'Address', replace: '地址' },
+        { match: 'Wallets', replace: '钱包' },
+    ];
+    traverseTextNodes($('.second-level-menu'), rules12);
+    if (is_mSite) {
+        traverseTextNodes($('nav'), rules12);
+    }
 
-        const rules13 = [
-            { match: 'Expand', replace: '展开' }
-        ];
-        traverseTextNodes($('.topic-toggle-collapse'), rules13);
+    const rules13 = [
+        { match: 'Expand', replace: '展开' }
+    ];
+    traverseTextNodes($('.topic-toggle-collapse'), rules13);
 
-        const rules14 = [
-            { match: 'Full text and comments', replace: '阅读全文/评论' }
-        ];
-        traverseTextNodes($('.topic-read-more'), rules14);
+    const rules14 = [
+        { match: 'Full text and comments', replace: '阅读全文/评论' }
+    ];
+    traverseTextNodes($('.topic-read-more'), rules14);
 
-        const rules15 = [
-            { match: 'Switch off editor', replace: '关闭编辑器语法高亮' }
-        ];
-        traverseTextNodes($('.toggleEditorCheckboxLabel'), rules15);
+    const rules15 = [
+        { match: 'Switch off editor', replace: '关闭编辑器语法高亮' }
+    ];
+    traverseTextNodes($('.toggleEditorCheckboxLabel'), rules15);
 
-        const rules16 = [
-            { match: 'Registration for the contest', replace: '比赛报名' }
-        ];
-        traverseTextNodes($('.submit'), rules16);
+    const rules16 = [
+        { match: 'Registration for the contest', replace: '比赛报名' }
+    ];
+    traverseTextNodes($('.submit'), rules16);
 
-        const rules17 = [
-            { match: 'Difficulty:', replace: '难度:' },
-        ];
-        traverseTextNodes($('._FilterByTagsFrame_difficulty'), rules17);
+    const rules17 = [
+        { match: 'Difficulty:', replace: '难度:' },
+    ];
+    traverseTextNodes($('._FilterByTagsFrame_difficulty'), rules17);
 
-        const rules18 = [
-            { match: 'Add tag', replace: '添加标签' }
-        ];
-        traverseTextNodes($('._FilterByTagsFrame_addTagLink'), rules18);
+    const rules18 = [
+        { match: 'Add tag', replace: '添加标签' }
+    ];
+    traverseTextNodes($('._FilterByTagsFrame_addTagLink'), rules18);
 
-        const rules19 = [
-            { match: 'Rating changes for last rounds are temporarily rolled back. They will be returned soon.', replace: '上一轮的评级变化暂时回滚。它们将很快恢复。' },
-            { match: 'Reminder: in case of any technical issues, you can use the lightweight website', replace: '提醒：如果出现任何技术问题，您可以使用轻量网站' },
-            { match: 'Please subscribe to the official Codeforces channel in Telegram via the link ', replace: '请通过链接订阅Codeforces的官方Telegram频道' }
-        ];
-        traverseTextNodes($('.alert'), rules19);
+    const rules19 = [
+        { match: 'Rating changes for last rounds are temporarily rolled back. They will be returned soon.', replace: '上一轮的评级变化暂时回滚。它们将很快恢复。' },
+        { match: 'Reminder: in case of any technical issues, you can use the lightweight website', replace: '提醒：如果出现任何技术问题，您可以使用轻量网站' },
+        { match: 'Please subscribe to the official Codeforces channel in Telegram via the link ', replace: '请通过链接订阅Codeforces的官方Telegram频道' }
+    ];
+    traverseTextNodes($('.alert'), rules19);
 
-        const rules20 = [
-            { match: 'Enter', replace: '登录' },
-            { match: 'Register', replace: '注册' },
-            { match: 'Contest rating', replace: '测试 rating' },
-            { match: 'Logout', replace: '退出登录' }
-        ];
-        traverseTextNodes($('.lang-chooser'), rules20);
+    const rules20 = [
+        { match: 'Enter', replace: '登录' },
+        { match: 'Register', replace: '注册' },
+        { match: 'Contest rating', replace: '测试 rating' },
+        { match: 'Logout', replace: '退出登录' }
+    ];
+    traverseTextNodes($('.lang-chooser'), rules20);
 
-        const rules21 = [
-            { match: 'Change photo', replace: '更换图片' },
-            { match: 'Contest rating', replace: '比赛Rating' },
-            { match: 'Contribution', replace: '贡献' },
-            { match: 'My friends', replace: '我的好友' },
-            { match: 'Change settings', replace: '改变设置' },
-            { match: 'Last visit', replace: '最后访问' },
-            { match: 'Registered', replace: '注册于' },
-            { match: 'Blog entries', replace: '博客条目' },
-            { match: 'comments', replace: '评论' },
-            { match: 'Write new entry', replace: '编写新条目' },
-            { match: 'View my talks', replace: '查看我的私信' },
-            { match: 'Talks', replace: '私信' },
-            { match: 'Send message', replace: '发送消息' },
-        ];
-        traverseTextNodes($('.userbox'), rules21);
+    const rules21 = [
+        { match: 'Change photo', replace: '更换图片' },
+        { match: 'Contest rating', replace: '比赛Rating' },
+        { match: 'Contribution', replace: '贡献' },
+        { match: 'My friends', replace: '我的好友' },
+        { match: 'Change settings', replace: '改变设置' },
+        { match: 'Last visit', replace: '最后访问' },
+        { match: 'Registered', replace: '注册于' },
+        { match: 'Blog entries', replace: '博客条目' },
+        { match: 'comments', replace: '评论' },
+        { match: 'Write new entry', replace: '编写新条目' },
+        { match: 'View my talks', replace: '查看我的私信' },
+        { match: 'Talks', replace: '私信' },
+        { match: 'Send message', replace: '发送消息' },
+    ];
+    traverseTextNodes($('.userbox'), rules21);
 
-        const rules22 = [
-            { match: 'Reset', replace: '重置' },
-        ];
-        traverseTextNodes($('#vote-reset-filterDifficultyLowerBorder'), rules22);
-        traverseTextNodes($('#vote-reset-filterDifficultyUpperBorder'), rules22);
+    const rules22 = [
+        { match: 'Reset', replace: '重置' },
+    ];
+    traverseTextNodes($('#vote-reset-filterDifficultyLowerBorder'), rules22);
+    traverseTextNodes($('#vote-reset-filterDifficultyUpperBorder'), rules22);
 
-        const rules23 = [
-            { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。\n（说明：有极小概率可能是Codeforces Better!插入翻译按钮导致的）' },
-            { match: 'View the changes.', replace: '查看更改' },
-        ];
-        traverseTextNodes($('.alert.alert-info'), rules23);
+    const rules23 = [
+        { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。\n（说明：有极小概率可能是Codeforces Better!插入翻译按钮导致的）' },
+        { match: 'View the changes.', replace: '查看更改' },
+    ];
+    traverseTextNodes($('.alert.alert-info'), rules23);
 
-        const rules24 = [
-            { match: 'Fill in the form to login into Codeforces.', replace: '填写表单以登录到Codeforces。' },
-            { match: 'You can use', replace: '你也可以使用' },
-            { match: 'as an alternative way to enter.', replace: '登录' },
-        ];
-        traverseTextNodes($('.enterPage'), rules24);
+    const rules24 = [
+        { match: 'Fill in the form to login into Codeforces.', replace: '填写表单以登录到Codeforces。' },
+        { match: 'You can use', replace: '你也可以使用' },
+        { match: 'as an alternative way to enter.', replace: '登录' },
+    ];
+    traverseTextNodes($('.enterPage'), rules24);
 
-        const rules25 = [
-            { match: '\\* To view the complete list, click ', replace: '* 要查看完整列表，请点击' },
-        ];
-        traverseTextNodes($('.notice.small'), rules25);
+    const rules25 = [
+        { match: '\\* To view the complete list, click ', replace: '* 要查看完整列表，请点击' },
+    ];
+    traverseTextNodes($('.notice.small'), rules25);
 
-        const rules26 = [
-            { match: 'Contest type:', replace: '比赛类型：' },
-            { match: 'Rated:', replace: '已评级：' },
-            { match: 'Tried:', replace: '已尝试' },
-            { match: 'Substring:', replace: '关键字' },
-        ];
-        traverseTextNodes($('.setting-name'), rules26);
+    const rules26 = [
+        { match: 'Contest type:', replace: '比赛类型：' },
+        { match: 'Rated:', replace: '已评级：' },
+        { match: 'Tried:', replace: '已尝试' },
+        { match: 'Substring:', replace: '关键字' },
+    ];
+    traverseTextNodes($('.setting-name'), rules26);
 
-    });
     // 元素选择替换
     // 侧栏titled汉化
     (function () {
@@ -1782,19 +1956,7 @@ function addDraggable(element) {
             });
         })();
     }
-})();
-
-// 设置面板
-$("div[class='lang-chooser']").each(function () {
-    $(this).before(
-        "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
-    );
-});
-$("div[class='enter-or-register-box']").each(function () {
-    $(this).after(
-        "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
-    );
-});
+};
 
 // 配置管理函数
 function setupConfigManagement(element, tempConfig, structure, configHTML, checkable) {
@@ -2038,6 +2200,10 @@ const CFBetterSettingMenuHTML = `
         <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
     </div>
     <div class='CFBetter_setting_list'>
+        <label for="darkMode">深色模式</label>
+        <input type="checkbox" id="darkMode" name="darkMode">
+    </div>
+    <div class='CFBetter_setting_list'>
     <label for="showLoading">显示加载提示信息</label>
     <div class="help_tip">
         `+ helpCircleHTML + `
@@ -2227,7 +2393,19 @@ const chatgptConfigEditHTML = `
     </div>
 `;
 
-$(document).ready(function () {
+// 设置按钮面板
+function settingPanel() {
+    $("div[class='lang-chooser']").each(function () {
+        $(this).before(
+            "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
+        );
+    });
+    $("div[class='enter-or-register-box']").each(function () {
+        $(this).after(
+            "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
+        );
+    });
+
     const $settingBtns = $(".CFBetter_setting");
     $settingBtns.click(() => {
         const styleElement = GM_addStyle(darkenPageStyle);
@@ -2248,13 +2426,12 @@ $(document).ready(function () {
             '#_header',
             '#_data',
         ]
-
-        // 缓存配置信息
-        let tempConfig = GM_getValue('chatgpt-config');
+        let tempConfig = GM_getValue('chatgpt-config'); // 缓存配置信息
         tempConfig = setupConfigManagement('#chatgpt-config', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
 
-        // 状态切换
+        // 状态更新
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
+        $("#darkMode").prop("checked", GM_getValue("darkMode") === true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
@@ -2294,6 +2471,7 @@ $(document).ready(function () {
         $("#save").click(debounce(function () {
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
+                darkMode: $("#darkMode").prop("checked"),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
@@ -2312,7 +2490,7 @@ $(document).ready(function () {
             GM_setValue('chatgpt-config', tempConfig);
             let refreshPage = false; // 是否需要刷新页面
             for (const [key, value] of Object.entries(settings)) {
-                if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation')) {
+                if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation' || key == 'darkMode')) {
                     if (GM_getValue(key) != value) refreshPage = true;
                 }
                 GM_setValue(key, value);
@@ -2320,6 +2498,12 @@ $(document).ready(function () {
 
             if (refreshPage) location.reload();
             else {
+                // 切换深色模式
+                if (darkMode != settings.darkMode) {
+                    if (darkMode) $('html').removeAttr('data-theme');
+                    else $('html').attr('data-theme', 'dark');
+                    darkMode = settings.darkMode;
+                }
                 // 更新配置信息
                 enableSegmentedTranslation = settings.enableSegmentedTranslation;
                 translation = settings.translation;
@@ -2357,20 +2541,7 @@ $(document).ready(function () {
             $(styleElement).remove();
         });
     });
-});
-
-// 说明为旧的latex渲染
-if (is_oldLatex) {
-    var newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert").html(`
-    注意：当前页面存在使用非 MathJax 库渲染为 HTML 的 Latex 公式（这通常是一道古老的题目），这导致 CodeforcesBetter! 无法将其还原回 Latex，因此当前页面部分功能不适用。
-    <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。
-    `).css({
-        "margin": "1em",
-        "text-align": "center",
-        "position": "relative"
-    });
-    $(".menu-box:first").next().after(newElement);
-}
+};
 
 // html2md转换/处理规则
 var turndownService = new TurndownService({ bulletListMarker: '-' });
@@ -3040,7 +3211,12 @@ function waitUntilIdleThenDo(callback) {
     }, 100);
 }
 
-$(document).ready(function () {
+// 开始
+document.addEventListener("DOMContentLoaded", function () {
+    init();
+    settingPanel();
+    checkScriptVersion();
+    toZH_CN();
     var newElement = $("<div></div>")
         .addClass("alert alert-info CFBetter_alert")
         .html(`Codeforces Better! —— 正在等待页面资源加载……`)
