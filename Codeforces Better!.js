@@ -41,8 +41,9 @@ const getGMValue = (key, defaultValue) => {
     return value;
 };
 var darkMode = getGMValue("darkMode", false);
-var is_mSite, is_acmsguru, is_oldLatex, bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks;
-var enableSegmentedTranslation, translation, openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
+var is_mSite, is_acmsguru, is_oldLatex;
+var bottomZh_CN, renderPerfOpt, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, enableSegmentedTranslation, translation;
+var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var showJumpToLuogu, loaded;
 function init() {
     is_mSite = window.location.hostname.startsWith('m');
@@ -57,6 +58,7 @@ function init() {
         $(".menu-box:first").next().after(newElement);
     }
     bottomZh_CN = getGMValue("bottomZh_CN", true);
+    renderPerfOpt = getGMValue("renderPerfOpt", true);
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
     expandFoldingblocks = getGMValue("expandFoldingblocks", true);
@@ -130,9 +132,9 @@ window.onerror = (message, source, lineno, colno, error) => {
     }
     if (darkMode || window.matchMedia('(prefers-color-scheme: dark)').matches) {
         setDarkTheme();
-    }    
+    }
 
-    // 系統深色监听
+    // 系统深色监听
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
         const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
         if (!event.matches) {
@@ -141,6 +143,10 @@ window.onerror = (message, source, lineno, colno, error) => {
         }
     });
     GM_addStyle(`
+        /* 黑暗支持 */
+        html[data-theme=dark]:root {
+            color-scheme: light dark;
+        }
         /* 文字颜色1 */
         html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, html[data-theme=dark] .ttypography .MathJax,
         html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
@@ -173,7 +179,7 @@ window.onerror = (message, source, lineno, colno, error) => {
             color: #3989c9;
         }
         html[data-theme=dark] a:visited {
-            color: #8590a6;
+            color: #8590a6 !important;
         }
         /* 按钮 */
         html[data-theme=dark] .second-level-menu-list li.backLava {
@@ -186,12 +192,13 @@ window.onerror = (message, source, lineno, colno, error) => {
         } 
         /* 背景层次1 */
         html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
         html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
         html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
         html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
         html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
-        html[data-theme=dark] textarea, html[data-theme=dark] .state{
+        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
+        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -201,46 +208,59 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
-        html[data-theme=dark] .problems .accepted-problem td.act,
+        html[data-theme=dark] .problems .accepted-problem td.act, html[data-theme=dark] .input-output-copier:hover,
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] .CFBetter_setting_menu hr, html[data-theme=dark] .wordsExceeded{
             background-color: #2d333b !important;
         }
-        /* 实线边框颜色 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td, .roundbox .rtable th,
+        /* 实线边框颜色-圆角 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
         html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .sidebar-menu ul li,
         html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt,
         html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement{
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement,
+        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
             border: 1px solid #424b56 !important;
             border-radius: 2px;
         }
-        html[data-theme=dark] .roundbox .titled {
+        /* 实线边框颜色-无圆角 */
+        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
+        html[data-theme=dark] .problem-statement .sample-tests .output{
+            border: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
             border-bottom: 1px solid #424b56 !important;
         }
-        html[data-theme=dark] .roundbox .bottom-links {
+        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer{
             border-top: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .topic .content {
             border-left: 4px solid #424b56 !important;
         }
         /* 虚线边框颜色 */
-        html[data-theme=dark] .comment-table{
+        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button{
             border: 1px dashed #424b56 !important;
         }
+        html[data-theme=dark] li#add_button:hover{
+            border: 1px dashed #03A9F4 !important;
+            background-color: #2d333b !important;
+            color: #03A9F4 !important;
+        }
         /* focus-visible */
-        html[data-theme=dark] input:focus-visible, html[data-theme=dark] textarea{
+        html[data-theme=dark] input:focus-visible, html[data-theme=dark] textarea, html[data-theme=dark] select{
             border-width: 1.5px !important;
             outline: none;
         }
-        /* 图片调整 */
+        /* 图片-亮度 */
         html[data-theme=dark] img{
             opacity: .75; 
         }
-        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i{
+        /* 图片-反转 */
+        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
@@ -266,9 +286,6 @@ window.onerror = (message, source, lineno, colno, error) => {
             box-shadow: 0px 0px 0px 4px #2d333b;
             border: 1px solid #2d333b;
         }
-        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list{
-            border: 1px solid #424b56 !important;
-        }
         html[data-theme=dark] .collapsible-topic.collapsed .content .collapsible-topic-options:before{
             background-image: linear-gradient(#22272e00, #22272e);
         }
@@ -276,8 +293,6 @@ window.onerror = (message, source, lineno, colno, error) => {
             text-shadow: none;
         }
     `);
-    // 特殊
-
 })()
 
 // 样式
@@ -2200,8 +2215,20 @@ const CFBetterSettingMenuHTML = `
         <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="darkMode">深色模式</label>
+        <label for="darkMode">强制深色模式</label>
         <input type="checkbox" id="darkMode" name="darkMode">
+    </div>
+    <div class='CFBetter_setting_list'>
+    <label for="renderPerfOpt">渲染优化</label>
+    <div class="help_tip">
+        `+ helpCircleHTML + `
+        <div class="tip_text">
+        <p>启用可见渲染（content-visibility: auto），</p>
+        <p>这一定程度上可以改善长页面在Chrome上的的渲染性能，但会带来滚动条跳动的问题</p>
+        <p>注意这是一项实验性技术，请确保您的浏览器支持它，Firefox不需要开启</p>
+        </div>
+    </div>
+    <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='CFBetter_setting_list'>
     <label for="showLoading">显示加载提示信息</label>
@@ -2431,6 +2458,7 @@ function settingPanel() {
 
         // 状态更新
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
+        $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
         $("#darkMode").prop("checked", GM_getValue("darkMode") === true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
@@ -2471,6 +2499,7 @@ function settingPanel() {
         $("#save").click(debounce(function () {
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
+                renderPerfOpt: $("#renderPerfOpt").prop("checked"),
                 darkMode: $("#darkMode").prop("checked"),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
@@ -3143,8 +3172,30 @@ function alertZh() {
 };
 
 
-// 展开折叠块
+// 折叠块与渲染优化
 function ExpandFoldingblocks() {
+    if (renderPerfOpt) {
+        GM_addStyle(`
+            html {
+                scroll-behavior: smooth;
+            }
+            .spoiler-content {
+                content-visibility: auto;
+                contain-intrinsic-size: 200px;
+            }
+        `);
+        if($('.ttypography').length < 200){
+            GM_addStyle(`
+            html {
+                scroll-behavior: smooth;
+            }
+            .ttypography {
+                content-visibility: auto;
+                contain-intrinsic-size: 200px;
+            }
+        `);
+        }
+    }
     if (expandFoldingblocks) {
         $('.spoiler').addClass('spoiler-open');
         $('.spoiler-content').attr('style', '');
@@ -3213,59 +3264,70 @@ function waitUntilIdleThenDo(callback) {
 
 // 开始
 document.addEventListener("DOMContentLoaded", function () {
-    init();
-    settingPanel();
-    checkScriptVersion();
-    toZH_CN();
-    var newElement = $("<div></div>")
-        .addClass("alert alert-info CFBetter_alert")
-        .html(`Codeforces Better! —— 正在等待页面资源加载……`)
-        .css({
-            "margin": "1em",
-            "text-align": "center",
-            "font-weight": "600",
-            "position": "relative"
-        });
-    var tip_SegmentedTranslation = $("<div></div>")
-        .addClass("alert alert-error CFBetter_alert")
-        .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
-        <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
-        .css({
-            "margin": "1em",
-            "text-align": "center",
-            "font-weight": "600",
-            "position": "relative"
-        });
+    function checkJQuery(retryDelay) {
+        if (typeof jQuery === 'undefined') {
+            console.warn("JQuery未加载，" + retryDelay + "毫秒后重试");
+            setTimeout(function () {
+                var newRetryDelay = Math.min(retryDelay * 2, 2000);
+                checkJQuery(newRetryDelay);
+            }, retryDelay);
+        } else {
+            init();
+            settingPanel();
+            checkScriptVersion();
+            toZH_CN();
+            var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
+                .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+                .css({
+                    "margin": "1em",
+                    "text-align": "center",
+                    "font-weight": "600",
+                    "position": "relative"
+                });
+            var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-error CFBetter_alert")
+                .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
+                <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
+                .css({
+                    "margin": "1em",
+                    "text-align": "center",
+                    "font-weight": "600",
+                    "position": "relative"
+                });
 
-    function processPage() {
-        if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
-        waitUntilIdleThenDo(function () {
-            if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
-            if (showJumpToLuogu) CF2luogu();
-            ExpandFoldingblocks();
-            addConversionButton();
-            alertZh();
-            if (showLoading) {
-                newElement.html('Codeforces Better! —— 加载已完成');
-                newElement.removeClass('alert-info').addClass('alert-success');
-                setTimeout(function () {
-                    newElement.remove();
-                }, 3000);
+            function processPage() {
+                if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
+                waitUntilIdleThenDo(function () {
+                    if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
+                    if (showJumpToLuogu) CF2luogu();
+                    ExpandFoldingblocks();
+                    addConversionButton();
+                    alertZh();
+                    if (showLoading) {
+                        newElement.html('Codeforces Better! —— 加载已完成');
+                        newElement.removeClass('alert-info').addClass('alert-success');
+                        setTimeout(function () {
+                            newElement.remove();
+                        }, 3000);
+                    }
+                });
             }
-        });
-    }
 
-    if (showLoading) $(".menu-box:first").next().after(newElement);
+            if (showLoading) $(".menu-box:first").next().after(newElement);
 
-    if (loaded) {
-        processPage();
-    } else {
-        // 页面完全加载完成后执行
-        window.onload = function () {
-            processPage();
-        };
+            if (loaded) {
+                processPage();
+            } else {
+                // 页面完全加载完成后执行
+                window.onload = function () {
+                    processPage();
+                };
+            }
+        }
     }
-})
+    checkJQuery(50);
+});
+
+
 
 // 字数超限确认
 function showWordsExceededDialog(button) {
@@ -3502,6 +3564,7 @@ async function translateProblemStatement(text, element_node, button) {
     // 转义LaTex中的特殊符号
     if (!is_oldLatex) {
         const escapeRules = [
+            { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
             { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
             { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
