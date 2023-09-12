@@ -44,7 +44,7 @@ var darkMode = getGMValue("darkMode", false);
 var is_mSite, is_acmsguru, is_oldLatex;
 var bottomZh_CN, renderPerfOpt, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, enableSegmentedTranslation, translation;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
-var showJumpToLuogu, loaded;
+var commentPaging, showJumpToLuogu, loaded;
 function init() {
     is_mSite = window.location.hostname.startsWith('m');
     is_acmsguru = window.location.href.includes("acmsguru");
@@ -58,10 +58,11 @@ function init() {
         $(".menu-box:first").next().after(newElement);
     }
     bottomZh_CN = getGMValue("bottomZh_CN", true);
-    renderPerfOpt = getGMValue("renderPerfOpt", true);
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
     expandFoldingblocks = getGMValue("expandFoldingblocks", true);
+    renderPerfOpt = getGMValue("renderPerfOpt", true);
+    commentPaging = getGMValue("commentPaging", true);
     enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
     showJumpToLuogu = getGMValue("showJumpToLuogu", true);
     loaded = getGMValue("loaded", false);
@@ -119,7 +120,7 @@ window.onerror = (message, source, lineno, colno, error) => {
     return true;
 };*/
 
-// 深色模式
+// 黑暗模式
 (function setDark() {
     // 初始化
     function setDarkTheme() {
@@ -134,7 +135,7 @@ window.onerror = (message, source, lineno, colno, error) => {
         setDarkTheme();
     }
 
-    // 系统深色监听
+    // 系统黑暗监听
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
         const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
         if (!event.matches) {
@@ -151,7 +152,6 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, html[data-theme=dark] .ttypography .MathJax,
         html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
         html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a,
         html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
         html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6
         html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
@@ -160,11 +160,14 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
         html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
-        html[data-theme=dark] .comments label.show-archived *{
+        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table{
             color: #adbac7 !important;
         }
+        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
+            color: #adbac7;
+        }
         /* 文字颜色2 */
-        html[data-theme=dark] .second-level-menu-list li a,html[data-theme=dark] span, html[data-theme=dark] #footer,
+        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] span, html[data-theme=dark] #footer,
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
         html[data-theme=dark] .user-admin{
@@ -179,7 +182,10 @@ window.onerror = (message, source, lineno, colno, error) => {
             color: #3989c9;
         }
         html[data-theme=dark] a:visited {
-            color: #8590a6 !important;
+            color: #8590a6;
+        }
+        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
+            color: #9099a3 !important;
         }
         /* 按钮 */
         html[data-theme=dark] .second-level-menu-list li.backLava {
@@ -198,7 +204,8 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
         html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
         html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
-        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active{
+        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
+        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -242,7 +249,8 @@ window.onerror = (message, source, lineno, colno, error) => {
             border-left: 4px solid #424b56 !important;
         }
         /* 虚线边框颜色 */
-        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button{
+        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
+        html[data-theme=dark] .CFBetter_setting_menu_label_text{
             border: 1px dashed #424b56 !important;
         }
         html[data-theme=dark] li#add_button:hover{
@@ -297,6 +305,9 @@ window.onerror = (message, source, lineno, colno, error) => {
 
 // 样式
 GM_addStyle(`
+html {
+    scroll-behavior: smooth;
+}
 :root {
     --vp-font-family-base: "Chinese Quotes", "Inter var", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -1096,6 +1107,16 @@ div#config_bar_menu_delete:hover {
 #config_edit_menu {
     z-index: 11000;
     width: 450px; 
+}
+/* 分页 */
+.comments > .comment {
+    display: none;
+}
+#next-page-btn, #prev-page-btn {
+    display: none;
+}
+#jump-input{
+    height: 22px;
 }
 `);
 
@@ -2215,20 +2236,8 @@ const CFBetterSettingMenuHTML = `
         <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="darkMode">强制深色模式</label>
+        <label for="darkMode">强制黑暗模式</label>
         <input type="checkbox" id="darkMode" name="darkMode">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="renderPerfOpt">渲染优化</label>
-    <div class="help_tip">
-        `+ helpCircleHTML + `
-        <div class="tip_text">
-        <p>启用可见渲染（content-visibility: auto），</p>
-        <p>这一定程度上可以改善长页面在Chrome上的的渲染性能，但会带来滚动条跳动的问题</p>
-        <p>注意这是一项实验性技术，请确保您的浏览器支持它，Firefox不需要开启</p>
-        </div>
-    </div>
-    <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='CFBetter_setting_list'>
     <label for="showLoading">显示加载提示信息</label>
@@ -2257,18 +2266,20 @@ const CFBetterSettingMenuHTML = `
         <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="enableSegmentedTranslation">分段翻译</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
-            <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
-            <p><u>注意：开启分段翻译会产生如下问题：</u></p>
-            <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-            <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
-            </div>
+    <label for="renderPerfOpt">折叠块渲染优化</label>
+    <div class="help_tip">
+        `+ helpCircleHTML + `
+        <div class="tip_text">
+        <p>启用可见渲染（content-visibility: auto），</p>
+        <p>这一定程度上可以改善大量折叠块同时展开时在Chrome上的的渲染性能，但会带来滚动条跳动的问题</p>
+        <p>Firefox不需要开启</p>
         </div>
-        <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
+    </div>
+    <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="commentPaging">评论区分页</label>
+        <input type="checkbox" id="commentPaging" name="commentPaging">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="showJumpToLuogu">显示跳转到洛谷</label>
@@ -2299,6 +2310,20 @@ const CFBetterSettingMenuHTML = `
     </div>
     <h3>翻译设置</h3>
     <hr>
+    <div class='CFBetter_setting_list'>
+        <label for="enableSegmentedTranslation">分段翻译</label>
+        <div class="help_tip">
+            `+ helpCircleHTML + `
+            <div class="tip_text">
+            <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
+            <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
+            <p><u>注意：开启分段翻译会产生如下问题：</u></p>
+            <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+            <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+            </div>
+        </div>
+        <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
+    </div>
     <label>
         <input type='radio' name='translation' value='deepl'>
         <span class='CFBetter_setting_menu_label_text'>deepl翻译</span>
@@ -2458,11 +2483,12 @@ function settingPanel() {
 
         // 状态更新
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
-        $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
         $("#darkMode").prop("checked", GM_getValue("darkMode") === true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
+        $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
+        $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#loaded").prop("checked", GM_getValue("loaded") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
@@ -2499,11 +2525,12 @@ function settingPanel() {
         $("#save").click(debounce(function () {
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
-                renderPerfOpt: $("#renderPerfOpt").prop("checked"),
                 darkMode: $("#darkMode").prop("checked"),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
+                renderPerfOpt: $("#renderPerfOpt").prop("checked"),
+                commentPaging: $("#commentPaging").prop("checked"),
                 enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 loaded: $("#loaded").prop("checked"),
@@ -2527,7 +2554,7 @@ function settingPanel() {
 
             if (refreshPage) location.reload();
             else {
-                // 切换深色模式
+                // 切换黑暗模式
                 if (darkMode != settings.darkMode) {
                     if (darkMode) $('html').removeAttr('data-theme');
                     else $('html').attr('data-theme', 'dark');
@@ -2784,7 +2811,9 @@ function addButtonWithHTML2MD(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css(previousCSS);
+            if (previousCSS) {
+                $(target).css(previousCSS);
+            }
             $(".html2md-view" + suffix).parent().css({
                 "position": "static"
             });
@@ -2862,7 +2891,9 @@ function addButtonWithCopy(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css(previousCSS);
+            if (previousCSS) {
+                $(target).css(previousCSS);
+            }
             $(".html2md-cb" + suffix).parent().css({
                 "position": "static"
             })
@@ -3171,36 +3202,120 @@ function alertZh() {
     }
 };
 
-
 // 折叠块与渲染优化
 function ExpandFoldingblocks() {
     if (renderPerfOpt) {
         GM_addStyle(`
-            html {
-                scroll-behavior: smooth;
-            }
-            .spoiler-content {
+            .spoiler-content{
                 content-visibility: auto;
                 contain-intrinsic-size: 200px;
             }
         `);
-        if($('.ttypography').length < 200){
-            GM_addStyle(`
-            html {
-                scroll-behavior: smooth;
-            }
-            .ttypography {
-                content-visibility: auto;
-                contain-intrinsic-size: 200px;
-            }
-        `);
-        }
     }
     if (expandFoldingblocks) {
         $('.spoiler').addClass('spoiler-open');
         $('.spoiler-content').attr('style', '');
     }
 };
+
+// 分页
+function CommentPagination() {
+    if (commentPaging) {
+        $('.comments').after(`
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <label for="items-per-page">每页展示数量：</label>
+                <select id="items-per-page" style="margin-right: 15px;">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+                <div class="paging" style="margin-right: 15px;">
+                    <span id="current-page">1</span> / <span id="total-pages"></span>
+                </div>
+                <input type="text" id="jump-input" placeholder="跳转到页码">
+                <button type="button" id="jump-btn" class="html2mdButton">跳转</button>
+                <button id="prev-page-btn" class="html2mdButton">上一页</button>
+                <button id="next-page-btn" class="html2mdButton">下一页</button>
+            </div>
+        `);
+
+        var batchSize = 5;
+        var elements = $(".comments > .comment");
+        elements.last().detach(); // 去掉最后一个元素（评论框）
+        var start = 0;
+        var end = batchSize;
+        var currentPage = 1;
+        var displayedIndexes = []; // 存储已显示元素的索引
+
+        function showBatch(start, end) {
+            // 隐藏上一页
+            for (var i = 0; i < displayedIndexes.length; i++) {
+                elements.eq(displayedIndexes[i]).hide();
+            }
+
+            displayedIndexes = [];
+
+            // 显示当前页
+            elements.slice(start, end).each(function (index) {
+                $(this).show();
+                displayedIndexes.push(start + index);
+            });
+
+            // 更新页码和翻页按钮
+            $("#current-page").text(currentPage);
+            $("#total-pages").text(Math.ceil(elements.length / (end - start)));
+
+            if (currentPage === 1) $("#prev-page-btn").hide();
+            else $("#prev-page-btn").show();
+
+            if (end >= elements.length) $("#next-page-btn").hide();
+            else $("#next-page-btn").show();
+        }
+
+        // 初始化第一页
+        showBatch(0, parseInt($("#items-per-page").val()));
+
+        $("#prev-page-btn").on("click", function () {
+            var itemsPerPage = parseInt($("#items-per-page").val());
+            var start = (currentPage - 2) * itemsPerPage;
+            var end = (currentPage - 1) * itemsPerPage;
+
+            currentPage--;
+
+            showBatch(start, end);
+        });
+
+        $("#next-page-btn").on("click", function () {
+            var itemsPerPage = parseInt($("#items-per-page").val());
+            var start = currentPage * itemsPerPage;
+            var end = (currentPage + 1) * itemsPerPage;
+
+            currentPage++;
+
+            showBatch(start, end);
+        });
+
+        $("#jump-btn").on("click", function () {
+            var inputPage = parseInt($("#jump-input").val());
+
+            if (inputPage >= 1 && inputPage <= Math.ceil(elements.length / parseInt($("#items-per-page").val()))) {
+                var itemsPerPage = parseInt($("#items-per-page").val());
+                var start = (inputPage - 1) * itemsPerPage;
+                var end = inputPage * itemsPerPage;
+
+                currentPage = inputPage; // 更新当前页码
+
+                showBatch(start, end);
+            }
+        });
+
+        $("#items-per-page").on("change", function () {
+            var itemsPerPage = parseInt($(this).val());
+
+            showBatch(0, itemsPerPage);
+        });
+    }
+}
 
 // 跳转洛谷
 async function CF2luogu() {
@@ -3300,6 +3415,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
                     if (showJumpToLuogu) CF2luogu();
                     ExpandFoldingblocks();
+                    CommentPagination();
                     addConversionButton();
                     alertZh();
                     if (showLoading) {
