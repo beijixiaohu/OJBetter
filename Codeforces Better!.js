@@ -490,7 +490,7 @@ button.html2mdButton.CFBetter_setting.open {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 480px;
+    width: 485px;
     max-height: 90vh;
     overflow-y: auto;
     transform: translate(-50%, -50%);
@@ -514,6 +514,19 @@ button.html2mdButton.CFBetter_setting.open {
     height: 1px;
     background-color: #ccc;
     margin: 10px 0;
+}
+/*设置面板-滚动条*/
+.CFBetter_setting_menu::-webkit-scrollbar {
+    width: 5px;
+    height: 7px;
+    background-color: #aaa;
+}
+.CFBetter_setting_menu::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: #d7d9e4;
+}
+.CFBetter_setting_menu::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
 }
 /*设置面板-关闭按钮*/
 .CFBetter_setting_menu .tool-box {
