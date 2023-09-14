@@ -2291,9 +2291,8 @@ const CFBetterSettingMenuHTML = `
     <div class="help_tip">
         `+ helpCircleHTML + `
         <div class="tip_text">
-        <p>为折叠块元素启用可见渲染（content-visibility: auto），</p>
-        <p>这可以改善大量折叠块同时展开时在Chrome上的的渲染性能</p>
-        <p>Firefox不需要开启</p>
+        <p>为折叠块元素启用可见渲染（content-visibility: auto）</p>
+        <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后可以有一定程度的改善</p>
         </div>
     </div>
     <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
@@ -3325,7 +3324,7 @@ function CommentPagination() {
 
         // 更新页码和翻页按钮
         $("#current-page").text(currentPage);
-        $("#total-pages").text(Math.ceil(elements.length / (end - start)));
+        $("#total-pages").text(Math.ceil(elements.length / batchSize));
 
         if (currentPage === 1) $("#prev-page-btn").hide();
         else $("#prev-page-btn").show();
@@ -3362,8 +3361,8 @@ function CommentPagination() {
 
         if (inputPage >= 1 && inputPage <= Math.ceil(elements.length / parseInt($("#items-per-page").val()))) {
             var itemsPerPage = parseInt($("#items-per-page").val());
-            var start = (inputPage - 1) * itemsPerPage;
-            var end = inputPage * itemsPerPage;
+            start = (inputPage - 1) * itemsPerPage;
+            end = inputPage * itemsPerPage;
 
             currentPage = inputPage; // 更新当前页码
 
@@ -3372,9 +3371,10 @@ function CommentPagination() {
     });
 
     $("#items-per-page").on("change", function () {
-        var itemsPerPage = parseInt($(this).val());
-
-        showBatch(0, itemsPerPage);
+        batchSize = parseInt($(this).val());
+        let page = Math.floor(start / batchSize);
+        currentPage = !page ? 1 : page;
+        showBatch(currentPage * batchSize, (currentPage + 1) * batchSize);
     });
 }
 
@@ -4000,7 +4000,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 return new Promise((resolve) => setTimeout(resolve, ms));
             }
 
-            if (showLoading) $(".menu-box:first").next().after(newElement);
+            if (showLoading) {
+                if (is_mSite) $("header").after(newElement);
+                else $(".menu-box:first").next().after(newElement);
+            }
 
             if (loaded) {
                 processPage();
