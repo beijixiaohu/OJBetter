@@ -42,7 +42,7 @@ const getGMValue = (key, defaultValue) => {
 };
 var darkMode = getGMValue("darkMode", false);
 var is_mSite, is_acmsguru, is_oldLatex;
-var bottomZh_CN, renderPerfOpt, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, enableSegmentedTranslation, translation;
+var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var commentPaging, showJumpToLuogu, loaded;
 function init() {
@@ -160,7 +160,8 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
         html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
-        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table{
+        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar{
             color: #adbac7 !important;
         }
         html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
@@ -225,7 +226,7 @@ window.onerror = (message, source, lineno, colno, error) => {
         /* 实线边框颜色-圆角 */
         html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
         html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .sidebar-menu ul li,
-        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt,
+        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
         html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement,
@@ -640,7 +641,7 @@ button.html2mdButton.CFBetter_setting.open {
 
 /*设置面板-radio*/
 .CFBetter_setting_menu>label {
-    display: flex;
+    display: grid;
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
@@ -1115,8 +1116,15 @@ div#config_bar_menu_delete:hover {
 #next-page-btn, #prev-page-btn {
     display: none;
 }
-#jump-input{
+#jump-input, #items-per-page{
     height: 22px;
+    border: 1px solid #dcdfe6;
+    border-radius: 0.3rem;
+}
+#jump-input:focus-visible{
+    border-style: solid;
+    border-color: #3f51b5;
+    outline: none;
 }
 `);
 
@@ -2270,16 +2278,23 @@ const CFBetterSettingMenuHTML = `
     <div class="help_tip">
         `+ helpCircleHTML + `
         <div class="tip_text">
-        <p>启用可见渲染（content-visibility: auto），</p>
-        <p>这一定程度上可以改善大量折叠块同时展开时在Chrome上的的渲染性能，但会带来滚动条跳动的问题</p>
+        <p>为折叠块元素启用可见渲染（content-visibility: auto），</p>
+        <p>这可以改善大量折叠块同时展开时在Chrome上的的渲染性能</p>
         <p>Firefox不需要开启</p>
         </div>
     </div>
     <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="commentPaging">评论区分页</label>
-        <input type="checkbox" id="commentPaging" name="commentPaging">
+    <label for="commentPaging">评论区分页</label>
+    <div class="help_tip">
+        `+ helpCircleHTML + `
+        <div class="tip_text">
+        <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
+        <p>这可以缓解评论区卡顿的问题</p>
+        </div>
+    </div>
+    <input type="checkbox" id="commentPaging" name="commentPaging">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="showJumpToLuogu">显示跳转到洛谷</label>
@@ -2301,7 +2316,7 @@ const CFBetterSettingMenuHTML = `
             <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
             <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
             <p><u>您首先应该确认是否是网络问题，</u></p>
-            <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
+            <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
             <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
             <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
             </div>
@@ -3202,28 +3217,62 @@ function alertZh() {
     }
 };
 
-// 折叠块与渲染优化
+// 折叠块
 function ExpandFoldingblocks() {
-    if (renderPerfOpt) {
-        GM_addStyle(`
-            .spoiler-content{
-                content-visibility: auto;
-                contain-intrinsic-size: 200px;
-            }
-        `);
-    }
-    if (expandFoldingblocks) {
-        $('.spoiler').addClass('spoiler-open');
-        $('.spoiler-content').attr('style', '');
-    }
+    $('.spoiler').addClass('spoiler-open');
+    $('.spoiler-content').attr('style', '');
 };
+
+// 折叠块渲染优化
+function RenderPerfOpt() {
+    return new Promise(function (resolve) {
+        var currentIndex = 0;
+        var delay = 50;
+        var maxDelay = 1000;
+
+        var elements = $('.spoiler-content');
+        var batchSize = 10;
+        var initialDelay = 50;
+
+        function processBatch(callback) {
+            var endIndex = currentIndex + batchSize;
+            for (var i = currentIndex; i < endIndex; i++) {
+                if (i >= elements.length) {
+                    callback();
+                    resolve();
+                    return;
+                }
+                var element = elements.eq(i);
+                var height = element.outerHeight();
+                element.css('contain-intrinsic-size', height + 'px');
+            }
+
+            currentIndex += batchSize;
+
+            // 延时
+            delay *= 2;
+            if (delay >= maxDelay) delay = initialDelay;
+
+            setTimeout(function () {
+                processBatch(callback); // 递归
+            }, delay);
+        }
+
+        processBatch(function () {
+            GM_addStyle(`
+                .spoiler-content {
+                    content-visibility: auto;
+                }
+            `);
+        });
+    });
+}
 
 // 分页
 function CommentPagination() {
-    if (commentPaging) {
-        $('.comments').after(`
-            <div style="display: flex; align-items: center; justify-content: center;">
-                <label for="items-per-page">每页展示数量：</label>
+    $('.comments').after(`
+            <div id="pagBar" style="display: flex; align-items: center; justify-content: center; color: #606266;">
+                <label for="items-per-page">每页展示主楼数：</label>
                 <select id="items-per-page" style="margin-right: 15px;">
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -3239,82 +3288,81 @@ function CommentPagination() {
             </div>
         `);
 
-        var batchSize = 5;
-        var elements = $(".comments > .comment");
-        elements.last().detach(); // 去掉最后一个元素（评论框）
-        var start = 0;
-        var end = batchSize;
-        var currentPage = 1;
-        var displayedIndexes = []; // 存储已显示元素的索引
+    var batchSize = 5;
+    var elements = $(".comments > .comment");
+    elements.last().detach(); // 去掉最后一个元素（评论框）
+    var start = 0;
+    var end = batchSize;
+    var currentPage = 1;
+    var displayedIndexes = []; // 存储已显示元素的索引
 
-        function showBatch(start, end) {
-            // 隐藏上一页
-            for (var i = 0; i < displayedIndexes.length; i++) {
-                elements.eq(displayedIndexes[i]).hide();
-            }
-
-            displayedIndexes = [];
-
-            // 显示当前页
-            elements.slice(start, end).each(function (index) {
-                $(this).show();
-                displayedIndexes.push(start + index);
-            });
-
-            // 更新页码和翻页按钮
-            $("#current-page").text(currentPage);
-            $("#total-pages").text(Math.ceil(elements.length / (end - start)));
-
-            if (currentPage === 1) $("#prev-page-btn").hide();
-            else $("#prev-page-btn").show();
-
-            if (end >= elements.length) $("#next-page-btn").hide();
-            else $("#next-page-btn").show();
+    function showBatch(start, end) {
+        // 隐藏上一页
+        for (var i = 0; i < displayedIndexes.length; i++) {
+            elements.eq(displayedIndexes[i]).hide();
         }
 
-        // 初始化第一页
-        showBatch(0, parseInt($("#items-per-page").val()));
+        displayedIndexes = [];
 
-        $("#prev-page-btn").on("click", function () {
-            var itemsPerPage = parseInt($("#items-per-page").val());
-            var start = (currentPage - 2) * itemsPerPage;
-            var end = (currentPage - 1) * itemsPerPage;
-
-            currentPage--;
-
-            showBatch(start, end);
+        // 显示当前页
+        elements.slice(start, end).each(function (index) {
+            $(this).show();
+            displayedIndexes.push(start + index);
         });
 
-        $("#next-page-btn").on("click", function () {
-            var itemsPerPage = parseInt($("#items-per-page").val());
-            var start = currentPage * itemsPerPage;
-            var end = (currentPage + 1) * itemsPerPage;
+        // 更新页码和翻页按钮
+        $("#current-page").text(currentPage);
+        $("#total-pages").text(Math.ceil(elements.length / (end - start)));
 
-            currentPage++;
+        if (currentPage === 1) $("#prev-page-btn").hide();
+        else $("#prev-page-btn").show();
 
-            showBatch(start, end);
-        });
-
-        $("#jump-btn").on("click", function () {
-            var inputPage = parseInt($("#jump-input").val());
-
-            if (inputPage >= 1 && inputPage <= Math.ceil(elements.length / parseInt($("#items-per-page").val()))) {
-                var itemsPerPage = parseInt($("#items-per-page").val());
-                var start = (inputPage - 1) * itemsPerPage;
-                var end = inputPage * itemsPerPage;
-
-                currentPage = inputPage; // 更新当前页码
-
-                showBatch(start, end);
-            }
-        });
-
-        $("#items-per-page").on("change", function () {
-            var itemsPerPage = parseInt($(this).val());
-
-            showBatch(0, itemsPerPage);
-        });
+        if (end >= elements.length) $("#next-page-btn").hide();
+        else $("#next-page-btn").show();
     }
+
+    // 初始化第一页
+    showBatch(0, parseInt($("#items-per-page").val()));
+
+    $("#prev-page-btn").on("click", function () {
+        var itemsPerPage = parseInt($("#items-per-page").val());
+        var start = (currentPage - 2) * itemsPerPage;
+        var end = (currentPage - 1) * itemsPerPage;
+
+        currentPage--;
+
+        showBatch(start, end);
+    });
+
+    $("#next-page-btn").on("click", function () {
+        var itemsPerPage = parseInt($("#items-per-page").val());
+        var start = currentPage * itemsPerPage;
+        var end = (currentPage + 1) * itemsPerPage;
+
+        currentPage++;
+
+        showBatch(start, end);
+    });
+
+    $("#jump-btn").on("click", function () {
+        var inputPage = parseInt($("#jump-input").val());
+
+        if (inputPage >= 1 && inputPage <= Math.ceil(elements.length / parseInt($("#items-per-page").val()))) {
+            var itemsPerPage = parseInt($("#items-per-page").val());
+            var start = (inputPage - 1) * itemsPerPage;
+            var end = inputPage * itemsPerPage;
+
+            currentPage = inputPage; // 更新当前页码
+
+            showBatch(start, end);
+        }
+    });
+
+    $("#items-per-page").on("change", function () {
+        var itemsPerPage = parseInt($(this).val());
+
+        showBatch(0, itemsPerPage);
+    });
 }
 
 // 跳转洛谷
@@ -3376,74 +3424,6 @@ function waitUntilIdleThenDo(callback) {
         }
     }, 100);
 }
-
-// 开始
-document.addEventListener("DOMContentLoaded", function () {
-    function checkJQuery(retryDelay) {
-        if (typeof jQuery === 'undefined') {
-            console.warn("JQuery未加载，" + retryDelay + "毫秒后重试");
-            setTimeout(function () {
-                var newRetryDelay = Math.min(retryDelay * 2, 2000);
-                checkJQuery(newRetryDelay);
-            }, retryDelay);
-        } else {
-            init();
-            settingPanel();
-            checkScriptVersion();
-            toZH_CN();
-            var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
-                .html(`Codeforces Better! —— 正在等待页面资源加载……`)
-                .css({
-                    "margin": "1em",
-                    "text-align": "center",
-                    "font-weight": "600",
-                    "position": "relative"
-                });
-            var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-                .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
-                <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
-                .css({
-                    "margin": "1em",
-                    "text-align": "center",
-                    "font-weight": "600",
-                    "position": "relative"
-                });
-
-            function processPage() {
-                if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
-                waitUntilIdleThenDo(function () {
-                    if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
-                    if (showJumpToLuogu) CF2luogu();
-                    ExpandFoldingblocks();
-                    CommentPagination();
-                    addConversionButton();
-                    alertZh();
-                    if (showLoading) {
-                        newElement.html('Codeforces Better! —— 加载已完成');
-                        newElement.removeClass('alert-info').addClass('alert-success');
-                        setTimeout(function () {
-                            newElement.remove();
-                        }, 3000);
-                    }
-                });
-            }
-
-            if (showLoading) $(".menu-box:first").next().after(newElement);
-
-            if (loaded) {
-                processPage();
-            } else {
-                // 页面完全加载完成后执行
-                window.onload = function () {
-                    processPage();
-                };
-            }
-        }
-    }
-    checkJQuery(50);
-});
-
-
 
 // 字数超限确认
 function showWordsExceededDialog(button) {
@@ -3680,23 +3660,23 @@ async function translateProblemStatement(text, element_node, button) {
     // 转义LaTex中的特殊符号
     if (!is_oldLatex) {
         const escapeRules = [
-            { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
             { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
             { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
             { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
             { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
+            { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
         ];
 
-        let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$/g)];
+        let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
 
         for (const match of latexMatches) {
             const matchedText = match[0];
-
+            var escapedText = matchedText;
             for (const rule of escapeRules) {
-                const escapedText = matchedText.replaceAll(rule.pattern, rule.replacement);
-                translatedText = translatedText.replace(matchedText, escapedText);
+                escapedText = matchedText.replaceAll(rule.pattern, rule.replacement);
             }
+            translatedText = translatedText.replace(matchedText, escapedText);
         }
     }
 
@@ -3932,6 +3912,95 @@ function Request(options) {
 
 //--异步请求包装工具--end
 
+// 开始
+document.addEventListener("DOMContentLoaded", function () {
+    function checkJQuery(retryDelay) {
+        if (typeof jQuery === 'undefined') {
+            console.warn("JQuery未加载，" + retryDelay + "毫秒后重试");
+            setTimeout(function () {
+                var newRetryDelay = Math.min(retryDelay * 2, 2000);
+                checkJQuery(newRetryDelay);
+            }, retryDelay);
+        } else {
+            init();
+            settingPanel();
+            checkScriptVersion();
+            toZH_CN();
+            var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
+                .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+                .css({
+                    "margin": "1em",
+                    "text-align": "center",
+                    "font-weight": "600",
+                    "position": "relative"
+                });
+            var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-error CFBetter_alert")
+                .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
+                <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
+                .css({
+                    "margin": "1em",
+                    "text-align": "center",
+                    "font-weight": "600",
+                    "position": "relative"
+                });
+
+            async function processPage() {
+                if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
+                await waitUntilIdleThenDo(async function () {
+                    if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
+                    if (showJumpToLuogu) CF2luogu();
+                    Promise.resolve()
+                        .then(() => {
+                            if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
+                            return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
+                        })
+                        .then(() => {
+                            if (showLoading && commentPaging) newElement.html('Codeforces Better! —— 正在对评论区分页……');
+                            return delay(100).then(() => { if (commentPaging) CommentPagination() });
+                        })
+                        .then(() => {
+                            if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
+                            return delay(100).then(() => addConversionButton());
+                        })
+                        .then(async () => {
+                            if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
+                            await delay(100);
+                            if (renderPerfOpt) await RenderPerfOpt();
+                        })
+                        .then(() => {
+                            alertZh();
+                            if (showLoading) {
+                                newElement.html('Codeforces Better! —— 加载已完成');
+                                newElement.removeClass('alert-info').addClass('alert-success');
+                                setTimeout(function () {
+                                    newElement.remove();
+                                }, 3000);
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                });
+            }
+
+            function delay(ms) {
+                return new Promise((resolve) => setTimeout(resolve, ms));
+            }
+
+            if (showLoading) $(".menu-box:first").next().after(newElement);
+
+            if (loaded) {
+                processPage();
+            } else {
+                // 页面完全加载完成后执行
+                window.onload = function () {
+                    processPage();
+                };
+            }
+        }
+    }
+    checkJQuery(50);
+});
 
 // 配置自动迁移代码（将在10个小版本后移除）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
