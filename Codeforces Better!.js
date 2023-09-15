@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.58
-// @description  Codeforces界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
+// @version      1.60
+// @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @run-at       document-start
@@ -40,7 +40,7 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
-var darkMode = getGMValue("darkMode", false);
+var darkMode = getGMValue("darkMode", "follow");
 var is_mSite, is_acmsguru, is_oldLatex;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
@@ -61,7 +61,7 @@ function init() {
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
     expandFoldingblocks = getGMValue("expandFoldingblocks", true);
-    renderPerfOpt = getGMValue("renderPerfOpt", true);
+    renderPerfOpt = getGMValue("renderPerfOpt", false);
     commentPaging = getGMValue("commentPaging", true);
     enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
     showJumpToLuogu = getGMValue("showJumpToLuogu", true);
@@ -120,6 +120,17 @@ window.onerror = (message, source, lineno, colno, error) => {
     return true;
 };*/
 
+// 切换系统黑暗监听
+const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+const changeEventListeners = [];
+function handleColorSchemeChange(event) {
+    const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
+    if (!event.matches) {
+        var originalColor = $(this).data("original-color");
+        $(this).css("background-color", originalColor);
+    }
+}
+
 // 黑暗模式
 (function setDark() {
     // 初始化
@@ -131,25 +142,23 @@ window.onerror = (message, source, lineno, colno, error) => {
             setTimeout(setDarkTheme, 100);
         }
     }
-    if (darkMode || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (darkMode == "dark") {
         setDarkTheme();
+    } else if (darkMode == "follow") {
+        // 添加事件监听器
+        changeEventListeners.push(handleColorSchemeChange);
+        mediaQueryList.addEventListener('change', handleColorSchemeChange);
+
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) setDarkTheme();
     }
 
-    // 系统黑暗监听
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-        const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
-        if (!event.matches) {
-            var originalColor = $(this).data("original-color");
-            $(this).css("background-color", originalColor);
-        }
-    });
     GM_addStyle(`
         /* 黑暗支持 */
         html[data-theme=dark]:root {
             color-scheme: light dark;
         }
         /* 文字颜色1 */
-        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, html[data-theme=dark] .ttypography .MathJax,
+        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, 
         html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
         html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
         html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
@@ -162,7 +171,7 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
         html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
         html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar{
-            color: #adbac7 !important;
+            color: #a0adb9 !important;
         }
         html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
             color: #adbac7;
@@ -177,6 +186,10 @@ window.onerror = (message, source, lineno, colno, error) => {
         /* 文字颜色3 */
         html[data-theme=dark] button.html2mdButton, html[data-theme=dark] input{
             color: #6385a6 !important;
+        }
+        /* 文字颜色4 */
+        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
+            color: #cbd6e2 !important;
         }
         /* 链接颜色 */
         html[data-theme=dark] a:link {
@@ -301,6 +314,10 @@ window.onerror = (message, source, lineno, colno, error) => {
         html[data-theme=dark] .alert{
             text-shadow: none;
         }
+        html[data-theme=dark] input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
+            color: #a0adb9 !important;
+            border: 1px solid #326154 !important;
+        }
     `);
 })()
 
@@ -407,7 +424,7 @@ button.html2mdButton {
     font-size: 13px;
     border-radius: 0.3rem;
     padding: 1px 5px;
-    margin: 5px;
+    margin: 5px !important;
     border: 1px solid #dcdfe6;
 }
 button.html2mdButton:hover {
@@ -687,12 +704,19 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     font-weight: 500;
 }
 
-.CFBetter_setting_menu>label input[type="radio"] {
-    -webkit-appearance: none;
+.CFBetter_setting_menu label input[type="radio"] {
     appearance: none;
     list-style: none;
     padding: 0px !important;
     margin: 0px;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .CFBetter_setting_menu input[type="text"] {
@@ -1122,22 +1146,22 @@ div#config_bar_menu_delete:hover {
     z-index: 11000;
     width: 450px; 
 }
-/* 分页 */
-.comments > .comment {
-    display: none;
+/* 黑暗模式选项 */
+.dark-mode-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 350px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
-#next-page-btn, #prev-page-btn {
-    display: none;
+.dark-mode-selection > * {
+    margin: 6px;
 }
-#jump-input, #items-per-page{
-    height: 22px;
-    border: 1px solid #dcdfe6;
-    border-radius: 0.3rem;
-}
-#jump-input:focus-visible{
-    border-style: solid;
-    border-color: #3f51b5;
-    outline: none;
+.dark-mode-selection .CFBetter_setting_menu_label_text {
+    border-radius: 8px;
 }
 `);
 
@@ -2252,13 +2276,29 @@ const CFBetterSettingMenuHTML = `
     </div>
     <h3>基本设置</h3>
     <hr>
+    <div class='CFBetter_setting_list' style="padding: 0px 10px;">
+        <span style="font-size: 16px;">黑暗模式</span>
+        <div class="dark-mode-selection">
+            <label>
+                <input class="radio-input" type="radio" name="darkMode" value="dark" />
+                <span class="CFBetter_setting_menu_label_text">黑暗</span>
+                <span class="radio-icon"> </span>
+            </label>
+            <label>
+                <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
+                <span class="CFBetter_setting_menu_label_text">白天</span>
+                <span class="radio-icon"> </span>
+            </label>
+            <label>
+                <input class="radio-input" type="radio" name="darkMode" value="follow" />
+                <span class="CFBetter_setting_menu_label_text">跟随系统</span>
+                <span class="radio-icon"> </span>
+            </label>
+        </div>
+    </div>
     <div class='CFBetter_setting_list'>
         <label for="bottomZh_CN">界面汉化</label>
         <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="darkMode">强制黑暗模式</label>
-        <input type="checkbox" id="darkMode" name="darkMode">
     </div>
     <div class='CFBetter_setting_list'>
     <label for="showLoading">显示加载提示信息</label>
@@ -2292,7 +2332,8 @@ const CFBetterSettingMenuHTML = `
         `+ helpCircleHTML + `
         <div class="tip_text">
         <p>为折叠块元素启用可见渲染（content-visibility: auto）</p>
-        <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后可以有一定程度的改善</p>
+        <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后会有一定程度的改善</p>
+        <p>注意：本特性有小概率可能导致页面在某些位置时上下快速跳动闪屏</p>
         </div>
     </div>
     <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
@@ -2303,7 +2344,6 @@ const CFBetterSettingMenuHTML = `
         `+ helpCircleHTML + `
         <div class="tip_text">
         <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
-        <p>这可以缓解评论区卡顿的问题</p>
         </div>
     </div>
     <input type="checkbox" id="commentPaging" name="commentPaging">
@@ -2510,7 +2550,7 @@ function settingPanel() {
 
         // 状态更新
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
-        $("#darkMode").prop("checked", GM_getValue("darkMode") === true);
+        $("input[name='darkMode'][value='" + darkMode + "']").prop("checked", true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
@@ -2552,7 +2592,7 @@ function settingPanel() {
         $("#save").click(debounce(function () {
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
-                darkMode: $("#darkMode").prop("checked"),
+                darkMode: $("input[name='darkMode']:checked").val(),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
@@ -2583,9 +2623,24 @@ function settingPanel() {
             else {
                 // 切换黑暗模式
                 if (darkMode != settings.darkMode) {
-                    if (darkMode) $('html').removeAttr('data-theme');
-                    else $('html').attr('data-theme', 'dark');
                     darkMode = settings.darkMode;
+                    // 移除旧的事件监听器
+                    changeEventListeners.forEach(listener => {
+                        mediaQueryList.removeEventListener('change', listener);
+                    });
+
+                    if (darkMode == "follow") {
+                        changeEventListeners.push(handleColorSchemeChange);
+                        mediaQueryList.addEventListener('change', handleColorSchemeChange);
+                        $('html').removeAttr('data-theme');
+                    } else if (darkMode == "dark") {
+                        $('html').attr('data-theme', 'dark');
+                    } else {
+                        $('html').attr('data-theme', 'light');
+                        // 移除旧的事件监听器
+                        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+                        window.matchMedia('(prefers-color-scheme: dark)');
+                    }
                 }
                 // 更新配置信息
                 enableSegmentedTranslation = settings.enableSegmentedTranslation;
@@ -3282,6 +3337,24 @@ function RenderPerfOpt() {
 
 // 分页
 function CommentPagination() {
+    GM_addStyle(`
+        .comments > .comment {
+            display: none;
+        }
+        #next-page-btn, #prev-page-btn {
+            display: none;
+        }
+        #jump-input, #items-per-page{
+            height: 22px;
+            border: 1px solid #dcdfe6;
+            border-radius: 0.3rem;
+        }
+        #jump-input:focus-visible{
+            border-style: solid;
+            border-color: #3f51b5;
+            outline: none;
+        }
+    `);
     $('.comments').after(`
             <div id="pagBar" style="display: flex; align-items: center; justify-content: center; color: #606266;">
                 <label for="items-per-page">每页展示主楼数：</label>
@@ -3300,13 +3373,12 @@ function CommentPagination() {
             </div>
         `);
 
-    var batchSize = 5;
-    var elements = $(".comments > .comment");
-    elements.last().detach(); // 去掉最后一个元素（评论框）
-    var start = 0;
-    var end = batchSize;
-    var currentPage = 1;
-    var displayedIndexes = []; // 存储已显示元素的索引
+    let batchSize = 5;
+    let elements = $(".comments > .comment").slice(0, -1);
+    let start = 0;
+    let end = batchSize;
+    let currentPage = 1;
+    let displayedIndexes = []; // 存储已显示元素的索引
 
     function showBatch(start, end) {
         // 隐藏上一页
@@ -3333,26 +3405,46 @@ function CommentPagination() {
         else $("#next-page-btn").show();
     }
 
-    // 初始化第一页
-    showBatch(0, parseInt($("#items-per-page").val()));
+    // 初始化
+    var commentID = null;
+    var pageURL = window.location.href;
+    if (pageURL.includes("#comment-")) {
+        // 带评论区锚点的链接
+        var startIndex = pageURL.lastIndexOf("#comment-") + 9;
+        commentID = pageURL.substring(startIndex);
+        var indexInComments = null;
+        $(".comments > .comment").each(function (index) {
+            $(this).find(".comment-table").each(function () {
+                var tableCommentID = $(this).attr("commentid");
+                if (tableCommentID === commentID) {
+                    indexInComments = index;
+                    return false;
+                }
+            });
+        });
+        let page = Math.ceil((indexInComments + 1) / batchSize);
+        currentPage = !page ? 1 : page;
+        showBatch((currentPage - 1) * batchSize, currentPage * batchSize);
+        setTimeout(function () {
+            window.location.href = pageURL;
+        }, 1000);
+    } else {
+        showBatch(0, batchSize);
+    }
 
     $("#prev-page-btn").on("click", function () {
         var itemsPerPage = parseInt($("#items-per-page").val());
-        var start = (currentPage - 2) * itemsPerPage;
-        var end = (currentPage - 1) * itemsPerPage;
-
+        start = (currentPage - 2) * itemsPerPage;
+        end = (currentPage - 1) * itemsPerPage;
         currentPage--;
-
         showBatch(start, end);
     });
 
     $("#next-page-btn").on("click", function () {
         var itemsPerPage = parseInt($("#items-per-page").val());
-        var start = currentPage * itemsPerPage;
-        var end = (currentPage + 1) * itemsPerPage;
-
+        start = currentPage * itemsPerPage;
+        end = (currentPage + 1) * itemsPerPage;
         currentPage++;
-
         showBatch(start, end);
     });
 
@@ -3363,18 +3455,18 @@ function CommentPagination() {
             var itemsPerPage = parseInt($("#items-per-page").val());
             start = (inputPage - 1) * itemsPerPage;
             end = inputPage * itemsPerPage;
-
             currentPage = inputPage; // 更新当前页码
-
             showBatch(start, end);
         }
     });
 
     $("#items-per-page").on("change", function () {
         batchSize = parseInt($(this).val());
-        let page = Math.floor(start / batchSize);
+        let page = Math.ceil(end / batchSize);
         currentPage = !page ? 1 : page;
-        showBatch(currentPage * batchSize, (currentPage + 1) * batchSize);
+        let maxPage = Math.ceil(elements.length / batchSize);
+        if (currentPage > maxPage) currentPage = maxPage;
+        showBatch((currentPage - 1) * batchSize, currentPage * batchSize);
     });
 }
 
@@ -3677,7 +3769,7 @@ async function translateProblemStatement(text, element_node, button) {
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
             { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
             { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
-            { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
+            { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
             { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
         ];
 
@@ -3687,7 +3779,7 @@ async function translateProblemStatement(text, element_node, button) {
             const matchedText = match[0];
             var escapedText = matchedText;
             for (const rule of escapeRules) {
-                escapedText = matchedText.replaceAll(rule.pattern, rule.replacement);
+                escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
             }
             translatedText = translatedText.replace(matchedText, escapedText);
         }
@@ -3721,6 +3813,7 @@ async function translateProblemStatement(text, element_node, button) {
         translateDiv.innerHTML = html;
         // 渲染Latex
         MathJax.Hub.Queue(["Typeset", MathJax.Hub, translateDiv]);
+
         return {
             translateDiv: translateDiv,
             status: status,
@@ -4054,6 +4147,11 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
         if (GM_getValue(key) != undefined) GM_deleteValue(key);
     });
     if (GM_getValue("translation") === "api2d") GM_setValue("translation", "openai");
+    location.reload();
+}
+
+if (GM_getValue("darkMode") === true || GM_getValue("darkMode") === false) {
+    GM_setValue("darkMode", "follow");
     location.reload();
 }
 
