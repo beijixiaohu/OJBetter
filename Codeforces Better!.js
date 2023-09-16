@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.60
+// @version      1.61
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -229,11 +229,13 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
-        html[data-theme=dark] .problems .accepted-problem td.act, html[data-theme=dark] .input-output-copier:hover,
+        html[data-theme=dark] .input-output-copier:hover,
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] .CFBetter_setting_menu hr, html[data-theme=dark] .wordsExceeded{
+        html[data-theme=dark] .CFBetter_setting_menu hr, html[data-theme=dark] .wordsExceeded,
+        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
+        html[data-theme=dark] .pagination span.active{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -250,7 +252,7 @@ function handleColorSchemeChange(event) {
         /* 实线边框颜色-无圆角 */
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
-        html[data-theme=dark] .problem-statement .sample-tests .output{
+        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -302,7 +304,11 @@ function handleColorSchemeChange(event) {
             background: none;
         }
         html[data-theme=dark] .problems .accepted-problem td.id{
-            border-left: 6px solid #009688 !important;
+            border-left: 6px solid #47837d !important;
+        }
+        html[data-theme=dark] .problems .accepted-problem td.act {
+            background-color: #47837d !important;
+            border-radius: 0px;
         }
         html[data-theme=dark] .CFBetter_setting_menu{
             box-shadow: 0px 0px 0px 4px #2d333b;
@@ -317,6 +323,20 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
             color: #a0adb9 !important;
             border: 1px solid #326154 !important;
+        }
+        /* 评测状态文字颜色 */
+        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
+        html[data-theme=dark] .verdict-successful-challenge{
+            color: #0a0 !important;
+        }
+        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
+            color: red !important;
+        }
+        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
+            color: #673ab7 !important;
+        }
+        html[data-theme=dark] .verdict-waiting {
+            color: gray !important;
         }
     `);
 })()
@@ -4111,7 +4131,7 @@ document.addEventListener("DOMContentLoaded", function () {
     checkJQuery(50);
 });
 
-// 配置自动迁移代码（将在10个小版本后移除）
+// 配置自动迁移代码（将在10个小版本后移除-1.66）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     const newConfig = { "choice": -1, "configurations": [] };
     if (GM_getValue("openai_key")) {
@@ -4149,7 +4169,7 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     if (GM_getValue("translation") === "api2d") GM_setValue("translation", "openai");
     location.reload();
 }
-
+// 配置自动迁移代码（将在10个小版本后移除-1.71）
 if (GM_getValue("darkMode") === true || GM_getValue("darkMode") === false) {
     GM_setValue("darkMode", "follow");
     location.reload();
