@@ -1279,7 +1279,7 @@ function acTiming() {
 }
 
 $(document).ready(function () {
-    if (acTimer) acTiming();
+    if (acTimer && window.location.href.includes("/problem/content/")) acTiming();
     // 让某些链接在新窗口打开
     var regExps = [
         /常用代码模板/,
