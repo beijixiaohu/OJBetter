@@ -1183,48 +1183,44 @@ div#config_bar_menu_delete:hover {
 .dark-mode-selection .CFBetter_setting_menu_label_text {
     border-radius: 8px;
 }
-`);
-
-function mobileSiteOptimization() {
-    if (queryMobile == "true" || useMobile == true) {
-        GM_addStyle(`
-        button.html2mdButton{
-            height: 2em;
-            font-size: 1.2em;
-        }
-        button.html2mdButton.CFBetter_setting{
-            height: 2.5em;
-            font-size: 1em;
-        }
-        .CFBetter_setting_menu{
-            width: 90%;
-        }
-        .CFBetter_setting_menu label, #darkMode_span, #loaded_span, .CFBetter_setting_menu_label_text{
-            font-size: 1em;
-        }
-        .translate-problem-statement{
-            font-size: 1.2em;
-        }
-        .wordsExceeded{
-            font-size: 1.5em;
-        }
-        .CFBetter_setting_list, .translate-problem-statement{
-            padding: 0.5em;
-        }
-        .CFBetter_setting_menu_label_text{
-            height: 2.5em;
-            padding: 0.5em;
-        }
-        #pagBar #jump-input, #pagBar #items-per-page, .wordsExceeded button{
-            height: 2.5em;
-            font-size: 1em;
-        }
-        .translate-problem-statement p, .translate-problem-statement ul li{
-            line-height: 1.5em !important;
-        }
-        `);
+/* 移动设备 */
+@media (max-device-width: 450px) {
+    button.html2mdButton{
+        height: 2em;
+        font-size: 1.2em;
+    }
+    button.html2mdButton.CFBetter_setting{
+        height: 2.5em;
+        font-size: 1em;
+    }
+    .CFBetter_setting_menu{
+        width: 90%;
+    }
+    .CFBetter_setting_menu label, #darkMode_span, #loaded_span, .CFBetter_setting_menu_label_text{
+        font-size: 1em;
+    }
+    .translate-problem-statement{
+        font-size: 1.2em;
+    }
+    .wordsExceeded{
+        font-size: 1.5em;
+    }
+    .CFBetter_setting_list, .translate-problem-statement{
+        padding: 0.5em;
+    }
+    .CFBetter_setting_menu_label_text{
+        height: 2.5em;
+        padding: 0.5em;
+    }
+    #pagBar #jump-input, #pagBar #items-per-page, .wordsExceeded button{
+        height: 2.5em;
+        font-size: 1em;
+    }
+    .translate-problem-statement p, .translate-problem-statement ul li{
+        line-height: 1.5em !important;
     }
 }
+`);
 
 // 工具
 // 获取cookie
@@ -4091,7 +4087,6 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             init();
             settingPanel();
-            mobileSiteOptimization();
             checkScriptVersion();
             toZH_CN();
             var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
