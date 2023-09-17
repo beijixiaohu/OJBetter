@@ -388,7 +388,7 @@ span.mdViewContent {
   color: red;
   border-color: red;
 }
-.translate-problem-statement a {
+.translate-problem-statement a, .translate-problem-statement a:link {
     color: #10b981;
     font-weight: 600;
     background: 0 0;
@@ -674,7 +674,7 @@ button.html2mdButton.CFBetter_setting.open {
     left: 4.5px;
 }
 
-.CFBetter_setting_menu label {
+.CFBetter_setting_menu label, #darkMode_span, #loaded_span {
     font-size: 16px;
 }
 
@@ -1184,6 +1184,47 @@ div#config_bar_menu_delete:hover {
     border-radius: 8px;
 }
 `);
+
+function mobileSiteOptimization() {
+    if (queryMobile == "true" || useMobile == true) {
+        GM_addStyle(`
+        button.html2mdButton{
+            height: 2em;
+            font-size: 1.2em;
+        }
+        button.html2mdButton.CFBetter_setting{
+            height: 2.5em;
+            font-size: 1em;
+        }
+        .CFBetter_setting_menu{
+            width: 90%;
+        }
+        .CFBetter_setting_menu label, #darkMode_span, #loaded_span, .CFBetter_setting_menu_label_text{
+            font-size: 1em;
+        }
+        .translate-problem-statement{
+            font-size: 1.2em;
+        }
+        .wordsExceeded{
+            font-size: 1.5em;
+        }
+        .CFBetter_setting_list, .translate-problem-statement{
+            padding: 0.5em;
+        }
+        .CFBetter_setting_menu_label_text{
+            height: 2.5em;
+            padding: 0.5em;
+        }
+        #pagBar #jump-input, #pagBar #items-per-page, .wordsExceeded button{
+            height: 2.5em;
+            font-size: 1em;
+        }
+        .translate-problem-statement p, .translate-problem-statement ul li{
+            line-height: 1.5em !important;
+        }
+        `);
+    }
+}
 
 // 工具
 // 获取cookie
@@ -2297,7 +2338,7 @@ const CFBetterSettingMenuHTML = `
     <h3>基本设置</h3>
     <hr>
     <div class='CFBetter_setting_list' style="padding: 0px 10px;">
-        <span style="font-size: 16px;">黑暗模式</span>
+        <span id="darkMode_span">黑暗模式</span>
         <div class="dark-mode-selection">
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="dark" />
@@ -2381,7 +2422,7 @@ const CFBetterSettingMenuHTML = `
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="loaded"><span style="font-size: 14px;">兼容选项-不等待页面资源加载</span></label>
+        <label for="loaded"><span id="loaded_span">兼容选项-不等待页面资源加载</span></label>
         <div class="help_tip">
             `+ helpCircleHTML + `
             <div class="tip_text">
@@ -4050,6 +4091,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             init();
             settingPanel();
+            mobileSiteOptimization();
             checkScriptVersion();
             toZH_CN();
             var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
