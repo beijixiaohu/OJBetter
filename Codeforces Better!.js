@@ -2536,7 +2536,7 @@ const CFBetterSettingMenuHTML = `
                 </label>
                 <label>
                     <input type='radio' name='translation' value='caiyun'>
-                    <span class='CFBetter_setting_menu_label_text'>彩云翻译</span>
+                    <span class='CFBetter_setting_menu_label_text'>彩云小译翻译</span>
                 </label>
                 <label>
                     <input type='radio' name='translation' value='openai'>
@@ -2562,7 +2562,7 @@ const CFBetterSettingMenuHTML = `
                         <option value="iflyrec">讯飞听见翻译</option>
                         <option value="youdao">有道翻译</option>
                         <option value="google">Google翻译</option>
-                        <option value="caiyun">彩云翻译</option>
+                        <option value="caiyun">彩云小译翻译</option>
                         <option value="openai">ChatGPT翻译</option>
                     </select>
                 </div>
@@ -3964,7 +3964,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
             translatedText = await translate_gg(text);
         } else if (translation == "caiyun") {
-            translateDiv.innerHTML = "正在使用 彩云 翻译中……请稍等";
+            translateDiv.innerHTML = "正在使用 彩云小译 翻译中……请稍等";
             await translate_caiyun_startup();
             translatedText = await translate_caiyun(text);
         } else if (translation == "openai") {
