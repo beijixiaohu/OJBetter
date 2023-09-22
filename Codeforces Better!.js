@@ -25,8 +25,8 @@
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/codeforces.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.jsdelivr.net/npm/js-base64@3.7.4/base64.min.js
+// @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
+// @require      https://cdn.bootcdn.net/ajax/libs/Base64/1.2.0/base64.min.js
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
