@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.621
+// @version      1.622
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -225,7 +225,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
         html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
         html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
-        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track{
+        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
+        html[data-theme=dark] .wordsExceeded{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -239,7 +240,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] .CFBetter_setting_menu hr, html[data-theme=dark] .wordsExceeded,
+        html[data-theme=dark] .CFBetter_setting_menu hr, 
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
         html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb{
@@ -321,7 +322,7 @@ function handleColorSchemeChange(event) {
             background-color: #47837d !important;
             border-radius: 0px;
         }
-        html[data-theme=dark] .CFBetter_setting_menu{
+        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .wordsExceeded{
             box-shadow: 0px 0px 0px 4px #2d333b;
             border: 1px solid #2d333b;
         }
@@ -967,18 +968,19 @@ span.input_label {
 /*确认弹窗*/
 .wordsExceeded {
     z-index: 999999;
-    box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 10%), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     display: grid;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 4px;
-    background-color: #ffffff;
-    border: 1px solid #e4e7ed;
-    color: #697e91;
     font-family: var(--vp-font-family-base);
     padding: 10px 20px 20px 20px;
+    box-shadow: 0px 0px 0px 4px #ffffff;
+    border-radius: 6px;
+    background-color: #f0f4f9;
+    border-collapse: collapse;
+    border: 1px solid #ffffff;
+    color: #697e91;
 }
 .wordsExceeded button {
     display: inline-flex;
@@ -2713,7 +2715,7 @@ const chatgptConfigEditHTML = `
 // 配置改变保存确认
 function saveConfirmation() {
     return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle);
+        const styleElement = GM_addStyle(darkenPageStyle2);
         let htmlString = `
         <div class="wordsExceeded">
             <h2>配置已更改，是否保存？</h2>
@@ -2723,6 +2725,7 @@ function saveConfirmation() {
         </div>
       `;
         $('body').before(htmlString);
+        addDraggable($('.wordsExceeded'));
         $("#saveButton").click(function () {
             $(styleElement).remove();
             $('.wordsExceeded').remove();
