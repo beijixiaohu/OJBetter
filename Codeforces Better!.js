@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.61
+// @version      1.621
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -25,6 +25,8 @@
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/codeforces.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
+// @require      https://cdn.jsdelivr.net/npm/js-base64@3.7.4/base64.min.js
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -42,9 +44,9 @@ const getGMValue = (key, defaultValue) => {
 };
 var darkMode = getGMValue("darkMode", "follow");
 var is_mSite, is_acmsguru, is_oldLatex;
-var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation;
+var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
-var commentPaging, showJumpToLuogu, loaded;
+var replaceSymbol, commentPaging, showJumpToLuogu, loaded;
 function init() {
     is_mSite = window.location.hostname.startsWith('m');
     is_acmsguru = window.location.href.includes("acmsguru");
@@ -67,6 +69,8 @@ function init() {
     showJumpToLuogu = getGMValue("showJumpToLuogu", true);
     loaded = getGMValue("loaded", false);
     translation = getGMValue("translation", "deepl");
+    commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
+    replaceSymbol = getGMValue("replaceSymbol", "2");
     //openai
     opneaiConfig = getGMValue("chatgpt-config", {
         "choice": -1,
@@ -170,7 +174,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
         html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar{
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .CFBetter_setting_sidebar li a:link{
             color: #a0adb9 !important;
         }
         html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
@@ -219,7 +223,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
         html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
         html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
-        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover{
+        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
+        html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
+        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -235,7 +241,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] .CFBetter_setting_menu hr, html[data-theme=dark] .wordsExceeded,
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
-        html[data-theme=dark] .pagination span.active{
+        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
+        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -252,7 +259,8 @@ function handleColorSchemeChange(event) {
         /* 实线边框颜色-无圆角 */
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
-        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active{
+        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
+        html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -263,6 +271,9 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] .topic .content {
             border-left: 4px solid #424b56 !important;
+        }
+        html[data-theme=dark] .CFBetter_setting_sidebar {
+            border-right: 1px solid #424b56 !important;
         }
         /* 虚线边框颜色 */
         html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
@@ -528,20 +539,22 @@ button.html2mdButton.CFBetter_setting.open {
     top: 50%;
     left: 50%;
     width: 485px;
-    max-height: 90vh;
-    overflow-y: auto;
+    height: 600px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
-    background-color: #edf1ff;
+    background-color: #f0f4f9;
     border-collapse: collapse;
     border: 1px solid #ffffff;
     color: #697e91;
     font-family: var(--vp-font-family-base);
-    padding: 10px 20px 20px 20px;
+    padding: 10px 20px 20px 10px;
     box-sizing: content-box;
 }
 .CFBetter_setting_menu h3 {
     margin-top: 10px;
+}
+.CFBetter_setting_menu h4 {
+    margin: 15px 0px 10px 0px;
 }
 .CFBetter_setting_menu h4,.CFBetter_setting_menu h5 {
     font-weight: 600;
@@ -552,17 +565,89 @@ button.html2mdButton.CFBetter_setting.open {
     background-color: #ccc;
     margin: 10px 0;
 }
+/* 页面切换 */
+.settings-page {
+    display: none;
+}
+.settings-page.active {
+    display: block;
+}
+.CFBetter_setting_container {
+    display: flex;
+}
+.CFBetter_setting_sidebar {
+    width: 100px;
+    padding: 6px 10px 6px 6px;
+    margin: 20px 0px;
+    border-right: 1px solid #d4d8e9;
+}
+.CFBetter_setting_content {
+    flex-grow: 1;
+    margin: 20px 0px 0px 20px;
+    padding-right: 10px;
+    max-height: 580px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.CFBetter_setting_sidebar h3 {
+    margin-top: 0;
+}
+.CFBetter_setting_sidebar hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-top: 1px solid #DADCE0;
+}
+.CFBetter_setting_sidebar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.CFBetter_setting_sidebar li {
+    margin: 5px 0px;
+    background-color: #ffffff;
+    border: 1px solid #d4d8e9;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.CFBetter_setting_sidebar li a {
+    text-decoration: none;
+    display: flex;
+    width: 100%;
+    color: gray;
+    letter-spacing: 2px;
+    padding: 7px;
+    border-radius: 4px;
+    align-items: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.CFBetter_setting_sidebar li a.active {
+    background-color: #eceff1c7;
+}
+/* 下拉选择框 */
+.CFBetter_setting_menu select {
+    margin-left: 6px;
+    border-style: solid;
+    border-color: #26A69A;
+    color: #009688;
+    font-size: 15px;
+}
+.CFBetter_setting_menu select:focus-visible {
+    outline: none;
+}
 /*设置面板-滚动条*/
-.CFBetter_setting_menu::-webkit-scrollbar {
+.CFBetter_setting_menu::-webkit-scrollbar, .CFBetter_setting_content::-webkit-scrollbar {
     width: 5px;
     height: 7px;
     background-color: #aaa;
 }
-.CFBetter_setting_menu::-webkit-scrollbar-thumb {
+.CFBetter_setting_menu::-webkit-scrollbar-thumb, .CFBetter_setting_content::-webkit-scrollbar-thumb {
     background-clip: padding-box;
     background-color: #d7d9e4;
 }
-.CFBetter_setting_menu::-webkit-scrollbar-track {
+.CFBetter_setting_menu::-webkit-scrollbar-track, .CFBetter_setting_content::-webkit-scrollbar-track {
     background-color: #f1f1f1;
 }
 /*设置面板-关闭按钮*/
@@ -690,13 +775,12 @@ button.html2mdButton.CFBetter_setting.open {
 }
 
 /*设置面板-radio*/
-.CFBetter_setting_menu>label {
+.CFBetter_setting_menu #translation-settings label {
     display: grid;
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
     max-width: 100%;
-    margin: 0px;
     align-items: center;
     margin: 3px 0px;
 }
@@ -882,7 +966,7 @@ span.input_label {
 
 /*确认弹窗*/
 .wordsExceeded {
-    z-index: 9999;
+    z-index: 999999;
     box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 10%), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     display: grid;
     position: fixed;
@@ -1023,7 +1107,7 @@ li#add_button:hover {
 }
 div#config_bar_list {
     display: flex;
-    width: 480px;
+    width: 100%;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
@@ -1268,7 +1352,7 @@ function addDraggable(element) {
         startX = e.clientX;
         startY = e.clientY;
 
-        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
+        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span, select');
         if (isSpecialMouseDown) return;
         $('body').css('cursor', 'all-scroll');
     });
@@ -2331,151 +2415,208 @@ const CFBetterSettingMenuHTML = `
     <div class="tool-box">
         <button class="btn-close">×</button>
     </div>
-    <h3>基本设置</h3>
-    <hr>
-    <div class='CFBetter_setting_list' style="padding: 0px 10px;">
-        <span id="darkMode_span">黑暗模式</span>
-        <div class="dark-mode-selection">
-            <label>
-                <input class="radio-input" type="radio" name="darkMode" value="dark" />
-                <span class="CFBetter_setting_menu_label_text">黑暗</span>
-                <span class="radio-icon"> </span>
-            </label>
-            <label>
-                <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
-                <span class="CFBetter_setting_menu_label_text">白天</span>
-                <span class="radio-icon"> </span>
-            </label>
-            <label>
-                <input class="radio-input" type="radio" name="darkMode" value="follow" />
-                <span class="CFBetter_setting_menu_label_text">跟随系统</span>
-                <span class="radio-icon"> </span>
-            </label>
+    <div class="CFBetter_setting_container">
+        <div class="CFBetter_setting_sidebar">
+        <ul>
+            <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
+            <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
+            <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
+        </ul>
         </div>
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="bottomZh_CN">界面汉化</label>
-        <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="showLoading">显示加载提示信息</label>
-    <div class="help_tip">
-        `+ helpCircleHTML + `
-        <div class="tip_text">
-        <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Codeforces Better! —— xxx”</p>
-        <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
-        <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
-        </div>
-    </div>
-    <input type="checkbox" id="showLoading" name="showLoading">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
-    <div class="help_tip">
-        `+ helpCircleHTML + `
-        <div class="tip_text">
-        <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
-        </div>
-    </div>
-    <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="expandFoldingblocks">自动展开折叠块</label>
-        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="renderPerfOpt">折叠块渲染优化</label>
-    <div class="help_tip">
-        `+ helpCircleHTML + `
-        <div class="tip_text">
-        <p>为折叠块元素启用可见渲染（content-visibility: auto）</p>
-        <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后会有一定程度的改善</p>
-        <p>注意：本特性有小概率可能导致页面在某些位置时上下快速跳动闪屏</p>
-        </div>
-    </div>
-    <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="commentPaging">评论区分页</label>
-    <div class="help_tip">
-        `+ helpCircleHTML + `
-        <div class="tip_text">
-        <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
-        </div>
-    </div>
-    <input type="checkbox" id="commentPaging" name="commentPaging">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="showJumpToLuogu">显示跳转到洛谷</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p>
-            <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
-            <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
-            </div>
-        </div>
-        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="loaded"><span id="loaded_span">兼容选项-不等待页面资源加载</span></label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
-            <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
-            <p><u>您首先应该确认是否是网络问题，</u></p>
-            <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
-            <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
-            <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
-            </div>
-        </div>
-        <input type="checkbox" id="loaded" name="loaded">
-    </div>
-    <h3>翻译设置</h3>
-    <hr>
-    <div class='CFBetter_setting_list'>
-        <label for="enableSegmentedTranslation">分段翻译</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
-            <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
-            <p><u>注意：开启分段翻译会产生如下问题：</u></p>
-            <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-            <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
-            </div>
-        </div>
-        <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
-    </div>
-    <label>
-        <input type='radio' name='translation' value='deepl'>
-        <span class='CFBetter_setting_menu_label_text'>deepl翻译</span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='youdao'>
-        <span class='CFBetter_setting_menu_label_text'>有道翻译</span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='google'>
-        <span class='CFBetter_setting_menu_label_text'>Google翻译</span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='openai'>
-        <span class='CFBetter_setting_menu_label_text'>使用ChatGPT翻译(API)
-            <div class="help_tip">
-                `+ helpCircleHTML + `
-                <div class="tip_text">
-                <p><b>请在下方添加并选定你想使用的配置信息</b></p>
-                <p>具体请阅读脚本页的介绍</p>
+        <div class="CFBetter_setting_content">
+            <div id="basic-settings" class="settings-page active">
+                <h3>基本设置</h3>
+                <hr>
+                <div class='CFBetter_setting_list' style="padding: 0px 10px;">
+                    <span id="darkMode_span">黑暗模式</span>
+                    <div class="dark-mode-selection">
+                        <label>
+                            <input class="radio-input" type="radio" name="darkMode" value="dark" />
+                            <span class="CFBetter_setting_menu_label_text">黑暗</span>
+                            <span class="radio-icon"> </span>
+                        </label>
+                        <label>
+                            <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
+                            <span class="CFBetter_setting_menu_label_text">白天</span>
+                            <span class="radio-icon"> </span>
+                        </label>
+                        <label>
+                            <input class="radio-input" type="radio" name="darkMode" value="follow" />
+                            <span class="CFBetter_setting_menu_label_text">跟随系统</span>
+                            <span class="radio-icon"> </span>
+                        </label>
+                    </div>
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="bottomZh_CN">界面汉化</label>
+                    <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
+                </div>
+                <div class='CFBetter_setting_list'>
+                <label for="showLoading">显示加载提示信息</label>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text">
+                    <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Codeforces Better! —— xxx”</p>
+                    <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
+                    <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
+                    </div>
+                </div>
+                <input type="checkbox" id="showLoading" name="showLoading">
+                </div>
+                <div class='CFBetter_setting_list'>
+                <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
+                    </div>
+                </div>
+                <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="expandFoldingblocks">自动展开折叠块</label>
+                    <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
+                </div>
+                <div class='CFBetter_setting_list'>
+                <label for="renderPerfOpt">折叠块渲染优化</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>为折叠块元素启用可见渲染（content-visibility: auto）</p>
+                    <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后会有一定程度的改善</p>
+                    <p>注意：本特性有小概率可能导致页面在某些位置时上下快速跳动闪屏</p>
+                    </div>
+                </div>
+                <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+                </div>
+                <div class='CFBetter_setting_list'>
+                <label for="commentPaging">评论区分页</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
+                    </div>
+                </div>
+                <input type="checkbox" id="commentPaging" name="commentPaging">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="showJumpToLuogu">显示跳转到洛谷</label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p>
+                        <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
+                        <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
                 </div>
             </div>
-        </span>
-    </label>
-    <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
-        <div id="chatgpt-config"></div>
-    </div>
-    <button id='save'>保存</button>
+            <div id="translation-settings" class="settings-page">
+                <h3>翻译设置</h3>
+                <hr>
+                <h4>首选项</h4>
+                <label>
+                    <input type='radio' name='translation' value='deepl'>
+                    <span class='CFBetter_setting_menu_label_text'>deepl翻译</span>
+                </label>
+                <label>
+                    <input type='radio' name='translation' value='iflyrec'>
+                    <span class='CFBetter_setting_menu_label_text'>讯飞听见翻译</span>
+                </label>
+                <label>
+                    <input type='radio' name='translation' value='youdao'>
+                    <span class='CFBetter_setting_menu_label_text'>有道翻译</span>
+                </label>
+                <label>
+                    <input type='radio' name='translation' value='google'>
+                    <span class='CFBetter_setting_menu_label_text'>Google翻译</span>
+                </label>
+                <label>
+                    <input type='radio' name='translation' value='caiyun'>
+                    <span class='CFBetter_setting_menu_label_text'>彩云翻译</span>
+                </label>
+                <label>
+                    <input type='radio' name='translation' value='openai'>
+                    <span class='CFBetter_setting_menu_label_text'>ChatGPT翻译
+                        <div class="help_tip">
+                            `+ helpCircleHTML + `
+                            <div class="tip_text">
+                            <p><b>请在下方添加并选定你想使用的配置信息</b></p>
+                            <p>具体请阅读脚本页的介绍</p>
+                            </div>
+                        </div>
+                    </span>
+                </label>
+                <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
+                    <div id="chatgpt-config"></div>
+                </div>
+                <h4>偏好</h4>
+                <div class='CFBetter_setting_list'>
+                    <label for="comment_translation_choice" style="display: flex;">博客&评论区翻译</label>
+                    <select id="comment_translation_choice" name="comment_translation_choice">
+                        <option value="0">跟随首选项</option>
+                        <option value="deepl">deepl翻译</option>
+                        <option value="iflyrec">讯飞听见翻译</option>
+                        <option value="youdao">有道翻译</option>
+                        <option value="google">Google翻译</option>
+                        <option value="caiyun">彩云翻译</option>
+                        <option value="openai">ChatGPT翻译</option>
+                    </select>
+                </div>
+                <h4>高级</h4>
+                <div class='CFBetter_setting_list'>
+                    <label for="enableSegmentedTranslation">分段翻译</label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
+                        <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
+                        <p><u>注意：开启分段翻译会产生如下问题：</u></p>
+                        <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+                        <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="translation_replaceSymbol" style="display: flex;">LaTeX替换符</label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p>
+                        <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p>
+                        <p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>
+                        <p>具体您可以前往阅读脚本页的说明</p>
+                        </div>
+                    </div>
+                    <select id="translation_replaceSymbol" name="translation_replaceSymbol">
+                        <option value=2>使用{}</option>    
+                        <option value=1>使用【】</option>
+                        <option value=3>使用[]</option>
+                    </select>
+                </div>
+            </div>
+            <div id="compatibility-settings" class="settings-page active">
+                <h3>兼容设置</h3>
+                <hr>
+                <div class='CFBetter_setting_list'>
+                    <label for="loaded"><span id="loaded_span">不等待页面资源加载</span></label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
+                        <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
+                        <p><u>您首先应该确认是否是网络问题，</u></p>
+                        <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
+                        <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+                        <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="loaded" name="loaded">
+                </div>
+            </div>
+        </div>
     </div>
 `;
 
@@ -2569,8 +2710,35 @@ const chatgptConfigEditHTML = `
     </div>
 `;
 
+// 配置改变保存确认
+function saveConfirmation() {
+    return new Promise(resolve => {
+        const styleElement = GM_addStyle(darkenPageStyle);
+        let htmlString = `
+        <div class="wordsExceeded">
+            <h2>配置已更改，是否保存？</h2>
+            <div style="display:flex; padding-top:10px">
+                <button id="cancelButton">不保存</button><button id="saveButton">保存</button>
+            </div>
+        </div>
+      `;
+        $('body').before(htmlString);
+        $("#saveButton").click(function () {
+            $(styleElement).remove();
+            $('.wordsExceeded').remove();
+            resolve(true);
+        });
+        $("#cancelButton").click(function () {
+            $(styleElement).remove();
+            $('.wordsExceeded').remove();
+            resolve(false);
+        });
+    });
+}
+
 // 设置按钮面板
-function settingPanel() {
+async function settingPanel() {
+    // 添加按钮
     $("div[class='lang-chooser']").each(function () {
         $(this).before(
             "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
@@ -2590,6 +2758,17 @@ function settingPanel() {
 
         // 窗口初始化
         addDraggable($('#CFBetter_setting_menu'));
+
+        // 选项卡切换
+        $('.CFBetter_setting_sidebar a').click(function (event) {
+            event.preventDefault();
+            $('.CFBetter_setting_sidebar a').removeClass('active');
+            $(this).addClass('active');
+            $('.settings-page').removeClass('active');
+            const targetPageId = $(this).attr('href').substring(1);
+            $('#' + targetPageId).addClass('active');
+        });
+
         const chatgptStructure = {
             '#note': 'note',
             '#openai_model': 'model',
@@ -2624,6 +2803,8 @@ function settingPanel() {
                 $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
             }
         }
+        $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
+        $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
 
         // 翻译选择情况监听
         $("input[name='translation']").change(function () {
@@ -2644,9 +2825,9 @@ function settingPanel() {
             tempConfig.choice = selected;
         });
 
+        // 关闭
         const $settingMenu = $(".CFBetter_setting_menu");
-
-        $("#save").click(debounce(function () {
+        $settingMenu.on("click", ".btn-close", async () => {
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
                 darkMode: $("input[name='darkMode']:checked").val(),
@@ -2658,79 +2839,97 @@ function settingPanel() {
                 enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 loaded: $("#loaded").prop("checked"),
-                translation: $("input[name='translation']:checked").val()
+                translation: $("input[name='translation']:checked").val(),
+                commentTranslationChoice: $('#comment_translation_choice').val(),
+                replaceSymbol: $('#translation_replaceSymbol').val()
             };
-            if (settings.translation === "openai") {
-                var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
-                if (selectedIndex === -1) {
-                    $('#configControlTip').text('请选择一项配置！')
-                    return;
-                }
-            }
-            GM_setValue('chatgpt-config', tempConfig);
-            let refreshPage = false; // 是否需要刷新页面
+
+            // 判断是否改变
+            let hasChange = false;
             for (const [key, value] of Object.entries(settings)) {
-                if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation' || key == 'darkMode')) {
-                    if (GM_getValue(key) != value) refreshPage = true;
-                }
-                GM_setValue(key, value);
+                if (!hasChange && GM_getValue(key) != value) hasChange = true;
             }
+            if (!hasChange && JSON.stringify(GM_getValue('chatgpt-config')) != JSON.stringify(tempConfig)) hasChange = true;
 
-            if (refreshPage) location.reload();
-            else {
-                // 切换黑暗模式
-                if (darkMode != settings.darkMode) {
-                    darkMode = settings.darkMode;
-                    // 移除旧的事件监听器
-                    changeEventListeners.forEach(listener => {
-                        mediaQueryList.removeEventListener('change', listener);
-                    });
+            if (hasChange) {
+                const shouldSave = await saveConfirmation();
+                if (shouldSave) {
+                    // 数据校验
+                    if (settings.translation === "openai") {
+                        var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
+                        if (selectedIndex === -1) {
+                            $('#configControlTip').text('请选择一项配置！');
+                            $('.CFBetter_setting_sidebar a').removeClass('active');
+                            $('#sidebar-translation-settings').addClass('active');
+                            $('.settings-page').removeClass('active');
+                            $('#translation-settings').addClass('active');
+                            return;
+                        }
+                    }
 
-                    if (darkMode == "follow") {
-                        changeEventListeners.push(handleColorSchemeChange);
-                        mediaQueryList.addEventListener('change', handleColorSchemeChange);
-                        $('html').removeAttr('data-theme');
-                    } else if (darkMode == "dark") {
-                        $('html').attr('data-theme', 'dark');
-                    } else {
-                        $('html').attr('data-theme', 'light');
-                        // 移除旧的事件监听器
-                        const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-                        window.matchMedia('(prefers-color-scheme: dark)');
+                    // 保存数据
+                    let refreshPage = false; // 是否需要刷新页面
+                    for (const [key, value] of Object.entries(settings)) {
+                        if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation' || key == 'darkMode' ||
+                            key == 'replaceSymbol' || key == 'commentTranslationChoice')) {
+                            if (GM_getValue(key) != value) refreshPage = true;
+                        }
+                        GM_setValue(key, value);
+                    }
+                    GM_setValue('chatgpt-config', tempConfig);
+
+                    if (refreshPage) location.reload();
+                    else {
+                        // 切换黑暗模式
+                        if (darkMode != settings.darkMode) {
+                            darkMode = settings.darkMode;
+                            // 移除旧的事件监听器
+                            changeEventListeners.forEach(listener => {
+                                mediaQueryList.removeEventListener('change', listener);
+                            });
+
+                            if (darkMode == "follow") {
+                                changeEventListeners.push(handleColorSchemeChange);
+                                mediaQueryList.addEventListener('change', handleColorSchemeChange);
+                                $('html').removeAttr('data-theme');
+                            } else if (darkMode == "dark") {
+                                $('html').attr('data-theme', 'dark');
+                            } else {
+                                $('html').attr('data-theme', 'light');
+                                // 移除旧的事件监听器
+                                const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+                                window.matchMedia('(prefers-color-scheme: dark)');
+                            }
+                        }
+                        // 更新配置信息
+                        enableSegmentedTranslation = settings.enableSegmentedTranslation;
+                        translation = settings.translation;
+                        replaceSymbol = settings.replaceSymbol;
+                        commentTranslationChoice = settings.commentTranslationChoice;
+                        if (settings.translation === "openai") {
+                            var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
+                            if (selectedIndex !== opneaiConfig.choice) {
+                                opneaiConfig = GM_getValue("chatgpt-config");
+                                const configAtIndex = opneaiConfig.configurations[selectedIndex];
+                                openai_model = configAtIndex.model;
+                                openai_key = configAtIndex.key;
+                                openai_proxy = configAtIndex.proxy;
+                                openai_header = configAtIndex._header ?
+                                    configAtIndex._header.split("\n").map(header => {
+                                        const [key, value] = header.split(":");
+                                        return { [key.trim()]: value.trim() };
+                                    }) : [];
+                                openai_data = configAtIndex._data ?
+                                    configAtIndex._data.split("\n").map(header => {
+                                        const [key, value] = header.split(":");
+                                        return { [key.trim()]: value.trim() };
+                                    }) : [];
+                            }
+                        }
                     }
                 }
-                // 更新配置信息
-                enableSegmentedTranslation = settings.enableSegmentedTranslation;
-                translation = settings.translation;
-                if (settings.translation === "openai") {
-                    var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
-                    if (selectedIndex !== opneaiConfig.choice) {
-                        opneaiConfig = GM_getValue("chatgpt-config");
-                        const configAtIndex = opneaiConfig.configurations[selectedIndex];
-                        openai_model = configAtIndex.model;
-                        openai_key = configAtIndex.key;
-                        openai_proxy = configAtIndex.proxy;
-                        openai_header = configAtIndex._header ?
-                            configAtIndex._header.split("\n").map(header => {
-                                const [key, value] = header.split(":");
-                                return { [key.trim()]: value.trim() };
-                            }) : [];
-                        openai_data = configAtIndex._data ?
-                            configAtIndex._data.split("\n").map(header => {
-                                const [key, value] = header.split(":");
-                                return { [key.trim()]: value.trim() };
-                            }) : [];
-                    }
-                }
             }
 
-            $settingMenu.remove();
-            $settingBtns.prop("disabled", false).removeClass("open");
-            $(styleElement).remove();
-        }));
-
-        // 关闭
-        $settingMenu.on("click", ".btn-close", () => {
             $settingMenu.remove();
             $settingBtns.prop("disabled", false).removeClass("open");
             $(styleElement).remove();
@@ -3040,7 +3239,7 @@ function addButtonWithCopy(parent, suffix, type) {
     }
 }
 
-async function addButtonWithTranslation(parent, suffix, type) {
+async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
     var result;
     $(document).on('click', '.translateButton' + suffix, debounce(async function () {
         $(this).trigger('mouseout');
@@ -3083,7 +3282,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
                     $(pElements[i]).append("<div></div>");
                     element_node = $(pElements[i]).find("div:last-child").get(0);
                 }
-                result = await blockProcessing(target, element_node, $(".translateButton" + suffix));
+                result = await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment);
                 if (result.status) errerNum += 1;
                 $(target).remove();
                 if (translation == "deepl") await new Promise(resolve => setTimeout(resolve, 2000));
@@ -3105,7 +3304,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
                     $(target).find('.html2md-panel').remove();
                 }
             }
-            result = await blockProcessing(target, element_node, $(".translateButton" + suffix));
+            result = await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment);
             if (result.status) errerNum += 1;
             $(target).remove();
         }
@@ -3192,7 +3391,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
 }
 
 // 块处理
-async function blockProcessing(target, element_node, button) {
+async function blockProcessing(target, element_node, button, is_comment) {
     if (is_oldLatex) {
         $(target).find('.overlay').remove();
         target.markdown = $(target).html();
@@ -3201,7 +3400,7 @@ async function blockProcessing(target, element_node, button) {
     }
     const textarea = document.createElement('textarea');
     textarea.value = target.markdown;
-    var result = await translateProblemStatement(textarea.value, element_node, $(button));
+    var result = await translateProblemStatement(textarea.value, element_node, $(button), is_comment);
     //
     if (result.status == 1) {
         $(button).addClass("error")
@@ -3228,7 +3427,7 @@ function addConversionButton() {
         $('.problem-statement').children('div').each(function () {
             var className = $(this).attr('class');
             if (!exContentsPageClasses.includes(className)) {
-                var id = "_" + getRandomNumber(8);
+                var id = "_problem_" + getRandomNumber(8);
                 addButtonPanel(this, id, "this_level");
                 addButtonWithHTML2MD(this, id, "this_level");
                 addButtonWithCopy(this, id, "this_level");
@@ -3244,7 +3443,7 @@ function addConversionButton() {
             addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(this, id, "this_level");
             addButtonWithCopy(this, id, "this_level");
-            addButtonWithTranslation(this, id, "this_level");
+            addButtonWithTranslation(this, id, "this_level", true); // is_comment
         }
     });
 
@@ -3663,9 +3862,48 @@ function skiFoldingBlocks() {
     });
 }
 
+// latex替换
+function replaceBlock(text, matches, replacements) {
+    let i = 0;
+    try {
+        for (i; i < matches.length; i++) {
+            let match = matches[i];
+            let replacement = '';
+            if (replaceSymbol === "1") {
+                replacement = `【${i + 1}】`;
+            } else if (replaceSymbol === "2") {
+                replacement = `{${i + 1}}`;
+            } else if (replaceSymbol === "3") {
+                replacement = `[${i + 1}]`;
+            }
+            text = text.replace(match, replacement);
+            replacements[replacement] = match;
+        }
+    } catch (e) { }
+    return text;
+}
+
+// latex还原
+function recoverBlock(translatedText, matches, replacements) {
+    for (let i = 0; i < matches.length; i++) {
+        let match = matches[i];
+        let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
+
+        let regex = new RegExp(`【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, replacement);
+
+        regex = new RegExp(`【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|
+        \\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|
+        {\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, " " + replacement);
+    }
+    return translatedText;
+}
+
+
 // 翻译框/翻译处理器
 var translatedText = "";
-async function translateProblemStatement(text, element_node, button) {
+async function translateProblemStatement(text, element_node, button, is_comment) {
     let status = 0;
     let id = getRandomNumber(8);
     let matches = [];
@@ -3677,43 +3915,24 @@ async function translateProblemStatement(text, element_node, button) {
     const spanElement = document.createElement('span');
     translateDiv.appendChild(spanElement);
     element_node.insertAdjacentElement('afterend', translateDiv);
+
     // 替换latex公式
     if (is_oldLatex) {
         //去除开头结尾的<p>标签
         text = text.replace(/^<p>/i, "");
         text = text.replace(/<\/p>$/i, "");
-        //
-        let i = 0;
         let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
         matches = text.match(regex);
-        try {
-            for (i; i < matches.length; i++) {
-                let match = matches[i];
-                text = text.replace(match, `【${i + 1}】`);
-                replacements[`【${i + 1}】`] = match;
-            }
-        } catch (e) { }
+        text = replaceBlock(text, matches, replacements);
     } else if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
-        let i = 0;
-        // 块公式
-        matches = matches.concat(text.match(/\$\$([\s\S]*?)\$\$/g));
-        try {
-            for (i; i < matches.length; i++) {
-                let match = matches[i];
-                text = text.replace(match, `【${i + 1}】`);
-                replacements[`【${i + 1}】`] = match;
-            }
-        } catch (e) { }
-        // 行内公式
-        matches = matches.concat(text.match(/\$(.*?)\$/g));
-        try {
-            for (i; i < matches.length; i++) {
-                let match = matches[i];
-                text = text.replace(match, `【${i + 1}】`);
-                replacements[`【${i + 1}】`] = match;
-            }
-        } catch (e) { }
+        let regex = /\$\$([\s\S]*?)\$\$/g; // 块公式
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
+
+        regex = /\$(.*?)\$/g; // 行内公式
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
     }
 
     if (text.length > 4950) {
@@ -3726,65 +3945,51 @@ async function translateProblemStatement(text, element_node, button) {
             };
         }
     }
+
     // 翻译
-    if (translation == "deepl") {
-        translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
-        translatedText = await translate_deepl(text);
-    } else if (translation == "youdao") {
-        translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
-        translatedText = await translate_youdao_mobile(text);
-    } else if (translation == "google") {
-        translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
-        translatedText = await translate_gg(text);
-    } else if (translation == "openai") {
-        try {
-            translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
-                "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
-                "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
-            translatedText = await translate_openai(text);
-        } catch (error) {
-            status = 2;
-            translatedText = error;
+    async function translate(translation) {
+        if (translation == "deepl") {
+            translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
+            translatedText = await translate_deepl(text);
+        } else if (translation == "iflyrec") {
+            translateDiv.innerHTML = "正在使用 讯飞听见 翻译中……请稍等";
+            translatedText = await translate_iflyrec(text);
+        } else if (translation == "youdao") {
+            translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
+            translatedText = await translate_youdao_mobile(text);
+        } else if (translation == "google") {
+            translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
+            translatedText = await translate_gg(text);
+        } else if (translation == "caiyun") {
+            translateDiv.innerHTML = "正在使用 彩云 翻译中……请稍等";
+            await translate_caiyun_startup();
+            translatedText = await translate_caiyun(text);
+        } else if (translation == "openai") {
+            try {
+                translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
+                    "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
+                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
+                translatedText = await translate_openai(text);
+            } catch (error) {
+                status = 2;
+                translatedText = error;
+            }
         }
+        if (/^翻译出错/.test(translatedText)) status = 2;
     }
-    if (/^翻译出错/.test(translatedText)) status = 2;
+
+    if (is_comment && commentTranslationChoice != "0") await translate(commentTranslationChoice);
+    else await translate(translation);
+
     // 还原latex公式
-    translatedText = translatedText.replace(/】【/g, '】 【');
+    translatedText = translatedText.replace(/】\s*【/g, '】 【');
+    translatedText = translatedText.replace(/\]\s*\[/g, '] [');
+    translatedText = translatedText.replace(/\}\s*\{/g, '} {');
     if (is_oldLatex) {
-        translatedText = "<p>" + translatedText;
-        translatedText += "</p>";
-        try {
-            for (let i = 0; i < matches.length; i++) {
-                let match = matches[i];
-                let replacement = replacements[`【${i + 1}】`];
-                let regex;
-                regex = new RegExp(`【\\s*${i + 1}\\s*】`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
-                translatedText = translatedText.replace(regex, " " + replacement);
-            }
-        } catch (e) { }
-    }
-    else if (translation != "openai") {
-        try {
-            for (let i = 0; i < matches.length; i++) {
-                let match = matches[i];
-                let replacement = replacements[`【${i + 1}】`];
-                let regex;
-                regex = new RegExp(`【\\s*${i + 1}\\s*】`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
-                translatedText = translatedText.replace(regex, " " + replacement);
-            }
-        } catch (e) { }
+        translatedText = "<p>" + translatedText + "</p>";
+        translatedText = recoverBlock(translatedText, matches, replacements);
+    } else if (translation != "openai") {
+        translatedText = recoverBlock(translatedText, matches, replacements);
     }
 
     // 结果复制按钮
@@ -3843,14 +4048,24 @@ async function translateProblemStatement(text, element_node, button) {
     }
 
     // 使符合mathjx的转换语法
-    const ruleMap = [
+    const mathjaxRuleMap = [
+        { pattern: /(\$\$[\r\n])/g, replacement: "$$$$$$$$$$$$" }, // $$ 行间
+        { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$$$" } // $ 内联
+    ];
+    mathjaxRuleMap.forEach(({ pattern, replacement }) => {
+        translatedText = translatedText.replace(pattern, replacement);
+    });
+
+    // markdown修正
+    const mdRuleMap = [
         { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
         { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
         { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
-        { pattern: /(\$\$[\r\n])/g, replacement: "$$$$$$$$$$$$" }, // $$ 行间
-        { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$$$" }, // $ 内联
+        { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+        // { pattern: /：/g, replacement: ":" }, // 中文：
+        { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
     ];
-    ruleMap.forEach(({ pattern, replacement }) => {
+    mdRuleMap.forEach(({ pattern, replacement }) => {
         translatedText = translatedText.replace(pattern, replacement);
     });
 
@@ -3976,6 +4191,46 @@ async function translate_youdao_mobile(raw) {
 }
 //--有道翻译m--end
 
+//--彩云翻译--start
+async function translate_caiyun_startup() {
+    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
+    sessionStorage.setItem('caiyun_id', browser_id);
+    const options = {
+        method: "POST",
+        url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
+        headers: {
+            "Content-Type": "application/json",
+            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "Origin": "https://fanyi.caiyunapp.com",
+        },
+        data: JSON.stringify({ browser_id }),
+    }
+    const res = await Request(options);
+    sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
+}
+
+async function translate_caiyun(raw) {
+    const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+    const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
+    const decoder = line => Base64.decode([...line].map(i => dic[i] || i).join(""))
+    const options = {
+        method: "POST",
+        url: 'https://api.interpreter.caiyunai.com/v1/translator',
+        data: JSON.stringify({
+            "source": raw.split('\n'),
+            "trans_type": "auto2zh",
+            "detect": true,
+            "browser_id": sessionStorage.getItem('caiyun_id')
+        }),
+        headers: {
+            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "T-Authorization": sessionStorage.getItem('caiyun_jwt')
+        }
+    }
+    return await BaseTranslate('彩云小译', raw, options, res => JSON.parse(res).target.map(decoder).join('\n'))
+}
+//--彩云翻译--end
+
 //--Deepl翻译--start
 function getTimeStamp(iCount) {
     const ts = Date.now();
@@ -4030,6 +4285,30 @@ async function translate_deepl(raw) {
 
 //--Deepl翻译--end
 
+//--讯飞听见翻译--end
+async function translate_iflyrec(text) {
+    const options = {
+        method: "POST",
+        url: 'https://www.iflyrec.com/TranslationService/v1/textTranslation',
+        data: JSON.stringify({
+            "from": "2",
+            "to": "1",
+            "contents": [{
+                "text": text,
+                "frontBlankLine": 0
+            }]
+        }),
+        anonymous: true,
+        headers: {
+            'Content-Type': 'application/json',
+            'Origin': 'https://www.iflyrec.com',
+        },
+        responseType: "json",
+    };
+    return await BaseTranslate('讯飞翻译', text, options, res => JSON.parse(res).biz[0].translateResult.replace(/\\n/g, "\n\n"));
+}
+//--讯飞听见翻译--end
+
 //--异步请求包装工具--start
 async function PromiseRetryWrap(task, options, ...values) {
     const { RetryTimes, ErrProcesser } = options || {};
@@ -4055,9 +4334,8 @@ async function BaseTranslate(name, raw, options, processer) {
         try {
             const data = await Request(options);
             tmp = data.responseText;
-            const result = await processer(tmp);
-            if (result) sessionStorage.setItem(name + '-' + raw, result);
-            return result
+            let result = await processer(tmp);
+            return result;
         } catch (err) {
             errtext = tmp;
             throw {
@@ -4066,7 +4344,7 @@ async function BaseTranslate(name, raw, options, processer) {
             }
         }
     }
-    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
+    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请查看报错信息，并重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
 }
 
 function Request(options) {
@@ -4141,7 +4419,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         })
                         .catch((error) => {
-                            console.log(error);
+                            console.warn(error);
                         });
                 });
             }
