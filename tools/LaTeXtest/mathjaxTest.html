@@ -26,7 +26,10 @@
       $$
       \texttt{B} \underbrace{\texttt{A} \dots \texttt{A}}_{\text{some number, possibly } 0} \texttt{B} \underbrace{\texttt{A} \dots \texttt{A}}_{\text{some number, possibly } 0} \texttt{B} \underbrace{\texttt{A} \dots \texttt{A}}_{\text{some number, possibly } 0} \dots
       $$
-      
+      $$
+      \begin{aligned} & n\sum_{i=t}^{n-2} \sum_{j=0}^{n-i-2}\binom{n-i-2}{j}(i+j-1)!\cdot(2t-i) \\ +&[n \text{ is even}]n(n-2)! \end{aligned} 
+      $$
+      $$\color{red}{\texttt{BA}}\texttt{ABA} \to \texttt{CBA}\color{red}{\texttt{BA}} \to \texttt{C}\color{red}{\texttt{BA}}\texttt{CB} \to \texttt{CCBCB}$$
 
       "
     </div>
@@ -46,43 +49,38 @@
         { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
       ];
 
-      let latexMatches = [
-        ...translatedText.matchAll(
-          /\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g
-        ),
-      ];
+      let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
 
       for (const match of latexMatches) {
-        const matchedText = match[0];
-        var escapedText = matchedText;
-        for (const rule of escapeRules) {
-          escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
-          console.log("规则：" + rule.pattern);
-          console.log(escapedText);
-        }
-        translatedText = translatedText.replace(matchedText, escapedText);
+          const matchedText = match[0];
+          var escapedText = matchedText;
+
+          for (const rule of escapeRules) {
+              escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
+          }
+          escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
+          translatedText = translatedText.replace(matchedText, escapedText);
       }
-      console.log(translatedText);
 
       // 使符合mathjx的转换语法
-      const ruleMap = [
-        {
-          pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g,
-          replacement: "$1 $2",
-        }, // 斜体
-        {
-          pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g,
-          replacement: " $1$2",
-        },
-        {
-          pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g,
-          replacement: " $1 $2",
-        },
-        { pattern: /(\$\$[\r\n])/g, replacement: "$$$$" }, // $$ 行间
-        { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$" }, // $ 内联
+      const mathjaxRuleMap = [
+          { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
       ];
-      ruleMap.forEach(({ pattern, replacement }) => {
-        translatedText = translatedText.replace(pattern, replacement);
+      mathjaxRuleMap.forEach(({ pattern, replacement }) => {
+          translatedText = translatedText.replace(pattern, replacement);
+      });
+
+      // markdown修正
+      const mdRuleMap = [
+          { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
+          { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
+          { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
+          { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+          // { pattern: /：/g, replacement: ":" }, // 中文：
+          { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+      ];
+      mdRuleMap.forEach(({ pattern, replacement }) => {
+          translatedText = translatedText.replace(pattern, replacement);
       });
 
       // ===================================================================

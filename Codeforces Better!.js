@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.623
+// @version      1.624
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -105,8 +105,8 @@ function init() {
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
-const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 999; }`;
-const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 10000; }`;
+const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 100; }`;
+const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
 
 // 报错信息捕获
 /*let errorMessages = "";
@@ -534,7 +534,7 @@ button.html2mdButton.CFBetter_setting.open {
 }
 
 .CFBetter_setting_menu {
-    z-index: 9999;
+    z-index: 200;
     box-shadow: 0px 0px 0px 4px #ffffff;
     display: grid;
     position: fixed;
@@ -936,7 +936,7 @@ span.input_label {
     border-radius: 4px;
     border: 1px solid #e4e7ed;
     box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
-    z-index: 999;
+    z-index: 100;
 }
 .help_tip .tip_text p {
     margin-bottom: 5px;
@@ -968,7 +968,7 @@ span.input_label {
 
 /*确认弹窗*/
 .wordsExceeded {
-    z-index: 999999;
+    z-index: 600;
     display: grid;
     position: fixed;
     top: 50%;
@@ -1027,7 +1027,7 @@ span.input_label {
 }
 /*更新检查*/
 div#update_panel {
-    z-index: 9999;
+    z-index: 200;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -1219,7 +1219,7 @@ label.config_bar_ul_li_text::-webkit-scrollbar-track {
 }
 /* 修改菜单 */
 div#config_bar_menu {
-    z-index: 99999;
+    z-index: 400;
     position: absolute;
     width: 60px;
     background: #ffffff;
@@ -1250,7 +1250,7 @@ div#config_bar_menu_delete:hover {
 }
 /* 配置页面 */
 #config_edit_menu {
-    z-index: 11000;
+    z-index: 300;
     width: 450px; 
 }
 /* 黑暗模式选项 */
@@ -1272,7 +1272,7 @@ div#config_bar_menu_delete:hover {
 }
 /* 右键菜单 */
 .CFBetter_contextmenu {
-    z-index: 100000;
+    z-index: 500;
     display: grid;
     position: absolute;
     border-radius: 6px;
@@ -3177,7 +3177,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 
             $(".html2md-view" + suffix).parent().css({
                 "position": "relative",
-                "z-index": "99999"
+                "z-index": "400"
             });
         });
 
@@ -3257,7 +3257,7 @@ function addButtonWithCopy(parent, suffix, type) {
             });
             $(".html2md-cb" + suffix).parent().css({
                 "position": "relative",
-                "z-index": "99999"
+                "z-index": "400"
             })
         });
 
@@ -3404,7 +3404,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
             $(".translateButton" + suffix).parent().css({
                 "position": "relative",
-                "z-index": "99999"
+                "z-index": "400"
             });
         });
 
@@ -3975,9 +3975,8 @@ function skiFoldingBlocks() {
 
 // latex替换
 function replaceBlock(text, matches, replacements) {
-    let i = 0;
     try {
-        for (i; i < matches.length; i++) {
+        for (let i = 0; i < matches.length; i++) {
             let match = matches[i];
             let replacement = '';
             if (replaceSymbol === "1") {
@@ -4000,13 +3999,26 @@ function recoverBlock(translatedText, matches, replacements) {
         let match = matches[i];
         let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
 
-        let regex = new RegExp(`【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, replacement);
+        let latexMatch = '\\$\\$([\\s\\S]*?)\\$\\$|\\$(.*?)\\$|\\$([\\s\\S]*?)\\$|';
 
-        regex = new RegExp(`【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|
-        \\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|
-        {\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, " " + replacement);
+        let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+            // LaTeX中的不替换
+            if (p1 || p2 || p3) {
+                return match;
+            }
+            return replacement;
+        });
+
+
+        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+            // LaTeX中的不替换
+            if (p1 || p2 || p3) {
+                return match;
+            }
+            return " " + replacement;
+        });
     }
     return translatedText;
 }
@@ -4037,11 +4049,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         text = replaceBlock(text, matches, replacements);
     } else if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
-        let regex = /\$\$([\s\S]*?)\$\$/g; // 块公式
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-
-        regex = /\$(.*?)\$/g; // 行内公式
+        let regex = /\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g;
         matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
     }
@@ -4153,17 +4161,18 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         for (const match of latexMatches) {
             const matchedText = match[0];
             var escapedText = matchedText;
+
             for (const rule of escapeRules) {
                 escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
             }
+            escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
             translatedText = translatedText.replace(matchedText, escapedText);
         }
     }
 
     // 使符合mathjx的转换语法
     const mathjaxRuleMap = [
-        { pattern: /(\$\$[\r\n])/g, replacement: "$$$$$$$$$$$$" }, // $$ 行间
-        { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$$$" } // $ 内联
+        { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
     ];
     mathjaxRuleMap.forEach(({ pattern, replacement }) => {
         translatedText = translatedText.replace(pattern, replacement);
