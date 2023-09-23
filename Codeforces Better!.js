@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.622
+// @version      1.623
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @run-at       document-start
 // @connect      www2.deepl.com
+// @connect      www.iflyrec.com
 // @connect      m.youdao.com
+// @connect      api.interpreter.caiyunai.com
 // @connect      translate.google.com
 // @connect      openai.api2d.net
 // @connect      api.openai.com
@@ -26,7 +28,6 @@
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/Base64/1.2.0/base64.min.js
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -809,7 +810,7 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     font-weight: 500;
 }
 
-.CFBetter_setting_menu label input[type="radio"] {
+.CFBetter_setting_menu label input[type="radio"], .CFBetter_contextmenu label input[type="radio"]{
     appearance: none;
     list-style: none;
     padding: 0px !important;
@@ -1269,6 +1270,44 @@ div#config_bar_menu_delete:hover {
 .dark-mode-selection .CFBetter_setting_menu_label_text {
     border-radius: 8px;
 }
+/* 右键菜单 */
+.CFBetter_contextmenu {
+    z-index: 100000;
+    display: grid;
+    position: absolute;
+    border-radius: 6px;
+    background-color: #f0f4f9;
+    border-collapse: collapse;
+    border: 1px solid #009688;
+    color: #697e91;
+    font-family: var(--vp-font-family-base);
+    overflow: hidden;
+    box-sizing: content-box;
+}
+input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
+    background: #41e49930;
+    border: 1px solid green;
+    color: green;
+    font-weight: 500;
+}
+.CFBetter_contextmenu_label_text {
+    display: flex;
+    border: 1px dashed #80cbc4;
+    height: 26px;
+    width: 100%;
+    color: gray;
+    font-size: 13px;
+    padding: 4px;
+    align-items: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.CFBetter_contextmenu_label_text:hover {
+    color: #F44336;
+    border: 1px dashed #009688;
+    background-color: #ffebcd;
+}
 /* 移动设备 */
 @media (max-device-width: 450px) {
     button.html2mdButton{
@@ -1498,7 +1537,7 @@ function toZH_CN() {
         { match: 'Current standings', replace: '当前榜单' },
         { match: 'Final standings', replace: '最终榜单' },
         { match: 'Preliminary results', replace: '初步结果' },
-        { match: 'open hacking:', replace: '公开黑客攻击中（即尝试提交数据加强，对已通过的代码重测）' },
+        { match: 'open hacking:', replace: '公开黑客攻击中' },
         { match: 'School/University/City/Region Championship', replace: '学校/大学/城市/区域比赛' },
         { match: 'Official School Contest', replace: '学校官方比赛' },
         { match: 'Training Contest', replace: '训练赛' },
@@ -2555,7 +2594,7 @@ const CFBetterSettingMenuHTML = `
                 </div>
                 <h4>偏好</h4>
                 <div class='CFBetter_setting_list'>
-                    <label for="comment_translation_choice" style="display: flex;">博客&评论区翻译</label>
+                    <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
                     <select id="comment_translation_choice" name="comment_translation_choice">
                         <option value="0">跟随首选项</option>
                         <option value="deepl">deepl翻译</option>
@@ -3391,6 +3430,72 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
     }
 
     if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
+
+    // 右键菜单
+    $(document).on('contextmenu', '.translateButton' + suffix, function (e) {
+        e.preventDefault();
+
+        // 是否为评论的翻译
+        let is_comment = false;
+        if ($(".translateButton" + suffix).parents('.comments').length > 0) is_comment = true;
+
+        // 移除旧的
+        if (!$(event.target).closest('.CFBetter_contextmenu').length) {
+            $('.CFBetter_contextmenu').remove();
+        }
+
+        var menu = $('<div class="CFBetter_contextmenu"></div>');
+        var translations = [
+            { value: 'deepl', name: 'deepl翻译' },
+            { value: 'iflyrec', name: '讯飞听见翻译' },
+            { value: 'youdao', name: '有道翻译' },
+            { value: 'google', name: 'Google翻译' },
+            { value: 'caiyun', name: '彩云小译翻译' },
+            { value: 'openai', name: 'ChatGPT翻译' }
+        ];
+        if (is_comment) {
+            var label = $('<label><input type="radio" name="translation" value="0"><span class="CFBetter_contextmenu_label_text">跟随首选项</span></label>');
+            menu.append(label);
+        }
+        translations.forEach(function (translation) {
+            var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
+            <span class="CFBetter_contextmenu_label_text">${translation.name}</span></label>`);
+            menu.append(label);
+        });
+
+        // 初始化
+        if (is_comment) {
+            menu.find(`input[name="translation"][value="${commentTranslationChoice}"]`).prop('checked', true);
+        } else {
+            menu.find(`input[name="translation"][value="${translation}"]`).prop('checked', true);
+        }
+        menu.css({
+            top: e.pageY + 'px',
+            left: e.pageX + 'px'
+        }).appendTo('body');
+
+        $(document).one('change', 'input[name="translation"]', function () {
+            if (is_comment) {
+                commentTranslationChoice = $('input[name="translation"]:checked').val();
+                GM_setValue("commentTranslationChoice", commentTranslationChoice);
+            } else {
+                translation = $('input[name="translation"]:checked').val();
+                GM_setValue("translation", translation);
+            }
+            $('.CFBetter_contextmenu').remove();
+        });
+
+        // 点击区域外关闭菜单
+        function handleClick(event) {
+            if (!$(event.target).closest('.CFBetter_contextmenu').length) {
+                $('.CFBetter_contextmenu').remove();
+                $(document).off('change', 'input[name="translation"]');
+            } else {
+                $(document).one('click', handleClick);
+            }
+        }
+        $(document).one('click', handleClick);
+    });
 }
 
 // 块处理
@@ -3440,13 +3545,16 @@ function addConversionButton() {
     }
     // 添加按钮到ttypography部分
     $(".ttypography").each(function () {
+        // 是否为评论
+        let is_comment = false;
+        if ($(this).parents('.comments').length > 0) is_comment = true;
         // 题目页特判
         if (!$(this).parent().hasClass('problemindexholder')) {
             let id = "_comment_" + getRandomNumber(8);
             addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(this, id, "this_level");
             addButtonWithCopy(this, id, "this_level");
-            addButtonWithTranslation(this, id, "this_level", true); // is_comment
+            addButtonWithTranslation(this, id, "this_level", is_comment);
         }
     });
 
@@ -3951,34 +4059,36 @@ async function translateProblemStatement(text, element_node, button, is_comment)
 
     // 翻译
     async function translate(translation) {
-        if (translation == "deepl") {
-            translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
-            translatedText = await translate_deepl(text);
-        } else if (translation == "iflyrec") {
-            translateDiv.innerHTML = "正在使用 讯飞听见 翻译中……请稍等";
-            translatedText = await translate_iflyrec(text);
-        } else if (translation == "youdao") {
-            translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
-            translatedText = await translate_youdao_mobile(text);
-        } else if (translation == "google") {
-            translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
-            translatedText = await translate_gg(text);
-        } else if (translation == "caiyun") {
-            translateDiv.innerHTML = "正在使用 彩云小译 翻译中……请稍等";
-            await translate_caiyun_startup();
-            translatedText = await translate_caiyun(text);
-        } else if (translation == "openai") {
-            try {
+        try {
+            if (translation == "deepl") {
+                translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
+                translatedText = await translate_deepl(text);
+            } else if (translation == "iflyrec") {
+                translateDiv.innerHTML = "正在使用 讯飞听见 翻译中……请稍等";
+                translatedText = await translate_iflyrec(text);
+            } else if (translation == "youdao") {
+                translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
+                translatedText = await translate_youdao_mobile(text);
+            } else if (translation == "google") {
+                translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
+                translatedText = await translate_gg(text);
+            } else if (translation == "caiyun") {
+                translateDiv.innerHTML = "正在使用 彩云小译 翻译中……请稍等";
+                await translate_caiyun_startup();
+                translatedText = await translate_caiyun(text);
+            } else if (translation == "openai") {
+
                 translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
                     "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
                     "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
                 translatedText = await translate_openai(text);
-            } catch (error) {
-                status = 2;
-                translatedText = error;
+
             }
+            if (/^翻译出错/.test(translatedText)) status = 2;
+        } catch (error) {
+            status = 2;
+            translatedText = error;
         }
-        if (/^翻译出错/.test(translatedText)) status = 2;
     }
 
     if (is_comment && commentTranslationChoice != "0") await translate(commentTranslationChoice);
@@ -4033,7 +4143,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
             { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-            { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
+            { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
             { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
             { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
         ];
@@ -4167,9 +4277,8 @@ async function translate_gg(raw) {
                 const translatedText = $(html).find('.result-container').text();
                 resolve(translatedText);
             },
-            onerror: function (error) {
-                console.error('Error:', error);
-                reject(error);
+            onerror: function (response) {
+                reject("发生了未知的错误，请确认你是否能正常访问Google翻译，\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n响应报文：" + JSON.stringify(response))
             }
         });
     });
@@ -4215,7 +4324,13 @@ async function translate_caiyun_startup() {
 async function translate_caiyun(raw) {
     const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
     const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
-    const decoder = line => Base64.decode([...line].map(i => dic[i] || i).join(""))
+    // 解码
+    const decodeUnicode = str => {
+        const decoder = new TextDecoder();
+        const data = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+        return decoder.decode(data);
+    };
+    const decoder = line => decodeUnicode([...line].map(i => dic[i] || i).join(""));
     const options = {
         method: "POST",
         url: 'https://api.interpreter.caiyunai.com/v1/translator',

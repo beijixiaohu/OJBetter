@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>mathjax渲染测试</title>
+    <script src="https://codeforces.org/s/0/js/jquery-1.8.3.js"></script>
+    <script src="https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js"></script>
+    <script src="https://mathjax.codeforces.org/MathJax.js?config=TeX-AMS_HTML-full"></script>
+
+    <style>
+      .markdown-container {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="markdown-content">"
+      $(5 \oplus 17) \& (23 \oplus 17) = (00101_2 \oplus 10001_2) \& (10111_2 \oplus 10001_2) = 10100_2 \& 00110_2 = 00100_2 = 4$
+      $
+      M= \begin{pmatrix} 0&1&\cdots&m-2&m-1\\ 1&2&\cdots&m-1&0\\ 2&3&\cdots&0&1\\
+      \vdots&\vdots&\ddots&\vdots&\vdots\\ m-2&m-1&\cdots &m-4 & m-3\\
+       0&1&\cdots&m-2&m-1\\ 0&1&\cdots&m-2&m-1\\ \vdots&\vdots&\ddots&\vdots&\vdots
+       \\ 0&1&\cdots&m-2&m-1\\ \end{pmatrix}
+      $
+      $l_{(i\%k)+1}$  $a_1 < a_2 < \dots < a_n$ $O(s*\sqrt{s})$
+      $$
+      \texttt{B} \underbrace{\texttt{A} \dots \texttt{A}}_{\text{some number, possibly } 0} \texttt{B} \underbrace{\texttt{A} \dots \texttt{A}}_{\text{some number, possibly } 0} \texttt{B} \underbrace{\texttt{A} \dots \texttt{A}}_{\text{some number, possibly } 0} \dots
+      $$
+      
+
+      "
+    </div>
+    <script>
+      var translateDiv = document.getElementById("markdown-content");
+      var translatedText = translateDiv.textContent;
+
+      // ===================================================================
+
+      const escapeRules = [
+        { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
+        { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
+        { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
+        { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
+        // { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
+        { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
+        { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
+      ];
+
+      let latexMatches = [
+        ...translatedText.matchAll(
+          /\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g
+        ),
+      ];
+
+      for (const match of latexMatches) {
+        const matchedText = match[0];
+        var escapedText = matchedText;
+        for (const rule of escapeRules) {
+          escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
+          console.log("规则：" + rule.pattern);
+          console.log(escapedText);
+        }
+        translatedText = translatedText.replace(matchedText, escapedText);
+      }
+      console.log(translatedText);
+
+      // 使符合mathjx的转换语法
+      const ruleMap = [
+        {
+          pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g,
+          replacement: "$1 $2",
+        }, // 斜体
+        {
+          pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g,
+          replacement: " $1$2",
+        },
+        {
+          pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g,
+          replacement: " $1 $2",
+        },
+        { pattern: /(\$\$[\r\n])/g, replacement: "$$$$" }, // $$ 行间
+        { pattern: /(?<!\$)\$(?!\$)/g, replacement: "$$$" }, // $ 内联
+      ];
+      ruleMap.forEach(({ pattern, replacement }) => {
+        translatedText = translatedText.replace(pattern, replacement);
+      });
+
+      // ===================================================================
+
+      var md = window.markdownit();
+      var html = md.render(translatedText);
+      translateDiv.innerHTML = html;
+
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub, translateDiv]);
+    </script>
+  </body>
+</html>
