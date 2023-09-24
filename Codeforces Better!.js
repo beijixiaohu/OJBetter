@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.624
+// @version      1.625
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -227,7 +227,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
         html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
-        html[data-theme=dark] .wordsExceeded{
+        html[data-theme=dark] .CFBetter_modal{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -323,7 +323,7 @@ function handleColorSchemeChange(event) {
             background-color: #47837d !important;
             border-radius: 0px;
         }
-        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .wordsExceeded{
+        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .CFBetter_modal{
             box-shadow: 0px 0px 0px 4px #2d333b;
             border: 1px solid #2d333b;
         }
@@ -967,7 +967,7 @@ span.input_label {
 }
 
 /*确认弹窗*/
-.wordsExceeded {
+.CFBetter_modal {
     z-index: 600;
     display: grid;
     position: fixed;
@@ -975,7 +975,7 @@ span.input_label {
     left: 50%;
     transform: translate(-50%, -50%);
     font-family: var(--vp-font-family-base);
-    padding: 10px 20px 20px 20px;
+    padding: 10px 20px;
     box-shadow: 0px 0px 0px 4px #ffffff;
     border-radius: 6px;
     background-color: #f0f4f9;
@@ -983,7 +983,11 @@ span.input_label {
     border: 1px solid #ffffff;
     color: #697e91;
 }
-.wordsExceeded button {
+.CFBetter_modal .buttons{
+    display: flex;
+    padding-top: 15px;
+}
+.CFBetter_modal button {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -999,18 +1003,24 @@ span.input_label {
     -webkit-appearance: none;
     height: 24px;
     padding: 5px 11px;
+    margin-right: 15px;
     font-size: 12px;
     border-radius: 4px;
     color: #ffffff;
-    background: #409eff;
-    border-color: #409eff;
+    background: #009688;
+    border-color: #009688;
     border: none;
-    margin-right: 12px;
 }
-.wordsExceeded button:hover{
-    background-color:#79bbff;
+.CFBetter_modal button#cancelButton{
+    background-color:#4DB6AC;
 }
-.wordsExceeded .help-icon {
+.CFBetter_modal button:hover{
+    background-color:#4DB6AC;
+}
+.CFBetter_modal button#cancelButton:hover {
+    background-color: #80CBC4;
+}
+.CFBetter_modal .help-icon {
     margin: 0px 8px 0px 0px;
     height: 1em;
     width: 1em;
@@ -1022,7 +1032,7 @@ span.input_label {
     fill: currentColor;
     font-size: inherit;
 }
-.wordsExceeded p {
+.CFBetter_modal p {
     margin: 5px 0px;
 }
 /*更新检查*/
@@ -1327,7 +1337,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     .translate-problem-statement{
         font-size: 1.2em;
     }
-    .wordsExceeded{
+    .CFBetter_modal{
         font-size: 1.5em;
     }
     .CFBetter_setting_list, .translate-problem-statement{
@@ -1337,7 +1347,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
         height: 2.5em;
         padding: 0.5em;
     }
-    #pagBar #jump-input, #pagBar #items-per-page, .wordsExceeded button{
+    #pagBar #jump-input, #pagBar #items-per-page, .CFBetter_modal button{
         height: 2.5em;
         font-size: 1em;
     }
@@ -2756,23 +2766,23 @@ function saveConfirmation() {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle2);
         let htmlString = `
-        <div class="wordsExceeded">
+        <div class="CFBetter_modal">
             <h2>配置已更改，是否保存？</h2>
-            <div style="display:flex; padding-top:10px">
+            <div class="buttons">
                 <button id="cancelButton">不保存</button><button id="saveButton">保存</button>
             </div>
         </div>
       `;
         $('body').before(htmlString);
-        addDraggable($('.wordsExceeded'));
+        addDraggable($('.CFBetter_modal'));
         $("#saveButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.CFBetter_modal').remove();
             resolve(true);
         });
         $("#cancelButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.CFBetter_modal').remove();
             resolve(false);
         });
     });
@@ -3898,7 +3908,7 @@ function waitUntilIdleThenDo(callback) {
 }
 
 // 字数超限确认
-function showWordsExceededDialog(button) {
+function showWordsExceededDialog(button, textLength, realTextLength) {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle);
         $(button).removeClass("translated");
@@ -3906,19 +3916,20 @@ function showWordsExceededDialog(button) {
         $(button).css("cursor", "not-allowed");
         $(button).prop("disabled", true);
         let htmlString = `
-      <div class="wordsExceeded">
-          <h2>字数超限!</h2>
-          <p>注意，即将翻译的内容字数超过了4950个字符，您可能选择了错误的翻译按钮</p>
+      <div class="CFBetter_modal">
+          <h2>字符数超限! </h2>
+          <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
+          <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
+          
           <div style="display:flex; padding:5px 0px; align-items: center;">
-      `+ helpCircleHTML + `
+            `+ helpCircleHTML + `
             <p>
-            由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮，
-            <br>或者在设置面板中开启 分段翻译 后重试。
+            注意，可能您选择了错误的翻译按钮<br>
+            由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
             </p>
           </div>
-          <p>对于免费的接口，大量请求可能导致你的IP被暂时禁止访问，对于GPT，会消耗大量的token</p>
           <p>您确定要继续翻译吗？</p>
-          <div style="display:flex; padding-top:10px">
+          <div class="buttons">
             <button id="continueButton">继续</button><button id="cancelButton">取消</button>
           </div>
       </div>
@@ -3926,12 +3937,12 @@ function showWordsExceededDialog(button) {
         $('body').before(htmlString);
         $("#continueButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.CFBetter_modal').remove();
             resolve(true);
         });
         $("#cancelButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.CFBetter_modal').remove();
             resolve(false);
         });
     });
@@ -3942,7 +3953,7 @@ function skiFoldingBlocks() {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle);
         let htmlString = `
-      <div class="wordsExceeded">
+      <div class="CFBetter_modal">
           <h2>是否跳过折叠块？</h2>
           <p></p>
           <div style="display:grid; padding:5px 0px; align-items: center;">
@@ -3954,7 +3965,7 @@ function skiFoldingBlocks() {
             </p>
           </div>
           <p>要跳过折叠块吗？（建议选择跳过）</p>
-          <div style="display:flex; padding-top:10px">
+          <div class="buttons">
             <button id="cancelButton">否</button><button id="skipButton">跳过</button>
           </div>
       </div>
@@ -3962,12 +3973,12 @@ function skiFoldingBlocks() {
         $('body').before(htmlString);
         $("#skipButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.CFBetter_modal').remove();
             resolve(true);
         });
         $("#cancelButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.CFBetter_modal').remove();
             resolve(false);
         });
     });
@@ -4054,8 +4065,16 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         text = replaceBlock(text, matches, replacements);
     }
 
-    if (text.length > 4950) {
-        const shouldContinue = await showWordsExceededDialog(button);
+    // 字符数上限
+    const translationLimits = {
+        deepl: 5000,
+        iflyrec: 2000,
+        youdao: 600,
+        google: 5000,
+        caiyun: 5000
+    };
+    if (translationLimits.hasOwnProperty(translation) && text.length > translationLimits[translation]) {
+        const shouldContinue = await showWordsExceededDialog(button, translationLimits[translation], text.length);
         if (!shouldContinue) {
             status = 1;
             return {
