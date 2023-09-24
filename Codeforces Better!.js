@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.625
+// @version      1.626
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -974,6 +974,7 @@ span.input_label {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    font-size: 12px;
     font-family: var(--vp-font-family-base);
     padding: 10px 20px;
     box-shadow: 0px 0px 0px 4px #ffffff;
@@ -1285,14 +1286,13 @@ div#config_bar_menu_delete:hover {
     z-index: 500;
     display: grid;
     position: absolute;
-    border-radius: 6px;
     background-color: #f0f4f9;
     border-collapse: collapse;
-    border: 1px solid #009688;
     color: #697e91;
     font-family: var(--vp-font-family-base);
     overflow: hidden;
     box-sizing: content-box;
+    box-shadow: 0px 0px 0px 2px #eddbdb4d;
 }
 input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background: #41e49930;
@@ -1331,7 +1331,8 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     .CFBetter_setting_menu{
         width: 90%;
     }
-    .CFBetter_setting_menu label, #darkMode_span, #loaded_span, .CFBetter_setting_menu_label_text{
+    .CFBetter_setting_menu label, #darkMode_span, #loaded_span, .CFBetter_setting_menu_label_text,
+    .CFBetter_setting_sidebar li{
         font-size: 1em;
     }
     .translate-problem-statement{
@@ -1353,6 +1354,10 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     }
     .translate-problem-statement p, .translate-problem-statement ul li{
         line-height: 1.5em !important;
+    }
+    .CFBetter_contextmenu_label_text{
+        height: 3em;
+        font-size: 1em;
     }
 }
 `);
@@ -1781,6 +1786,14 @@ function toZH_CN() {
         { match: 'Substring:', replace: '关键字' },
     ];
     traverseTextNodes($('.setting-name'), rules26);
+
+    const rules27 = [
+        { match: 'Sort by:', replace: '排序依据：' },
+        { match: 'relevance', replace: '相关' },
+        { match: 'popularity', replace: '热度' },
+        { match: 'time', replace: '时间' },
+    ];
+    traverseTextNodes($('.by-form'), rules27);
 
     // 元素选择替换
     // 侧栏titled汉化
@@ -3002,7 +3015,8 @@ turndownService.addRule('remove-by-class', {
         return node.classList.contains('sample-tests') ||
             node.classList.contains('header') ||
             node.classList.contains('overlay') ||
-            node.classList.contains('html2md-panel');
+            node.classList.contains('html2md-panel')||
+            node.classList.contains('likeForm');
     },
     replacement: function (content, node) {
         return "";
