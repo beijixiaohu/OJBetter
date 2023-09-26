@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.626
+// @version      1.631
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -14,6 +14,7 @@
 // @connect      openai.api2d.net
 // @connect      api.openai.com
 // @connect      www.luogu.com.cn
+// @connect      clist.by
 // @connect      greasyfork.org
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -44,14 +45,19 @@ const getGMValue = (key, defaultValue) => {
     return value;
 };
 var darkMode = getGMValue("darkMode", "follow");
-var is_mSite, is_acmsguru, is_oldLatex;
+var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var replaceSymbol, commentPaging, showJumpToLuogu, loaded;
+var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 function init() {
-    is_mSite = window.location.hostname.startsWith('m');
-    is_acmsguru = window.location.href.includes("acmsguru");
+    const { hostname, href } = window.location;
+    is_mSite = hostname.startsWith('m');
+    is_acmsguru = href.includes("acmsguru");
     is_oldLatex = $('.tex-span').length;
+    is_contest = href.includes('/contest/') && !href.includes('/problem/');
+    is_problem = href.includes('/problem/');
+    is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     // 说明为旧的latex渲染
     if (is_oldLatex) {
         var newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert").html(`
@@ -72,6 +78,11 @@ function init() {
     translation = getGMValue("translation", "deepl");
     commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
     replaceSymbol = getGMValue("replaceSymbol", "2");
+    showClistRating_contest = getGMValue("showClistRating_contest", false);
+    showClistRating_problem = getGMValue("showClistRating_problem", false);
+    showClistRating_problemset = getGMValue("showClistRating_problemset", false);
+    RatingHidden = getGMValue("RatingHidden", false);
+    clist_Authorization = getGMValue("clist_Authorization", "");
     //openai
     opneaiConfig = getGMValue("chatgpt-config", {
         "choice": -1,
@@ -319,8 +330,15 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .problems .accepted-problem td.id{
             border-left: 6px solid #47837d !important;
         }
+        html[data-theme=dark] .problems .rejected-problem td.id{
+            border-left: 6px solid #ef9a9a !important;
+        }
         html[data-theme=dark] .problems .accepted-problem td.act {
             background-color: #47837d !important;
+            border-radius: 0px;
+        }
+        html[data-theme=dark] .problems .rejected-problem td.act{
+            background-color: #ef9a9a !important;
             border-radius: 0px;
         }
         html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .CFBetter_modal{
@@ -442,11 +460,12 @@ span.mdViewContent {
 .html2md-panel {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 .html2md-panel a {
     text-decoration: none;
 }
-button.html2mdButton {
+.html2mdButton {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -460,7 +479,7 @@ button.html2mdButton {
     margin: 5px !important;
     border: 1px solid #dcdfe6;
 }
-button.html2mdButton:hover {
+.html2mdButton:hover {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
@@ -567,6 +586,15 @@ button.html2mdButton.CFBetter_setting.open {
     background-color: #ccc;
     margin: 10px 0;
 }
+.CFBetter_setting_menu .badge {
+    border-radius: 4px;
+    border: 1px solid #009688;
+    color: #009688;
+    font-size: 12px;
+    padding: 0.5px 4px;
+    margin-left: 5px;
+    margin-right: auto;
+}
 /* 页面切换 */
 .settings-page {
     display: none;
@@ -585,6 +613,7 @@ button.html2mdButton.CFBetter_setting.open {
 }
 .CFBetter_setting_content {
     flex-grow: 1;
+    width: 350px;
     margin: 20px 0px 0px 20px;
     padding-right: 10px;
     max-height: 580px;
@@ -838,6 +867,10 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     margin: 5px 0px 5px 0px;
     border: 1px solid #00aeeccc;
     box-shadow: 0 0 1px #0000004d;
+}
+
+.CFBetter_setting_menu .CFBetter_setting_list input[type="text"] {
+    margin-left: 5px;
 }
 
 .CFBetter_setting_menu input[type="text"]:focus-visible{
@@ -1318,6 +1351,14 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     border: 1px dashed #009688;
     background-color: #ffebcd;
 }
+/* RatingByClist */
+.ratingBadges{
+    font-weight: 700;
+    margin-top: 5px;
+    border-radius: 4px;
+    color: #ffffff00;
+    border: 1px solid #cccccc66;
+}
 /* 移动设备 */
 @media (max-device-width: 450px) {
     button.html2mdButton{
@@ -1762,7 +1803,7 @@ function toZH_CN() {
     traverseTextNodes($('#vote-reset-filterDifficultyUpperBorder'), rules22);
 
     const rules23 = [
-        { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。\n（说明：有极小概率可能是Codeforces Better!插入翻译按钮导致的）' },
+        { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。' },
         { match: 'View the changes.', replace: '查看更改' },
     ];
     traverseTextNodes($('.alert.alert-info'), rules23);
@@ -2484,6 +2525,7 @@ const CFBetterSettingMenuHTML = `
         <ul>
             <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
             <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
+            <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist设置</a></li>
             <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
         </ul>
         </div>
@@ -2661,7 +2703,82 @@ const CFBetterSettingMenuHTML = `
                     </select>
                 </div>
             </div>
-            <div id="compatibility-settings" class="settings-page active">
+            <div id="clist_rating-settings" class="settings-page">
+                <h3>Clist设置</h3>
+                <hr>
+                <h4>基本</h4>
+                <div class='CFBetter_setting_list' style="background-color: #E0F2F1;border: 1px solid #009688;">
+                    <div>
+                        <p>注意：不同页面的显示功能工作所需要的凭证有所不同的</p>
+                    </div>
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for='clist_Authorization'>
+                        <div style="display: flex;align-items: center;">
+                            <span class="input_label">KEY:</span>
+                        </div>
+                    </label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                            <p>格式样例：</p>
+                            <div style="border: 1px solid #795548; padding: 10px;">
+                                <p>ApiKey XXXXXXXXX</p>
+                            </div>
+                        </div>
+                    </div>
+                    <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' require = true>
+                </div>
+                <hr>
+                <h4>显示Rating分</h4>
+                <div class='CFBetter_setting_list'>
+                    <label for="showClistRating_contest"><span>比赛问题集页</span></label>
+                    <div class="help_tip" style="margin-right: initial;">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>数据来源clist.by</p>
+                        <p>您需要提供官方的api key</p>
+                        <p>或让您的浏览器上的clist.by处于登录状态（即cookie有效）</p>
+                        </div>
+                    </div>
+                    <div class="badge">Cookie/API KEY</div>
+                    <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="showClistRating_problem"><span>题目页</span></label>
+                    <div class="help_tip" style="margin-right: initial;">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+                        </div>
+                    </div>
+                    <div class="badge">Cookie</div>
+                    <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="showClistRating_problemset"><span>题单页</span></label>
+                    <div class="help_tip" style="margin-right: initial;">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+                        </div>
+                    </div>
+                    <div class="badge">Cookie</div>
+                    <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
+                </div>
+                <hr>
+                <div class='CFBetter_setting_list'>
+                    <label for="RatingHidden"><span>防剧透</span></label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>只有当鼠标移动到Rating分展示区域上时才显示</p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="RatingHidden" name="RatingHidden">
+                </div>
+            </div>
+            <div id="compatibility-settings" class="settings-page">
                 <h3>兼容设置</h3>
                 <hr>
                 <div class='CFBetter_setting_list'>
@@ -2860,6 +2977,10 @@ async function settingPanel() {
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#loaded").prop("checked", GM_getValue("loaded") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
+        $("#showClistRating_contest").prop("checked", GM_getValue("showClistRating_contest") === true);
+        $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
+        $("#showClistRating_problem").prop("checked", GM_getValue("showClistRating_problem") === true);
+        $("#RatingHidden").prop("checked", GM_getValue("RatingHidden") === true);
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
@@ -2870,6 +2991,7 @@ async function settingPanel() {
         }
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
+        $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
 
         // 翻译选择情况监听
         $("input[name='translation']").change(function () {
@@ -2906,7 +3028,12 @@ async function settingPanel() {
                 loaded: $("#loaded").prop("checked"),
                 translation: $("input[name='translation']:checked").val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
-                replaceSymbol: $('#translation_replaceSymbol').val()
+                replaceSymbol: $('#translation_replaceSymbol').val(),
+                showClistRating_contest: $('#showClistRating_contest').prop("checked"),
+                showClistRating_problemset: $('#showClistRating_problemset').prop("checked"),
+                showClistRating_problem: $('#showClistRating_problem').prop("checked"),
+                RatingHidden: $('#RatingHidden').prop("checked"),
+                clist_Authorization: $('#clist_Authorization').val()
             };
 
             // 判断是否改变
@@ -3015,7 +3142,7 @@ turndownService.addRule('remove-by-class', {
         return node.classList.contains('sample-tests') ||
             node.classList.contains('header') ||
             node.classList.contains('overlay') ||
-            node.classList.contains('html2md-panel')||
+            node.classList.contains('html2md-panel') ||
             node.classList.contains('likeForm');
     },
     replacement: function (content, node) {
@@ -3862,18 +3989,17 @@ function CommentPagination() {
 }
 
 // 跳转洛谷
-async function CF2luogu() {
-    const getProblemId = () => {
-        const url = window.location.href;
-        const regex = url.includes('/contest/')
-            ? /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/
-            : /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/;
-        const matchResult = url.match(regex);
-        return matchResult && matchResult.length >= 3
-            ? `${matchResult[1]}${matchResult[2]}`
-            : '';
-    };
+function getProblemId(url) {
+    const regex = url.includes('/contest/')
+        ? /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/
+        : /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/;
+    const matchResult = url.match(regex);
+    return matchResult && matchResult.length >= 3 ? `${matchResult[1]}${matchResult[2]}` : '';
+};
 
+async function CF2luogu() {
+    const url = window.location.href;
+    const problemId = getProblemId(url);
     const checkLinkExistence = (url) => {
         return new Promise((resolve, reject) => {
             GM.xmlHttpRequest({
@@ -3893,20 +4019,276 @@ async function CF2luogu() {
             });
         });
     };
-    const panelElement = $("<div>")
-        .addClass("html2md-panel")
-        .attr("id", "CF2luoguPanel")
-        .insertBefore('.problemindexholder');
 
-    const url = `https://www.luogu.com.cn/problem/CF${getProblemId()}`;
-    const result = await checkLinkExistence(url);
-    if (getProblemId() && result) {
+    let panelElement;
+    if ($('#CF2luoguPanel').length > 0) {
+        panelElement = $('#CF2luoguPanel');
+    } else {
+        panelElement = $("<div>")
+            .addClass("html2md-panel")
+            .attr("id", "CF2luoguPanel")
+            .insertBefore('.problemindexholder');
+    }
+
+    const LuoguUrl = `https://www.luogu.com.cn/problem/CF${problemId}`;
+    const result = await checkLinkExistence(LuoguUrl);
+    if (problemId && result) {
         const problemLink = $("<a>")
             .attr("id", "problemLink")
-            .attr("href", url)
+            .attr("href", LuoguUrl)
             .attr("target", "_blank")
             .html(`<button style="height: 25px;" class="html2mdButton"><img style="width:45px; margin-right:2px;" src="https://cdn.luogu.com.cn/fe/logo.png"></button>`);
         panelElement.append(problemLink);
+    }
+}
+
+// RatingClass
+const ratingClassMap = {
+    0: "rating_by_clist_color0",
+    1200: "rating_by_clist_color1",
+    1400: "rating_by_clist_color2",
+    1600: "rating_by_clist_color3",
+    1900: "rating_by_clist_color4",
+    2100: "rating_by_clist_color5",
+    2300: "rating_by_clist_color6",
+    2400: "rating_by_clist_color7",
+    2600: "rating_by_clist_color8",
+    3000: "rating_by_clist_color9"
+};
+const cssMap = {
+    "rating_by_clist_color0": "#cccccc",
+    "rating_by_clist_color1": "#73e473",
+    "rating_by_clist_color2": "#77ddbb",
+    "rating_by_clist_color3": "#aaaaff",
+    "rating_by_clist_color4": "#ff88ff",
+    "rating_by_clist_color5": "#ffcc88",
+    "rating_by_clist_color6": "#ffbb55",
+    "rating_by_clist_color7": "#ff7777",
+    "rating_by_clist_color8": "#ff3333",
+    "rating_by_clist_color9": "#aa0000"
+};
+// cookie有效性检查
+async function checkCookie(isContest = false) {
+    let ok = false, congested = false;
+    await new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: "https://clist.by:443/api/v3/contest/?limit=1&resource_id=1",
+            onload: function (response) {
+                if (response.status === 200) ok = true;
+                resolve();
+            },
+            onerror: function (response) {
+                console.warn("访问clist.by出现错误，请稍后再试");
+                congested = true;
+                resolve();
+            }
+        });
+    });
+    if (isContest && !ok && !congested) {
+        await new Promise((resolve, reject) => {
+            GM_xmlhttpRequest({
+                method: "GET",
+                url: "https://clist.by:443/api/v3/contest/?limit=1&resource_id=1",
+                headers: {
+                    "Authorization": clist_Authorization
+                },
+                onload: function (response) {
+                    if (response.status === 200) ok = true;
+                    resolve();
+                },
+                onerror: function (response) {
+                    console.warn("访问clist.by出现错误，请稍后再试");
+                    resolve();
+                }
+            });
+        });
+    }
+    if (!ok) {
+        var state = congested ? `当前访问Clist.by网络拥堵，请求已中断，请稍后再重试` :
+            `当前浏览器的Clist.by登录Cookie已失效，请打开<a target="_blank" href="https://clist.by/">Clist.by</a>重新登录
+         <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
+         <br>脚本不会也无法获取您在Clist.by站点上的具体Cookie，发送请求时会由浏览器自动携带，具体请阅读脚本页的说明`;
+        var newElement = $("<div></div>")
+            .addClass("alert alert-error ojbetter-alert").html(`CodeforcesBetter! —— ${state}`)
+            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
+    }
+    return ok;
+}
+// 创建css
+function creatRatingCss(hasborder = true) {
+    let dynamicCss = "";
+    let hiddenCss = RatingHidden ? ":hover" : "";
+    for (let cssClass in cssMap) {
+        dynamicCss += "." + cssClass + hiddenCss + " {\n";
+        let border = hasborder ? `    border: 1px solid ${cssMap[cssClass]};\n` : `    border: 1px solid #dcdfe6;\n`;
+        dynamicCss += `    color: ${cssMap[cssClass]};\n${border}}\n`;
+    }
+    GM_addStyle(dynamicCss);
+}
+// 模拟请求获取
+async function getRating(problem, problem_url) {
+    problem = problem.replace(/\([\s\S]*?\)/g, '').replace(/^\s+|\s+$/g, '');
+    return new Promise((resolve, reject) => {
+        const queryString = `search=${problem}&resource=1`;
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url: `https://clist.by/problems/?${queryString}`,
+            responseType: 'html',
+            onload: function (response) {
+                const html = response.responseText;
+                var cleanedHtml = html.replace(/src=(.|\s)*?"/g, '');
+                const trs = $(cleanedHtml).find('table').find('tbody tr');
+                let problemMap = {};
+                trs.each(function (index) {
+                    const rating = $(this).find('.problem-rating-column').text().trim();
+                    const link = $(this).find('.problem-name-column').find('a').eq(1).attr('href');
+                    problemMap[link] = rating;
+                });
+                for (let [link, rating] of Object.entries(problemMap)) {
+                    link = link.replace(/http:/g, 'https:');
+                    if (link == problem_url || link == problem_url + '/') {
+                        resolve({
+                            rating: parseInt(rating),
+                            problem: problem
+                        });
+                        return;
+                    }
+                }
+                reject('\n' + problem + '未找到该题目的数据\n');
+            },
+            onerror: function (response) {
+                reject(problem + '发生了错误！');
+            }
+        });
+    });
+}
+// contest页显示Rating
+async function showRatingByClist_contest() {
+    if (!await checkCookie(true)) return;
+    creatRatingCss();
+
+    var clist_event = $('#sidebar').children().first().find('.rtable th').first().text();
+    var problemsMap = new Map();
+    await new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: "https://clist.by/api/v3/contest/?limit=1&resource_id=1&with_problems=true&event=" + encodeURIComponent(clist_event),
+            headers: {
+                "Authorization": clist_Authorization
+            },
+            onload: function (response) {
+                var data = JSON.parse(response.responseText);
+                var objects = data.objects;
+                if (objects.length > 0) {
+                    var problems = objects[0].problems;
+                    for (var i = 0; i < problems.length; i++) {
+                        var problem = problems[i];
+                        problemsMap.set(problem.code, problem.rating);
+                    }
+                    resolve();
+                }
+            }
+        });
+    });
+
+    $('.datatable .id.left').each(function () {
+        let href = $(this).find('a').attr('href');
+        let problemId = getProblemId(href);
+        if (problemsMap.has(problemId)) {
+            var rating = problemsMap.get(problemId);
+            let className = "rating_by_clist_color9";
+            let keys = Object.keys(ratingClassMap);
+            for (let i = 0; i < keys.length; i++) {
+                if (rating < keys[i]) {
+                    className = ratingClassMap[keys[i - 1]];
+                    break;
+                }
+            }
+            $(this).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${rating}</span></div>`);
+        }
+    });
+}
+// problemset页显示Rating
+async function showRatingByClist_problemset() {
+    if (!await checkCookie()) return;
+    creatRatingCss();
+
+    const $problems = $('.problems');
+    const $trs = $problems.find('tbody tr:gt(0)');
+
+    for (let i = 0; i < $trs.length; i++) {
+        const $tds = $($trs[i]).find('td');
+        let problem = $($tds[1]).find('a:first').text();
+        let problem_url = $($tds[1]).find('a').attr('href');
+        problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
+        let result;
+        try {
+            result = await getRating(problem, problem_url);
+        } catch (error) {
+            console.warn(error);
+        }
+
+        let className = "rating_by_clist_color9";
+        let keys = Object.keys(ratingClassMap);
+        for (let i = 0; i < keys.length; i++) {
+            if (result.rating < keys[i]) {
+                className = ratingClassMap[keys[i - 1]];
+                break;
+            }
+        }
+        $($tds[0]).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${result.rating}</span></div>`);
+        // 延时100毫秒
+        // await new Promise(resolve => setTimeout(resolve, 100));
+    }
+}
+// problem页显示Rating
+async function showRatingByClist_problem() {
+    if (!await checkCookie()) return;
+    creatRatingCss(false);
+
+    let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    let problem_url = window.location.href;
+    if (problem_url.includes('/contest/')) {
+        problem_url = problem_url.replace(/\/contest\/(\d+)\/problem\/(\w+)[^\w]*/, '/contest/$1/problem/$2');
+    } else {
+        problem_url = problem_url.replace(/\/problemset\/problem\/(\d+)\/(\w+)/, '/contest/$1/problem/$2');
+    }
+    // 轻量站
+    if (is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com');
+    let result;
+    try {
+        result = await getRating(problem, problem_url);
+    } catch (error) {
+        console.warn(error);
+        return;
+    }
+
+    let className = "rating_by_clist_color9";
+    let keys = Object.keys(ratingClassMap);
+    for (let i = 0; i < keys.length; i++) {
+        if (result.rating < keys[i]) {
+            className = ratingClassMap[keys[i - 1]];
+            break;
+        }
+    }
+    const RatingHtml = $(`<a id="problemLink" href="https://clist.by/problems/?search=${result.problem}&resource=1" target="_blank">
+        <button style="height: 25px;" class="html2mdButton ratingBadges ${className}">
+        <img style="width:45px; margin-right:2px;" src="https://pic.imgdb.cn/item/65121765c458853aef9427ad.png">${result.rating}</button>
+        </a>`);
+    if ($('#CF2luoguPanel').length > 0) {
+        $('#CF2luoguPanel').append(RatingHtml);
+    } else {
+        const panelElement = $("<div>")
+            .addClass("html2md-panel")
+            .attr("id", "CF2luoguPanel");
+        if (is_mSite) {
+            panelElement.insertBefore('.problem-statement');
+        } else {
+            panelElement.insertBefore('.problemindexholder');
+        }
+        panelElement.append(RatingHtml);
     }
 }
 
@@ -4118,7 +4500,6 @@ async function translateProblemStatement(text, element_node, button, is_comment)
                 await translate_caiyun_startup();
                 translatedText = await translate_caiyun(text);
             } else if (translation == "openai") {
-
                 translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
                     "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
                     "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
@@ -4480,7 +4861,7 @@ async function PromiseRetryWrap(task, options, ...values) {
             return await task(...values);
         } catch (err) {
             if (!--retryTimes) {
-                console.log(err);
+                console.warn(err);
                 return usedErrProcesser(err);
             }
         }
@@ -4549,7 +4930,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
                 await waitUntilIdleThenDo(async function () {
                     if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
-                    if (showJumpToLuogu) CF2luogu();
+                    if (showJumpToLuogu && is_problem) CF2luogu();
                     Promise.resolve()
                         .then(() => {
                             if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
@@ -4567,6 +4948,21 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
                             await delay(100);
                             if (renderPerfOpt) await RenderPerfOpt();
+                        })
+                        .then(async () => {
+                            await delay(100);
+                            if (showClistRating_contest && is_contest) {
+                                newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                                await showRatingByClist_contest();
+                            }
+                            if (showClistRating_problemset && is_problemset) {
+                                newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                                await showRatingByClist_problemset();
+                            }
+                            if (showClistRating_problem && is_problem) {
+                                newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                                await showRatingByClist_problem();
+                            }
                         })
                         .then(() => {
                             alertZh();
