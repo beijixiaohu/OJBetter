@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.631
+// @version      1.632
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -29,6 +29,7 @@
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
+// @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -45,19 +46,21 @@ const getGMValue = (key, defaultValue) => {
     return value;
 };
 var darkMode = getGMValue("darkMode", "follow");
-var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset;
+var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset, is_standings;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var replaceSymbol, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
+var standingsRecolor;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
     is_acmsguru = href.includes("acmsguru");
     is_oldLatex = $('.tex-span').length;
-    is_contest = href.includes('/contest/') && !href.includes('/problem/');
+    is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     is_problem = href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
+    is_standings = href.includes('/standings');
     // 说明为旧的latex渲染
     if (is_oldLatex) {
         var newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert").html(`
@@ -74,6 +77,7 @@ function init() {
     commentPaging = getGMValue("commentPaging", true);
     enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
     showJumpToLuogu = getGMValue("showJumpToLuogu", true);
+    standingsRecolor = getGMValue("standingsRecolor", true);
     loaded = getGMValue("loaded", false);
     translation = getGMValue("translation", "deepl");
     commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
@@ -2617,6 +2621,18 @@ const CFBetterSettingMenuHTML = `
                     </div>
                     <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
                 </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="standingsRecolor">榜单重新着色</label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>对于采用 Codeforces 赛制的比赛的榜单</p>
+                        <p>按照“得分/总分”所在的范围为分数重新渐变着色</p>
+                        <p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+                </div>
             </div>
             <div id="translation-settings" class="settings-page">
                 <h3>翻译设置</h3>
@@ -2974,6 +2990,7 @@ async function settingPanel() {
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
+        $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#loaded").prop("checked", GM_getValue("loaded") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
@@ -3024,6 +3041,7 @@ async function settingPanel() {
                 renderPerfOpt: $("#renderPerfOpt").prop("checked"),
                 commentPaging: $("#commentPaging").prop("checked"),
                 enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
+                standingsRecolor: $("#standingsRecolor").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 loaded: $("#loaded").prop("checked"),
                 translation: $("input[name='translation']:checked").val(),
@@ -4210,38 +4228,47 @@ async function showRatingByClist_contest() {
         }
     });
 }
-// problemset页显示Rating
-async function showRatingByClist_problemset() {
-    if (!await checkCookie()) return;
-    creatRatingCss();
+// problemset页显示Rating 
+async function showRatingByClist_problemset() { 
+    if (!await checkCookie()) return; 
+    creatRatingCss(); 
 
-    const $problems = $('.problems');
-    const $trs = $problems.find('tbody tr:gt(0)');
+    const $problems = $('.problems'); 
+    const $trs = $problems.find('tbody tr:gt(0)'); 
 
-    for (let i = 0; i < $trs.length; i++) {
-        const $tds = $($trs[i]).find('td');
-        let problem = $($tds[1]).find('a:first').text();
-        let problem_url = $($tds[1]).find('a').attr('href');
-        problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
-        let result;
-        try {
-            result = await getRating(problem, problem_url);
-        } catch (error) {
-            console.warn(error);
+    for (let i = 0; i < $trs.length; i += 3) {
+        const promises = [];
+        const endIndex = Math.min(i + 3, $trs.length);
+
+        for (let j = i; j < endIndex; j++) {
+            const $tds = $($trs[j]).find('td'); 
+            let problem = $($tds[1]).find('a:first').text(); 
+            let problem_url = $($tds[1]).find('a').attr('href'); 
+            problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
+            
+            promises.push(getRating(problem, problem_url).catch(error => console.warn(error)));
         }
 
-        let className = "rating_by_clist_color9";
-        let keys = Object.keys(ratingClassMap);
-        for (let i = 0; i < keys.length; i++) {
-            if (result.rating < keys[i]) {
-                className = ratingClassMap[keys[i - 1]];
-                break;
+        const results = await Promise.all(promises);
+
+        for (let j = i; j < endIndex; j++) {
+            const result = results[j - i];
+            let className = "rating_by_clist_color9";
+            let keys = Object.keys(ratingClassMap);
+            for (let k = 0; k < keys.length; k++) { 
+                if (result.rating < keys[k]) {
+                    className = ratingClassMap[keys[k - 1]];
+                    break;
+                }
             }
+
+            const $tds = $($trs[j]).find('td');
+            $($tds[0]).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${result.rating}</span></div>`);
         }
-        $($tds[0]).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${result.rating}</span></div>`);
-        // 延时100毫秒
+
+        // 延时100毫秒 
         // await new Promise(resolve => setTimeout(resolve, 100));
-    }
+    } 
 }
 // problem页显示Rating
 async function showRatingByClist_problem() {
@@ -4290,6 +4317,32 @@ async function showRatingByClist_problem() {
         }
         panelElement.append(RatingHtml);
     }
+}
+
+// cf赛制榜单重新着色
+function recolorStandings() {
+    function getColorValue(value) {
+        value = Math.max(0, Math.min(1, value));
+
+        const scale = chroma.scale(['#b71c1c', '#ff9800', '#ffc107', '#00aa00']).mode('lch').domain([0, 0.45, 0.7, 1]);
+        return scale(value).hex();
+    }
+    var maxScores = $('.standings tr:first th:nth-child(n+5)')
+        .map(function () {
+            return $(this).find('span').text();
+        })
+        .get();
+    if (maxScores.every(score => score === '')) return;
+    $('.standings tr:not(:first):not(:last)').each(function () {
+        var thElements = $(this).find('td:nth-child(n+5)');
+        thElements.each(function (index) {
+            var spanElement = $(this).find('span:first');
+            var value = parseInt(spanElement.text());
+            if (value <= 0) return;
+            var colorValue = getColorValue(value / maxScores[index]);
+            spanElement.css('color', colorValue);
+        });
+    });
 }
 
 // 等待Latex渲染队列全部完成
@@ -4558,6 +4611,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         });
         translateDiv.parentNode.insertBefore(wrapperDiv, translateDiv);
     }
+    console.log(translatedText);
 
     // 转义LaTex中的特殊符号
     if (!is_oldLatex) {
@@ -4571,6 +4625,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         ];
 
         let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
+        console.log(latexMatches);
 
         for (const match of latexMatches) {
             const matchedText = match[0];
@@ -4583,6 +4638,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             translatedText = translatedText.replace(matchedText, escapedText);
         }
     }
+    console.log(translatedText);
 
     // 使符合mathjx的转换语法
     const mathjaxRuleMap = [
@@ -4931,6 +4987,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 await waitUntilIdleThenDo(async function () {
                     if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
                     if (showJumpToLuogu && is_problem) CF2luogu();
+
                     Promise.resolve()
                         .then(() => {
                             if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
@@ -4948,6 +5005,11 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
                             await delay(100);
                             if (renderPerfOpt) await RenderPerfOpt();
+                        })
+                        .then(async () => {
+                            if (standingsRecolor && is_standings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
+                            await delay(100);
+                            if (standingsRecolor && is_standings) await recolorStandings();
                         })
                         .then(async () => {
                             await delay(100);
