@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.632
+// @version      1.633
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -120,6 +120,9 @@ function init() {
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
+const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="16" height="16"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
+const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="16" height="16"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
+const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 100; }`;
 const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
 
@@ -414,7 +417,7 @@ span.mdViewContent {
     border: 1px solid #10b981;
     border-radius: 0.3rem;
     padding: 5px;
-    margin: 10px 0px;
+    margin: -1px 0px 10px 0px;
     width: 100%;
     box-sizing: border-box;
     font-size: 13px;
@@ -460,6 +463,14 @@ span.mdViewContent {
     background-color: #800;
     color: #fff;
     text-decoration: none;
+}
+.translate-problem-statement-panel{
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9fa;
+    border: 1px solid #c5ebdf;
+    border-radius: 0.3rem;
+    margin-bottom: 4px;
 }
 .html2md-panel {
     display: flex;
@@ -512,6 +523,16 @@ button.html2mdButton.reTranslation {
     background-color: #f4f4f5;
     color: #909399;
     border: 1px solid #c8c9cc;
+}
+.borderlessButton{
+    display: flex;
+    align-items: center;
+    margin: 2.5px 7px;
+    fill: #9E9E9E;
+}
+.borderlessButton:hover{
+    cursor: pointer;
+    fill: #059669;
 }
 .translate-problem-statement table {
     border: 1px #ccc solid !important;
@@ -3453,11 +3474,11 @@ function addButtonWithCopy(parent, suffix, type) {
 async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
     var result;
     $(document).on('click', '.translateButton' + suffix, debounce(async function () {
-        $(this).trigger('mouseout');
-        $(this).removeClass("translated");
-        $(this).text("翻译中");
-        $(this).css("cursor", "not-allowed");
-        $(this).prop("disabled", true);
+        $(this).trigger('mouseout')
+            .removeClass("translated")
+            .text("翻译中")
+            .css("cursor", "not-allowed")
+            .prop("disabled", true);
         var target, element_node, block, errerNum = 0;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
@@ -3471,8 +3492,8 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                 if (result.copyDiv) {
                     $(result.copyDiv).remove();
                 }
-                if (result.copyButton) {
-                    $(result.copyButton).remove();
+                if (result.panelDiv) {
+                    $(result.panelDiv).remove();
                 }
             }
             // 移除旧的事件
@@ -4229,23 +4250,23 @@ async function showRatingByClist_contest() {
     });
 }
 // problemset页显示Rating 
-async function showRatingByClist_problemset() { 
-    if (!await checkCookie()) return; 
-    creatRatingCss(); 
+async function showRatingByClist_problemset() {
+    if (!await checkCookie()) return;
+    creatRatingCss();
 
-    const $problems = $('.problems'); 
-    const $trs = $problems.find('tbody tr:gt(0)'); 
+    const $problems = $('.problems');
+    const $trs = $problems.find('tbody tr:gt(0)');
 
     for (let i = 0; i < $trs.length; i += 3) {
         const promises = [];
         const endIndex = Math.min(i + 3, $trs.length);
 
         for (let j = i; j < endIndex; j++) {
-            const $tds = $($trs[j]).find('td'); 
-            let problem = $($tds[1]).find('a:first').text(); 
-            let problem_url = $($tds[1]).find('a').attr('href'); 
+            const $tds = $($trs[j]).find('td');
+            let problem = $($tds[1]).find('a:first').text();
+            let problem_url = $($tds[1]).find('a').attr('href');
             problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
-            
+
             promises.push(getRating(problem, problem_url).catch(error => console.warn(error)));
         }
 
@@ -4255,7 +4276,7 @@ async function showRatingByClist_problemset() {
             const result = results[j - i];
             let className = "rating_by_clist_color9";
             let keys = Object.keys(ratingClassMap);
-            for (let k = 0; k < keys.length; k++) { 
+            for (let k = 0; k < keys.length; k++) {
                 if (result.rating < keys[k]) {
                     className = ratingClassMap[keys[k - 1]];
                     break;
@@ -4268,7 +4289,7 @@ async function showRatingByClist_problemset() {
 
         // 延时100毫秒 
         // await new Promise(resolve => setTimeout(resolve, 100));
-    } 
+    }
 }
 // problem页显示Rating
 async function showRatingByClist_problem() {
@@ -4302,7 +4323,7 @@ async function showRatingByClist_problem() {
     }
     const RatingHtml = $(`<a id="problemLink" href="https://clist.by/problems/?search=${result.problem}&resource=1" target="_blank">
         <button style="height: 25px;" class="html2mdButton ratingBadges ${className}">
-        <img style="width:45px; margin-right:2px;" src="https://pic.imgdb.cn/item/65121765c458853aef9427ad.png">${result.rating}</button>
+        <img style="width:45px; margin-right:2px;" src="https://aowuucdn.oss-cn-beijing.aliyuncs.com/clist.png">${result.rating}</button>
         </a>`);
     if ($('#CF2luoguPanel').length > 0) {
         $('#CF2luoguPanel').append(RatingHtml);
@@ -4588,30 +4609,52 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         textElement.textContent = translatedText;
         translateDiv.parentNode.insertBefore(textElement, translateDiv);
 
-        // 按钮
-        var copyButton = document.createElement("button");
-        copyButton.textContent = "Copy";
-        var wrapperDiv = document.createElement("div");
-        $(wrapperDiv).css({
-            display: "flex",
-            justifyContent: "flex-end"
+        // panel
+        var panelDiv = document.createElement("div");
+        $(panelDiv).addClass("translate-problem-statement-panel");
+        // 收起按钮
+        var closeButton = document.createElement("div");
+        closeButton.innerHTML = putawayIcon;
+        $(closeButton).addClass("borderlessButton");
+        $(panelDiv).append(closeButton);
+        // 复制按钮
+        var copyButton = document.createElement("div");
+        copyButton.innerHTML = copyIcon;
+        $(copyButton).addClass("borderlessButton");
+        $(panelDiv).append(copyButton);
+
+        var buttonState = "expand";
+        closeButton.addEventListener("click", function () {
+            if (buttonState === "expand") {
+                this.innerHTML = unfoldIcon;
+                $(translateDiv).css({
+                    display: "none",
+                    transition: "height 2s"
+                });
+                buttonState = "collapse";
+            } else if (buttonState === "collapse") {
+                // 执行收起操作
+                this.innerHTML = putawayIcon;
+                $(translateDiv).css({
+                    display: "",
+                    transition: "height 2s"
+                });
+                buttonState = "expand";
+            }
         });
-        $(wrapperDiv).append(copyButton);
-        $(copyButton).addClass("html2mdButton html2md-cb");
 
         copyButton.addEventListener("click", function () {
             var translatedText = textElement.textContent;
             GM_setClipboard(translatedText);
-            $(this).addClass("copied").text("Copied");
-            // 更新复制按钮文本
-            setTimeout(() => {
-                $(this).removeClass("copied");
-                $(this).text("Copy");
-            }, 2000);
+            // $(this).addClass("copied").text("Copied");
+            // // 更新复制按钮文本
+            // setTimeout(() => {
+            //     $(this).removeClass("copied");
+            //     $(this).text("Copy");
+            // }, 2000);
         });
-        translateDiv.parentNode.insertBefore(wrapperDiv, translateDiv);
+        translateDiv.parentNode.insertBefore(panelDiv, translateDiv);
     }
-    console.log(translatedText);
 
     // 转义LaTex中的特殊符号
     if (!is_oldLatex) {
@@ -4620,12 +4663,11 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
             { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
             { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
-            { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
             { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
+            { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
         ];
 
         let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
-        console.log(latexMatches);
 
         for (const match of latexMatches) {
             const matchedText = match[0];
@@ -4638,7 +4680,6 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             translatedText = translatedText.replace(matchedText, escapedText);
         }
     }
-    console.log(translatedText);
 
     // 使符合mathjx的转换语法
     const mathjaxRuleMap = [
@@ -4682,7 +4723,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             translateDiv: translateDiv,
             status: status,
             copyDiv: textElement,
-            copyButton: copyButton
+            panelDiv: panelDiv
         };
     }
 
