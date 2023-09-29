@@ -1,5 +1,5 @@
 <h1 id="codeforces-better🎈">Codeforces Better!🎈</h1>
-<p>Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页</p>
+<p>Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色</p>
 <h2 id="功能">功能</h2>
 <p>tip：脚本的部分功能提供了配置项，您可以点击<strong>整个页面右上角</strong> 的 <strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</p>
 <h3 id="界面汉化">界面汉化</h3>
@@ -77,7 +77,11 @@
 </table>
 <h3 id="ClistRating分">ClistRating分</h3>
 <p>获取clist.by网站的Rating分数据，并展示</p>
-<p>您可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择您想使用的翻译服务（默认为Deepl）</p>
+<p>注意，不同页面工作所需要的凭证有所不同：</p>
+<ul>
+  <li>对于比赛问题集页（contest），需要浏览器中clist.by网站的登录cookie有效，<strong>或者</strong>在设置面板中填写api key</li>
+  <li>对于题目页（problem）和题单页（problemset），需要浏览器中clist.by的登录cookie有效</li>
+</ul>
 <h2 id="其他功能">其他功能</h2>
 <p>部分功能可在右上角的 <code>CodeforcesBetter设置</code> 面板中更改/开关</p>
 <ul>
@@ -87,6 +91,7 @@
   <li>洛谷跳转，一键跳转到该题在洛谷对应的页面</li>
   <li>评论区分页，支持翻页、跳转、可选择每页显示的主楼数</li>
   <li>渲染优化，为折叠块元素启用可见渲染（content-visibility: auto）</li>
+  <li>榜单重新着色，对于采用 Codeforces 赛制的比赛的榜单，按照“得分/总分”所在的范围为分数重新渐变着色</li>
 </ul>
 <h2 id="兼容性">兼容性</h2>
 <p><strong>浏览器</strong></p>

@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.633
-// @description  Codeforces界面汉化、黑暗模式支持、题目翻译，markdown视图，一键复制题目，跳转到洛谷、评论区分页
+// @version      1.634
+// @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @run-at       document-start
@@ -200,14 +200,20 @@ function handleColorSchemeChange(event) {
             color: #adbac7;
         }
         /* 文字颜色2 */
-        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] span, html[data-theme=dark] #footer,
+        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
+        html[data-theme=dark] .lang-chooser,
+        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
-        html[data-theme=dark] .user-admin{
+        html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
+        html[data-theme=dark] .CFBetter_modal button{
             color: #9099a3 !important;
         }
         /* 文字颜色3 */
-        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] input{
+        html[data-theme=dark] button.html2mdButton{
+            color: #6385a6;
+        }
+        html[data-theme=dark] input{
             color: #6385a6 !important;
         }
         /* 文字颜色4 */
@@ -245,7 +251,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
         html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
-        html[data-theme=dark] .CFBetter_modal{
+        html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -255,14 +261,15 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
-        html[data-theme=dark] .input-output-copier:hover,
+        html[data-theme=dark] .input-output-copier:hover, html[data-theme=dark] .translate-problem-statement-panel,
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] .CFBetter_setting_menu hr, 
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
         html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
-        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb{
+        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
+        html[data-theme=dark] .CFBetter_modal button{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -280,7 +287,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
-        html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select{
+        html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -1377,7 +1385,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background-color: #ffebcd;
 }
 /* RatingByClist */
-.ratingBadges{
+.ratingBadges, html[data-theme=dark] button.ratingBadges{
     font-weight: 700;
     margin-top: 5px;
     border-radius: 4px;
@@ -2746,7 +2754,7 @@ const CFBetterSettingMenuHTML = `
                 <h4>基本</h4>
                 <div class='CFBetter_setting_list' style="background-color: #E0F2F1;border: 1px solid #009688;">
                     <div>
-                        <p>注意：不同页面的显示功能工作所需要的凭证有所不同的</p>
+                        <p>注意：不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明</p>
                     </div>
                 </div>
                 <div class='CFBetter_setting_list'>
