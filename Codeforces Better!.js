@@ -4486,6 +4486,7 @@ function replaceBlock(text, matches, replacements) {
 
 // latex还原
 function recoverBlock(translatedText, matches, replacements) {
+    if (matches == null) return translatedText;
     for (let i = 0; i < matches.length; i++) {
         let match = matches[i];
         let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
