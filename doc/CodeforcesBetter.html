@@ -76,12 +76,13 @@
   </tbody>
 </table>
 <h3 id="ClistRating分">ClistRating分</h3>
-<p>获取clist.by网站的Rating分数据，并展示</p>
+<p>获取 clist.by 网站的 Rating 分数据，并展示</p>
 <p>注意，不同页面工作所需要的凭证有所不同：</p>
 <ul>
-  <li>对于比赛问题集页（contest），需要浏览器中clist.by网站的登录cookie有效，<strong>或者</strong>在设置面板中填写api key</li>
-  <li>对于题目页（problem）和题单页（problemset），需要浏览器中clist.by的登录cookie有效</li>
+  <li>对于比赛问题集页（contest），需要浏览器中 clist.by 网站的登录 cookie 有效，<strong>或者</strong>在设置面板中填写api key</li>
+  <li>对于题目页（problem）和题单页（problemset），需要浏览器中 clist.by 的登录 cookie 有效</li>
 </ul>
+<p style="color: #F44336;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie 有效性通过尝试请求所返回的状态码判断</p>
 <h2 id="其他功能">其他功能</h2>
 <p>部分功能可在右上角的 <code>CodeforcesBetter设置</code> 面板中更改/开关</p>
 <ul>
@@ -133,7 +134,7 @@
 </table>
 
 <p><strong>脚本管理器</strong></p>
-<p>仅在Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在Greasemonkey，Violentmonkey等中的兼容性</p>
+<p>仅在Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在Greasemonkey，Violentmonkey，ScriptCat等中的兼容性</p>
 <p><strong>其他插件</strong></p>
 <p>与主流CF相关插件不存在兼容性问题，如果您遇到了兼容性问题，欢迎反馈。</p>
 <h2 id="常见问题">常见问题</h2>
@@ -161,7 +162,7 @@
   <ul>
     <li>A. 在使用普通翻译接口（deepl/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】</li>
     <div style="background-color: #00BCD4; color: #ffffff;">
-      <p><strong>脚本的对公式的处理方式</strong></p>
+      <p><strong>脚本对公式的处理方式</strong></p>
       <p>为了保护LaTeX公式在翻译时不被破坏，脚本会先取出所有的LaTeX公式，并使用替换符{xx}/[xx]/【xx】来占位，</p>
       <p>由于这些替换符大概率不会在翻译的过程中遭到破坏，因此可以在翻译后再根据替换符还原回LaTeX公式。</p>
       <p>这种实现方式能如期工作的前提是替换符不被破坏，这在绝大多数情况下都是没有问题的，</p>
@@ -245,7 +246,7 @@
       href="https://greasyfork.org/zh-CN/scripts/378277">翻译机</a></li>
   <li>脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
       href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a>、<a
-      href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>
+      href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a href="https://github.com/gka/chroma.js">chroma</a>
   </li>
   <li>特别感谢所有提供反馈和建议的朋友们。</li>
 </ul>
