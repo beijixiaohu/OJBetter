@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.65
+// @version      1.652
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -3495,17 +3495,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
         // 重新翻译
         if (result) {
-            if (result.translateDiv) {
-                $(result.translateDiv).remove();
-            }
-            if (!is_oldLatex) {
-                if (result.copyDiv) {
-                    $(result.copyDiv).remove();
-                }
-                if (result.panelDiv) {
-                    $(result.panelDiv).remove();
-                }
-            }
+            $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
             // 移除旧的事件
             $(document).off("mouseover", ".translateButton" + suffix);
             $(document).off("mouseout", ".translateButton" + suffix);
@@ -3515,10 +3505,9 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
         // 分段翻译
         if (enableSegmentedTranslation) {
-            var pElements = block.find("p, li");
+            var pElements = block.find("p:not(li p), li");
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
-                if (type === "child_level") $(target).children(':first').remove();
                 element_node = pElements[i];
                 if (type === "child_level") {
                     $(pElements[i]).append("<div></div>");
@@ -4177,7 +4166,7 @@ function creatRatingCss(hasborder = true) {
     GM_addStyle(dynamicCss);
 }
 // 模拟请求获取
-async function getRating(problem, problem_url) {
+async function getRating(problem, problem_url, contest = null) {
     problem = problem.replace(/\([\s\S]*?\)/g, '').replace(/^\s+|\s+$/g, '');
     return new Promise((resolve, reject) => {
         const queryString = `search=${problem}&resource=1`;
@@ -4189,20 +4178,38 @@ async function getRating(problem, problem_url) {
                 const html = response.responseText;
                 var cleanedHtml = html.replace(/src=(.|\s)*?"/g, '');
                 const trs = $(cleanedHtml).find('table').find('tbody tr');
-                let problemMap = {};
+                let records = [];
                 trs.each(function (index) {
                     const rating = $(this).find('.problem-rating-column').text().trim();
                     const link = $(this).find('.problem-name-column').find('a').eq(1).attr('href');
-                    problemMap[link] = rating;
+                    var contests = [];
+                    $(this).find('.problem-name-column').find('.pull-right a[title], .pull-right span[title]').each(function () {
+                        var value = $(this).attr('title');
+                        if (value) {
+                            value = value.replace(/<br\/?><\/a>/g, '');
+                            contests.push(value);
+                        }
+                    });
+                    records.push({ rating: rating, link: link, contests: contests });
                 });
-                for (let [link, rating] of Object.entries(problemMap)) {
-                    link = link.replace(/http:/g, 'https:');
+                for (let record of records) {
+                    let link = record.link.replace(/http:/g, 'https:');
                     if (link == problem_url || link == problem_url + '/') {
                         resolve({
-                            rating: parseInt(rating),
+                            rating: parseInt(record.rating),
                             problem: problem
                         });
                         return;
+                    } else if (contest != null) {
+                        for (let item of record.contests) {
+                            if (contest == item) {
+                                resolve({
+                                    rating: parseInt(record.rating),
+                                    problem: problem
+                                });
+                                return;
+                            }
+                        }
                     }
                 }
                 reject('\n' + problem + '未找到该题目的数据\n');
@@ -4234,7 +4241,7 @@ async function showRatingByClist_contest() {
                     var problems = objects[0].problems;
                     for (var i = 0; i < problems.length; i++) {
                         var problem = problems[i];
-                        problemsMap.set(problem.code, problem.rating);
+                        problemsMap.set(problem.url, problem.rating);
                     }
                     resolve();
                 }
@@ -4243,10 +4250,9 @@ async function showRatingByClist_contest() {
     });
 
     $('.datatable .id.left').each(function () {
-        let href = $(this).find('a').attr('href');
-        let problemId = getProblemId(href);
-        if (problemsMap.has(problemId)) {
-            var rating = problemsMap.get(problemId);
+        let href = 'https://codeforces.com' + $(this).find('a').attr('href');
+        if (problemsMap.has(href)) {
+            var rating = problemsMap.get(href);
             let className = "rating_by_clist_color9";
             let keys = Object.keys(ratingClassMap);
             for (let i = 0; i < keys.length; i++) {
@@ -4313,11 +4319,11 @@ async function showRatingByClist_problem() {
     } else {
         problem_url = problem_url.replace(/\/problemset\/problem\/(\d+)\/(\w+)/, '/contest/$1/problem/$2');
     }
-    // 轻量站
-    if (is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com');
+    if (is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com'); // 轻量站
+    let contest = $('#sidebar').children().first().find('.rtable th').first().text();
     let result;
     try {
-        result = await getRating(problem, problem_url);
+        result = await getRating(problem, problem_url, contest);
     } catch (error) {
         console.warn(error);
         return;
