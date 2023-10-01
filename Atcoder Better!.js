@@ -1,16 +1,20 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.10
-// @description  Atcoder界面汉化、题目翻译，markdown视图，一键复制题目，跳转到洛谷
+// @version      1.101
+// @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
+// @run-at       document-start
 // @connect      www2.deepl.com
+// @connect      www.iflyrec.com
 // @connect      m.youdao.com
+// @connect      api.interpreter.caiyunai.com
 // @connect      translate.google.com
 // @connect      openai.api2d.net
 // @connect      api.openai.com
 // @connect      www.luogu.com.cn
+// @connect      clist.by
 // @connect      greasyfork.org
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -23,6 +27,7 @@
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/atcoder.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
+// @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -39,58 +44,322 @@ const getGMValue = (key, defaultValue) => {
     return value;
 };
 
-const bottomZh_CN = getGMValue("bottomZh_CN", true);
-const showLoading = getGMValue("showLoading", true);
-const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-var enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
-const showJumpToLuogu = getGMValue("showJumpToLuogu", true);
-const loaded = getGMValue("loaded", false);
-var translation = getGMValue("translation", "deepl");
-//openai
-var openai_model, openai_key, openai_proxy, openai_header, openai_data;
-var opneaiConfig = getGMValue("chatgpt-config", {
-    "choice": -1,
-    "configurations": []
-});
-if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
-    const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
+var darkMode = getGMValue("darkMode", "follow");
+var is_problem;
+var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, enableSegmentedTranslation, translation;
+var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
+var replaceSymbol, commentPaging, showJumpToLuogu, loaded;
+var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
+var isEnglishLanguage;
+function init() {
+    const { hostname, href } = window.location;
+    is_problem = href.includes('/tasks/');
+    bottomZh_CN = getGMValue("bottomZh_CN", true);
+    showLoading = getGMValue("showLoading", true);
+    hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
+    expandFoldingblocks = getGMValue("expandFoldingblocks", true);
+    commentPaging = getGMValue("commentPaging", true);
+    enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
+    showJumpToLuogu = getGMValue("showJumpToLuogu", true);
+    loaded = getGMValue("loaded", false);
+    translation = getGMValue("translation", "deepl");
+    replaceSymbol = getGMValue("replaceSymbol", "2");
+    showClistRating_contest = getGMValue("showClistRating_contest", false);
+    showClistRating_problem = getGMValue("showClistRating_problem", false);
+    showClistRating_problemset = getGMValue("showClistRating_problemset", false);
+    RatingHidden = getGMValue("RatingHidden", false);
+    clist_Authorization = getGMValue("clist_Authorization", "");
+    //openai
+    opneaiConfig = getGMValue("chatgpt-config", {
+        "choice": -1,
+        "configurations": []
+    });
+    if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
+        const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
 
-    if (configAtIndex == undefined) {
-        let existingConfig = GM_getValue('chatgpt-config');
-        existingConfig.choice = 0;
-        GM_setValue('chatgpt-config', existingConfig);
-        location.reload();
+        if (configAtIndex == undefined) {
+            let existingConfig = GM_getValue('chatgpt-config');
+            existingConfig.choice = 0;
+            GM_setValue('chatgpt-config', existingConfig);
+            location.reload();
+        }
+
+        openai_model = configAtIndex.model;
+        openai_key = configAtIndex.key;
+        openai_proxy = configAtIndex.proxy;
+        openai_header = configAtIndex._header ?
+            configAtIndex._header.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
+        openai_data = configAtIndex._data ?
+            configAtIndex._data.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
     }
-
-    openai_model = configAtIndex.model;
-    openai_key = configAtIndex.key;
-    openai_proxy = configAtIndex.proxy;
-    openai_header = configAtIndex._header ?
-        configAtIndex._header.split("\n").map(header => {
-            const [key, value] = header.split(":");
-            return { [key.trim()]: value.trim() };
-        }) : [];
-    openai_data = configAtIndex._data ?
-        configAtIndex._data.split("\n").map(header => {
-            const [key, value] = header.split(":");
-            return { [key.trim()]: value.trim() };
-        }) : [];
 }
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
-const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 9999; }`;
-const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 10000; }`;
+const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="16" height="16"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
+const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="16" height="16"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
+const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
+const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
+<path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
+<path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
+const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1100; }`;
+const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1300; }`;
 
-// 语言判断
-const isEnglishLanguage = (function () {
-    var metaElement = $('meta[http-equiv="Content-Language"]');
-    var contentValue = metaElement.attr('content');
-    return (contentValue === 'en');
-})();
+// 切换系统黑暗监听
+const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+const changeEventListeners = [];
+function handleColorSchemeChange(event) {
+    const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
+    if (!event.matches) {
+        var originalColor = $(this).data("original-color");
+        $(this).css("background-color", originalColor);
+    }
+}
+
+// 黑暗模式
+(function setDark() {
+    // 初始化
+    function setDarkTheme() {
+        const htmlElement = document.querySelector('html');
+        if (htmlElement) {
+            htmlElement.setAttribute('data-theme', 'dark');
+        } else {
+            setTimeout(setDarkTheme, 100);
+        }
+    }
+    if (darkMode == "dark") {
+        setDarkTheme();
+    } else if (darkMode == "follow") {
+        // 添加事件监听器
+        changeEventListeners.push(handleColorSchemeChange);
+        mediaQueryList.addEventListener('change', handleColorSchemeChange);
+
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) setDarkTheme();
+    }
+
+    GM_addStyle(`
+        /* 黑暗支持 */
+        html[data-theme=dark]:root {
+            color-scheme: light dark;
+        }
+        /* 文字颜色1 */
+        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, 
+        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
+        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
+        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
+        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, html[data-theme=dark] #pageContent,
+        html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
+        html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
+        html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
+        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .CFBetter_setting_sidebar li a:link{
+            color: #a0adb9 !important;
+        }
+        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
+            color: #adbac7;
+        }
+        /* 文字颜色2 */
+        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
+        html[data-theme=dark] .lang-chooser,
+        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
+        html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
+        html[data-theme=dark] .CFBetter_modal button{
+            color: #9099a3 !important;
+        }
+        /* 文字颜色3 */
+        html[data-theme=dark] button.html2mdButton{
+            color: #6385a6;
+        }
+        html[data-theme=dark] input{
+            color: #6385a6 !important;
+        }
+        /* 文字颜色4 */
+        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
+            color: #cbd6e2 !important;
+        }
+        /* 链接颜色 */
+        html[data-theme=dark] a:link {
+            color: #3989c9;
+        }
+        html[data-theme=dark] a:visited {
+            color: #8590a6;
+        }
+        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
+            color: #9099a3 !important;
+        }
+        /* 按钮 */
+        html[data-theme=dark] .second-level-menu-list li.backLava {
+            border-radius: 6px;
+            overflow: hidden;
+            filter: invert(1) hue-rotate(.5turn);
+        }
+        html[data-theme=dark] input:hover{
+            background-color: #22272e !important;
+        } 
+        /* 背景层次1 */
+        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
+        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
+        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
+        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
+        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
+        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
+        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
+        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
+        html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
+        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
+        html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover{
+            background-color: #22272e !important;
+        }
+        /* 背景层次2 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
+        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
+        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
+        html[data-theme=dark] .input-output-copier:hover, html[data-theme=dark] .translate-problem-statement-panel,
+        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
+        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] .CFBetter_setting_menu hr, 
+        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
+        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
+        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
+        html[data-theme=dark] .CFBetter_modal button{
+            background-color: #2d333b !important;
+        }
+        /* 实线边框颜色-圆角 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
+        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .sidebar-menu ul li,
+        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
+        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
+        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement,
+        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
+            border: 1px solid #424b56 !important;
+            border-radius: 2px;
+        }
+        /* 实线边框颜色-无圆角 */
+        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
+        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
+        html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button{
+            border: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
+            border-bottom: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer{
+            border-top: 1px solid #424b56 !important;
+        }
+        html[data-theme=dark] .topic .content {
+            border-left: 4px solid #424b56 !important;
+        }
+        html[data-theme=dark] .CFBetter_setting_sidebar {
+            border-right: 1px solid #424b56 !important;
+        }
+        /* 虚线边框颜色 */
+        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
+        html[data-theme=dark] .CFBetter_setting_menu_label_text{
+            border: 1px dashed #424b56 !important;
+        }
+        html[data-theme=dark] li#add_button:hover{
+            border: 1px dashed #03A9F4 !important;
+            background-color: #2d333b !important;
+            color: #03A9F4 !important;
+        }
+        /* focus-visible */
+        html[data-theme=dark] input:focus-visible, html[data-theme=dark] textarea, html[data-theme=dark] select{
+            border-width: 1.5px !important;
+            outline: none;
+        }
+        /* 图片-亮度 */
+        html[data-theme=dark] img{
+            opacity: .75; 
+        }
+        /* 图片-反转 */
+        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link{
+            filter: invert(1) hue-rotate(.5turn);
+        }
+        /* 区域遮罩 */
+        html[data-theme=dark] .overlay {
+            background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
+            color: #9099a3;
+            text-shadow: 0px 0px 2px #000000;
+        }
+        /* 其他样式 */
+        html[data-theme=dark] .rated-user{
+            display: initial;
+        }
+        html[data-theme=dark] .datatable .ilt, html[data-theme=dark] .datatable .irt,
+        html[data-theme=dark] .datatable .ilb, html[data-theme=dark] .datatable .irb,
+        html[data-theme=dark] .datatable .lt, html[data-theme=dark] .datatable .rt,
+        html[data-theme=dark] .datatable .lb, html[data-theme=dark] .datatable .rb{
+            background: none;
+        }
+        html[data-theme=dark] .problems .accepted-problem td.id{
+            border-left: 6px solid #47837d !important;
+        }
+        html[data-theme=dark] .problems .rejected-problem td.id{
+            border-left: 6px solid #ef9a9a !important;
+        }
+        html[data-theme=dark] .problems .accepted-problem td.act {
+            background-color: #47837d !important;
+            border-radius: 0px;
+        }
+        html[data-theme=dark] .problems .rejected-problem td.act{
+            background-color: #ef9a9a !important;
+            border-radius: 0px;
+        }
+        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .CFBetter_modal{
+            box-shadow: 0px 0px 0px 4px #2d333b;
+            border: 1px solid #2d333b;
+        }
+        html[data-theme=dark] .collapsible-topic.collapsed .content .collapsible-topic-options:before{
+            background-image: linear-gradient(#22272e00, #22272e);
+        }
+        html[data-theme=dark] .alert{
+            text-shadow: none;
+        }
+        html[data-theme=dark] input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
+            color: #a0adb9 !important;
+            border: 1px solid #326154 !important;
+        }
+        /* 评测状态文字颜色 */
+        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
+        html[data-theme=dark] .verdict-successful-challenge{
+            color: #0a0 !important;
+        }
+        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
+            color: red !important;
+        }
+        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
+            color: #673ab7 !important;
+        }
+        html[data-theme=dark] .verdict-waiting {
+            color: gray !important;
+        }
+    `);
+})()
 
 // 样式
 GM_addStyle(`
+html {
+    scroll-behavior: smooth;
+}
 :root {
     --vp-font-family-base: "Chinese Quotes", "Inter var", "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
@@ -124,7 +393,7 @@ span.mdViewContent {
     border: 1px solid #10b981;
     border-radius: 0.3rem;
     padding: 5px;
-    margin: 10px 0px;
+    margin: -1px 0px 10px 0px;
     width: 100%;
     box-sizing: border-box;
     font-size: 13px;
@@ -142,7 +411,7 @@ span.mdViewContent {
   line-height: 100%;
 }
 
-.translate-problem-statement a {
+.translate-problem-statement a, .translate-problem-statement a:link {
     color: #10b981;
     font-weight: 600;
     background: 0 0;
@@ -162,14 +431,23 @@ span.mdViewContent {
 .translate-problem-statement a:hover {
     text-decoration: revert;
 }
+.translate-problem-statement-panel{
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9fa;
+    border: 1px solid #c5ebdf;
+    border-radius: 0.3rem;
+    margin: 4px 0px;
+}
 .html2md-panel {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 .html2md-panel a {
     text-decoration: none;
 }
-button.html2mdButton {
+.html2mdButton {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -180,10 +458,10 @@ button.html2mdButton {
     font-size: 13px;
     border-radius: 0.3rem;
     padding: 1px 5px;
-    margin: 5px;
+    margin: 5px !important;
     border: 1px solid #dcdfe6;
 }
-button.html2mdButton:hover {
+.html2mdButton:hover {
     color: #409eff;
     border-color: #409eff;
 }
@@ -212,6 +490,16 @@ button.html2mdButton.reTranslation {
     background-color: #f4f4f5;
     color: #909399;
     border: 1px solid #c8c9cc;
+}
+.borderlessButton{
+    display: flex;
+    align-items: center;
+    margin: 2.5px 7px;
+    fill: #9E9E9E;
+}
+.borderlessButton:hover{
+    cursor: pointer;
+    fill: #059669;
 }
 .translate-problem-statement table {
     border: 1px #ccc solid !important;
@@ -253,27 +541,27 @@ button.html2mdButton.AtBetter_setting.open {
   cursor: not-allowed;
 }
 .AtBetter_setting_menu {
-    z-index: 9999;
+    z-index: 1200;
     box-shadow: 0px 0px 0px 4px #ffffff;
     display: grid;
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 480px;
-    max-height: 90vh;
-    overflow-y: auto;
+    width: 485px;
+    height: 600px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
-    background-color: #edf1ff;
+    background-color: #f0f4f9;
     border-collapse: collapse;
     border: 1px solid #ffffff;
     color: #697e91;
     font-family: var(--vp-font-family-base);
-    padding: 10px 20px 20px 20px;
+    padding: 10px 20px 20px 10px;
     box-sizing: content-box;
 }
 .AtBetter_setting_menu h4,.AtBetter_setting_menu h5 {
     font-weight: 600;
+    margin: 15px 0px 10px 0px;
 }
 .AtBetter_setting_menu h3 {
     margin-top: 10px;
@@ -283,6 +571,101 @@ button.html2mdButton.AtBetter_setting.open {
     height: 1px;
     background-color: #ccc;
     margin: 10px 0;
+}
+.AtBetter_setting_menu .badge {
+    border-radius: 4px;
+    border: 1px solid #009688;
+    color: #009688;
+    font-size: 12px;
+    padding: 0.5px 4px;
+    margin-left: 5px;
+    margin-right: auto;
+}
+/* 页面切换 */
+.settings-page {
+    display: none;
+}
+.settings-page.active {
+    display: block;
+}
+.AtBetter_setting_container {
+    display: flex;
+}
+.AtBetter_setting_sidebar {
+    width: 120px;
+    padding: 6px 10px 6px 6px;
+    margin: 20px 0px;
+    border-right: 1px solid #d4d8e9;
+}
+.AtBetter_setting_content {
+    flex-grow: 1;
+    width: 350px;
+    margin: 20px 0px 0px 20px;
+    padding-right: 10px;
+    max-height: 580px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.AtBetter_setting_sidebar h3 {
+    margin-top: 0;
+}
+.AtBetter_setting_sidebar hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-top: 1px solid #DADCE0;
+}
+.AtBetter_setting_sidebar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.AtBetter_setting_sidebar li {
+    margin: 5px 0px;
+    background-color: #ffffff;
+    border: 1px solid #d4d8e9;
+    border-radius: 4px;
+    font-size: 16px;
+}
+.AtBetter_setting_sidebar li a {
+    text-decoration: none;
+    display: flex;
+    width: 100%;
+    color: gray;
+    letter-spacing: 2px;
+    padding: 7px;
+    border-radius: 4px;
+    align-items: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.AtBetter_setting_sidebar li a.active {
+    background-color: #eceff1c7;
+}
+/* 下拉选择框 */
+.AtBetter_setting_menu select {
+    margin-left: 6px;
+    border-style: solid;
+    border-color: #26A69A;
+    color: #009688;
+    font-size: 15px;
+}
+.AtBetter_setting_menu select:focus-visible {
+    outline: none;
+}
+/*设置面板-滚动条*/
+.AtBetter_setting_menu::-webkit-scrollbar, .AtBetter_setting_content::-webkit-scrollbar {
+    width: 5px;
+    height: 7px;
+    background-color: #aaa;
+}
+.AtBetter_setting_menu::-webkit-scrollbar-thumb, .AtBetter_setting_content::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: #d7d9e4;
+}
+.AtBetter_setting_menu::-webkit-scrollbar-track, .AtBetter_setting_content::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
 }
 /*设置面板-关闭按钮*/
 .AtBetter_setting_menu .tool-box {
@@ -396,7 +779,7 @@ button.html2mdButton.AtBetter_setting.open {
     left: 4.5px;
 }
 
-.AtBetter_setting_menu label {
+.AtBetter_setting_menu label, #darkMode_span, #loaded_span {
     font-size: 16px;
     font-weight: initial;
     margin-bottom: 0px;
@@ -414,8 +797,8 @@ button.html2mdButton.AtBetter_setting.open {
 }
 
 /*设置面板-radio*/
-.AtBetter_setting_menu>label {
-    display: flex;
+.AtBetter_setting_menu #translation-settings label {
+    display: grid;
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
@@ -448,12 +831,19 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     font-weight: 500;
 }
 
-.AtBetter_setting_menu>label input[type="radio"] {
-    -webkit-appearance: none;
+.AtBetter_setting_menu label input[type="radio"], .AtBetter_contextmenu label input[type="radio"]{
     appearance: none;
     list-style: none;
     padding: 0px !important;
     margin: 0px;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }
 
 .AtBetter_setting_menu input[type="text"] {
@@ -469,6 +859,10 @@ input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
     margin: 5px 0px 5px 0px;
     border: 1px solid #00aeeccc;
     box-shadow: 0 0 1px #0000004d;
+}
+
+.AtBetter_setting_menu .AtBetter_setting_list input[type="text"] {
+    margin-left: 5px;
 }
 
 .AtBetter_setting_menu input[type="text"]:focus-visible{
@@ -567,7 +961,7 @@ span.input_label {
     border-radius: 4px;
     border: 1px solid #e4e7ed;
     box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
-    z-index: 999;
+    z-index: 1100;
 }
 .help_tip .tip_text p {
     margin-bottom: 5px;
@@ -598,22 +992,32 @@ span.input_label {
 }
 
 /*确认弹窗*/
-.wordsExceeded {
-    z-index: 99999;
-    box-shadow: 0px 0px 5px 1px rgb(0 0 0 / 10%), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+.AtBetter_modal {
+    z-index: 1600;
     display: grid;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 4px;
-    background-color: #ffffff;
-    border: 1px solid #e4e7ed;
-    color: #697e91;
+    font-size: 12px;
     font-family: var(--vp-font-family-base);
-    padding: 10px 20px 20px 20px;
+    padding: 10px 20px;
+    box-shadow: 0px 0px 0px 4px #ffffff;
+    border-radius: 6px;
+    background-color: #f0f4f9;
+    border-collapse: collapse;
+    border: 1px solid #ffffff;
+    color: #697e91;
 }
-.wordsExceeded button {
+.AtBetter_modal h2 {
+    font-size: 1.6em;
+    margin: 0px;
+}
+.AtBetter_modal .buttons{
+    display: flex;
+    padding-top: 15px;
+}
+.AtBetter_modal button {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -629,18 +1033,24 @@ span.input_label {
     -webkit-appearance: none;
     height: 24px;
     padding: 5px 11px;
+    margin-right: 15px;
     font-size: 12px;
     border-radius: 4px;
     color: #ffffff;
-    background: #409eff;
-    border-color: #409eff;
+    background: #009688;
+    border-color: #009688;
     border: none;
-    margin-right: 12px;
 }
-.wordsExceeded button:hover{
-    background-color:#79bbff;
+.AtBetter_modal button#cancelButton{
+    background-color:#4DB6AC;
 }
-.wordsExceeded .help-icon {
+.AtBetter_modal button:hover{
+    background-color:#4DB6AC;
+}
+.AtBetter_modal button#cancelButton:hover {
+    background-color: #80CBC4;
+}
+.AtBetter_modal .help-icon {
     margin: 0px 8px 0px 0px;
     height: 1em;
     width: 1em;
@@ -652,12 +1062,12 @@ span.input_label {
     fill: currentColor;
     font-size: inherit;
 }
-.wordsExceeded p {
+.AtBetter_modal p {
     margin: 5px 0px;
 }
 /*更新检查*/
 div#update_panel {
-    z-index: 9999;
+    z-index: 1200;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -740,7 +1150,7 @@ li#add_button:hover {
 }
 div#config_bar_list {
     display: flex;
-    width: 480px;
+    width: 340px;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
@@ -849,7 +1259,7 @@ label.config_bar_ul_li_text::-webkit-scrollbar-track {
 }
 /* 修改菜单 */
 div#config_bar_menu {
-    z-index: 99999;
+    z-index: 1300;
     position: absolute;
     width: 60px;
     background: #ffffff;
@@ -880,8 +1290,70 @@ div#config_bar_menu_delete:hover {
 }
 /* 配置页面 */
 #config_edit_menu {
-    z-index: 11000;
+    z-index: 1300;
     width: 450px; 
+}
+/* 黑暗模式选项 */
+.dark-mode-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 350px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.dark-mode-selection > * {
+    margin: 6px;
+}
+.dark-mode-selection .AtBetter_setting_menu_label_text {
+    border-radius: 8px;
+}
+/* 右键菜单 */
+.AtBetter_contextmenu {
+    z-index: 1500;
+    display: grid;
+    position: absolute;
+    background-color: #f0f4f9;
+    border-collapse: collapse;
+    color: #697e91;
+    font-family: var(--vp-font-family-base);
+    overflow: hidden;
+    box-sizing: content-box;
+    box-shadow: 0px 0px 0px 2px #eddbdb4d;
+}
+input[type="radio"]:checked+.AtBetter_contextmenu_label_text {
+    background: #41e49930;
+    border: 1px solid green;
+    color: green;
+    font-weight: 500;
+}
+.AtBetter_contextmenu_label_text {
+    display: flex;
+    border: 1px dashed #80cbc4;
+    height: 26px;
+    width: 100%;
+    color: gray;
+    font-size: 13px;
+    padding: 4px;
+    align-items: center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.AtBetter_contextmenu_label_text:hover {
+    color: #F44336;
+    border: 1px dashed #009688;
+    background-color: #ffebcd;
+}
+/* RatingByClist */
+.ratingBadges, html[data-theme=dark] button.ratingBadges{
+    font-weight: 700;
+    margin-top: 5px;
+    border-radius: 4px;
+    color: #ffffff00;
+    border: 1px solid #cccccc66;
 }
 `);
 
@@ -930,7 +1402,7 @@ function addDraggable(element) {
         startX = e.clientX;
         startY = e.clientY;
 
-        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
+        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span, select');
 
         $('body').css('cursor', 'all-scroll');
     });
@@ -956,7 +1428,7 @@ function addDraggable(element) {
 
 
 // 更新检查
-(function checkScriptVersion() {
+function checkScriptVersion() {
     function compareVersions(version1 = "0", version2 = "0") {
         const v1Array = String(version1).split(".");
         const v2Array = String(version2).split(".");
@@ -1034,517 +1506,511 @@ function addDraggable(element) {
         }
     });
 
-})();
+};
 
 
 // 汉化替换
-(function () {
+function toZH_CN() {
     if (!bottomZh_CN) return;
 
+    // 语言判断
+    isEnglishLanguage = (function () {
+        var metaElement = $('meta[http-equiv="Content-Language"]');
+        var contentValue = metaElement.attr('content');
+        return (contentValue === 'en');
+    })();
+
     // 文本节点遍历替换
-    $(document).ready(function () {
-        function traverseTextNodes(node, rules) {
-            if (!node) return;
-            if (node.nodeType === Node.TEXT_NODE) {
-                rules.forEach(rule => {
-                    const regex = new RegExp(rule.match, 'g');
-                    node.textContent = node.textContent.replace(regex, rule.replace);
-                });
-            } else {
-                $(node).contents().each((_, child) => traverseTextNodes(child, rules));
-            }
+    function traverseTextNodes(node, rules) {
+        if (!node) return;
+        if (node.nodeType === Node.TEXT_NODE) {
+            rules.forEach(rule => {
+                const regex = new RegExp(rule.match, 'g');
+                node.textContent = node.textContent.replace(regex, rule.replace);
+            });
+        } else {
+            $(node).contents().each((_, child) => traverseTextNodes(child, rules));
         }
+    }
 
-        // 严格
-        function strictTraverseTextNodes(node, rules) {
-            if (!node) return;
-            if (node.nodeType === Node.TEXT_NODE) {
-                const nodeText = node.textContent.trim();
-                rules.forEach(rule => {
-                    if (nodeText === rule.match) {
-                        node.textContent = rule.replace;
-                    }
-                });
-            } else {
-                $(node).contents().each((_, child) => strictTraverseTextNodes(child, rules));
-            }
+    // 严格
+    function strictTraverseTextNodes(node, rules) {
+        if (!node) return;
+        if (node.nodeType === Node.TEXT_NODE) {
+            const nodeText = node.textContent.trim();
+            rules.forEach(rule => {
+                if (nodeText === rule.match) {
+                    node.textContent = rule.replace;
+                }
+            });
+        } else {
+            $(node).contents().each((_, child) => strictTraverseTextNodes(child, rules));
         }
+    }
 
-        // 日语汉化
-        if (!isEnglishLanguage) {
-            const rules1 = [
-                { match: 'コンテスト', replace: '比赛' },
-                { match: 'Jobs', replace: '工作' },
-                { match: '検定', replace: '考试' },
-                { match: 'CareerDesign', replace: '职业规划' },
-                { match: 'マイプロフィール', replace: '我的个人资料' },
-                { match: '基本設定', replace: '基本设置' },
-                { match: 'アイコン設定', replace: '头像设置' },
-                { match: 'パスワードの変更', replace: '修改密码' },
-                { match: 'お気に入り管理', replace: '收藏夹管理' },
-                { match: 'ログアウト', replace: '注销' }
-            ];
-            traverseTextNodes($('.header-inner'), rules1);
-
-            const rules2 = [
-                { match: 'コンテスト', replace: '比赛' },
-                { match: '最新コンテスト', replace: '最新比赛' },
-                { match: 'ランキング', replace: '排名' },
-                { match: 'お知らせ', replace: '公告' },
-                { match: 'AtCoderJobs', replace: 'AtCoder工作' },
-                { match: '検定', replace: '考试' },
-                { match: 'アルゴリズム実技検定についてはこちらから！', replace: '有关算法实际技能考试，请点击此处！' },
-                { match: '過去問公開中', replace: '过去问题公开中' },
-            ];
-            traverseTextNodes($('.a-title_ttl'), rules2);
-
-            const rules3 = [
-                { match: '詳細を見る', replace: '查看详情' },
-                { match: '求人情報を見る', replace: '查看职位信息' },
-                { match: '採用担当者の方へ', replace: '致招聘负责人' },
-                { match: '詳細ページ', replace: '详细页面' },
-                { match: 'マイページ', replace: '我的页面' },
-                { match: 'コンテスト一覧', replace: '比赛列表' },
-                { match: 'すべて表示', replace: '显示全部' },
-                { match: '殿堂入り', replace: '名人堂' },
-                { match: 'お知らせ一覧', replace: '公告列表' },
-            ];
-            traverseTextNodes($('.a-btnarea'), rules3);
-
-            const rules4 = [
-                { match: '解けた！を', replace: '解决了！' },
-                { match: '世界に届けたい。', replace: '给全世界。' },
-                { match: 'AtCoderは、世界最高峰の競技プログラミングサイトです。', replace: 'AtCoder是世界最高水平的竞技编程网站。' },
-                { match: 'リアルタイムのオンラインコンテストで競い合うことや、', replace: '您可以参加实时在线比赛，' },
-                { match: '5,000以上の過去問にいつでもチャレンジすることができます。', replace: '随时挑战超过5,000道历年题目。' },
-            ];
-            traverseTextNodes($('.keyvisual-grid'), rules4);
-
-            const rules5 = [
-                { match: 'コンテスト', replace: '比赛' },
-                { match: '開催中のコンテスト', replace: '进行中的比赛' },
-                { match: '常設中のコンテスト', replace: '长期持续的比赛' },
-                { match: '予定されたコンテスト', replace: '计划中的比赛' },
-                { match: '終了後のコンテスト(最新 10 件)', replace: '已结束的比赛（最新10场）' },
-                { match: '終了後のコンテスト(最新 50 件)', replace: '已结束的比赛（最新10场）' },
-                { match: 'ランキング', replace: '排名' },
-                { match: 'インフォメーション', replace: '信息' },
-                { match: '過去のコンテスト', replace: '过去的比赛' },
-                { match: '過去のコンテストを検索', replace: '搜索过去的比赛' },
-            ];
-            strictTraverseTextNodes($('.panel-title'), rules5);
-            strictTraverseTextNodes($('h3'), rules5);
-            strictTraverseTextNodes($('.h3'), rules5);
-            strictTraverseTextNodes($('h4'), rules5);
-
-            const rules6 = [
-                { match: 'ホーム', replace: '主页' },
-                { match: 'コンテスト一覧', replace: '比赛列表' },
-                { match: 'ランキング', replace: '排名' },
-                { match: '便利リンク集', replace: '实用链接' },
-            ];
-            traverseTextNodes($('.header-sub_nav'), rules6);
-            traverseTextNodes($('.h3'), rules6);
-
-            const rules7 = [
-                { match: '現在のコンテスト', replace: '现在的比赛' },
-                { match: '過去のコンテスト', replace: '过去的比赛' },
-                { match: 'Algorithm', replace: '算法' },
-                { match: 'Heuristic', replace: '启发式' },
-                { match: 'アクティブユーザのみ', replace: '仅活跃用户' },
-                { match: '全ユーザ', replace: '所有用户' },
-                { match: '新エディタテストコンテスト', replace: '新编辑器测试比赛' },
-                { match: '日本語', replace: '日语' },
-                { match: 'English', replace: '英语' },
-                { match: 'bjxh (Guest)', replace: 'bjxh（游客）' },
-                { match: 'マイプロフィール', replace: '个人资料' },
-                { match: '基本設定', replace: '基本设置' },
-                { match: 'アイコン設定', replace: '头像设置' },
-                { match: 'パスワードの変更', replace: '修改密码' },
-                { match: 'お気に入り管理', replace: '收藏管理' },
-                { match: 'ログアウト', replace: '登出' },
-                { match: 'トップ', replace: '首页' },
-                { match: '問題', replace: '问题' },
-                { match: '質問', replace: '提问' },
-                { match: '提出', replace: '提交' },
-                { match: '提出結果', replace: '提交结果' },
-                { match: 'すべての提出', replace: '所有提交' },
-                { match: '自分の提出', replace: '我的提交' },
-                { match: '自分の得点状況', replace: '我的得分情况' },
-                { match: 'バーチャル順位表', replace: '虚拟排名表' },
-                { match: '順位表', replace: '排名表' },
-                { match: 'チーム戦排名表', replace: '团队比赛排名表' },
-                { match: 'コードテスト', replace: '代码测试' },
-                { match: '解説', replace: '题解' },
-                { match: 'すべての提交', replace: '所有提交' },
-                { match: '自分の提交', replace: '我的提交' },
-                { match: 'プロフィール', replace: '个人资料' },
-                { match: 'コンテスト成績表', replace: '比赛成绩表' },
-                { match: '設定', replace: '设置' },
-                { match: 'メールアドレスの更新・認証', replace: '更新/认证电子邮件地址' },
-                { match: '收藏管理', replace: '收藏管理' },
-                { match: 'ユーザ名照会', replace: '用户名查询' },
-                { match: 'ユーザ名の変更', replace: '更改用户名' },
-                { match: '退会', replace: '注销' },
-                { match: 'その他', replace: '其他' },
-            ];
-            traverseTextNodes($('.nav'), rules7);
-
-            const rules8 = [
-                { match: 'Rated対象', replace: '限定范围' },
-                { match: 'ABCクラス', replace: 'ABC类别' },
-                { match: '(Rated上限: 1999)', replace: '(Rated上限: 1999)' },
-                { match: 'ARCクラス', replace: 'ARC类别' },
-                { match: '(Rated上限: 2799)', replace: '(Rated上限: 2799)' },
-                { match: 'AGCクラス', replace: 'AGC类别' },
-                { match: '(Rated上限なし)', replace: '(无Rated上限)' },
-                { match: 'AHCクラス', replace: 'AHC类别' },
-                { match: 'カテゴリ', replace: '分类' },
-                { match: '全て', replace: '全部' },
-                { match: 'AtCoder Typical Contest', replace: 'AtCoder经典比赛' },
-                { match: 'PAST過去問', replace: 'PAST历年问题' },
-                { match: '非公式コンテスト(unrated)', replace: '非官方比赛（未评级）' },
-                { match: 'JOI過去問', replace: 'JOI历年问题' },
-                { match: '企業コンテスト決勝', replace: '企业比赛决赛' },
-                { match: '企業オープンコンテスト(rated)', replace: '企业公开比赛（已评级）' },
-                { match: '企業オープンコンテスト(unrated)', replace: '企业公开比赛（未评级）' },
-                { match: '企業ABC', replace: '企业ABC' },
-                { match: '企業ARC', replace: '企业ARC' },
-                { match: 'ヒューリスティック', replace: '启发式' },
-                { match: '企業ヒューリスティック', replace: '企业启发式' },
-                { match: '検索', replace: '搜索' },
-                { match: 'リセット', replace: '重置' },
-                { match: 'コンテスト名', replace: '比赛名称' },
-            ];
-            strictTraverseTextNodes($('#collapse-search'), rules8);
-
-            const rules9 = [
-                { match: 'もっと見る', replace: '查看更多' },
-                { match: '自分の得点状況', replace: '我的得分情况' },
-                { match: '印刷用問題文', replace: '打印问题集' },
-                { match: '記事アーカイブ', replace: '文章存档' },
-                { match: '詳細', replace: '详情' },
-                { match: 'すべて表示', replace: '显示全部' },
-                { match: '殿堂入り', replace: '名人堂' },
-            ];
-            strictTraverseTextNodes($('.btn-text'), rules9);
-
-            const rules10 = [
-                { match: 'ホーム', replace: '主页' },
-                { match: 'コンテスト一覧', replace: '比赛列表' },
-                { match: 'コンテスト', replace: '比赛' },
-                { match: 'ランキング', replace: '排名' },
-                { match: '便利リンク集', replace: '实用链接' },
-                { match: 'AtCoderJobs', replace: 'AtCoder职位' },
-                { match: 'AtCoderJobsトップ', replace: 'AtCoder职位首页' },
-                { match: '2024年新卒採用求人一覧', replace: '2024年应届毕业生招聘职位列表' },
-                { match: '2025年新卒採用求人一覧', replace: '2025年应届毕业生招聘职位列表' },
-                { match: '中途採用求人一覧', replace: '社会人招聘职位列表' },
-                { match: 'インターン求人一覧', replace: '实习职位列表' },
-                { match: 'アルバイト求人一覧', replace: '兼职职位列表' },
-                { match: 'その他求人一覧', replace: '其他职位列表' },
-                { match: 'AtCoder社による職業紹介求人一覧', replace: '由AtCoder公司提供的职业介绍职位列表' },
-                { match: '採用担当者の方へ', replace: '给招聘负责人的信息' },
-                { match: '検定', replace: '认证考试' },
-                { match: '検定トップ', replace: '认证考试首页' },
-                { match: 'マイページ', replace: '个人主页' },
-                { match: 'AtCoderCareerDesign', replace: 'AtCoder职业设计' },
-                { match: 'キャリアデザイントップ', replace: '职业设计首页' },
-                { match: 'About', replace: '关于' },
-                { match: '企業情報', replace: '企业信息' },
-                { match: 'よくある質問', replace: '常见问题' },
-                { match: 'お問い合わせ', replace: '联系我们' },
-                { match: '資料請求', replace: '索取资料' },
-                { match: '利用規約', replace: '使用规范' },
-                { match: 'ルール', replace: '规则' },
-                { match: '用語集', replace: '术语表' },
-                { match: 'プライバシーポリシー', replace: '隐私政策' },
-                { match: '個人情報保護方針', replace: '个人信息保护政策' },
-                { match: 'Copyright Since 2012 (C) AtCoder Inc. All rights reserved.', replace: '版权所有 © 2012年起 AtCoder公司。保留所有权利。' },
-            ];
-            strictTraverseTextNodes($('#footer'), rules10);
-            strictTraverseTextNodes($('.footer'), rules10);
-
-            const rules11 = [
-                { match: 'ファイルを開く', replace: '打开文件' },
-                { match: 'カスタマイズ', replace: '自定义' },
-                { match: 'エディタ切り替え', replace: '切换编辑器' },
-                { match: '高さ自動調節', replace: '自动调整高度' },
-            ];
-            traverseTextNodes($('.editor-buttons'), rules11);
-
-            const rules12 = [
-                { match: '問題', replace: '问题' },
-                { match: '言語', replace: '语言' },
-                { match: 'ソースコード', replace: '源代码' },
-                { match: '標準入力', replace: '标注输入' },
-                { match: '標準出力', replace: '标准输出' },
-                { match: '標準エラー出力', replace: '标准错误输出' },
-            ];
-            traverseTextNodes($('.control-label'), rules12);
-
-            const rules13 = [
-                { match: 'トップ', replace: '首页' },
-                { match: '問題', replace: '问题' },
-                { match: '質問', replace: '提问' },
-                { match: '提出', replace: '提交' },
-                { match: '提出結果', replace: '提交结果' },
-                { match: 'すべての提交', replace: '所有提交' },
-                { match: '自分の提交', replace: '我的提交' },
-                { match: '自分の得点状況', replace: '我的得分情况' },
-                { match: 'バーチャル順位表', replace: '虚拟排名表' },
-                { match: '順位表', replace: '排名表' },
-                { match: 'コードテスト', replace: '代码测试' },
-                { match: '解説', replace: '题解' },
-            ];
-            traverseTextNodes($('.h2'), rules13);
-            traverseTextNodes($('h2'), rules13);
-
-            const rules14 = [
-                { match: 'トップ', replace: '首页' },
-                { match: '問題', replace: '问题' },
-                { match: '質問', replace: '提问' },
-                { match: '提出', replace: '提交' },
-                { match: '提出結果', replace: '提交结果' },
-                { match: 'すべての提交', replace: '所有提交' },
-                { match: '自分の提交', replace: '我的提交' },
-                { match: '自分の得点状況', replace: '我的得分情况' },
-                { match: 'バーチャル順位表', replace: '虚拟排名表' },
-                { match: '順位表', replace: '排名表' },
-                { match: 'コードテスト', replace: '代码测试' },
-                { match: '解説', replace: '题解' },
-            ];
-            traverseTextNodes($('.panel-heading'), rules14);
-
-            const rules15 = [
-                { match: '開催中', replace: '进行中' },
-                { match: '予定', replace: '即将举行' },
-                { match: '終了', replace: '已结束' },
-            ];
-            traverseTextNodes($('.status'), rules15);
-
-            const rules16 = [
-                { match: 'コンテスト名', replace: '比赛名称' },
-                { match: 'Rated対象', replace: '计分对象' },
-                { match: '時間', replace: '时长' },
-                { match: '開始時刻', replace: '开始时间' },
-            ];
-            traverseTextNodes($('th.text-center'), rules16);
-
-            const rules17 = [
-                { match: 'コンテスト名', replace: '比赛名称' },
-                { match: '開始時刻', replace: '开始时间' },
-                { match: 'ユーザ', replace: '用户' },
-            ];
-            traverseTextNodes($('.table-responsive tr th'), rules17);
-
-            const rules19 = [
-                { match: '問題名', replace: '问题名称' },
-                { match: '実行時間制限', replace: '执行时间限制' },
-                { match: 'メモリ制限', replace: '内存限制' },
-            ];
-            traverseTextNodes($('.table-bordered tr th'), rules19);
-
-            const rules20 = [
-                { match: 'ページトップ', replace: '返回顶部' },
-            ];
-            traverseTextNodes($('#scroll-page-top'), rules20);
-
-            const rules21 = [
-                { match: 'AtCoderホームへ戻る', replace: '返回 AtCoder 主页' },
-            ];
-            traverseTextNodes($('.back-to-home'), rules21);
-
-            const rules22 = [
-                { match: '参加登録', replace: '报名' },
-                { match: 'バーチャル参加', replace: '虚拟参与' },
-            ];
-            traverseTextNodes($('.btn'), rules22);
-
-            return;
-        }
-
-        // 英语汉化
+    // 日语汉化
+    if (!isEnglishLanguage) {
         const rules1 = [
-            { match: 'Present Contests', replace: '目前的比赛' },
-            { match: 'Past Contests', replace: '过去的比赛' },
-            { match: 'Top', replace: '首页' },
-            { match: 'Tasks', replace: '问题集' },
-            { match: 'Clarifications', replace: '问题答疑' },
-            { match: 'Submit', replace: '提交' },
-            { match: 'Results', replace: '结果' },
-            { match: 'All Submissions', replace: '所有提交' },
-            { match: 'My Submissions', replace: '我的提交' },
-            { match: 'My Score', replace: '我的得分' },
-            { match: 'Virtual Standings', replace: '虚拟排名' },
-            { match: 'Standings', replace: '排名' },
-            { match: 'Custom Test', replace: '自定义测试' },
-            { match: 'Editorial', replace: '题解' },
-            { match: 'Discuss', replace: '讨论' },
-            { match: 'Algorithm', replace: '算法' },
-            { match: 'Heuristic', replace: '启发式' },
-            { match: 'Active Users', replace: '活跃用户' },
-            { match: 'All Users', replace: '所有用户' },
-            { match: 'Profile', replace: '个人资料' },
-            { match: 'Competition History', replace: '比赛记录' },
-            { match: 'General Settings', replace: '常规设置' },
-            { match: 'Settings', replace: '设置' },
-            { match: 'Change/Verify Email address', replace: '更改/验证电子邮件地址' },
-            { match: 'Remind Username', replace: '提醒用户名' },
-            { match: 'Change Username', replace: '更改用户名' },
-            { match: 'Delete Account', replace: '删除账户' },
-            { match: 'Change Photo', replace: '更改头像' },
-            { match: 'Change Password', replace: '更改密码' },
-            { match: 'Manage Fav', replace: '管理收藏' },
-            { match: 'Other', replace: '其他' },
-            { match: 'Remind Username', replace: '提醒用户名' },
-            { match: 'Change Username', replace: '更改用户名' },
-            { match: 'Delete Account', replace: '删除账户' }
+            { match: 'コンテスト', replace: '比赛' },
+            { match: 'Jobs', replace: '工作' },
+            { match: '検定', replace: '考试' },
+            { match: 'CareerDesign', replace: '职业规划' },
+            { match: 'マイプロフィール', replace: '我的个人资料' },
+            { match: '基本設定', replace: '基本设置' },
+            { match: 'アイコン設定', replace: '头像设置' },
+            { match: 'パスワードの変更', replace: '修改密码' },
+            { match: 'お気に入り管理', replace: '收藏夹管理' },
+            { match: 'ログアウト', replace: '注销' }
         ];
-        traverseTextNodes($('.nav'), rules1);
+        traverseTextNodes($('.header-inner'), rules1);
 
         const rules2 = [
-            { match: 'My Profile', replace: '个人资料' },
-            { match: 'General Settings', replace: '常规设置' },
-            { match: 'Change Photo', replace: '更改照片' },
-            { match: 'Change Password', replace: '更改密码' },
-            { match: 'Manage Fav', replace: '管理收藏' },
-            { match: 'Sign Out', replace: '退出登录' }
+            { match: 'コンテスト', replace: '比赛' },
+            { match: '最新コンテスト', replace: '最新比赛' },
+            { match: 'ランキング', replace: '排名' },
+            { match: 'お知らせ', replace: '公告' },
+            { match: 'AtCoderJobs', replace: 'AtCoder工作' },
+            { match: '検定', replace: '考试' },
+            { match: 'アルゴリズム実技検定についてはこちらから！', replace: '有关算法实际技能考试，请点击此处！' },
+            { match: '過去問公開中', replace: '过去问题公开中' },
         ];
-        traverseTextNodes($('.dropdown-menu'), rules2);
+        traverseTextNodes($('.a-title_ttl'), rules2);
 
         const rules3 = [
-            { match: 'Search in Archive', replace: '搜索存档' },
-            { match: 'Permanent Contests', replace: '长期持续的比赛' },
-            { match: 'Upcoming Contests', replace: '即将举行的比赛' },
-            { match: 'Recent Contests', replace: '最近的比赛' },
-            { match: 'Ranking', replace: '排行' },
-            { match: 'Contest Archive', replace: '比赛档案' },
-            { match: 'Information', replace: '信息' },
-            { match: 'About the situation where it is difficult to access the contest site', replace: '关于难以访问比赛网站的情况' },
+            { match: '詳細を見る', replace: '查看详情' },
+            { match: '求人情報を見る', replace: '查看职位信息' },
+            { match: '採用担当者の方へ', replace: '致招聘负责人' },
+            { match: '詳細ページ', replace: '详细页面' },
+            { match: 'マイページ', replace: '我的页面' },
+            { match: 'コンテスト一覧', replace: '比赛列表' },
+            { match: 'すべて表示', replace: '显示全部' },
+            { match: '殿堂入り', replace: '名人堂' },
+            { match: 'お知らせ一覧', replace: '公告列表' },
         ];
-        traverseTextNodes($('.panel-title'), rules3);
-        traverseTextNodes($('.h3'), rules3);
-        strictTraverseTextNodes($('h3'), rules3);
+        traverseTextNodes($('.a-btnarea'), rules3);
 
         const rules4 = [
-            { match: 'Rated Range', replace: '限定范围' },
-            { match: 'Category', replace: '类别' },
-            { match: 'Search', replace: '搜索' }
+            { match: '解けた！を', replace: '解决了！' },
+            { match: '世界に届けたい。', replace: '给全世界。' },
+            { match: 'AtCoderは、世界最高峰の競技プログラミングサイトです。', replace: 'AtCoder是世界最高水平的竞技编程网站。' },
+            { match: 'リアルタイムのオンラインコンテストで競い合うことや、', replace: '您可以参加实时在线比赛，' },
+            { match: '5,000以上の過去問にいつでもチャレンジすることができます。', replace: '随时挑战超过5,000道历年题目。' },
         ];
-        traverseTextNodes($('.filter-body-heading'), rules4);
+        traverseTextNodes($('.keyvisual-grid'), rules4);
 
         const rules5 = [
-            { match: 'Current Password', replace: '当前密码' },
-            { match: 'New Password', replace: '新密码' },
-            { match: 'Confirm Password', replace: '确认密码' },
-            { match: 'Update', replace: '更新' },
-            { match: 'Contest Name', replace: '比赛名称' },
-            { match: 'Username', replace: '用户名' },
-            { match: 'Password', replace: '密码' },
-            { match: 'Sign In', replace: '登录' },
-            { match: 'Sign Up', replace: '注册' },
-            { match: 'Nickname', replace: '昵称' },
-            { match: 'Country/Region', replace: '国家/地区' },
-            { match: 'Birth Year', replace: '出生年份' },
-            { match: 'Affiliation', replace: '机构' },
-            { match: 'Email Notifications', replace: '邮件通知' },
-            { match: 'New Email address', replace: '新电子邮件地址' },
-            { match: 'Request Email address verify', replace: '请求电子邮件地址验证' },
-            { match: 'I agree.', replace: '我同意。' },
-            { match: 'Do you live in Japan?', replace: '您是否居住在日本？' },
-            { match: 'Family Name', replace: '姓氏' },
-            { match: 'First Name', replace: '名字' },
-            { match: 'Category', replace: '分类' },
-            { match: 'College Students (Master or Doctor cource)', replace: '大学生（硕士或博士课程）' },
-            { match: 'College Students', replace: '大学生' },
-            { match: 'Technical college/Vocational school/Short-term university', replace: '技术学院/职业学校/短期大学' },
-            { match: 'High school', replace: '高中' },
-            { match: 'Junior high school', replace: '初中' },
-            { match: 'Office worker', replace: '上班族' },
-            { match: 'Other', replace: '其他' },
-            { match: 'Organization Name \\(Company Name or School Name\\)', replace: '组织名称（公司名称或学校名称）' },
-            { match: 'Depertment \\(For Students\\)', replace: '部门（适用于学生）' },
-            { match: 'Do you have any intention or plan to find a job or change jobs in 2023 or 2024?', replace: '您是否有意向或计划在2023年或2024年找工作或换工作？' },
-            { match: 'Graduation Schedule', replace: '毕业时间表' },
-            { match: "I'm already employed.", replace: '我已经就业了。' },
-            { match: 'Later years', replace: '以后的几年' },
-            { match: 'I am interested in going into the digital area of Toyota Motor Corporation\'s operations.', replace: '我对加入丰田汽车公司的数字领域感兴趣。' },
-            { match: 'Toyota is currently actively recruiting engineers. Would you like to be considered?', replace: '丰田目前正在积极招聘工程师。您有兴趣被考虑吗？' },
-            { match: 'I\'d like to talk to you first.', replace: '我想先和您交谈。' },
-            { match: 'Department name', replace: '部门名称' },
-            { match: 'What kind of work do you currently do?', replace: '您目前从事什么样的工作？' },
-            { match: 'How can the Algorithms Group of the Digital Transformation Office help\\?', replace: '数字转型办公室的算法组可以如何帮助您？' }
+            { match: 'コンテスト', replace: '比赛' },
+            { match: '開催中のコンテスト', replace: '进行中的比赛' },
+            { match: '常設中のコンテスト', replace: '长期持续的比赛' },
+            { match: '予定されたコンテスト', replace: '计划中的比赛' },
+            { match: '終了後のコンテスト(最新 10 件)', replace: '已结束的比赛（最新10场）' },
+            { match: '終了後のコンテスト(最新 50 件)', replace: '已结束的比赛（最新10场）' },
+            { match: 'ランキング', replace: '排名' },
+            { match: 'インフォメーション', replace: '信息' },
+            { match: '過去のコンテスト', replace: '过去的比赛' },
+            { match: '過去のコンテストを検索', replace: '搜索过去的比赛' },
         ];
-        traverseTextNodes($('.form-group'), rules5);
+        strictTraverseTextNodes($('.panel-title'), rules5);
+        strictTraverseTextNodes($('h3'), rules5);
+        strictTraverseTextNodes($('.h3'), rules5);
+        strictTraverseTextNodes($('h4'), rules5);
 
         const rules6 = [
-            { match: 'Unofficial(unrated)', replace: '非官方（无评级）' },
-            { match: 'Sponsored Parallel(rated)', replace: '赞助平行（有评级）' },
-            { match: 'Sponsored Parallel(unrated)', replace: '赞助平行（无评级）' },
-            { match: 'Sponsored Heuristic Contest', replace: '启发式赞助比赛' },
-            { match: 'All', replace: '全部' },
-            { match: 'AtCoder Typical Contest', replace: 'AtCoder 经典比赛' },
-            { match: 'PAST Archive', replace: 'PAST 比赛归档' },
-            { match: 'JOI Archive', replace: 'JOI 比赛归档' },
-            { match: 'Sponsored Tournament', replace: '赞助比赛' },
-            { match: 'Sponsored ABC', replace: '赞助 ABC' },
-            { match: 'Sponsored ARC', replace: '赞助 ARC' },
-            { match: 'Heuristic Contest', replace: '启发式比赛' }
+            { match: 'ホーム', replace: '主页' },
+            { match: 'コンテスト一覧', replace: '比赛列表' },
+            { match: 'ランキング', replace: '排名' },
+            { match: '便利リンク集', replace: '实用链接' },
         ];
-        strictTraverseTextNodes($('#category-btn-group'), rules6);
+        traverseTextNodes($('.header-sub_nav'), rules6);
+        traverseTextNodes($('.h3'), rules6);
 
         const rules7 = [
-            { match: 'Task', replace: '任务' },
-            { match: 'Language', replace: '语言' },
-            { match: 'Source Code', replace: '源代码' },
-            { match: 'Standard Input', replace: '标准输入' },
-            { match: 'Standard Output', replace: '标准输出' },
-            { match: 'Standard Error', replace: '标准错误' },
+            { match: '現在のコンテスト', replace: '现在的比赛' },
+            { match: '過去のコンテスト', replace: '过去的比赛' },
+            { match: 'Algorithm', replace: '算法' },
+            { match: 'Heuristic', replace: '启发式' },
+            { match: 'アクティブユーザのみ', replace: '仅活跃用户' },
+            { match: '全ユーザ', replace: '所有用户' },
+            { match: '新エディタテストコンテスト', replace: '新编辑器测试比赛' },
+            { match: '日本語', replace: '日语' },
+            { match: 'English', replace: '英语' },
+            { match: 'bjxh (Guest)', replace: 'bjxh（游客）' },
+            { match: 'マイプロフィール', replace: '个人资料' },
+            { match: '基本設定', replace: '基本设置' },
+            { match: 'アイコン設定', replace: '头像设置' },
+            { match: 'パスワードの変更', replace: '修改密码' },
+            { match: 'お気に入り管理', replace: '收藏管理' },
+            { match: 'ログアウト', replace: '登出' },
+            { match: 'トップ', replace: '首页' },
+            { match: '問題', replace: '问题' },
+            { match: '質問', replace: '提问' },
+            { match: '提出', replace: '提交' },
+            { match: '提出結果', replace: '提交结果' },
+            { match: 'すべての提出', replace: '所有提交' },
+            { match: '自分の提出', replace: '我的提交' },
+            { match: '自分の得点状況', replace: '我的得分情况' },
+            { match: 'バーチャル順位表', replace: '虚拟排名表' },
+            { match: '順位表', replace: '排名表' },
+            { match: 'チーム戦排名表', replace: '团队比赛排名表' },
+            { match: 'コードテスト', replace: '代码测试' },
+            { match: '解説', replace: '题解' },
+            { match: 'すべての提交', replace: '所有提交' },
+            { match: '自分の提交', replace: '我的提交' },
+            { match: 'プロフィール', replace: '个人资料' },
+            { match: 'コンテスト成績表', replace: '比赛成绩表' },
+            { match: '設定', replace: '设置' },
+            { match: 'メールアドレスの更新・認証', replace: '更新/认证电子邮件地址' },
+            { match: '收藏管理', replace: '收藏管理' },
+            { match: 'ユーザ名照会', replace: '用户名查询' },
+            { match: 'ユーザ名の変更', replace: '更改用户名' },
+            { match: '退会', replace: '注销' },
+            { match: 'その他', replace: '其他' },
         ];
-        traverseTextNodes($('.control-label'), rules7);
+        traverseTextNodes($('.nav'), rules7);
 
         const rules8 = [
-            { match: 'Permanent Contests', replace: '永久比赛' },
-            { match: 'Upcoming Contests', replace: '即将举行的比赛' },
-            { match: 'Recent Contests', replace: '最近的比赛' }
+            { match: 'Rated対象', replace: '限定范围' },
+            { match: 'ABCクラス', replace: 'ABC类别' },
+            { match: '(Rated上限: 1999)', replace: '(Rated上限: 1999)' },
+            { match: 'ARCクラス', replace: 'ARC类别' },
+            { match: '(Rated上限: 2799)', replace: '(Rated上限: 2799)' },
+            { match: 'AGCクラス', replace: 'AGC类别' },
+            { match: '(Rated上限なし)', replace: '(无Rated上限)' },
+            { match: 'AHCクラス', replace: 'AHC类别' },
+            { match: 'カテゴリ', replace: '分类' },
+            { match: '全て', replace: '全部' },
+            { match: 'AtCoder Typical Contest', replace: 'AtCoder经典比赛' },
+            { match: 'PAST過去問', replace: 'PAST历年问题' },
+            { match: '非公式コンテスト(unrated)', replace: '非官方比赛（未评级）' },
+            { match: 'JOI過去問', replace: 'JOI历年问题' },
+            { match: '企業コンテスト決勝', replace: '企业比赛决赛' },
+            { match: '企業オープンコンテスト(rated)', replace: '企业公开比赛（已评级）' },
+            { match: '企業オープンコンテスト(unrated)', replace: '企业公开比赛（未评级）' },
+            { match: '企業ABC', replace: '企业ABC' },
+            { match: '企業ARC', replace: '企业ARC' },
+            { match: 'ヒューリスティック', replace: '启发式' },
+            { match: '企業ヒューリスティック', replace: '企业启发式' },
+            { match: '検索', replace: '搜索' },
+            { match: 'リセット', replace: '重置' },
+            { match: 'コンテスト名', replace: '比赛名称' },
         ];
-        traverseTextNodes($('h4'), rules8);
+        strictTraverseTextNodes($('#collapse-search'), rules8);
 
         const rules9 = [
-            { match: 'Open File', replace: '打开文件' },
-            { match: 'Toggle Editor', replace: '切换编辑器' },
-            { match: 'Auto Height', replace: '自动调整高度' }
+            { match: 'もっと見る', replace: '查看更多' },
+            { match: '自分の得点状況', replace: '我的得分情况' },
+            { match: '印刷用問題文', replace: '打印问题集' },
+            { match: '記事アーカイブ', replace: '文章存档' },
+            { match: '詳細', replace: '详情' },
+            { match: 'すべて表示', replace: '显示全部' },
+            { match: '殿堂入り', replace: '名人堂' },
         ];
-        traverseTextNodes($('.editor-buttons'), rules9);
+        strictTraverseTextNodes($('.btn-text'), rules9);
 
         const rules10 = [
-            { match: 'Register', replace: '报名' },
-            { match: 'Virtual Participation', replace: '虚拟参加' }
+            { match: 'ホーム', replace: '主页' },
+            { match: 'コンテスト一覧', replace: '比赛列表' },
+            { match: 'コンテスト', replace: '比赛' },
+            { match: 'ランキング', replace: '排名' },
+            { match: '便利リンク集', replace: '实用链接' },
+            { match: 'AtCoderJobs', replace: 'AtCoder职位' },
+            { match: 'AtCoderJobsトップ', replace: 'AtCoder职位首页' },
+            { match: '2024年新卒採用求人一覧', replace: '2024年应届毕业生招聘职位列表' },
+            { match: '2025年新卒採用求人一覧', replace: '2025年应届毕业生招聘职位列表' },
+            { match: '中途採用求人一覧', replace: '社会人招聘职位列表' },
+            { match: 'インターン求人一覧', replace: '实习职位列表' },
+            { match: 'アルバイト求人一覧', replace: '兼职职位列表' },
+            { match: 'その他求人一覧', replace: '其他职位列表' },
+            { match: 'AtCoder社による職業紹介求人一覧', replace: '由AtCoder公司提供的职业介绍职位列表' },
+            { match: '採用担当者の方へ', replace: '给招聘负责人的信息' },
+            { match: '検定', replace: '认证考试' },
+            { match: '検定トップ', replace: '认证考试首页' },
+            { match: 'マイページ', replace: '个人主页' },
+            { match: 'AtCoderCareerDesign', replace: 'AtCoder职业设计' },
+            { match: 'キャリアデザイントップ', replace: '职业设计首页' },
+            { match: 'About', replace: '关于' },
+            { match: '企業情報', replace: '企业信息' },
+            { match: 'よくある質問', replace: '常见问题' },
+            { match: 'お問い合わせ', replace: '联系我们' },
+            { match: '資料請求', replace: '索取资料' },
+            { match: '利用規約', replace: '使用规范' },
+            { match: 'ルール', replace: '规则' },
+            { match: '用語集', replace: '术语表' },
+            { match: 'プライバシーポリシー', replace: '隐私政策' },
+            { match: '個人情報保護方針', replace: '个人信息保护政策' },
+            { match: 'Copyright Since 2012 (C) AtCoder Inc. All rights reserved.', replace: '版权所有 © 2012年起 AtCoder公司。保留所有权利。' },
         ];
-        traverseTextNodes($('.btn'), rules10);
+        strictTraverseTextNodes($('#footer'), rules10);
+        strictTraverseTextNodes($('.footer'), rules10);
 
         const rules11 = [
-            { match: 'Home', replace: '主页' },
-            { match: 'Contest', replace: '比赛' },
-            { match: 'Ranking', replace: '排名' },
-            { match: 'Sign Up', replace: '注册' },
-            { match: 'Sign In', replace: '登录' },
+            { match: 'ファイルを開く', replace: '打开文件' },
+            { match: 'カスタマイズ', replace: '自定义' },
+            { match: 'エディタ切り替え', replace: '切换编辑器' },
+            { match: '高さ自動調節', replace: '自动调整高度' },
         ];
-        strictTraverseTextNodes($('#navbar-collapse'), rules11);
-    });
-})();
+        traverseTextNodes($('.editor-buttons'), rules11);
 
-// 设置面板
-$(document).ready(function () {
-    var htmlContent = "<button class='html2mdButton AtBetter_setting'>AtcoderBetter设置</button>";
-    if (isEnglishLanguage) {
-        $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
-    } else {
-        if ($('.header-mypage').length > 0) $('.header-mypage').after(htmlContent);
-        else $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
+        const rules12 = [
+            { match: '問題', replace: '问题' },
+            { match: '言語', replace: '语言' },
+            { match: 'ソースコード', replace: '源代码' },
+            { match: '標準入力', replace: '标注输入' },
+            { match: '標準出力', replace: '标准输出' },
+            { match: '標準エラー出力', replace: '标准错误输出' },
+        ];
+        traverseTextNodes($('.control-label'), rules12);
+
+        const rules13 = [
+            { match: 'トップ', replace: '首页' },
+            { match: '問題', replace: '问题' },
+            { match: '質問', replace: '提问' },
+            { match: '提出', replace: '提交' },
+            { match: '提出結果', replace: '提交结果' },
+            { match: 'すべての提交', replace: '所有提交' },
+            { match: '自分の提交', replace: '我的提交' },
+            { match: '自分の得点状況', replace: '我的得分情况' },
+            { match: 'バーチャル順位表', replace: '虚拟排名表' },
+            { match: '順位表', replace: '排名表' },
+            { match: 'コードテスト', replace: '代码测试' },
+            { match: '解説', replace: '题解' },
+        ];
+        traverseTextNodes($('.h2'), rules13);
+        traverseTextNodes($('h2'), rules13);
+
+        const rules14 = [
+            { match: 'トップ', replace: '首页' },
+            { match: '問題', replace: '问题' },
+            { match: '質問', replace: '提问' },
+            { match: '提出', replace: '提交' },
+            { match: '提出結果', replace: '提交结果' },
+            { match: 'すべての提交', replace: '所有提交' },
+            { match: '自分の提交', replace: '我的提交' },
+            { match: '自分の得点状況', replace: '我的得分情况' },
+            { match: 'バーチャル順位表', replace: '虚拟排名表' },
+            { match: '順位表', replace: '排名表' },
+            { match: 'コードテスト', replace: '代码测试' },
+            { match: '解説', replace: '题解' },
+        ];
+        traverseTextNodes($('.panel-heading'), rules14);
+
+        const rules15 = [
+            { match: '開催中', replace: '进行中' },
+            { match: '予定', replace: '即将举行' },
+            { match: '終了', replace: '已结束' },
+        ];
+        traverseTextNodes($('.status'), rules15);
+
+        const rules16 = [
+            { match: 'コンテスト名', replace: '比赛名称' },
+            { match: 'Rated対象', replace: '计分对象' },
+            { match: '時間', replace: '时长' },
+            { match: '開始時刻', replace: '开始时间' },
+        ];
+        traverseTextNodes($('th.text-center'), rules16);
+
+        const rules17 = [
+            { match: 'コンテスト名', replace: '比赛名称' },
+            { match: '開始時刻', replace: '开始时间' },
+            { match: 'ユーザ', replace: '用户' },
+        ];
+        traverseTextNodes($('.table-responsive tr th'), rules17);
+
+        const rules19 = [
+            { match: '問題名', replace: '问题名称' },
+            { match: '実行時間制限', replace: '执行时间限制' },
+            { match: 'メモリ制限', replace: '内存限制' },
+        ];
+        traverseTextNodes($('.table-bordered tr th'), rules19);
+
+        const rules20 = [
+            { match: 'ページトップ', replace: '返回顶部' },
+        ];
+        traverseTextNodes($('#scroll-page-top'), rules20);
+
+        const rules21 = [
+            { match: 'AtCoderホームへ戻る', replace: '返回 AtCoder 主页' },
+        ];
+        traverseTextNodes($('.back-to-home'), rules21);
+
+        const rules22 = [
+            { match: '参加登録', replace: '报名' },
+            { match: 'バーチャル参加', replace: '虚拟参与' },
+        ];
+        traverseTextNodes($('.btn'), rules22);
+
+        return;
     }
-});
+
+    // 英语汉化
+    const rules1 = [
+        { match: 'Present Contests', replace: '目前的比赛' },
+        { match: 'Past Contests', replace: '过去的比赛' },
+        { match: 'Top', replace: '首页' },
+        { match: 'Tasks', replace: '问题集' },
+        { match: 'Clarifications', replace: '问题答疑' },
+        { match: 'Submit', replace: '提交' },
+        { match: 'Results', replace: '结果' },
+        { match: 'All Submissions', replace: '所有提交' },
+        { match: 'My Submissions', replace: '我的提交' },
+        { match: 'My Score', replace: '我的得分' },
+        { match: 'Virtual Standings', replace: '虚拟排名' },
+        { match: 'Standings', replace: '排名' },
+        { match: 'Custom Test', replace: '自定义测试' },
+        { match: 'Editorial', replace: '题解' },
+        { match: 'Discuss', replace: '讨论' },
+        { match: 'Algorithm', replace: '算法' },
+        { match: 'Heuristic', replace: '启发式' },
+        { match: 'Active Users', replace: '活跃用户' },
+        { match: 'All Users', replace: '所有用户' },
+        { match: 'Profile', replace: '个人资料' },
+        { match: 'Competition History', replace: '比赛记录' },
+        { match: 'General Settings', replace: '常规设置' },
+        { match: 'Settings', replace: '设置' },
+        { match: 'Change/Verify Email address', replace: '更改/验证电子邮件地址' },
+        { match: 'Remind Username', replace: '提醒用户名' },
+        { match: 'Change Username', replace: '更改用户名' },
+        { match: 'Delete Account', replace: '删除账户' },
+        { match: 'Change Photo', replace: '更改头像' },
+        { match: 'Change Password', replace: '更改密码' },
+        { match: 'Manage Fav', replace: '管理收藏' },
+        { match: 'Other', replace: '其他' },
+        { match: 'Remind Username', replace: '提醒用户名' },
+        { match: 'Change Username', replace: '更改用户名' },
+        { match: 'Delete Account', replace: '删除账户' }
+    ];
+    traverseTextNodes($('.nav'), rules1);
+
+    const rules2 = [
+        { match: 'My Profile', replace: '个人资料' },
+        { match: 'General Settings', replace: '常规设置' },
+        { match: 'Change Photo', replace: '更改照片' },
+        { match: 'Change Password', replace: '更改密码' },
+        { match: 'Manage Fav', replace: '管理收藏' },
+        { match: 'Sign Out', replace: '退出登录' }
+    ];
+    traverseTextNodes($('.dropdown-menu'), rules2);
+
+    const rules3 = [
+        { match: 'Search in Archive', replace: '搜索存档' },
+        { match: 'Permanent Contests', replace: '长期持续的比赛' },
+        { match: 'Upcoming Contests', replace: '即将举行的比赛' },
+        { match: 'Recent Contests', replace: '最近的比赛' },
+        { match: 'Ranking', replace: '排行' },
+        { match: 'Contest Archive', replace: '比赛档案' },
+        { match: 'Information', replace: '信息' },
+        { match: 'About the situation where it is difficult to access the contest site', replace: '关于难以访问比赛网站的情况' },
+    ];
+    traverseTextNodes($('.panel-title'), rules3);
+    traverseTextNodes($('.h3'), rules3);
+    strictTraverseTextNodes($('h3'), rules3);
+
+    const rules4 = [
+        { match: 'Rated Range', replace: '限定范围' },
+        { match: 'Category', replace: '类别' },
+        { match: 'Search', replace: '搜索' }
+    ];
+    traverseTextNodes($('.filter-body-heading'), rules4);
+
+    const rules5 = [
+        { match: 'Current Password', replace: '当前密码' },
+        { match: 'New Password', replace: '新密码' },
+        { match: 'Confirm Password', replace: '确认密码' },
+        { match: 'Update', replace: '更新' },
+        { match: 'Contest Name', replace: '比赛名称' },
+        { match: 'Username', replace: '用户名' },
+        { match: 'Password', replace: '密码' },
+        { match: 'Sign In', replace: '登录' },
+        { match: 'Sign Up', replace: '注册' },
+        { match: 'Nickname', replace: '昵称' },
+        { match: 'Country/Region', replace: '国家/地区' },
+        { match: 'Birth Year', replace: '出生年份' },
+        { match: 'Affiliation', replace: '机构' },
+        { match: 'Email Notifications', replace: '邮件通知' },
+        { match: 'New Email address', replace: '新电子邮件地址' },
+        { match: 'Request Email address verify', replace: '请求电子邮件地址验证' },
+        { match: 'I agree.', replace: '我同意。' },
+        { match: 'Do you live in Japan?', replace: '您是否居住在日本？' },
+        { match: 'Family Name', replace: '姓氏' },
+        { match: 'First Name', replace: '名字' },
+        { match: 'Category', replace: '分类' },
+        { match: 'College Students (Master or Doctor cource)', replace: '大学生（硕士或博士课程）' },
+        { match: 'College Students', replace: '大学生' },
+        { match: 'Technical college/Vocational school/Short-term university', replace: '技术学院/职业学校/短期大学' },
+        { match: 'High school', replace: '高中' },
+        { match: 'Junior high school', replace: '初中' },
+        { match: 'Office worker', replace: '上班族' },
+        { match: 'Other', replace: '其他' },
+        { match: 'Organization Name \\(Company Name or School Name\\)', replace: '组织名称（公司名称或学校名称）' },
+        { match: 'Depertment \\(For Students\\)', replace: '部门（适用于学生）' },
+        { match: 'Do you have any intention or plan to find a job or change jobs in 2023 or 2024?', replace: '您是否有意向或计划在2023年或2024年找工作或换工作？' },
+        { match: 'Graduation Schedule', replace: '毕业时间表' },
+        { match: "I'm already employed.", replace: '我已经就业了。' },
+        { match: 'Later years', replace: '以后的几年' },
+        { match: 'I am interested in going into the digital area of Toyota Motor Corporation\'s operations.', replace: '我对加入丰田汽车公司的数字领域感兴趣。' },
+        { match: 'Toyota is currently actively recruiting engineers. Would you like to be considered?', replace: '丰田目前正在积极招聘工程师。您有兴趣被考虑吗？' },
+        { match: 'I\'d like to talk to you first.', replace: '我想先和您交谈。' },
+        { match: 'Department name', replace: '部门名称' },
+        { match: 'What kind of work do you currently do?', replace: '您目前从事什么样的工作？' },
+        { match: 'How can the Algorithms Group of the Digital Transformation Office help\\?', replace: '数字转型办公室的算法组可以如何帮助您？' }
+    ];
+    traverseTextNodes($('.form-group'), rules5);
+
+    const rules6 = [
+        { match: 'Unofficial(unrated)', replace: '非官方（无评级）' },
+        { match: 'Sponsored Parallel(rated)', replace: '赞助平行（有评级）' },
+        { match: 'Sponsored Parallel(unrated)', replace: '赞助平行（无评级）' },
+        { match: 'Sponsored Heuristic Contest', replace: '启发式赞助比赛' },
+        { match: 'All', replace: '全部' },
+        { match: 'AtCoder Typical Contest', replace: 'AtCoder 经典比赛' },
+        { match: 'PAST Archive', replace: 'PAST 比赛归档' },
+        { match: 'JOI Archive', replace: 'JOI 比赛归档' },
+        { match: 'Sponsored Tournament', replace: '赞助比赛' },
+        { match: 'Sponsored ABC', replace: '赞助 ABC' },
+        { match: 'Sponsored ARC', replace: '赞助 ARC' },
+        { match: 'Heuristic Contest', replace: '启发式比赛' }
+    ];
+    strictTraverseTextNodes($('#category-btn-group'), rules6);
+
+    const rules7 = [
+        { match: 'Task', replace: '任务' },
+        { match: 'Language', replace: '语言' },
+        { match: 'Source Code', replace: '源代码' },
+        { match: 'Standard Input', replace: '标准输入' },
+        { match: 'Standard Output', replace: '标准输出' },
+        { match: 'Standard Error', replace: '标准错误' },
+    ];
+    traverseTextNodes($('.control-label'), rules7);
+
+    const rules8 = [
+        { match: 'Permanent Contests', replace: '永久比赛' },
+        { match: 'Upcoming Contests', replace: '即将举行的比赛' },
+        { match: 'Recent Contests', replace: '最近的比赛' }
+    ];
+    traverseTextNodes($('h4'), rules8);
+
+    const rules9 = [
+        { match: 'Open File', replace: '打开文件' },
+        { match: 'Toggle Editor', replace: '切换编辑器' },
+        { match: 'Auto Height', replace: '自动调整高度' }
+    ];
+    traverseTextNodes($('.editor-buttons'), rules9);
+
+    const rules10 = [
+        { match: 'Register', replace: '报名' },
+        { match: 'Virtual Participation', replace: '虚拟参加' }
+    ];
+    traverseTextNodes($('.btn'), rules10);
+
+    const rules11 = [
+        { match: 'Home', replace: '主页' },
+        { match: 'Contest', replace: '比赛' },
+        { match: 'Ranking', replace: '排名' },
+        { match: 'Sign Up', replace: '注册' },
+        { match: 'Sign In', replace: '登录' },
+    ];
+    strictTraverseTextNodes($('#navbar-collapse'), rules11);
+};
 
 // 配置管理函数
 function setupConfigManagement(element, tempConfig, structure, configHTML, checkable) {
@@ -1781,105 +2247,244 @@ const AtBetterSettingMenuHTML = `
     <div class="tool-box">
         <button class="btn-close">×</button>
     </div>
-    <h4>基本设置</h4>
-    <hr>
-    <div class='AtBetter_setting_list'>
-        <label for="bottomZh_CN">界面汉化</label>
-        <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
-    </div>
-    <div class='AtBetter_setting_list'>
-        <label for="showLoading">显示加载信息</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Atcoder Better! —— xxx”</p>
-            <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
-            <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
-            </div>
+    <div class="AtBetter_setting_container">
+        <div class="AtBetter_setting_sidebar">
+        <ul>
+            <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
+            <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
+            <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist设置</a></li>
+            <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
+        </ul>
         </div>
-        <input type="checkbox" id="showLoading" name="showLoading">
-    </div>
-    <div class='AtBetter_setting_list'>
-        <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
-            </div>
-        </div>
-        <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
-    </div>
-    <div class='AtBetter_setting_list'>
-        <label for="enableSegmentedTranslation">分段翻译</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
-            <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
-            <p><u>注意：开启分段翻译会产生如下问题：</u></p>
-            <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-            <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;标签</p>
-            </div>
-        </div>
-        <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
-    </div>
-    <div class='AtBetter_setting_list'>
-        <label for="showJumpToLuogu">显示跳转到洛谷</label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>洛谷OJ上收录了Atcoder的部分题目，一些题目有翻译和题解</p>
-            <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
-            <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
-            </div>
-        </div>
-        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-    </div>
-    <div class='AtBetter_setting_list'>
-        <label for="loaded"><span style="font-size: 14px;">兼容选项-不等待页面资源加载</span></label>
-        <div class="help_tip">
-            `+ helpCircleHTML + `
-            <div class="tip_text">
-            <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
-            <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，</p>
-            <p><u>您首先应该确认是否是网络问题，</u></p>
-            <p>如果页面实际已经加载完成，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于document.ready），</p>
-            <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
-            <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
-            </div>
-        </div>
-        <input type="checkbox" id="loaded" name="loaded">
-    </div>
-    <h4>翻译设置</h4>
-    <hr>
-    <label>
-        <input type='radio' name='translation' value='deepl'>
-        <span class='AtBetter_setting_menu_label_text'>deepl翻译</span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='youdao'>
-        <span class='AtBetter_setting_menu_label_text'>有道翻译</span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='google'>
-        <span class='AtBetter_setting_menu_label_text'>Google翻译</span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='openai'>
-        <span class='AtBetter_setting_menu_label_text'>使用ChatGPT翻译(API)
-            <div class="help_tip">
-                `+ helpCircleHTML + `
-                <div class="tip_text">
-                <p><b>请在下方选定你想使用的配置信息</b></p>
-                <p>脚本的所有请求均在本地完成</p>
+        <div class="AtBetter_setting_content">
+        <div id="basic-settings" class="settings-page active">
+            <h3>基本设置</h3>
+            <hr>
+            <div class='AtBetter_setting_list' style="padding: 0px 10px;">
+                <span id="darkMode_span">黑暗模式</span>
+                <div class="dark-mode-selection">
+                    <label>
+                        <input class="radio-input" type="radio" name="darkMode" value="dark" />
+                        <span class="AtBetter_setting_menu_label_text">黑暗</span>
+                        <span class="radio-icon"> </span>
+                    </label>
+                    <label>
+                        <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
+                        <span class="AtBetter_setting_menu_label_text">白天</span>
+                        <span class="radio-icon"> </span>
+                    </label>
+                    <label>
+                        <input class="radio-input" type="radio" name="darkMode" value="follow" />
+                        <span class="AtBetter_setting_menu_label_text">跟随系统</span>
+                        <span class="radio-icon"> </span>
+                    </label>
                 </div>
             </div>
-        </span>
-    </label>
-    <div class='AtBetter_setting_menu_input' id='openai' style='display: none;'>
-        <div id="chatgpt-config"></div>
-    </div>
-    <button id='save'>保存</button>
+            <div class='AtBetter_setting_list'>
+                <label for="bottomZh_CN">界面汉化</label>
+                <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for="showLoading">显示加载信息</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Atcoder Better! —— xxx”</p>
+                    <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
+                    <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
+                    </div>
+                </div>
+                <input type="checkbox" id="showLoading" name="showLoading">
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
+                    </div>
+                </div>
+                <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for="showJumpToLuogu">显示跳转到洛谷</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>洛谷OJ上收录了Atcoder的部分题目，一些题目有翻译和题解</p>
+                    <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
+                    <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
+                    </div>
+                </div>
+                <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+            </div>
+        </div>
+        <div id="translation-settings" class="settings-page">
+            <h3>翻译设置</h3>
+            <hr>
+            <h4>首选项</h4>
+            <label>
+                <input type='radio' name='translation' value='deepl'>
+                <span class='AtBetter_setting_menu_label_text'>deepl翻译</span>
+            </label>
+            <label>
+                <input type='radio' name='translation' value='iflyrec'>
+                <span class='AtBetter_setting_menu_label_text'>讯飞听见翻译</span>
+            </label>
+            <label>
+                <input type='radio' name='translation' value='youdao'>
+                <span class='AtBetter_setting_menu_label_text'>有道翻译</span>
+            </label>
+            <label>
+                <input type='radio' name='translation' value='google'>
+                <span class='AtBetter_setting_menu_label_text'>Google翻译</span>
+            </label>
+            <label>
+                <input type='radio' name='translation' value='caiyun'>
+                <span class='AtBetter_setting_menu_label_text'>彩云小译翻译</span>
+            </label>
+            <label>
+                <input type='radio' name='translation' value='openai'>
+                <span class='AtBetter_setting_menu_label_text'>使用ChatGPT翻译(API)
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p><b>请在下方选定你想使用的配置信息</b></p>
+                        <p>脚本的所有请求均在本地完成</p>
+                        </div>
+                    </div>
+                </span>
+            </label>
+            <div class='AtBetter_setting_menu_input' id='openai' style='display: none;'>
+                <div id="chatgpt-config"></div>
+            </div>
+            <h4>高级</h4>
+            <div class='AtBetter_setting_list'>
+                <label for="enableSegmentedTranslation">分段翻译</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
+                    <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
+                    <p><u>注意：开启分段翻译会产生如下问题：</u></p>
+                    <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+                    <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;标签</p>
+                    </div>
+                </div>
+                <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for="translation_replaceSymbol" style="display: flex;">LaTeX替换符</label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p>
+                    <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p>
+                    <p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>
+                    <p>具体您可以前往阅读脚本页的说明</p>
+                    </div>
+                </div>
+                <select id="translation_replaceSymbol" name="translation_replaceSymbol">
+                    <option value=2>使用{}</option>    
+                    <option value=1>使用【】</option>
+                    <option value=3>使用[]</option>
+                </select>
+            </div>
+        </div>
+        <div id="clist_rating-settings" class="settings-page">
+            <h3>Clist设置</h3>
+            <hr>
+            <h4>基本</h4>
+            <div class='AtBetter_setting_list' style="background-color: #E0F2F1;border: 1px solid #009688;">
+                <div>
+                    <p>注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明</p>
+                </div>
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for='clist_Authorization'>
+                    <div style="display: flex;align-items: center;">
+                        <span class="input_label">KEY:</span>
+                    </div>
+                </label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                        <p>格式样例：</p>
+                        <div style="border: 1px solid #795548; padding: 10px;">
+                            <p>ApiKey XXXXXXXXX</p>
+                        </div>
+                    </div>
+                </div>
+                <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' require = true>
+            </div>
+            <hr>
+            <h4>显示Rating分</h4>
+            <div class='AtBetter_setting_list'>
+                <label for="showClistRating_contest"><span>比赛问题集页</span></label>
+                <div class="help_tip" style="margin-right: initial;">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>数据来源clist.by</p>
+                    <p>您需要提供官方的api key</p>
+                    <p>或让您的浏览器上的clist.by处于登录状态（即cookie有效）</p>
+                    </div>
+                </div>
+                <div class="badge">Cookie/API KEY</div>
+                <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for="showClistRating_problem"><span>题目页</span></label>
+                <div class="help_tip" style="margin-right: initial;">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+                    </div>
+                </div>
+                <div class="badge">Cookie</div>
+                <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
+            </div>
+            <div class='AtBetter_setting_list'>
+                <label for="showClistRating_problemset"><span>题单页</span></label>
+                <div class="help_tip" style="margin-right: initial;">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+                    </div>
+                </div>
+                <div class="badge">Cookie</div>
+                <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
+            </div>
+            <hr>
+            <div class='AtBetter_setting_list'>
+                <label for="RatingHidden"><span>防剧透</span></label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>只有当鼠标移动到Rating分展示区域上时才显示</p>
+                    </div>
+                </div>
+                <input type="checkbox" id="RatingHidden" name="RatingHidden">
+            </div>
+        </div>
+        <div id="compatibility-settings" class="settings-page">
+            <h3>兼容设置</h3>
+            <hr>
+            <div class='AtBetter_setting_list'>
+                <label for="loaded"><span id="loaded_span">不等待页面资源加载</span></label>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
+                    <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
+                    <p><u>您首先应该确认是否是网络问题，</u></p>
+                    <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
+                    <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+                    <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
+                    </div>
+                </div>
+                <input type="checkbox" id="loaded" name="loaded">
+            </div>
+        </div>
     </div>
 `;
 
@@ -1973,7 +2578,43 @@ const chatgptConfigEditHTML = `
     </div>
 `;
 
-$(document).ready(function () {
+// 配置改变保存确认
+function saveConfirmation() {
+    return new Promise(resolve => {
+        const styleElement = GM_addStyle(darkenPageStyle2);
+        let htmlString = `
+        <div class="AtBetter_modal">
+            <h2>配置已更改，是否保存？</h2>
+            <div class="buttons">
+                <button id="cancelButton">不保存</button><button id="saveButton">保存</button>
+            </div>
+        </div>
+      `;
+        $('body').before(htmlString);
+        addDraggable($('.AtBetter_modal'));
+        $("#saveButton").click(function () {
+            $(styleElement).remove();
+            $('.AtBetter_modal').remove();
+            resolve(true);
+        });
+        $("#cancelButton").click(function () {
+            $(styleElement).remove();
+            $('.AtBetter_modal').remove();
+            resolve(false);
+        });
+    });
+}
+
+// 设置按钮面板
+async function settingPanel() {
+    // 添加按钮
+    var htmlContent = "<button class='html2mdButton AtBetter_setting'>AtcoderBetter设置</button>";
+    if (isEnglishLanguage) {
+        $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
+    } else {
+        if ($('.header-mypage').length > 0) $('.header-mypage').after(htmlContent);
+        else $('#navbar-collapse > ul:nth-child(2) > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
+    }
     const $settingBtns = $(".AtBetter_setting");
     $settingBtns.click(() => {
         const styleElement = GM_addStyle(darkenPageStyle);
@@ -1982,6 +2623,17 @@ $(document).ready(function () {
 
         // 窗口初始化
         addDraggable($('#AtBetter_setting_menu'));
+
+        // 选项卡切换
+        $('.AtBetter_setting_sidebar a').click(function (event) {
+            event.preventDefault();
+            $('.AtBetter_setting_sidebar a').removeClass('active');
+            $(this).addClass('active');
+            $('.settings-page').removeClass('active');
+            const targetPageId = $(this).attr('href').substring(1);
+            $('#' + targetPageId).addClass('active');
+        });
+
         const chatgptStructure = {
             '#note': 'note',
             '#openai_model': 'model',
@@ -1995,12 +2647,12 @@ $(document).ready(function () {
             '#_data',
         ]
 
-        // 缓存配置信息
-        let tempConfig = GM_getValue('chatgpt-config');
+        let tempConfig = GM_getValue('chatgpt-config'); // 缓存配置信息
         tempConfig = setupConfigManagement('#chatgpt-config', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
 
-        // 状态切换
+        // 状态更新
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
+        $("input[name='darkMode'][value='" + darkMode + "']").prop("checked", true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
@@ -2034,11 +2686,12 @@ $(document).ready(function () {
             tempConfig.choice = selected;
         });
 
+        // 关闭
         const $settingMenu = $(".AtBetter_setting_menu");
-
-        $("#save").click(debounce(function () {
+        $settingMenu.on("click", ".btn-close", async () => {
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
+                darkMode: $("input[name='darkMode']:checked").val(),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
@@ -2046,62 +2699,98 @@ $(document).ready(function () {
                 loaded: $("#loaded").prop("checked"),
                 translation: $("input[name='translation']:checked").val()
             };
-            if (settings.translation === "openai") {
-                var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
-                if (selectedIndex === -1) {
-                    $('#configControlTip').text('请选择一项配置！')
-                    return;
-                }
-            }
-            GM_setValue('chatgpt-config', tempConfig);
-            let refreshPage = false; // 是否需要刷新页面
+            // 判断是否改变
+            let hasChange = false;
             for (const [key, value] of Object.entries(settings)) {
-                if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation')) {
-                    if (GM_getValue(key) != value) refreshPage = true;
-                }
-                GM_setValue(key, value);
+                if (!hasChange && GM_getValue(key) != value) hasChange = true;
             }
+            if (!hasChange && JSON.stringify(GM_getValue('chatgpt-config')) != JSON.stringify(tempConfig)) hasChange = true;
 
-            if (refreshPage) location.reload();
-            else {
-                // 更新配置信息
-                enableSegmentedTranslation = settings.enableSegmentedTranslation;
-                translation = settings.translation;
-                if (settings.translation === "openai") {
-                    var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
-                    if (selectedIndex !== opneaiConfig.choice) {
-                        opneaiConfig = GM_getValue("chatgpt-config");
-                        const configAtIndex = opneaiConfig.configurations[selectedIndex];
-                        openai_model = configAtIndex.model;
-                        openai_key = configAtIndex.key;
-                        openai_proxy = configAtIndex.proxy;
-                        openai_header = configAtIndex._header ?
-                            configAtIndex._header.split("\n").map(header => {
-                                const [key, value] = header.split(":");
-                                return { [key.trim()]: value.trim() };
-                            }) : [];
-                        openai_data = configAtIndex._data ?
-                            configAtIndex._data.split("\n").map(header => {
-                                const [key, value] = header.split(":");
-                                return { [key.trim()]: value.trim() };
-                            }) : [];
+            if (hasChange) {
+                const shouldSave = await saveConfirmation();
+                if (shouldSave) {
+                    // 数据校验
+                    if (settings.translation === "openai") {
+                        var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
+                        if (selectedIndex === -1) {
+                            $('#configControlTip').text('请选择一项配置！');
+                            $('.AtBetter_setting_sidebar a').removeClass('active');
+                            $('#sidebar-translation-settings').addClass('active');
+                            $('.settings-page').removeClass('active');
+                            $('#translation-settings').addClass('active');
+                            return;
+                        }
+                    }
+
+                    // 保存数据
+                    let refreshPage = false; // 是否需要刷新页面
+                    for (const [key, value] of Object.entries(settings)) {
+                        if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation' || key == 'darkMode' ||
+                            key == 'replaceSymbol')) {
+                            if (GM_getValue(key) != value) refreshPage = true;
+                        }
+                        GM_setValue(key, value);
+                    }
+                    GM_setValue('chatgpt-config', tempConfig);
+
+                    if (refreshPage) location.reload();
+                    else {
+                        // 切换黑暗模式
+                        if (darkMode != settings.darkMode) {
+                            darkMode = settings.darkMode;
+                            // 移除旧的事件监听器
+                            changeEventListeners.forEach(listener => {
+                                mediaQueryList.removeEventListener('change', listener);
+                            });
+
+                            if (darkMode == "follow") {
+                                changeEventListeners.push(handleColorSchemeChange);
+                                mediaQueryList.addEventListener('change', handleColorSchemeChange);
+                                $('html').removeAttr('data-theme');
+                            } else if (darkMode == "dark") {
+                                $('html').attr('data-theme', 'dark');
+                            } else {
+                                $('html').attr('data-theme', 'light');
+                                // 移除旧的事件监听器
+                                const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+                                window.matchMedia('(prefers-color-scheme: dark)');
+                            }
+                        }
+                        // 更新配置信息
+                        enableSegmentedTranslation = settings.enableSegmentedTranslation;
+                        translation = settings.translation;
+                        replaceSymbol = settings.replaceSymbol;
+                        commentTranslationChoice = settings.commentTranslationChoice;
+                        if (settings.translation === "openai") {
+                            var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
+                            if (selectedIndex !== opneaiConfig.choice) {
+                                opneaiConfig = GM_getValue("chatgpt-config");
+                                const configAtIndex = opneaiConfig.configurations[selectedIndex];
+                                openai_model = configAtIndex.model;
+                                openai_key = configAtIndex.key;
+                                openai_proxy = configAtIndex.proxy;
+                                openai_header = configAtIndex._header ?
+                                    configAtIndex._header.split("\n").map(header => {
+                                        const [key, value] = header.split(":");
+                                        return { [key.trim()]: value.trim() };
+                                    }) : [];
+                                openai_data = configAtIndex._data ?
+                                    configAtIndex._data.split("\n").map(header => {
+                                        const [key, value] = header.split(":");
+                                        return { [key.trim()]: value.trim() };
+                                    }) : [];
+                            }
+                        }
                     }
                 }
-            }
+            };
 
-            $settingMenu.remove();
-            $settingBtns.prop("disabled", false).removeClass("open");
-            $(styleElement).remove();
-        }));
-
-        // 关闭
-        $settingMenu.on("click", ".btn-close", () => {
             $settingMenu.remove();
             $settingBtns.prop("disabled", false).removeClass("open");
             $(styleElement).remove();
         });
     });
-});
+};
 
 // html2md转换/处理规则
 var turndownService = new TurndownService({ bulletListMarker: '-', escape: (text) => text });
@@ -2264,7 +2953,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 
             $(".html2md-view" + suffix).parent().css({
                 "position": "relative",
-                "z-index": "99999"
+                "z-index": "1400"
             })
         });
 
@@ -2278,7 +2967,9 @@ function addButtonWithHTML2MD(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css(previousCSS);
+            if (previousCSS) {
+                $(target).css(previousCSS);
+            }
             $(".html2md-view" + suffix).parent().css({
                 "position": "static"
             })
@@ -2333,7 +3024,7 @@ function addButtonWithCopy(parent, suffix, type) {
             });
             $(".html2md-cb" + suffix).parent().css({
                 "position": "relative",
-                "z-index": "99999"
+                "z-index": "1400"
             })
         });
 
@@ -2347,7 +3038,9 @@ function addButtonWithCopy(parent, suffix, type) {
             }
 
             $(target).find('.overlay').remove();
-            $(target).css(previousCSS);
+            if (previousCSS) {
+                $(target).css(previousCSS);
+            }
             $(".html2md-cb" + suffix).parent().css({
                 "position": "static"
             })
@@ -2358,26 +3051,18 @@ function addButtonWithCopy(parent, suffix, type) {
 async function addButtonWithTranslation(parent, suffix, type) {
     var result;
     $(document).on('click', '.translateButton' + suffix, debounce(async function () {
-        $(this).trigger('mouseout');
-        $(this).removeClass("translated");
-        $(this).text("翻译中");
-        $(this).css("cursor", "not-allowed");
-        $(this).prop("disabled", true);
+        $(this).trigger('mouseout')
+            .removeClass("translated")
+            .text("翻译中")
+            .css("cursor", "not-allowed")
+            .prop("disabled", true);
         var target, element_node, block, errerNum = 0;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
 
         // 重新翻译
         if (result) {
-            if (result.translateDiv) {
-                $(result.translateDiv).remove();
-            }
-            if (result.copyDiv) {
-                $(result.copyDiv).remove();
-            }
-            if (result.copyButton) {
-                $(result.copyButton).remove();
-            }
+            $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
             // 移除旧的事件
             $(document).off("mouseover", ".translateButton" + suffix);
             $(document).off("mouseout", ".translateButton" + suffix);
@@ -2387,7 +3072,8 @@ async function addButtonWithTranslation(parent, suffix, type) {
 
         // 分段翻译
         if (enableSegmentedTranslation) {
-            var pElements = block.find("p, li");
+            var pElements = block.find("p, li:not(pre li)");
+            pElements.find('pre').remove();
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
                 if (type === "child_level") $(target).children(':first').remove();
@@ -2403,6 +3089,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
             }
         } else {
             target = block.eq(0).clone();
+            $(target).find('pre').remove();
             if (type === "child_level") $(target).children(':first').remove();
             element_node = $(block).get(0);
             if (type === "child_level") {
@@ -2474,7 +3161,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
             });
             $(".translateButton" + suffix).parent().css({
                 "position": "relative",
-                "z-index": "99999"
+                "z-index": "1400"
             });
         });
 
@@ -2498,13 +3185,65 @@ async function addButtonWithTranslation(parent, suffix, type) {
     }
 
     if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
+
+    // 右键菜单
+    $(document).on('contextmenu', '.translateButton' + suffix, function (e) {
+        e.preventDefault();
+
+        // 移除旧的
+        if (!$(event.target).closest('.AtBetter_contextmenu').length) {
+            $('.AtBetter_contextmenu').remove();
+        }
+
+        var menu = $('<div class="AtBetter_contextmenu"></div>');
+        var translations = [
+            { value: 'deepl', name: 'deepl翻译' },
+            { value: 'iflyrec', name: '讯飞听见翻译' },
+            { value: 'youdao', name: '有道翻译' },
+            { value: 'google', name: 'Google翻译' },
+            { value: 'caiyun', name: '彩云小译翻译' },
+            { value: 'openai', name: 'ChatGPT翻译' }
+        ];
+        translations.forEach(function (translation) {
+            var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
+            <span class="AtBetter_contextmenu_label_text">${translation.name}</span></label>`);
+            menu.append(label);
+        });
+
+        // 初始化
+        menu.find(`input[name="translation"][value="${translation}"]`).prop('checked', true);
+        menu.css({
+            top: e.pageY + 'px',
+            left: e.pageX + 'px'
+        }).appendTo('body');
+
+        $(document).one('change', 'input[name="translation"]', function () {
+            translation = $('input[name="translation"]:checked').val();
+            GM_setValue("translation", translation);
+            $('.AtBetter_contextmenu').remove();
+        });
+
+        // 点击区域外关闭菜单
+        function handleClick(event) {
+            if (!$(event.target).closest('.AtBetter_contextmenu').length) {
+                $('.AtBetter_contextmenu').remove();
+                $(document).off('change', 'input[name="translation"]');
+            } else {
+                $(document).one('click', handleClick);
+            }
+        }
+        $(document).one('click', handleClick);
+    });
 }
 
 // 块处理
 async function blockProcessing(target, element_node, button) {
+    // 锚点2
+    console.log($(target).html());
     if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
     }
+    console.log(target.markdown);
     const textarea = document.createElement('textarea');
     textarea.value = target.markdown;
     var result = await translateProblemStatement(textarea.value, element_node, $(button));
@@ -2628,65 +3367,8 @@ async function At2luogu() {
     }
 }
 
-$(document).ready(function () {
-    var newElement = $("<div></div>")
-        .addClass("alert alert-info")
-        .html(`Atcoder Better! —— 正在等待页面资源加载……`)
-        .css({
-            margin: "1em",
-            "text-align": "center",
-            "font-weight": "600",
-            position: "relative",
-        });
-
-    var tip_SegmentedTranslation = $("<div></div>")
-        .addClass("alert alert-danger")
-        .html(`
-        Atcoder Better! —— 注意！分段翻译已开启，这会造成负面效果，
-        <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>
-      `)
-        .css({
-            margin: "1em",
-            "text-align": "center",
-            "font-weight": "600",
-            position: "relative",
-        });
-
-    function processPage() {
-        if (enableSegmentedTranslation)
-            $("#main-container").prepend(tip_SegmentedTranslation); //显示分段翻译警告
-
-        if (showLoading) {
-            newElement.html("Atcoder Better! —— 正在处理中……");
-            newElement.removeClass("alert-info").addClass("alert-success");
-        }
-
-        if (showJumpToLuogu) At2luogu();
-
-        addConversionButton();
-
-        if (showLoading) {
-            newElement.html("Atcoder Better! —— 加载已完成");
-            setTimeout(function () {
-                newElement.remove();
-            }, 3000);
-        }
-    }
-
-    if (showLoading) $("#main-container").prepend(newElement);
-
-    if (loaded) {
-        processPage();
-    } else {
-        // 页面完全加载完成后执行
-        window.onload = function () {
-            processPage();
-        };
-    }
-});
-
 // 字数超限确认
-function showWordsExceededDialog(button) {
+function showWordsExceededDialog(button, textLength, realTextLength) {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle);
         $(button).removeClass("translated");
@@ -2694,32 +3376,33 @@ function showWordsExceededDialog(button) {
         $(button).css("cursor", "not-allowed");
         $(button).prop("disabled", true);
         let htmlString = `
-    <div class="wordsExceeded">
-        <h4>字数超限!</h4>
-        <p>注意，即将翻译的内容字数超过了4950个字符，您可能选择了错误的翻译按钮</p>
-        <div style="display:flex; padding:5px 0px; align-items: center;">
-    `+ helpCircleHTML + `
-          <p>
-          由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮，
-          <br>或者在设置面板中开启 分段翻译 后重试。
-          </p>
+        <div class="AtBetter_modal">
+          <h2>字符数超限! </h2>
+          <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
+          <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
+          
+          <div style="display:flex; padding:5px 0px; align-items: center;">
+            `+ helpCircleHTML + `
+                <p>
+                注意，可能您选择了错误的翻译按钮<br>
+                由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
+                </p>
+            </div>
+            <p>您确定要继续翻译吗？</p>
+            <div class="buttons">
+                <button id="continueButton">继续</button><button id="cancelButton">取消</button>
+            </div>
         </div>
-        <p>对于免费的接口，大量请求可能导致你的IP被暂时禁止访问，对于GPT，会消耗大量的token</p>
-        <p>您确定要继续翻译吗？</p>
-        <div style="display:flex; padding-top:10px">
-          <button id="continueButton">继续</button><button id="cancelButton">取消</button>
-        </div>
-    </div>
-    `;
+        `;
         $('body').before(htmlString);
         $("#continueButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.AtBetter_modal').remove();
             resolve(true);
         });
         $("#cancelButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.AtBetter_modal').remove();
             resolve(false);
         });
     });
@@ -2730,7 +3413,7 @@ function skiFoldingBlocks() {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle);
         let htmlString = `
-    <div class="wordsExceeded">
+    <div class="AtBetter_modal">
         <h4>是否跳过折叠块？</h4>
         <p></p>
         <div style="display:grid; padding:5px 0px; align-items: center;">
@@ -2742,7 +3425,7 @@ function skiFoldingBlocks() {
           </p>
         </div>
         <p>要跳过折叠块吗？（建议选择跳过）</p>
-        <div style="display:flex; padding-top:10px">
+        <div class="buttons">
           <button id="cancelButton">否</button><button id="skipButton">跳过</button>
         </div>
     </div>
@@ -2750,15 +3433,66 @@ function skiFoldingBlocks() {
         $('body').before(htmlString);
         $("#skipButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.AtBetter_modal').remove();
             resolve(true);
         });
         $("#cancelButton").click(function () {
             $(styleElement).remove();
-            $('.wordsExceeded').remove();
+            $('.AtBetter_modal').remove();
             resolve(false);
         });
     });
+}
+
+// latex替换
+function replaceBlock(text, matches, replacements) {
+    try {
+        for (let i = 0; i < matches.length; i++) {
+            let match = matches[i];
+            let replacement = '';
+            if (replaceSymbol === "1") {
+                replacement = `【${i + 1}】`;
+            } else if (replaceSymbol === "2") {
+                replacement = `{${i + 1}}`;
+            } else if (replaceSymbol === "3") {
+                replacement = `[${i + 1}]`;
+            }
+            text = text.replace(match, replacement);
+            replacements[replacement] = match;
+        }
+    } catch (e) { }
+    return text;
+}
+
+// latex还原
+function recoverBlock(translatedText, matches, replacements) {
+    if (matches == null) return translatedText;
+    for (let i = 0; i < matches.length; i++) {
+        let match = matches[i];
+        let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
+
+        let latexMatch = '\\$\\$([\\s\\S]*?)\\$\\$|\\$(.*?)\\$|\\$([\\s\\S]*?)\\$|';
+
+        let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+            // LaTeX中的不替换
+            if (p1 || p2 || p3) {
+                return match;
+            }
+            return replacement;
+        });
+
+
+        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+            // LaTeX中的不替换
+            if (p1 || p2 || p3) {
+                return match;
+            }
+            return " " + replacement;
+        });
+    }
+    return translatedText;
 }
 
 // 翻译框/翻译处理器
@@ -2778,28 +3512,20 @@ async function translateProblemStatement(text, element_node, button) {
     // 替换latex公式
     if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
-        let i = 0;
-        // 块公式
-        matches = matches.concat(text.match(/\$\$([\s\S]*?)\$\$/g));
-        try {
-            for (i; i < matches.length; i++) {
-                let match = matches[i];
-                text = text.replace(match, `【${i + 1}】`);
-                replacements[`【${i + 1}】`] = match;
-            }
-        } catch (e) { }
-        // 行内公式
-        matches = matches.concat(text.match(/\$(.*?)\$/g));
-        try {
-            for (i; i < matches.length; i++) {
-                let match = matches[i];
-                text = text.replace(match, `【${i + 1}】`);
-                replacements[`【${i + 1}】`] = match;
-            }
-        } catch (e) { }
+        let regex = /\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g;
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
     }
-    if (text.length > 4950) {
-        const shouldContinue = await showWordsExceededDialog(button);
+    // 字符数上限
+    const translationLimits = {
+        deepl: 5000,
+        iflyrec: 2000,
+        youdao: 600,
+        google: 5000,
+        caiyun: 5000
+    };
+    if (translationLimits.hasOwnProperty(translation) && text.length > translationLimits[translation]) {
+        const shouldContinue = await showWordsExceededDialog(button, translationLimits[translation], text.length);
         if (!shouldContinue) {
             status = 1;
             return {
@@ -2809,94 +3535,134 @@ async function translateProblemStatement(text, element_node, button) {
         }
     }
     // 翻译
-    if (translation == "deepl") {
-        translateDiv.innerHTML = "正在翻译中……请稍等";
-        translatedText = await translate_deepl(text);
-    } else if (translation == "youdao") {
-        translateDiv.innerHTML = "正在翻译中……请稍等";
-        translatedText = await translate_youdao_mobile(text);
-    } else if (translation == "google") {
-        translateDiv.innerHTML = "正在翻译中……请稍等";
-        translatedText = await translate_gg(text);
-    } else if (translation == "openai") {
+    async function translate(translation) {
         try {
-            translateDiv.innerHTML = "正在翻译中……" + "<br><br>正在使用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note
-                + "<br><br>使用 ChatGPT 进行翻译通常需要很长的时间，请耐心等待";
-            translatedText = await translate_openai(text);
+            if (translation == "deepl") {
+                translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
+                translatedText = await translate_deepl(text);
+            } else if (translation == "iflyrec") {
+                translateDiv.innerHTML = "正在使用 讯飞听见 翻译中……请稍等";
+                translatedText = await translate_iflyrec(text);
+            } else if (translation == "youdao") {
+                translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
+                translatedText = await translate_youdao_mobile(text);
+            } else if (translation == "google") {
+                translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
+                translatedText = await translate_gg(text);
+            } else if (translation == "caiyun") {
+                translateDiv.innerHTML = "正在使用 彩云小译 翻译中……请稍等";
+                await translate_caiyun_startup();
+                translatedText = await translate_caiyun(text);
+            } else if (translation == "openai") {
+                translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
+                    "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
+                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
+                translatedText = await translate_openai(text);
+
+            }
+            if (/^翻译出错/.test(translatedText)) status = 2;
         } catch (error) {
             status = 2;
             translatedText = error;
         }
     }
-    if (/^翻译出错/.test(translatedText)) status = 2;
+    await translate(translation);
+
     // 还原latex公式
-    translatedText = translatedText.replace(/】【/g, '】 【');
+    translatedText = translatedText.replace(/】\s*【/g, '】 【');
+    translatedText = translatedText.replace(/\]\s*\[/g, '] [');
+    translatedText = translatedText.replace(/\}\s*\{/g, '} {');
     if (translation != "openai") {
-        try {
-            for (let i = 0; i < matches.length; i++) {
-                let match = matches[i];
-                let replacement = replacements[`【${i + 1}】`];
-                let regex;
-                regex = new RegExp(`【\\s*${i + 1}\\s*】`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`\\[\\s*${i + 1}\\s*\\]`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`【\\s*${i + 1}(?![】\\d])`, 'g');
-                translatedText = translatedText.replace(regex, replacement);
-                regex = new RegExp(`(?<![【\\d])${i + 1}\\s*】`, 'g');
-                translatedText = translatedText.replace(regex, " " + replacement);
-            }
-        } catch (e) { }
+        translatedText = recoverBlock(translatedText, matches, replacements);
     }
 
+    // 结果复制按钮
     // 创建一个隐藏的元素来保存 translatedText 的值
     var textElement = document.createElement("div");
     textElement.style.display = "none";
     textElement.textContent = translatedText;
     translateDiv.parentNode.insertBefore(textElement, translateDiv);
 
-    // 翻译复制按钮
-    var copyButton = document.createElement("button");
-    copyButton.textContent = "Copy";
-    var wrapperDiv = document.createElement("div");
-    $(wrapperDiv).css({
-        display: "flex",
-        justifyContent: "flex-end"
+    // panel
+    var panelDiv = document.createElement("div");
+    $(panelDiv).addClass("translate-problem-statement-panel");
+    // 收起按钮
+    var closeButton = document.createElement("div");
+    closeButton.innerHTML = putawayIcon;
+    $(closeButton).addClass("borderlessButton");
+    $(panelDiv).append(closeButton);
+    // 复制按钮
+    var copyButton = document.createElement("div");
+    copyButton.innerHTML = copyIcon;
+    $(copyButton).addClass("borderlessButton");
+    $(panelDiv).append(copyButton);
+
+    var buttonState = "expand";
+    closeButton.addEventListener("click", function () {
+        if (buttonState === "expand") {
+            this.innerHTML = unfoldIcon;
+            $(translateDiv).css({
+                display: "none",
+                transition: "height 2s"
+            });
+            buttonState = "collapse";
+        } else if (buttonState === "collapse") {
+            // 执行收起操作
+            this.innerHTML = putawayIcon;
+            $(translateDiv).css({
+                display: "",
+                transition: "height 2s"
+            });
+            buttonState = "expand";
+        }
     });
-    $(wrapperDiv).append(copyButton);
-    $(copyButton).addClass("html2mdButton html2md-cb");
 
     copyButton.addEventListener("click", function () {
         var translatedText = textElement.textContent;
         GM_setClipboard(translatedText);
-        $(this).addClass("copied").text("Copied");
-        // 更新复制按钮文本
-        setTimeout(() => {
-            $(this).removeClass("copied");
-            $(this).text("Copy");
-        }, 2000);
+        // $(this).addClass("copied").text("Copied");
+        // // 更新复制按钮文本
+        // setTimeout(() => {
+        //     $(this).removeClass("copied");
+        //     $(this).text("Copy");
+        // }, 2000);
     });
-    translateDiv.parentNode.insertBefore(wrapperDiv, translateDiv);
+    translateDiv.parentNode.insertBefore(panelDiv, translateDiv);
 
     // 转义LaTex中的特殊符号
     const escapeRules = [
         { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
         { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
         { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-        { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
-        { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
+        { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
+        { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
+        { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
     ];
 
-    let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$/g)];
+    let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
 
     for (const match of latexMatches) {
         const matchedText = match[0];
-
+        var escapedText = matchedText;
         for (const rule of escapeRules) {
-            const escapedText = matchedText.replaceAll(rule.pattern, rule.replacement);
-            translatedText = translatedText.replace(matchedText, escapedText);
+            escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
         }
+        escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
+        translatedText = translatedText.replace(matchedText, escapedText);
     }
+
+    // markdown修正
+    const mdRuleMap = [
+        { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
+        { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
+        { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
+        { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+        // { pattern: /：/g, replacement: ":" }, // 中文：
+        { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+    ];
+    mdRuleMap.forEach(({ pattern, replacement }) => {
+        translatedText = translatedText.replace(pattern, replacement);
+    });
 
     // 渲染MarkDown
     var md = window.markdownit();
@@ -2920,7 +3686,7 @@ async function translateProblemStatement(text, element_node, button) {
         translateDiv: translateDiv,
         status: status,
         copyDiv: textElement,
-        copyButton: copyButton
+        panelDiv: panelDiv
     };
 
 }
@@ -2981,9 +3747,8 @@ async function translate_gg(raw) {
                 const translatedText = $(html).find('.result-container').text();
                 resolve(translatedText);
             },
-            onerror: function (error) {
-                console.error('Error:', error);
-                reject(error);
+            onerror: function (response) {
+                reject("发生了未知的错误，请确认你是否能正常访问Google翻译，\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n响应报文：" + JSON.stringify(response))
             }
         });
     });
@@ -3007,6 +3772,52 @@ async function translate_youdao_mobile(raw) {
     return await BaseTranslate('有道翻译mobile', raw, options, res => /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res)[1])
 }
 //--有道翻译m--end
+
+//--彩云翻译--start
+async function translate_caiyun_startup() {
+    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
+    sessionStorage.setItem('caiyun_id', browser_id);
+    const options = {
+        method: "POST",
+        url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
+        headers: {
+            "Content-Type": "application/json",
+            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "Origin": "https://fanyi.caiyunapp.com",
+        },
+        data: JSON.stringify({ browser_id }),
+    }
+    const res = await Request(options);
+    sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
+}
+
+async function translate_caiyun(raw) {
+    const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+    const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
+    // 解码
+    const decodeUnicode = str => {
+        const decoder = new TextDecoder();
+        const data = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+        return decoder.decode(data);
+    };
+    const decoder = line => decodeUnicode([...line].map(i => dic[i] || i).join(""));
+    const options = {
+        method: "POST",
+        url: 'https://api.interpreter.caiyunai.com/v1/translator',
+        data: JSON.stringify({
+            "source": raw.split('\n'),
+            "trans_type": "auto2zh",
+            "detect": true,
+            "browser_id": sessionStorage.getItem('caiyun_id')
+        }),
+        headers: {
+            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "T-Authorization": sessionStorage.getItem('caiyun_jwt')
+        }
+    }
+    return await BaseTranslate('彩云小译', raw, options, res => JSON.parse(res).target.map(decoder).join('\n'))
+}
+//--彩云翻译--end
 
 //--Deepl翻译--start
 function getTimeStamp(iCount) {
@@ -3062,6 +3873,30 @@ async function translate_deepl(raw) {
 
 //--Deepl翻译--end
 
+//--讯飞听见翻译--end
+async function translate_iflyrec(text) {
+    const options = {
+        method: "POST",
+        url: 'https://www.iflyrec.com/TranslationService/v1/textTranslation',
+        data: JSON.stringify({
+            "from": "2",
+            "to": "1",
+            "contents": [{
+                "text": text,
+                "frontBlankLine": 0
+            }]
+        }),
+        anonymous: true,
+        headers: {
+            'Content-Type': 'application/json',
+            'Origin': 'https://www.iflyrec.com',
+        },
+        responseType: "json",
+    };
+    return await BaseTranslate('讯飞翻译', text, options, res => JSON.parse(res).biz[0].translateResult.replace(/\\n/g, "\n\n"));
+}
+//--讯飞听见翻译--end
+
 //--异步请求包装工具--start
 async function PromiseRetryWrap(task, options, ...values) {
     const { RetryTimes, ErrProcesser } = options || {};
@@ -3073,7 +3908,7 @@ async function PromiseRetryWrap(task, options, ...values) {
             return await task(...values);
         } catch (err) {
             if (!--retryTimes) {
-                console.log(err);
+                console.warn(err);
                 return usedErrProcesser(err);
             }
         }
@@ -3087,9 +3922,8 @@ async function BaseTranslate(name, raw, options, processer) {
         try {
             const data = await Request(options);
             tmp = data.responseText;
-            const result = await processer(tmp);
-            if (result) sessionStorage.setItem(name + '-' + raw, result);
-            return result
+            let result = await processer(tmp);
+            return result;
         } catch (err) {
             errtext = tmp;
             throw {
@@ -3098,7 +3932,7 @@ async function BaseTranslate(name, raw, options, processer) {
             }
         }
     }
-    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈  请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
+    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请查看报错信息，并重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
 }
 
 
@@ -3107,6 +3941,80 @@ function Request(options) {
 }
 
 //--异步请求包装工具--end
+
+// 开始
+document.addEventListener("DOMContentLoaded", function () {
+    function checkJQuery(retryDelay) {
+        if (typeof jQuery === 'undefined') {
+            console.warn("JQuery未加载，" + retryDelay + "毫秒后重试");
+            setTimeout(function () {
+                var newRetryDelay = Math.min(retryDelay * 2, 2000);
+                checkJQuery(newRetryDelay);
+            }, retryDelay);
+        } else {
+            init();
+            settingPanel();
+            checkScriptVersion();
+            toZH_CN();
+            var newElement = $("<div></div>").addClass("alert alert-info AtBetter_alert")
+                .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+                .css({
+                    "margin": "1em",
+                    "text-align": "center",
+                    "font-weight": "600",
+                    "position": "relative"
+                });
+            var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-danger AtBetter_alert")
+                .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
+                <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
+                .css({
+                    "margin": "1em",
+                    "text-align": "center",
+                    "font-weight": "600",
+                    "position": "relative"
+                });
+
+            async function processPage() {
+                if (enableSegmentedTranslation)$("#main-container").prepend(tip_SegmentedTranslation); //显示分段翻译警告
+                if (showJumpToLuogu && is_problem) At2luogu();
+
+                Promise.resolve()
+                    .then(() => {
+                        if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
+                        return delay(100).then(() => addConversionButton());
+                    })
+                    .then(() => {
+                        if (showLoading) {
+                            newElement.html('Codeforces Better! —— 加载已完成');
+                            newElement.removeClass('alert-info').addClass('alert-success');
+                            setTimeout(function () {
+                                newElement.remove();
+                            }, 3000);
+                        }
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
+            }
+
+            function delay(ms) {
+                return new Promise((resolve) => setTimeout(resolve, ms));
+            }
+
+            if (showLoading) $("#main-container").prepend(newElement);
+
+            if (loaded) {
+                processPage();
+            } else {
+                // 页面完全加载完成后执行
+                window.onload = function () {
+                    processPage();
+                };
+            }
+        }
+    }
+    checkJQuery(50);
+});
 
 // 配置自动迁移代码（将在10个小版本后移除-1.19）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
