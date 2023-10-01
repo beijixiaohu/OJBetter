@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.64
+// @version      1.65
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -4155,7 +4155,7 @@ async function checkCookie(isContest = false) {
     }
     if (!ok) {
         var state = congested ? `当前访问Clist.by网络拥堵，请求已中断，请稍后再重试` :
-            `当前浏览器的Clist.by登录Cookie已失效，请打开<a target="_blank" href="https://clist.by/">Clist.by</a>重新登录
+            `当前浏览器的Clist.by登录Cookie可能已失效，请打开<a target="_blank" href="https://clist.by/">Clist.by</a>重新登录
          <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
          <br>脚本不会也无法获取您在Clist.by站点上的具体Cookie，发送请求时会由浏览器自动携带，具体请阅读脚本页的说明`;
         var newElement = $("<div></div>")
@@ -4486,7 +4486,6 @@ function replaceBlock(text, matches, replacements) {
 
 // latex还原
 function recoverBlock(translatedText, matches, replacements) {
-    if (matches == null) return translatedText;
     for (let i = 0; i < matches.length; i++) {
         let match = matches[i];
         let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
@@ -4537,7 +4536,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         text = text.replace(/^<p>/i, "");
         text = text.replace(/<\/p>$/i, "");
         let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-        matches = text.match(regex);
+        matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
     } else if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
