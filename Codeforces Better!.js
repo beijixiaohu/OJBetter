@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.652
+// @version      1.67
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -3495,6 +3495,11 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
         // 重新翻译
         if (result) {
+            if (result.translateDiv) $(result.translateDiv).remove();
+            if (!is_oldLatex) {
+                if (result.copyDiv) $(result.copyDiv).remove();
+                if (result.panelDiv) $(result.panelDiv).remove();
+            }
             $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
             // 移除旧的事件
             $(document).off("mouseover", ".translateButton" + suffix);
