@@ -183,7 +183,7 @@ function handleColorSchemeChange(event) {
             color-scheme: light dark;
         }
         /* 文字颜色1 */
-        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, 
+        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement,
         html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
         html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
         html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
@@ -240,7 +240,7 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] input:hover{
             background-color: #22272e !important;
-        } 
+        }
         /* 背景层次1 */
         html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
         html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
@@ -267,7 +267,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] .CFBetter_setting_menu hr, 
+        html[data-theme=dark] .CFBetter_setting_menu hr,
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
         html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
@@ -322,7 +322,7 @@ function handleColorSchemeChange(event) {
         }
         /* 图片-亮度 */
         html[data-theme=dark] img{
-            opacity: .75; 
+            opacity: .75;
         }
         /* 图片-反转 */
         html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link{
@@ -385,6 +385,18 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] .verdict-waiting {
             color: gray !important;
+        }
+        /* 代码提交详情页和详情弹窗的暗色模式优化 */
+        html[data-theme=dark] .popup .content .test-for-popup pre,
+        html[data-theme=dark] .file.input-view .text,
+        html[data-theme=dark] .file.output-view .text,
+        html[data-theme=dark] .file.answer-view .text,
+        html[data-theme=dark] .file.checker-comment-view .text {
+            background-color: #22272e !important;
+        }
+        html[data-theme=dark] #program-source-text,
+        html[data-theme=dark] .spoiler-content pre {
+            background-color: #fff !important;
         }
     `);
 })()
@@ -1273,7 +1285,7 @@ ul#config_bar_ul::-webkit-scrollbar-button:start:decrement {
 }
 ul#config_bar_ul::-webkit-scrollbar-button:end:increment {
     width: 4px;
-    background-color: transparent; 
+    background-color: transparent;
 }
 ul#config_bar_ul::-webkit-scrollbar-track {
     background-color: #f1f1f1;
@@ -1330,7 +1342,7 @@ div#config_bar_menu_delete:hover {
 /* 配置页面 */
 #config_edit_menu {
     z-index: 300;
-    width: 450px; 
+    width: 450px;
 }
 /* 黑暗模式选项 */
 .dark-mode-selection {
@@ -2744,7 +2756,7 @@ const CFBetterSettingMenuHTML = `
                         </div>
                     </div>
                     <select id="translation_replaceSymbol" name="translation_replaceSymbol">
-                        <option value=2>使用{}</option>    
+                        <option value=2>使用{}</option>
                         <option value=1>使用【】</option>
                         <option value=3>使用[]</option>
                     </select>
@@ -4270,7 +4282,7 @@ async function showRatingByClist_contest() {
         }
     });
 }
-// problemset页显示Rating 
+// problemset页显示Rating
 async function showRatingByClist_problemset() {
     if (!await checkCookie()) return;
     creatRatingCss();
@@ -4308,7 +4320,7 @@ async function showRatingByClist_problemset() {
             $($tds[0]).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${result.rating}</span></div>`);
         }
 
-        // 延时100毫秒 
+        // 延时100毫秒
         // await new Promise(resolve => setTimeout(resolve, 100));
     }
 }
@@ -4411,7 +4423,7 @@ function showWordsExceededDialog(button, textLength, realTextLength) {
           <h2>字符数超限! </h2>
           <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
           <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
-          
+
           <div style="display:flex; padding:5px 0px; align-items: center;">
             `+ helpCircleHTML + `
             <p>
@@ -4519,7 +4531,7 @@ function recoverBlock(translatedText, matches, replacements) {
         regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
         translatedText = translatedText.replace(regex, function (match, ...args) {
             // LaTeX中的不替换
-            const groups = args[args.length - 1]; 
+            const groups = args[args.length - 1];
             if (groups.latex_block || groups.latex_inline) return match;
             // 没有空格则加一个
             const offset = args[args.length - 3];
@@ -5173,4 +5185,3 @@ if (GM_getValue("darkMode") === true || GM_getValue("darkMode") === false) {
     GM_setValue("darkMode", "follow");
     location.reload();
 }
-
