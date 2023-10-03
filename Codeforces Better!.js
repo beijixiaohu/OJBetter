@@ -4501,30 +4501,36 @@ function recoverBlock(translatedText, matches, replacements) {
         let match = matches[i];
         let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
 
-        let latexMatch = '\\$\\$([\\s\\S]*?)\\$\\$|\\$(.*?)\\$|\\$([\\s\\S]*?)\\$|';
+        let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
 
         let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+        translatedText = translatedText.replace(regex, function (match, ...args) {
             // LaTeX中的不替换
-            if (p1 || p2 || p3) {
-                return match;
-            }
-            return replacement;
+            const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
+            if (groups.latex_block || groups.latex_inline) return match;
+            // 没有空格则加一个
+            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
+            let leftSpace = "", rightSpace = "";
+            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
+            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
+            return leftSpace + replacement + rightSpace;
         });
 
-
         regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+        translatedText = translatedText.replace(regex, function (match, ...args) {
             // LaTeX中的不替换
-            if (p1 || p2 || p3) {
-                return match;
-            }
-            return " " + replacement;
+            const groups = args[args.length - 1]; 
+            if (groups.latex_block || groups.latex_inline) return match;
+            // 没有空格则加一个
+            const offset = args[args.length - 3];
+            let leftSpace = "", rightSpace = "";
+            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
+            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
+            return leftSpace + replacement + rightSpace;
         });
     }
     return translatedText;
 }
-
 
 // 翻译框/翻译处理器
 var translatedText = "";
@@ -4540,7 +4546,6 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     const spanElement = document.createElement('span');
     translateDiv.appendChild(spanElement);
     element_node.insertAdjacentElement('afterend', translateDiv);
-
     // 替换latex公式
     if (is_oldLatex) {
         //去除开头结尾的<p>标签
@@ -4551,11 +4556,10 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         text = replaceBlock(text, matches, replacements);
     } else if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
-        let regex = /\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g;
+        let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
         matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
+        translatedText = replaceBlock(text, matches, replacements);
     }
-
     // 字符数上限
     const translationLimits = {
         deepl: 5000,
