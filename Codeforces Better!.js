@@ -195,7 +195,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
         html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .CFBetter_setting_sidebar li a:link{
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .CFBetter_setting_sidebar li a:link,
+        html[data-theme=dark] .popup .content{
             color: #a0adb9 !important;
         }
         html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
@@ -212,7 +213,7 @@ function handleColorSchemeChange(event) {
             color: #9099a3 !important;
         }
         /* 文字颜色3 */
-        html[data-theme=dark] button.html2mdButton{
+        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] #program-source-text-copy{
             color: #6385a6;
         }
         html[data-theme=dark] input{
@@ -253,7 +254,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
         html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
-        html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover{
+        html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
+        html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
+        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -267,11 +270,12 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] .CFBetter_setting_menu hr,
+        html[data-theme=dark] .CFBetter_setting_menu hr, 
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
         html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
-        html[data-theme=dark] .CFBetter_modal button{
+        html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] .test-for-popup pre,
+        html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -305,6 +309,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_sidebar {
             border-right: 1px solid #424b56 !important;
         }
+        html[data-theme=dark] hr {
+            border-color: #424b56 !important;
+        }
         /* 虚线边框颜色 */
         html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
         html[data-theme=dark] .CFBetter_setting_menu_label_text{
@@ -321,11 +328,13 @@ function handleColorSchemeChange(event) {
             outline: none;
         }
         /* 图片-亮度 */
-        html[data-theme=dark] img{
-            opacity: .75;
+        html[data-theme=dark] img, html[data-theme=dark] #facebox .popup a{
+            opacity: .75; 
         }
-        /* 图片-反转 */
-        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link{
+        /* 反转 */
+        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link,
+        html[data-theme=dark] #program-source-text, html[data-theme=dark] .spoiler-content pre,
+        html[data-theme=dark] .popup .content pre code{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
@@ -385,18 +394,6 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] .verdict-waiting {
             color: gray !important;
-        }
-        /* 代码提交详情页和详情弹窗的暗色模式优化 */
-        html[data-theme=dark] .popup .content .test-for-popup pre,
-        html[data-theme=dark] .file.input-view .text,
-        html[data-theme=dark] .file.output-view .text,
-        html[data-theme=dark] .file.answer-view .text,
-        html[data-theme=dark] .file.checker-comment-view .text {
-            background-color: #22272e !important;
-        }
-        html[data-theme=dark] #program-source-text,
-        html[data-theme=dark] .spoiler-content pre {
-            background-color: #fff !important;
         }
     `);
 })()
