@@ -2943,10 +2943,8 @@ async function addButtonWithTranslation(parent, suffix, type) {
         // 重新翻译
         if (result) {
             if (result.translateDiv) $(result.translateDiv).remove();
-            if (!is_oldLatex) {
-                if (result.copyDiv) $(result.copyDiv).remove();
-                if (result.panelDiv) $(result.panelDiv).remove();
-            }
+            if (result.copyDiv) $(result.copyDiv).remove();
+            if (result.panelDiv) $(result.panelDiv).remove();
             $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
             // 移除旧的事件
             $(document).off("mouseover", ".translateButton" + suffix);
