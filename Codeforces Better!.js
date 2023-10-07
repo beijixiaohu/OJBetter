@@ -256,7 +256,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
         html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
-        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text{
+        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
+        html[data-theme=dark] #config_bar_list{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -269,13 +270,14 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .input-output-copier:hover, html[data-theme=dark] .translate-problem-statement-panel,
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
-        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] .CFBetter_setting_list,
         html[data-theme=dark] .CFBetter_setting_menu hr, 
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
         html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] .test-for-popup pre,
-        html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code{
+        html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
+        html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -294,7 +296,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
         html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
-        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button{
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button,
+        html[data-theme=dark] .test-for-popup pre{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -1198,7 +1201,7 @@ li#add_button:hover {
 }
 div#config_bar_list {
     display: flex;
-    width: 100%;
+    width: 335px;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
@@ -1285,7 +1288,6 @@ ul#config_bar_ul::-webkit-scrollbar-button:end:increment {
     background-color: transparent;
 }
 ul#config_bar_ul::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
     border-radius: 5px;
 }
 label.config_bar_ul_li_text::-webkit-scrollbar {
