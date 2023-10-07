@@ -139,149 +139,124 @@ function handleColorSchemeChange(event) {
             color-scheme: light dark;
         }
         /* 文字颜色1 */
-        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement, 
-        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
-        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
-        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
-        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, html[data-theme=dark] #pageContent,
-        html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
-        html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
-        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .CFBetter_setting_sidebar li a:link{
+        html[data-theme=dark] .float-container>#main-container, html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-danger,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .panel-default>.panel-heading,
+        html[data-theme=dark] .pagination>li>a, html[data-theme=dark] .pagination>li>span, html[data-theme=dark] .dropdown-menu,
+        html[data-theme=dark] .select2-container--bootstrap .select2-selection--single .select2-selection__rendered,
+        html[data-theme=dark] .ace-tm .ace_gutter, html[data-theme=dark] .translate-problem-statement-panel,
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .select2-container--bootstrap .select2-results__option--highlighted[aria-selected],
+        html[data-theme=dark] .nav-pills>li.active>a{
             color: #a0adb9 !important;
         }
-        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
-            color: #adbac7;
-        }
         /* 文字颜色2 */
-        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
-        html[data-theme=dark] .lang-chooser,
-        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
-        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
-        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
-        html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
-        html[data-theme=dark] .CFBetter_modal button{
-            color: #9099a3 !important;
+        html[data-theme=dark] pre, html[data-theme=dark] .html2mdButton, html[data-theme=dark] .btn-default, html[data-theme=dark] .btn-pre,
+        html[data-theme=dark] small.contest-duration, html[data-theme=dark] .select2-container--bootstrap .select2-results__option,
+        html[data-theme=dark] #ace_settingsmenu, #kbshortcutmenu, html[data-theme=dark] code{
+            color: #9099a3;
         }
         /* 文字颜色3 */
-        html[data-theme=dark] button.html2mdButton{
-            color: #6385a6;
-        }
         html[data-theme=dark] input{
             color: #6385a6 !important;
         }
         /* 文字颜色4 */
-        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
+        html[data-theme=dark] .katex{
             color: #cbd6e2 !important;
         }
         /* 链接颜色 */
         html[data-theme=dark] a:link {
-            color: #3989c9;
+            color: #a0adb9;
         }
         html[data-theme=dark] a:visited {
             color: #8590a6;
         }
-        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
-            color: #9099a3 !important;
-        }
         /* 按钮 */
-        html[data-theme=dark] .second-level-menu-list li.backLava {
-            border-radius: 6px;
-            overflow: hidden;
-            filter: invert(1) hue-rotate(.5turn);
-        }
-        html[data-theme=dark] input:hover{
+        html[data-theme=dark] input:hover, html[data-theme=dark] .btn-default:hover{
             background-color: #22272e !important;
         } 
         /* 背景层次1 */
-        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
-        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
-        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
-        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
-        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
-        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
-        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
-        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
-        html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
-        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
-        html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover{
+        html[data-theme=dark] body, html[data-theme=dark] #main-div.float-container, html[data-theme=dark] pre,
+        html[data-theme=dark] .html2mdButton:hover, html[data-theme=dark] .pagination>.active>a, html[data-theme=dark] .ace-tm,
+        html[data-theme=dark] .dropdown-menu>li>a:hover, html[data-theme=dark] .dropdown-menu>li>a:focus,
+        html[data-theme=dark] .dropdown-menu .divider, html[data-theme=dark] .select2-container--bootstrap .select2-selection,
+        html[data-theme=dark] .ace-tm .ace_gutter-active-line, html[data-theme=dark] .select2-dropdown,
+        html[data-theme=dark] input, html[data-theme=dark] button, html[data-theme=dark] select, html[data-theme=dark] textarea,
+        html[data-theme=dark] code, html[data-theme=dark] .AtBetter_setting_menu,
+        html[data-theme=dark] .AtBetter_setting_sidebar li a.active, html[data-theme=dark] .AtBetter_setting_sidebar li,
+        html[data-theme=dark] .AtBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .AtBetter_setting_content::-webkit-scrollbar-track,
+        html[data-theme=dark] .AtBetter_modal, html[data-theme=dark] .AtBetter_modal button:hover, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
-        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
-        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
-        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
-        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
-        html[data-theme=dark] .input-output-copier:hover, html[data-theme=dark] .translate-problem-statement-panel,
-        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
-        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
-        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] .CFBetter_setting_menu hr, 
-        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
-        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
-        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
-        html[data-theme=dark] .CFBetter_modal button{
+        html[data-theme=dark] .float-container>#main-container, html[data-theme=dark] #contest-nav-tabs,
+        html[data-theme=dark] .btn-default, html[data-theme=dark] .html2mdButton,
+        html[data-theme=dark] .nav-tabs>li.active>a, html[data-theme=dark] .nav-tabs>li.active>a:hover, html[data-theme=dark] .nav-tabs>li.active>a:focus,
+        html[data-theme=dark] .nav>li>a:hover, html[data-theme=dark] .nav>li>a:focus, html[data-theme=dark] .panel, 
+        html[data-theme=dark] .table-striped>tbody>tr:nth-of-type(odd), html[data-theme=dark] .insert-participant-box,
+        html[data-theme=dark] .btn-pre, html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-danger,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .panel-default>.panel-heading,
+        html[data-theme=dark] .pagination>li>a, html[data-theme=dark] .pagination>li>span, html[data-theme=dark] .dropdown-menu,
+        html[data-theme=dark] .ace-tm .ace_gutter, html[data-theme=dark] .select2-container--bootstrap .select2-results__option[aria-selected=true],
+        html[data-theme=dark] #ace_settingsmenu, #kbshortcutmenu, html[data-theme=dark] .AtBetter_setting_sidebar li,
+        html[data-theme=dark] .AtBetter_setting_list,
+        html[data-theme=dark] .AtBetter_setting_menu hr, html[data-theme=dark] .AtBetter_setting_sidebar li a,
+        html[data-theme=dark] .AtBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .AtBetter_setting_content::-webkit-scrollbar-thumb,
+        html[data-theme=dark] .AtBetter_modal button, html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb,
+        html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .post-footer{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
-        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .sidebar-menu ul li,
-        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
-        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
-        html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
+        html[data-theme=dark] input{
             border: 1px solid #424b56 !important;
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
-        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
-        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
-        html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
-        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button{
+        html[data-theme=dark] .btn-default, html[data-theme=dark] .html2mdButton, html[data-theme=dark] .nav-tabs>li>a:hover,
+        html[data-theme=dark] .nav-tabs>li.active>a, html[data-theme=dark] .nav-tabs>li.active>a:hover,
+        html[data-theme=dark] .nav-tabs>li.active>a:focus, html[data-theme=dark] .btn-pre, html[data-theme=dark] .btn-pre:hover,
+        html[data-theme=dark] pre, html[data-theme=dark] .pagination>li>a, html[data-theme=dark] .pagination>li>span,
+        html[data-theme=dark] .table-bordered>thead>tr>th, html[data-theme=dark] .table-bordered>tbody>tr>th, html[data-theme=dark] .table-bordered>tfoot>tr>th,
+        html[data-theme=dark] .table-bordered>thead>tr>td, html[data-theme=dark] .table-bordered>tbody>tr>td, html[data-theme=dark] .table-bordered>tfoot>tr>td,
+        html[data-theme=dark] .panel, html[data-theme=dark] #editor, html[data-theme=dark] .AtBetter_setting_list,
+        html[data-theme=dark] .AtBetter_setting_sidebar li, html[data-theme=dark] .AtBetter_setting_menu select,
+        html[data-theme=dark] .AtBetter_modal button, html[data-theme=dark] div#config_bar_list, html[data-theme=dark] label.config_bar_ul_li_text,
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement,
+        html[data-theme=dark] .select2-container--bootstrap .select2-selection{
             border: 1px solid #424b56 !important;
         }
-        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
-            border-bottom: 1px solid #424b56 !important;
-        }
-        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer{
+        html[data-theme=dark] hr, html[data-theme=dark] .panel-footer,
+        html[data-theme=dark] .table>thead>tr>th, html[data-theme=dark] .table>tbody>tr>th, html[data-theme=dark] .table>tfoot>tr>th,
+        html[data-theme=dark] .table>thead>tr>td, html[data-theme=dark] .table>tbody>tr>td, html[data-theme=dark] .table>tfoot>tr>td{
             border-top: 1px solid #424b56 !important;
         }
-        html[data-theme=dark] .topic .content {
-            border-left: 4px solid #424b56 !important;
+        html[data-theme=dark] .nav-tabs, html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .panel-default>.panel-heading{
+            border-bottom: 1px solid #424b56 !important;
         }
-        html[data-theme=dark] .CFBetter_setting_sidebar {
+        html[data-theme=dark] .table>thead>tr>th{
+            border-bottom: 2px solid #424b56 !important;
+        }
+        html[data-theme=dark] .AtBetter_setting_sidebar {
             border-right: 1px solid #424b56 !important;
         }
+        /* 阴影 */
+        html[data-theme=dark] .float-container>#main-container{
+            box-shadow: 0px 0px 10px 5px #fff0;
+        }
         /* 虚线边框颜色 */
-        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
-        html[data-theme=dark] .CFBetter_setting_menu_label_text{
+        html[data-theme=dark] .AtBetter_setting_menu_label_text, html[data-theme=dark] li#add_button{
             border: 1px dashed #424b56 !important;
         }
-        html[data-theme=dark] li#add_button:hover{
-            border: 1px dashed #03A9F4 !important;
-            background-color: #2d333b !important;
-            color: #03A9F4 !important;
-        }
-        /* focus-visible */
-        html[data-theme=dark] input:focus-visible, html[data-theme=dark] textarea, html[data-theme=dark] select{
+        /* focus-visible 
+        html[data-theme=dark] {
             border-width: 1.5px !important;
             outline: none;
-        }
+        }*/
         /* 图片-亮度 */
         html[data-theme=dark] img{
             opacity: .75; 
         }
-        /* 图片-反转 */
-        html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link{
+        /* 反转 */
+        html[data-theme=dark] .ace_content{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
@@ -291,30 +266,10 @@ function handleColorSchemeChange(event) {
             text-shadow: 0px 0px 2px #000000;
         }
         /* 其他样式 */
-        html[data-theme=dark] .rated-user{
-            display: initial;
+        html[data-theme=dark] .nav-tabs>li.active>a, html[data-theme=dark] .nav-tabs>li.active>a:hover, html[data-theme=dark] .nav-tabs>li.active>a:focus{
+            border-bottom-color: transparent !important;
         }
-        html[data-theme=dark] .datatable .ilt, html[data-theme=dark] .datatable .irt,
-        html[data-theme=dark] .datatable .ilb, html[data-theme=dark] .datatable .irb,
-        html[data-theme=dark] .datatable .lt, html[data-theme=dark] .datatable .rt,
-        html[data-theme=dark] .datatable .lb, html[data-theme=dark] .datatable .rb{
-            background: none;
-        }
-        html[data-theme=dark] .problems .accepted-problem td.id{
-            border-left: 6px solid #47837d !important;
-        }
-        html[data-theme=dark] .problems .rejected-problem td.id{
-            border-left: 6px solid #ef9a9a !important;
-        }
-        html[data-theme=dark] .problems .accepted-problem td.act {
-            background-color: #47837d !important;
-            border-radius: 0px;
-        }
-        html[data-theme=dark] .problems .rejected-problem td.act{
-            background-color: #ef9a9a !important;
-            border-radius: 0px;
-        }
-        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .CFBetter_modal{
+        html[data-theme=dark] .AtBetter_setting_menu, html[data-theme=dark] .AtBetter_modal{
             box-shadow: 0px 0px 0px 4px #2d333b;
             border: 1px solid #2d333b;
         }
@@ -324,23 +279,12 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .alert{
             text-shadow: none;
         }
-        html[data-theme=dark] input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
+        html[data-theme=dark] input[type="radio"]:checked+.AtBetter_setting_menu_label_text {
             color: #a0adb9 !important;
             border: 1px solid #326154 !important;
         }
-        /* 评测状态文字颜色 */
-        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
-        html[data-theme=dark] .verdict-successful-challenge{
-            color: #0a0 !important;
-        }
-        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
-            color: red !important;
-        }
-        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
-            color: #673ab7 !important;
-        }
-        html[data-theme=dark] .verdict-waiting {
-            color: gray !important;
+        html[data-theme=dark] .AtBetter_setting_menu .btn-close{
+            background-color: #ef5350a1 !important;
         }
     `);
 })()
@@ -1226,7 +1170,6 @@ ul#config_bar_ul::-webkit-scrollbar-button:end:increment {
     background-color: transparent; 
 }
 ul#config_bar_ul::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
     border-radius: 5px;
 }
 label.config_bar_ul_li_text::-webkit-scrollbar {
@@ -1339,6 +1282,15 @@ input[type="radio"]:checked+.AtBetter_contextmenu_label_text {
     color: #F44336;
     border: 1px dashed #009688;
     background-color: #ffebcd;
+}
+/* alert提示 */
+.AtBetter_alert{
+    margin: 1em;
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 `);
 
@@ -3887,21 +3839,9 @@ document.addEventListener("DOMContentLoaded", function () {
             toZH_CN();
             var newElement = $("<div></div>").addClass("alert alert-info AtBetter_alert")
                 .html(`Codeforces Better! —— 正在等待页面资源加载……`)
-                .css({
-                    "margin": "1em",
-                    "text-align": "center",
-                    "font-weight": "600",
-                    "position": "relative"
-                });
             var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-danger AtBetter_alert")
                 .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
                 <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
-                .css({
-                    "margin": "1em",
-                    "text-align": "center",
-                    "font-weight": "600",
-                    "position": "relative"
-                });
 
             async function processPage() {
                 if (enableSegmentedTranslation) $("#main-container").prepend(tip_SegmentedTranslation); //显示分段翻译警告
