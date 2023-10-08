@@ -115,7 +115,7 @@ function init() {
 function ShowAlertMessage() {
     if (is_oldLatex) {
         let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
-            .html(`注意：当前页面存在使用非 MathJax 库渲染为 HTML 的 Latex 公式（这通常是一道古老的题目），这导致 CodeforcesBetter! 无法将其还原回 Latex，因此当前页面部分功能不适用。
+            .html(`Codeforces Better! —— 注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。
                 <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
@@ -123,7 +123,7 @@ function ShowAlertMessage() {
     if (commentTranslationMode == "1") {
         let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
             .html(`Codeforces Better! —— 注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>`)
-            .css({ "margin": "1em", "text-align": "center", "font-weight": "600", "position": "relative" });
+            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
     if (commentTranslationMode == "2") {
@@ -4809,31 +4809,31 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             //     $(this).text("Copy");
             // }, 2000);
         });
-        // 收起按钮
-        upButton.on("click", function () {
-            if (upButton.html() === putawayIcon) {
-                upButton.html(unfoldIcon);
-                $(translateDiv).css({
-                    display: "none",
-                    transition: "height 2s"
-                });
-            } else {
-                // 执行收起操作
-                upButton.html(putawayIcon);
-                $(translateDiv).css({
-                    display: "",
-                    transition: "height 2s"
-                });
-            }
-        });
-        // 关闭按钮
-        closeButton.on("click", function () {
-            $(translateDiv).remove();
-            $(panelDiv).remove();
-        });
-
-
     }
+
+    // 收起按钮
+    upButton.on("click", function () {
+        if (upButton.html() === putawayIcon) {
+            upButton.html(unfoldIcon);
+            $(translateDiv).css({
+                display: "none",
+                transition: "height 2s"
+            });
+        } else {
+            // 执行收起操作
+            upButton.html(putawayIcon);
+            $(translateDiv).css({
+                display: "",
+                transition: "height 2s"
+            });
+        }
+    });
+
+    // 关闭按钮
+    closeButton.on("click", function () {
+        $(translateDiv).remove();
+        $(panelDiv).remove();
+    });
 
     // 转义LaTex中的特殊符号
     if (!is_oldLatex) {
@@ -4888,7 +4888,10 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         translateDiv.empty().append($(translatedText));
         return {
             translateDiv: translateDiv,
-            status: status
+            status: status,
+            copyDiv: textElement,
+            panelDiv: panelDiv,
+            upButton: upButton
         };
     } else {
         // 渲染MarkDown
