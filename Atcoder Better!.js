@@ -209,7 +209,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .AtBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .AtBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .AtBetter_modal button, html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb,
         html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .post-footer, html[data-theme=dark] .a-btn_arrow:before,
-        html[data-theme=dark] .table-hover>tbody>tr:hover{
+        html[data-theme=dark] .table-hover>tbody>tr:hover, html[data-theme=dark] .AtBetter_contextmenu{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -3856,9 +3856,9 @@ document.addEventListener("DOMContentLoaded", function () {
             checkScriptVersion();
             toZH_CN();
             var newElement = $("<div></div>").addClass("alert alert-info AtBetter_alert")
-                .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+                .html(`AtCoder Better! —— 正在等待页面资源加载……`)
             var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-danger AtBetter_alert")
-                .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
+                .html(`AtCoder Better! —— 注意！分段翻译已开启，这会造成负面效果，
                 <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
 
             async function processPage() {
@@ -3867,12 +3867,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 Promise.resolve()
                     .then(() => {
-                        if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
+                        if (showLoading) newElement.html('AtCoder Better! —— 正在加载按钮……');
                         return delay(100).then(() => addConversionButton());
                     })
                     .then(() => {
                         if (showLoading) {
-                            newElement.html('Codeforces Better! —— 加载已完成');
+                            newElement.html('AtCoder Better! —— 加载已完成');
                             newElement.removeClass('alert-info').addClass('alert-success');
                             setTimeout(function () {
                                 newElement.remove();
