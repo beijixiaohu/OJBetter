@@ -46,9 +46,9 @@ const getGMValue = (key, defaultValue) => {
 };
 var darkMode = getGMValue("darkMode", "follow");
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset, is_standings;
-var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, enableSegmentedTranslation, translation, commentTranslationChoice;
+var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
-var replaceSymbol, commentPaging, showJumpToLuogu, loaded;
+var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor;
 function init() {
@@ -60,26 +60,20 @@ function init() {
     is_problem = href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     is_standings = href.includes('/standings');
-    // 说明为旧的latex渲染
-    if (is_oldLatex) {
-        var newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert").html(`
-        注意：当前页面存在使用非 MathJax 库渲染为 HTML 的 Latex 公式（这通常是一道古老的题目），这导致 CodeforcesBetter! 无法将其还原回 Latex，因此当前页面部分功能不适用。
-        <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。
-        `).css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
-    }
     bottomZh_CN = getGMValue("bottomZh_CN", true);
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
     expandFoldingblocks = getGMValue("expandFoldingblocks", true);
     renderPerfOpt = getGMValue("renderPerfOpt", false);
     commentPaging = getGMValue("commentPaging", true);
-    enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
     showJumpToLuogu = getGMValue("showJumpToLuogu", true);
     standingsRecolor = getGMValue("standingsRecolor", true);
     loaded = getGMValue("loaded", false);
     translation = getGMValue("translation", "deepl");
+    commentTranslationMode = getGMValue("commentTranslationMode", "0");
     commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
+    retransAction = getGMValue("retransAction", "0");
+    transWaitTime = getGMValue("transWaitTime", "200");
     replaceSymbol = getGMValue("replaceSymbol", "2");
     showClistRating_contest = getGMValue("showClistRating_contest", false);
     showClistRating_problem = getGMValue("showClistRating_problem", false);
@@ -117,10 +111,35 @@ function init() {
     }
 }
 
+// 显示警告消息
+function ShowAlertMessage() {
+    if (is_oldLatex) {
+        let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
+            .html(`注意：当前页面存在使用非 MathJax 库渲染为 HTML 的 Latex 公式（这通常是一道古老的题目），这导致 CodeforcesBetter! 无法将其还原回 Latex，因此当前页面部分功能不适用。
+                <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
+            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
+    }
+    if (commentTranslationMode == "1") {
+        let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
+            .html(`Codeforces Better! —— 注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>`)
+            .css({ "margin": "1em", "text-align": "center", "font-weight": "600", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
+    }
+    if (commentTranslationMode == "2") {
+        let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
+            .html(`Codeforces Better! —— 注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框），按住 Ctrl 可以多选<br>
+            <p>如果你现在不需要翻译超长篇的博客或者题目，建议你请前往设置切换为普通模式</p>`)
+            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
+    }
+}
+
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
-const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="16" height="16"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
-const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="16" height="16"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
+const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="18" height="18"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
+const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
+const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
 const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
@@ -436,10 +455,10 @@ span.mdViewContent {
     letter-spacing: 1.8px;
     color: #059669;
     background-color: #f9f9fa;
-    border: 1px solid #10b981;
-    border-radius: 0.3rem;
+    border: 1px solid #c5ebdf;
+    border-radius: 0rem 0rem 0.3rem 0.3rem;
     padding: 5px;
-    margin: -1px 0px 10px 0px;
+    margin: -5px 0px 4px 0px;
     width: 100%;
     box-sizing: border-box;
     font-size: 13px;
@@ -492,7 +511,7 @@ span.mdViewContent {
     background-color: #f9f9fa;
     border: 1px solid #c5ebdf;
     border-radius: 0.3rem;
-    margin-bottom: 4px;
+    margin: 4px 0px;
 }
 .html2md-panel {
     display: flex;
@@ -546,6 +565,13 @@ button.html2mdButton.reTranslation {
     color: #909399;
     border: 1px solid #c8c9cc;
 }
+.topText {
+    display: flex;
+    margin-left: 5px;
+    color: #9e9e9e;
+    font-size: 13px;
+    align-items: center;
+}
 .borderlessButton{
     display: flex;
     align-items: center;
@@ -578,6 +604,9 @@ button.html2mdButton.reTranslation {
 }
 .translate-problem-statement p {
     line-height: 20px !important;
+}
+.problem-statement p:last-child {
+    margin-bottom: 0px !important;
 }
 /*设置面板*/
 header .enter-or-register-box, header .languages {
@@ -713,6 +742,16 @@ button.html2mdButton.CFBetter_setting.open {
     font-size: 15px;
 }
 .CFBetter_setting_menu select:focus-visible {
+    outline: none;
+}
+/* 数值输入框 */
+.CFBetter_setting_menu input[type="number"] {
+    width: 60px;
+    border: 1px solid #26A69A;
+    color: #009688;
+    font-size: 15px;
+}
+.CFBetter_setting_menu input[type="number"]:focus-visible {
     outline: none;
 }
 /*设置面板-滚动条*/
@@ -1404,6 +1443,11 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     border-radius: 4px;
     color: #ffffff00;
     border: 1px solid #cccccc66;
+}
+/* 多选翻译 */
+.block_selected{
+    box-shadow: 0px 0px 0px 1px #FF9800;
+    outline: none;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -2715,6 +2759,15 @@ const CFBetterSettingMenuHTML = `
                 <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
                     <div id="chatgpt-config"></div>
                 </div>
+                <h4>工作模式</h4>
+                <div class='CFBetter_setting_list'>
+                    <label for="comment_translation_mode" style="display: flex;">评论区翻译</label>
+                    <select id="comment_translation_mode" name="comment_translation_mode">
+                        <option value="0">普通模式</option>
+                        <option value="1">分段模式</option>
+                        <option value="2">选段模式</option>
+                    </select>
+                </div>
                 <h4>偏好</h4>
                 <div class='CFBetter_setting_list'>
                     <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
@@ -2730,18 +2783,32 @@ const CFBetterSettingMenuHTML = `
                 </div>
                 <h4>高级</h4>
                 <div class='CFBetter_setting_list'>
-                    <label for="enableSegmentedTranslation">分段翻译</label>
+                    <label for="translation_retransAction" style="display: flex;">重新翻译时</label>
                     <div class="help_tip">
                         `+ helpCircleHTML + `
                         <div class="tip_text">
-                        <p>分段翻译会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译，</p>
-                        <p>这通常在翻译<strong>长篇博客</strong>或者<strong>超长的题目</strong>时很有用。</p>
-                        <p><u>注意：开启分段翻译会产生如下问题：</u></p>
-                        <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-                        <p>- 会有<strong>部分内容不会被翻译</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+                        <p>选择在重新翻译时是"关闭旧的结果"还是"收起旧的结果"</p>
                         </div>
                     </div>
-                    <input type="checkbox" id="enableSegmentedTranslation" name="enableSegmentedTranslation">
+                    <select id="translation_retransAction" name="translation_retransAction">
+                        <option value=0>关闭旧的结果</option>
+                        <option value=1>收起旧的结果</option>
+                    </select>
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for='transWaitTime'>
+                        <div style="display: flex;align-items: center;">
+                            <span>批量翻译延时</span>
+                        </div>
+                    </label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                            <p>在分段模式或者选段模式中批量翻译多段间的等待延时（毫秒）</p>
+                        </div>
+                    </div>
+                    <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
+                    <span>毫秒</span>
                 </div>
                 <div class='CFBetter_setting_list'>
                     <label for="translation_replaceSymbol" style="display: flex;">LaTeX替换符</label>
@@ -3029,7 +3096,6 @@ async function settingPanel() {
         $("input[name='darkMode'][value='" + darkMode + "']").prop("checked", true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
-        $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
@@ -3048,8 +3114,11 @@ async function settingPanel() {
                 $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
             }
         }
+        $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
+        $('#transWaitTime').val(GM_getValue("transWaitTime"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
+        $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
 
         // 翻译选择情况监听
@@ -3082,13 +3151,15 @@ async function settingPanel() {
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
                 renderPerfOpt: $("#renderPerfOpt").prop("checked"),
                 commentPaging: $("#commentPaging").prop("checked"),
-                enableSegmentedTranslation: $("#enableSegmentedTranslation").prop("checked"),
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 loaded: $("#loaded").prop("checked"),
                 translation: $("input[name='translation']:checked").val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
+                commentTranslationMode: $('#comment_translation_mode').val(),
+                transWaitTime: $('#transWaitTime').val(),
                 replaceSymbol: $('#translation_replaceSymbol').val(),
+                retransAction: $('#translation_retransAction').val(),
                 showClistRating_contest: $('#showClistRating_contest').prop("checked"),
                 showClistRating_problemset: $('#showClistRating_problemset').prop("checked"),
                 showClistRating_problem: $('#showClistRating_problem').prop("checked"),
@@ -3122,7 +3193,7 @@ async function settingPanel() {
                     // 保存数据
                     let refreshPage = false; // 是否需要刷新页面
                     for (const [key, value] of Object.entries(settings)) {
-                        if (!refreshPage && !(key == 'enableSegmentedTranslation' || key == 'translation' || key == 'darkMode' ||
+                        if (!refreshPage && !(key == 'translation' || key == 'darkMode' ||
                             key == 'replaceSymbol' || key == 'commentTranslationChoice')) {
                             if (GM_getValue(key) != value) refreshPage = true;
                         }
@@ -3154,7 +3225,6 @@ async function settingPanel() {
                             }
                         }
                         // 更新配置信息
-                        enableSegmentedTranslation = settings.enableSegmentedTranslation;
                         translation = settings.translation;
                         replaceSymbol = settings.replaceSymbol;
                         commentTranslationChoice = settings.commentTranslationChoice;
@@ -3307,10 +3377,15 @@ function getRandomNumber(numDigits) {
 
 // 题目markdown转换/翻译面板
 function addButtonPanel(parent, suffix, type, is_simple = false) {
+    let translateButtonText;
+    if (commentTranslationMode == "1") translateButtonText = "分段翻译";
+    else if (commentTranslationMode == "2") translateButtonText = "翻译选中";
+    else translateButtonText = "翻译";
+
     let htmlString = `<div class='html2md-panel'>
     <button class='html2mdButton html2md-view${suffix}'>MarkDown视图</button>
     <button class='html2mdButton html2md-cb${suffix}'>Copy</button>
-    <button class='html2mdButton translateButton${suffix}'>翻译</button>
+    <button class='html2mdButton translateButton${suffix}'>${translateButtonText}</button>
   </div>`;
     if (type === "this_level") {
         $(parent).before(htmlString);
@@ -3493,7 +3568,7 @@ function addButtonWithCopy(parent, suffix, type) {
 }
 
 async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
-    var result;
+    var resultStack = []; // 结果
     $(document).on('click', '.translateButton' + suffix, debounce(async function () {
         $(this).trigger('mouseout')
             .removeClass("translated")
@@ -3505,13 +3580,26 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
 
         // 重新翻译
-        if (result) {
-            if (result.translateDiv) $(result.translateDiv).remove();
-            if (!is_oldLatex) {
-                if (result.copyDiv) $(result.copyDiv).remove();
-                if (result.panelDiv) $(result.panelDiv).remove();
+        if (resultStack) {
+            if (retransAction == "0") {
+                for (let item of resultStack) {
+                    if (item.translateDiv) $(item.translateDiv).remove();
+                    if (!is_oldLatex) {
+                        if (item.copyDiv) $(item.copyDiv).remove();
+                        if (item.panelDiv) $(item.panelDiv).remove();
+                    }
+                }
+                $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
+            } else {
+                for (let item of resultStack) {
+                    item.upButton.html(unfoldIcon);
+                    $(item.translateDiv).css({
+                        display: "none",
+                        transition: "height 2s"
+                    });
+                }
             }
-            $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
+
             // 移除旧的事件
             $(document).off("mouseover", ".translateButton" + suffix);
             $(document).off("mouseout", ".translateButton" + suffix);
@@ -3519,8 +3607,8 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
             if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
         }
 
-        // 分段翻译
-        if (enableSegmentedTranslation) {
+        if (commentTranslationMode == "1") {
+            // 分段翻译
             var pElements = block.find("p:not(li p), li");
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
@@ -3529,12 +3617,33 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(pElements[i]).append("<div></div>");
                     element_node = $(pElements[i]).find("div:last-child").get(0);
                 }
-                result = await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment);
-                if (result.status) errerNum += 1;
+                resultStack.push(await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment));
+
+                let topStack = resultStack[resultStack.length - 1];
+                if (topStack.status) errerNum += 1;
                 $(target).remove();
-                if (translation == "deepl") await new Promise(resolve => setTimeout(resolve, 2000));
+                await new Promise(resolve => setTimeout(resolve, transWaitTime));
             }
+        } else if (commentTranslationMode == "2") {
+            // 选段翻译
+            var pElements = block.find("p.block_selected:not(li p), li.block_selected");
+            for (let i = 0; i < pElements.length; i++) {
+                target = $(pElements[i]).eq(0).clone();
+                element_node = pElements[i];
+                if (type === "child_level") {
+                    $(pElements[i]).append("<div></div>");
+                    element_node = $(pElements[i]).find("div:last-child").get(0);
+                }
+                resultStack.push(await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment));
+
+                let topStack = resultStack[resultStack.length - 1];
+                if (topStack.status) errerNum += 1;
+                $(target).remove();
+                await new Promise(resolve => setTimeout(resolve, transWaitTime));
+            }
+            block.find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
         } else {
+            // 普通翻译
             target = block.eq(0).clone();
             if (type === "child_level") $(target).children(':first').remove();
             element_node = $(block).get(0);
@@ -3551,8 +3660,10 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(target).find('.html2md-panel').remove();
                 }
             }
-            result = await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment);
-            if (result.status) errerNum += 1;
+            resultStack.push(await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment));
+
+            let topStack = resultStack[resultStack.length - 1];
+            if (topStack.status) errerNum += 1;
             $(target).remove();
         }
 
@@ -3731,6 +3842,21 @@ async function blockProcessing(target, element_node, button, is_comment) {
         $(target).remove();
     }
     return result;
+}
+
+// 选段翻译支持
+function multiChoiceTranslation() {
+    $('p:not(li p), li').each(function () {
+        var $this = $(this);
+        // 添加可选且可多选功能
+        $this.click(function () {
+            if ($this.hasClass('block_selected')) {
+                $this.removeClass('block_selected');
+            } else {
+                $this.addClass('block_selected');
+            }
+        });
+    });
 }
 
 function addConversionButton() {
@@ -4550,13 +4676,42 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     let id = getRandomNumber(8);
     let matches = [];
     let replacements = {};
+    let translationService = {
+        "deepl": "DeepL",
+        "iflyrec": "讯飞听见",
+        "youdao": "有道",
+        "google": "Google",
+        "caiyun": "彩云小译",
+        "openai": "ChatGPT"
+    };
     // 创建元素并放在element_node的后面
-    const translateDiv = document.createElement('div');
-    translateDiv.setAttribute('id', id);
-    translateDiv.classList.add('translate-problem-statement');
-    const spanElement = document.createElement('span');
-    translateDiv.appendChild(spanElement);
-    element_node.insertAdjacentElement('afterend', translateDiv);
+    const translateDiv = $('<div>').attr('id', id).addClass('translate-problem-statement');
+    const spanElement = $('<span>');
+    translateDiv.append(spanElement);
+    $(element_node).after(translateDiv);
+
+    // panel
+    var panelDiv = $('<div>').addClass('translate-problem-statement-panel');
+
+    // 信息
+    var topText = $('<div>').text(translationService[translation] + ' 翻译').addClass('topText');
+    panelDiv.append(topText);
+
+    // 右侧
+    var rightDiv = $('<div>').css('display', 'flex');
+    panelDiv.append(rightDiv);
+
+    var copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
+    rightDiv.append(copyButton);
+
+    var upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
+    rightDiv.append(upButton);
+
+    var closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
+    rightDiv.append(closeButton);
+
+    panelDiv.insertBefore(translateDiv);
+
     // 替换latex公式
     if (is_oldLatex) {
         //去除开头结尾的<p>标签
@@ -4569,7 +4724,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         // 使用GPT翻译时不必替换latex公式
         let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
         matches = matches.concat(text.match(regex));
-        translatedText = replaceBlock(text, matches, replacements);
+        text = replaceBlock(text, matches, replacements);
     }
     // 字符数上限
     const translationLimits = {
@@ -4594,27 +4749,26 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     async function translate(translation) {
         try {
             if (translation == "deepl") {
-                translateDiv.innerHTML = "正在使用 deepl 翻译中……请稍等";
+                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
                 translatedText = await translate_deepl(text);
             } else if (translation == "iflyrec") {
-                translateDiv.innerHTML = "正在使用 讯飞听见 翻译中……请稍等";
+                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
                 translatedText = await translate_iflyrec(text);
             } else if (translation == "youdao") {
-                translateDiv.innerHTML = "正在使用 有道 翻译中……请稍等";
+                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
                 translatedText = await translate_youdao_mobile(text);
             } else if (translation == "google") {
-                translateDiv.innerHTML = "正在使用 google 翻译中……请稍等";
+                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
                 translatedText = await translate_gg(text);
             } else if (translation == "caiyun") {
-                translateDiv.innerHTML = "正在使用 彩云小译 翻译中……请稍等";
+                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
                 await translate_caiyun_startup();
                 translatedText = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
+                translateDiv.html("正在使用 ChatGPT 翻译中……" +
                     "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
-                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
+                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待");
                 translatedText = await translate_openai(text);
-
             }
             if (/^翻译出错/.test(translatedText)) status = 2;
         } catch (error) {
@@ -4622,7 +4776,6 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             translatedText = error;
         }
     }
-
     if (is_comment && commentTranslationChoice != "0") await translate(commentTranslationChoice);
     else await translate(translation);
 
@@ -4643,43 +4796,10 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         var textElement = document.createElement("div");
         textElement.style.display = "none";
         textElement.textContent = translatedText;
-        translateDiv.parentNode.insertBefore(textElement, translateDiv);
+        translateDiv.parent().insertBefore(textElement, translateDiv);
 
-        // panel
-        var panelDiv = document.createElement("div");
-        $(panelDiv).addClass("translate-problem-statement-panel");
-        // 收起按钮
-        var closeButton = document.createElement("div");
-        closeButton.innerHTML = putawayIcon;
-        $(closeButton).addClass("borderlessButton");
-        $(panelDiv).append(closeButton);
         // 复制按钮
-        var copyButton = document.createElement("div");
-        copyButton.innerHTML = copyIcon;
-        $(copyButton).addClass("borderlessButton");
-        $(panelDiv).append(copyButton);
-
-        var buttonState = "expand";
-        closeButton.addEventListener("click", function () {
-            if (buttonState === "expand") {
-                this.innerHTML = unfoldIcon;
-                $(translateDiv).css({
-                    display: "none",
-                    transition: "height 2s"
-                });
-                buttonState = "collapse";
-            } else if (buttonState === "collapse") {
-                // 执行收起操作
-                this.innerHTML = putawayIcon;
-                $(translateDiv).css({
-                    display: "",
-                    transition: "height 2s"
-                });
-                buttonState = "expand";
-            }
-        });
-
-        copyButton.addEventListener("click", function () {
+        copyButton.on("click", function () {
             var translatedText = textElement.textContent;
             GM_setClipboard(translatedText);
             // $(this).addClass("copied").text("Copied");
@@ -4689,7 +4809,30 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             //     $(this).text("Copy");
             // }, 2000);
         });
-        translateDiv.parentNode.insertBefore(panelDiv, translateDiv);
+        // 收起按钮
+        upButton.on("click", function () {
+            if (upButton.html() === putawayIcon) {
+                upButton.html(unfoldIcon);
+                $(translateDiv).css({
+                    display: "none",
+                    transition: "height 2s"
+                });
+            } else {
+                // 执行收起操作
+                upButton.html(putawayIcon);
+                $(translateDiv).css({
+                    display: "",
+                    transition: "height 2s"
+                });
+            }
+        });
+        // 关闭按钮
+        closeButton.on("click", function () {
+            $(translateDiv).remove();
+            $(panelDiv).remove();
+        });
+
+
     }
 
     // 转义LaTex中的特殊符号
@@ -4742,7 +4885,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     if (is_oldLatex) {
         // oldlatex
         translatedText = $.parseHTML(translatedText);
-        $(translateDiv).empty().append($(translatedText));
+        translateDiv.empty().append($(translatedText));
         return {
             translateDiv: translateDiv,
             status: status
@@ -4751,15 +4894,16 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         // 渲染MarkDown
         var md = window.markdownit();
         var html = md.render(translatedText);
-        translateDiv.innerHTML = html;
+        translateDiv.html(html);
         // 渲染Latex
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, translateDiv]);
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, translateDiv.get(0)]);
 
         return {
             translateDiv: translateDiv,
             status: status,
             copyDiv: textElement,
-            panelDiv: panelDiv
+            panelDiv: panelDiv,
+            upButton: upButton
         };
     }
 
@@ -5038,20 +5182,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }, retryDelay);
         } else {
             init();
+            ShowAlertMessage();
             settingPanel();
             checkScriptVersion();
             toZH_CN();
+            if (commentTranslationMode == "2") multiChoiceTranslation();
             var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
                 .html(`Codeforces Better! —— 正在等待页面资源加载……`)
-                .css({
-                    "margin": "1em",
-                    "text-align": "center",
-                    "font-weight": "600",
-                    "position": "relative"
-                });
-            var tip_SegmentedTranslation = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-                .html(`Codeforces Better! —— 注意！分段翻译已开启，这会造成负面效果，
-                <p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置关闭分段翻译</p>`)
                 .css({
                     "margin": "1em",
                     "text-align": "center",
@@ -5062,7 +5199,6 @@ document.addEventListener("DOMContentLoaded", function () {
             async function processPage() {
                 if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
                 await waitUntilIdleThenDo(async function () {
-                    if (enableSegmentedTranslation) $(".menu-box:first").next().after(tip_SegmentedTranslation); //显示分段翻译警告
                     if (showJumpToLuogu && is_problem) CF2luogu();
 
                     Promise.resolve()

@@ -27,7 +27,7 @@ function replaceBlock(text, matches, replacements) {
 }
 
 // 翻译框/翻译处理器
-var translatedText = "";
+var text = "";
 async function translateProblemStatement(text) {
     let status = 0;
     let id = getRandomNumber(8);
@@ -41,11 +41,11 @@ async function translateProblemStatement(text) {
         // 使用GPT翻译时不必替换latex公式
         let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
         matches = matches.concat(text.match(regex));
-        translatedText = replaceBlock(text, matches, replacements);
+        text = replaceBlock(text, matches, replacements);
     }
 
     // =============== test data setup ===============
-    return translatedText;
+    return text;
     // ===============================================
 }
 
