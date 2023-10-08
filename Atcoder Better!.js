@@ -44,7 +44,7 @@ const getGMValue = (key, defaultValue) => {
 };
 
 var darkMode = getGMValue("darkMode", "follow");
-var is_problem;
+var is_problem, is_homepage;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, enableSegmentedTranslation, translation;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var replaceSymbol, commentPaging, showJumpToLuogu, loaded;
@@ -52,6 +52,7 @@ var isEnglishLanguage;
 function init() {
     const { hostname, href } = window.location;
     is_problem = href.includes('/tasks/');
+    is_homepage = (href === 'https://atcoder.jp/' || href === 'https://atcoder.jp/?lang=ja');
     bottomZh_CN = getGMValue("bottomZh_CN", true);
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
@@ -140,12 +141,15 @@ function handleColorSchemeChange(event) {
         }
         /* 文字颜色1 */
         html[data-theme=dark] .float-container>#main-container, html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-danger,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .panel-default>.panel-heading,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .panel-default>.panel-heading, html[data-theme=dark] #header a,
         html[data-theme=dark] .pagination>li>a, html[data-theme=dark] .pagination>li>span, html[data-theme=dark] .dropdown-menu,
         html[data-theme=dark] .select2-container--bootstrap .select2-selection--single .select2-selection__rendered,
         html[data-theme=dark] .ace-tm .ace_gutter, html[data-theme=dark] .translate-problem-statement-panel,
-        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .select2-container--bootstrap .select2-results__option--highlighted[aria-selected],
-        html[data-theme=dark] .nav-pills>li.active>a{
+        html[data-theme=dark] .translate-problem-statement, 
+        html[data-theme=dark] .select2-container--bootstrap .select2-results__option--highlighted[aria-selected],
+        html[data-theme=dark] .nav-pills>li.active>a, html[data-theme=dark] .user-unrated, html[data-theme=dark] #header .header-page li.is-active a,
+        html[data-theme=dark] .m-box_inner, html[data-theme=dark] .m-list-job_item, html[data-theme=dark] .a-btn_arrow,
+        html[data-theme=dark] #header, html[data-theme=dark] #header .header-sub_page li a{
             color: #a0adb9 !important;
         }
         /* 文字颜色2 */
@@ -155,7 +159,7 @@ function handleColorSchemeChange(event) {
             color: #9099a3;
         }
         /* 文字颜色3 */
-        html[data-theme=dark] input{
+        html[data-theme=dark] input, html[data-theme=dark] #header .header-page li a:hover{
             color: #6385a6 !important;
         }
         /* 文字颜色4 */
@@ -184,7 +188,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .AtBetter_setting_sidebar li a.active, html[data-theme=dark] .AtBetter_setting_sidebar li,
         html[data-theme=dark] .AtBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .AtBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .AtBetter_modal, html[data-theme=dark] .AtBetter_modal button:hover, html[data-theme=dark] #config_bar_list,
-        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement,
+        html[data-theme=dark] #keyvisual .keyvisual-inner:before, html[data-theme=dark] .m-box_inner,
+        html[data-theme=dark] .m-list-job_item{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -198,11 +204,12 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .pagination>li>a, html[data-theme=dark] .pagination>li>span, html[data-theme=dark] .dropdown-menu,
         html[data-theme=dark] .ace-tm .ace_gutter, html[data-theme=dark] .select2-container--bootstrap .select2-results__option[aria-selected=true],
         html[data-theme=dark] #ace_settingsmenu, #kbshortcutmenu, html[data-theme=dark] .AtBetter_setting_sidebar li,
-        html[data-theme=dark] .AtBetter_setting_list,
+        html[data-theme=dark] .AtBetter_setting_list, html[data-theme=dark] #header .header-inner,
         html[data-theme=dark] .AtBetter_setting_menu hr, html[data-theme=dark] .AtBetter_setting_sidebar li a,
         html[data-theme=dark] .AtBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .AtBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .AtBetter_modal button, html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb,
-        html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .post-footer{
+        html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .post-footer, html[data-theme=dark] .a-btn_arrow:before,
+        html[data-theme=dark] .table-hover>tbody>tr:hover{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -229,7 +236,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .table>thead>tr>td, html[data-theme=dark] .table>tbody>tr>td, html[data-theme=dark] .table>tfoot>tr>td{
             border-top: 1px solid #424b56 !important;
         }
-        html[data-theme=dark] .nav-tabs, html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .panel-default>.panel-heading{
+        html[data-theme=dark] .nav-tabs, html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .panel-default>.panel-heading,
+        html[data-theme=dark] .a-btn_arrow{
             border-bottom: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .table>thead>tr>th{
@@ -237,6 +245,10 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] .AtBetter_setting_sidebar {
             border-right: 1px solid #424b56 !important;
+        }
+        /* 双实线边框颜色 */
+        html[data-theme=dark] #header .header-inner{
+            border-bottom: 5px double #22272e !important;
         }
         /* 阴影 */
         html[data-theme=dark] .float-container>#main-container{
@@ -256,7 +268,7 @@ function handleColorSchemeChange(event) {
             opacity: .75; 
         }
         /* 反转 */
-        html[data-theme=dark] .ace_content{
+        html[data-theme=dark] .ace_content, html[data-theme=dark] #header .header-logo img{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
@@ -285,6 +297,12 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] .AtBetter_setting_menu .btn-close{
             background-color: #ef5350a1 !important;
+        }
+        html[data-theme=dark] .m-box-news_post:before{
+            background: linear-gradient(0deg, #22272e 50%, rgba(255,255,255,0) 100%);
+        }
+        html[data-theme=dark] #header .header-sub_page li a:before, html[data-theme=dark] #header .header-page li a:before{
+            background-color: #9e9e9e !important;
         }
     `);
 })()
@@ -3147,13 +3165,15 @@ async function blockProcessing(target, element_node, button) {
 
 function addConversionButton() {
     // 基本添加
-    $('section').each(function () {
-        let id = "_" + getRandomNumber(8);
-        addButtonPanel(this, id, "this_level");
-        addButtonWithHTML2MD(this, id, "this_level");
-        addButtonWithCopy(this, id, "this_level");
-        addButtonWithTranslation(this, id, "this_level");
-    });
+    if (!is_homepage) {
+        $('section').each(function () {
+            let id = "_" + getRandomNumber(8);
+            addButtonPanel(this, id, "this_level");
+            addButtonWithHTML2MD(this, id, "this_level");
+            addButtonWithCopy(this, id, "this_level");
+            addButtonWithTranslation(this, id, "this_level");
+        });
+    }
 
     // 添加按钮到题解部分
     if (window.location.href.includes("editorial")) {
