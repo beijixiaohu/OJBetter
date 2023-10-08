@@ -128,7 +128,7 @@ function ShowAlertMessage() {
     }
     if (commentTranslationMode == "2") {
         let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-            .html(`Codeforces Better! —— 注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框），按住 Ctrl 可以多选<br>
+            .html(`Codeforces Better! —— 注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框）<br>
             <p>如果你现在不需要翻译超长篇的博客或者题目，建议你请前往设置切换为普通模式</p>`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
@@ -2798,13 +2798,13 @@ const CFBetterSettingMenuHTML = `
                 <div class='CFBetter_setting_list'>
                     <label for='transWaitTime'>
                         <div style="display: flex;align-items: center;">
-                            <span>批量翻译延时</span>
+                            <span>等待间隔</span>
                         </div>
                     </label>
                     <div class="help_tip">
                         `+ helpCircleHTML + `
                         <div class="tip_text">
-                            <p>在分段模式或者选段模式中批量翻译多段间的等待延时（毫秒）</p>
+                            <p>设置在 分段/选段 模式中翻译两段间的等待间隔，建议 200 + 毫秒</p>
                         </div>
                     </div>
                     <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
@@ -3065,6 +3065,18 @@ async function settingPanel() {
 
         // 窗口初始化
         addDraggable($('#CFBetter_setting_menu'));
+
+        // help浮窗位置更新
+        $('.help-icon').hover(function (event) {
+            var menuOffset = $('#CFBetter_setting_menu').offset();
+            var mouseX = event.pageX - menuOffset.left;
+            var mouseY = event.pageY - menuOffset.top;
+
+            $('.tip_text').css({
+                'top': mouseY,
+                'left': mouseX
+            });
+        });
 
         // 选项卡切换
         $('.CFBetter_setting_sidebar a').click(function (event) {
