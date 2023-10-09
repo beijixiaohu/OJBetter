@@ -92,4 +92,18 @@ describe('Testing replaceBlock function', () => {
         const result = await translateProblemStatement(text);
         expect(result).toBe(expectedText);
     });
+
+    test('escaped replace symbols', async () => {
+        const text = `
+        ### \[1\] The test string is $X$ and $Y$
+        ### \[2\] Solution to the original problem
+        `;
+        const expectedText = `
+        ### \[1\] The test string is {1} and {2}
+        ### \[2\] Solution to the original problem
+        `;
+
+        const result = await translateProblemStatement(text);
+        expect(result).toBe(expectedText);
+    });
 });

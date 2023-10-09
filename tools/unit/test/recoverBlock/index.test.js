@@ -115,4 +115,21 @@ describe('Testing recoverBlock function', () => {
         const result = await translateProblemStatement();
         expect(result).toBe(expectedText);
     });
+
+    test('escaped replace symbols', async () => {
+        data.translatedText = `
+        ### \\[1\\] The test string is {1} and {2}
+        ### \\[2\\] Solution to the original problem`;
+        data.matches = ["{1}", "{2}"];
+        data.replacements = {
+            "{1}": "$X$",
+            "{2}": "$Y$"
+        };
+        const expectedText = `
+        ### \\[1\\] The test string is $X$ and $Y$
+        ### \\[2\\] Solution to the original problem`;
+
+        const result = await translateProblemStatement();
+        expect(result).toBe(expectedText);
+    });
 });
