@@ -5,6 +5,7 @@
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
+// @match        *://*.codeforc.es/*
 // @run-at       document-start
 // @connect      www2.deepl.com
 // @connect      www.iflyrec.com
@@ -141,6 +142,8 @@ const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" 
 const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
 const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
+const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
+m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v65.974857h-44.78781v-65.974857h-87.698285v-145.359238h87.698285v-38.351238z m0 83.139047h-44.787809v56.05181h44.787809v-56.05181z m89.307429 0h-44.519619v56.05181h44.519619v-56.05181zM780.190476 170.666667a73.142857 73.142857 0 0 1 73.142857 73.142857v97.523809h-73.142857v-97.523809h-97.523809V170.666667h97.523809z" p-id="6326"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
@@ -458,7 +461,7 @@ span.mdViewContent {
     border: 1px solid #c5ebdf;
     border-radius: 0rem 0rem 0.3rem 0.3rem;
     padding: 5px;
-    margin: -5px 0px 4px 0px;
+    margin: -5px 0px 6px 0px;
     width: 100%;
     box-sizing: border-box;
     font-size: 13px;
@@ -893,12 +896,10 @@ button.html2mdButton.CFBetter_setting.open {
 
 /*设置面板-radio*/
 .CFBetter_setting_menu #translation-settings label {
-    display: grid;
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
     max-width: 100%;
-    align-items: center;
     margin: 3px 0px;
 }
 
@@ -912,6 +913,7 @@ button.html2mdButton.CFBetter_setting.open {
     font-size: 14px;
     letter-spacing: 2px;
     padding: 7px;
+    margin-bottom: 4px;
     align-items: center;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -1448,6 +1450,23 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .block_selected{
     box-shadow: 0px 0px 0px 1px #FF9800;
     outline: none;
+}
+/* 悬浮菜单 */
+.CFBetter_MiniTranslateButton {
+    z-index: 500;
+    display: grid;
+    position: absolute;
+    border-collapse: collapse;
+    fill: #F57C00;
+    background-color: #FFF3E0;
+    overflow: hidden;
+    box-sizing: content-box;
+    box-shadow: 0px 0px 0px 2px #FFE0B2;
+    border-radius: 100%;
+}
+.CFBetter_MiniTranslateButton:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 0px 2px #FFB74D;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -3395,40 +3414,40 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
     else translateButtonText = "翻译";
 
     let htmlString = `<div class='html2md-panel'>
-    <button class='html2mdButton html2md-view${suffix}'>MarkDown视图</button>
-    <button class='html2mdButton html2md-cb${suffix}'>Copy</button>
-    <button class='html2mdButton translateButton${suffix}'>${translateButtonText}</button>
+    <button class='html2mdButton' id='html2md-view${suffix}'>MarkDown视图</button>
+    <button class='html2mdButton' id='html2md-cb${suffix}'>Copy</button>
+    <button class='html2mdButton' id='translateButton${suffix}'>${translateButtonText}</button>
   </div>`;
     if (type === "this_level") {
         $(parent).before(htmlString);
-        var block = $(".translateButton" + suffix).parent().next();
+        var block = $("#translateButton" + suffix).parent().next();
     } else if (type === "child_level") {
         $(parent).prepend(htmlString);
-        var block = $(".translateButton" + suffix).parent().parent();
+        var block = $("#translateButton" + suffix).parent().parent();
     }
     if (is_simple) {
-        $('.html2md-panel').find('.html2mdButton.html2md-view' + suffix + ', .html2mdButton.html2md-cb' + suffix).remove();
+        $('.html2md-panel').find('.html2mdButton#html2md-view' + suffix + ', .html2mdButton#html2md-cb' + suffix).remove();
     }
 
-    if (block.css("display") === "none" || block.hasClass('ojbetter-alert')) $(".translateButton" + suffix).parent().remove();
+    if (block.css("display") === "none" || block.hasClass('ojbetter-alert')) $("#translateButton" + suffix).parent().remove();
 }
 function addButtonWithHTML2MD(parent, suffix, type) {
     if (is_oldLatex) {
-        $(".html2md-view" + suffix).css({
+        $("#html2md-view" + suffix).css({
             "cursor": "not-allowed",
             "background-color": "#ffffff",
             "color": "#a8abb2",
             "border": "1px solid #e4e7ed"
         });
-        $(".html2md-view" + suffix).prop("disabled", true);
+        $("#html2md-view" + suffix).prop("disabled", true);
     }
-    $(document).on("click", ".html2md-view" + suffix, debounce(function () {
+    $(document).on("click", "#html2md-view" + suffix, debounce(function () {
         var target, removedChildren = $();
         if (type === "this_level") {
-            target = $(".html2md-view" + suffix).parent().next().get(0);
+            target = $("#html2md-view" + suffix).parent().next().get(0);
         } else if (type === "child_level") {
-            target = $(".html2md-view" + suffix).parent().parent().get(0);
-            removedChildren = $(".html2md-view" + suffix).parent().parent().children(':first').detach();
+            target = $("#html2md-view" + suffix).parent().parent().get(0);
+            removedChildren = $("#html2md-view" + suffix).parent().parent().children(':first').detach();
         }
         if (target.viewmd) {
             target.viewmd = false;
@@ -3453,13 +3472,13 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 
     if (hoverTargetAreaDisplay && !is_oldLatex) {
         var previousCSS;
-        $(document).on("mouseover", ".html2md-view" + suffix, function () {
+        $(document).on("mouseover", "#html2md-view" + suffix, function () {
             var target;
 
             if (type === "this_level") {
-                target = $(".html2md-view" + suffix).parent().next().get(0);
+                target = $("#html2md-view" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
-                target = $(".html2md-view" + suffix).parent().parent().get(0);
+                target = $("#html2md-view" + suffix).parent().parent().get(0);
             }
 
             $(target).append('<div class="overlay">目标转换区域</div>');
@@ -3473,26 +3492,26 @@ function addButtonWithHTML2MD(parent, suffix, type) {
                 "display": "block"
             });
 
-            $(".html2md-view" + suffix).parent().css({
+            $("#html2md-view" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "400"
             });
         });
 
-        $(document).on("mouseout", ".html2md-view" + suffix, function () {
+        $(document).on("mouseout", "#html2md-view" + suffix, function () {
             var target;
 
             if (type === "this_level") {
-                target = $(".html2md-view" + suffix).parent().next().get(0);
+                target = $("#html2md-view" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
-                target = $(".html2md-view" + suffix).parent().parent().get(0);
+                target = $("#html2md-view" + suffix).parent().parent().get(0);
             }
 
             $(target).find('.overlay').remove();
             if (previousCSS) {
                 $(target).css(previousCSS);
             }
-            $(".html2md-view" + suffix).parent().css({
+            $("#html2md-view" + suffix).parent().css({
                 "position": "static"
             });
         });
@@ -3501,20 +3520,20 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 
 function addButtonWithCopy(parent, suffix, type) {
     if (is_oldLatex) {
-        $(".html2md-cb" + suffix).css({
+        $("#html2md-cb" + suffix).css({
             "cursor": "not-allowed",
             "background-color": "#ffffff",
             "color": "#a8abb2",
             "border": "1px solid #e4e7ed"
         });
-        $(".html2md-cb" + suffix).prop("disabled", true);
+        $("#html2md-cb" + suffix).prop("disabled", true);
     }
-    $(document).on("click", ".html2md-cb" + suffix, debounce(function () {
+    $(document).on("click", "#html2md-cb" + suffix, debounce(function () {
         var target, removedChildren;
         if (type === "this_level") {
-            target = $(".translateButton" + suffix).parent().next().eq(0).clone();
+            target = $("#translateButton" + suffix).parent().next().eq(0).clone();
         } else if (type === "child_level") {
-            target = $(".translateButton" + suffix).parent().parent().eq(0).clone();
+            target = $("#translateButton" + suffix).parent().parent().eq(0).clone();
             $(target).children(':first').remove();
         }
         if ($(target).find('.mdViewContent').length <= 0) {
@@ -3535,13 +3554,13 @@ function addButtonWithCopy(parent, suffix, type) {
 
     if (hoverTargetAreaDisplay && !is_oldLatex) {
         var previousCSS;
-        $(document).on("mouseover", ".html2md-cb" + suffix, function () {
+        $(document).on("mouseover", "#html2md-cb" + suffix, function () {
             var target;
 
             if (type === "this_level") {
-                target = $(".html2md-cb" + suffix).parent().next().get(0);
+                target = $("#html2md-cb" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
-                target = $(".html2md-cb" + suffix).parent().parent().get(0);
+                target = $("#html2md-cb" + suffix).parent().parent().get(0);
             }
 
             $(target).append('<div class="overlay">目标复制区域</div>');
@@ -3553,26 +3572,26 @@ function addButtonWithCopy(parent, suffix, type) {
                 "position": "relative",
                 "display": "block"
             });
-            $(".html2md-cb" + suffix).parent().css({
+            $("#html2md-cb" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "400"
             })
         });
 
-        $(document).on("mouseout", ".html2md-cb" + suffix, function () {
+        $(document).on("mouseout", "#html2md-cb" + suffix, function () {
             var target;
 
             if (type === "this_level") {
-                target = $(".html2md-cb" + suffix).parent().next().get(0);
+                target = $("#html2md-cb" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
-                target = $(".html2md-cb" + suffix).parent().parent().get(0);
+                target = $("#html2md-cb" + suffix).parent().parent().get(0);
             }
 
             $(target).find('.overlay').remove();
             if (previousCSS) {
                 $(target).css(previousCSS);
             }
-            $(".html2md-cb" + suffix).parent().css({
+            $("#html2md-cb" + suffix).parent().css({
                 "position": "static"
             })
         });
@@ -3581,29 +3600,42 @@ function addButtonWithCopy(parent, suffix, type) {
 
 async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
     var resultStack = []; // 结果
-    $(document).on('click', '.translateButton' + suffix, debounce(async function () {
+    var block;
+    if (type === "this_level") block = $("#translateButton" + suffix).parent().next();
+    else if (type === "child_level") block = $("#translateButton" + suffix).parent().parent();
+
+    $(document).on('click', '#translateButton' + suffix, debounce(async function () {
         $(this).trigger('mouseout')
             .removeClass("translated")
             .text("翻译中")
             .css("cursor", "not-allowed")
             .prop("disabled", true);
-        var target, element_node, block, errerNum = 0;
-        if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
-        else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
+        var target, element_node, errerNum = 0;
 
         // 重新翻译
         if (resultStack) {
-            if (retransAction == "0") {
-                for (let item of resultStack) {
-                    if (item.translateDiv) $(item.translateDiv).remove();
-                    if (!is_oldLatex) {
-                        if (item.copyDiv) $(item.copyDiv).remove();
+            let pElements = block.find("p.block_selected:not(li p), li.block_selected");
+            for (let item of resultStack) {
+                if (retransAction == "0") {
+                    // 选段翻译不直接移除旧结果
+                    if (commentTranslationMode == "2") {
+                        // 只移除即将要翻译的段的结果
+                        if (pElements.is(item.panelDiv.prev())) {
+                            if (item.translateDiv) $(item.translateDiv).remove();
+                            if (item.panelDiv) $(item.panelDiv).remove();
+                            if (!is_oldLatex) {
+                                if (item.copyDiv) $(item.copyDiv).remove();
+                            }
+                        }
+                    } else {
+                        if (item.translateDiv) $(item.translateDiv).remove();
                         if (item.panelDiv) $(item.panelDiv).remove();
+                        if (!is_oldLatex) {
+                            if (item.copyDiv) $(item.copyDiv).remove();
+                        }
+                        $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
-                }
-                $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
-            } else {
-                for (let item of resultStack) {
+                } else {
                     item.upButton.html(unfoldIcon);
                     $(item.translateDiv).css({
                         display: "none",
@@ -3613,8 +3645,8 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
             }
 
             // 移除旧的事件
-            $(document).off("mouseover", ".translateButton" + suffix);
-            $(document).off("mouseout", ".translateButton" + suffix);
+            $(document).off("mouseover", "#translateButton" + suffix);
+            $(document).off("mouseout", "#translateButton" + suffix);
             // 重新绑定悬停事件
             if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
         }
@@ -3629,7 +3661,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(pElements[i]).append("<div></div>");
                     element_node = $(pElements[i]).find("div:last-child").get(0);
                 }
-                resultStack.push(await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment));
+                resultStack.push(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
 
                 let topStack = resultStack[resultStack.length - 1];
                 if (topStack.status) errerNum += 1;
@@ -3646,7 +3678,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(pElements[i]).append("<div></div>");
                     element_node = $(pElements[i]).find("div:last-child").get(0);
                 }
-                resultStack.push(await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment));
+                resultStack.push(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
 
                 let topStack = resultStack[resultStack.length - 1];
                 if (topStack.status) errerNum += 1;
@@ -3672,13 +3704,12 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(target).find('.html2md-panel').remove();
                 }
             }
-            resultStack.push(await blockProcessing(target, element_node, $(".translateButton" + suffix), is_comment));
+            resultStack.push(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
 
             let topStack = resultStack[resultStack.length - 1];
             if (topStack.status) errerNum += 1;
             $(target).remove();
         }
-
         if (!errerNum) {
             $(this).addClass("translated")
                 .text("已翻译")
@@ -3691,7 +3722,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
         // 重新翻译
         let currentText, is_error;
-        $(document).on("mouseover", ".translateButton" + suffix, function () {
+        $(document).on("mouseover", "#translateButton" + suffix, function () {
             currentText = $(this).text();
             $(this).text("重新翻译");
             if ($(this).hasClass("error")) {
@@ -3700,7 +3731,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
             }
         });
 
-        $(document).on("mouseout", ".translateButton" + suffix, function () {
+        $(document).on("mouseout", "#translateButton" + suffix, function () {
             $(this).text(currentText);
             if (is_error) $(this).addClass("error");
         });
@@ -3710,13 +3741,13 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
     function bindHoverEvents(suffix, type) {
         var previousCSS;
 
-        $(document).on("mouseover", ".translateButton" + suffix, function () {
+        $(document).on("mouseover", "#translateButton" + suffix, function () {
             var target;
 
             if (type === "this_level") {
-                target = $(".translateButton" + suffix).parent().next().get(0);
+                target = $("#translateButton" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
-                target = $(".translateButton" + suffix).parent().parent().get(0);
+                target = $("#translateButton" + suffix).parent().parent().get(0);
             }
 
             $(target).append('<div class="overlay">目标翻译区域</div>');
@@ -3730,19 +3761,19 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                 "display": ($(target).hasClass('question-response')) ? "block" : $(target).css("display")
             });
 
-            $(".translateButton" + suffix).parent().css({
+            $("#translateButton" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "400"
             });
         });
 
-        $(document).on("mouseout", ".translateButton" + suffix, function () {
+        $(document).on("mouseout", "#translateButton" + suffix, function () {
             var target;
 
             if (type === "this_level") {
-                target = $(".translateButton" + suffix).parent().next().get(0);
+                target = $("#translateButton" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
-                target = $(".translateButton" + suffix).parent().parent().get(0);
+                target = $("#translateButton" + suffix).parent().parent().get(0);
             }
 
             $(target).find('.overlay').remove();
@@ -3751,7 +3782,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                 $(target).css(previousCSS);
             }
 
-            $(".translateButton" + suffix).parent().css({
+            $("#translateButton" + suffix).parent().css({
                 "position": "static"
             });
         });
@@ -3760,12 +3791,12 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
     if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
 
     // 右键菜单
-    $(document).on('contextmenu', '.translateButton' + suffix, function (e) {
+    $(document).on('contextmenu', '#translateButton' + suffix, function (e) {
         e.preventDefault();
 
         // 是否为评论的翻译
         let is_comment = false;
-        if ($(".translateButton" + suffix).parents('.comments').length > 0) is_comment = true;
+        if ($("#translateButton" + suffix).parents('.comments').length > 0) is_comment = true;
 
         // 移除旧的
         if (!$(event.target).closest('.CFBetter_contextmenu').length) {
@@ -3837,7 +3868,6 @@ async function blockProcessing(target, element_node, button, is_comment) {
     const textarea = document.createElement('textarea');
     textarea.value = target.markdown;
     var result = await translateProblemStatement(textarea.value, element_node, $(button), is_comment);
-    //
     if (result.status == 1) {
         $(button).addClass("error")
             .text("翻译中止")
@@ -3858,14 +3888,40 @@ async function blockProcessing(target, element_node, button, is_comment) {
 
 // 选段翻译支持
 function multiChoiceTranslation() {
+    GM_addStyle(`
+        .topic .content .ttypography {
+            overflow: initial;
+        }
+    `);
     $('p:not(li p), li').each(function () {
         var $this = $(this);
-        // 添加可选且可多选功能
-        $this.click(function () {
+        var buttons = {}; // 存储元素和按钮id的对应关系
+
+        $this.click(function (e) {
+            e.stopPropagation();
             if ($this.hasClass('block_selected')) {
                 $this.removeClass('block_selected');
+                // 移除对应的按钮
+                $('.CFBetter_MiniTranslateButton').remove("#translateButton" + buttons[$this]);
             } else {
                 $this.addClass('block_selected');
+                // 添加按钮
+                var id = "_selected_translate_" + getRandomNumber(8);
+                var menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton${id}'>${translateIcon}</div>`)
+                    .css({
+                        left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px'
+                    });
+                $this.before(menu);
+
+                // 存储元素和按钮id的对应关系
+                buttons[$this] = id;
+                $("#translateButton" + id).click(function () {
+                    let target = $this.eq(0).clone();
+                    blockProcessing(target, $this.eq(0), $("#translateButton" + id), false);
+                    $this.removeClass('block_selected');
+                    // 移除对应的按钮
+                    $('.CFBetter_MiniTranslateButton').remove("#translateButton" + id);
+                });
             }
         });
     });
@@ -3892,7 +3948,7 @@ function addConversionButton() {
         let is_comment = false;
         if ($(this).parents('.comments').length > 0) is_comment = true;
         // 题目页特判
-        if (!$(this).parent().hasClass('problemindexholder')) {
+        if (!$(this).parent().hasClass('problemindexholder') || is_acmsguru) {
             let id = "_comment_" + getRandomNumber(8);
             addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(this, id, "this_level");
@@ -4347,7 +4403,8 @@ async function getRating(problem, problem_url, contest = null) {
                     records.push({ rating: rating, link: link, contests: contests });
                 });
                 for (let record of records) {
-                    let link = record.link.replace(/http:/g, 'https:');
+                    let link;
+                    if (typeof record.link !== 'undefined') link = record.link.replace(/http:/g, 'https:');
                     if (link == problem_url || link == problem_url + '/') {
                         resolve({
                             rating: parseInt(record.rating),
@@ -4466,7 +4523,11 @@ async function showRatingByClist_problem() {
     if (!await checkCookie()) return;
     creatRatingCss(false);
 
+    // 题目名
     let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    if (is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
+
+    // 题目链接
     let problem_url = window.location.href;
     if (problem_url.includes('/contest/')) {
         problem_url = problem_url.replace(/\/contest\/(\d+)\/problem\/(\w+)[^\w]*/, '/contest/$1/problem/$2');
@@ -4474,7 +4535,10 @@ async function showRatingByClist_problem() {
         problem_url = problem_url.replace(/\/problemset\/problem\/(\d+)\/(\w+)/, '/contest/$1/problem/$2');
     }
     if (is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com'); // 轻量站
+
+    // 比赛名
     let contest = $('#sidebar').children().first().find('.rtable th').first().text();
+
     let result;
     try {
         result = await getRating(problem, problem_url, contest);
@@ -4536,7 +4600,7 @@ function recolorStandings() {
     });
 }
 
-// 等待Latex渲染队列全部完成
+// 等待LaTeX渲染队列全部完成
 function waitUntilIdleThenDo(callback) {
     var intervalId = setInterval(function () {
         var queue = MathJax.Hub.queue;
