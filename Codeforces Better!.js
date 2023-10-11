@@ -56,7 +56,7 @@ function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
     is_oldLatex = $('.tex-span').length;
-    is_acmsguru = href.includes("acmsguru");
+    is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     is_problem = href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
@@ -2749,7 +2749,7 @@ const CFBetterSettingMenuHTML = `
                     <div class="help_tip">
                         `+ helpCircleHTML + `
                         <div class="tip_text">
-                        <p>对于采用 Codeforces 赛制的比赛的榜单</p>
+                        <p>对于采用 Codeforces 赛制的比赛榜单</p>
                         <p>按照“得分/总分”所在的范围为分数重新渐变着色</p>
                         <p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>
                         </div>
@@ -3617,18 +3617,16 @@ function addButtonWithCopy(parent, suffix, type) {
 }
 
 async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
-    var resultStack = []; // 结果
-    var block;
-    if (type === "this_level") block = $("#translateButton" + suffix).parent().next();
-    else if (type === "child_level") block = $("#translateButton" + suffix).parent().parent();
-
+    var resultStack = []; // 结果  
     $(document).on('click', '#translateButton' + suffix, debounce(async function () {
         $(this).trigger('mouseout')
             .removeClass("translated")
             .text("翻译中")
             .css("cursor", "not-allowed")
             .prop("disabled", true);
-        var target, element_node, errerNum = 0;
+        var target, element_node, block, errerNum = 0;
+        if (type === "this_level") block = $("#translateButton" + suffix).parent().next();
+        else if (type === "child_level") block = $("#translateButton" + suffix).parent().parent();
 
         // 重新翻译
         if (resultStack) {
@@ -3671,7 +3669,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
         if (commentTranslationMode == "1") {
             // 分段翻译
-            var pElements = block.find("p:not(li p), li");
+            var pElements = block.find("p:not(li p), li, .CFBetter_acmsguru");
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
                 element_node = pElements[i];
@@ -3688,7 +3686,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
             }
         } else if (commentTranslationMode == "2") {
             // 选段翻译
-            var pElements = block.find("p.block_selected:not(li p), li.block_selected");
+            var pElements = block.find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
                 element_node = pElements[i];
@@ -3911,7 +3909,6 @@ function multiChoiceTranslation() {
             overflow: initial;
         }
     `);
-    let buttons = {}; // 存储元素和按钮id的对应关系
 
     $(document).on('click', 'p, li:not(:has(.comment)), .CFBetter_acmsguru', function (e) {
         let $this = $(this);
@@ -3919,25 +3916,24 @@ function multiChoiceTranslation() {
         if ($this.hasClass('block_selected')) {
             $this.removeClass('block_selected');
             // 移除对应的按钮
-            $('.CFBetter_MiniTranslateButton').remove("#translateButton" + buttons[$this]);
+            $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('CFBetter_p_id'));
         } else {
+            let id = getRandomNumber(8);
+            $this.attr('CFBetter_p_id', id);
             $this.addClass('block_selected');
             // 添加按钮
-            let id = "_selected_" + getRandomNumber(8);
-            let menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton${id}'>${translateIcon}</div>`)
+            let menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
                 });
             $this.before(menu);
 
-            buttons[$this] = id; // 存储元素和按钮id的对应关系
-
-            $("#translateButton" + id).click(function () {
+            $("#translateButton_selected_" + id).click(function () {
                 let target = $this.eq(0).clone();
-                blockProcessing(target, $this.eq(0), $("#translateButton" + id), false);
+                blockProcessing(target, $this.eq(0), $("#translateButton_selected_" + id), false);
                 $this.removeClass('block_selected');
                 // 移除对应的按钮
-                $('.CFBetter_MiniTranslateButton').remove("#translateButton" + id);
+                $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
             });
         }
     });
@@ -3945,12 +3941,32 @@ function multiChoiceTranslation() {
 
 // 为acmsguru题面重新划分div
 function acmsguruReblock() {
-    $('.ttypography').children().each(function () {
-        var html = $(this).html();
-        var replacedHtml = html.replace(/(?:<\/div>|<br><br>)(?<text>[\s\S]+?)(?=<br><br>)/g,
-            '<div align="left" class="CFBetter_acmsguru" >$<text></div>');
-        $(this).html(replacedHtml);
-    });
+    if (commentTranslationMode == '0') {
+        // 普通模式下的划分方式
+        var html = $('.ttypography').children().html();
+        var separator = /(<div align="left" style="margin-top: 1\.0em;"><b>.*?<\/b><\/div>)/g;
+        var result = html.split(separator); // 分割代码
+        var outputHtml = '';
+        var header = '';
+        for (var i = 0; i < result.length; i++) {
+            if (separator.test(result[i])) {
+                header = result[i];
+                continue;
+            }
+            outputHtml += '<div class="ttypography">' + header + result[i] + '</div>';
+            header = '';
+        }
+        $('.ttypography').html(outputHtml);
+    }
+    else {
+        // 分段/选段模式下的划分方式
+        $('.ttypography').children().each(function () {
+            var html = $(this).html();
+            var replacedHtml = html.replace(/(?:<\/div>|<br><br>)(?<text>[\s\S]+?)(?=<br><br>)/g,
+                '<div align="left" class="CFBetter_acmsguru" >$<text></div>');
+            $(this).html(replacedHtml);
+        });
+    }
 }
 
 function addConversionButton() {
@@ -4387,7 +4403,7 @@ async function checkCookie(isContest = false) {
         var state = congested ? `当前访问Clist.by网络拥堵，请求已中断，请稍后再重试` :
             `当前浏览器的Clist.by登录Cookie可能已失效，请打开<a target="_blank" href="https://clist.by/">Clist.by</a>重新登录
          <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
-         <br>脚本不会也无法获取您在Clist.by站点上的具体Cookie，发送请求时会由浏览器自动携带，具体请阅读脚本页的说明`;
+         <br>脚本不会获取您在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明`;
         var newElement = $("<div></div>")
             .addClass("alert alert-error ojbetter-alert").html(`Codeforces Better! —— ${state}`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
@@ -4799,34 +4815,51 @@ async function translateProblemStatement(text, element_node, button, is_comment)
 
     // panel
     var panelDiv = $('<div>').addClass('translate-problem-statement-panel');
-
     // 信息
     var topText = $('<div>').text(translationService[translation] + ' 翻译').addClass('topText');
     panelDiv.append(topText);
-
     // 右侧
     var rightDiv = $('<div>').css('display', 'flex');
     panelDiv.append(rightDiv);
-
     var copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
     rightDiv.append(copyButton);
-
     var upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
     rightDiv.append(upButton);
-
     var closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
     rightDiv.append(closeButton);
 
     panelDiv.insertBefore(translateDiv);
 
+    // 收起按钮
+    upButton.on("click", function () {
+        if (upButton.html() === putawayIcon) {
+            upButton.html(unfoldIcon);
+            $(translateDiv).css({
+                display: "none",
+                transition: "height 2s"
+            });
+        } else {
+            // 执行收起操作
+            upButton.html(putawayIcon);
+            $(translateDiv).css({
+                display: "",
+                transition: "height 2s"
+            });
+        }
+    });
+
+    // 关闭按钮
+    closeButton.on("click", function () {
+        $(translateDiv).remove();
+        $(panelDiv).remove();
+    });
+
     // 替换latex公式
     if (is_oldLatex) {
-        //去除开头结尾的<p>标签
-        text = text.replace(/^<p>/i, "");
-        text = text.replace(/<\/p>$/i, "");
         let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
         matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
+        text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
     } else if (is_acmsguru) {
         let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
         matches = matches.concat(text.match(regex));
@@ -4855,7 +4888,6 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             };
         }
     }
-
     // 翻译
     async function translate(translation) {
         try {
@@ -4895,7 +4927,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     translatedText = translatedText.replace(/\]\s*\[/g, '] [');
     translatedText = translatedText.replace(/\}\s*\{/g, '} {');
     if (is_oldLatex) {
-        translatedText = "<p>" + translatedText + "</p>";
+        translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 还原为<p/>标签
         translatedText = recoverBlock(translatedText, matches, replacements);
     } else if (is_acmsguru) {
         translatedText = recoverBlock(translatedText, matches, replacements);
@@ -4923,30 +4955,6 @@ async function translateProblemStatement(text, element_node, button, is_comment)
             // }, 2000);
         });
     }
-
-    // 收起按钮
-    upButton.on("click", function () {
-        if (upButton.html() === putawayIcon) {
-            upButton.html(unfoldIcon);
-            $(translateDiv).css({
-                display: "none",
-                transition: "height 2s"
-            });
-        } else {
-            // 执行收起操作
-            upButton.html(putawayIcon);
-            $(translateDiv).css({
-                display: "",
-                transition: "height 2s"
-            });
-        }
-    });
-
-    // 关闭按钮
-    closeButton.on("click", function () {
-        $(translateDiv).remove();
-        $(panelDiv).remove();
-    });
 
     // 转义LaTex中的特殊符号
     if (!is_oldLatex && !is_acmsguru) {
@@ -5326,16 +5334,16 @@ document.addEventListener("DOMContentLoaded", function () {
                             return delay(100).then(() => { if (commentPaging) CommentPagination() });
                         })
                         .then(() => {
+                            if (showLoading && is_acmsguru) newElement.html('Codeforces Better! —— 正在为acmsguru题面重新划分div……');
+                            return delay(100).then(() => { acmsguruReblock() });
+                        })
+                        .then(() => {
                             if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
                             return delay(100).then(() => addConversionButton());
                         })
                         .then(() => {
-                            if (is_acmsguru) newElement.html('Codeforces Better! —— 正在为题面重新划分块……');
-                            return delay(100).then(() => { acmsguruReblock() });
-                        })
-                        .then(() => {
-                            if (commentTranslationMode == "2") newElement.html('Codeforces Better! —— 正在加载选段翻译……');
-                            return delay(100).then(() => { multiChoiceTranslation() });
+                            if (showLoading && commentTranslationMode == "2") newElement.html('Codeforces Better! —— 正在加载选段翻译……');
+                            return delay(100).then(() => { if (commentTranslationMode == "2") multiChoiceTranslation() });
                         })
                         .then(async () => {
                             if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
@@ -5343,21 +5351,21 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (renderPerfOpt) await RenderPerfOpt();
                         })
                         .then(async () => {
-                            if (standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
+                            if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
                             await delay(100);
                             if (standingsRecolor && is_cfStandings) await recolorStandings();
                         })
                         .then(async () => {
                             await delay(100);
-                            if (showClistRating_contest && is_contest) {
+                            if (showLoading && showClistRating_contest && is_contest) {
                                 newElement.html('Codeforces Better! —— 正在加载Clist数据……');
                                 await showRatingByClist_contest();
                             }
-                            if (showClistRating_problemset && is_problemset) {
+                            if (showLoading && showClistRating_problemset && is_problemset) {
                                 newElement.html('Codeforces Better! —— 正在加载Clist数据……');
                                 await showRatingByClist_problemset();
                             }
-                            if (showClistRating_problem && is_problem) {
+                            if (showLoading && showClistRating_problem && is_problem) {
                                 newElement.html('Codeforces Better! —— 正在加载Clist数据……');
                                 await showRatingByClist_problem();
                             }
