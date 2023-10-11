@@ -46,7 +46,7 @@ const getGMValue = (key, defaultValue) => {
     return value;
 };
 var darkMode = getGMValue("darkMode", "follow");
-var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset, is_standings;
+var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset, is_cfStandings;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, commentPaging, showJumpToLuogu, loaded;
@@ -55,12 +55,15 @@ var standingsRecolor;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
-    is_acmsguru = href.includes("acmsguru");
     is_oldLatex = $('.tex-span').length;
+    is_acmsguru = href.includes("acmsguru");
     is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     is_problem = href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
-    is_standings = href.includes('/standings');
+    is_cfStandings = href.includes('/standings') &&
+        $('.standings tr:first th:nth-child(n+5)')
+            .map(() => $(this).find('span').text())
+            .get().every(score => /^[0-9]+$/.test(score));
     bottomZh_CN = getGMValue("bottomZh_CN", true);
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
@@ -117,6 +120,13 @@ function ShowAlertMessage() {
     if (is_oldLatex) {
         let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
             .html(`Codeforces Better! —— 注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。
+                <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
+            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
+    }
+    if (is_acmsguru) {
+        let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
+            .html(`Codeforces Better! —— 注意：当前页面为 acmsguru 题目（这是一道非常古老的题目），部分功能不适用。
                 <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
@@ -1453,7 +1463,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 }
 /* 悬浮菜单 */
 .CFBetter_MiniTranslateButton {
-    z-index: 500;
+    z-index: 100;
     display: grid;
     position: absolute;
     border-collapse: collapse;
@@ -1467,6 +1477,10 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .CFBetter_MiniTranslateButton:hover {
     cursor: pointer;
     box-shadow: 0px 0px 0px 2px #FFB74D;
+}
+/* acmsguru划分块 */
+.CFBetter_acmsguru {
+    margin: 0 0 1em!important;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -2697,9 +2711,13 @@ const CFBetterSettingMenuHTML = `
                 <div class="help_tip">
                     `+ helpCircleHTML + `
                     <div class="tip_text">
-                    <p>为折叠块元素启用可见渲染（content-visibility: auto）</p>
-                    <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后会有一定程度的改善</p>
-                    <p>注意：本特性有小概率可能导致页面在某些位置时上下快速跳动闪屏</p>
+                    <p>为折叠块元素添加 contain 约束</p>
+                    <div style="border: 1px solid #795548; padding: 10px;">
+                        <p>
+                        contain: layout style;
+                        </p>
+                    </div>
+                    <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>
                     </div>
                 </div>
                 <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
@@ -3432,7 +3450,7 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
     if (block.css("display") === "none" || block.hasClass('ojbetter-alert')) $("#translateButton" + suffix).parent().remove();
 }
 function addButtonWithHTML2MD(parent, suffix, type) {
-    if (is_oldLatex) {
+    if (is_oldLatex || is_acmsguru) {
         $("#html2md-view" + suffix).css({
             "cursor": "not-allowed",
             "background-color": "#ffffff",
@@ -3470,7 +3488,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         if (removedChildren) $(target).prepend(removedChildren);
     }));
 
-    if (hoverTargetAreaDisplay && !is_oldLatex) {
+    if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
         var previousCSS;
         $(document).on("mouseover", "#html2md-view" + suffix, function () {
             var target;
@@ -3519,7 +3537,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 }
 
 function addButtonWithCopy(parent, suffix, type) {
-    if (is_oldLatex) {
+    if (is_oldLatex || is_acmsguru) {
         $("#html2md-cb" + suffix).css({
             "cursor": "not-allowed",
             "background-color": "#ffffff",
@@ -3552,7 +3570,7 @@ function addButtonWithCopy(parent, suffix, type) {
         $(target).remove();
     }));
 
-    if (hoverTargetAreaDisplay && !is_oldLatex) {
+    if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
         var previousCSS;
         $(document).on("mouseover", "#html2md-cb" + suffix, function () {
             var target;
@@ -3623,14 +3641,14 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                         if (pElements.is(item.panelDiv.prev())) {
                             if (item.translateDiv) $(item.translateDiv).remove();
                             if (item.panelDiv) $(item.panelDiv).remove();
-                            if (!is_oldLatex) {
+                            if (!is_oldLatex && !is_acmsguru) {
                                 if (item.copyDiv) $(item.copyDiv).remove();
                             }
                         }
                     } else {
                         if (item.translateDiv) $(item.translateDiv).remove();
                         if (item.panelDiv) $(item.panelDiv).remove();
-                        if (!is_oldLatex) {
+                        if (!is_oldLatex && !is_acmsguru) {
                             if (item.copyDiv) $(item.copyDiv).remove();
                         }
                         $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
@@ -3799,7 +3817,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
         if ($("#translateButton" + suffix).parents('.comments').length > 0) is_comment = true;
 
         // 移除旧的
-        if (!$(event.target).closest('.CFBetter_contextmenu').length) {
+        if (!$(e.target).closest('.CFBetter_contextmenu').length) {
             $('.CFBetter_contextmenu').remove();
         }
 
@@ -3859,7 +3877,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
 
 // 块处理
 async function blockProcessing(target, element_node, button, is_comment) {
-    if (is_oldLatex) {
+    if (is_oldLatex || is_acmsguru) {
         $(target).find('.overlay').remove();
         target.markdown = $(target).html();
     } else if (!target.markdown) {
@@ -3893,37 +3911,45 @@ function multiChoiceTranslation() {
             overflow: initial;
         }
     `);
-    $('p:not(li p), li').each(function () {
-        var $this = $(this);
-        var buttons = {}; // 存储元素和按钮id的对应关系
+    let buttons = {}; // 存储元素和按钮id的对应关系
 
-        $this.click(function (e) {
-            e.stopPropagation();
-            if ($this.hasClass('block_selected')) {
+    $(document).on('click', 'p, li:not(:has(.comment)), .CFBetter_acmsguru', function (e) {
+        let $this = $(this);
+        e.stopPropagation();
+        if ($this.hasClass('block_selected')) {
+            $this.removeClass('block_selected');
+            // 移除对应的按钮
+            $('.CFBetter_MiniTranslateButton').remove("#translateButton" + buttons[$this]);
+        } else {
+            $this.addClass('block_selected');
+            // 添加按钮
+            let id = "_selected_" + getRandomNumber(8);
+            let menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton${id}'>${translateIcon}</div>`)
+                .css({
+                    left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
+                });
+            $this.before(menu);
+
+            buttons[$this] = id; // 存储元素和按钮id的对应关系
+
+            $("#translateButton" + id).click(function () {
+                let target = $this.eq(0).clone();
+                blockProcessing(target, $this.eq(0), $("#translateButton" + id), false);
                 $this.removeClass('block_selected');
                 // 移除对应的按钮
-                $('.CFBetter_MiniTranslateButton').remove("#translateButton" + buttons[$this]);
-            } else {
-                $this.addClass('block_selected');
-                // 添加按钮
-                var id = "_selected_translate_" + getRandomNumber(8);
-                var menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton${id}'>${translateIcon}</div>`)
-                    .css({
-                        left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px'
-                    });
-                $this.before(menu);
+                $('.CFBetter_MiniTranslateButton').remove("#translateButton" + id);
+            });
+        }
+    });
+}
 
-                // 存储元素和按钮id的对应关系
-                buttons[$this] = id;
-                $("#translateButton" + id).click(function () {
-                    let target = $this.eq(0).clone();
-                    blockProcessing(target, $this.eq(0), $("#translateButton" + id), false);
-                    $this.removeClass('block_selected');
-                    // 移除对应的按钮
-                    $('.CFBetter_MiniTranslateButton').remove("#translateButton" + id);
-                });
-            }
-        });
+// 为acmsguru题面重新划分div
+function acmsguruReblock() {
+    $('.ttypography').children().each(function () {
+        var html = $(this).html();
+        var replacedHtml = html.replace(/(?:<\/div>|<br><br>)(?<text>[\s\S]+?)(?=<br><br>)/g,
+            '<div align="left" class="CFBetter_acmsguru" >$<text></div>');
+        $(this).html(replacedHtml);
     });
 }
 
@@ -4058,47 +4084,52 @@ function ExpandFoldingblocks() {
 
 // 折叠块渲染优化
 function RenderPerfOpt() {
-    return new Promise(function (resolve) {
-        var currentIndex = 0;
-        var delay = 50;
-        var maxDelay = 1000;
-
-        var elements = $('.spoiler-content');
-        var batchSize = 10;
-        var initialDelay = 50;
-
-        function processBatch(callback) {
-            var endIndex = currentIndex + batchSize;
-            for (var i = currentIndex; i < endIndex; i++) {
-                if (i >= elements.length) {
-                    callback();
-                    resolve();
-                    return;
-                }
-                var element = elements.eq(i);
-                var height = element.outerHeight();
-                element.css('contain-intrinsic-size', height + 'px');
-            }
-
-            currentIndex += batchSize;
-
-            // 延时
-            delay *= 2;
-            if (delay >= maxDelay) delay = initialDelay;
-
-            setTimeout(function () {
-                processBatch(callback); // 递归
-            }, delay);
+    GM_addStyle(`
+        .spoiler-content {
+            contain: layout style;
         }
+    `);
+    // return new Promise(function (resolve) {
+    //     var currentIndex = 0;
+    //     var delay = 50;
+    //     var maxDelay = 1000;
 
-        processBatch(function () {
-            GM_addStyle(`
-                .spoiler-content {
-                    content-visibility: auto;
-                }
-            `);
-        });
-    });
+    //     var elements = $('.spoiler-content');
+    //     var batchSize = 10;
+    //     var initialDelay = 50;
+
+    //     function processBatch(callback) {
+    //         var endIndex = currentIndex + batchSize;
+    //         for (var i = currentIndex; i < endIndex; i++) {
+    //             if (i >= elements.length) {
+    //                 callback();
+    //                 resolve();
+    //                 return;
+    //             }
+    //             var element = elements.eq(i);
+    //             var height = element.outerHeight();
+    //             element.css('contain-intrinsic-size', `auto ${height}px`);
+    //         }
+
+    //         currentIndex += batchSize;
+
+    //         // 延时
+    //         delay *= 2;
+    //         if (delay >= maxDelay) delay = initialDelay;
+
+    //         setTimeout(function () {
+    //             processBatch(callback); // 递归
+    //         }, delay);
+    //     }
+
+    //     processBatch(function () {
+    //         GM_addStyle(`
+    //             .spoiler-content {
+    //                 contain: layout style;
+    //             }
+    //         `);
+    //     });
+    // });
 }
 
 // 分页
@@ -4358,7 +4389,7 @@ async function checkCookie(isContest = false) {
          <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
          <br>脚本不会也无法获取您在Clist.by站点上的具体Cookie，发送请求时会由浏览器自动携带，具体请阅读脚本页的说明`;
         var newElement = $("<div></div>")
-            .addClass("alert alert-error ojbetter-alert").html(`CodeforcesBetter! —— ${state}`)
+            .addClass("alert alert-error ojbetter-alert").html(`Codeforces Better! —— ${state}`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
@@ -4501,6 +4532,7 @@ async function showRatingByClist_problemset() {
 
         for (let j = i; j < endIndex; j++) {
             const result = results[j - i];
+            if (result == undefined) continue;
             let className = "rating_by_clist_color9";
             let keys = Object.keys(ratingClassMap);
             for (let k = 0; k < keys.length; k++) {
@@ -4587,13 +4619,12 @@ function recolorStandings() {
             return $(this).find('span').text();
         })
         .get();
-    if (maxScores.every(score => score === '')) return;
     $('.standings tr:not(:first):not(:last)').each(function () {
         var thElements = $(this).find('td:nth-child(n+5)');
         thElements.each(function (index) {
             var spanElement = $(this).find('span:first');
             var value = parseInt(spanElement.text());
-            if (value <= 0) return;
+            if (value <= 0 || /[a-zA-Z]/.test(maxScores[index])) return;
             var colorValue = getColorValue(value / maxScores[index]);
             spanElement.css('color', colorValue);
         });
@@ -4796,6 +4827,10 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
         matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
+    } else if (is_acmsguru) {
+        let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
     } else if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
         let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
@@ -4862,12 +4897,14 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     if (is_oldLatex) {
         translatedText = "<p>" + translatedText + "</p>";
         translatedText = recoverBlock(translatedText, matches, replacements);
+    } else if (is_acmsguru) {
+        translatedText = recoverBlock(translatedText, matches, replacements);
     } else if (translation != "openai") {
         translatedText = recoverBlock(translatedText, matches, replacements);
     }
 
     // 结果复制按钮
-    if (!is_oldLatex) {
+    if (!is_oldLatex && !is_acmsguru) {
         // 创建一个隐藏的元素来保存 translatedText 的值
         var textElement = document.createElement("div");
         textElement.style.display = "none";
@@ -4912,7 +4949,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     });
 
     // 转义LaTex中的特殊符号
-    if (!is_oldLatex) {
+    if (!is_oldLatex && !is_acmsguru) {
         const escapeRules = [
             { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
             { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
@@ -4958,7 +4995,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     });
 
     // 更新
-    if (is_oldLatex) {
+    if (is_oldLatex || is_acmsguru) {
         // oldlatex
         translatedText = $.parseHTML(translatedText);
         translateDiv.empty().append($(translatedText));
@@ -4992,7 +5029,7 @@ async function translateProblemStatement(text, element_node, button, is_comment)
 async function translate_openai(raw) {
     var openai_retext = "";
     var data;
-    if (is_oldLatex) {
+    if (is_oldLatex || is_acmsguru) {
         data = {
             model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
             messages: [{
@@ -5265,7 +5302,6 @@ document.addEventListener("DOMContentLoaded", function () {
             settingPanel();
             checkScriptVersion();
             toZH_CN();
-            if (commentTranslationMode == "2") multiChoiceTranslation();
             var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
                 .html(`Codeforces Better! —— 正在等待页面资源加载……`)
                 .css({
@@ -5276,7 +5312,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
             async function processPage() {
-                if (showLoading) newElement.html('Codeforces Better! —— 正在等待Latex渲染队列全部完成……');
+                if (showLoading) newElement.html('Codeforces Better! —— 正在等待LaTeX渲染队列全部完成……');
                 await waitUntilIdleThenDo(async function () {
                     if (showJumpToLuogu && is_problem) CF2luogu();
 
@@ -5293,15 +5329,23 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
                             return delay(100).then(() => addConversionButton());
                         })
+                        .then(() => {
+                            if (is_acmsguru) newElement.html('Codeforces Better! —— 正在为题面重新划分块……');
+                            return delay(100).then(() => { acmsguruReblock() });
+                        })
+                        .then(() => {
+                            if (commentTranslationMode == "2") newElement.html('Codeforces Better! —— 正在加载选段翻译……');
+                            return delay(100).then(() => { multiChoiceTranslation() });
+                        })
                         .then(async () => {
                             if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
                             await delay(100);
                             if (renderPerfOpt) await RenderPerfOpt();
                         })
                         .then(async () => {
-                            if (standingsRecolor && is_standings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
+                            if (standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
                             await delay(100);
-                            if (standingsRecolor && is_standings) await recolorStandings();
+                            if (standingsRecolor && is_cfStandings) await recolorStandings();
                         })
                         .then(async () => {
                             await delay(100);
