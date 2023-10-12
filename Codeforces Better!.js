@@ -922,7 +922,7 @@ button.html2mdButton.CFBetter_setting.open {
     border: 1px dashed #00aeeccc;
     height: 35px;
     width: 100%;
-    color: gray;
+    color: #6e6e6e;
     font-weight: 300;
     font-size: 14px;
     letter-spacing: 2px;
@@ -1327,7 +1327,7 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
 }
 ul#config_bar_ul::-webkit-scrollbar {
     width: 5px;
-    height: 5px;
+    height: 3px;
 }
 ul#config_bar_ul::-webkit-scrollbar-thumb {
     background-clip: padding-box;
@@ -2800,15 +2800,6 @@ const CFBetterSettingMenuHTML = `
                 <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
                     <div id="chatgpt-config"></div>
                 </div>
-                <h4>工作模式</h4>
-                <div class='CFBetter_setting_list'>
-                    <label for="comment_translation_mode" style="display: flex;">评论区翻译</label>
-                    <select id="comment_translation_mode" name="comment_translation_mode">
-                        <option value="0">普通模式</option>
-                        <option value="1">分段模式</option>
-                        <option value="2">选段模式</option>
-                    </select>
-                </div>
                 <h4>偏好</h4>
                 <div class='CFBetter_setting_list'>
                     <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
@@ -2823,6 +2814,28 @@ const CFBetterSettingMenuHTML = `
                     </select>
                 </div>
                 <h4>高级</h4>
+                <div class='CFBetter_setting_list'>
+                    <label for="comment_translation_mode" style="display: flex;">工作模式</label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>你可以选择脚本的工作方式</p>
+                        <p>○ 普通模式：会一次性翻译整个区域的内容</p>
+                        <p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p>
+                        <p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p>
+                            <div style="color:#f44336;">
+                                <p><u>注意：分段/选段模式会产生如下问题：</u></p>
+                                <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+                                <p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+                            </div>
+                        </div>
+                    </div>
+                    <select id="comment_translation_mode" name="comment_translation_mode">
+                        <option value="0">普通模式</option>
+                        <option value="1">分段模式</option>
+                        <option value="2">选段模式</option>
+                    </select>
+                </div>
                 <div class='CFBetter_setting_list'>
                     <label for="translation_retransAction" style="display: flex;">重新翻译时</label>
                     <div class="help_tip">
