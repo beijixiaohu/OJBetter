@@ -152,6 +152,8 @@ const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" 
 const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
 const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
+const copyedIcon = `<svg t="1697105956577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="986" width="16" height="16"><path d="M928 612.8V144c0-44.8-35.2-80-80-80H304c-17.6 0-32 14.4-32 32s14.4 32 32 32h544c8 0 16 8 16 16v425.6c-19.2-9.6-41.6-16-64-17.6V272c0-44.8-35.2-80-80-80H176c-44.8 0-80 35.2-80 80v608c0 44.8 35.2 80 80 80h460.8c36.8 27.2 83.2 43.2 132.8 43.2 126.4 0 227.2-100.8 227.2-227.2 0-64-27.2-121.6-68.8-163.2zM176 896c-8 0-16-8-16-16V272c0-8 8-16 16-16h544c8 0 16 8 16 16v280c-108.8 16-193.6 110.4-193.6 224 0 44.8 12.8 84.8 33.6 120H176z m593.6 72c-19.2 0-36.8-3.2-54.4-8-38.4-11.2-72-33.6-96-64-25.6-32-41.6-75.2-41.6-120 0-94.4 67.2-172.8 158.4-188.8 11.2-1.6 22.4-3.2 33.6-3.2 11.2 0 20.8 0 30.4 1.6 22.4 3.2 44.8 11.2 64 22.4 25.6 14.4 48 35.2 64 59.2 20.8 30.4 33.6 68.8 33.6 108.8 0 107.2-84.8 192-192 192z" p-id="987"></path>
+<path d="M608 360H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h320c17.6 0 32-14.4 32-32s-14.4-32-32-32z m0 160H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h320c17.6 0 32-14.4 32-32s-14.4-32-32-32z m-128 158.4H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h192c17.6 0 32-14.4 32-32s-14.4-32-32-32zM731.2 886.4c-6.4 0-11.2-1.6-16-6.4l-73.6-73.6c-9.6-9.6-9.6-22.4 0-32s22.4-9.6 32 0l57.6 57.6 137.6-137.6c9.6-9.6 22.4-9.6 32 0s9.6 22.4 0 32L747.2 880c-4.8 3.2-9.6 6.4-16 6.4z" p-id="988"></path></svg>`;
 const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
 m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v65.974857h-44.78781v-65.974857h-87.698285v-145.359238h87.698285v-38.351238z m0 83.139047h-44.787809v56.05181h44.787809v-56.05181z m89.307429 0h-44.519619v56.05181h44.519619v-56.05181zM780.190476 170.666667a73.142857 73.142857 0 0 1 73.142857 73.142857v97.523809h-73.142857v-97.523809h-97.523809V170.666667h97.523809z" p-id="6326"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
@@ -469,6 +471,7 @@ span.mdViewContent {
     color: #059669;
     background-color: #f9f9fa;
     border: 1px solid #c5ebdf;
+    box-shadow: 0px 0px 0.5px 0.5px #defdf3;
     border-radius: 0rem 0rem 0.3rem 0.3rem;
     padding: 5px;
     margin: -5px 0px 6px 0px;
@@ -523,6 +526,7 @@ span.mdViewContent {
     justify-content: space-between;
     background-color: #f9f9fa;
     border: 1px solid #c5ebdf;
+    box-shadow: 0px 0px 0.5px 0.5px #defdf3;
     border-radius: 0.3rem;
     margin: 4px 0px;
 }
@@ -934,7 +938,7 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     background: #41e49930;
     border: 1px solid green;
     color: green;
-    font-weight: 500;
+    text-shadow: 0px 0px 0.5px green;
 }
 
 .CFBetter_setting_menu label input[type="radio"], .CFBetter_contextmenu label input[type="radio"]{
@@ -3903,7 +3907,7 @@ async function blockProcessing(target, element_node, button, is_comment) {
 }
 
 // 选段翻译支持
-function multiChoiceTranslation() {
+async function multiChoiceTranslation() {
     GM_addStyle(`
         .topic .content .ttypography {
             overflow: initial;
@@ -3915,25 +3919,45 @@ function multiChoiceTranslation() {
         e.stopPropagation();
         if ($this.hasClass('block_selected')) {
             $this.removeClass('block_selected');
-            // 移除对应的按钮
+            // 移除对应的按钮 
             $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('CFBetter_p_id'));
         } else {
             let id = getRandomNumber(8);
             $this.attr('CFBetter_p_id', id);
             $this.addClass('block_selected');
-            // 添加按钮
+            // 添加按钮 
             let menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
                 });
             $this.before(menu);
 
-            $("#translateButton_selected_" + id).click(function () {
+            $("#translateButton_selected_" + id).click(async function () {
+                // 处理旧的结果
+                if ($this.attr('translated')) {
+                    let result = $this.data("resultData");
+                    if (retransAction == "0") {
+                        if (result.translateDiv) $(result.translateDiv).remove();
+                        if (result.panelDiv) $(result.panelDiv).remove();
+                        if (!is_oldLatex && !is_acmsguru) {
+                            if (result.copyDiv) $(result.copyDiv).remove();
+                        }
+                    } else {
+                        result.upButton.html(unfoldIcon);
+                        $(result.translateDiv).css({
+                            display: "none",
+                            transition: "height 2s"
+                        });
+                    }
+                }
+
                 let target = $this.eq(0).clone();
-                blockProcessing(target, $this.eq(0), $("#translateButton_selected_" + id), false);
+                let result = await blockProcessing(target, $this.eq(0), $("#translateButton_selected_" + id), false);
+                $this.data("resultData", result); // 将blockData绑定到$this元素上
                 $this.removeClass('block_selected');
-                // 移除对应的按钮
+                // 移除对应的按钮 
                 $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
+                $this.attr('translated', '1'); // 标记已翻译
             });
         }
     });
@@ -4947,12 +4971,13 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         copyButton.on("click", function () {
             var translatedText = textElement.textContent;
             GM_setClipboard(translatedText);
-            // $(this).addClass("copied").text("Copied");
-            // // 更新复制按钮文本
-            // setTimeout(() => {
-            //     $(this).removeClass("copied");
-            //     $(this).text("Copy");
-            // }, 2000);
+            copyButton.html(copyedIcon);
+            copyButton.css({ 'fill': '#8bc34a' });
+            // 复制提示
+            setTimeout(() => {
+                copyButton.html(copyIcon);
+                copyButton.css({ 'fill': '' });
+            }, 2000);
         });
     }
 
@@ -5335,7 +5360,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         })
                         .then(() => {
                             if (showLoading && is_acmsguru) newElement.html('Codeforces Better! —— 正在为acmsguru题面重新划分div……');
-                            return delay(100).then(() => { acmsguruReblock() });
+                            return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
                         })
                         .then(() => {
                             if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
