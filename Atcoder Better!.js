@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.11
+// @version      1.12
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        https://atcoder.jp/*
@@ -149,7 +149,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .select2-container--bootstrap .select2-results__option--highlighted[aria-selected],
         html[data-theme=dark] .nav-pills>li.active>a, html[data-theme=dark] .user-unrated, html[data-theme=dark] #header .header-page li.is-active a,
         html[data-theme=dark] .m-box_inner, html[data-theme=dark] .m-list-job_item, html[data-theme=dark] .a-btn_arrow,
-        html[data-theme=dark] #header, html[data-theme=dark] #header .header-sub_page li a{
+        html[data-theme=dark] #header, html[data-theme=dark] #header .header-sub_page li a,
+        html[data-theme=dark] .select2-container--default .select2-selection--single .select2-selection__rendered, html[data-theme=dark] .select2-results{
             color: #a0adb9 !important;
         }
         /* 文字颜色2 */
@@ -190,7 +191,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .AtBetter_modal, html[data-theme=dark] .AtBetter_modal button:hover, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement,
         html[data-theme=dark] #keyvisual .keyvisual-inner:before, html[data-theme=dark] .m-box_inner,
-        html[data-theme=dark] .m-list-job_item{
+        html[data-theme=dark] .m-list-job_item, html[data-theme=dark] .select2-container--default .select2-selection--single{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -228,7 +229,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .AtBetter_setting_sidebar li, html[data-theme=dark] .AtBetter_setting_menu select,
         html[data-theme=dark] .AtBetter_modal button, html[data-theme=dark] div#config_bar_list, html[data-theme=dark] label.config_bar_ul_li_text,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] .select2-container--bootstrap .select2-selection{
+        html[data-theme=dark] .select2-container--bootstrap .select2-selection, html[data-theme=dark] .select2-container--default .select2-selection--single{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] hr, html[data-theme=dark] .panel-footer,
@@ -303,6 +304,9 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] #header .header-sub_page li a:before, html[data-theme=dark] #header .header-page li a:before{
             background-color: #9e9e9e !important;
+        }
+        html[data-theme=dark] .standings-score{
+            color: #2196f3;
         }
     `);
 })()
@@ -3365,30 +3369,36 @@ function replaceBlock(text, matches, replacements) {
 
 // latex还原
 function recoverBlock(translatedText, matches, replacements) {
-    if (matches == null) return translatedText;
     for (let i = 0; i < matches.length; i++) {
         let match = matches[i];
         let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
 
-        let latexMatch = '\\$\\$([\\s\\S]*?)\\$\\$|\\$(.*?)\\$|\\$([\\s\\S]*?)\\$|';
+        let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
 
         let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+        translatedText = translatedText.replace(regex, function (match, ...args) {
             // LaTeX中的不替换
-            if (p1 || p2 || p3) {
-                return match;
-            }
-            return replacement;
+            const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
+            if (groups.latex_block || groups.latex_inline) return match;
+            // 没有空格则加一个
+            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
+            let leftSpace = "", rightSpace = "";
+            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
+            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
+            return leftSpace + replacement + rightSpace;
         });
 
-
-        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, p1, p2, p3) {
+        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|(?<!\\\\)\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, ...args) {
             // LaTeX中的不替换
-            if (p1 || p2 || p3) {
-                return match;
-            }
-            return " " + replacement;
+            const groups = args[args.length - 1]; 
+            if (groups.latex_block || groups.latex_inline) return match;
+            // 没有空格则加一个
+            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
+            let leftSpace = "", rightSpace = "";
+            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
+            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
+            return leftSpace + replacement + rightSpace;
         });
     }
     return translatedText;
@@ -3411,7 +3421,7 @@ async function translateProblemStatement(text, element_node, button) {
     // 替换latex公式
     if (translation != "openai") {
         // 使用GPT翻译时不必替换latex公式
-        let regex = /\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g;
+        let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
         matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
     }
