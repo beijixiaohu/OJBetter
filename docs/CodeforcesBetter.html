@@ -1,80 +1,102 @@
 <h1 id="codeforces-better🎈">Codeforces Better!🎈</h1>
 <p>Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <center>
+      <h3>写在前面：反馈须知</h3>
+    </center>
+    <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336" href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336" href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。</p>
+    <p>请提供关于问题的详细描述，比如：链接，截图，期望的结果、实际的结果，复现方式……</p>
+    <p>此外还欢迎友善的讨论以及功能建议，但维护脚本以及提供帮助并不是作者的义务，感谢您的理解。</p>
+  </div>
+</div>
 <h2 id="功能">功能</h2>
-<p>tip：脚本的部分功能提供了配置项，您可以点击<strong>整个页面右上角</strong> 的 <strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</p>
+<span style="color:#009688; background-color: #E0F2F1;">提示：脚本的部分功能提供了配置项，您可以点击 <strong>整个页面右上角</strong> 的 <strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</span>
 <h3 id="界面汉化">界面汉化</h3>
-<p>将网站的主要元素汉化为中文，如果某处翻译有误或者不佳，欢迎反馈。</p>
-<p>您可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择开启或关闭汉化</p>
+<p>将网站的主要元素汉化为中文（可关闭）</p>
 <h3 id="题目翻译">题目翻译</h3>
 <p>在题目、blog、评论等的右上角添加翻译按钮，一键即可翻译为中文，同时确保不破坏Latex公式</p>
-<p>您可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择您想使用的翻译服务（默认为Deepl）</p>
-<p style="color:#009688">tip：右键点击<strong>翻译</strong>按钮，可以快速切换翻译服务哦</p>
-<p>提供了如下翻译接口可供选择：</p>
+<p>在此基础上，脚本提供了三种翻译模式：</p>
+<ul>
+  <li>普通模式：会一次性翻译整个区域的内容</li>
+  <li>分段模式：会对区域内的每一个 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签依次进行翻译</li>
+  <li>选段模式：您可以自由点选页面上的任何 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签进行翻译</li>
+</ul>
+<p>您可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择您想使用的翻译服务（默认为DeepL）以及切换脚本的工作模式。</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>注意：</strong>分段/选段模式会产生如下问题：</p>
+    <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+    <p>- 会有部分内容不会被翻译/不能被选中，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+  </div>
+</div>
+<p>脚本提供了如下翻译接口可供选择：（默认为DeepL）</p>
 <table style="border: 1px solid #bcaaa4;">
   <thead>
     <tr>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">&nbsp;
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">&nbsp;
       </th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">KEY
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">KEY
       </th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">翻译质量</th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">可靠性</th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">字符数上限
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">翻译质量</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">可靠性</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">字符数上限
       </th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">耗时</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">耗时</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td style="text-align: left; background-color: #1976D2; color: #E3F2FD;">Deepl翻译（✨推荐）</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">部分地区可能无法访问或较慢</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">5000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
+      <td style="background-color: #1976D2; color: #E3F2FD;">DeepL翻译（✨推荐）</td>
+      <td style="background-color: #f9f9f9; color: black;">不需要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️</td>
+      <td style="background-color: #FFC107; color: #3e2723;">部分地区可能无法访问或较慢</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">讯飞听见翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">通常可靠</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">2000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
+      <td style="background-color: #f9f9f9; color: black;">讯飞听见翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">不需要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">通常可靠</td>
+      <td style="background-color: #f9f9f9; color: black;">2000</td>
+      <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">有道翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">通常可靠</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">600</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
+      <td style="background-color: #f9f9f9; color: black;">有道翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">不需要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">通常可靠</td>
+      <td style="background-color: #FFC107; color: #3e2723;">600</td>
+      <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">Google翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">需要当前网络能顺利访问Google</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">5000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
+      <td style="background-color: #f9f9f9; color: black;">Google翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">不需要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
+      <td style="background-color: #FFC107; color: #3e2723;">需要当前网络能顺利访问Google</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color:black;">彩云翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">通常可靠</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">5000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
+      <td style="background-color: #f9f9f9; color:black;">彩云翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">不需要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">通常可靠</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="text-align: left; background-color: #1976D2; color: #E3F2FD;">使用ChatGPT翻译（✨推荐）</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">需要API Key</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">取决于服务商质量以及 OpenAI 的拥挤程度</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">取决于模型</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">较慢</td>
+      <td style="background-color: #1976D2; color: #E3F2FD;">使用ChatGPT翻译（✨推荐）</td>
+      <td style="background-color: #f9f9f9; color: black;">需要API Key</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">取决于服务商质量以及 OpenAI 的拥挤程度</td>
+      <td style="background-color: #f9f9f9; color: black;">取决于模型</td>
+      <td style="background-color: #FFC107; color: #3e2723;">较慢</td>
     </tr>
   </tbody>
 </table>
+<span style="color:#009688; background-color: #E0F2F1;">提示：右键<strong>翻译</strong>按钮，可以快速切换翻译服务哦</span>
 <h3 id="ClistRating分">ClistRating分</h3>
 <p>获取 clist.by 网站的 Rating 分数据，并展示</p>
 <p>注意，不同页面工作所需要的凭证有所不同：</p>
@@ -82,7 +104,7 @@
   <li>对于比赛问题集页（contest），需要浏览器中 clist.by 网站的登录 cookie 有效，<strong>或者</strong>在设置面板中填写api key</li>
   <li>对于题目页（problem）和题单页（problemset），需要浏览器中 clist.by 的登录 cookie 有效</li>
 </ul>
-<p style="color: #F44336;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie 有效性通过尝试请求所返回的状态码判断</p>
+<span style="background-color: #FFF3E0;color: #FF5722;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie 有效性通过尝试请求所返回的状态码判断</span>
 <h2 id="其他功能">其他功能</h2>
 <p>部分功能可在右上角的 <code>CodeforcesBetter设置</code> 面板中更改/开关</p>
 <ul>
@@ -91,7 +113,7 @@
   <li>展开折叠块，自动展开所有的折叠块</li>
   <li>洛谷跳转，一键跳转到该题在洛谷对应的页面</li>
   <li>评论区分页，支持翻页、跳转、可选择每页显示的主楼数</li>
-  <li>渲染优化，为折叠块元素启用可见渲染（content-visibility: auto）</li>
+  <li>渲染优化，为折叠块元素添加渲染限制（contain: layout style;）</li>
   <li>榜单重新着色，对于采用 Codeforces 赛制的比赛的榜单，按照“得分/总分”所在的范围为分数重新渐变着色</li>
 </ul>
 <h2 id="兼容性">兼容性</h2>
@@ -111,14 +133,14 @@
       <td style="background-color: #f9f9f9;">96</td>
     </tr>
     <tr style="background-color: white;">
-      <td style="background-color: #009688; color: #ffffff;">Egde</td>
+      <td style="background-color: #009688; color: #ffffff;">Edge</td>
       <td style="background-color: #009688; color: #ffffff;">支持</td>
       <td style="background-color: #f9f9f9;">96</td>
     </tr>
     <tr style="background-color: white;">
       <td style="background-color: #f9f9f9;">国产Chromium套壳</td>
-      <td style="background-color: #FFC107; color: #795548;">基本兼容，但可能出现意外的错误</td>
-      <td style="background-color: #FFC107; color: #795548;">Chromium 内核版本≥96</td>
+      <td style="background-color: #FFC107; color: #3e2723;">基本兼容，但可能出现意外的错误</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Chromium 内核版本≥96</td>
     </tr>
     <tr style="background-color: white;">
       <td style="background-color: #009688; color: #ffffff;">FireFox（包括移动端）</td>
@@ -132,112 +154,128 @@
     </tr>
   </tbody>
 </table>
-
 <p><strong>脚本管理器</strong></p>
-<p>仅在Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在Greasemonkey，Violentmonkey，ScriptCat等中的兼容性</p>
+<p>仅在 Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在 Greasemonkey，Violentmonkey，ScriptCat 等中的兼容性</p>
 <p><strong>其他插件</strong></p>
 <p>与主流CF相关插件不存在兼容性问题，如果您遇到了兼容性问题，欢迎反馈。</p>
+<p><strong>镜像站</strong></p>
+<p>支持官方轻量站 <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a href="https://m2.codeforces.com">m3</a> 、非官方镜像站 <a href="https://codeforc.es">https://codeforc.es</a></p>
 <h2 id="常见问题">常见问题</h2>
-<ul>
-  <p><strong>Q. 如何开始？</strong></p>
-  <ul>
-    <li>A. 您需要先安装<a href="https://www.tampermonkey.net/">Tampermonkey</a>，然后再安装该脚本
-    </li>
-  </ul>
-  <p><strong>Q. 更新错误？</strong></p>
-  <ul>
-    <li>A. 由于 Greasyfork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，通常您只需要稍等几分钟，然后再次前往更新/安装即可。
-      您也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</li>
-  </ul>
-  <p><strong>Q. 一直显示加载中？</strong></p>
-  <ul>
-    <li>A. 请开启设置面板中的 ”兼容选项-不等待页面资源加载“ 选项</li>
-  </ul>
-  <p><strong>Q. 使用deepl翻译报错Too many requests ？</strong></p>
-  <ul>
-    <li>A. 这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，deepl对翻译字数和频率是有限制的，这是暂时的，一段时间后就恢复正常了
-    </li>
-  </ul>
-  <p><strong>Q. 翻译结果中一些公式显示为{xx}/[xx]/【xx】？</strong></p>
-  <ul>
-    <li>A. 在使用普通翻译接口（deepl/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】</li>
-    <div style="background-color: #00BCD4; color: #ffffff;">
-      <p><strong>脚本对公式的处理方式</strong></p>
-      <p>为了保护LaTeX公式在翻译时不被破坏，脚本会先取出所有的LaTeX公式，并使用替换符{xx}/[xx]/【xx】来占位，</p>
-      <p>由于这些替换符大概率不会在翻译的过程中遭到破坏，因此可以在翻译后再根据替换符还原回LaTeX公式。</p>
-      <p>这种实现方式能如期工作的前提是替换符不被破坏，这在绝大多数情况下都是没有问题的，</p>
-      <p>但有时翻译服务会破坏替换符 ，比如 【23】 变成了 【23 / 23】 / [23]/ 【23 】/ 23 】，这些情况下脚本会通过一定的正则规则进行还原，使其仍然可以如期工作</p>
-      <p>但如果翻译服务还破坏了更多的内容，产生了歧义，比如翻译服务将【2】 313 变成了 【2312，这时就无法还原了，</p>
-      <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，您可以在右上角的设置面板中选择不同的替换符，</p>
-      <p>经过测试，通常 <code>{}</code> 表现的效果更好，因此这也是脚本默认使用的替换符</p>
-    </div>
-    <div style="background-color: #009688; color: #ffffff;">
-      <p><strong>tip：</strong></p>
-      <p>在使用 ChatGPT 进行翻译时不会存在这个问题，因为可以通过提示词直接告诉 ChatGPT “保持其中的LaTeX公式不翻译”，</p>
-      <p>聪明的 ChatGPT 可以很好的遵守这一点，这也是脚本推荐的翻译方式。</p>
-    </div>
-  </ul>
-  <p><strong>Q. 如何使用ChatGPT翻译？</strong></p>
-  <ul>
-    <li>A. 如果您可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，您只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。</li>
-    <p>此外，您也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，您可以选择使用
-    </p>
-    <table style="border: 1px solid #bcaaa4;">
-      <thead>
-        <tr style="background-color: #f2f2f2;">
-          <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
-          <th style="border-bottom: 1px solid #bcaaa4;">官网</th>
-          <th style="border-bottom: 1px solid #bcaaa4;">获取方式</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">API2D</td>
-          <td style="background-color: #f9f9f9;"><a href="https://api2d.com/" target="_blank"
-              class="url">https://api2d.com/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">CloseAI</td>
-          <td style="background-color: #f9f9f9;"><a href="https://console.closeai-asia.com/" target="_blank"
-              class="url">https://console.closeai-asia.com/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">OhMyGPT</td>
-          <td style="background-color: #f9f9f9;"><a href="https://aigptx.top/" target="_blank"
-              class="url">https://aigptx.top/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">OpenAI-SB</td>
-          <td style="background-color: #f9f9f9;"><a href="https://openai-sb.com/" target="_blank"
-              class="url">https://openai-sb.com/</a></td>
-          <td style="background-color: #f9f9f9;">Telegram机器人</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">API2GPT</td>
-          <td style="background-color: #f9f9f9;"><a href="https://www.api2gpt.com/" target="_blank"
-              class="url">https://www.api2gpt.com/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="background-color:antiquewhite">
-      <p><strong>免责：</strong></p>
-      <p>作者仅为收集分享，没有获得任何收益，亦不保证上述平台的稳定性，平台的任何行为均与作者无关。</p>
-      <p>建议小额充值，用完再充，这些服务商可能会跑路</p>
-    </div>
-    <p>如果您使用的是 api 代理服务商 提供的服务，配置中的 KEY 应该填写 api代理服务商提供的 key，</p>
-    <p>此外，您还需要在配置中额外填写 Proxy API，</p>
-    <p>Proxy API 需要填写完整的地址，这里以 <a href="https://console.closeai-asia.com/">CloseAI</a> 为例，其提供了API
-      Base：<code>https://api.closeai-proxy.xyz</code></p>
-    <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
-    <p style="color: #F44336;">注意：由于您指定了自定义的API，Tampermonkey会对您的跨域请求进行警告，请自行点击授权</p>
-  </ul>
-</ul>
-
-
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何开始？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 您需要先安装 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然后再安装该脚本
+      </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 更新错误？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <p>A. 由于 Greasy Fork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，</p>
+        <p>通常您只需要稍等几分钟，然后再次前往更新/安装即可。</p>
+        <p>您也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</p>
+      </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 一直显示加载中？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 请开启设置面板中的 ”兼容选项-不等待页面资源加载“ 选项
+      </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 Too many requests ？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <p>A. 这通常是因为您短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，DeepL对翻译字数和频率是有限制的，</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">这是暂时的，一段时间后就恢复正常了</span>
+      </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 undefind 或一直显示翻译中？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 这通常是因为您所使用的网络无法正常访问 <a href="https://www.deepl.com">www.deepl.com</a>
+      </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 翻译结果中一些公式显示为 {xx} / [xx] / 【xx】？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 在使用普通翻译接口（DeepL/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】
+        <div style="border: 8px solid #ffffff00;"></div>
+        <div style="background-color: #E3F2FD;color: #1565C0;border: 1px solid #1565c0;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>脚本对公式的处理方式</strong></p>
+            <p>为了保护LaTeX公式在翻译时不被破坏，脚本会先取出所有的LaTeX公式，并使用替换符{xx}/[xx]/【xx】来占位，</p>
+            <p>由于这些替换符大概率不会在翻译的过程中遭到破坏，因此可以在翻译后再根据替换符还原回LaTeX公式。</p>
+            <p>这种实现方式能如期工作的前提是替换符不被破坏，这在绝大多数情况下都是没有问题的，</p>
+            <p>但有时翻译服务会破坏替换符 ，比如 【23】 变成了 【23 / 23】 / [23]/ 【23 】/ 23 】，这些情况下脚本会通过一定的正则规则进行还原，使其仍然可以如期工作</p>
+            <p>但如果翻译服务还破坏了更多的内容，产生了歧义，比如翻译服务将【2】 313 变成了 【2312，这时就无法还原了，</p>
+            <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，您可以在右上角的设置面板中选择不同的替换符，</p>
+            <p>经过测试，通常 <code>{}</code> 表现的效果更好，因此这也是脚本默认使用的替换符</p>
+          </div>
+        </div>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>提示：</strong></p>
+            <p>在使用 ChatGPT 进行翻译时不会存在这个问题，因为可以通过提示词直接告诉 ChatGPT “保持其中的LaTeX公式不翻译”，</p>
+            <p>聪明的 ChatGPT 可以很好的遵守这一点，这也是脚本推荐的翻译方式。</p>
+          </div>
+        </div>
+      </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用 ChatGPT 翻译？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 如果您可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，您只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。
+        <p>此外，您也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，您可以选择使用
+        </p>
+        <table style="border: 1px solid #bcaaa4;">
+          <thead>
+            <tr style="background-color: #f2f2f2;">
+              <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">官网</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">获取方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">API2D</td>
+              <td style="background-color: #f9f9f9;"><a href="https://api2d.com/" target="_blank"
+                  class="url">https://api2d.com/</a></td>
+              <td style="background-color: #f9f9f9;">官网</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">CloseAI</td>
+              <td style="background-color: #f9f9f9;"><a href="https://console.closeai-asia.com/" target="_blank"
+                  class="url">https://console.closeai-asia.com/</a></td>
+              <td style="background-color: #f9f9f9;">官网</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">OhMyGPT</td>
+              <td style="background-color: #f9f9f9;"><a href="https://aigptx.top/" target="_blank"
+                  class="url">https://aigptx.top/</a></td>
+              <td style="background-color: #f9f9f9;">官网</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">OpenAI-SB</td>
+              <td style="background-color: #f9f9f9;"><a href="https://openai-sb.com/" target="_blank"
+                  class="url">https://openai-sb.com/</a></td>
+              <td style="background-color: #f9f9f9;">Telegram机器人</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">API2GPT</td>
+              <td style="background-color: #f9f9f9;"><a href="https://www.api2gpt.com/" target="_blank"
+                  class="url">https://www.api2gpt.com/</a></td>
+              <td style="background-color: #f9f9f9;">官网</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>免责：</strong></p>
+            <p>作者仅为收集分享，没有获得任何收益，亦不保证上述平台的稳定性，平台的任何行为均与作者无关。</p>
+            <p>建议小额充值，用完再充，这些服务商可能会跑路</p>
+          </div>
+        </div>
+        <p>如果您使用的是 api 代理服务商 提供的服务，配置中的 KEY 应该填写 api代理服务商提供的 key，</p>
+        <p>此外，您还需要在配置中额外填写 Proxy API，</p>
+        <p>Proxy API 需要填写完整的地址，这里以 <a href="https://console.closeai-asia.com/">CloseAI</a> 为例，其提供了API Base：<code>https://api.closeai-proxy.xyz</code></p>
+        <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注意：由于您指定了自定义的API，Tampermonkey会对您的跨域请求进行警告，请自行点击授权</span>
+      </div>
+</details></div></div>
 <h2 id="贡献代码">贡献代码</h2>
 <p>欢迎贡献代码，请前往 <a href="https://github.com/beijixiaohu/OJBetter">Github仓库</a> 创建PR</p>
 <h2 id="感谢">感谢</h2>
@@ -246,7 +284,8 @@
       href="https://greasyfork.org/zh-CN/scripts/378277">翻译机</a></li>
   <li>脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
       href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a>、<a
-      href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a href="https://github.com/gka/chroma.js">chroma</a>
+      href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a
+      href="https://github.com/gka/chroma.js">chroma</a>
   </li>
   <li>特别感谢所有提供反馈和建议的朋友们。</li>
 </ul>
