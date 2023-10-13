@@ -3963,10 +3963,10 @@ async function multiChoiceTranslation() {
                         });
                     }
                 }
-
+                // 翻译
                 let target = $this.eq(0).clone();
                 let result = await blockProcessing(target, $this.eq(0), $("#translateButton_selected_" + id), false);
-                $this.data("resultData", result); // 将blockData绑定到$this元素上
+                $this.data("resultData", result);
                 $this.removeClass('block_selected');
                 // 移除对应的按钮 
                 $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
@@ -4853,7 +4853,9 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     // panel
     var panelDiv = $('<div>').addClass('translate-problem-statement-panel');
     // 信息
-    var topText = $('<div>').text(translationService[translation] + ' 翻译').addClass('topText');
+    var topText;
+    if (is_comment && commentTranslationChoice != "0") topText = $('<div>').text(translationService[commentTranslationChoice] + ' 翻译').addClass('topText');
+    else topText = $('<div>').text(translationService[translation] + ' 翻译').addClass('topText');
     panelDiv.append(topText);
     // 右侧
     var rightDiv = $('<div>').css('display', 'flex');
