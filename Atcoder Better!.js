@@ -191,7 +191,10 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .AtBetter_modal, html[data-theme=dark] .AtBetter_modal button:hover, html[data-theme=dark] #config_bar_list,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement,
         html[data-theme=dark] #keyvisual .keyvisual-inner:before, html[data-theme=dark] .m-box_inner,
-        html[data-theme=dark] .m-list-job_item, html[data-theme=dark] .select2-container--default .select2-selection--single{
+        html[data-theme=dark] .m-list-job_item, html[data-theme=dark] .select2-container--default .select2-selection--single,
+        html[data-theme=dark] ol.linenums, html[data-theme=dark] li.L0, html[data-theme=dark] li.L1, html[data-theme=dark] li.L2,
+        html[data-theme=dark] li.L3, html[data-theme=dark] li.L4, html[data-theme=dark] li.L5, html[data-theme=dark] li.L6,
+        html[data-theme=dark] li.L7, html[data-theme=dark] li.L8, html[data-theme=dark] li.L9{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -210,7 +213,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .AtBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .AtBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .AtBetter_modal button, html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb,
         html[data-theme=dark] .panel-info>.panel-heading, html[data-theme=dark] .post-footer, html[data-theme=dark] .a-btn_arrow:before,
-        html[data-theme=dark] .table-hover>tbody>tr:hover, html[data-theme=dark] .AtBetter_contextmenu{
+        html[data-theme=dark] .table-hover>tbody>tr:hover, html[data-theme=dark] .AtBetter_contextmenu,
+        html[data-theme=dark] li.L1, html[data-theme=dark] li.L3, html[data-theme=dark] li.L5, html[data-theme=dark] li.L7,
+        html[data-theme=dark] li.L9{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -269,7 +274,7 @@ function handleColorSchemeChange(event) {
             opacity: .75; 
         }
         /* 反转 */
-        html[data-theme=dark] .ace_content, html[data-theme=dark] #header .header-logo img{
+        html[data-theme=dark] .ace_content, html[data-theme=dark] #header .header-logo img, html[data-theme=dark] pre code{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
@@ -307,6 +312,9 @@ function handleColorSchemeChange(event) {
         }
         html[data-theme=dark] .standings-score{
             color: #2196f3;
+        }
+        html[data-theme=dark] pre code{
+            background-color: transparent !important;
         }
     `);
 })()
