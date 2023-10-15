@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.67
+// @version      1.68
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -34,6 +34,8 @@
 // @compatible	 Chrome
 // @compatible	 Firefox
 // @compatible	 Edge
+// @incompatible safari
+// @supportURL   https://github.com/beijixiaohu/OJBetter/issues
 // ==/UserScript==
 
 // 状态与初始化
@@ -62,8 +64,11 @@ function init() {
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
-            .map(() => $(this).find('span').text())
-            .get().every(score => /^[0-9]+$/.test(score));
+            .map(function () {
+                return $(this).find('span').text();
+            })
+            .get()
+            .every(score => /^[0-9]+$/.test(score));
     bottomZh_CN = getGMValue("bottomZh_CN", true);
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
@@ -2791,7 +2796,7 @@ const CFBetterSettingMenuHTML = `
                         <div class="help_tip">
                             `+ helpCircleHTML + `
                             <div class="tip_text">
-                            <p><b>请在下方添加并选定你想使用的配置信息</b></p>
+                            <p><b>请在下方添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p>
                             <p>具体请阅读脚本页的介绍</p>
                             </div>
                         </div>
@@ -5111,17 +5116,17 @@ async function translate_openai(raw) {
             responseType: 'json',
             onload: function (response) {
                 if (!response.response) {
-                    reject("发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
+                    reject("发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
                 }
                 else if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
-                    resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 \n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
+                    resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 \n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
                 } else {
                     openai_retext = response.response.choices[0].message.content;
                     resolve(openai_retext);
                 }
             },
             onerror: function (response) {
-                reject("发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
+                reject("发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
             },
         });
     });
@@ -5142,7 +5147,7 @@ async function translate_gg(raw) {
                 resolve(translatedText);
             },
             onerror: function (response) {
-                reject("发生了未知的错误，请确认你是否能正常访问Google翻译，\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n响应报文：" + JSON.stringify(response))
+                reject("发生了未知的错误，请确认你是否能正常访问Google翻译，\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码报错信息的敏感部分\n\n响应报文：" + JSON.stringify(response))
             }
         });
     });
@@ -5326,7 +5331,7 @@ async function BaseTranslate(name, raw, options, processer) {
             }
         }
     }
-    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请查看报错信息，并重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 反馈 请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
+    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请查看报错信息，并重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
 }
 
 function Request(options) {
