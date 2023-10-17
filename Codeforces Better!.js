@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.68
+// @version      1.69
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -30,6 +30,7 @@
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
+// @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/code_completer-0.0.11.min.js
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -48,12 +49,14 @@ const getGMValue = (key, defaultValue) => {
     return value;
 };
 var darkMode = getGMValue("darkMode", "follow");
-var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset, is_cfStandings;
+var hostAddress = location.origin;
+var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
-var standingsRecolor;
+var standingsRecolor, problemPageCodeEditor, keywordAutoComplete, cppCodeTemplateComplete;
+var compilerSelection;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -61,6 +64,7 @@ function init() {
     is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     is_problem = href.includes('/problem/');
+    is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
@@ -89,6 +93,11 @@ function init() {
     showClistRating_problemset = getGMValue("showClistRating_problemset", false);
     RatingHidden = getGMValue("RatingHidden", false);
     clist_Authorization = getGMValue("clist_Authorization", "");
+    // 编辑器
+    compilerSelection = getGMValue("compilerSelection", "61");
+    problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
+    keywordAutoComplete = getGMValue("keywordAutoComplete", true);
+    cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
     //openai
     opneaiConfig = getGMValue("chatgpt-config", {
         "choice": -1,
@@ -657,7 +666,7 @@ button.html2mdButton.CFBetter_setting.open {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 485px;
+    width: 500px;
     height: 600px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
@@ -704,14 +713,14 @@ button.html2mdButton.CFBetter_setting.open {
     display: flex;
 }
 .CFBetter_setting_sidebar {
-    width: 100px;
+    width: 110px;
     padding: 6px 10px 6px 6px;
     margin: 20px 0px;
     border-right: 1px solid #d4d8e9;
 }
 .CFBetter_setting_content {
     flex-grow: 1;
-    width: 350px;
+    width: 360px;
     margin: 20px 0px 0px 20px;
     padding-right: 10px;
     max-height: 580px;
@@ -1490,6 +1499,116 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 /* acmsguru划分块 */
 .CFBetter_acmsguru {
     margin: 0 0 1em!important;
+}
+/* 代码编辑 */
+#CFBetter_editor{
+    box-sizing: border-box;
+    height: 370px;
+    border: 1px solid rgb(170, 170, 170);
+    width: 100% !important;
+    display: block;
+}
+#CFBetter_submitDiv{
+    display: flex;
+    padding-top: 15px;
+}
+.CFBetter_SubmitButton {
+    padding: 0 1em;
+    margin: 0em 1em;
+    height: 2em;
+    width: 15%;
+}
+#drag-handle {
+    height: 2px;
+    margin-top: 2px;
+    background-color: #EEEEEE;
+    cursor: ns-resize;
+    border-top: 1px solid #9E9E9E;
+    border-bottom: 1px solid #9E9E9E;
+}
+/* 调试 */
+.CFBetter_loding{
+    height: 22px;
+}
+#CompilerArgsInput{
+    width: 100%;
+    border: 1px solid #bcaaa4;
+}
+.CFBetter_pre{
+    line-height: 1.25em;
+    padding: 0.25em;
+    margin: 0;
+    background-color: #efefef;
+}
+.CFBetter_RunResult{
+
+}
+/* 自定义样例 */
+#customTestBlock {
+    padding: 10px;
+    margin-top: 10px;
+    color: #616161;
+    border: 1px solid #bcaaa4;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.sampleDiv {
+    color: #727378;
+    background-color: #FAFAFA;
+    padding: 5px;
+    margin: 30px 0px;
+    box-shadow: inset 0 0 1px #0000004d;
+    position: relative;
+}
+
+.dynamicTextarea {
+    width: 98%;
+    height: 120px;
+    margin: 10px 5px;
+    border: 1px solid #E0E0E0;
+}
+
+.deleteCustomTest {
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #F44336;
+    border: 1px solid #F44336;
+    background-color: #FFEBEE;
+}
+
+#addCustomTest {
+    cursor: pointer;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    padding: 3px 10px;
+    color: #795548;
+    border: 1px solid #795548;
+    border-radius: 4px;
+    background-color: #FAFAFA;
+}
+/* 差异对比 */
+.outputDiff {
+    color: #5d4037;
+    font-size: 13px;
+    margin: 5px 0px;
+    display: grid;
+    border: 1px solid #bcaaa4;
+}
+
+.outputDiff span {
+    padding: 1px 3px;
+}
+
+.added {
+    background-color: #c8f7c5;
+}
+
+.removed {
+    background-color: #f7c5c5;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -2658,6 +2777,7 @@ const CFBetterSettingMenuHTML = `
             <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
             <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
             <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist设置</a></li>
+            <li><a href="#code_editor-settings" id="sidebar-code_editor-settings">编辑器设置</a></li>
             <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
         </ul>
         </div>
@@ -2962,6 +3082,42 @@ const CFBetterSettingMenuHTML = `
                     <input type="checkbox" id="RatingHidden" name="RatingHidden">
                 </div>
             </div>
+            <div id="code_editor-settings" class="settings-page">
+                <h3>编辑器设置</h3>
+                <hr>
+                <h4>基本</h4>
+                <div class='CFBetter_setting_list'>
+                    <label for="problemPageCodeEditor"><span>快速代码编辑器</span></label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>在问题页下面添加快速代码编辑器</p>
+                        <p>支持代码补全，自动保存，在线调试（由<a href="https://rextester.com/" target="_blank">Rextester</a>提供服务）</p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="keywordAutoComplete"><span>关键字自动补全</span></label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>开启 ace 编辑器自带的关键字自动补全</p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="keywordAutoComplete" name="keywordAutoComplete">
+                </div>
+                <div class='CFBetter_setting_list'>
+                    <label for="cppCodeTemplateComplete"><span>C++代码模板补全</span></label>
+                    <div class="help_tip">
+                        `+ helpCircleHTML + `
+                        <div class="tip_text">
+                        <p>开启C++代码模板级补全，模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
+                </div>
+            </div>
             <div id="compatibility-settings" class="settings-page">
                 <h3>兼容设置</h3>
                 <hr>
@@ -3191,6 +3347,9 @@ async function settingPanel() {
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
+        $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
+        $("#keywordAutoComplete").prop("checked", GM_getValue("keywordAutoComplete") === true);
+        $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
 
         // 翻译选择情况监听
         $("input[name='translation']").change(function () {
@@ -3235,7 +3394,10 @@ async function settingPanel() {
                 showClistRating_problemset: $('#showClistRating_problemset').prop("checked"),
                 showClistRating_problem: $('#showClistRating_problem').prop("checked"),
                 RatingHidden: $('#RatingHidden').prop("checked"),
-                clist_Authorization: $('#clist_Authorization').val()
+                clist_Authorization: $('#clist_Authorization').val(),
+                problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
+                keywordAutoComplete: $("#keywordAutoComplete").prop("checked"),
+                cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked")
             };
 
             // 判断是否改变
@@ -4535,6 +4697,7 @@ async function showRatingByClist_contest() {
                 "Authorization": clist_Authorization
             },
             onload: function (response) {
+                if (!response) reject('发生了未知错误！');
                 var data = JSON.parse(response.responseText);
                 var objects = data.objects;
                 if (objects.length > 0) {
@@ -4687,6 +4850,583 @@ function recolorStandings() {
             spanElement.css('color', colorValue);
         });
     });
+}
+
+// 语言切换选项value与ace mode的对应关系
+var extensionMap = {
+    "43": "program.c", "80": "program.cpp", "52": "program.cpp", "50": "program.cpp", "54": "program.cpp", "73": "program.cpp",
+    "59": "program.cpp", "61": "program.cpp", "65": "program.cs", "79": "program.cs", "9": "program.cs", "28": "program.d", "32": "program.go",
+    "12": "program.hs", "60": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java", "74": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java",
+    "87": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java", "36": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java", "77": "program.kt",
+    "83": "program.kt", "19": "program.ml", "3": "program.dpr", "4": "program.pas", "51": "program.pas", "13": "program.pl", "6": "program.php",
+    "7": "program.py", "31": "a.py", "40": "a.py", "41": "a.py", "70": "a.py", "67": "program.rb", "75": "program.rs",
+    "20": "[^{}]*object\\s+(\\w+).*|$1.scala", "34": "program.js", "55": "program.js"
+};
+
+// 获取代码提交页的HTML元素
+async function CloneOriginalHTML(submitUrl) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url: submitUrl,
+            responseType: 'html',
+            onload: function (response) {
+                const html = response.responseText;
+                const cloneHTML = $(html);
+                resolve(cloneHTML);
+                reject('发生了未知错误');
+            },
+            onerror: function (response) {
+                reject('网络错误');
+            }
+        });
+    });
+}
+
+// 代码自动保存
+class CodeStorage {
+    constructor(databaseName) {
+        this.databaseName = databaseName;
+        this.db = null;
+    }
+
+    async connect() {
+        return new Promise((resolve, reject) => {
+            const request = window.indexedDB.open(this.databaseName);
+
+            request.onerror = function () {
+                reject('Failed to open the database');
+            };
+
+            request.onsuccess = (event) => {
+                this.db = event.target.result;
+                resolve();
+            };
+
+            request.onupgradeneeded = (event) => {
+                this.db = event.target.result;
+                const objectStore = this.db.createObjectStore('codes', { keyPath: 'url' });
+                objectStore.createIndex('url', 'url', { unique: true });
+            };
+        });
+    }
+
+    async saveCode(url, code) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['codes'], 'readwrite');
+            const objectStore = transaction.objectStore('codes');
+
+            const data = { url, code };
+            const request = objectStore.put(data);
+
+            request.onerror = function () {
+                reject('Failed to save code');
+            };
+
+            request.onsuccess = function () {
+                resolve('Code saved successfully');
+            };
+        });
+    }
+
+    async getCode(url) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['codes'], 'readonly');
+            const objectStore = transaction.objectStore('codes');
+
+            const request = objectStore.get(url);
+
+            request.onerror = function () {
+                reject('Failed to get code');
+            };
+
+            request.onsuccess = function () {
+                resolve(request.result ? request.result.code : null);
+            };
+        });
+    }
+}
+
+// 创建表单
+async function CreateCodeDevFrom(submitUrl, cloneHTML) {
+    // 表单
+    var formDiv = $('<form method="post" id="CFBetter_SubmitForm"></form>');
+    $('.ttypography').after(formDiv);
+    formDiv.attr('action', submitUrl + cloneHTML.find('form.submit-form').attr('action'));
+
+    // 语言选择
+    let selectLang = cloneHTML.find('select[name="programTypeId"]');
+    selectLang.css({
+        'margin': '10px 0px'
+    })
+    formDiv.append(selectLang);
+
+    // 问题选择/编号
+    var selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
+    let problemCode;
+    if (is_acmsguru) {
+        problemCode = $('h4').eq(0).text();
+        let matchResult = problemCode.match(/([A-Z])/);
+        problemCode = matchResult[0];
+    } else if (is_problemset_problem) {
+        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z]+?)$/);
+        problemCode = match[1] + match[2];
+        selectProblem.attr('name', 'submittedProblemCode');
+    } else {
+        problemCode = $('.header .title').eq(0).text();
+        let matchResult = problemCode.match(/([A-Z])/);
+        problemCode = matchResult[0];
+    }
+    selectProblem.val(problemCode);
+    formDiv.append(selectProblem);
+
+    // 隐藏的代码记录
+    var sourceDiv = $('<textarea id="sourceCodeTextarea" name="source" style="display: none;"></textarea>');
+    formDiv.append(sourceDiv);
+
+    // 代码编辑器
+    var editorDiv = $('<div id="CFBetter_editor" style="height:600px"></div><div id="drag-handle"></div>');
+    formDiv.append(editorDiv);
+    editor = ace.edit('CFBetter_editor');
+    editor.$blockScrolling = Infinity;// 禁用滚动警告
+    editor.setTheme('ace/theme/chrome'); // 主题为'ace/theme/chrome'
+    editor.setShowPrintMargin(false); // 不显示打印边距
+    editor.setFontSize(16); // 字体大小为 16px
+    if (keywordAutoComplete) {
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true,
+            enableSnippets: true
+        });
+    }
+
+    // 可拖拽调整高度
+    $('#drag-handle').on('mousedown', function (e) {
+        e.preventDefault();
+        var startY = e.pageY;
+        var startHeight = $('#CFBetter_editor').outerHeight();
+        var minHeight = 400; // 最小高度
+        $(document).on('mousemove', function (e) {
+            var currentY = e.pageY;
+            var newHeight = startHeight + (currentY - startY);
+            if (newHeight < minHeight) {
+                newHeight = minHeight;
+            }
+            $('#CFBetter_editor').css('height', newHeight);
+        });
+    });
+    $(document).on('mouseup', function () {
+        $(document).off('mousemove');
+    });
+
+    // 代码同步与保存
+    const codeStorage = new CodeStorage('editorCodeDataDB');
+    await codeStorage.connect(); // 连接数据库
+    const nowUrl = window.location.href;
+    const code = await codeStorage.getCode(nowUrl);
+    if (code){
+        editor.setValue(code, 1); // 恢复代码
+        $('#sourceCodeTextarea').val(code);
+    }
+    editor.scrollToRow(editor.session.getLength() - 1); // 滚动到最后一行
+    editor.getSession().on('change', async function () {
+        const code = editor.getValue();
+        $('#sourceCodeTextarea').val(code); // 将ace editor的内容同步到sourceCodeTextarea
+        await codeStorage.saveCode(nowUrl, code);
+    });
+
+    // 自定义调试
+    var customTestDiv = $(`
+        <details id="customTestBlock">
+            <summary>自定义测试数据(自动保存)</summary>
+            <div id="customTests" style="min-height: 30px;"></div>
+            <div id="control">
+                <button type="button" id="addCustomTest">新建</button>
+            </div>
+        </details>
+    `)
+    formDiv.append(customTestDiv);
+
+    // 调试/提交
+    var submitDiv = $('<div id="CFBetter_submitDiv"></div>');
+    var CompilerArgsInput = $('<input type="text" id="CompilerArgsInput"></button>');
+    submitDiv.append(CompilerArgsInput);
+    var runBottom = $('<button class="CFBetter_SubmitButton" id="RunTestButton">样例测试</button>');
+    submitDiv.append(runBottom);
+    var submitBottom = $('<input class="CFBetter_SubmitButton" type="submit" value="提交">');
+    submitDiv.append(submitBottom);
+    formDiv.append(submitDiv);
+
+    var from = {
+        formDiv: formDiv,
+        selectLang: selectLang,
+        sourceDiv: sourceDiv,
+        editor: editor,
+        runBottom: runBottom,
+        submitBottom: submitBottom,
+        submitDiv: submitDiv
+    };
+    return from;
+}
+
+// 语言更改
+function changeAceLanguage(selectLang, editor) {
+    let nowSelect = selectLang.val();
+    var filePath = extensionMap[nowSelect];
+    var modelist = ace.require("ace/ext/modelist");
+    var mode = modelist.getModeForPath(filePath).mode;
+    editor.session.setMode(mode);
+
+    // 调试器
+    if (nowSelect in LanguageChoiceList) {
+        $('#RunTestButton').prop("disabled", false);
+        LanguageChoiceWrapper = LanguageChoiceList[nowSelect];
+    } else {
+        $('#RunTestButton').prop("disabled", true);
+    }
+    if (LanguageChoiceWrapper in CompilerArgsList) {
+        CompilerArgs = CompilerArgsList[LanguageChoiceWrapper];
+        $('#CompilerArgsInput').val(CompilerArgs);
+    } else {
+        $('#CompilerArgsInput').val("");
+    }
+}
+
+// 自动补全器更新
+function updateAutocomplete() {
+    if (!keywordAutoComplete) return;
+    let extraCompleters = [];
+    let langTools = ace.require('ace/ext/language_tools');
+    if (editor.getSession().getMode().$id === "ace/mode/c_cpp") {
+        extraCompleters.push(langTools.textCompleter); // 本地补全
+        if (cppCodeTemplateComplete) extraCompleters.push(CODE_COMPLETER); // acwing补全规则
+        else {
+            extraCompleters.push(langTools.keyWordCompleter);
+            extraCompleters.push(langTools.snippetCompleter);
+        }
+        editor.completers = extraCompleters;
+    } else {
+        extraCompleters.push(langTools.textCompleter);
+        extraCompleters.push(langTools.keyWordCompleter);
+        extraCompleters.push(langTools.snippetCompleter);
+        editor.completers = extraCompleters;
+    }
+}
+
+// 初始化自定义测试数据面板
+function CustomTestInit() {
+    const tableName = window.location.href;
+
+    // 打开或创建数据库
+    var request = indexedDB.open('samplesDataDB', 1);
+    request.onupgradeneeded = function (event) {
+        var db = event.target.result;
+        if (!db.objectStoreNames.contains(tableName)) {
+            db.createObjectStore(tableName, { keyPath: 'id' }); // 创建表
+        }
+    };
+
+    request.onsuccess = function (event) {
+        var db = event.target.result;
+        restoreText(db);
+
+        // 添加
+        $('#addCustomTest').click(function () {
+            var sampleDiv = $('<div class="sampleDiv">');
+            var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
+            var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
+            var deleteCustomTest = $('<button class="deleteCustomTest">删除</button>');
+            sampleDiv.append(deleteCustomTest);
+            sampleDiv.append(inputTextarea);
+            sampleDiv.append(outputTextarea);
+            $('#customTests').append(sampleDiv);
+        });
+
+        // 实时保存文本内容到indexedDB中
+        $(document).on('input', '.inputTextarea, .outputTextarea', function () {
+            var transaction = db.transaction(tableName, 'readwrite');
+            var objectStore = transaction.objectStore(tableName);
+
+            var samplesData = {};
+            var index = 0;
+            $('.sampleDiv').each(function () {
+                var $sampleDiv = $(this);
+                var inputVal = $sampleDiv.find('.inputTextarea').val();
+                var outputVal = $sampleDiv.find('.outputTextarea').val();
+
+                var data = {
+                    id: index,
+                    input: inputVal,
+                    output: outputVal
+                };
+
+                objectStore.put(data);
+                samplesData['sample' + index] = data;
+                $sampleDiv.attr('data-index', index);
+                index++;
+            });
+        });
+
+        // 删除
+        $(document).on('click', '.deleteCustomTest', function () {
+            var $sampleDiv = $(this).closest('.sampleDiv');
+            $sampleDiv.remove();
+            var transaction = db.transaction(tableName, 'readwrite');
+            var objectStore = transaction.objectStore(tableName);
+            var index = parseInt($sampleDiv.attr('data-index'));
+            if (index !== undefined) objectStore.delete(index);
+        });
+
+        // 恢复保存的内容
+        function restoreText(db) {
+            var transaction = db.transaction(tableName, 'readonly');
+            var objectStore = transaction.objectStore(tableName);
+            var getRequest = objectStore.getAll();
+
+            getRequest.onsuccess = function () {
+                var data = getRequest.result;
+                if (data && data.length > 0) {
+                    data.forEach(function (item, index) {
+                        var sampleDiv = $('<div class="sampleDiv">');
+                        var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
+                        var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
+                        var deleteCustomTest = $('<button class="deleteCustomTest">删除</button>');
+
+                        inputTextarea.val(item.input);
+                        outputTextarea.val(item.output);
+
+                        sampleDiv.append(deleteCustomTest);
+                        sampleDiv.append(inputTextarea);
+                        sampleDiv.append(outputTextarea);
+                        sampleDiv.attr('data-index', index);
+                        $('#customTests').append(sampleDiv);
+                    });
+                }
+            };
+        }
+    };
+}
+
+// 获取自定义测试数据
+function getCustomTestData() {
+    const tableName = window.location.href;
+    var request = indexedDB.open('samplesDataDB', 1);
+
+    return new Promise(function (resolve) {
+        request.onsuccess = function (event) {
+            var db = event.target.result;
+            var transaction = db.transaction(tableName, 'readonly');
+            var objectStore = transaction.objectStore(tableName);
+            var getRequest = objectStore.getAll();
+
+            getRequest.onsuccess = function () {
+                var data = getRequest.result;
+                var customTestData = {};
+
+                if (data && data.length > 0) {
+                    data.forEach(function (item, index) {
+                        customTestData[index + 1] = {
+                            input: item.input,
+                            output: item.output
+                        };
+                    });
+                }
+
+                resolve(customTestData);
+            };
+
+            transaction.oncomplete = function () {
+                db.close();
+            };
+        };
+    });
+}
+
+// 差异对比
+function codeDiff(expectedText, actualText) {
+    // 将文本按行拆分
+    var expectedLines = expectedText.split('\n');
+    var actualLines = actualText.split('\n');
+
+    var output = "";
+    for (var i = 0; i < expectedLines.length; i++) {
+        var expectedLine = expectedLines[i];
+        var actualLine = actualLines[i];
+
+        if (expectedLine === actualLine) {
+            output += '<span>' + actualLine + '</span>';
+        } else {
+            output += '<span class="removed">' + actualLine + '</span>';
+            output += '<span class="added">' + expectedLine + '</span>';
+        }
+    }
+
+    // 多余的 actualLines
+    for (var j = expectedLines.length; j < actualLines.length; j++) {
+        output += '<span class="removed">' + actualLines[j] + '</span>';
+    }
+
+    return output;
+}
+
+// 调试器参数列表
+let LanguageChoiceWrapper = "", CompilerArgs = "";
+let LanguageChoiceList = {
+    "4": "9", "6": "8", "7": "5", "9": "1", "13": "13", "19": "42", "20": "21", "28": "30", "31": "24", "32": "20",
+    "34": "17", "36": "4", "40": "5", "41": "5", "43": "6", "45": "7", "46": "4", "50": "7", "51": "9", "52": "27", "54": "7", "55": "23", "60": "4",
+    "61": "7", "65": "1", "67": "12", "70": "5", "73": "7", "74": "4", "75": "46", "77": "43", "79": "1", "80": "27", "83": "43", "87": "4"
+}
+let CompilerArgsList = {
+    "6": "-Wall -std=gnu99 -O2 -o a.out source_file.c",
+    "7": "-Wall -std=c++14 -O2 -o a.out source_file.cpp",
+    "20": "-o a.out source_file.go",
+    "27": "-Wall -std=c++14 -stdlib=libc++ -O2 -o a.out source_file.cpp",
+    "30": "source_file.d -ofa.out"
+}
+
+// 编译器api通信
+async function onlineCompilerConnect(code, input) {
+    var data = new FormData();
+    data.append('LanguageChoiceWrapper', LanguageChoiceWrapper);
+    data.append('EditorChoiceWrapper', '1');
+    data.append('LayoutChoiceWrapper', '1');
+    data.append('Program', code);
+    data.append('CompilerArgs', CompilerArgs);
+    data.append('Input', input);
+    data.append('ShowWarnings', 'false');
+    data.append('IsInEditMode', 'false');
+    data.append('IsLive', 'false');
+
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: 'https://rextester.com/rundotnet/Run',
+            data: data,
+            onload: function (responseDetails) {
+                if (!responseDetails.response) {
+                    reject("发生了未知的错误，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 \n\n响应报文：" + JSON.stringify(responseDetails));
+                } else {
+                    const response = JSON.parse(responseDetails.response);
+                    resolve(response);
+                }
+            },
+            onerror: function () {
+                reject('网络错误');
+            }
+        });
+    });
+}
+
+// 收集样例数据
+function collectTestData() {
+    var testData = {};
+
+    $('.input').each(function (index) {
+        var inputText = '';
+        if ($(this).find('pre').find('div').length > 0) {
+            $(this).find('pre').find('div').each(function () {
+                inputText += $(this).text() + '\n';
+            });
+        } else {
+            inputText = $(this).find('pre').text();
+        }
+        var outputText = '';
+        if ($('.output').eq(index).find('pre').find('div').length > 0) {
+            $('.output').eq(index).find('pre').find('div').each(function () {
+                inputText += $(this).text() + '\n';
+            });
+        } else {
+            outputText = $('.output').eq(index).find('pre').text();
+        }
+
+        testData[index + 1] = {
+            input: inputText.trim(),
+            output: outputText.trim()
+        };
+    });
+
+    return testData;
+}
+
+// 样例测试函数
+async function runCode(event, sourceDiv, submitDiv) {
+    event.preventDefault();
+    const loadingImage = $('<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">');
+    $('#RunTestButton').after(loadingImage);
+    $('#statePanel').remove(); // 移除旧结果
+
+    // 评测结果面板
+    var statePanel = $(`<div id="statePanel">`);
+    submitDiv.after(statePanel);
+
+    // 更新状态
+    CompilerArgs = $('#CompilerArgsInput').val();
+
+    // 获取数据
+    const testData = collectTestData();
+    const customtestData = await getCustomTestData();
+
+    // 测试
+    const handleResult = (prefix, data, item, result) => {
+        if (result.Errors) {
+            statePanel.append($(`<div style="color:red;margin-top:10px;">${prefix}${item} 编译错误或超时</div>`));
+            statePanel.append($(`<div style="color:red;">错误： ${result.Errors}</div>`));
+        } else if (result.Result.trim() === data.output.trim()) {
+            statePanel.append($(`<div style="color:green;margin-top:10px;">${prefix}${item} 通过</div>`));
+        } else {
+            statePanel.append($(`<div style="color:red;margin-top:10px;">${prefix}${item} 未通过</div>`));
+            statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>`));
+        }
+        statePanel.append($(`<div style="color:${result.Errors ? 'red' : '#1565C0'};">状态： ${result.Stats}</div>`));
+    };
+
+    // 遍历数据并测试
+    for (const [item, data] of Object.entries(customtestData)) {
+        await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
+        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
+        handleResult('自定义样例', data, item, result);
+    }
+    for (const [item, data] of Object.entries(testData)) {
+        await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
+        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
+        handleResult('题目样例', data, item, result);
+    }
+
+    loadingImage.remove();
+}
+
+async function CodeCommit() {
+    if (getCookie('X-User-Sha1') === '') return; // 未登录
+
+    const href = window.location.href;
+    let submitUrl = /\/problemset\//.test(href) ? hostAddress + '/problemset/submit' :
+        href.replace(/\/problem[A-Za-z\/#]*/, "/submit");
+    let cloneHTML = await CloneOriginalHTML(submitUrl)
+
+    // 创建
+    let from = await CreateCodeDevFrom(submitUrl, cloneHTML);
+    let editor = from.editor;
+    let selectLang = from.selectLang;
+    let submitBottom = from.submitBottom;
+    let submitDiv = from.submitDiv;
+    let runBottom = from.runBottom;
+
+    CustomTestInit(); // 初始化自定义测试数据面板
+    selectLang.on('change', () => changeAceLanguage(from.selectLang, from.editor)); // 编辑器语言切换监听
+    editor.getSession().on("changeMode", updateAutocomplete); // 切换语言监听，更新自动补全
+    runBottom.on('click', (event) => runCode(event, from.sourceDiv, from.submitDiv)); // 样例测试按钮点击事件
+
+    // 提交
+    submitBottom.on('click', function (event) {
+        event.preventDefault();
+        submitDiv.append(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
+        $('#CFBetter_SubmitForm').submit();
+    });
+
+    // 初始化
+    selectLang.val(compilerSelection);
+    changeAceLanguage(from.selectLang, from.editor);
+    updateAutocomplete();
 }
 
 // 等待LaTeX渲染队列全部完成
@@ -5350,107 +6090,114 @@ document.addEventListener("DOMContentLoaded", function () {
                 checkJQuery(newRetryDelay);
             }, retryDelay);
         } else {
-            init();
-            ShowAlertMessage();
-            settingPanel();
-            checkScriptVersion();
-            toZH_CN();
-            var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
-                .html(`Codeforces Better! —— 正在等待页面资源加载……`)
-                .css({
-                    "margin": "1em",
-                    "text-align": "center",
-                    "font-weight": "600",
-                    "position": "relative"
-                });
-
-            async function processPage() {
-                if (showLoading) newElement.html('Codeforces Better! —— 正在等待LaTeX渲染队列全部完成……');
-                await waitUntilIdleThenDo(async function () {
-                    if (showJumpToLuogu && is_problem) CF2luogu();
-
-                    Promise.resolve()
-                        .then(() => {
-                            if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
-                            return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
-                        })
-                        .then(() => {
-                            if (showLoading && commentPaging) newElement.html('Codeforces Better! —— 正在对评论区分页……');
-                            return delay(100).then(() => { if (commentPaging) CommentPagination() });
-                        })
-                        .then(() => {
-                            if (showLoading && is_acmsguru) newElement.html('Codeforces Better! —— 正在为acmsguru题面重新划分div……');
-                            return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
-                        })
-                        .then(() => {
-                            if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
-                            return delay(100).then(() => addConversionButton());
-                        })
-                        .then(() => {
-                            if (showLoading && commentTranslationMode == "2") newElement.html('Codeforces Better! —— 正在加载选段翻译……');
-                            return delay(100).then(() => { if (commentTranslationMode == "2") multiChoiceTranslation() });
-                        })
-                        .then(async () => {
-                            if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
-                            await delay(100);
-                            if (renderPerfOpt) await RenderPerfOpt();
-                        })
-                        .then(async () => {
-                            if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
-                            await delay(100);
-                            if (standingsRecolor && is_cfStandings) await recolorStandings();
-                        })
-                        .then(async () => {
-                            await delay(100);
-                            if (showLoading && showClistRating_contest && is_contest) {
-                                newElement.html('Codeforces Better! —— 正在加载Clist数据……');
-                                await showRatingByClist_contest();
-                            }
-                            if (showLoading && showClistRating_problemset && is_problemset) {
-                                newElement.html('Codeforces Better! —— 正在加载Clist数据……');
-                                await showRatingByClist_problemset();
-                            }
-                            if (showLoading && showClistRating_problem && is_problem) {
-                                newElement.html('Codeforces Better! —— 正在加载Clist数据……');
-                                await showRatingByClist_problem();
-                            }
-                        })
-                        .then(() => {
-                            alertZh();
-                            if (showLoading) {
-                                newElement.html('Codeforces Better! —— 加载已完成');
-                                newElement.removeClass('alert-info').addClass('alert-success');
-                                setTimeout(function () {
-                                    newElement.remove();
-                                }, 3000);
-                            }
-                        })
-                        .catch((error) => {
-                            console.warn(error);
-                        });
-                });
-            }
-
-            function delay(ms) {
-                return new Promise((resolve) => setTimeout(resolve, ms));
-            }
-
-            if (showLoading) {
-                if (is_mSite) $("header").after(newElement);
-                else $(".menu-box:first").next().after(newElement);
-            }
-
-            if (loaded) {
-                processPage();
-            } else {
-                // 页面完全加载完成后执行
-                window.onload = function () {
-                    processPage();
-                };
-            }
+            executeFunctions();
         }
     }
     checkJQuery(50);
+    function executeFunctions() {
+        init();
+        ShowAlertMessage();
+        settingPanel();
+        checkScriptVersion();
+        toZH_CN();
+        var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
+            .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+            .css({
+                "margin": "1em",
+                "text-align": "center",
+                "font-weight": "600",
+                "position": "relative"
+            });
+
+        async function processPage() {
+            if (showLoading) newElement.html('Codeforces Better! —— 正在等待LaTeX渲染队列全部完成……');
+            await waitUntilIdleThenDo(async function () {
+                if (showJumpToLuogu && is_problem) CF2luogu();
+
+                Promise.resolve()
+                    .then(() => {
+                        if (showLoading && is_problem) newElement.html('Codeforces Better! —— 正在添加代码编辑器……');
+                        return delay(100).then(() => { if (is_problem && problemPageCodeEditor) CodeCommit() });
+                    })
+                    .then(() => {
+                        if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
+                        return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
+                    })
+                    .then(() => {
+                        if (showLoading && commentPaging) newElement.html('Codeforces Better! —— 正在对评论区分页……');
+                        return delay(100).then(() => { if (commentPaging) CommentPagination() });
+                    })
+                    .then(() => {
+                        if (showLoading && is_acmsguru) newElement.html('Codeforces Better! —— 正在为acmsguru题面重新划分div……');
+                        return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
+                    })
+                    .then(() => {
+                        if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
+                        return delay(100).then(() => addConversionButton());
+                    })
+                    .then(() => {
+                        if (showLoading && commentTranslationMode == "2") newElement.html('Codeforces Better! —— 正在加载选段翻译……');
+                        return delay(100).then(() => { if (commentTranslationMode == "2") multiChoiceTranslation() });
+                    })
+                    .then(async () => {
+                        if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
+                        await delay(100);
+                        if (renderPerfOpt) await RenderPerfOpt();
+                    })
+                    .then(async () => {
+                        if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
+                        await delay(100);
+                        if (standingsRecolor && is_cfStandings) await recolorStandings();
+                    })
+                    .then(async () => {
+                        await delay(100);
+                        if (showLoading && showClistRating_contest && is_contest) {
+                            newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                            await showRatingByClist_contest();
+                        }
+                        if (showLoading && showClistRating_problemset && is_problemset) {
+                            newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                            await showRatingByClist_problemset();
+                        }
+                        if (showLoading && showClistRating_problem && is_problem) {
+                            newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                            await showRatingByClist_problem();
+                        }
+                    })
+                    .then(() => {
+                        alertZh();
+                        if (showLoading) {
+                            newElement.html('Codeforces Better! —— 加载已完成');
+                            newElement.removeClass('alert-info').addClass('alert-success');
+                            setTimeout(function () {
+                                newElement.remove();
+                            }, 3000);
+                        }
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
+            });
+        }
+
+        function delay(ms) {
+            return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        if (showLoading) {
+            if (is_mSite) $("header").after(newElement);
+            else $(".menu-box:first").next().after(newElement);
+        }
+
+        if (loaded) {
+            processPage();
+        } else {
+            // 页面完全加载完成后执行
+            window.onload = function () {
+                processPage();
+            };
+        }
+    }
 });
 
 // 配置自动迁移代码（将在10个小版本后移除-1.66）
