@@ -17,6 +17,9 @@
 // @connect      www.luogu.com.cn
 // @connect      clist.by
 // @connect      greasyfork.org
+// @connect      rextester.com
+// @connect      codechef.com
+// @connect      wandbox.org
 // @connect      *
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -25,12 +28,16 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
+// @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/codeforces.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
 // @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/code_completer-0.0.11.min.js
+// @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
+// @resource     wandboxlist https://wandbox.org/api/list.json
+// @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
 // @license      MIT
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -56,7 +63,7 @@ var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiCo
 var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, keywordAutoComplete, cppCodeTemplateComplete;
-var compilerSelection;
+var compilerSelection, onlineCompilerChoice, codecheCsrfToken;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -98,6 +105,8 @@ function init() {
     problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
     keywordAutoComplete = getGMValue("keywordAutoComplete", true);
     cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
+    onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
+    codecheCsrfToken = getGMValue("codecheCsrfToken", "");
     //openai
     opneaiConfig = getGMValue("chatgpt-config", {
         "choice": -1,
@@ -161,6 +170,7 @@ function ShowAlertMessage() {
 }
 
 // 常量
+const findHelpText = '\n\n 如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 \n\n';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="18" height="18"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
 const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
@@ -766,9 +776,12 @@ button.html2mdButton.CFBetter_setting.open {
 }
 /* 下拉选择框 */
 .CFBetter_setting_menu select {
-    margin-left: 6px;
+    appearance: none;
+    padding: 5px 10px;
+    margin: -5px 0px;
+    border-radius: 6px;
     border-style: solid;
-    border-color: #26A69A;
+    border: 1px solid #ced4da;
     color: #009688;
     font-size: 15px;
 }
@@ -777,13 +790,23 @@ button.html2mdButton.CFBetter_setting.open {
 }
 /* 数值输入框 */
 .CFBetter_setting_menu input[type="number"] {
-    width: 60px;
-    border: 1px solid #26A69A;
+    width: 40px;
     color: #009688;
     font-size: 15px;
+    appearance: none;
+    padding: 5px 10px;
+    margin: -5px 3px;
+    border-radius: 6px;
+    border-style: solid;
+    border: 1px solid #ced4da;
 }
 .CFBetter_setting_menu input[type="number"]:focus-visible {
     outline: none;
+}
+.CFBetter_setting_menu input[type="number"]::-webkit-inner-spin-button,
+.CFBetter_setting_menu input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 /*设置面板-滚动条*/
 .CFBetter_setting_menu::-webkit-scrollbar, .CFBetter_setting_content::-webkit-scrollbar {
@@ -1510,38 +1533,99 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 }
 #CFBetter_submitDiv{
     display: flex;
+    justify-content: space-between;
     padding-top: 15px;
 }
 .CFBetter_SubmitButton {
-    padding: 0 1em;
-    margin: 0em 1em;
-    height: 2em;
-    width: 15%;
+    cursor: pointer;
+    font-size: 15px;
+    height: 35px;
+    width: 100px;
+    margin-left: 10px;
+    border-radius: 6px;
+    border: 1px solid #3c9a5f;
+}
+#RunTestButton {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+#SubmitButton {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #43A047;
 }
 #drag-handle {
-    height: 2px;
-    margin-top: 2px;
+    height: 4px;
     background-color: #EEEEEE;
     cursor: ns-resize;
     border-top: 1px solid #9E9E9E;
     border-bottom: 1px solid #9E9E9E;
 }
+#programTypeId{
+    padding: 5px 10px;
+    border-radius: 6px;
+    border-style: solid;
+    border: 1px solid #ced4da;
+    color: #212529;
+}
 /* 调试 */
 .CFBetter_loding{
+    padding: 6px 0px 0px 5px;
     height: 22px;
+}
+#CompilerSetting{
+    width: 70%;
+}
+#CompilerSetting select{
+    padding: 4px 10px;
+    border-radius: 6px;
+    border-style: solid;
+    border: 1px solid #ced4da;
+    color: #212529;
 }
 #CompilerArgsInput{
     width: 100%;
-    border: 1px solid #bcaaa4;
+    height: 35px;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    box-shadow: inset 0px 1px 1px rgba(0,0,0,.075);
 }
-.CFBetter_pre{
-    line-height: 1.25em;
-    padding: 0.25em;
-    margin: 0;
-    background-color: #efefef;
+input#CompilerArgsInput[disabled] {
+    cursor: not-allowed;
 }
-.CFBetter_RunResult{
+#CompilerBox{
+    display: grid;
+    margin-top: 10px;
+    border: #d0d7de solid 1px;
+    border-radius: 6px;
+}
+#CompilerBox > * {  
+    margin: 5px;
+}
 
+/* 调试结果 */
+#statePanel{
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.RunState_title:not(:first-child){
+    margin-top: 20px;
+}
+.RunState_title{
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+.RunState_title.error{
+    color: red;
+}
+.RunState_title.ok{
+    color: #449d44;
 }
 /* 自定义样例 */
 #customTestBlock {
@@ -1574,8 +1658,10 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     position: absolute;
     top: 5px;
     right: 5px;
-    color: #F44336;
-    border: 1px solid #F44336;
+    color: #EF5350;
+    border-radius: 4px;
+    border: 1px solid #ef9a9a;
+    padding: 2px 6px;
     background-color: #FFEBEE;
 }
 
@@ -1586,7 +1672,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     right: 5px;
     padding: 3px 10px;
     color: #795548;
-    border: 1px solid #795548;
+    border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #FAFAFA;
 }
@@ -1667,6 +1753,13 @@ function getCookie(name) {
         }
     }
     return "";
+}
+
+// 随机数生成
+function getRandomNumber(numDigits) {
+    let min = Math.pow(10, numDigits - 1);
+    let max = Math.pow(10, numDigits) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // 防抖函数
@@ -1778,7 +1871,7 @@ function checkScriptVersion() {
                         <br>
                         <div id="skip_menu">
                             <div class="help_tip">
-                                `+ helpCircleHTML + `
+                                ${helpCircleHTML}
                                 <div class="tip_text">
                                     <p><b>更新遇到了问题？</b></p>
                                     <p>由于 Greasyfork 平台的原因，当新版本刚发布时，点击 Greasyfork 上的更新按钮<u>可能</u>会出现<u>实际更新/安装的却是上一个版本</u>的情况</p>
@@ -2766,378 +2859,454 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
     return tempConfig;
 }
 
-const CFBetterSettingMenuHTML = `
+const CFBetter_setting_sidebar_HTML = `
+<div class="CFBetter_setting_sidebar">
+    <ul>
+        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
+        <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
+        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist设置</a></li>
+        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings">编辑器设置</a></li>
+        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
+    </ul>
+</div>
+`;
+
+const basic_settings_HTML = `
+<div id="basic-settings" class="settings-page active">
+    <h3>基本设置</h3>
+    <hr>
+    <div class='CFBetter_setting_list' style="padding: 0px 10px;">
+        <span id="darkMode_span">黑暗模式</span>
+        <div class="dark-mode-selection">
+            <label>
+                <input class="radio-input" type="radio" name="darkMode" value="dark" />
+                <span class="CFBetter_setting_menu_label_text">黑暗</span>
+                <span class="radio-icon"> </span>
+            </label>
+            <label>
+                <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
+                <span class="CFBetter_setting_menu_label_text">白天</span>
+                <span class="radio-icon"> </span>
+            </label>
+            <label>
+                <input class="radio-input" type="radio" name="darkMode" value="follow" />
+                <span class="CFBetter_setting_menu_label_text">跟随系统</span>
+                <span class="radio-icon"> </span>
+            </label>
+        </div>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="bottomZh_CN">界面汉化</label>
+        <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
+    </div>
+    <div class='CFBetter_setting_list'>
+    <label for="showLoading">显示加载提示信息</label>
+    <div class="help_tip">
+        ${helpCircleHTML}
+        <div class="tip_text">
+        <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Codeforces Better! —— xxx”</p>
+        <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
+        <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
+        </div>
+    </div>
+    <input type="checkbox" id="showLoading" name="showLoading">
+    </div>
+    <div class='CFBetter_setting_list'>
+    <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
+    <div class="help_tip">
+        ${helpCircleHTML}
+        <div class="tip_text">
+        <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
+        </div>
+    </div>
+    <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="expandFoldingblocks">自动展开折叠块</label>
+        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
+    </div>
+    <div class='CFBetter_setting_list'>
+    <label for="renderPerfOpt">折叠块渲染优化</label>
+    <div class="help_tip">
+        ${helpCircleHTML}
+        <div class="tip_text">
+        <p>为折叠块元素添加 contain 约束</p>
+        <div style="border: 1px solid #795548; padding: 10px;">
+            <p>
+            contain: layout style;
+            </p>
+        </div>
+        <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>
+        </div>
+    </div>
+    <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='CFBetter_setting_list'>
+    <label for="commentPaging">评论区分页</label>
+    <div class="help_tip">
+        ${helpCircleHTML}
+        <div class="tip_text">
+        <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
+        </div>
+    </div>
+    <input type="checkbox" id="commentPaging" name="commentPaging">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="showJumpToLuogu">显示跳转到洛谷</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p>
+            <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
+            <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
+            </div>
+        </div>
+        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="standingsRecolor">榜单重新着色</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>对于采用 Codeforces 赛制的比赛榜单</p>
+            <p>按照“得分/总分”所在的范围为分数重新渐变着色</p>
+            <p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>
+            </div>
+        </div>
+        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+    </div>
+</div>
+`;
+
+const translation_settings_HTML = `
+<div id="translation-settings" class="settings-page">
+    <h3>翻译设置</h3>
+    <hr>
+    <h4>首选项</h4>
+    <label>
+        <input type='radio' name='translation' value='deepl'>
+        <span class='CFBetter_setting_menu_label_text'>deepl翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='iflyrec'>
+        <span class='CFBetter_setting_menu_label_text'>讯飞听见翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='youdao'>
+        <span class='CFBetter_setting_menu_label_text'>有道翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='google'>
+        <span class='CFBetter_setting_menu_label_text'>Google翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='caiyun'>
+        <span class='CFBetter_setting_menu_label_text'>彩云小译翻译</span>
+    </label>
+    <label>
+        <input type='radio' name='translation' value='openai'>
+        <span class='CFBetter_setting_menu_label_text'>ChatGPT翻译
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">
+                <p><b>请在下方添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p>
+                <p>具体请阅读脚本页的介绍</p>
+                </div>
+            </div>
+        </span>
+    </label>
+    <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
+        <div id="chatgpt-config"></div>
+    </div>
+    <h4>偏好</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
+        <select id="comment_translation_choice" name="comment_translation_choice">
+            <option value="0">跟随首选项</option>
+            <option value="deepl">deepl翻译</option>
+            <option value="iflyrec">讯飞听见翻译</option>
+            <option value="youdao">有道翻译</option>
+            <option value="google">Google翻译</option>
+            <option value="caiyun">彩云小译翻译</option>
+            <option value="openai">ChatGPT翻译</option>
+        </select>
+    </div>
+    <h4>高级</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="comment_translation_mode" style="display: flex;">工作模式</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>你可以选择脚本的工作方式</p>
+            <p>○ 普通模式：会一次性翻译整个区域的内容</p>
+            <p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p>
+            <p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p>
+                <div style="color:#f44336;">
+                    <p><u>注意：分段/选段模式会产生如下问题：</u></p>
+                    <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
+                    <p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+                </div>
+            </div>
+        </div>
+        <select id="comment_translation_mode" name="comment_translation_mode">
+            <option value="0">普通模式</option>
+            <option value="1">分段模式</option>
+            <option value="2">选段模式</option>
+        </select>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="translation_retransAction" style="display: flex;">重新翻译时</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>选择在重新翻译时是"关闭旧的结果"还是"收起旧的结果"</p>
+            </div>
+        </div>
+        <select id="translation_retransAction" name="translation_retransAction">
+            <option value=0>关闭旧的结果</option>
+            <option value=1>收起旧的结果</option>
+        </select>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for='transWaitTime'>
+            <div style="display: flex;align-items: center;">
+                <span>等待间隔</span>
+            </div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+                <p>设置在 分段/选段 模式中翻译两段间的等待间隔，建议 200 + 毫秒</p>
+            </div>
+        </div>
+        <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
+        <span>毫秒</span>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="translation_replaceSymbol" style="display: flex;">LaTeX替换符</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p>
+            <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p>
+            <p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>
+            <p>具体您可以前往阅读脚本页的说明</p>
+            </div>
+        </div>
+        <select id="translation_replaceSymbol" name="translation_replaceSymbol">
+            <option value=2>使用{}</option>
+            <option value=1>使用【】</option>
+            <option value=3>使用[]</option>
+        </select>
+    </div>
+</div>
+`;
+
+const clist_rating_settings_HTML = `
+<div id="clist_rating-settings" class="settings-page">
+    <h3>Clist设置</h3>
+    <hr>
+    <h4>基本</h4>
+    <div class='CFBetter_setting_list' style="background-color: #E0F2F1;border: 1px solid #009688;">
+        <div>
+            <p>注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明</p>
+        </div>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for='clist_Authorization'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">KEY:</span>
+            </div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+                <p>格式样例：</p>
+                <div style="border: 1px solid #795548; padding: 10px;">
+                    <p>ApiKey XXXXXXXXX</p>
+                </div>
+            </div>
+        </div>
+        <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' require = true>
+    </div>
+    <hr>
+    <h4>显示Rating分</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="showClistRating_contest"><span>比赛问题集页</span></label>
+        <div class="help_tip" style="margin-right: initial;">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>数据来源clist.by</p>
+            <p>您需要提供官方的api key</p>
+            <p>或让您的浏览器上的clist.by处于登录状态（即cookie有效）</p>
+            </div>
+        </div>
+        <div class="badge">Cookie/API KEY</div>
+        <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="showClistRating_problem"><span>题目页</span></label>
+        <div class="help_tip" style="margin-right: initial;">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+            </div>
+        </div>
+        <div class="badge">Cookie</div>
+        <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="showClistRating_problemset"><span>题单页</span></label>
+        <div class="help_tip" style="margin-right: initial;">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+            </div>
+        </div>
+        <div class="badge">Cookie</div>
+        <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
+    </div>
+    <hr>
+    <div class='CFBetter_setting_list'>
+        <label for="RatingHidden"><span>防剧透</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>只有当鼠标移动到Rating分展示区域上时才显示</p>
+            </div>
+        </div>
+        <input type="checkbox" id="RatingHidden" name="RatingHidden">
+    </div>
+</div>
+`;
+
+const code_editor_settings_HTML = `
+<div id="code_editor-settings" class="settings-page">
+    <h3>编辑器设置</h3>
+    <hr>
+    <h4>基本</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="problemPageCodeEditor"><span>快速代码编辑器</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>在问题页下面添加快速代码编辑器</p>
+            <p>支持代码补全，自动保存，在线代码调试</p>
+            </div>
+        </div>
+        <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="keywordAutoComplete"><span>关键字自动补全</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>开启 ace 编辑器自带的关键字自动补全</p>
+            </div>
+        </div>
+        <input type="checkbox" id="keywordAutoComplete" name="keywordAutoComplete">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="cppCodeTemplateComplete"><span>C++代码模板补全</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>开启C++代码模板级补全，模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
+            </div>
+        </div>
+        <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
+    </div>
+    <hr>
+    <h4>在线代码调试</h4>
+    <label>
+        <input type='radio' name='compiler' value='official'>
+        <span class='CFBetter_setting_menu_label_text'>Codeforces</span>
+    </label>
+    <label>
+        <input type='radio' name='compiler' value='wandbox'>
+        <span class='CFBetter_setting_menu_label_text'>wandbox
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">
+                <p>由wandbox提供</p>
+                </div>
+            </div>
+        </span>
+    </label>
+    <label>
+        <input type='radio' name='compiler' value='rextester'>
+        <span class='CFBetter_setting_menu_label_text'>rextester</span>
+    </label>
+    <label>
+        <input type='radio' name='compiler' value='codechef'>
+        <span class='CFBetter_setting_menu_label_text'>codechef
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">
+                <p>请在下方添加csrfToken</p>
+                </div>
+            </div>
+        </span>
+    </label>
+    <div class='CFBetter_setting_menu_input' id='codechef' style='display: none;'>
+        <div class='CFBetter_setting_list'>
+            <label for='codecheCsrfToken'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">CsrfToken:</span>
+                </div>
+            </label>
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">
+                <p><b>请填写csrfToken</b>，注意不包含单引号</p>
+                <p>登录codechef网站，然后打开codechef页面的控制台，输入csrfToken即可查看</p>
+                </div>
+            </div>
+            <input type='text' id='codecheCsrfToken' class='no_default' placeholder='请输入KEY' require = true>
+        </div>
+    </div>
+</div>
+`;
+
+const compatibility_settings_HTML = `
+<div id="compatibility-settings" class="settings-page">
+    <h3>兼容设置</h3>
+    <hr>
+    <div class='CFBetter_setting_list'>
+        <label for="loaded"><span id="loaded_span">不等待页面资源加载</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
+            <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
+            <p><u>您首先应该确认是否是网络问题，</u></p>
+            <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
+            <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+            <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
+            </div>
+        </div>
+        <input type="checkbox" id="loaded" name="loaded">
+    </div>
+</div>
+`;
+
+const CFBetter_setting_content_HTML = `
+<div class="CFBetter_setting_content">
+    ${basic_settings_HTML}
+    ${translation_settings_HTML}
+    ${clist_rating_settings_HTML}
+    ${code_editor_settings_HTML}
+    ${compatibility_settings_HTML}
+</div>
+`;
+const CFBetterSettingMenu_HTML = `
     <div class='CFBetter_setting_menu' id='CFBetter_setting_menu'>
     <div class="tool-box">
         <button class="btn-close">×</button>
     </div>
     <div class="CFBetter_setting_container">
-        <div class="CFBetter_setting_sidebar">
-        <ul>
-            <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
-            <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
-            <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist设置</a></li>
-            <li><a href="#code_editor-settings" id="sidebar-code_editor-settings">编辑器设置</a></li>
-            <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
-        </ul>
-        </div>
-        <div class="CFBetter_setting_content">
-            <div id="basic-settings" class="settings-page active">
-                <h3>基本设置</h3>
-                <hr>
-                <div class='CFBetter_setting_list' style="padding: 0px 10px;">
-                    <span id="darkMode_span">黑暗模式</span>
-                    <div class="dark-mode-selection">
-                        <label>
-                            <input class="radio-input" type="radio" name="darkMode" value="dark" />
-                            <span class="CFBetter_setting_menu_label_text">黑暗</span>
-                            <span class="radio-icon"> </span>
-                        </label>
-                        <label>
-                            <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
-                            <span class="CFBetter_setting_menu_label_text">白天</span>
-                            <span class="radio-icon"> </span>
-                        </label>
-                        <label>
-                            <input class="radio-input" type="radio" name="darkMode" value="follow" />
-                            <span class="CFBetter_setting_menu_label_text">跟随系统</span>
-                            <span class="radio-icon"> </span>
-                        </label>
-                    </div>
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="bottomZh_CN">界面汉化</label>
-                    <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
-                </div>
-                <div class='CFBetter_setting_list'>
-                <label for="showLoading">显示加载提示信息</label>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text">
-                    <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Codeforces Better! —— xxx”</p>
-                    <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
-                    <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
-                    </div>
-                </div>
-                <input type="checkbox" id="showLoading" name="showLoading">
-                </div>
-                <div class='CFBetter_setting_list'>
-                <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
-                <div class="help_tip">
-                    `+ helpCircleHTML + `
-                    <div class="tip_text">
-                    <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
-                    </div>
-                </div>
-                <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="expandFoldingblocks">自动展开折叠块</label>
-                    <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
-                </div>
-                <div class='CFBetter_setting_list'>
-                <label for="renderPerfOpt">折叠块渲染优化</label>
-                <div class="help_tip">
-                    `+ helpCircleHTML + `
-                    <div class="tip_text">
-                    <p>为折叠块元素添加 contain 约束</p>
-                    <div style="border: 1px solid #795548; padding: 10px;">
-                        <p>
-                        contain: layout style;
-                        </p>
-                    </div>
-                    <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>
-                    </div>
-                </div>
-                <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-                </div>
-                <div class='CFBetter_setting_list'>
-                <label for="commentPaging">评论区分页</label>
-                <div class="help_tip">
-                    `+ helpCircleHTML + `
-                    <div class="tip_text">
-                    <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
-                    </div>
-                </div>
-                <input type="checkbox" id="commentPaging" name="commentPaging">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="showJumpToLuogu">显示跳转到洛谷</label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p>
-                        <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
-                        <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="standingsRecolor">榜单重新着色</label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>对于采用 Codeforces 赛制的比赛榜单</p>
-                        <p>按照“得分/总分”所在的范围为分数重新渐变着色</p>
-                        <p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
-                </div>
-            </div>
-            <div id="translation-settings" class="settings-page">
-                <h3>翻译设置</h3>
-                <hr>
-                <h4>首选项</h4>
-                <label>
-                    <input type='radio' name='translation' value='deepl'>
-                    <span class='CFBetter_setting_menu_label_text'>deepl翻译</span>
-                </label>
-                <label>
-                    <input type='radio' name='translation' value='iflyrec'>
-                    <span class='CFBetter_setting_menu_label_text'>讯飞听见翻译</span>
-                </label>
-                <label>
-                    <input type='radio' name='translation' value='youdao'>
-                    <span class='CFBetter_setting_menu_label_text'>有道翻译</span>
-                </label>
-                <label>
-                    <input type='radio' name='translation' value='google'>
-                    <span class='CFBetter_setting_menu_label_text'>Google翻译</span>
-                </label>
-                <label>
-                    <input type='radio' name='translation' value='caiyun'>
-                    <span class='CFBetter_setting_menu_label_text'>彩云小译翻译</span>
-                </label>
-                <label>
-                    <input type='radio' name='translation' value='openai'>
-                    <span class='CFBetter_setting_menu_label_text'>ChatGPT翻译
-                        <div class="help_tip">
-                            `+ helpCircleHTML + `
-                            <div class="tip_text">
-                            <p><b>请在下方添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p>
-                            <p>具体请阅读脚本页的介绍</p>
-                            </div>
-                        </div>
-                    </span>
-                </label>
-                <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
-                    <div id="chatgpt-config"></div>
-                </div>
-                <h4>偏好</h4>
-                <div class='CFBetter_setting_list'>
-                    <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
-                    <select id="comment_translation_choice" name="comment_translation_choice">
-                        <option value="0">跟随首选项</option>
-                        <option value="deepl">deepl翻译</option>
-                        <option value="iflyrec">讯飞听见翻译</option>
-                        <option value="youdao">有道翻译</option>
-                        <option value="google">Google翻译</option>
-                        <option value="caiyun">彩云小译翻译</option>
-                        <option value="openai">ChatGPT翻译</option>
-                    </select>
-                </div>
-                <h4>高级</h4>
-                <div class='CFBetter_setting_list'>
-                    <label for="comment_translation_mode" style="display: flex;">工作模式</label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>你可以选择脚本的工作方式</p>
-                        <p>○ 普通模式：会一次性翻译整个区域的内容</p>
-                        <p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p>
-                        <p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p>
-                            <div style="color:#f44336;">
-                                <p><u>注意：分段/选段模式会产生如下问题：</u></p>
-                                <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-                                <p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
-                            </div>
-                        </div>
-                    </div>
-                    <select id="comment_translation_mode" name="comment_translation_mode">
-                        <option value="0">普通模式</option>
-                        <option value="1">分段模式</option>
-                        <option value="2">选段模式</option>
-                    </select>
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="translation_retransAction" style="display: flex;">重新翻译时</label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>选择在重新翻译时是"关闭旧的结果"还是"收起旧的结果"</p>
-                        </div>
-                    </div>
-                    <select id="translation_retransAction" name="translation_retransAction">
-                        <option value=0>关闭旧的结果</option>
-                        <option value=1>收起旧的结果</option>
-                    </select>
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for='transWaitTime'>
-                        <div style="display: flex;align-items: center;">
-                            <span>等待间隔</span>
-                        </div>
-                    </label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                            <p>设置在 分段/选段 模式中翻译两段间的等待间隔，建议 200 + 毫秒</p>
-                        </div>
-                    </div>
-                    <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
-                    <span>毫秒</span>
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="translation_replaceSymbol" style="display: flex;">LaTeX替换符</label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p>
-                        <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p>
-                        <p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>
-                        <p>具体您可以前往阅读脚本页的说明</p>
-                        </div>
-                    </div>
-                    <select id="translation_replaceSymbol" name="translation_replaceSymbol">
-                        <option value=2>使用{}</option>
-                        <option value=1>使用【】</option>
-                        <option value=3>使用[]</option>
-                    </select>
-                </div>
-            </div>
-            <div id="clist_rating-settings" class="settings-page">
-                <h3>Clist设置</h3>
-                <hr>
-                <h4>基本</h4>
-                <div class='CFBetter_setting_list' style="background-color: #E0F2F1;border: 1px solid #009688;">
-                    <div>
-                        <p>注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明</p>
-                    </div>
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for='clist_Authorization'>
-                        <div style="display: flex;align-items: center;">
-                            <span class="input_label">KEY:</span>
-                        </div>
-                    </label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                            <p>格式样例：</p>
-                            <div style="border: 1px solid #795548; padding: 10px;">
-                                <p>ApiKey XXXXXXXXX</p>
-                            </div>
-                        </div>
-                    </div>
-                    <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' require = true>
-                </div>
-                <hr>
-                <h4>显示Rating分</h4>
-                <div class='CFBetter_setting_list'>
-                    <label for="showClistRating_contest"><span>比赛问题集页</span></label>
-                    <div class="help_tip" style="margin-right: initial;">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>数据来源clist.by</p>
-                        <p>您需要提供官方的api key</p>
-                        <p>或让您的浏览器上的clist.by处于登录状态（即cookie有效）</p>
-                        </div>
-                    </div>
-                    <div class="badge">Cookie/API KEY</div>
-                    <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="showClistRating_problem"><span>题目页</span></label>
-                    <div class="help_tip" style="margin-right: initial;">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
-                        </div>
-                    </div>
-                    <div class="badge">Cookie</div>
-                    <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="showClistRating_problemset"><span>题单页</span></label>
-                    <div class="help_tip" style="margin-right: initial;">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
-                        </div>
-                    </div>
-                    <div class="badge">Cookie</div>
-                    <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
-                </div>
-                <hr>
-                <div class='CFBetter_setting_list'>
-                    <label for="RatingHidden"><span>防剧透</span></label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>只有当鼠标移动到Rating分展示区域上时才显示</p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="RatingHidden" name="RatingHidden">
-                </div>
-            </div>
-            <div id="code_editor-settings" class="settings-page">
-                <h3>编辑器设置</h3>
-                <hr>
-                <h4>基本</h4>
-                <div class='CFBetter_setting_list'>
-                    <label for="problemPageCodeEditor"><span>快速代码编辑器</span></label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>在问题页下面添加快速代码编辑器</p>
-                        <p>支持代码补全，自动保存，在线调试（由<a href="https://rextester.com/" target="_blank">Rextester</a>提供服务）</p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="keywordAutoComplete"><span>关键字自动补全</span></label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>开启 ace 编辑器自带的关键字自动补全</p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="keywordAutoComplete" name="keywordAutoComplete">
-                </div>
-                <div class='CFBetter_setting_list'>
-                    <label for="cppCodeTemplateComplete"><span>C++代码模板补全</span></label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>开启C++代码模板级补全，模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
-                </div>
-            </div>
-            <div id="compatibility-settings" class="settings-page">
-                <h3>兼容设置</h3>
-                <hr>
-                <div class='CFBetter_setting_list'>
-                    <label for="loaded"><span id="loaded_span">不等待页面资源加载</span></label>
-                    <div class="help_tip">
-                        `+ helpCircleHTML + `
-                        <div class="tip_text">
-                        <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
-                        <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
-                        <p><u>您首先应该确认是否是网络问题，</u></p>
-                        <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
-                        <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
-                        <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
-                        </div>
-                    </div>
-                    <input type="checkbox" id="loaded" name="loaded">
-                </div>
-            </div>
-        </div>
+        ${CFBetter_setting_sidebar_HTML}
+        ${CFBetter_setting_content_HTML}
     </div>
 `;
 
@@ -3157,7 +3326,7 @@ const chatgptConfigEditHTML = `
             <div style="display: flex;align-items: center;">
                 <span class="input_label">模型:</span>
                 <div class="help_tip">
-                    `+ helpCircleHTML + `
+                    ${helpCircleHTML}
                     <div class="tip_text">
                     <p>留空则默认为：gpt-3.5-turbo</p>
                     <p>模型列表请查阅<a target="_blank" href="https://platform.openai.com/docs/models">OpenAI官方文档</a></p>
@@ -3171,7 +3340,7 @@ const chatgptConfigEditHTML = `
             <div style="display: flex;align-items: center;">
                 <span class="input_label">KEY:</span>
                 <div class="help_tip">
-                    `+ helpCircleHTML + `
+                    ${helpCircleHTML}
                     <div class="tip_text">
                     <p>您需要输入自己的OpenAI key，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
                     <p><b>如果您使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>
@@ -3184,7 +3353,7 @@ const chatgptConfigEditHTML = `
             <div style="display: flex;align-items: center;">
                 <span class="input_label">Proxy API:</span>
                 <div class="help_tip">
-                    `+ helpCircleHTML + `
+                    ${helpCircleHTML}
                     <div class="tip_text">
                         <p>留空则默认为OpenAI官方API</p>
                         <p>您也可以填写指定的API来代理访问OpenAI的API，</p>
@@ -3201,7 +3370,7 @@ const chatgptConfigEditHTML = `
             <div style="display: flex;align-items: center;">
                 <span class="input_label">自定义header</span>
                 <div class="help_tip">
-                    `+ helpCircleHTML + `
+                    ${helpCircleHTML}
                     <div class="tip_text">
                         <p>格式样例：</p>
                         <div style="border: 1px solid #795548; padding: 10px;">
@@ -3216,7 +3385,7 @@ const chatgptConfigEditHTML = `
             <div style="display: flex;align-items: center;">
                 <span class="input_label">自定义data</span>
                 <div class="help_tip">
-                    `+ helpCircleHTML + `
+                    ${helpCircleHTML}
                     <div class="tip_text">
                         <p>格式样例：</p>
                         <div style="border: 1px solid #795548; padding: 10px;">
@@ -3276,7 +3445,7 @@ async function settingPanel() {
     $settingBtns.click(() => {
         const styleElement = GM_addStyle(darkenPageStyle);
         $settingBtns.prop("disabled", true).addClass("open");
-        $("body").append(CFBetterSettingMenuHTML);
+        $("body").append(CFBetterSettingMenu_HTML);
 
         // 窗口初始化
         addDraggable($('#CFBetter_setting_menu'));
@@ -3350,6 +3519,12 @@ async function settingPanel() {
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#keywordAutoComplete").prop("checked", GM_getValue("keywordAutoComplete") === true);
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
+        $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
+        $("input[name='compiler']").css("color", "gray");
+        if (onlineCompilerChoice == "codechef") {
+            $("#codechef").show();
+        }
+        $('#codecheCsrfToken').val(GM_getValue("codecheCsrfToken"));
 
         // 翻译选择情况监听
         $("input[name='translation']").change(function () {
@@ -3361,6 +3536,16 @@ async function settingPanel() {
                 }
             } else {
                 $("#openai").hide();
+            }
+        });
+
+        // 在线编译器选择情况监听
+        $("input[name='compiler']").change(function () {
+            var selected = $(this).val(); // 获取当前选中的值
+            if (selected === "codechef") {
+                $("#codechef").show();
+            } else {
+                $("#codechef").hide();
             }
         });
 
@@ -3397,7 +3582,9 @@ async function settingPanel() {
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 keywordAutoComplete: $("#keywordAutoComplete").prop("checked"),
-                cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked")
+                cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
+                onlineCompilerChoice: $("input[name='compiler']:checked").val(),
+                codecheCsrfToken: $('#codecheCsrfToken').val(),
             };
 
             // 判断是否改变
@@ -3600,13 +3787,6 @@ turndownService.addRule('bordertable', {
         }
     }
 });
-
-// 随机数生成
-function getRandomNumber(numDigits) {
-    let min = Math.pow(10, numDigits - 1);
-    let max = Math.pow(10, numDigits) - 1;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 // 题目markdown转换/翻译面板
 function addButtonPanel(parent, suffix, type, is_simple = false) {
@@ -4863,8 +5043,9 @@ var extensionMap = {
     "20": "[^{}]*object\\s+(\\w+).*|$1.scala", "34": "program.js", "55": "program.js"
 };
 
-// 获取代码提交页的HTML元素
-async function CloneOriginalHTML(submitUrl) {
+
+// 更新代码提交页的HTML元素
+async function CloneOriginalHTML(submitUrl, cacheKey) {
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
             method: 'GET',
@@ -4873,14 +5054,31 @@ async function CloneOriginalHTML(submitUrl) {
             onload: function (response) {
                 const html = response.responseText;
                 const cloneHTML = $(html);
+                localStorage.setItem(cacheKey, html);
+                let csrf_token = cloneHTML.find('form.submit-form').attr('action');
+                $('#CFBetter_SubmitForm').attr('action', submitUrl + csrf_token); // 更新，防止为旧的csrf
                 resolve(cloneHTML);
-                reject('发生了未知错误');
             },
             onerror: function (response) {
                 reject('网络错误');
             }
         });
     });
+}
+
+// 获取代码提交页的HTML元素
+async function getSubmitHTML(submitUrl) {
+    const cacheKey = 'CFBetter_CloneOriginalHTML';
+    const cookieKey = 'CFBetter_CloneOriginalHTML_time';
+    if (getCookie(cookieKey) === '1') {
+        // 存在缓存
+        CloneOriginalHTML(submitUrl, cacheKey);
+        return $(localStorage.getItem(cacheKey));
+    } else {
+        // 没有缓存，更新
+        document.cookie = `${cookieKey}=1; path=/`;
+        return await CloneOriginalHTML(submitUrl, cacheKey);
+    }
 }
 
 // 代码自动保存
@@ -4952,13 +5150,12 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     // 表单
     var formDiv = $('<form method="post" id="CFBetter_SubmitForm"></form>');
     $('.ttypography').after(formDiv);
-    formDiv.attr('action', submitUrl + cloneHTML.find('form.submit-form').attr('action'));
+    let csrf_token = cloneHTML.find('form.submit-form').attr('action');
+    formDiv.attr('action', submitUrl + csrf_token);
 
     // 语言选择
     let selectLang = cloneHTML.find('select[name="programTypeId"]');
-    selectLang.css({
-        'margin': '10px 0px'
-    })
+    selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
     formDiv.append(selectLang);
 
     // 问题选择/编号
@@ -4989,7 +5186,7 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     formDiv.append(editorDiv);
     editor = ace.edit('CFBetter_editor');
     editor.$blockScrolling = Infinity;// 禁用滚动警告
-    editor.setTheme('ace/theme/chrome'); // 主题为'ace/theme/chrome'
+    editor.setTheme('ace/theme/textmate'); // 主题
     editor.setShowPrintMargin(false); // 不显示打印边距
     editor.setFontSize(16); // 字体大小为 16px
     if (keywordAutoComplete) {
@@ -5024,7 +5221,7 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     await codeStorage.connect(); // 连接数据库
     const nowUrl = window.location.href;
     const code = await codeStorage.getCode(nowUrl);
-    if (code){
+    if (code) {
         editor.setValue(code, 1); // 恢复代码
         $('#sourceCodeTextarea').val(code);
     }
@@ -5049,15 +5246,16 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
 
     // 调试/提交
     var submitDiv = $('<div id="CFBetter_submitDiv"></div>');
-    var CompilerArgsInput = $('<input type="text" id="CompilerArgsInput"></button>');
-    submitDiv.append(CompilerArgsInput);
+    var CompilerSetting = $('<div id="CompilerSetting"><input type="text" id="CompilerArgsInput"></div>');
+    submitDiv.append(CompilerSetting);
     var runBottom = $('<button class="CFBetter_SubmitButton" id="RunTestButton">样例测试</button>');
     submitDiv.append(runBottom);
-    var submitBottom = $('<input class="CFBetter_SubmitButton" type="submit" value="提交">');
+    var submitBottom = $('<input class="CFBetter_SubmitButton" id="SubmitButton" type="submit" value="提交">');
     submitDiv.append(submitBottom);
     formDiv.append(submitDiv);
 
     var from = {
+        csrf_token: csrf_token,
         formDiv: formDiv,
         selectLang: selectLang,
         sourceDiv: sourceDiv,
@@ -5072,24 +5270,15 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
 // 语言更改
 function changeAceLanguage(selectLang, editor) {
     let nowSelect = selectLang.val();
+    // 记忆更改
+    GM_setValue('compilerSelection', nowSelect);
+    // 编辑器
     var filePath = extensionMap[nowSelect];
     var modelist = ace.require("ace/ext/modelist");
     var mode = modelist.getModeForPath(filePath).mode;
     editor.session.setMode(mode);
-
     // 调试器
-    if (nowSelect in LanguageChoiceList) {
-        $('#RunTestButton').prop("disabled", false);
-        LanguageChoiceWrapper = LanguageChoiceList[nowSelect];
-    } else {
-        $('#RunTestButton').prop("disabled", true);
-    }
-    if (LanguageChoiceWrapper in CompilerArgsList) {
-        CompilerArgs = CompilerArgsList[LanguageChoiceWrapper];
-        $('#CompilerArgsInput').val(CompilerArgs);
-    } else {
-        $('#CompilerArgsInput').val("");
-    }
+    changeCompilerArgs(nowSelect);
 }
 
 // 自动补全器更新
@@ -5111,6 +5300,37 @@ function updateAutocomplete() {
         extraCompleters.push(langTools.snippetCompleter);
         editor.completers = extraCompleters;
     }
+}
+
+// 收集样例数据
+function collectTestData() {
+    var testData = {};
+
+    $('.input').each(function (index) {
+        var inputText = '';
+        if ($(this).find('pre').find('div').length > 0) {
+            $(this).find('pre').find('div').each(function () {
+                inputText += $(this).text() + '\n';
+            });
+        } else {
+            inputText = $(this).find('pre').text();
+        }
+        var outputText = '';
+        if ($('.output').eq(index).find('pre').find('div').length > 0) {
+            $('.output').eq(index).find('pre').find('div').each(function () {
+                inputText += $(this).text() + '\n';
+            });
+        } else {
+            outputText = $('.output').eq(index).find('pre').text();
+        }
+
+        testData[index + 1] = {
+            input: inputText.trim(),
+            output: outputText.trim()
+        };
+    });
+
+    return testData;
 }
 
 // 初始化自定义测试数据面板
@@ -5151,13 +5371,15 @@ function CustomTestInit() {
             var index = 0;
             $('.sampleDiv').each(function () {
                 var $sampleDiv = $(this);
-                var inputVal = $sampleDiv.find('.inputTextarea').val();
-                var outputVal = $sampleDiv.find('.outputTextarea').val();
+                var inputTextarea = $sampleDiv.find('.inputTextarea');
+                inputTextarea.attr('id', 'input' + index);
+                var outputTextarea = $sampleDiv.find('.outputTextarea');
+                outputTextarea.attr('id', 'output' + index);
 
                 var data = {
                     id: index,
-                    input: inputVal,
-                    output: outputVal
+                    input: inputTextarea.val(),
+                    output: outputTextarea.val()
                 };
 
                 objectStore.put(data);
@@ -5179,7 +5401,14 @@ function CustomTestInit() {
 
         // 恢复保存的内容
         function restoreText(db) {
-            var transaction = db.transaction(tableName, 'readonly');
+            var transaction;
+
+            // 数据检查，不存在该表则直接返回
+            var tableNames = Array.from(db.objectStoreNames);
+            if (tableNames.includes(tableName)) {
+                transaction = db.transaction(tableName, 'readonly');
+            } else { return; }
+
             var objectStore = transaction.objectStore(tableName);
             var getRequest = objectStore.getAll();
 
@@ -5188,8 +5417,8 @@ function CustomTestInit() {
                 if (data && data.length > 0) {
                     data.forEach(function (item, index) {
                         var sampleDiv = $('<div class="sampleDiv">');
-                        var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
-                        var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
+                        var inputTextarea = $(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
+                        var outputTextarea = $(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
                         var deleteCustomTest = $('<button class="deleteCustomTest">删除</button>');
 
                         inputTextarea.val(item.input);
@@ -5198,7 +5427,7 @@ function CustomTestInit() {
                         sampleDiv.append(deleteCustomTest);
                         sampleDiv.append(inputTextarea);
                         sampleDiv.append(outputTextarea);
-                        sampleDiv.attr('data-index', index);
+                        sampleDiv.attr('data-index', index)
                         $('#customTests').append(sampleDiv);
                     });
                 }
@@ -5242,6 +5471,471 @@ function getCustomTestData() {
     });
 }
 
+// codeforces编译器参数列表
+let officialLanguage = "";
+function officialCompilerArgsChange(nowSelect) {
+    officialLanguage = nowSelect;
+    $('#CompilerArgsInput').prop("disabled", true);
+}
+
+// codeforces编译器通信
+async function officialCompiler(csrf_token, code, input) {
+    var data = new FormData();
+    data.append('csrf_token', csrf_token);
+    data.append('source', code);
+    data.append('tabSize', '4');
+    data.append('programTypeId', officialLanguage);
+    data.append('input', input);
+    data.append('output', '');
+    data.append('communityCode', '');
+    data.append('action', 'submitSourceCode');
+    data.append('programTypeId', officialLanguage);
+    data.append('sourceCode', code);
+    var result = {
+        Errors: '',
+        Result: '',
+        Stats: ''
+    };
+
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: 'https://codeforces.com/data/customtest',
+            data: data,
+            headers: {
+                'X-Csrf-Token': csrf_token
+            },
+            onload: function (responseDetails) {
+                if (responseDetails.status !== 200 || !responseDetails.response) {
+                    result.Errors = `提交代码到 codeforces 服务器时发生了错误，请重试 ${findHelpText}`;
+                    resolve(result);
+                } else {
+                    try {
+                        const response = JSON.parse(responseDetails.response);
+                        resolve(response.customTestSubmitId);
+                    } catch (error) {
+                        result.Errors = `解析响应数据 customTestSubmitId 时发生了错误，请重试 ${findHelpText}`;
+                        resolve(result);
+                    }
+                }
+            },
+            onerror: function () {
+                result.Errors = '请求 customTestSubmitId 时网络错误';
+                resolve(result);
+            }
+        });
+    }).then(customTestSubmitId => {
+        if (result.Errors !== '') return result; // 产生了错误，直接返回
+        return new Promise((resolve, reject) => {
+            let retryCount = 0;
+            var newdata = new FormData();
+            newdata.append('csrf_token', csrf_token);
+            newdata.append('action', 'getVerdict');
+            newdata.append('customTestSubmitId', customTestSubmitId);
+            function makeRequest() {
+                GM_xmlhttpRequest({
+                    method: 'POST',
+                    url: hostAddress + '/data/customtest',
+                    data: newdata,
+                    headers: {
+                        'X-Csrf-Token': csrf_token
+                    },
+                    onload: function (responseDetails) {
+                        if (responseDetails.status !== 200 || !responseDetails.response) {
+                            result.Errors = `请求运行结果时发生了错误，请重试 ${findHelpText}`;
+                            resolve(result);
+                        } else {
+                            try {
+                                const response = JSON.parse(responseDetails.response);
+                                if (!response.stat && retryCount < 10) {
+                                    retryCount++;
+                                    setTimeout(makeRequest, 1000);
+                                } else if (retryCount >= 5) {
+                                    result.Errors = `结果获取已超时，请重试 ${findHelpText}`;
+                                    resolve(result);
+                                } else {
+                                    const result = {
+                                        Errors: response.verdict == "OK" ? null : response.verdict + '<br>' + response.output,
+                                        Result: response.output.replace(/\r\n/g, "\n"),
+                                        Stats: `Status: ${response.stat}`
+                                    };
+                                    resolve(result);
+                                }
+                            } catch (error) {
+                                result.Errors = '请求运行结果时响应数据解析错误';
+                                resolve(result);
+                            }
+                        }
+                    },
+                    onerror: function () {
+                        result.Errors = '请求运行结果时网络错误';
+                        resolve(result);
+                    }
+                });
+            }
+
+            makeRequest();
+        });
+    });
+}
+
+// rextester编译器参数列表
+let rextesterLanguage = "", rextesterCompilerArgs = "";
+function rextesterCompilerArgsChange(nowSelect) {
+    let LanguageChoiceList = {
+        "4": "9", "6": "8", "7": "5", "9": "1", "13": "13", "19": "42", "20": "21", "28": "30", "31": "24", "32": "20",
+        "34": "17", "36": "4", "43": "6", "45": "7", "46": "4", "50": "7", "51": "9", "52": "27", "54": "7", "55": "23", "60": "4",
+        "61": "7", "65": "1", "67": "12", "70": "5", "73": "7", "74": "4", "75": "46", "77": "43", "79": "1", "80": "27", "83": "43", "87": "4"
+    }
+    let CompilerArgsList = {
+        "6": "-Wall -std=gnu99 -O2 -o a.out source_file.c",
+        "7": "-Wall -std=c++14 -O2 -o a.out source_file.cpp",
+        "20": "-o a.out source_file.go",
+        "27": "-Wall -std=c++14 -stdlib=libc++ -O2 -o a.out source_file.cpp",
+        "30": "source_file.d -ofa.out"
+    }
+    if (nowSelect in LanguageChoiceList) {
+        $('#RunTestButton').prop("disabled", false);
+        rextesterLanguage = LanguageChoiceList[nowSelect];
+    } else {
+        $('#RunTestButton').prop("disabled", true);
+    }
+    if (rextesterLanguage in CompilerArgsList) {
+        rextesterCompilerArgs = CompilerArgsList[rextesterLanguage];
+        $('#CompilerArgsInput').val(rextesterCompilerArgs);
+    } else {
+        $('#CompilerArgsInput').val("");
+    }
+}
+
+// rextester编译器通信
+async function rextesterCompiler(code, input) {
+    var data = new FormData();
+    data.append('LanguageChoiceWrapper', rextesterLanguage);
+    data.append('EditorChoiceWrapper', '1');
+    data.append('LayoutChoiceWrapper', '1');
+    data.append('Program', code);
+    data.append('CompilerArgs', rextesterCompilerArgs);
+    data.append('Input', input);
+    data.append('ShowWarnings', 'false');
+    data.append('IsInEditMode', 'false');
+    data.append('IsLive', 'false');
+    var result = {
+        Errors: '',
+        Result: '',
+        Stats: ''
+    };
+
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: 'https://rextester.com/rundotnet/Run',
+            data: data,
+            onload: function (responseDetails) {
+                if (responseDetails.status !== 200 || !responseDetails.response) {
+                    result.Errors = `发生了未知的错误，请重试 ${findHelpText}`;
+                    resolve(result);
+                } else {
+                    try {
+                        const response = JSON.parse(responseDetails.response);
+                        result.Errors = response.Errors;
+                        result.Result = response.Result;
+                        result.Stats = response.Stats;
+                        resolve(result);
+                    } catch (error) {
+                        result.Errors = '响应数据解析错误';
+                        resolve(result);
+                    }
+                }
+            },
+            onerror: function () {
+                result.Errors = '网络错误';
+                resolve(result);
+            }
+        });
+    });
+}
+
+// codechef编译器参数列表
+let codechefLanguage = "";
+function codechefCompilerArgsChange(nowSelect) {
+    let LanguageChoiceList = {
+        "6": "29", "9": "27", "32": "114", "34": "56", "36": "10", "41": "109", "43": "44", "50": "44",
+        "52": "63", "54": "63", "60": "10", "61": "63", "65": "27", "70": "109", "73": "63", "74": "10", "75": "93", "77": "47",
+        "79": "27", "80": "63", "83": "47", "87": "10"
+    }
+    if (nowSelect in LanguageChoiceList) {
+        $('#RunTestButton').prop("disabled", false);
+        codechefLanguage = LanguageChoiceList[nowSelect];
+    } else {
+        $('#RunTestButton').prop("disabled", true);
+    }
+    $('#CompilerArgsInput').prop('disabled', true);
+}
+
+// codechef编译器通信
+async function codechefCompiler(code, input) {
+    const data = new URLSearchParams();
+    data.append('sourceCode', code);
+    data.append('language', codechefLanguage);
+    data.append('input', input);
+    var result = {
+        Errors: '',
+        Result: '',
+        Stats: ''
+    };
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: 'https://www.codechef.com/api/ide/run/all',
+            data: data.toString(),
+            headers: {
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'X-Csrf-Token': codecheCsrfToken
+            },
+            onload: function (responseDetails) {
+                if (responseDetails.status !== 200 || !responseDetails.response) {
+                    result.Errors = `提交代码到 codechef 服务器时发生了错误，请重试 ${findHelpText}`;
+                    resolve(result);
+                } else {
+                    try {
+                        const response = JSON.parse(responseDetails.response);
+                        resolve(response.timestamp);
+                    } catch (error) {
+                        result.Errors = `解析响应数据 timestamp 时发生了错误，请重试 ${findHelpText}`;
+                        resolve(result);
+                    }
+                }
+            },
+            onerror: function () {
+                result.Errors = '请求 timestamp 时网络错误';
+                resolve(result);
+            }
+        });
+    }).then(timestamp => {
+        if (result.Errors !== '') return result; // 产生了错误，直接返回
+        return new Promise((resolve, reject) => {
+            let retryCount = 0;
+
+            function makeRequest() {
+                GM_xmlhttpRequest({
+                    method: 'GET',
+                    url: `https://www.codechef.com/api/ide/run/all?timestamp=${timestamp}`,
+                    headers: {
+                        'Accept': 'application/json, text/javascript, */*; q=0.01',
+                        'X-Csrf-Token': codecheCsrfToken
+                    },
+                    onload: function (responseDetails) {
+                        if (responseDetails.status !== 200 || !responseDetails.response) {
+                            result.Errors = `请求运行结果时发生了错误，请重试 ${findHelpText}`;
+                            resolve(result);
+                        } else {
+                            try {
+                                const response = JSON.parse(responseDetails.response);
+                                if (response.result === 0 && retryCount < 5) {
+                                    retryCount++;
+                                    setTimeout(makeRequest, 500);
+                                } else if (retryCount >= 5) {
+                                    result.Errors = `结果获取已超时，请重试 ${findHelpText}`;
+                                    resolve(result);
+                                } else {
+                                    const result = {
+                                        Errors: response.stderr == "" ? null : response.stderr,
+                                        Result: response.output,
+                                        Stats: `Status: ${response.status} Time: ${response.time} Mem: ${response.memory} kB`
+                                    };
+                                    resolve(result);
+                                }
+                            } catch (error) {
+                                result.Errors = '请求运行结果时响应数据解析错误';
+                                resolve(result);
+                            }
+                        }
+                    },
+                    onerror: function () {
+                        result.Errors = '请求运行结果时网络错误';
+                        resolve(result);
+                    }
+                });
+            }
+
+            makeRequest();
+        });
+    });
+}
+
+// wandbox编译器参数列表
+let wandboxLanguage = "";
+var wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
+function wandboxCompilerArgsChange(nowSelect) {
+    let LanguageChoiceList = {
+        "6": "PHP", "7": "Python", "9": "C#", "12": "Haskell", "13": "Perl", "19": "OCaml",
+        "20": "Scala", "28": "D", "31": "Python", "32": "Go", "34": "JavaScript", "36": "Java", "40": "Python", "41": "Python",
+        "43": "C++", "50": "C++", "51": "Pascal", "52": "C++", "54": "C++", "60": "Java", "61": "C++", "65": "C#", "67": "Ruby",
+        "70": "Python", "73": "C++", "74": "Java", "75": "Rust", "79": "C#", "80": "C++", "87": "Java"
+    }
+    if (nowSelect in LanguageChoiceList) {
+        $('#RunTestButton').prop("disabled", false);
+        const Languagefiltered = wandboxlist.filter(obj => obj.language === LanguageChoiceList[nowSelect]);
+
+        // 创建编辑器下拉框
+        var CompilerChange = $('<select id="CompilerChange" style="width: 100%;"></select>');
+        $('#CompilerSetting').append(CompilerChange);
+        for (let i = 0; i < Languagefiltered.length; i++) {
+            let Compiler = Languagefiltered[i];
+            let op = $("<option></option>")
+                .val(Compiler.name)
+                .text(Compiler["display-name"] + " " + Compiler.version);
+            $("#CompilerChange").append(op);
+        }
+
+        // 编辑器参数刷新
+        function refreshCompilerArgs() {
+            var flags = '';
+            $("#CompilerBox").find("*").each(function () {
+                if ($(this).is("input[type='checkbox']")) {
+                    let flag = $(this).prop("checked") ? $(this).val() : '';
+                    flags += flag + (flag ? ' ' : '');
+                } else if ($(this).is("select") || $(this).is("input")) {
+                    let flag = $(this).val();
+                    flags += flag + (flag ? ' ' : '');
+                }
+            });
+            $("#CompilerArgsInput").val(flags);
+        }
+
+        // 编辑器切换监听
+        CompilerChange.change(function () {
+            let selectedName = $(this).val();
+            let Compiler = Languagefiltered.find(
+                (obj) => obj.name === selectedName
+            );
+
+            $("#CompilerBox").remove();
+            let div = $("<div id='CompilerBox'></div>");
+
+            $("#CompilerArgsInput").val(); // 初始化编译器输入框
+
+            let display_compile_command = $(`<input id='${Compiler.name}' value='${Compiler['display-compile-command']}' style="display:none;"}></input>`);
+            div.append(display_compile_command);
+
+            let switches = Compiler.switches;
+            for (let i = 0; i < switches.length; i++) {
+                let switche = switches[i];
+
+                if (switche.type == "single") {
+                    let single = $(`
+                    <div>
+                        <input type='checkbox' id='${switche.name}' value='${switche['display-flags']}' ${switche.default ? 'checked' : ''}></input>
+                        <label for='${switche.name}'>${switche['display-name']}</label>
+                    </div>
+                    `);
+                    div.append(single);
+                    single.find("input").change(function () {
+                        refreshCompilerArgs();
+                    });
+                } else if (switche.type == "select") {
+                    let select = $(`<select id='${switche.name}'></select>`);
+                    select.data('previousValue', switche.options[0]['display-flags']);
+                    div.append(select);
+                    for (let i = 0; i < switche.options.length; i++) {
+                        let option = switche.options[i];
+                        let op = $("<option></option>")
+                            .val(option['display-flags'])
+                            .text(option['display-name']);
+                        select.append(op);
+                    }
+                    select.change(function () {
+                        refreshCompilerArgs();
+                    });
+                }
+            }
+
+            $("#CompilerSetting").append(div);
+
+            refreshCompilerArgs();  // 初始化
+        });
+
+        CompilerChange.trigger("change"); // 初始化
+    } else {
+        $('#RunTestButton').prop("disabled", true);
+    }
+}
+
+// wandbox编译器通信
+async function wandboxCompiler(code, input) {
+    var data = {
+        code: code,
+        codes: [],
+        compiler: $('#CompilerChange').val(),
+        'compiler-option-raw': '',
+        'runtime-option-raw': '',
+        options: $("#CompilerArgsInput").val(),
+        description: '',
+        stdin: input,
+        title: ''
+    }
+    var result = {
+        Errors: '',
+        Result: '',
+        Stats: ''
+    };
+
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: 'https://wandbox.org/api/compile.json',
+            data: JSON.stringify(data),
+            onload: function (responseDetails) {
+                if (responseDetails.status !== 200 || !responseDetails.response) {
+                    result.Errors = `发生了未知的错误，请重试 ${findHelpText}`;
+                    resolve(result);
+                } else {
+                    try {
+                        const response = JSON.parse(responseDetails.response);
+                        result.Errors = response.compiler_error;
+                        result.Result = response.program_output;
+                        result.Stats = response.status == "0" ? "OK" : "Error";
+                        resolve(result);
+                    } catch (error) {
+                        result.Errors = '响应数据解析错误';
+                        resolve(result);
+                    }
+                }
+            },
+            onerror: function () {
+                result.Errors = '网络错误';
+                resolve(result);
+            }
+        });
+    });
+}
+
+function changeCompilerArgs(nowSelect) {
+    if (onlineCompilerChoice == "official") {
+        officialCompilerArgsChange(nowSelect);
+    } else if (onlineCompilerChoice == "rextester") {
+        rextesterCompilerArgsChange(nowSelect);
+    } else if (onlineCompilerChoice == "codechef") {
+        codechefCompilerArgsChange(nowSelect);
+    } else if (onlineCompilerChoice == "wandbox") {
+        wandboxCompilerArgsChange(nowSelect);
+    }
+}
+
+async function onlineCompilerConnect(csrf_token, code, input) {
+    if (onlineCompilerChoice == "official") {
+        return await officialCompiler(csrf_token, code, input);
+    } else if (onlineCompilerChoice == "rextester") {
+        return await rextesterCompiler(code, input);
+    } else if (onlineCompilerChoice == "codechef") {
+        return await codechefCompiler(code, input);
+    } else if (onlineCompilerChoice == "wandbox") {
+        return await wandboxCompiler(code, input);
+    }
+}
+
 // 差异对比
 function codeDiff(expectedText, actualText) {
     // 将文本按行拆分
@@ -5253,11 +5947,15 @@ function codeDiff(expectedText, actualText) {
         var expectedLine = expectedLines[i];
         var actualLine = actualLines[i];
 
-        if (expectedLine === actualLine) {
-            output += '<span>' + actualLine + '</span>';
-        } else {
-            output += '<span class="removed">' + actualLine + '</span>';
+        if (actualLine == undefined) {
             output += '<span class="added">' + expectedLine + '</span>';
+        } else {
+            if (expectedLine === actualLine) {
+                output += '<span>' + actualLine + '</span>';
+            } else {
+                output += '<span class="removed">' + actualLine + '</span>';
+                output += '<span class="added">' + expectedLine + '</span>';
+            }
         }
     }
 
@@ -5269,87 +5967,8 @@ function codeDiff(expectedText, actualText) {
     return output;
 }
 
-// 调试器参数列表
-let LanguageChoiceWrapper = "", CompilerArgs = "";
-let LanguageChoiceList = {
-    "4": "9", "6": "8", "7": "5", "9": "1", "13": "13", "19": "42", "20": "21", "28": "30", "31": "24", "32": "20",
-    "34": "17", "36": "4", "40": "5", "41": "5", "43": "6", "45": "7", "46": "4", "50": "7", "51": "9", "52": "27", "54": "7", "55": "23", "60": "4",
-    "61": "7", "65": "1", "67": "12", "70": "5", "73": "7", "74": "4", "75": "46", "77": "43", "79": "1", "80": "27", "83": "43", "87": "4"
-}
-let CompilerArgsList = {
-    "6": "-Wall -std=gnu99 -O2 -o a.out source_file.c",
-    "7": "-Wall -std=c++14 -O2 -o a.out source_file.cpp",
-    "20": "-o a.out source_file.go",
-    "27": "-Wall -std=c++14 -stdlib=libc++ -O2 -o a.out source_file.cpp",
-    "30": "source_file.d -ofa.out"
-}
-
-// 编译器api通信
-async function onlineCompilerConnect(code, input) {
-    var data = new FormData();
-    data.append('LanguageChoiceWrapper', LanguageChoiceWrapper);
-    data.append('EditorChoiceWrapper', '1');
-    data.append('LayoutChoiceWrapper', '1');
-    data.append('Program', code);
-    data.append('CompilerArgs', CompilerArgs);
-    data.append('Input', input);
-    data.append('ShowWarnings', 'false');
-    data.append('IsInEditMode', 'false');
-    data.append('IsLive', 'false');
-
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: 'POST',
-            url: 'https://rextester.com/rundotnet/Run',
-            data: data,
-            onload: function (responseDetails) {
-                if (!responseDetails.response) {
-                    reject("发生了未知的错误，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 \n\n响应报文：" + JSON.stringify(responseDetails));
-                } else {
-                    const response = JSON.parse(responseDetails.response);
-                    resolve(response);
-                }
-            },
-            onerror: function () {
-                reject('网络错误');
-            }
-        });
-    });
-}
-
-// 收集样例数据
-function collectTestData() {
-    var testData = {};
-
-    $('.input').each(function (index) {
-        var inputText = '';
-        if ($(this).find('pre').find('div').length > 0) {
-            $(this).find('pre').find('div').each(function () {
-                inputText += $(this).text() + '\n';
-            });
-        } else {
-            inputText = $(this).find('pre').text();
-        }
-        var outputText = '';
-        if ($('.output').eq(index).find('pre').find('div').length > 0) {
-            $('.output').eq(index).find('pre').find('div').each(function () {
-                inputText += $(this).text() + '\n';
-            });
-        } else {
-            outputText = $('.output').eq(index).find('pre').text();
-        }
-
-        testData[index + 1] = {
-            input: inputText.trim(),
-            output: outputText.trim()
-        };
-    });
-
-    return testData;
-}
-
 // 样例测试函数
-async function runCode(event, sourceDiv, submitDiv) {
+async function runCode(event, sourceDiv, submitDiv, csrf_token) {
     event.preventDefault();
     const loadingImage = $('<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">');
     $('#RunTestButton').after(loadingImage);
@@ -5360,7 +5979,7 @@ async function runCode(event, sourceDiv, submitDiv) {
     submitDiv.after(statePanel);
 
     // 更新状态
-    CompilerArgs = $('#CompilerArgsInput').val();
+    rextesterCompilerArgs = $('#CompilerArgsInput').val();
 
     // 获取数据
     const testData = collectTestData();
@@ -5369,12 +5988,30 @@ async function runCode(event, sourceDiv, submitDiv) {
     // 测试
     const handleResult = (prefix, data, item, result) => {
         if (result.Errors) {
-            statePanel.append($(`<div style="color:red;margin-top:10px;">${prefix}${item} 编译错误或超时</div>`));
-            statePanel.append($(`<div style="color:red;">错误： ${result.Errors}</div>`));
+            statePanel.append($(`<div class="RunState_title error">${prefix}${item} 编译错误或超时</div>`));
+            if (onlineCompilerChoice == "wandbox") {
+                // 需要渲染终端转义序列
+                GM_addStyle(GM_getResourceText("xtermcss"));
+                let terminalContainer = $(`<div id="terminal-container"></div>`);
+                statePanel.append(terminalContainer);
+                const term = new Terminal({
+                    rows: 10,
+                    cols: 30
+                });
+                term.setOption('theme', {
+                    background: '#fff',
+                    foreground: '#000'
+                });
+                term.setOption('convertEol', true); // 将\n转换为\r\n
+                term.write(result.Errors);
+                term.open(terminalContainer.get(0));
+            } else {
+                statePanel.append($(`<div style="color:red;">错误： ${result.Errors}</div>`));
+            }
         } else if (result.Result.trim() === data.output.trim()) {
-            statePanel.append($(`<div style="color:green;margin-top:10px;">${prefix}${item} 通过</div>`));
+            statePanel.append($(`<div class="RunState_title ok">${prefix}${item} 通过</div>`));
         } else {
-            statePanel.append($(`<div style="color:red;margin-top:10px;">${prefix}${item} 未通过</div>`));
+            statePanel.append($(`<div class="RunState_title error">${prefix}${item} 未通过</div>`));
             statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>`));
         }
         statePanel.append($(`<div style="color:${result.Errors ? 'red' : '#1565C0'};">状态： ${result.Stats}</div>`));
@@ -5383,43 +6020,43 @@ async function runCode(event, sourceDiv, submitDiv) {
     // 遍历数据并测试
     for (const [item, data] of Object.entries(customtestData)) {
         await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
-        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
+        const result = await onlineCompilerConnect(csrf_token, sourceDiv.val(), data.input);
         handleResult('自定义样例', data, item, result);
     }
     for (const [item, data] of Object.entries(testData)) {
         await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
-        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
+        const result = await onlineCompilerConnect(csrf_token, sourceDiv.val(), data.input);
         handleResult('题目样例', data, item, result);
     }
 
     loadingImage.remove();
 }
 
-async function CodeCommit() {
-    if (getCookie('X-User-Sha1') === '') return; // 未登录
+async function addProblemPageCodeEditor() {
+    if (typeof ace === 'undefined') return; // 未登录，不存在ace库
 
     const href = window.location.href;
     let submitUrl = /\/problemset\//.test(href) ? hostAddress + '/problemset/submit' :
         href.replace(/\/problem[A-Za-z\/#]*/, "/submit");
-    let cloneHTML = await CloneOriginalHTML(submitUrl)
+    let cloneHTML = await getSubmitHTML(submitUrl)
 
     // 创建
     let from = await CreateCodeDevFrom(submitUrl, cloneHTML);
+    let csrf_token = from.csrf_token.match(/(?<=\?csrf_token=)[^&]+/)?.[0];
     let editor = from.editor;
     let selectLang = from.selectLang;
     let submitBottom = from.submitBottom;
-    let submitDiv = from.submitDiv;
     let runBottom = from.runBottom;
 
     CustomTestInit(); // 初始化自定义测试数据面板
     selectLang.on('change', () => changeAceLanguage(from.selectLang, from.editor)); // 编辑器语言切换监听
     editor.getSession().on("changeMode", updateAutocomplete); // 切换语言监听，更新自动补全
-    runBottom.on('click', (event) => runCode(event, from.sourceDiv, from.submitDiv)); // 样例测试按钮点击事件
+    runBottom.on('click', (event) => runCode(event, from.sourceDiv, from.submitDiv, csrf_token)); // 样例测试按钮点击事件
 
     // 提交
     submitBottom.on('click', function (event) {
         event.preventDefault();
-        submitDiv.append(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
+        submitBottom.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
         $('#CFBetter_SubmitForm').submit();
     });
 
@@ -5455,7 +6092,7 @@ function showWordsExceededDialog(button, textLength, realTextLength) {
           <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
 
           <div style="display:flex; padding:5px 0px; align-items: center;">
-            `+ helpCircleHTML + `
+            ${helpCircleHTML}
             <p>
             注意，可能您选择了错误的翻译按钮<br>
             由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
@@ -6116,10 +6753,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 Promise.resolve()
                     .then(() => {
-                        if (showLoading && is_problem) newElement.html('Codeforces Better! —— 正在添加代码编辑器……');
-                        return delay(100).then(() => { if (is_problem && problemPageCodeEditor) CodeCommit() });
-                    })
-                    .then(() => {
                         if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
                         return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
                     })
@@ -6148,6 +6781,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
                         await delay(100);
                         if (standingsRecolor && is_cfStandings) await recolorStandings();
+                    })
+                    .then(async () => {
+                        if (showLoading && is_problem) newElement.html('Codeforces Better! —— 正在添加代码编辑器……');
+                        await delay(100);
+                        if (is_problem && problemPageCodeEditor) await addProblemPageCodeEditor();
                     })
                     .then(async () => {
                         await delay(100);
