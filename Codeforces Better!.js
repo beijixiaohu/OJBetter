@@ -5355,7 +5355,7 @@ function CustomTestInit() {
             var sampleDiv = $('<div class="sampleDiv">');
             var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
             var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
-            var deleteCustomTest = $('<button class="deleteCustomTest">删除</button>');
+            var deleteCustomTest = $('<button type="button" class="deleteCustomTest">X</button>');
             sampleDiv.append(deleteCustomTest);
             sampleDiv.append(inputTextarea);
             sampleDiv.append(outputTextarea);
@@ -5392,11 +5392,11 @@ function CustomTestInit() {
         // 删除
         $(document).on('click', '.deleteCustomTest', function () {
             var $sampleDiv = $(this).closest('.sampleDiv');
-            $sampleDiv.remove();
             var transaction = db.transaction(tableName, 'readwrite');
             var objectStore = transaction.objectStore(tableName);
             var index = parseInt($sampleDiv.attr('data-index'));
-            if (index !== undefined) objectStore.delete(index);
+            if (!isNaN(index)) objectStore.delete(index);
+            $sampleDiv.remove();
         });
 
         // 恢复保存的内容
@@ -5419,7 +5419,7 @@ function CustomTestInit() {
                         var sampleDiv = $('<div class="sampleDiv">');
                         var inputTextarea = $(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
                         var outputTextarea = $(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
-                        var deleteCustomTest = $('<button class="deleteCustomTest">删除</button>');
+                        var deleteCustomTest = $('<button type="button" class="deleteCustomTest">X</button>');
 
                         inputTextarea.val(item.input);
                         outputTextarea.val(item.output);
