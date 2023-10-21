@@ -36,6 +36,7 @@
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
 // @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/code_completer-0.0.11.min.js
 // @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
+// @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
 // @license      MIT
@@ -186,22 +187,15 @@ const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" versio
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 100; }`;
 const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
 
-// 报错信息捕获
-/*let errorMessages = "";
-const defaultError = console.error.bind(console);
-console.error = (message) => {
-    const error = new Error();
-    const stack = error.stack.split("\n").slice(2).join("\n");
-    const now = new Date().toLocaleString();
-    errorMessages += "\n## " + message + "\n### time: " + now +"\n" + stack + "\n";
-    defaultError(message);
-};
-window.onerror = (message, source, lineno, colno, error) => {
-    const now = new Date().toLocaleString();
-    errorMessages += "\n## " + message + "\n### time: " + now +"\n" + error.stack + "\n";
-    defaultError(message);
-    return true;
-};*/
+// 连接数据库
+var CFBetterDB;
+function initDB() {
+    CFBetterDB = new Dexie('CFBetterDB');
+    CFBetterDB.version(1).stores({
+        samplesData: `&url`,
+        editorCode: `&url`
+    });
+}
 
 // 切换系统黑暗监听
 const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
@@ -1530,6 +1524,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     border: 1px solid rgb(170, 170, 170);
     width: 100% !important;
     display: block;
+    resize: vertical;
 }
 #CFBetter_submitDiv{
     display: flex;
@@ -1550,17 +1545,16 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background-color: #fff;
     border-color: #ccc;
 }
+#RunTestButton:hover {
+    background-color: #f5f5f5;
+}
 #SubmitButton {
     color: #fff;
-    background-color: #5cb85c;
-    border-color: #43A047;
+    background-color: #209978;
+    border-color: #17795E;
 }
-#drag-handle {
-    height: 4px;
-    background-color: #EEEEEE;
-    cursor: ns-resize;
-    border-top: 1px solid #9E9E9E;
-    border-bottom: 1px solid #9E9E9E;
+#SubmitButton:hover {
+    background-color: #17795e;
 }
 #programTypeId{
     padding: 5px 10px;
@@ -1629,7 +1623,6 @@ input#CompilerArgsInput[disabled] {
 }
 /* 自定义样例 */
 #customTestBlock {
-    padding: 10px;
     margin-top: 10px;
     color: #616161;
     border: 1px solid #bcaaa4;
@@ -1637,11 +1630,25 @@ input#CompilerArgsInput[disabled] {
     position: relative;
 }
 
+#customTestBlock #customTests{
+    border-top: 1px solid #bcaaa4;
+    margin: 0px 0px 40px 0px;
+}
+
+#customTestBlock summary {
+    cursor: pointer;
+    padding: 10px;
+}
+
+#customTestBlock textarea {
+    resize: vertical;
+}
+
 .sampleDiv {
     color: #727378;
     background-color: #FAFAFA;
     padding: 5px;
-    margin: 30px 0px;
+    margin-bottom: 10px;
     box-shadow: inset 0 0 1px #0000004d;
     position: relative;
 }
@@ -1658,10 +1665,18 @@ input#CompilerArgsInput[disabled] {
     position: absolute;
     top: 5px;
     right: 5px;
-    color: #EF5350;
+    display: flex;
+    fill: #9E9E9E;
+    padding: 2px 2px;
     border-radius: 4px;
+    border: 1px solid #ffffff00;
+    background-color: #ffffff00;
+    align-items: center;
+}
+
+.deleteCustomTest:hover {
+    fill: #EF5350;
     border: 1px solid #ef9a9a;
-    padding: 2px 6px;
     background-color: #FFEBEE;
 }
 
@@ -1675,6 +1690,9 @@ input#CompilerArgsInput[disabled] {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #FAFAFA;
+}
+#addCustomTest:hover {
+    background-color: #f5f5f5;
 }
 /* 差异对比 */
 .outputDiff {
@@ -1950,6 +1968,7 @@ function toZH_CN() {
         { match: 'Trainings', replace: '训练' },
         { match: 'Prepared by', replace: '编写人' },
         { match: 'Current or upcoming contests', replace: '当前或即将举行的比赛' },
+        { match: 'Rating: users participated in recent 6 months', replace: '评级：最近 6 个月有参与的用户' },
         { match: 'Past contests', replace: '过去的比赛' },
         { match: 'Exclusions', replace: '排除' },
         { match: 'Before start', replace: '距比赛开始还有' },
@@ -2055,6 +2074,8 @@ function toZH_CN() {
         { match: 'Teams', replace: '队伍' },
         { match: 'Submissions', replace: '提交记录' },
         { match: 'Groups', replace: '团体' },
+        { match: 'Rating', replace: '评级' },
+        { match: 'Friends rating', replace: '朋友的评级' },
         { match: 'Favourites', replace: '收藏' },
         { match: 'Contests', replace: '比赛' },
         { match: 'Members', replace: '成员' },
@@ -5082,66 +5103,21 @@ async function getSubmitHTML(submitUrl) {
 }
 
 // 代码自动保存
-class CodeStorage {
-    constructor(databaseName) {
-        this.databaseName = databaseName;
-        this.db = null;
+async function saveCode(url, code) {
+    try {
+        await CFBetterDB.editorCode.put({ url, code });
+        return 'Code saved successfully';
+    } catch (error) {
+        throw new Error('Failed to save code');
     }
+}
 
-    async connect() {
-        return new Promise((resolve, reject) => {
-            const request = window.indexedDB.open(this.databaseName);
-
-            request.onerror = function () {
-                reject('Failed to open the database');
-            };
-
-            request.onsuccess = (event) => {
-                this.db = event.target.result;
-                resolve();
-            };
-
-            request.onupgradeneeded = (event) => {
-                this.db = event.target.result;
-                const objectStore = this.db.createObjectStore('codes', { keyPath: 'url' });
-                objectStore.createIndex('url', 'url', { unique: true });
-            };
-        });
-    }
-
-    async saveCode(url, code) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(['codes'], 'readwrite');
-            const objectStore = transaction.objectStore('codes');
-
-            const data = { url, code };
-            const request = objectStore.put(data);
-
-            request.onerror = function () {
-                reject('Failed to save code');
-            };
-
-            request.onsuccess = function () {
-                resolve('Code saved successfully');
-            };
-        });
-    }
-
-    async getCode(url) {
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(['codes'], 'readonly');
-            const objectStore = transaction.objectStore('codes');
-
-            const request = objectStore.get(url);
-
-            request.onerror = function () {
-                reject('Failed to get code');
-            };
-
-            request.onsuccess = function () {
-                resolve(request.result ? request.result.code : null);
-            };
-        });
+async function getCode(url) {
+    try {
+        const result = await CFBetterDB.editorCode.get(url);
+        return result ? result.code : null;
+    } catch (error) {
+        throw new Error('Failed to get code');
     }
 }
 
@@ -5182,7 +5158,7 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     formDiv.append(sourceDiv);
 
     // 代码编辑器
-    var editorDiv = $('<div id="CFBetter_editor" style="height:600px"></div><div id="drag-handle"></div>');
+    var editorDiv = $('<div id="CFBetter_editor" style="height:600px"></div>');
     formDiv.append(editorDiv);
     editor = ace.edit('CFBetter_editor');
     editor.$blockScrolling = Infinity;// 禁用滚动警告
@@ -5197,30 +5173,9 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
         });
     }
 
-    // 可拖拽调整高度
-    $('#drag-handle').on('mousedown', function (e) {
-        e.preventDefault();
-        var startY = e.pageY;
-        var startHeight = $('#CFBetter_editor').outerHeight();
-        var minHeight = 400; // 最小高度
-        $(document).on('mousemove', function (e) {
-            var currentY = e.pageY;
-            var newHeight = startHeight + (currentY - startY);
-            if (newHeight < minHeight) {
-                newHeight = minHeight;
-            }
-            $('#CFBetter_editor').css('height', newHeight);
-        });
-    });
-    $(document).on('mouseup', function () {
-        $(document).off('mousemove');
-    });
-
     // 代码同步与保存
-    const codeStorage = new CodeStorage('editorCodeDataDB');
-    await codeStorage.connect(); // 连接数据库
     const nowUrl = window.location.href;
-    const code = await codeStorage.getCode(nowUrl);
+    const code = await getCode(nowUrl);
     if (code) {
         editor.setValue(code, 1); // 恢复代码
         $('#sourceCodeTextarea').val(code);
@@ -5229,7 +5184,7 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     editor.getSession().on('change', async function () {
         const code = editor.getValue();
         $('#sourceCodeTextarea').val(code); // 将ace editor的内容同步到sourceCodeTextarea
-        await codeStorage.saveCode(nowUrl, code);
+        await saveCode(nowUrl, code);
     });
 
     // 自定义调试
@@ -5335,139 +5290,116 @@ function collectTestData() {
 
 // 初始化自定义测试数据面板
 function CustomTestInit() {
-    const tableName = window.location.href;
+    const url = window.location.href;
 
-    // 打开或创建数据库
-    var request = indexedDB.open('samplesDataDB', 1);
-    request.onupgradeneeded = function (event) {
-        var db = event.target.result;
-        if (!db.objectStoreNames.contains(tableName)) {
-            db.createObjectStore(tableName, { keyPath: 'id' }); // 创建表
-        }
-    };
+    restoreText();
 
-    request.onsuccess = function (event) {
-        var db = event.target.result;
-        restoreText(db);
+    // 添加
+    $('#addCustomTest').click(function () {
+        var sampleDiv = $('<div class="sampleDiv">');
+        var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
+        var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
+        var deleteCustomTest = $(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
+        sampleDiv.append(deleteCustomTest);
+        sampleDiv.append(inputTextarea);
+        sampleDiv.append(outputTextarea);
+        $('#customTests').append(sampleDiv);
+    });
 
-        // 添加
-        $('#addCustomTest').click(function () {
-            var sampleDiv = $('<div class="sampleDiv">');
-            var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
-            var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
-            var deleteCustomTest = $('<button type="button" class="deleteCustomTest">X</button>');
-            sampleDiv.append(deleteCustomTest);
-            sampleDiv.append(inputTextarea);
-            sampleDiv.append(outputTextarea);
-            $('#customTests').append(sampleDiv);
-        });
-
-        // 实时保存文本内容到indexedDB中
-        $(document).on('input', '.inputTextarea, .outputTextarea', function () {
-            var transaction = db.transaction(tableName, 'readwrite');
-            var objectStore = transaction.objectStore(tableName);
-
-            var samplesData = {};
+    // 实时保存文本内容到 IndexedDB 中
+    $(document).on('input', '.inputTextarea, .outputTextarea', function () {
+        CFBetterDB.transaction('rw', CFBetterDB.samplesData, function () {
+            var objectStore = CFBetterDB.samplesData;
+            var samples = {
+                url: url,
+                samples: []
+            };
             var index = 0;
             $('.sampleDiv').each(function () {
                 var $sampleDiv = $(this);
                 var inputTextarea = $sampleDiv.find('.inputTextarea');
-                inputTextarea.attr('id', 'input' + index);
                 var outputTextarea = $sampleDiv.find('.outputTextarea');
+                $sampleDiv.attr('data-index', index);
+                inputTextarea.attr('id', 'input' + index);
                 outputTextarea.attr('id', 'output' + index);
-
-                var data = {
+                var sample = {
                     id: index,
                     input: inputTextarea.val(),
                     output: outputTextarea.val()
                 };
-
-                objectStore.put(data);
-                samplesData['sample' + index] = data;
-                $sampleDiv.attr('data-index', index);
+                samples.samples.push(sample);
                 index++;
             });
+            objectStore.put(samples);
         });
+    });
 
-        // 删除
-        $(document).on('click', '.deleteCustomTest', function () {
-            var $sampleDiv = $(this).closest('.sampleDiv');
-            var transaction = db.transaction(tableName, 'readwrite');
-            var objectStore = transaction.objectStore(tableName);
+    // 删除
+    $(document).on('click', '.deleteCustomTest', function () {
+        var $sampleDiv = $(this).closest('.sampleDiv');
+        CFBetterDB.transaction('rw', CFBetterDB.samplesData, function () {
+            var objectStore = CFBetterDB.samplesData;
             var index = parseInt($sampleDiv.attr('data-index'));
-            if (!isNaN(index)) objectStore.delete(index);
+            if (!isNaN(index)) {
+                objectStore.get(url).then(row => {
+                    let samples = row.samples;
+                    samples.splice(index, 1); // 移除第index个元素
+                    objectStore.put({
+                        url: url,
+                        samples: samples
+                    });
+                })
+            }
             $sampleDiv.remove();
         });
+    });
 
-        // 恢复保存的内容
-        function restoreText(db) {
-            var transaction;
+    // 恢复保存的内容
+    function restoreText() {
+        CFBetterDB.transaction('r', CFBetterDB.samplesData, function () {
+            return CFBetterDB.samplesData.get(url);
+        }).then(function (data) {
+            if (data.samples && data.samples.length > 0) {
+                data.samples.forEach(function (item, index) {
+                    var sampleDiv = $('<div class="sampleDiv">');
+                    var inputTextarea = $(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
+                    var outputTextarea = $(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
+                    var deleteCustomTest = $(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
 
-            // 数据检查，不存在该表则直接返回
-            var tableNames = Array.from(db.objectStoreNames);
-            if (tableNames.includes(tableName)) {
-                transaction = db.transaction(tableName, 'readonly');
-            } else { return; }
+                    inputTextarea.val(item.input);
+                    outputTextarea.val(item.output);
 
-            var objectStore = transaction.objectStore(tableName);
-            var getRequest = objectStore.getAll();
-
-            getRequest.onsuccess = function () {
-                var data = getRequest.result;
-                if (data && data.length > 0) {
-                    data.forEach(function (item, index) {
-                        var sampleDiv = $('<div class="sampleDiv">');
-                        var inputTextarea = $(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
-                        var outputTextarea = $(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
-                        var deleteCustomTest = $('<button type="button" class="deleteCustomTest">X</button>');
-
-                        inputTextarea.val(item.input);
-                        outputTextarea.val(item.output);
-
-                        sampleDiv.append(deleteCustomTest);
-                        sampleDiv.append(inputTextarea);
-                        sampleDiv.append(outputTextarea);
-                        sampleDiv.attr('data-index', index)
-                        $('#customTests').append(sampleDiv);
-                    });
-                }
-            };
-        }
-    };
+                    sampleDiv.append(deleteCustomTest);
+                    sampleDiv.append(inputTextarea);
+                    sampleDiv.append(outputTextarea);
+                    sampleDiv.attr('data-index', index)
+                    $('#customTests').append(sampleDiv);
+                });
+            }
+        });
+    }
 }
 
 // 获取自定义测试数据
 function getCustomTestData() {
-    const tableName = window.location.href;
-    var request = indexedDB.open('samplesDataDB', 1);
+    const url = window.location.href;
 
     return new Promise(function (resolve) {
-        request.onsuccess = function (event) {
-            var db = event.target.result;
-            var transaction = db.transaction(tableName, 'readonly');
-            var objectStore = transaction.objectStore(tableName);
-            var getRequest = objectStore.getAll();
+        var customTestData = {};
+        CFBetterDB.transaction('r', CFBetterDB.samplesData, function () {
+            return CFBetterDB.samplesData.get(url);
+        }).then(function (data) {
+            if (data.samples && data.samples.length > 0) {
+                data.samples.forEach(function (item, index) {
+                    customTestData[index + 1] = {
+                        input: item.input,
+                        output: item.output
+                    };
+                });
+            }
+        });
 
-            getRequest.onsuccess = function () {
-                var data = getRequest.result;
-                var customTestData = {};
-
-                if (data && data.length > 0) {
-                    data.forEach(function (item, index) {
-                        customTestData[index + 1] = {
-                            input: item.input,
-                            output: item.output
-                        };
-                    });
-                }
-
-                resolve(customTestData);
-            };
-
-            transaction.oncomplete = function () {
-                db.close();
-            };
-        };
+        resolve(customTestData);
     });
 }
 
@@ -5500,7 +5432,7 @@ async function officialCompiler(csrf_token, code, input) {
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
             method: 'POST',
-            url: 'https://codeforces.com/data/customtest',
+            url: hostAddress + '/data/customtest',
             data: data,
             headers: {
                 'X-Csrf-Token': csrf_token
@@ -6752,6 +6684,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (showJumpToLuogu && is_problem) CF2luogu();
 
                 Promise.resolve()
+                    .then(async () => {
+                        if (showLoading && is_problem) newElement.html('Codeforces Better! —— 正在连接数据库……');
+                        await delay(100);
+                        if (is_problem && problemPageCodeEditor) await initDB();
+                    })
                     .then(() => {
                         if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
                         return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
