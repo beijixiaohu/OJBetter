@@ -5397,9 +5397,8 @@ function getCustomTestData() {
                     };
                 });
             }
+            resolve(customTestData);
         });
-
-        resolve(customTestData);
     });
 }
 
