@@ -64,7 +64,7 @@ var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiCo
 var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, keywordAutoComplete, cppCodeTemplateComplete;
-var compilerSelection, onlineCompilerChoice, codecheCsrfToken;
+var compilerSelection, editorFontSize, indentSpacesCount, howToIndent, isWrapEnabled, onlineCompilerChoice, codecheCsrfToken;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -103,6 +103,10 @@ function init() {
     clist_Authorization = getGMValue("clist_Authorization", "");
     // 编辑器
     compilerSelection = getGMValue("compilerSelection", "61");
+    editorFontSize = getGMValue("editorFontSize", "15");
+    indentSpacesCount = getGMValue("indentSpacesCount", "4");
+    isWrapEnabled = getGMValue("isWrapEnabled", true);
+    howToIndent = getGMValue("howToIndent", "space");
     problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
     keywordAutoComplete = getGMValue("keywordAutoComplete", true);
     cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
@@ -171,7 +175,7 @@ function ShowAlertMessage() {
 }
 
 // 常量
-const findHelpText = '\n\n 如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 \n\n';
+const findHelpText = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助\n\n';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="18" height="18"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
 const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
@@ -1517,11 +1521,25 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .CFBetter_acmsguru {
     margin: 0 0 1em!important;
 }
+/* 整个代码提交表单 */
+#CFBetter_SubmitForm input[type="number"] {
+    width: 40px;
+    color: #009688;
+    appearance: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border-style: solid;
+    border: 1px solid #ced4da;
+}
+#CFBetter_SubmitForm :focus-visible {
+    outline: none;
+    border: 1px solid #9E9E9E !important;
+}
 /* 代码编辑 */
 #CFBetter_editor{
     box-sizing: border-box;
     height: 370px;
-    border: 1px solid rgb(170, 170, 170);
+    border: 1px solid #d3d3d3;
     width: 100% !important;
     display: block;
     resize: vertical;
@@ -1571,7 +1589,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 #CompilerSetting{
     width: 70%;
 }
-#CompilerSetting select{
+#CompilerSetting select, #CompilerSetting textarea{
     padding: 4px 10px;
     border-radius: 6px;
     border-style: solid;
@@ -1625,13 +1643,13 @@ input#CompilerArgsInput[disabled] {
 #customTestBlock {
     margin-top: 10px;
     color: #616161;
-    border: 1px solid #bcaaa4;
+    border: 1px solid #d3d3d3;
     box-sizing: border-box;
     position: relative;
 }
 
 #customTestBlock #customTests{
-    border-top: 1px solid #bcaaa4;
+    border-top: 1px solid #d3d3d3;
     margin: 0px 0px 40px 0px;
 }
 
@@ -1697,22 +1715,45 @@ input#CompilerArgsInput[disabled] {
 /* 差异对比 */
 .outputDiff {
     color: #5d4037;
-    font-size: 13px;
     margin: 5px 0px;
     display: grid;
     border: 1px solid #bcaaa4;
+    font-size: 13px;
+    font-family: Consolas, "Lucida Console", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
 }
 
-.outputDiff span {
-    padding: 1px 3px;
-}
-
-.added {
+.outputDiff .added {
     background-color: #c8f7c5;
+    user-select: none;
 }
 
-.removed {
+.outputDiff .removed {
     background-color: #f7c5c5;
+}
+
+.DiffLine {
+    display: flex;
+
+}
+
+.outputDiff .DiffLine:nth-child(odd) {
+    background-color: #f5f5f5;
+}
+
+.LineNo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    color: #BDBDBD;
+    font-size: 10px;
+    border-right: 1px solid;
+    user-select: none;
+}
+
+.LineContent {
+    display: grid;
+    width: 100%;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -3217,14 +3258,29 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
+    <hr>
+    <h4>编辑器设置</h4>
+    <div class='CFBetter_setting_list'>
+        <label for='indentSpacesCount'>
+            <div style="display: flex;align-items: center;">
+                <span>缩进空格数</span>
+            </div>
+        </label>
+        <input type='number' id='indentSpacesCount' class='no_default' placeholder='请输入' require = true>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="howToIndent" style="display: flex;">Tab行为</label>
+        <select id="howToIndent" name="howToIndent">
+            <option value="space">使用空格缩进</option>
+            <option value="tab">使用制表符缩进</option>
+        </select>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="isWrapEnabled"><span>自动换行</span></label>
+        <input type="checkbox" id="isWrapEnabled" name="isWrapEnabled">
+    </div>
     <div class='CFBetter_setting_list'>
         <label for="keywordAutoComplete"><span>关键字自动补全</span></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text">
-            <p>开启 ace 编辑器自带的关键字自动补全</p>
-            </div>
-        </div>
         <input type="checkbox" id="keywordAutoComplete" name="keywordAutoComplete">
     </div>
     <div class='CFBetter_setting_list'>
@@ -3538,6 +3594,9 @@ async function settingPanel() {
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
+        $('#indentSpacesCount').val(GM_getValue("indentSpacesCount"));
+        $('#howToIndent').val(GM_getValue("howToIndent"));
+        $("#isWrapEnabled").prop("checked", GM_getValue("isWrapEnabled") === true);
         $("#keywordAutoComplete").prop("checked", GM_getValue("keywordAutoComplete") === true);
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
@@ -3602,6 +3661,9 @@ async function settingPanel() {
                 RatingHidden: $('#RatingHidden').prop("checked"),
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
+                indentSpacesCount: $('#indentSpacesCount').val(),
+                howToIndent: $('#howToIndent').val(),
+                isWrapEnabled: $("#isWrapEnabled").prop("checked"),
                 keywordAutoComplete: $("#keywordAutoComplete").prop("checked"),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
@@ -5129,10 +5191,12 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     let csrf_token = cloneHTML.find('form.submit-form').attr('action');
     formDiv.attr('action', submitUrl + csrf_token);
 
-    // 语言选择
-    let selectLang = cloneHTML.find('select[name="programTypeId"]');
+    // 顶部区域
+    var topDiv = $(`<div style="display:flex;align-items: center;justify-content: space-between;"></div>`)
+    let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 编辑器语言选择
     selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
-    formDiv.append(selectLang);
+    topDiv.append(selectLang);
+    formDiv.append(topDiv);
 
     // 问题选择/编号
     var selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
@@ -5164,7 +5228,7 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     editor.$blockScrolling = Infinity;// 禁用滚动警告
     editor.setTheme('ace/theme/textmate'); // 主题
     editor.setShowPrintMargin(false); // 不显示打印边距
-    editor.setFontSize(16); // 字体大小为 16px
+    editor.setFontSize(parseInt(editorFontSize)); // 字体大小
     if (keywordAutoComplete) {
         editor.setOptions({
             enableBasicAutocompletion: true,
@@ -5172,6 +5236,21 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
             enableSnippets: true
         });
     }
+    editor.setOption("tabSize", parseInt(indentSpacesCount)); // 缩进空格数
+    // tab行为
+    if (howToIndent == "space") editor.setOption("useSoftTabs", true);
+    else editor.setOption("useSoftTabs", false);
+    // 自动换行
+    editor.setOption("wrap", isWrapEnabled ? "free" : "off");
+
+    // 调整字体大小
+    var changeSize = $(`<div><label for="fontSizeInput">字体大小：</label><input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
+    topDiv.append(changeSize);
+    changeSize.find('input#fontSizeInput').on('input', function () {
+        var size = $(this).val();
+        editor.setFontSize(parseInt(size));
+        GM_setValue('editorFontSize', size);
+    });
 
     // 代码同步与保存
     const nowUrl = window.location.href;
@@ -5697,7 +5776,6 @@ async function codechefCompiler(code, input) {
 }
 
 // wandbox编译器参数列表
-let wandboxLanguage = "";
 var wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
 function wandboxCompilerArgsChange(nowSelect) {
     let LanguageChoiceList = {
@@ -5728,12 +5806,13 @@ function wandboxCompilerArgsChange(nowSelect) {
                 if ($(this).is("input[type='checkbox']")) {
                     let flag = $(this).prop("checked") ? $(this).val() : '';
                     flags += flag + (flag ? ' ' : '');
-                } else if ($(this).is("select") || $(this).is("input")) {
+                } else if ($(this).is("select") || $(this).is("input") || $(this).is("textarea")) {
                     let flag = $(this).val();
                     flags += flag + (flag ? ' ' : '');
                 }
             });
             $("#CompilerArgsInput").val(flags);
+            $("#CompilerArgsInput").prop("readonly", true); // 只读
         }
 
         // 编辑器切换监听
@@ -5743,10 +5822,10 @@ function wandboxCompilerArgsChange(nowSelect) {
                 (obj) => obj.name === selectedName
             );
 
+            $("#CompilerArgsInput").val(); // 初始化编译器输入框
+
             $("#CompilerBox").remove();
             let div = $("<div id='CompilerBox'></div>");
-
-            $("#CompilerArgsInput").val(); // 初始化编译器输入框
 
             let display_compile_command = $(`<input id='${Compiler.name}' value='${Compiler['display-compile-command']}' style="display:none;"}></input>`);
             div.append(display_compile_command);
@@ -5783,6 +5862,20 @@ function wandboxCompilerArgsChange(nowSelect) {
                 }
             }
 
+            if (Compiler['compiler-option-raw'] == true) {
+                let textarea = $(`<textarea id="compiler_option_raw" placeholder="Raw compiler options" style="resize: vertical;"></textarea>`);
+                div.append(textarea);
+                textarea.on('input', function () {
+                    refreshCompilerArgs();
+                });
+            }
+            if (Compiler['runtime-option-raw'] == true) {
+                let textarea = $(`<textarea id="runtime_option_raw" placeholder="Raw runtime options" style="resize: vertical;"></textarea>`);
+                div.append(textarea);
+                textarea.on('input', function () {
+                    refreshCompilerArgs();
+                });
+            }
             $("#CompilerSetting").append(div);
 
             refreshCompilerArgs();  // 初始化
@@ -5799,9 +5892,9 @@ async function wandboxCompiler(code, input) {
     var data = {
         code: code,
         codes: [],
-        compiler: $('#CompilerChange').val(),
-        'compiler-option-raw': '',
-        'runtime-option-raw': '',
+        compiler: $('#CompilerChange').val().replace($('#compiler_option_raw').val(), '').replace($('#runtime_option_raw').val(), ''),
+        'compiler-option-raw': $('#compiler_option_raw').val(),
+        'runtime-option-raw': $('#runtime_option_raw').val(),
         options: $("#CompilerArgsInput").val(),
         description: '',
         stdin: input,
@@ -5825,9 +5918,9 @@ async function wandboxCompiler(code, input) {
                 } else {
                     try {
                         const response = JSON.parse(responseDetails.response);
-                        result.Errors = response.compiler_error;
+                        result.Errors = response.compiler_error == "" ? response.signal : response.compiler_error;
                         result.Result = response.program_output;
-                        result.Stats = response.status == "0" ? "OK" : "Error";
+                        result.Stats = response.status == "0" ? "Finish" : "Error";
                         resolve(result);
                     } catch (error) {
                         result.Errors = '响应数据解析错误';
@@ -5843,6 +5936,7 @@ async function wandboxCompiler(code, input) {
     });
 }
 
+// 编译器参数
 function changeCompilerArgs(nowSelect) {
     if (onlineCompilerChoice == "official") {
         officialCompilerArgsChange(nowSelect);
@@ -5855,6 +5949,7 @@ function changeCompilerArgs(nowSelect) {
     }
 }
 
+// 在线编译器通信
 async function onlineCompilerConnect(csrf_token, code, input) {
     if (onlineCompilerChoice == "official") {
         return await officialCompiler(csrf_token, code, input);
@@ -5873,29 +5968,32 @@ function codeDiff(expectedText, actualText) {
     var expectedLines = expectedText.split('\n');
     var actualLines = actualText.split('\n');
 
-    var output = "";
+    var output = $('<div>');
     for (var i = 0; i < expectedLines.length; i++) {
         var expectedLine = expectedLines[i];
         var actualLine = actualLines[i];
-
+        var LineDiv = $(`<div class="DiffLine"><span class="LineNo">${i + 1}</span></div>`);
         if (actualLine == undefined) {
-            output += '<span class="added">' + expectedLine + '</span>';
+            LineDiv.append(`<span class="added">${expectedLine}</span>`);
         } else {
+            let div = $('<div class="LineContent">');
             if (expectedLine === actualLine) {
-                output += '<span>' + actualLine + '</span>';
+                div.append(`<span style="padding-left:3px;">${actualLine}</span>`);
             } else {
-                output += '<span class="removed">' + actualLine + '</span>';
-                output += '<span class="added">' + expectedLine + '</span>';
+                div.append(`<span class="removed" style="padding-left:3px;">${actualLine}</span>`);
+                div.append(`<span class="added" style="padding-left:3px;">${expectedLine}</span>`);
             }
+            LineDiv.append(div);
         }
+        output.append(LineDiv);
     }
 
-    // 多余的 actualLines
+    // 处理多余的 actualLines
     for (var j = expectedLines.length; j < actualLines.length; j++) {
-        output += '<span class="removed">' + actualLines[j] + '</span>';
+        output.append(`<span class="removed">${actualLines[j]}</span>`);
     }
 
-    return output;
+    return output.html();
 }
 
 // 样例测试函数
@@ -5919,33 +6017,28 @@ async function runCode(event, sourceDiv, submitDiv, csrf_token) {
     // 测试
     const handleResult = (prefix, data, item, result) => {
         if (result.Errors) {
-            statePanel.append($(`<div class="RunState_title error">${prefix}${item} 编译错误或超时</div>`));
-            if (onlineCompilerChoice == "wandbox") {
-                // 需要渲染终端转义序列
-                GM_addStyle(GM_getResourceText("xtermcss"));
-                let terminalContainer = $(`<div id="terminal-container"></div>`);
-                statePanel.append(terminalContainer);
-                const term = new Terminal({
-                    rows: 10,
-                    cols: 30
-                });
-                term.setOption('theme', {
-                    background: '#fff',
-                    foreground: '#000'
-                });
-                term.setOption('convertEol', true); // 将\n转换为\r\n
-                term.write(result.Errors);
-                term.open(terminalContainer.get(0));
-            } else {
-                statePanel.append($(`<div style="color:red;">错误： ${result.Errors}</div>`));
-            }
+            statePanel.append($(`<div class="RunState_title error">${prefix}${item} Compilation error or Time limit</div>`));
+            // 渲染终端转义序列
+            GM_addStyle(GM_getResourceText("xtermcss"));
+            let terminalContainer = $(`<div id="terminal-container" style="overflow: auto;margin-bottom: 5px;"></div>`);
+            statePanel.append(terminalContainer);
+            const term = new Terminal({
+                rows: 10,
+                cols: 150
+            });
+            term.setOption('theme', {
+                background: '#2d2e2c',
+            });
+            term.setOption('convertEol', true); // 将\n转换为\r\n
+            term.write(result.Errors);
+            term.open(terminalContainer.get(0));
         } else if (result.Result.trim() === data.output.trim()) {
-            statePanel.append($(`<div class="RunState_title ok">${prefix}${item} 通过</div>`));
+            statePanel.append($(`<div class="RunState_title ok">${prefix}${item} Accepted</div>`));
         } else {
-            statePanel.append($(`<div class="RunState_title error">${prefix}${item} 未通过</div>`));
+            statePanel.append($(`<div class="RunState_title error">${prefix}${item} Wrong Answer</div>`));
             statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>`));
         }
-        statePanel.append($(`<div style="color:${result.Errors ? 'red' : '#1565C0'};">状态： ${result.Stats}</div>`));
+        statePanel.append($(`<div style="color:${result.Errors ? 'red' : ''};">状态： ${result.Stats}</div>`));
     };
 
     // 遍历数据并测试
