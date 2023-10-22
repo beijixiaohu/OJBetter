@@ -65,6 +65,7 @@ var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, comment
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, keywordAutoComplete, cppCodeTemplateComplete;
 var compilerSelection, editorFontSize, indentSpacesCount, howToIndent, isWrapEnabled, onlineCompilerChoice, codecheCsrfToken;
+var CF_csrf_token;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -1573,6 +1574,14 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 }
 #SubmitButton:hover {
     background-color: #17795e;
+}
+#SubmitButton.disabled {
+    background-color: red;
+    animation: shake 0.07s infinite alternate;
+}
+@keyframes shake {
+    0% { transform: translateX(-5px); }
+    100% { transform: translateX(5px); }
 }
 #programTypeId{
     padding: 5px 10px;
@@ -5138,8 +5147,12 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
                 const html = response.responseText;
                 const cloneHTML = $(html);
                 localStorage.setItem(cacheKey, html);
-                let csrf_token = cloneHTML.find('form.submit-form').attr('action');
-                $('#CFBetter_SubmitForm').attr('action', submitUrl + csrf_token); // 更新，防止为旧的csrf
+
+                // 更新，防止为旧的csrf
+                let _token = cloneHTML.find('form.submit-form').attr('action');
+                $('#CFBetter_SubmitForm').attr('action', submitUrl + _token);
+                CF_csrf_token = _token.match(/(?<=\?csrf_token=)[^&]+/)?.[0];
+
                 resolve(cloneHTML);
             },
             onerror: function (response) {
@@ -5156,7 +5169,19 @@ async function getSubmitHTML(submitUrl) {
     if (getCookie(cookieKey) === '1') {
         // 存在缓存
         CloneOriginalHTML(submitUrl, cacheKey);
-        return $(localStorage.getItem(cacheKey));
+        // 校验
+        let cloneHTML = $(localStorage.getItem(cacheKey));
+        if (cloneHTML.find('form.submit-form').length > 0) {
+            // 获取csrf_token
+            let _token = cloneHTML.find('form.submit-form').attr('action');
+            CF_csrf_token = _token.match(/(?<=\?csrf_token=)[^&]+/)?.[0];
+            return cloneHTML;
+        } else {
+            // 存在错误，更新缓存
+            console.log("%c缓存存在错误，正在尝试更新", "color:blue;")
+            return await CloneOriginalHTML(submitUrl, cacheKey);
+        }
+
     } else {
         // 没有缓存，更新
         document.cookie = `${cookieKey}=1; path=/`;
@@ -5188,8 +5213,8 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     // 表单
     var formDiv = $('<form method="post" id="CFBetter_SubmitForm"></form>');
     $('.ttypography').after(formDiv);
-    let csrf_token = cloneHTML.find('form.submit-form').attr('action');
-    formDiv.attr('action', submitUrl + csrf_token);
+    let _action = cloneHTML.find('form.submit-form').attr('action');
+    formDiv.attr('action', submitUrl + _action);
 
     // 顶部区域
     var topDiv = $(`<div style="display:flex;align-items: center;justify-content: space-between;"></div>`)
@@ -5269,9 +5294,18 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     // 自定义调试
     var customTestDiv = $(`
         <details id="customTestBlock">
-            <summary>自定义测试数据(自动保存)</summary>
+            <summary >自定义测试数据(自动保存)</summary>
             <div id="customTests" style="min-height: 30px;"></div>
-            <div id="control">
+            <div id="control" style="display:flex;">
+                <div style="display: flex;margin: 5px;">
+                    <input type="checkbox" id="onlyCustomTest"}><label for="onlyCustomTest">只测试自定义数据</label>
+                </div>
+                <div style="display: flex;margin: 5px;">
+                    <input type="checkbox" id="DontShowDiff"}><label for="DontShowDiff">不显示差异对比</label>
+                </div>
+                <div style="display: flex;margin: 5px;">
+                    <input type="checkbox" id="secureSubmit"}><label for="secureSubmit">防止误提交(勾选后不能点击提交按钮)</label>
+                </div>
                 <button type="button" id="addCustomTest">新建</button>
             </div>
         </details>
@@ -5282,20 +5316,19 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     var submitDiv = $('<div id="CFBetter_submitDiv"></div>');
     var CompilerSetting = $('<div id="CompilerSetting"><input type="text" id="CompilerArgsInput"></div>');
     submitDiv.append(CompilerSetting);
-    var runBottom = $('<button class="CFBetter_SubmitButton" id="RunTestButton">样例测试</button>');
-    submitDiv.append(runBottom);
-    var submitBottom = $('<input class="CFBetter_SubmitButton" id="SubmitButton" type="submit" value="提交">');
-    submitDiv.append(submitBottom);
+    var runButton = $('<button class="CFBetter_SubmitButton" id="RunTestButton">样例测试</button>');
+    submitDiv.append(runButton);
+    var submitButton = $('<input class="CFBetter_SubmitButton" id="SubmitButton" type="submit" value="提交">');
+    submitDiv.append(submitButton);
     formDiv.append(submitDiv);
 
     var from = {
-        csrf_token: csrf_token,
         formDiv: formDiv,
         selectLang: selectLang,
         sourceDiv: sourceDiv,
         editor: editor,
-        runBottom: runBottom,
-        submitBottom: submitBottom,
+        runButton: runButton,
+        submitButton: submitButton,
         submitDiv: submitDiv
     };
     return from;
@@ -5468,6 +5501,7 @@ function getCustomTestData() {
         CFBetterDB.transaction('r', CFBetterDB.samplesData, function () {
             return CFBetterDB.samplesData.get(url);
         }).then(function (data) {
+            if (!data) resolve(customTestData);
             if (data.samples && data.samples.length > 0) {
                 data.samples.forEach(function (item, index) {
                     customTestData[index + 1] = {
@@ -5489,9 +5523,9 @@ function officialCompilerArgsChange(nowSelect) {
 }
 
 // codeforces编译器通信
-async function officialCompiler(csrf_token, code, input) {
+async function officialCompiler(code, input) {
     var data = new FormData();
-    data.append('csrf_token', csrf_token);
+    data.append('csrf_token', CF_csrf_token);
     data.append('source', code);
     data.append('tabSize', '4');
     data.append('programTypeId', officialLanguage);
@@ -5513,7 +5547,7 @@ async function officialCompiler(csrf_token, code, input) {
             url: hostAddress + '/data/customtest',
             data: data,
             headers: {
-                'X-Csrf-Token': csrf_token
+                'X-Csrf-Token': CF_csrf_token
             },
             onload: function (responseDetails) {
                 if (responseDetails.status !== 200 || !responseDetails.response) {
@@ -5539,7 +5573,7 @@ async function officialCompiler(csrf_token, code, input) {
         return new Promise((resolve, reject) => {
             let retryCount = 0;
             var newdata = new FormData();
-            newdata.append('csrf_token', csrf_token);
+            newdata.append('csrf_token', CF_csrf_token);
             newdata.append('action', 'getVerdict');
             newdata.append('customTestSubmitId', customTestSubmitId);
             function makeRequest() {
@@ -5548,7 +5582,7 @@ async function officialCompiler(csrf_token, code, input) {
                     url: hostAddress + '/data/customtest',
                     data: newdata,
                     headers: {
-                        'X-Csrf-Token': csrf_token
+                        'X-Csrf-Token': CF_csrf_token
                     },
                     onload: function (responseDetails) {
                         if (responseDetails.status !== 200 || !responseDetails.response) {
@@ -5950,9 +5984,9 @@ function changeCompilerArgs(nowSelect) {
 }
 
 // 在线编译器通信
-async function onlineCompilerConnect(csrf_token, code, input) {
+async function onlineCompilerConnect(code, input) {
     if (onlineCompilerChoice == "official") {
-        return await officialCompiler(csrf_token, code, input);
+        return await officialCompiler(code, input);
     } else if (onlineCompilerChoice == "rextester") {
         return await rextesterCompiler(code, input);
     } else if (onlineCompilerChoice == "codechef") {
@@ -5990,14 +6024,14 @@ function codeDiff(expectedText, actualText) {
 
     // 处理多余的 actualLines
     for (var j = expectedLines.length; j < actualLines.length; j++) {
-        output.append(`<span class="removed">${actualLines[j]}</span>`);
+        output.append(`<span class="removed" style="padding-left:3px;">${actualLines[j]}</span>`);
     }
 
     return output.html();
 }
 
 // 样例测试函数
-async function runCode(event, sourceDiv, submitDiv, csrf_token) {
+async function runCode(event, sourceDiv, submitDiv) {
     event.preventDefault();
     const loadingImage = $('<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">');
     $('#RunTestButton').after(loadingImage);
@@ -6036,7 +6070,8 @@ async function runCode(event, sourceDiv, submitDiv, csrf_token) {
             statePanel.append($(`<div class="RunState_title ok">${prefix}${item} Accepted</div>`));
         } else {
             statePanel.append($(`<div class="RunState_title error">${prefix}${item} Wrong Answer</div>`));
-            statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>`));
+            if ($('#DontShowDiff').prop('checked')) statePanel.append($(`<div class="outputDiff" style="white-space: break-spaces;">${result.Result.trim()}</div>`));
+            else statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>`));
         }
         statePanel.append($(`<div style="color:${result.Errors ? 'red' : ''};">状态： ${result.Stats}</div>`));
     };
@@ -6044,44 +6079,58 @@ async function runCode(event, sourceDiv, submitDiv, csrf_token) {
     // 遍历数据并测试
     for (const [item, data] of Object.entries(customtestData)) {
         await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
-        const result = await onlineCompilerConnect(csrf_token, sourceDiv.val(), data.input);
+        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
         handleResult('自定义样例', data, item, result);
     }
-    for (const [item, data] of Object.entries(testData)) {
-        await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
-        const result = await onlineCompilerConnect(csrf_token, sourceDiv.val(), data.input);
-        handleResult('题目样例', data, item, result);
+
+    if (!$('#onlyCustomTest').prop('checked')) {
+        for (const [item, data] of Object.entries(testData)) {
+            await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
+            const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
+            handleResult('题目样例', data, item, result);
+        }
     }
 
     loadingImage.remove();
 }
 
 async function addProblemPageCodeEditor() {
-    if (typeof ace === 'undefined') return; // 未登录，不存在ace库
+    if (typeof ace === 'undefined') {
+        console.log("%c未找到ace，当前可能为非题目页或者比赛刚刚结束", "border:1px solid #000;padding:10px;");
+        return; // 未登录，不存在ace库
+    }
 
     const href = window.location.href;
     let submitUrl = /\/problemset\//.test(href) ? hostAddress + '/problemset/submit' :
-        href.replace(/\/problem[A-Za-z\/#]*/, "/submit");
-    let cloneHTML = await getSubmitHTML(submitUrl)
+        href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit");
+    let cloneHTML = await getSubmitHTML(submitUrl);
 
     // 创建
     let from = await CreateCodeDevFrom(submitUrl, cloneHTML);
-    let csrf_token = from.csrf_token.match(/(?<=\?csrf_token=)[^&]+/)?.[0];
     let editor = from.editor;
     let selectLang = from.selectLang;
-    let submitBottom = from.submitBottom;
-    let runBottom = from.runBottom;
+    let submitButton = from.submitButton;
+    let runButton = from.runButton;
 
     CustomTestInit(); // 初始化自定义测试数据面板
     selectLang.on('change', () => changeAceLanguage(from.selectLang, from.editor)); // 编辑器语言切换监听
     editor.getSession().on("changeMode", updateAutocomplete); // 切换语言监听，更新自动补全
-    runBottom.on('click', (event) => runCode(event, from.sourceDiv, from.submitDiv, csrf_token)); // 样例测试按钮点击事件
+
+    // 样例测试
+    runButton.on('click', (event) => runCode(event, from.sourceDiv, from.submitDiv));
 
     // 提交
-    submitBottom.on('click', function (event) {
+    submitButton.on('click', function (event) {
         event.preventDefault();
-        submitBottom.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
-        $('#CFBetter_SubmitForm').submit();
+        if (!$('#secureSubmit').prop('checked')) {
+            submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
+            $('#CFBetter_SubmitForm').submit();
+        } else {
+            submitButton.addClass('disabled');
+            setTimeout(function () {
+                submitButton.removeClass('disabled');
+            }, 300);
+        }
     });
 
     // 初始化
