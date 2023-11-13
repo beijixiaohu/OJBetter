@@ -1,0 +1,13 @@
+commands:
+  cpp:
+  - clangd
+  java:
+  - jdtls.bat
+  - -configuration
+  - ./jdt-language-server./config_win
+  - -data
+  - ./java_workspace
+  python:
+  - pylsp
+host: 127.0.0.1
+port: '2323'

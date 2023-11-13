@@ -18,8 +18,9 @@
 // @connect      clist.by
 // @connect      greasyfork.org
 // @connect      rextester.com
-// @connect      codechef.com
 // @connect      wandbox.org
+// @connect      staticfile.org
+// @connect      127.0.0.1
 // @connect      *
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -58,14 +59,15 @@ const getGMValue = (key, defaultValue) => {
 };
 var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
-var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings;
+var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
-var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, commentPaging, showJumpToLuogu, loaded;
+var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, filterTextWithoutEmphasis, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
-var standingsRecolor, problemPageCodeEditor, keywordAutoComplete, cppCodeTemplateComplete;
-var compilerSelection, editorFontSize, indentSpacesCount, howToIndent, isWrapEnabled, onlineCompilerChoice, codecheCsrfToken;
+var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete;
+var compilerSelection, editorFontSize, onlineCompilerChoice;
 var CF_csrf_token;
+var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, CFBetter_MonacoLSPBridge_WorkUri, CFBetter_MonacoLSPBridge_SocketUrl;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -75,6 +77,7 @@ function init() {
     is_problem = href.includes('/problem/');
     is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
+    is_submitPage = href.includes('/submit');
     is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
             .map(function () {
@@ -97,22 +100,12 @@ function init() {
     retransAction = getGMValue("retransAction", "0");
     transWaitTime = getGMValue("transWaitTime", "200");
     replaceSymbol = getGMValue("replaceSymbol", "2");
+    filterTextWithoutEmphasis = getGMValue("filterTextWithoutEmphasis", false);
     showClistRating_contest = getGMValue("showClistRating_contest", false);
     showClistRating_problem = getGMValue("showClistRating_problem", false);
     showClistRating_problemset = getGMValue("showClistRating_problemset", false);
     RatingHidden = getGMValue("RatingHidden", false);
     clist_Authorization = getGMValue("clist_Authorization", "");
-    // 编辑器
-    compilerSelection = getGMValue("compilerSelection", "61");
-    editorFontSize = getGMValue("editorFontSize", "15");
-    indentSpacesCount = getGMValue("indentSpacesCount", "4");
-    isWrapEnabled = getGMValue("isWrapEnabled", true);
-    howToIndent = getGMValue("howToIndent", "space");
-    problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
-    keywordAutoComplete = getGMValue("keywordAutoComplete", true);
-    cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
-    onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
-    codecheCsrfToken = getGMValue("codecheCsrfToken", "");
     //openai
     opneaiConfig = getGMValue("chatgpt-config", {
         "choice": -1,
@@ -141,6 +134,31 @@ function init() {
                 const [key, value] = header.split(":");
                 return { [key.trim()]: value.trim() };
             }) : [];
+    }
+    // 编辑器
+    CF_csrf_token = Codeforces.getCsrfToken();
+    compilerSelection = getGMValue("compilerSelection", "61");
+    editorFontSize = getGMValue("editorFontSize", "15");
+    problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
+    cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
+    onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
+    /**
+    * 加载monaco编辑器资源
+    */
+    useLSP = getGMValue("useLSP", true);
+    CFBetter_MonacoLSPBridge_WorkUri = getGMValue("CFBetter_MonacoLSPBridge_WorkUri", "c:/CFBetter_LSPBridge/");
+    CFBetter_MonacoLSPBridge_SocketUrl = getGMValue("CFBetter_MonacoLSPBridge_SocketUrl", "ws://127.0.0.1:2323/");
+    let monacoLoader = document.createElement("script");
+    monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
+    document.head.prepend(monacoLoader);
+    monacoLoader.onload = () => {
+        require.config({
+            paths: { vs: "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs" },
+            "vs/nls": { availableLanguages: { "*": "zh-cn" } },
+        });
+        require(["vs/editor/editor.main"], () => {
+            monacoLoaderOnload = true;
+        });
     }
 }
 
@@ -173,6 +191,13 @@ function ShowAlertMessage() {
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
+    if (is_submitPage && problemPageCodeEditor) {
+        let newElement = $("<div></div>").addClass("alert alert-warning CFBetter_alert")
+            .html(`Codeforces Better! —— 您已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
+            <p>如遇问题，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助</p>`)
+            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
+        $(".menu-box:first").next().after(newElement);
+    }
 }
 
 // 常量
@@ -189,7 +214,7 @@ m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
-const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 100; }`;
+const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 200; }`;
 const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
 
 // 连接数据库
@@ -206,10 +231,17 @@ function initDB() {
 const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
 const changeEventListeners = [];
 function handleColorSchemeChange(event) {
-    const newColorScheme = event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
+    event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
     if (!event.matches) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
+        if (editor) {
+            monaco.editor.setTheme('vs');
+        }
+    } else {
+        if (editor) {
+            monaco.editor.setTheme('vs-dark');
+        }
     }
 }
 
@@ -266,7 +298,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
         html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
-        html[data-theme=dark] .CFBetter_modal button{
+        html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest{
             color: #9099a3 !important;
         }
         /* 文字颜色3 */
@@ -314,7 +347,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
         html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
         html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
-        html[data-theme=dark] #config_bar_list{
+        html[data-theme=dark] #config_bar_list, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
+        html[data-theme=dark] #LSPLog{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -334,7 +368,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] .test-for-popup pre,
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
-        html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb{
+        html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] .sampleDiv,
+        html[data-theme=dark] #addCustomTest, html[data-theme=dark] #LSPLog li:nth-child(odd){
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -354,7 +390,10 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
         html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button,
-        html[data-theme=dark] .test-for-popup pre{
+        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #CFBetter_editor, html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
+        html[data-theme=dark] #addCustomTest, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
+        html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -455,8 +494,31 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .verdict-waiting {
             color: gray !important;
         }
+        /* 样例hover样式 */
+        html[data-theme=dark] .test-example-line-odd:hover, html[data-theme=dark] .test-example-line-odd.darkhighlight {
+          background-color: #455a64;
+        }
     `);
 })()
+
+/**
+ * 黑暗模式额外的处理事件
+ */
+function darkModeStyleAdjustment() {
+    $(".test-example-line").off("mouseenter mouseleave"); // 移除上面原本的事件
+    $('.test-example-line-odd').hover(
+        function () {
+            $(this).addClass('darkhighlight');
+            $(this).prevUntil(':not(.test-example-line-odd)').addClass('darkhighlight');
+            $(this).nextUntil(':not(.test-example-line-odd)').addClass('darkhighlight');
+        },
+        function () {
+            $(this).removeClass('darkhighlight');
+            $(this).prevUntil(':not(.test-example-line-odd)').removeClass('darkhighlight');
+            $(this).nextUntil(':not(.test-example-line-odd)').removeClass('darkhighlight');
+        }
+    );
+}
 
 // 样式
 GM_addStyle(`
@@ -647,6 +709,21 @@ button.html2mdButton.reTranslation {
 }
 .problem-statement p:last-child {
     margin-bottom: 0px !important;
+}
+/*特殊处理, 加上input-output-copier类, 让convertStatementToText方法忽略该元素*/
+.html2md-panel.input-output-copier {
+    font-size: initial;
+    float: initial;
+    color: initial;
+    cursor: initial;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    line-height: initial;
+    text-transform: none;
+}
+.html2md-panel.input-output-copier:hover {
+    background-color: #ffffff00;
 }
 /*设置面板*/
 header .enter-or-register-box, header .languages {
@@ -1536,10 +1613,79 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     outline: none;
     border: 1px solid #9E9E9E !important;
 }
+#CFBetter_SubmitForm .topDiv {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#CFBetter_SubmitForm .topDiv .topRightDiv {
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+/* 顶部区域 */
+#CFBetter_SubmitForm .topDiv button{
+    height: 100%;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+#CFBetter_SubmitForm .topDiv div#lspStateDiv{
+    cursor: pointer;
+    margin: 0px 5px;
+    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: 4px;
+}
+#CFBetter_SubmitForm .topDiv div#lspStateDiv.await{
+    border-color: #BBDEFB;
+    color: #2196F3;
+    background-color: #E3F2FD;
+}
+#CFBetter_SubmitForm .topDiv div#lspStateDiv.success{
+    border-color: #C8E6C9;
+    color: #4CAF50;
+    background-color: #E8F5E9;
+}
+#CFBetter_SubmitForm .topDiv div#lspStateDiv.error{
+    border-color: #FFCDD2;
+    color: #F44336;
+    background-color: #FFEBEE;
+}
+/* LSP连接Log */
+#LSPLog{
+    width: 500px;
+    height: 500px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    padding: 10px;
+    transform: translate(-50%, -50%);
+    border: 1px solid;
+    z-index: 200;
+    background-color: #ffffff;
+}
+#LSPLog button{
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 200;
+}
+#LSPLog #LSPLogList{
+    width: 500px;
+    height: 500px;
+    overflow: auto;
+    color: #424242;
+}
+#LSPLog li:nth-child(odd){
+    background-color: #f5f5f5;
+}
+#LSPLog details{
+    padding: 2px;
+}
 /* 代码编辑 */
 #CFBetter_editor{
     box-sizing: border-box;
-    height: 370px;
+    height: 600px;
     border: 1px solid #d3d3d3;
     width: 100% !important;
     display: block;
@@ -1763,6 +1909,56 @@ input#CompilerArgsInput[disabled] {
 .LineContent {
     display: grid;
     width: 100%;
+}
+
+/*monaco编辑器*/
+.monaco-hover hr {
+    margin: 4px -8px 4px !important;
+}
+#CFBetter_editor .highlight {
+    border: 1px solid #ffffff00;
+    background-color: #ffffff00!important
+}
+#CFBetter_editor.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+#CFBetter_editor.fixed {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    height: 50vh;
+    z-index: 100;
+}
+#CFBetter_editor.right-side {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 48vw !important;
+    height: 100%;
+    z-index: 100;
+}
+.html2mdButton.exit_button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    height: 28px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+.html2mdButton.exit_button.bottom {
+    top: 95%;
+}
+#CFBetter_SubmitForm #statusBar{
+    color: #757575;
+    border: 1px solid #d3d3d3;
+    background-color: #f8f8f8;
+    padding: 3px;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -2113,6 +2309,8 @@ function toZH_CN() {
         { match: 'My Submissions', replace: '我的提交' },
         { match: 'Status', replace: '状态' },
         { match: 'Standings', replace: '榜单' },
+        { match: 'Adm.', replace: '管理' },
+        { match: 'Edit', replace: '编辑' },
         { match: 'Custom Invocation', replace: '自定义调试' },
         { match: 'Common standings', replace: '全部排行' },
         { match: 'Friends standings', replace: '只看朋友' },
@@ -2251,6 +2449,22 @@ function toZH_CN() {
     ];
     traverseTextNodes($('.by-form'), rules27);
 
+    // 组合混搭管理汉化
+    const rules28 = [
+        { match: 'If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:', replace: '如果您邀请用户参加此竞赛，则无论其可见性如何，该竞赛都将对用户可见。您可以使用以下链接分享比赛：' },
+    ];
+    traverseTextNodes($('.roundbox.borderTopRound '), rules28);
+
+    const rules29 = [
+        { match: 'Show Log »', replace: '展示日志 »' },
+        { match: 'Move all to practice »', replace: '全部移至练习者 »' },
+        { match: 'Remove All »', replace: '移除全部 »' },
+        { match: 'Add »', replace: '添加 »' },
+        { match: 'Set »', replace: '设置 »' },
+        { match: 'Download Archive »', replace: '下载归档 »' },
+    ];
+    traverseTextNodes($('.roundbox.borderTopRound '), rules29);
+
     // 元素选择替换
     // 侧栏titled汉化
     (function () {
@@ -2267,6 +2481,8 @@ function toZH_CN() {
             "Settings": "→ 设置",
             "Create Mashup Contest": "→ 克隆比赛到组合混搭",
             "Clone Contest to Mashup": "→ 克隆比赛到组合混搭",
+            "Invitations": "→ 邀请",
+            "Administration": "→ 管理",
             "Create Mashup Contest": "→ 创建混搭比赛",
             "Submit": "→ 提交",
             "Practice": "→ 练习",
@@ -2284,6 +2500,12 @@ function toZH_CN() {
             "Contests": "→ 比赛",
             "History": "→ 编辑历史",
             "Login into Codeforces": "登录 Codeforces",
+            "Export the judgment log to DAT-file": "→ 导出判题日志为 DAT 文件",
+            "Contest managers": "→ 比赛管理员",
+            "Contest writers": "→ 比赛编写者",
+            "Spectator ranklists": "→ 观众排名列表",
+            "Ghosts:": "→ 幽灵选手",
+            "Export Submissions": "→ 导出提交",
         };
 
         $(".caption.titled").each(function () {
@@ -2516,12 +2738,79 @@ function toZH_CN() {
             "Organization": "组织",
             "Handle/Email": "账号/邮箱",
             "Password": "密码",
+            "Training name (English):": "训练名称（英文）:",
+            "Training name (Russian):": "训练名称（俄语）:",
+            "Contest format:": "比赛格式:",
+            "Start time:": "开始时间:",
+            "Duration:": "持续时间:",
+            "Visibility:": "可见性:",
+            "Attach parent contest?:": "关联父级比赛?",
+            "Participation type:": "参与类型:",
+            "Freeze period:": "冻结期间:",
+            "Unfreeze time:": "解冻时间:",
+            "Is practice allowed?:": "是否允许练习?",
+            "Is virtual allowed?:": "是否允许虚拟参赛?",
+            "Is out of competition allowed?:": "是否允许非竞赛参赛?",
+            "Is self-registration allowed?:": "是否允许自助注册?",
+            "Can non-registered view the contest?:": "未注册用户能否查看比赛?",
+            "Can participants view common status?:": "参赛选手能否查看共享状态?",
+            "Contest testdata policy:": "比赛测试数据策略:",
+            "Allow view other submissions to:": "允许查看其他提交给:",
+            "Manage program languages:": "管理编程语言:",
+            "Use time limits scaling policy?:": "使用时间限制缩放策略?",
+            "Allow statements?:": "允许陈述?",
+            "Allow standings?:": "允许排名?",
+            "Season:": "季节:",
+            "Contest type:": "比赛类型:",
+            "ICPC region:": "ICPC 地区:",
+            "Country:": "国家:",
+            "City:": "城市:",
+            "Contest difficulty:": "比赛难度:",
+            "Website URL:": "网站链接:",
+            "Description (English):": "描述（英文）:",
+            "Description (Russian):": "描述（俄语）:",
+            "Registration confirmation text (English):": "注册确认文字（英文）:",
+            "Registration confirmation text (Russian):": "注册确认文字（俄语）:",
+            "Logo (English):": "徽标（英文）:",
+            "Logo (Russian):": "徽标（俄语）:",
+            "End time:": "结束时间:",
+            "Name:": "名称:",
+            "Contest(s):": "比赛（们）:",
+            "Add contest:": "添加比赛:",
+            "Show Contestants:": "显示参赛选手:",
+            "Show Out of Competition Participants:": "显示非竞赛参与者:",
+            "Show Practices:": "显示练习:",
+            "Show Virtuals:": "显示虚拟选手:",
+            "Show Ghosts:": "显示幽灵选手:",
+            "Name:": "名称:",
+            "Text:": "文本:",
+            "Rewrite Examples:": "重写样例:",
+            "Add images:": "添加图片:",
+            "Do not use:": "不使用:",
+            "Problem short name:": "题目简称:",
+            "Source problem:": "源问题:",
+            "Problem name (English):": "题目名称（英文）:",
+            "Input file name:": "输入文件名:",
+            "Output file name:": "输出文件名:",
+            "Time Limit:": "时间限制:",
+            "Memory Limit:": "内存限制:",
+            "Output only:": "仅输出:"
         };
         $(".field-name").each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
+            var field = $(this);
+            field.contents().each(function () {
+                if (this.nodeType === Node.TEXT_NODE) {
+                    var optionValue = this.textContent.trim();
+                    if (translations[optionValue]) {
+                        this.textContent = translations[optionValue];
+                    }
+                } else if (this.nodeType === Node.ELEMENT_NODE && this.tagName.toLowerCase() === 'label') {
+                    var optionValue = this.textContent.trim();
+                    if (translations[optionValue]) {
+                        this.textContent = translations[optionValue];
+                    }
+                }
+            });
         });
     })();
     (function () {
@@ -2607,12 +2896,18 @@ function toZH_CN() {
             "Login": "登录",
             "Run": "运行",
             "Start virtual contest": "开始虚拟参赛",
+            "Manage invitations": "管理邀请",
+            "Disable manager mode": "临时关闭管理模式",
+            "Enable manager mode": "开启管理模式",
             "Clone Contest": "克隆比赛",
             "Submit": "提交",
             "Save changes": "保存设置",
             "Filter": "过滤",
             "Find": "查找",
-            "Create Mashup Contest": "创建混搭比赛"
+            "Save": "保存",
+            "Create Mashup Contest": "创建混搭比赛",
+            "Delete problem": "删除问题",
+            "Restore problem": "恢复问题"
         };
         $('input[type="submit"]').each(function () {
             var optionValue = $(this).val();
@@ -2624,6 +2919,8 @@ function toZH_CN() {
     (function () {
         var translations = {
             "Reset": "重置",
+            "Delete contest": "删除比赛",
+            "Preview": "预览",
         };
         $('input[type="button"]').each(function () {
             var optionValue = $(this).val();
@@ -2653,7 +2950,6 @@ function toZH_CN() {
             }
         });
     })();
-
 
     // 杂项
     (function () {
@@ -2933,11 +3229,11 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
 const CFBetter_setting_sidebar_HTML = `
 <div class="CFBetter_setting_sidebar">
     <ul>
-        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本设置</a></li>
-        <li><a href="#translation-settings" id="sidebar-translation-settings">翻译设置</a></li>
-        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist设置</a></li>
-        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings">编辑器设置</a></li>
-        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容设置</a></li>
+        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本</a></li>
+        <li><a href="#translation-settings" id="sidebar-translation-settings">翻译</a></li>
+        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist</a></li>
+        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings">Monaco</a></li>
+        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容</a></li>
     </ul>
 </div>
 `;
@@ -3170,6 +3466,17 @@ const translation_settings_HTML = `
             <option value=3>使用[]</option>
         </select>
     </div>
+    <div class='CFBetter_setting_list'>
+        <label for="filterTextWithoutEmphasis">过滤文本中的**号</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p>
+            <p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用ChatGPT会忽略该项) </p>
+            </div>
+        </div>
+        <input type="checkbox" id="filterTextWithoutEmphasis" name="filterTextWithoutEmphasis">
+    </div>
 </div>
 `;
 
@@ -3253,54 +3560,68 @@ const clist_rating_settings_HTML = `
 
 const code_editor_settings_HTML = `
 <div id="code_editor-settings" class="settings-page">
-    <h3>编辑器设置</h3>
+    <h3>Monaco编辑器设置</h3>
     <hr>
     <h4>基本</h4>
     <div class='CFBetter_setting_list'>
-        <label for="problemPageCodeEditor"><span>快速代码编辑器</span></label>
+        <label for="problemPageCodeEditor"><span>题目页添加编辑器</span></label>
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>在问题页下面添加快速代码编辑器</p>
-            <p>支持代码补全，自动保存，在线代码调试</p>
+            <p>在问题页下面添加Monaco编辑器，代码会自动保存，提供在线代码调试</p>
             </div>
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
-    <h4>编辑器设置</h4>
+    <h4>LSP设置</h4>
     <div class='CFBetter_setting_list'>
-        <label for='indentSpacesCount'>
-            <div style="display: flex;align-items: center;">
-                <span>缩进空格数</span>
-            </div>
-        </label>
-        <input type='number' id='indentSpacesCount' class='no_default' placeholder='请输入' require = true>
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="howToIndent" style="display: flex;">Tab行为</label>
-        <select id="howToIndent" name="howToIndent">
-            <option value="space">使用空格缩进</option>
-            <option value="tab">使用制表符缩进</option>
-        </select>
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="isWrapEnabled"><span>自动换行</span></label>
-        <input type="checkbox" id="isWrapEnabled" name="isWrapEnabled">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="keywordAutoComplete"><span>关键字自动补全</span></label>
-        <input type="checkbox" id="keywordAutoComplete" name="keywordAutoComplete">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="cppCodeTemplateComplete"><span>C++代码模板补全</span></label>
+        <label for="useLSP"><span>使用LSP</span></label>
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>开启C++代码模板级补全，模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
+            <p>为 Monaco 连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等…</p>
+            <p>支持C++、Java、Python语言</p>
+            <p>你需要下载脚本页的 cfbetter_monaco-lsp-bridge 并启动，具体请查看脚本页的说明</p>
             </div>
         </div>
-        <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
+        <input type="checkbox" id="useLSP" name="useLSP">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for='CFBetter_MonacoLSPBridge_WorkUri'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">工作路径:</span>
+            </div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+                <p>你需要填写 CFBetter_MonacoLSPBridge 所在的路径：</p>
+                <p>默认路径：</p>
+                <div style="border: 1px solid #795548; padding: 10px;">
+                    <p>c:/CFBetter_LSPBridge/</p>
+                </div>
+            </div>
+        </div>
+        <input type='text' id='CFBetter_MonacoLSPBridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/' require = true>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for='CFBetter_MonacoLSPBridge_SocketUrl'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">Server:</span>
+            </div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+                <p>你需要填写你本机中 CFBetter_MonacoLSPBridge 的Server URL</p>
+                <p>注意，你通常不需要更改这里，如果更改，请按照默认URL的格式</p>
+                <div style="border: 1px solid #795548; padding: 10px;">
+                    <p>ws://127.0.0.1:2323/</p>
+                </div>
+            </div>
+        </div>
+        <input type='text' id='CFBetter_MonacoLSPBridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写' require = true>
     </div>
     <hr>
     <h4>在线代码调试</h4>
@@ -3323,34 +3644,6 @@ const code_editor_settings_HTML = `
         <input type='radio' name='compiler' value='rextester'>
         <span class='CFBetter_setting_menu_label_text'>rextester</span>
     </label>
-    <label>
-        <input type='radio' name='compiler' value='codechef'>
-        <span class='CFBetter_setting_menu_label_text'>codechef
-            <div class="help_tip">
-                ${helpCircleHTML}
-                <div class="tip_text">
-                <p>请在下方添加csrfToken</p>
-                </div>
-            </div>
-        </span>
-    </label>
-    <div class='CFBetter_setting_menu_input' id='codechef' style='display: none;'>
-        <div class='CFBetter_setting_list'>
-            <label for='codecheCsrfToken'>
-                <div style="display: flex;align-items: center;">
-                    <span class="input_label">CsrfToken:</span>
-                </div>
-            </label>
-            <div class="help_tip">
-                ${helpCircleHTML}
-                <div class="tip_text">
-                <p><b>请填写csrfToken</b>，注意不包含单引号</p>
-                <p>登录codechef网站，然后打开codechef页面的控制台，输入csrfToken即可查看</p>
-                </div>
-            </div>
-            <input type='text' id='codecheCsrfToken' class='no_default' placeholder='请输入KEY' require = true>
-        </div>
-    </div>
 </div>
 `;
 
@@ -3600,20 +3893,15 @@ async function settingPanel() {
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
+        $("#filterTextWithoutEmphasis").prop("checked", GM_getValue("filterTextWithoutEmphasis") === true);
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
-        $('#indentSpacesCount').val(GM_getValue("indentSpacesCount"));
-        $('#howToIndent').val(GM_getValue("howToIndent"));
-        $("#isWrapEnabled").prop("checked", GM_getValue("isWrapEnabled") === true);
-        $("#keywordAutoComplete").prop("checked", GM_getValue("keywordAutoComplete") === true);
-        $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
+        $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
+        $("#CFBetter_MonacoLSPBridge_WorkUri").val(GM_getValue("CFBetter_MonacoLSPBridge_WorkUri"));
+        $("#CFBetter_MonacoLSPBridge_SocketUrl").val(GM_getValue("CFBetter_MonacoLSPBridge_SocketUrl"));
         $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
         $("input[name='compiler']").css("color", "gray");
-        if (onlineCompilerChoice == "codechef") {
-            $("#codechef").show();
-        }
-        $('#codecheCsrfToken').val(GM_getValue("codecheCsrfToken"));
 
         // 翻译选择情况监听
         $("input[name='translation']").change(function () {
@@ -3625,16 +3913,6 @@ async function settingPanel() {
                 }
             } else {
                 $("#openai").hide();
-            }
-        });
-
-        // 在线编译器选择情况监听
-        $("input[name='compiler']").change(function () {
-            var selected = $(this).val(); // 获取当前选中的值
-            if (selected === "codechef") {
-                $("#codechef").show();
-            } else {
-                $("#codechef").hide();
             }
         });
 
@@ -3663,6 +3941,7 @@ async function settingPanel() {
                 commentTranslationMode: $('#comment_translation_mode').val(),
                 transWaitTime: $('#transWaitTime').val(),
                 replaceSymbol: $('#translation_replaceSymbol').val(),
+                filterTextWithoutEmphasis: $('#filterTextWithoutEmphasis').prop("checked"),
                 retransAction: $('#translation_retransAction').val(),
                 showClistRating_contest: $('#showClistRating_contest').prop("checked"),
                 showClistRating_problemset: $('#showClistRating_problemset').prop("checked"),
@@ -3670,13 +3949,10 @@ async function settingPanel() {
                 RatingHidden: $('#RatingHidden').prop("checked"),
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
-                indentSpacesCount: $('#indentSpacesCount').val(),
-                howToIndent: $('#howToIndent').val(),
-                isWrapEnabled: $("#isWrapEnabled").prop("checked"),
-                keywordAutoComplete: $("#keywordAutoComplete").prop("checked"),
-                cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
+                useLSP: $("#useLSP").prop("checked"),
+                CFBetter_MonacoLSPBridge_WorkUri: $('#CFBetter_MonacoLSPBridge_WorkUri').val(),
+                CFBetter_MonacoLSPBridge_SocketUrl: $('#CFBetter_MonacoLSPBridge_SocketUrl').val(),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
-                codecheCsrfToken: $('#codecheCsrfToken').val(),
             };
 
             // 判断是否改变
@@ -3729,8 +4005,14 @@ async function settingPanel() {
                                 $('html').removeAttr('data-theme');
                             } else if (darkMode == "dark") {
                                 $('html').attr('data-theme', 'dark');
+                                if (editor) {
+                                    monaco.editor.setTheme('vs-dark');
+                                }
                             } else {
                                 $('html').attr('data-theme', 'light');
+                                if (editor) {
+                                    monaco.editor.setTheme('vs');
+                                }
                                 // 移除旧的事件监听器
                                 const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
                                 window.matchMedia('(prefers-color-scheme: dark)');
@@ -3887,7 +4169,7 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
     else if (commentTranslationMode == "2") translateButtonText = "翻译选中";
     else translateButtonText = "翻译";
 
-    let htmlString = `<div class='html2md-panel'>
+    let htmlString = `<div class='html2md-panel input-output-copier'>
     <button class='html2mdButton' id='html2md-view${suffix}'>MarkDown视图</button>
     <button class='html2mdButton' id='html2md-cb${suffix}'>Copy</button>
     <button class='html2mdButton' id='translateButton${suffix}'>${translateButtonText}</button>
@@ -4887,7 +5169,7 @@ async function checkCookie(isContest = false) {
     }
     return ok;
 }
-// 创建css
+// 创建Rating相关css
 function creatRatingCss(hasborder = true) {
     let dynamicCss = "";
     let hiddenCss = RatingHidden ? ":hover" : "";
@@ -5124,17 +5406,14 @@ function recolorStandings() {
     });
 }
 
-// 语言切换选项value与ace mode的对应关系
-var extensionMap = {
-    "43": "program.c", "80": "program.cpp", "52": "program.cpp", "50": "program.cpp", "54": "program.cpp", "73": "program.cpp",
-    "59": "program.cpp", "61": "program.cpp", "65": "program.cs", "79": "program.cs", "9": "program.cs", "28": "program.d", "32": "program.go",
-    "12": "program.hs", "60": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java", "74": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java",
-    "87": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java", "36": "[^{}]*public\\s+(final)?\\s*class\\s+(\\w+).*|$2.java", "77": "program.kt",
-    "83": "program.kt", "19": "program.ml", "3": "program.dpr", "4": "program.pas", "51": "program.pas", "13": "program.pl", "6": "program.php",
-    "7": "program.py", "31": "a.py", "40": "a.py", "41": "a.py", "70": "a.py", "67": "program.rb", "75": "program.rs",
-    "20": "[^{}]*object\\s+(\\w+).*|$1.scala", "34": "program.js", "55": "program.js"
+// 语言切换选项value与monaco_language的对应关系
+var value_monacoLanguageMap = {
+    "4": "pascal", "6": "php", "7": "python", "9": "csharp", "13": "perl", "20": "scala", "31": "python",
+    "32": "go", "34": "javascript", "36": "java", "40": "python", "41": "python", "43": "cpp",
+    "50": "cpp", "51": "pascal", "52": "cpp", "54": "cpp", "55": "javascript", "59": "cpp", "60": "java",
+    "61": "cpp", "65": "csharp", "67": "ruby", "70": "python", "73": "cpp", "74": "java", "75": "rust",
+    "77": "kotlin", "79": "csharp", "80": "cpp", "83": "kotlin", "87": "java"
 };
-
 
 // 更新代码提交页的HTML元素
 async function CloneOriginalHTML(submitUrl, cacheKey) {
@@ -5147,12 +5426,6 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
                 const html = response.responseText;
                 const cloneHTML = $(html);
                 localStorage.setItem(cacheKey, html);
-
-                // 更新，防止为旧的csrf
-                let _token = cloneHTML.find('form.submit-form').attr('action');
-                $('#CFBetter_SubmitForm').attr('action', submitUrl + _token);
-                CF_csrf_token = _token.match(/(?<=\?csrf_token=)[^&]+/)?.[0];
-
                 resolve(cloneHTML);
             },
             onerror: function (response) {
@@ -5172,13 +5445,12 @@ async function getSubmitHTML(submitUrl) {
         // 校验
         let cloneHTML = $(localStorage.getItem(cacheKey));
         if (cloneHTML.find('form.submit-form').length > 0) {
-            // 获取csrf_token
-            let _token = cloneHTML.find('form.submit-form').attr('action');
-            CF_csrf_token = _token.match(/(?<=\?csrf_token=)[^&]+/)?.[0];
             return cloneHTML;
         } else {
             // 存在错误，更新缓存
-            console.log("%c缓存存在错误，正在尝试更新", "color:blue;")
+            console.log("%c缓存存在错误，尝试更新", "color:red;");
+            console.log(`缓存目标submitUrl: ${submitUrl}`);
+            console.log("%c如果下面有新的相关报错，请先确认是否是网络问题，如果不是，请前往讨论区反馈", "color:red;");
             return await CloneOriginalHTML(submitUrl, cacheKey);
         }
 
@@ -5209,18 +5481,19 @@ async function getCode(url) {
 }
 
 // 创建表单
-async function CreateCodeDevFrom(submitUrl, cloneHTML) {
+async function CreateCodeDevForm(submitUrl, cloneHTML) {
     // 表单
     var formDiv = $('<form method="post" id="CFBetter_SubmitForm"></form>');
     $('.ttypography').after(formDiv);
-    let _action = cloneHTML.find('form.submit-form').attr('action');
-    formDiv.attr('action', submitUrl + _action);
+    formDiv.attr('action', submitUrl + "?csrf_token=" + CF_csrf_token);
 
     // 顶部区域
-    var topDiv = $(`<div style="display:flex;align-items: center;justify-content: space-between;"></div>`)
-    let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 编辑器语言选择
+    var topDiv = $(`<div class="topDiv"></div>`);
+    let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 语言选择
     selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
     topDiv.append(selectLang);
+    var topRightDiv = $(`<div class="topRightDiv"></div>`);
+    topDiv.append(topRightDiv);
     formDiv.append(topDiv);
 
     // 问题选择/编号
@@ -5228,15 +5501,15 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     let problemCode;
     if (is_acmsguru) {
         problemCode = $('h4').eq(0).text();
-        let matchResult = problemCode.match(/([A-Z])/);
+        let matchResult = problemCode.match(/([A-Z0-9]+)/);
         problemCode = matchResult[0];
     } else if (is_problemset_problem) {
-        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z]+?)$/);
+        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)$/);
         problemCode = match[1] + match[2];
         selectProblem.attr('name', 'submittedProblemCode');
     } else {
         problemCode = $('.header .title').eq(0).text();
-        let matchResult = problemCode.match(/([A-Z])/);
+        let matchResult = problemCode.match(/([A-Z0-9]+)/);
         problemCode = matchResult[0];
     }
     selectProblem.val(problemCode);
@@ -5247,49 +5520,8 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     formDiv.append(sourceDiv);
 
     // 代码编辑器
-    var editorDiv = $('<div id="CFBetter_editor" style="height:600px"></div>');
+    var editorDiv = $('<div id="CFBetter_editor"></div>');
     formDiv.append(editorDiv);
-    editor = ace.edit('CFBetter_editor');
-    editor.$blockScrolling = Infinity;// 禁用滚动警告
-    editor.setTheme('ace/theme/textmate'); // 主题
-    editor.setShowPrintMargin(false); // 不显示打印边距
-    editor.setFontSize(parseInt(editorFontSize)); // 字体大小
-    if (keywordAutoComplete) {
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true
-        });
-    }
-    editor.setOption("tabSize", parseInt(indentSpacesCount)); // 缩进空格数
-    // tab行为
-    if (howToIndent == "space") editor.setOption("useSoftTabs", true);
-    else editor.setOption("useSoftTabs", false);
-    // 自动换行
-    editor.setOption("wrap", isWrapEnabled ? "free" : "off");
-
-    // 调整字体大小
-    var changeSize = $(`<div><label for="fontSizeInput">字体大小：</label><input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
-    topDiv.append(changeSize);
-    changeSize.find('input#fontSizeInput').on('input', function () {
-        var size = $(this).val();
-        editor.setFontSize(parseInt(size));
-        GM_setValue('editorFontSize', size);
-    });
-
-    // 代码同步与保存
-    const nowUrl = window.location.href;
-    const code = await getCode(nowUrl);
-    if (code) {
-        editor.setValue(code, 1); // 恢复代码
-        $('#sourceCodeTextarea').val(code);
-    }
-    editor.scrollToRow(editor.session.getLength() - 1); // 滚动到最后一行
-    editor.getSession().on('change', async function () {
-        const code = editor.getValue();
-        $('#sourceCodeTextarea').val(code); // 将ace editor的内容同步到sourceCodeTextarea
-        await saveCode(nowUrl, code);
-    });
 
     // 自定义调试
     var customTestDiv = $(`
@@ -5325,8 +5557,9 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     var from = {
         formDiv: formDiv,
         selectLang: selectLang,
+        topRightDiv: topRightDiv,
         sourceDiv: sourceDiv,
-        editor: editor,
+        editorDiv: editorDiv,
         runButton: runButton,
         submitButton: submitButton,
         submitDiv: submitDiv
@@ -5334,23 +5567,1576 @@ async function CreateCodeDevFrom(submitUrl, cloneHTML) {
     return from;
 }
 
+/**
+ * 创建新的monaco编辑器
+ */
+async function createNewMonacoEdit(language, form, support) {
+    // 等待monacoLoader加载完毕
+    async function waitForMonacoLoaderOnload() {
+        return new Promise((resolve) => {
+            const checkInitialized = () => {
+                if (monacoLoaderOnload) {
+                    resolve();
+                } else {
+                    setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
+                }
+            };
+            checkInitialized();
+        });
+    }
+    if (!monacoLoaderOnload) await waitForMonacoLoaderOnload();
+    /**
+     * 通用参数
+     */
+    var id = 0; // 协议中的id标识
+    var workspace = language + "_workspace";
+    var rootUri = CFBetter_MonacoLSPBridge_WorkUri + workspace;
+    // 文件名
+    var InstanceID = getRandomNumber(8).toString();
+    var filename = language == "java" ? "hello/src/" + InstanceID : InstanceID;
+    // 后缀名
+    var fileExtension =
+        language === "cpp"
+            ? ".cpp"
+            : language === "python"
+                ? ".py"
+                : language === "java"
+                    ? ".java"
+                    : "";
+    var uri = rootUri + "/" + filename + fileExtension;
+    var initialized = false; // 是否已初始化
+    var serverInfo; // 服务器返回的支持信息
+    var model; // model
+    var CFBetter_monaco = {};
+    window.CFBetter_monaco = CFBetter_monaco; // 全局方法
+
+    /**
+     * 初始化monaco
+     */
+    uri = monaco.Uri.file(uri);
+    model = monaco.editor.getModel(uri);
+    if (!model) model = monaco.editor.createModel('', language, uri);
+    editor = monaco.editor.create(document.getElementById("CFBetter_editor"), {
+        model: model,
+        rootUri: rootUri,
+        fontSize: 15,
+        tabSize: 4,
+        theme: darkMode == "dark" ? "vs-dark" : "vs",
+        bracketPairColorization: {
+            enabled: true,
+            independentColorPoolPerBracketType: true,
+        },
+        automaticLayout: true,
+        lineNumbersMinChars: 3,
+        matchOnWordStartOnly: false,
+        wordWrap: "on",
+        wrappingIndent: "same",
+        glyphMargin: true,
+        formatOnType: true,
+        scrollbar: {
+            verticalScrollbarSize: 10,
+            horizontalScrollbarSize: 10,
+        },
+    });
+
+    /**
+     * 添加快捷功能
+     */
+    editor.updateOptions({ fontSize: parseInt(editorFontSize) }); // 字体大小
+
+    // 调整字体大小
+    var changeSize = $(`<div><label for="fontSizeInput">字体大小：</label><input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
+    form.topRightDiv.append(changeSize);
+    changeSize.find('input#fontSizeInput').on('input', function () {
+        var size = $(this).val();
+        editor.updateOptions({ fontSize: parseInt(size) });
+        GM_setValue('editorFontSize', size);
+    });
+
+    // 全屏按钮
+    var fullscreenButton = $('<button>', {
+        'type': 'button',
+        'class': 'html2mdButton',
+        'text': '全屏'
+    });
+    form.topRightDiv.append(fullscreenButton);
+    fullscreenButton.on('click', enterFullscreen);
+
+    // 固定到底部按钮
+    var fixToBottomButton = $('<button>', {
+        'type': 'button',
+        'class': 'html2mdButton',
+        'text': '固定到底部'
+    });
+    form.topRightDiv.append(fixToBottomButton);
+    fixToBottomButton.on('click', fixToBottom);
+
+    // 固定到右侧按钮
+    var fixToRightButton = $('<button>', {
+        'type': 'button',
+        'class': 'html2mdButton',
+        'text': '固定到右侧'
+    });
+    form.topRightDiv.append(fixToRightButton);
+    fixToRightButton.on('click', fixToRight);
+
+    // 当前固定状态
+    var isFixed = false;
+
+    // 进入全屏
+    function enterFullscreen() {
+        if (isFixed) return; // 如果已经固定则不执行
+        var editor = $('#CFBetter_editor');
+        editor.addClass('fullscreen');
+        var exitButton = $('<button>', {
+            'id': 'exitButton',
+            'class': 'html2mdButton',
+            'text': '退出全屏'
+        }).addClass('exit_button').on('click', exitFullscreen);
+        $('body').append(exitButton);
+        disableButtons();
+    }
+
+    // 退出全屏
+    function exitFullscreen() {
+        var editor = $('#CFBetter_editor');
+        editor.removeClass('fullscreen');
+        $('#exitButton').remove();
+        enableButtons();
+    }
+
+    // 固定到底部
+    function fixToBottom() {
+        if (isFixed) return; // 如果已经固定则不执行
+        var editor = $('#CFBetter_editor');
+        editor.addClass('fixed');
+
+        // 创建空白框来防止遮挡下面的内容
+        var halfHeight = $(window).height() * 0.5;
+        var blankSpace = $('<div>', {
+            'id': 'blank-space',
+            'style': 'height: ' + (halfHeight + 30) + 'px;'
+        });
+        $('body').append(blankSpace);
+        var cancelButton = $('<button>', {
+            'id': 'cancelButton',
+            'class': 'html2mdButton',
+            'text': '取消固定'
+        }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
+        $('body').append(cancelButton);
+        disableButtons();
+    }
+
+    // 取消固定到底部
+    function cancelFixingToBottom() {
+        var editor = $('#CFBetter_editor');
+        editor.removeClass('fixed');
+        // 移除空白框和取消按钮
+        $('#blank-space').remove();
+        $('#cancelButton').remove();
+        enableButtons();
+    }
+
+    // 固定到右侧边栏
+    var sidebarStyle;
+    function fixToRight() {
+        if (isFixed) return; // 如果已经固定则不执行
+        var sidebar = $('#sidebar');
+        sidebar.hide();
+        sidebarStyle = GM_addStyle(`
+            #body {
+                min-width: 50vw;
+                max-width: 50vw;
+            }
+            .content-with-sidebar {
+                margin-right: 0px !important;
+            }
+        `);
+
+        $('#body').wrap('<div id="right-side-wrapper" style="display:flex"></div>');
+        var blankSpace = $('<div>', {
+            'id': 'blank-space',
+            'style': 'float: right; width: 50vw;'
+        });
+        $('#right-side-wrapper').append(blankSpace);
+
+        var editor = $('#CFBetter_editor');
+        editor.addClass('right-side');
+
+        var cancelButton = $('<button>', {
+            'id': 'cancelButton',
+            'class': 'html2mdButton',
+            'text': '取消固定'
+        }).addClass('exit_button bottom').on('click', cancelFixingToRight);
+        $('body').append(cancelButton);
+        disableButtons();
+    }
+
+    // 取消固定到右侧边栏
+    function cancelFixingToRight() {
+        var sidebar = $('#sidebar');
+        sidebar.show();
+        $('#blank-space').remove();
+        $('#cancelButton').remove();
+        $('#body').unwrap();
+
+        if (sidebarStyle) {
+            $(sidebarStyle).remove();
+        }
+        var editor = $('#CFBetter_editor');
+        editor.removeClass('right-side');
+        enableButtons();
+    }
+
+    // 禁用按钮
+    function disableButtons() {
+        fullscreenButton.prop('disabled', true);
+        fixToBottomButton.prop('disabled', true);
+        fixToRightButton.prop('disabled', true);
+    }
+
+    // 启用按钮
+    function enableButtons() {
+        fullscreenButton.prop('disabled', false);
+        fixToBottomButton.prop('disabled', false);
+        fixToRightButton.prop('disabled', false);
+    }
+
+    // 代码同步与保存
+    var nowUrl = window.location.href;
+    nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时会多出一个#，去掉
+    const code = await getCode(nowUrl);
+    if (code) {
+        editor.setValue(code); // 恢复代码
+        $('#sourceCodeTextarea').val(code);
+    }
+    editor.onDidChangeModelContent(async () => {
+        // 将monaco editor的内容同步到sourceCodeTextarea
+        const code = editor.getValue();
+        $('#sourceCodeTextarea').val(code);
+        await saveCode(nowUrl, code);
+    });
+
+    if (!support || !useLSP) { return; } // 如果不支持lsp，则到此为止
+
+    /**
+     * LSP连接状态指示
+     */
+    let styleElement;
+    var lspStateDiv = $('<div>', {
+        'id': 'lspStateDiv',
+        'text': '创建LSP连接……'
+    }).addClass('await').on('click', () => {
+        styleElement = GM_addStyle(darkenPageStyle);
+        LSPLog.show();
+    });
+    form.topRightDiv.prepend(lspStateDiv);
+
+    var LSPLog = $('<div id="LSPLog" style="display: none;"><button class="html2mdButton">关闭</button><div id="LSPLogList" style="overflow: auto;"></div><div>');
+    $('body').append(LSPLog);
+    var LSPLogList = $('<ul></ul>');
+    $('#LSPLogList').append(LSPLogList);
+    var closeButton = LSPLog.find('button');
+    closeButton.on('click', function () {
+        LSPLog.hide();
+        $(styleElement).remove();
+    });
+
+    function pushLSPLogMessage(status, msg, data) {
+        var li = $('<li>').text('[' + new Date().toLocaleString() + '] ' + msg);
+        if (status === 'error') {
+            li.attr('style', 'color: #f44336;');
+        } else if (status === 'warn') {
+            li.attr('style', 'color: #ff9800;');
+        } else if (status === 'info') {
+            li.attr('style', 'color: #616161;');
+        }
+        if (data) {
+            var jsonText = JSON.stringify(data, null, 2);
+            var details = $('<details>');
+            var summary = $('<summary>').text('Data');
+            var pre = $('<pre>').text(jsonText);
+            details.append(summary, pre);
+            li.append(details);
+        }
+        LSPLogList.append(li);
+    }
+
+    /**
+     * 添加状态底栏
+     */
+    var statusBar = $('<div id="statusBar">');
+    form.editorDiv.after(statusBar);
+
+    /**
+     * languageSocket
+     */
+    var url = CFBetter_MonacoLSPBridge_SocketUrl;
+    var languageSocket = new WebSocket(url + language);
+    monacoSocket.push(languageSocket);
+    var languageSocketState = false;
+    var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
+    languageSocket.onopen = () => {
+        languageSocketState = true;
+        lspStateDiv.text('等待初始化回执……');
+        pushLSPLogMessage("info", "languageSocket 连接已建立");
+    };
+    languageSocket.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        if (message.id === 0 && message.result) {
+            // 初始化完成
+            lspStateDiv.removeClass().addClass('success').text('LSP已连接');
+            pushLSPLogMessage("info", "Initialization 完成");
+            serverInfo = message.result; // 存下服务器支持信息
+            CFBetter_monaco.openDocRequest(); // 打开文档
+            CFBetter_monaco.RegistrationAfterInit(); // 注册需要初始化信息的方法
+        } else if (message.id === 0 && message.error) {
+            pushLSPLogMessage("warn", "Initialization 失败");
+        } else if (message.id !== undefined && responseHandlers[message.id]) {
+            // 如果收到带有id字段的消息，则回传给对应的事件触发函数
+            responseHandlers[message.id](message);
+            delete responseHandlers[message.id]; // 删除已处理的事件触发函数
+        } else if (message.method == "textDocument/publishDiagnostics") {
+            // 接收代码诊断推送
+            CFBetter_monaco.updateMarkers(message);
+        } else if (message.method == "workspace/applyEdit") {
+            // 应用服务器推送的更改
+            CFBetter_monaco.applyEdit(message);
+        }
+    };
+    languageSocket.onerror = (error) => {
+        pushLSPLogMessage("error", `languageSocket 发生错误`, error);
+    };
+    languageSocket.onclose = (event) => {
+        languageSocketState = false;
+        lspStateDiv.removeClass().addClass('error').text('LSP连接已断开');
+        pushLSPLogMessage("warn", "languageSocket 连接已关闭");
+    };
+
+    /**
+     * 等待LanguageSocketState
+     */
+    async function waitForLanguageSocketState() {
+        return new Promise((resolve) => {
+            const checkInitialized = () => {
+                if (languageSocketState) {
+                    resolve();
+                } else {
+                    setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
+                }
+            };
+            checkInitialized();
+        });
+    }
+
+    // 等待lsp响应初始化结果
+    async function waitForInitialized() {
+        return new Promise((resolve) => {
+            const checkInitialized = () => {
+                if (initialized) {
+                    resolve();
+                } else {
+                    setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
+                }
+            };
+            checkInitialized();
+        });
+    }
+
+    /**
+     * 与languageSocket通信的包装方法
+     */
+    async function sendMessage(data, requiresResponse, callback) {
+        if (!initialized) {
+            await waitForInitialized(); // 等待initialized为真
+        }
+        if (requiresResponse) {
+            responseHandlers[data.id] = callback; // 将事件触发函数与id关联起来
+        }
+        if (!languageSocketState) await waitForLanguageSocketState();
+        languageSocket.send(JSON.stringify(data));
+    }
+    // 发送消息并等待返回结果
+    function fetchData(params, callback) {
+        sendMessage(params, true, callback);
+    }
+    // 发送消息，不需要等待返回结果
+    function sendData(data) {
+        sendMessage(data, false);
+    }
+
+    /**
+     * 代码文件更新fileWebSocket
+     */
+    var fileWebSocket = new WebSocket(url + "file");
+    var fileWebSocketState = false;
+    monacoSocket.push(fileWebSocket);
+    fileWebSocket.onopen = () => {
+        fileWebSocketState = true;
+        pushLSPLogMessage("info", "fileWebSocket 连接已建立");
+    };
+    fileWebSocket.onclose = (ev) => {
+        fileWebSocketState = false;
+        pushLSPLogMessage("warn", "fileWebSocket 连接已关闭", ev);
+    };
+    fileWebSocket.onmessage = (ev) => {
+        let message = JSON.parse(ev.data);
+        if (message.result !== "ok")
+            pushLSPLogMessage("error", `update file failed: ${ev}`);
+    };
+    async function updateFile(workspace, filename, fileExtension, code) {
+        async function waitForfileWebSocketState() {
+            return new Promise((resolve) => {
+                const checkInitialized = () => {
+                    if (fileWebSocketState) {
+                        resolve();
+                    } else {
+                        setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
+                    }
+                };
+                checkInitialized();
+            });
+        }
+        if (!fileWebSocketState) await waitForfileWebSocketState();
+        fileWebSocket.send(
+            JSON.stringify({
+                type: "update",
+                workspace,
+                filename,
+                fileExtension,
+                code,
+            })
+        );
+    }
+
+    /**
+     * 发送初始化请求
+     */
+    CFBetter_monaco.Initialize = () => {
+        //初始化initialize
+        const capabilities = {
+            workspace: {
+                applyEdit: true,
+            },
+            textDocument: {
+                publishDiagnostics: {
+                    relatedInformation: true,
+                    versionSupport: false,
+                    tagSupport: {
+                        valueSet: [1, 2],
+                    },
+                    codeDescriptionSupport: true,
+                },
+                completion: {
+                    contextSupport: true,
+                    completionItem: {
+                        snippetSupport: true,
+                        commitCharactersSupport: true,
+                        documentationFormat: ["markdown", "plaintext"],
+                        deprecatedSupport: true,
+                        preselectSupport: true,
+                        tagSupport: {
+                            valueSet: [1],
+                        },
+                        insertReplaceSupport: true,
+                        resolveSupport: {
+                            properties: [
+                                "documentation",
+                                "detail",
+                                "additionalTextEdits",
+                            ],
+                        },
+                        insertTextModeSupport: {
+                            valueSet: [1, 2],
+                        },
+                    },
+                },
+                hover: {
+                    dynamicRegistration: true,
+                    contentFormat: ["markdown", "plaintext"],
+                },
+                signatureHelp: {
+                    signatureInformation: {
+                        documentationFormat: ["markdown", "plaintext"],
+                        parameterInformation: {
+                            labelOffsetSupport: true,
+                        },
+                        activeParameterSupport: true,
+                    },
+                    contextSupport: true,
+                },
+                definition: {
+                    dynamicRegistration: true,
+                    linkSupport: true,
+                },
+                references: {
+                    dynamicRegistration: true,
+                },
+                documentHighlight: {
+                    dynamicRegistration: true,
+                },
+                codeAction: {
+                    codeActionLiteralSupport: {
+                        codeActionKind: {
+                            valueSet:
+                                language == "java"
+                                    ? []
+                                    : [
+                                        "",
+                                        "quickfix",
+                                        "refactor",
+                                        "refactor.extract",
+                                        "refactor.inline",
+                                        "refactor.rewrite",
+                                        "source",
+                                        "source.organizeImports",
+                                    ],
+                        },
+                    },
+                },
+                rename: {
+                    dynamicRegistration: true,
+                    prepareSupport: true,
+                    prepareSupportDefaultBehavior: 1,
+                    honorsChangeAnnotations: true,
+                },
+                documentLink: {
+                    tooltipSupport: true,
+                },
+                typeDefinition: {
+                    dynamicRegistration: true,
+                    linkSupport: true,
+                },
+                implementation: {
+                    dynamicRegistration: true,
+                    linkSupport: true,
+                },
+                colorProvider: {
+                    dynamicRegistration: true,
+                },
+                foldingRange: {
+                    dynamicRegistration: true,
+                    rangeLimit: 5000,
+                    lineFoldingOnly: true,
+                },
+                declaration: {
+                    dynamicRegistration: true,
+                    linkSupport: true,
+                },
+                semanticTokens: {
+                    dynamicRegistration: true,
+                    tokenTypes: [
+                        "namespace",
+                        "type",
+                        "class",
+                        "enum",
+                        "interface",
+                        "struct",
+                        "typeParameter",
+                        "parameter",
+                        "variable",
+                        "property",
+                        "enumMember",
+                        "event",
+                        "function",
+                        "method",
+                        "macro",
+                        "keyword",
+                        "modifier",
+                        "comment",
+                        "string",
+                        "number",
+                        "regexp",
+                        "operator",
+                    ],
+                    tokenModifiers: [
+                        "declaration",
+                        "definition",
+                        "readonly",
+                        "static",
+                        "deprecated",
+                        "abstract",
+                        "async",
+                        "modification",
+                        "documentation",
+                        "defaultLibrary",
+                    ],
+                    formats: ["relative"],
+                    requests: {
+                        range: true,
+                        full: {
+                            delta: true,
+                        },
+                    },
+                    multilineTokenSupport: false,
+                    overlappingTokenSupport: false,
+                },
+                callHierarchy: {
+                    dynamicRegistration: true,
+                },
+            },
+            window: {
+                showMessage: {
+                    messageActionItem: {
+                        additionalPropertiesSupport: true,
+                    },
+                },
+                showDocument: {
+                    support: true,
+                },
+                workDoneProgress: true,
+            },
+            general: {
+                regularExpressions: {
+                    engine: "ECMAScript",
+                    version: "ES2020",
+                },
+                markdown: {
+                    parser: "marked",
+                    version: "1.1.0",
+                },
+            },
+        };
+
+        const initializeRequest = {
+            id: id++,
+            jsonrpc: "2.0",
+            method: "initialize",
+            params: {
+                processId: null,
+                clientInfo: {
+                    name: "CFMonaco" + InstanceID,
+                },
+                locale: "zh-CN",
+                rootPath: null,
+                rootUri: null,
+                capabilities: capabilities,
+                trace: "off",
+                workspaceFolders: [
+                    {
+                        uri:
+                            "file:///" + CFBetter_MonacoLSPBridge_WorkUri + workspace,
+                        name:
+                            "file:///" + CFBetter_MonacoLSPBridge_WorkUri + workspace,
+                    },
+                ],
+            },
+        };
+        languageSocket.send(JSON.stringify(initializeRequest));
+
+        // 打开文档函数
+        CFBetter_monaco.openDocRequest = function () {
+            const initializ = {
+                jsonrpc: "2.0",
+                method: "initialized",
+                params: {},
+            };
+            languageSocket.send(JSON.stringify(initializ));
+            const openDocRequest = {
+                jsonrpc: "2.0",
+                method: "textDocument/didOpen",
+                params: {
+                    textDocument: {
+                        uri: model.uri.toString(),
+                        languageId: language,
+                        version: model.getVersionId(),
+                        text: model.getValue(),
+                    },
+                },
+            };
+            languageSocket.send(JSON.stringify(openDocRequest));
+            initialized = true; // 初始化完成，这里确认逻辑待完善
+        };
+
+        // 初始化更新文件
+        updateFile(workspace, filename, fileExtension, model.getValue());
+
+        /**
+         * 一些工具函数
+         */
+        // 将lsp格式的rang转换为Monaco格式
+        CFBetter_monaco.lspRangeToMonacoRange = function (range) {
+            const { start, end } = range;
+            return new monaco.Range(
+                start.line + 1,
+                start.character + 1,
+                end.line + 1,
+                end.character + 1
+            );
+        };
+        // 将Monaco格式的rang转为lsp格式
+        CFBetter_monaco.MonacoRangeTolspRange = function (range) {
+            return {
+                start: {
+                    line: range.startLineNumber - 1,
+                    character: range.startColumn - 1,
+                },
+                end: {
+                    line: range.endLineNumber - 1,
+                    character: range.endColumn - 1,
+                },
+            };
+        };
+        // 将Monaco格式的position转为lsp格式的
+        CFBetter_monaco.MonacoPositionTolspPosition = function (position) {
+            return {
+                line: position.lineNumber - 1,
+                character: position.column - 1,
+            };
+        };
+        // 将Monaco格式的severity转为lsp格式的
+        CFBetter_monaco.MonacoSeverityTolspSeverity = function (severity) {
+            switch (severity) {
+                case 8:
+                    return 1;
+                case 1:
+                    return 4;
+                case 2:
+                    return 3;
+                case 4:
+                    return 2;
+                default:
+                    return severity;
+            }
+        };
+        // 将lsp格式的severity转为Monaco格式的
+        CFBetter_monaco.lspSeverityToMonacoSeverity = function (severity) {
+            switch (severity) {
+                case 1:
+                    return 8;
+                case 4:
+                    return 1;
+                case 3:
+                    return 2;
+                case 2:
+                    return 4;
+                default:
+                    return severity;
+            }
+        };
+        // 收集Monaco数据中的rang数据
+        CFBetter_monaco.CollectRange = function (item) {
+            return {
+                startLineNumber: item.startLineNumber,
+                startColumn: item.startColumn,
+                endLineNumber: item.endLineNumber,
+                endColumn: item.endColumn,
+            };
+        };
+        // 将lsp格式的Edit转换为Monaco格式
+        CFBetter_monaco.lspEditToMonacoEdit = function (edit) {
+            const edits = [];
+
+            if (language == "python") {
+                for (const item1 of edit.documentChanges) {
+                    for (const item2 of item1.edits) {
+                        const newElement = {
+                            textEdit: {
+                                range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
+                                text: item2.newText,
+                            },
+                            resource: monaco.Uri.parse(item1.textDocument.uri),
+                            versionId: model.getVersionId(),
+                        };
+                        edits.push(newElement);
+                    }
+                }
+            } else if (language == "java") {
+                for (const item1 in edit.changes) {
+                    edit.changes[item1].forEach((item2) => {
+                        const newElement = {
+                            textEdit: {
+                                range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
+                                text: item2.newText,
+                            },
+                            resource: uri,
+                            versionId: model.getVersionId(),
+                        };
+                        edits.push(newElement);
+                    });
+                }
+            } else {
+                for (const key in edit.changes) {
+                    const arr = edit.changes[key];
+                    for (const item of arr) {
+                        const newElement = {
+                            textEdit: {
+                                range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                                text: item.newText,
+                            },
+                            resource: monaco.Uri.parse(key),
+                            versionId: model.getVersionId(),
+                        };
+                        edits.push(newElement);
+                    }
+                }
+            }
+            return { edits: edits };
+        };
+    }
+
+    /**
+     * 注册功能
+     */
+    CFBetter_monaco.RegistrationAfterInit = () => {
+        // 注册语言
+        monaco.languages.register({ id: language });
+
+        // 注册"Command"
+        (function registerCommand() {
+            serverInfo.capabilities.executeCommandProvider.commands.forEach(
+                (item) => {
+                    pushLSPLogMessage("info", `已注册命令↓`, item);
+                    monaco.editor.registerCommand(item, (accessor, ...args) => {
+                        sendData({
+                            jsonrpc: "2.0",
+                            id: id++,
+                            method: "workspace/executeCommand",
+                            params: {
+                                command: item,
+                                arguments: args,
+                            },
+                        });
+                    });
+                }
+            );
+        })();
+
+        // 注册"增量更新"
+        model.onDidChangeContent((event) => {
+            updateFile(workspace, filename, fileExtension, model.getValue()); // 更新文件
+            const changeDocRequest = {
+                jsonrpc: "2.0",
+                method: "textDocument/didChange",
+                params: {
+                    textDocument: {
+                        uri: model.uri.toString(),
+                        version: model.getVersionId(),
+                    },
+                    contentChanges: event.changes.map((change) => ({
+                        range: CFBetter_monaco.MonacoRangeTolspRange(change.range),
+                        rangeLength: change.rangeLength,
+                        text: change.text,
+                    })),
+                },
+            };
+            sendData(changeDocRequest);
+        });
+
+        //注册"自动补全"
+        monaco.languages.registerCompletionItemProvider(language, {
+            provideCompletionItems: (model, position, context) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/completion",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        context: {
+                            triggerKind: context.triggerKind + 1, // 这里要+1，两边的定义不一样。。。
+                            triggerCharacter: context.triggerCharacter,
+                        },
+                    },
+                };
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `completion 当前收到的数据↓`, response);
+                        if (!result) return resolve(null);
+                        const CompletionItems = {
+                            suggestions: result.items.map(
+                                ({
+                                    label,
+                                    kind,
+                                    filterText,
+                                    insertText,
+                                    insertTextFormat,
+                                    sortText,
+                                    textEdit,
+                                    documentation,
+                                    additionalTextEdits,
+                                }) => ({
+                                    additionalTextEdits: additionalTextEdits
+                                        ? additionalTextEdits.map(({ newText, range }) => ({
+                                            text: newText,
+                                            range: CFBetter_monaco.lspRangeToMonacoRange(range),
+                                        }))
+                                        : [],
+                                    documentation: documentation ? documentation.value : "",
+                                    filterText,
+                                    insertText: insertText ? insertText : textEdit.newText,
+                                    insertTextRules:
+                                        insertTextFormat === 2
+                                            ? monaco.languages.CompletionItemInsertTextRule
+                                                .InsertAsSnippet
+                                            : monaco.languages.CompletionItemInsertTextRule
+                                                .KeepWhitespace,
+                                    kind,
+                                    label,
+                                    sortText,
+                                    range: textEdit
+                                        ? textEdit.range
+                                            ? CFBetter_monaco.lspRangeToMonacoRange(textEdit.range)
+                                            : CFBetter_monaco.lspRangeToMonacoRange(textEdit.insert)
+                                        : null,
+                                })
+                            ),
+                        };
+                        pushLSPLogMessage("info", `completion 传递给monaco的数据↓`, CompletionItems);
+                        resolve(CompletionItems);
+                    });
+                });
+            },
+        });
+
+        // 注册"代码修复"
+        monaco.languages.registerCodeActionProvider(language, {
+            provideCodeActions: (model, range, context) => {
+                const request = {
+                    id: id++,
+                    jsonrpc: "2.0",
+                    method: "textDocument/codeAction",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        range: CFBetter_monaco.MonacoRangeTolspRange(range),
+                        context: {
+                            diagnostics: context.markers.map((item) => ({
+                                range: CFBetter_monaco.MonacoRangeTolspRange({
+                                    startLineNumber: item.startLineNumber,
+                                    startColumn: item.startColumn,
+                                    endLineNumber: item.endLineNumber,
+                                    endColumn: item.endColumn,
+                                }),
+                                severity: CFBetter_monaco.MonacoSeverityTolspSeverity(
+                                    item.severity
+                                ),
+                                code: item.code,
+                                source: item.source,
+                                message: item.message,
+                                tags: item.tags,
+                                relatedInformation: item.relatedInformation
+                                    ? item.relatedInformation.map((item) => ({
+                                        location: {
+                                            uri: item.resource.toString(),
+                                            range: CFBetter_monaco.MonacoRangeTolspRange({
+                                                startLineNumber: item.startLineNumber,
+                                                startColumn: item.startColumn,
+                                                endLineNumber: item.endLineNumber,
+                                                endColumn: item.endColumn,
+                                            }),
+                                        },
+                                        message: item.message,
+                                    }))
+                                    : null,
+                            })),
+                            only: context.only ? [context.only] : [],
+                            triggerKind: context.trigger,
+                        },
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `codeAction 当前收到的数据↓`, response);
+                        if (!result) return resolve(null);
+                        const codeAction = {
+                            actions: result.map((item) => ({
+                                title: item.title,
+                                kind: item.kind ? item.kind : "quickfix",
+                                command: item.command
+                                    ? item.command.command
+                                        ? {
+                                            id: item.command.command,
+                                            arguments: item.command.arguments,
+                                            title: item.command.title,
+                                        }
+                                        : null
+                                    : null,
+                                diagnostics: item.diagnostics
+                                    ? item.diagnostics.map((item) => ({
+                                        code: item.code,
+                                        message: item.message,
+                                        range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                                        severity: CFBetter_monaco.lspSeverityToMonacoSeverity(
+                                            item.severity
+                                        ),
+                                        source: item.source,
+                                    }))
+                                    : null,
+                                edit: item.edit
+                                    ? CFBetter_monaco.lspEditToMonacoEdit(item.edit)
+                                    : item.arguments
+                                        ? {
+                                            edits: item.arguments.flatMap(
+                                                (item1) => CFBetter_monaco.lspEditToMonacoEdit(item1).edits
+                                            ),
+                                        }
+                                        : null,
+                            })),
+                            dispose: () => { },
+                        };
+                        pushLSPLogMessage("info", `codeAction 传递给monaco的数据↓`, codeAction);
+
+                        resolve(codeAction);
+                    });
+                });
+            },
+        });
+
+        // 注册"hover提示"
+        monaco.languages.registerHoverProvider(language, {
+            provideHover: (model, position) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/hover",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        pushLSPLogMessage("info", `Hover 当前收到的数据↓`, response);
+                        const result = response.result;
+
+                        if (!result) return resolve(null);
+                        const Hover = {
+                            range: result.range
+                                ? CFBetter_monaco.lspRangeToMonacoRange(result.range)
+                                : new monaco.Range(
+                                    position.lineNumber,
+                                    position.column,
+                                    position.lineNumber,
+                                    position.column
+                                ),
+                            contents: Array.isArray(result.contents)
+                                ? result.contents.map((item) => ({
+                                    value: item.value ? item.value : item,
+                                }))
+                                : [
+                                    {
+                                        value: result.contents.value,
+                                    },
+                                ],
+                        };
+                        pushLSPLogMessage("info", `Hover 传递给monaco的数据↓`, Hover);
+                        resolve(Hover);
+                    });
+                });
+            },
+        });
+
+        // 注册"inlay提示"
+        if (language == "cpp" || language == "java")
+            monaco.languages.registerInlayHintsProvider(language, {
+                provideInlayHints: (model, range, token) => {
+                    return new Promise((resolve, reject) => {
+                        const request = {
+                            jsonrpc: "2.0",
+                            id: id++,
+                            method: "textDocument/inlayHint",
+                            params: {
+                                textDocument: {
+                                    uri: model.uri.toString(),
+                                },
+                                range: CFBetter_monaco.MonacoRangeTolspRange(range),
+                            },
+                        };
+
+                        fetchData(request, (response) => {
+                            const result = response.result;
+                            pushLSPLogMessage("info", `Inlay Hints 当前收到的数据↓`, response);
+
+                            if (!result) return resolve(null);
+
+                            const inlayHints = {
+                                hints: result.map((item) => {
+                                    return {
+                                        kind: item.kind,
+                                        label: item.label,
+                                        paddingLeft: item.paddingLeft,
+                                        paddingRight: item.paddingRight,
+                                        position: {
+                                            lineNumber: item.position.line + 1,
+                                            column: item.position.character + 1,
+                                        },
+                                    };
+                                }),
+                            };
+                            pushLSPLogMessage("info", `Inlay Hints 传递给monaco的数据↓`, inlayHints);
+
+                            resolve(inlayHints);
+                        });
+                    });
+                },
+            });
+
+        // 注册"转到定义"
+        monaco.languages.registerDefinitionProvider(language, {
+            provideDefinition: (model, position) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/definition",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `definition 当前收到的数据↓`, response);
+
+                        if (result.length == 0) return resolve(null);
+                        const definition = result.map((item) => ({
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            uri: monaco.Uri.parse(item.uri), //
+                        }));
+                        pushLSPLogMessage("info", `definition 传递给monaco的数据↓`, definition);
+
+                        resolve(definition);
+                    });
+                });
+
+                return null; // 如果没有内容，则返回null
+            },
+        });
+
+        // 注册"转到引用"
+        monaco.languages.registerReferenceProvider(language, {
+            provideReferences: (model, position, context) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/references",
+                    params: {
+                        context: context,
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `references 当前收到的数据↓`, response);
+
+                        if (result.length == 0) return resolve([]);
+
+                        const references = result.map((item) => ({
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            uri: monaco.Uri.parse(item.uri), //
+                        }));
+                        pushLSPLogMessage("info", `references 传递给monaco的数据↓`, references);
+                        resolve(references);
+                    });
+                });
+                return []; // 如果没有内容，则返回空数组
+            },
+        });
+
+        // 注册"符号引用点击高亮"
+        monaco.languages.registerDocumentHighlightProvider(language, {
+            provideDocumentHighlights: (model, position) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/documentHighlight",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `documentHighlight 当前收到的数据↓`, response);
+
+                        if (!result || result.length == 0) return resolve([]);
+                        const highlights = result.map((item) => ({
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            kind: item.kind,
+                        }));
+                        pushLSPLogMessage("info",
+                            `documentHighlight 传递给monaco的数据↓`,
+                            highlights
+                        );
+
+                        resolve(highlights);
+                    });
+                });
+                return []; // 如果没有内容，则返回空数组
+            },
+        });
+
+        // 注册"文件链接"
+        if (language == "cpp" || language == "java")
+            monaco.languages.registerLinkProvider(language, {
+                provideLinks: (model) => {
+                    const request = {
+                        jsonrpc: "2.0",
+                        id: id++,
+                        method: "textDocument/documentLink",
+                        params: {
+                            textDocument: {
+                                uri: model.uri.toString(),
+                            },
+                        },
+                    };
+
+                    return new Promise((resolve, reject) => {
+                        fetchData(request, (response) => {
+                            const result = response.result;
+                            pushLSPLogMessage("info", `DocumentLink 当前收到的数据↓`, response);
+
+                            if (!result) return resolve(null);
+                            const links = {
+                                links: result.map((item) => ({
+                                    range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                                    url: item.target.toString(),
+                                    tooltip: item.tooltip ? item.tooltip : null,
+                                })),
+                            };
+                            pushLSPLogMessage("info", `DocumentLink 传递给monaco的数据↓`, links);
+                            resolve(links);
+                        });
+                    });
+                },
+            });
+
+        // 注册"格式化"
+        monaco.languages.registerDocumentFormattingEditProvider(language, {
+            provideDocumentFormattingEdits: (model, options, token) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/formatting",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        options: options,
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `formatting 当前收到的数据↓`, response);
+
+                        const TextEdit = result.map((edit) => ({
+                            range: CFBetter_monaco.lspRangeToMonacoRange(edit.range),
+                            text: edit.newText,
+                        }));
+                        pushLSPLogMessage("info", `formatting 传递给monaco的数据↓`, TextEdit);
+                        resolve(TextEdit);
+                    });
+                });
+            },
+        });
+
+        // 注册"部分格式化"
+        monaco.languages.registerDocumentRangeFormattingEditProvider(language, {
+            provideDocumentRangeFormattingEdits: (model, range, options) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/rangeFormatting",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        range: CFBetter_monaco.MonacoRangeTolspRange(range),
+                        options,
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `rangeFormatting 当前收到的数据↓`, response);
+
+                        if (!result || result.length == 0) return resolve([]);
+                        const edits = result.map((item) => ({
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            text: item.newText,
+                        }));
+                        pushLSPLogMessage("info", `rangeFormatting 传递给monaco的数据↓`, edits);
+                        resolve(edits);
+                    });
+                });
+            },
+        });
+
+        // 注册"重命名"
+        monaco.languages.registerRenameProvider(language, {
+            provideRenameEdits: (model, position, newName, token) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/rename",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        newName: newName,
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `rename 当前收到的数据↓`, response);
+
+                        const rename = CFBetter_monaco.lspEditToMonacoEdit(result);
+                        pushLSPLogMessage("info", `rename 传递给monaco的数据↓`, rename);
+                        resolve(rename);
+                    });
+                });
+            },
+        });
+
+        // 注册"折叠范围分析"
+        monaco.languages.registerFoldingRangeProvider(language, {
+            provideFoldingRanges: (model) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/foldingRange",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+                        pushLSPLogMessage("info", `FoldingRange 当前收到的数据↓`, response);
+
+                        if (!result) return resolve([]);
+                        const foldingRanges = result.map((item) => ({
+                            start: item.startLine + 1,
+                            end: item.endLine + 1,
+                            kind: monaco.languages.FoldingRangeKind.fromValue(item.kind),
+                        }));
+                        pushLSPLogMessage("info", `FoldingRange 传递给monaco的数据↓`, foldingRanges);
+                        resolve(foldingRanges);
+                    });
+                });
+            },
+        });
+
+        // "实时代码诊断"
+        CFBetter_monaco.updateMarkers = function (message) {
+            const params = message.params;
+            pushLSPLogMessage("info", `Markers 当前收到的数据↓`, message);
+
+            if (!params) return;
+            const markers = params.diagnostics.map((item1) => ({
+                code: item1.code,
+                message: item1.message,
+                ...CFBetter_monaco.lspRangeToMonacoRange(item1.range),
+                relatedInformation: item1.relatedInformation
+                    ? item1.relatedInformation.map((item2) => ({
+                        ...(item2.location.range
+                            ? CFBetter_monaco.lspRangeToMonacoRange(item2.location.range)
+                            : CFBetter_monaco.lspRangeToMonacoRange(item2.location)),
+                        message: item2.message,
+                        resource: monaco.Uri.parse(item2.location.uri),
+                    }))
+                    : null,
+                severity: CFBetter_monaco.lspSeverityToMonacoSeverity(item1.severity),
+                source: item1.source,
+            }));
+
+            pushLSPLogMessage("info", `Markers 传递给monaco的数据↓`, markers);
+            monaco.editor.setModelMarkers(model, "eslint", markers);
+
+            // 更新状态底栏信息
+            const nowMarks = monaco.editor.getModelMarkers();
+            warningCount = 0;
+            errorCount = 0;
+            for (const marker of nowMarks) {
+                if (marker.severity === monaco.MarkerSeverity.Warning) {
+                    warningCount++;
+                } else if (marker.severity === monaco.MarkerSeverity.Error) {
+                    errorCount++;
+                }
+            }
+            $('#statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
+        };
+
+        // "应用服务器推送的更改"(代码修复)
+        CFBetter_monaco.applyEdit = function (message) {
+            const params = message.params;
+            pushLSPLogMessage("info", `applyEdit 当前收到的数据↓`, message);
+
+            if (!params) return;
+            const operations = Object.values(params.edit.changes)
+                .flat()
+                .map((item) => ({
+                    range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                    text: item.newText,
+                }));
+
+            pushLSPLogMessage("info", `applyEdit 传递给monaco的数据↓`, operations);
+            model.pushEditOperations([], operations, () => null); // 入栈编辑操作
+        };
+
+        // 注册"方法签名提示"
+        monaco.languages.registerSignatureHelpProvider(language, {
+            signatureHelpTriggerCharacters:
+                serverInfo.capabilities.signatureHelpProvider.triggerCharacters,
+            provideSignatureHelp: (model, position, token, context) => {
+                const request = {
+                    jsonrpc: "2.0",
+                    id: id++,
+                    method: "textDocument/signatureHelp",
+                    params: {
+                        textDocument: {
+                            uri: model.uri.toString(),
+                        },
+                        position: {
+                            line: position.lineNumber - 1,
+                            character: position.column - 1,
+                        },
+                        context: {
+                            triggerKind: context.triggerKind,
+                            triggerCharacter: context.triggerCharacter,
+                            isRetrigger: context.isRetrigger,
+                            activeSignatureHelp: context.activeSignatureHelp,
+                        },
+                    },
+                };
+
+                return new Promise((resolve, reject) => {
+                    fetchData(request, (response) => {
+                        const result = response.result;
+
+                        pushLSPLogMessage("info", `方法签名提示 当前收到的数据↓`, response);
+
+                        if (!result) return resolve(null);
+                        const SignatureHelpResult = {
+                            value: {
+                                activeParameter: result.activeParameter,
+                                activeSignature: result.activeSignature,
+                                signatures: result.signatures,
+                            },
+                            dispose: () => { },
+                        };
+
+                        pushLSPLogMessage("info",
+                            `方法签名提示 传递给monaco的数据↓`,
+                            SignatureHelpResult
+                        );
+                        resolve(SignatureHelpResult);
+                    });
+                });
+            },
+        });
+
+        // 注册"渐进式自动格式化" 如果server有这个
+        if (serverInfo.capabilities.documentOnTypeFormattingProvider)
+            monaco.languages.registerOnTypeFormattingEditProvider(language, {
+                autoFormatTriggerCharacters: [
+                    serverInfo.capabilities.documentOnTypeFormattingProvider
+                        .firstTriggerCharacter,
+                ],
+                provideOnTypeFormattingEdits: (model, position, ch, options) => {
+                    const request = {
+                        jsonrpc: "2.0",
+                        id: id++,
+                        method: "textDocument/onTypeFormatting",
+                        params: {
+                            textDocument: {
+                                uri: model.uri.toString(),
+                            },
+                            position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                            ch,
+                            options,
+                        },
+                    };
+
+                    return new Promise((resolve, reject) => {
+                        fetchData(request, (response) => {
+                            const result = response.result;
+                            pushLSPLogMessage("info", `onTypeFormatting 当前收到的数据↓`, response);
+
+                            if (!result || result.length == 0) return resolve([]);
+
+                            const edits = result.map((item) => ({
+                                range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                                text: item.newText,
+                            }));
+                            pushLSPLogMessage("info", `onTypeFormatting 传递给monaco的数据↓`, edits);
+                            resolve(edits);
+                        });
+                    });
+                },
+            });
+    };
+
+    if (!languageSocketState) await waitForLanguageSocketState();
+    CFBetter_monaco.Initialize();
+}
+
 // 语言更改
-function changeAceLanguage(selectLang, editor) {
-    let nowSelect = selectLang.val();
+function changeMonacoLanguage(form) {
+    let nowSelect = form.selectLang.val();
     // 记忆更改
     GM_setValue('compilerSelection', nowSelect);
-    // 编辑器
-    var filePath = extensionMap[nowSelect];
-    var modelist = ace.require("ace/ext/modelist");
-    var mode = modelist.getModeForPath(filePath).mode;
-    editor.session.setMode(mode);
-    // 调试器
+    // 销毁旧的编辑器
+    try {
+        if (editor) editor.dispose();
+    } catch (error) {
+        console.warn("销毁旧的编辑器时遇到了错误，这大概不会影响你的正常使用", error)
+    }
+    // 关闭旧的socket
+    monacoSocket.forEach(socket => {
+        socket.close();
+    });
+    // 移除相关元素
+    form.topRightDiv.empty();
+    $('#LSPLog').remove();
+    $('#statusBar').remove();
+    if (nowSelect in value_monacoLanguageMap) {
+        let language = value_monacoLanguageMap[nowSelect];
+        if (language == "python" || language == "cpp" || language == "java") {
+            createNewMonacoEdit(language, form, true);
+        } else {
+            createNewMonacoEdit(language, form, false);
+        }
+    } else {
+        createNewMonacoEdit(null, false);
+    }
+    // 更改在线编译器参数
     changeCompilerArgs(nowSelect);
 }
 
-// 自动补全器更新
-function updateAutocomplete() {
-    if (!keywordAutoComplete) return;
+// acwing cpp补全模板（暂未实现）
+function updateCppCodeTemplate() {
     let extraCompleters = [];
     let langTools = ace.require('ace/ext/language_tools');
     if (editor.getSession().getMode().$id === "ace/mode/c_cpp") {
@@ -5396,7 +7182,6 @@ function collectTestData() {
             output: outputText.trim()
         };
     });
-
     return testData;
 }
 
@@ -5594,7 +7379,7 @@ async function officialCompiler(code, input) {
                                 if (!response.stat && retryCount < 10) {
                                     retryCount++;
                                     setTimeout(makeRequest, 1000);
-                                } else if (retryCount >= 5) {
+                                } else if (retryCount >= 15) {
                                     result.Errors = `结果获取已超时，请重试 ${findHelpText}`;
                                     resolve(result);
                                 } else {
@@ -5700,115 +7485,6 @@ async function rextesterCompiler(code, input) {
     });
 }
 
-// codechef编译器参数列表
-let codechefLanguage = "";
-function codechefCompilerArgsChange(nowSelect) {
-    let LanguageChoiceList = {
-        "6": "29", "9": "27", "32": "114", "34": "56", "36": "10", "41": "109", "43": "44", "50": "44",
-        "52": "63", "54": "63", "60": "10", "61": "63", "65": "27", "70": "109", "73": "63", "74": "10", "75": "93", "77": "47",
-        "79": "27", "80": "63", "83": "47", "87": "10"
-    }
-    if (nowSelect in LanguageChoiceList) {
-        $('#RunTestButton').prop("disabled", false);
-        codechefLanguage = LanguageChoiceList[nowSelect];
-    } else {
-        $('#RunTestButton').prop("disabled", true);
-    }
-    $('#CompilerArgsInput').prop('disabled', true);
-}
-
-// codechef编译器通信
-async function codechefCompiler(code, input) {
-    const data = new URLSearchParams();
-    data.append('sourceCode', code);
-    data.append('language', codechefLanguage);
-    data.append('input', input);
-    var result = {
-        Errors: '',
-        Result: '',
-        Stats: ''
-    };
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: 'POST',
-            url: 'https://www.codechef.com/api/ide/run/all',
-            data: data.toString(),
-            headers: {
-                'Accept': 'application/json, text/javascript, */*; q=0.01',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Csrf-Token': codecheCsrfToken
-            },
-            onload: function (responseDetails) {
-                if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `提交代码到 codechef 服务器时发生了错误，请重试 ${findHelpText}`;
-                    resolve(result);
-                } else {
-                    try {
-                        const response = JSON.parse(responseDetails.response);
-                        resolve(response.timestamp);
-                    } catch (error) {
-                        result.Errors = `解析响应数据 timestamp 时发生了错误，请重试 ${findHelpText}`;
-                        resolve(result);
-                    }
-                }
-            },
-            onerror: function () {
-                result.Errors = '请求 timestamp 时网络错误';
-                resolve(result);
-            }
-        });
-    }).then(timestamp => {
-        if (result.Errors !== '') return result; // 产生了错误，直接返回
-        return new Promise((resolve, reject) => {
-            let retryCount = 0;
-
-            function makeRequest() {
-                GM_xmlhttpRequest({
-                    method: 'GET',
-                    url: `https://www.codechef.com/api/ide/run/all?timestamp=${timestamp}`,
-                    headers: {
-                        'Accept': 'application/json, text/javascript, */*; q=0.01',
-                        'X-Csrf-Token': codecheCsrfToken
-                    },
-                    onload: function (responseDetails) {
-                        if (responseDetails.status !== 200 || !responseDetails.response) {
-                            result.Errors = `请求运行结果时发生了错误，请重试 ${findHelpText}`;
-                            resolve(result);
-                        } else {
-                            try {
-                                const response = JSON.parse(responseDetails.response);
-                                if (response.result === 0 && retryCount < 5) {
-                                    retryCount++;
-                                    setTimeout(makeRequest, 500);
-                                } else if (retryCount >= 5) {
-                                    result.Errors = `结果获取已超时，请重试 ${findHelpText}`;
-                                    resolve(result);
-                                } else {
-                                    const result = {
-                                        Errors: response.stderr == "" ? null : response.stderr,
-                                        Result: response.output,
-                                        Stats: `Status: ${response.status} Time: ${response.time} Mem: ${response.memory} kB`
-                                    };
-                                    resolve(result);
-                                }
-                            } catch (error) {
-                                result.Errors = '请求运行结果时响应数据解析错误';
-                                resolve(result);
-                            }
-                        }
-                    },
-                    onerror: function () {
-                        result.Errors = '请求运行结果时网络错误';
-                        resolve(result);
-                    }
-                });
-            }
-
-            makeRequest();
-        });
-    });
-}
-
 // wandbox编译器参数列表
 var wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
 function wandboxCompilerArgsChange(nowSelect) {
@@ -5818,11 +7494,15 @@ function wandboxCompilerArgsChange(nowSelect) {
         "43": "C++", "50": "C++", "51": "Pascal", "52": "C++", "54": "C++", "60": "Java", "61": "C++", "65": "C#", "67": "Ruby",
         "70": "Python", "73": "C++", "74": "Java", "75": "Rust", "79": "C#", "80": "C++", "87": "Java"
     }
+
+    // 移除旧的
+    $('#CompilerChange').remove();
+
     if (nowSelect in LanguageChoiceList) {
         $('#RunTestButton').prop("disabled", false);
         const Languagefiltered = wandboxlist.filter(obj => obj.language === LanguageChoiceList[nowSelect]);
 
-        // 创建编辑器下拉框
+        // 创建编译器下拉框
         var CompilerChange = $('<select id="CompilerChange" style="width: 100%;"></select>');
         $('#CompilerSetting').append(CompilerChange);
         for (let i = 0; i < Languagefiltered.length; i++) {
@@ -5833,7 +7513,7 @@ function wandboxCompilerArgsChange(nowSelect) {
             $("#CompilerChange").append(op);
         }
 
-        // 编辑器参数刷新
+        // 编译器参数刷新
         function refreshCompilerArgs() {
             var flags = '';
             $("#CompilerBox").find("*").each(function () {
@@ -5849,9 +7529,9 @@ function wandboxCompilerArgsChange(nowSelect) {
             $("#CompilerArgsInput").prop("readonly", true); // 只读
         }
 
-        // 编辑器切换监听
+        // 编译器切换监听
         CompilerChange.change(function () {
-            let selectedName = $(this).val();
+            let selectedName = $('#CompilerChange').val();
             let Compiler = Languagefiltered.find(
                 (obj) => obj.name === selectedName
             );
@@ -5970,14 +7650,12 @@ async function wandboxCompiler(code, input) {
     });
 }
 
-// 编译器参数
+// 更改编译器参数
 function changeCompilerArgs(nowSelect) {
     if (onlineCompilerChoice == "official") {
         officialCompilerArgsChange(nowSelect);
     } else if (onlineCompilerChoice == "rextester") {
         rextesterCompilerArgsChange(nowSelect);
-    } else if (onlineCompilerChoice == "codechef") {
-        codechefCompilerArgsChange(nowSelect);
     } else if (onlineCompilerChoice == "wandbox") {
         wandboxCompilerArgsChange(nowSelect);
     }
@@ -5989,8 +7667,6 @@ async function onlineCompilerConnect(code, input) {
         return await officialCompiler(code, input);
     } else if (onlineCompilerChoice == "rextester") {
         return await rextesterCompiler(code, input);
-    } else if (onlineCompilerChoice == "codechef") {
-        return await codechefCompiler(code, input);
     } else if (onlineCompilerChoice == "wandbox") {
         return await wandboxCompiler(code, input);
     }
@@ -6094,30 +7770,43 @@ async function runCode(event, sourceDiv, submitDiv) {
     loadingImage.remove();
 }
 
+
 async function addProblemPageCodeEditor() {
     if (typeof ace === 'undefined') {
-        console.log("%c未找到ace，当前可能为非题目页或者比赛刚刚结束", "border:1px solid #000;padding:10px;");
+        console.log("%c无法加载编辑器必要的数据，可能当前未登录/非题目页/比赛刚刚结束", "border:1px solid #000;padding:10px;");
         return; // 未登录，不存在ace库
     }
 
     const href = window.location.href;
-    let submitUrl = /\/problemset\//.test(href) ? hostAddress + '/problemset/submit' :
-        href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit");
+    let submitUrl = /\/problemset\//.test(href) ?
+        hostAddress + '/problemset/submit' :
+        /\/gym\//.test(href) ?
+            hostAddress + '/gym/' + ((href) => {
+                const regex = /\/gym\/(?<num>[0-9a-zA-Z]*?)\/problem\//;
+                const match = href.match(regex);
+                return match && match.groups.num;
+            })(href) + '/submit' :
+            href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit")
+        ;
     let cloneHTML = await getSubmitHTML(submitUrl);
 
     // 创建
-    let from = await CreateCodeDevFrom(submitUrl, cloneHTML);
-    let editor = from.editor;
-    let selectLang = from.selectLang;
-    let submitButton = from.submitButton;
-    let runButton = from.runButton;
+    let form = await CreateCodeDevForm(submitUrl, cloneHTML);
+    let selectLang = form.selectLang;
+    let submitButton = form.submitButton;
+    let runButton = form.runButton;
 
-    CustomTestInit(); // 初始化自定义测试数据面板
-    selectLang.on('change', () => changeAceLanguage(from.selectLang, from.editor)); // 编辑器语言切换监听
-    editor.getSession().on("changeMode", updateAutocomplete); // 切换语言监听，更新自动补全
+    // 初始化
+    CustomTestInit(); // 自定义测试数据面板
+    selectLang.val(compilerSelection);
+    changeMonacoLanguage(form);
+    // updateAutocomplete();
+
+    selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
+    // editor.getSession().on("changeMode", updateAutocomplete); // 切换语言监听，更新自动补全
 
     // 样例测试
-    runButton.on('click', (event) => runCode(event, from.sourceDiv, from.submitDiv));
+    runButton.on('click', (event) => runCode(event, form.sourceDiv, form.submitDiv));
 
     // 提交
     submitButton.on('click', function (event) {
@@ -6132,11 +7821,6 @@ async function addProblemPageCodeEditor() {
             }, 300);
         }
     });
-
-    // 初始化
-    selectLang.val(compilerSelection);
-    changeAceLanguage(from.selectLang, from.editor);
-    updateAutocomplete();
 }
 
 // 等待LaTeX渲染队列全部完成
@@ -6364,6 +8048,12 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
     }
+
+    // 过滤**号
+    if (filterTextWithoutEmphasis && GM_getValue("translation") !== "openai") {
+        text = text.replace(/\*\*/g, "");
+    }
+
     // 字符数上限
     const translationLimits = {
         deepl: 5000,
@@ -6806,6 +8496,7 @@ document.addEventListener("DOMContentLoaded", function () {
     checkJQuery(50);
     function executeFunctions() {
         init();
+        darkModeStyleAdjustment();
         ShowAlertMessage();
         settingPanel();
         checkScriptVersion();
@@ -6916,44 +8607,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// 配置自动迁移代码（将在10个小版本后移除-1.66）
-if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
-    const newConfig = { "choice": -1, "configurations": [] };
-    if (GM_getValue("openai_key")) {
-        let config1 = {
-            "note": "我的配置1",
-            "model": GM_getValue("openai_model") || "",
-            "key": GM_getValue("openai_key"),
-            "proxy": GM_getValue("openai_proxy") || "",
-            "_header": "",
-            "_data": ""
-        }
-        if (GM_getValue("translation") === "openai") newConfig.choice = 0;
-        newConfig.configurations.push(config1);
-    }
-    if (GM_getValue("api2d_key")) {
-        let config2 = {
-            "note": "api2d",
-            "model": GM_getValue("api2d_model"),
-            "key": GM_getValue("api2d_key"),
-            "proxy": GM_getValue("api2d_request_entry") + '/v1/chat/completions',
-            "_header": GM_getValue("x_api2d_no_cache") ? "" : " x-api2d-no-cache : 1",
-            "_data": ""
-        }
-        if (GM_getValue("translation") === "api2d") {
-            if (GM_getValue("openai_key")) newConfig.choice = 1;
-            else newConfig.choice = 0;
-        }
-        newConfig.configurations.push(config2);
-    }
-    GM_setValue("chatgpt-config", newConfig);
-    const keysToDelete = ["openai_key", "openai_model", "openai_proxy", "api2d_key", "api2d_model", "api2d_request_entry", "x_api2d_no_cache", "showOpneAiAdvanced"];
-    keysToDelete.forEach(key => {
-        if (GM_getValue(key) != undefined) GM_deleteValue(key);
-    });
-    if (GM_getValue("translation") === "api2d") GM_setValue("translation", "openai");
-    location.reload();
-}
 // 配置自动迁移代码（将在10个小版本后移除-1.71）
 if (GM_getValue("darkMode") === true || GM_getValue("darkMode") === false) {
     GM_setValue("darkMode", "follow");
