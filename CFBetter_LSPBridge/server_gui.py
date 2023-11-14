@@ -228,7 +228,7 @@ class FileServerWebSocketHandler(websocket.WebSocketHandler):
             workspace = message['workspace']
             file_path = os.path.join(rootUri, workspace, filename + file_extension) # the path of the file
             self.createdFiles[self.nowconnection] = file_path
-            self.update_log_from_thread("success", f"File {file_path} has been created")  
+            self.update_log_from_thread("info", f"File {file_path} has been updated or created.")  
             with open(file_path, 'w') as f:
                 f.write(code)
             self.write_message(json.dumps({'result': 'ok'}))
