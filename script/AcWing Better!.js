@@ -14,7 +14,7 @@
 // @connect      greasyfork.org
 // @run-at       document-end
 // @require      https://cdn.bootcdn.net/ajax/libs/turndown/7.1.1/turndown.min.js
-// @license      MIT
+// @license      GPL3
 // @namespace    https://greasyfork.org/users/747162
 // ==/UserScript==
 

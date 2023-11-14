@@ -23,7 +23,7 @@
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/nowcoder.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
-// @license      MIT
+// @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
 // @compatible	 Edge

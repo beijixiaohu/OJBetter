@@ -40,7 +40,7 @@
 // @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
-// @license      MIT
+// @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
 // @compatible	 Edge
