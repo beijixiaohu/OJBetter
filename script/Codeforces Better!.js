@@ -146,7 +146,7 @@ function init() {
     * 加载monaco编辑器资源
     */
     useLSP = getGMValue("useLSP", true);
-    CFBetter_MonacoLSPBridge_WorkUri = getGMValue("CFBetter_MonacoLSPBridge_WorkUri", "c:/CFBetter_LSPBridge/");
+    CFBetter_MonacoLSPBridge_WorkUri = getGMValue("CFBetter_MonacoLSPBridge_WorkUri", "c:/CFBetter_LSPBridge/").replace(/\\/g, '/').replace(/\/$/, '');
     CFBetter_MonacoLSPBridge_SocketUrl = getGMValue("CFBetter_MonacoLSPBridge_SocketUrl", "ws://127.0.0.1:2323/");
     let monacoLoader = document.createElement("script");
     monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
@@ -753,7 +753,6 @@ button.html2mdButton.CFBetter_setting.open {
     top: 50%;
     left: 50%;
     width: 500px;
-    height: 600px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
     background-color: #f0f4f9;
@@ -1116,6 +1115,7 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     border-color: red;
 }
 .CFBetter_setting_menu textarea {
+    resize: vertical;
     display: block;
     width: 100%;
     height: 60px;
@@ -3574,6 +3574,19 @@ const code_editor_settings_HTML = `
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
+    <h4>自定义补全</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="cppCodeTemplateComplete"><span>ACWing CPP 补全模板</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>开启C++代码模板级补全，模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
+            <p><strong>警告：该功能仅供放松娱乐，请勿依赖，也不应将其用于任何正式比赛中</strong></p>
+            </div>
+        </div>
+        <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
+    </div>
+    <hr>
     <h4>LSP设置</h4>
     <div class='CFBetter_setting_list'>
         <label for="useLSP"><span>使用LSP</span></label>
@@ -3597,6 +3610,7 @@ const code_editor_settings_HTML = `
             ${helpCircleHTML}
             <div class="tip_text">
                 <p>你需要填写 CFBetter_MonacoLSPBridge 所在的路径：</p>
+                <p>使用正斜杠或反斜杠均可</p>
                 <p>默认路径：</p>
                 <div style="border: 1px solid #795548; padding: 10px;">
                     <p>c:/CFBetter_LSPBridge/</p>
@@ -3897,6 +3911,7 @@ async function settingPanel() {
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
+        $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
         $("#CFBetter_MonacoLSPBridge_WorkUri").val(GM_getValue("CFBetter_MonacoLSPBridge_WorkUri"));
         $("#CFBetter_MonacoLSPBridge_SocketUrl").val(GM_getValue("CFBetter_MonacoLSPBridge_SocketUrl"));
@@ -3949,6 +3964,7 @@ async function settingPanel() {
                 RatingHidden: $('#RatingHidden').prop("checked"),
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
+                cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
                 CFBetter_MonacoLSPBridge_WorkUri: $('#CFBetter_MonacoLSPBridge_WorkUri').val(),
                 CFBetter_MonacoLSPBridge_SocketUrl: $('#CFBetter_MonacoLSPBridge_SocketUrl').val(),
@@ -5567,6 +5583,32 @@ async function CreateCodeDevForm(submitUrl, cloneHTML) {
     return from;
 }
 
+// 解析ace格式的补全规则(acwing)
+function parseAceCompleter(rules, range) {
+    const suggestions = [];
+    if (rules && rules.templates && rules.templates.items) {
+        const items = rules.templates.items;
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const parts = item.caption.split(' ');
+            for (let i = 0; i < parts.length; i++) {
+                if (item.value.startsWith(parts[i])) {
+                    item.value = item.value.replace(parts[i], parts.slice(0, i+1).join(' '));
+                    break;
+                }
+            }
+            const completionItem = {
+                label: item.caption,
+                kind: monaco.languages.CompletionItemKind.Function,
+                insertText: item.value,
+                range: range
+            };
+            suggestions.push(completionItem);
+        }
+    }
+    return { suggestions };
+}
+
 /**
  * 创建新的monaco编辑器
  */
@@ -5590,7 +5632,7 @@ async function createNewMonacoEdit(language, form, support) {
      */
     var id = 0; // 协议中的id标识
     var workspace = language + "_workspace";
-    var rootUri = CFBetter_MonacoLSPBridge_WorkUri + workspace;
+    var rootUri = CFBetter_MonacoLSPBridge_WorkUri + "/" + workspace;
     // 文件名
     var InstanceID = getRandomNumber(8).toString();
     var filename = language == "java" ? "hello/src/" + InstanceID : InstanceID;
@@ -5816,6 +5858,18 @@ async function createNewMonacoEdit(language, form, support) {
         $('#sourceCodeTextarea').val(code);
         await saveCode(nowUrl, code);
     });
+
+    /**
+     * 注册本地补全
+     */
+    // 注册acwing cpp 模板
+    if (language == "cpp" && cppCodeTemplateComplete) {
+        monaco.languages.registerCompletionItemProvider('cpp', {
+            provideCompletionItems: function (model, position) {
+                return parseAceCompleter(CODE_COMPLETER, CFBetter_monaco.CollectRangeByPosition(position));;
+            }
+        });
+    }
 
     if (!support || !useLSP) { return; } // 如果不支持lsp，则到此为止
 
@@ -6321,6 +6375,16 @@ async function createNewMonacoEdit(language, form, support) {
                 startColumn: item.startColumn,
                 endLineNumber: item.endLineNumber,
                 endColumn: item.endColumn,
+            };
+        };
+        // 收集Monaco position数据中的rang数据
+        CFBetter_monaco.CollectRangeByPosition = function (item) {
+            var word = model.getWordUntilPosition(item);
+            return {
+                startLineNumber: item.lineNumber,
+                endLineNumber: item.lineNumber,
+                startColumn: word.startColumn,
+                endColumn: word.endColumn,
             };
         };
         // 将lsp格式的Edit转换为Monaco格式
@@ -7133,26 +7197,6 @@ function changeMonacoLanguage(form) {
     }
     // 更改在线编译器参数
     changeCompilerArgs(nowSelect);
-}
-
-// acwing cpp补全模板（暂未实现）
-function updateCppCodeTemplate() {
-    let extraCompleters = [];
-    let langTools = ace.require('ace/ext/language_tools');
-    if (editor.getSession().getMode().$id === "ace/mode/c_cpp") {
-        extraCompleters.push(langTools.textCompleter); // 本地补全
-        if (cppCodeTemplateComplete) extraCompleters.push(CODE_COMPLETER); // acwing补全规则
-        else {
-            extraCompleters.push(langTools.keyWordCompleter);
-            extraCompleters.push(langTools.snippetCompleter);
-        }
-        editor.completers = extraCompleters;
-    } else {
-        extraCompleters.push(langTools.textCompleter);
-        extraCompleters.push(langTools.keyWordCompleter);
-        extraCompleters.push(langTools.snippetCompleter);
-        editor.completers = extraCompleters;
-    }
 }
 
 // 收集样例数据
