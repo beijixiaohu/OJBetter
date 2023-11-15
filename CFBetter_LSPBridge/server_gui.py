@@ -6,12 +6,18 @@ import yaml
 from tornado import ioloop, process, web, websocket, httpserver
 from pylsp_jsonrpc import streams
 import ujson as json
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit, QMessageBox
-from PyQt5.QtCore import QSettings, Qt, pyqtSignal
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel
+from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtCore import pyqtSignal, QMutex, QMutexLocker
 from PyQt5.QtWidgets import QSystemTrayIcon, QMenu, QAction
 from PyQt5.QtGui import QIcon
+from qfluentwidgets import TextEdit, LineEdit
+from qfluentwidgets import MessageBox, PushButton
+from qfluentwidgets import SwitchButton
+from qfluentwidgets import InfoBar, FluentIcon, InfoBarPosition
+
 import sys
+from PyQt5.QtGui import QFont
 
 class ProcessManager:
     """
@@ -74,7 +80,7 @@ class Config:
         self.commands = {
             "cpp": ["clangd"],
             "python": ["pylsp"],
-            "java": ["jdtls.bat", "-configuration", "./jdt-language-server./config_win", "-data", "./java_workspace"]
+            # "java": ["jdtls.bat", "-configuration", "./jdt-language-server./config_win", "-data", "./java_workspace"]
         }
 
     def load(self):
@@ -108,22 +114,26 @@ class CommandChecker:
     """
     A class that checks the validity of the commands.
     """
-    @staticmethod
-    def check_command(window_self):
+    update_log_from_thread = None
+
+    def __init__(self, update_log_from_thread) -> None:
+        self.update_log_from_thread = update_log_from_thread
+
+    def check_command(self):
         """
         Check the validity of the commands.
         """
-        window_self.update_log("info", "Checking commands...")
+        self.update_log_from_thread("info", "Checking commands...")
         for lang in config.commands.keys():
             command = config.commands[lang][0] + " --version"
             try:
                 subprocess.run(command, shell=True, check=True, timeout=0.5, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-                window_self.update_log("success", f"The command for {lang} is valid.")
+                self.update_log_from_thread("success", f"The command for {lang} is valid.")
             except subprocess.CalledProcessError:
-                window_self.update_log("error", f"The command for {lang} is invalid.")
+                self.update_log_from_thread("error", f"The command for {lang} is invalid.")
             except subprocess.TimeoutExpired:
-                window_self.update_log("success", f"The command for {lang} is valid.")
-        window_self.update_log("info", "Commands checked.")
+                self.update_log_from_thread("success", f"The command for {lang} is valid.")
+        self.update_log_from_thread("info", "Commands checked.")
         return True
 
 
@@ -148,7 +158,7 @@ class StartupRun():
         Set the startup.
         """
         QSetting = QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings.NativeFormat)
-        QSetting.setValue("CFBetter_LSPBridge", rootUri + " -min")
+        QSetting.setValue("CFBetter_LSPBridge", rootUri + " min")
 
     @staticmethod
     def cancel_startup_run():
@@ -367,10 +377,12 @@ class WebServer():
     connections = []
     update_log_from_thread = None
     update_log = None
+    createInfoBar_from_thread = None
 
-    def __init__(self, update_log, update_log_from_thread):
+    def __init__(self, update_log, update_log_from_thread, createInfoBar_from_thread):
         self.update_log = update_log
         self.update_log_from_thread = update_log_from_thread
+        self.createInfoBar_from_thread = createInfoBar_from_thread
 
     def start_server(self):
         """
@@ -378,11 +390,12 @@ class WebServer():
         """
         
         if self.webserver is not None:
-            self.update_log("error", "Server already started")
+            self.createInfoBar_from_thread('error', 'Server already started', f"Please stop the server first.")
             return
         
         # check the commands
-        CommandChecker().check_command(window_self = self)
+        commandChecker = CommandChecker(self.update_log_from_thread)
+        commandChecker.check_command()
 
         # start the web server
         self.update_log("info", "Starting server...")
@@ -399,6 +412,9 @@ class WebServer():
             self.webserver = httpserver.HTTPServer(webapp)
             self.webserver.listen(config.port, config.host)
             self.update_log_from_thread("success", f"Listening on {config.host}:{config.port}")
+
+            # success!
+            self.createInfoBar_from_thread('success', 'Server started', f"Enjoy your coding!")
 
             # run until the stop event is set
             ioloop.IOLoop.current().start()
@@ -420,9 +436,10 @@ class WebServer():
             self.webserver = None
             for connection in self.connections:
                 connection.close()
-            self.update_log("success", "Server stopped")
+            self.update_log("warn", "Server stopped")
+            self.createInfoBar_from_thread('warn', 'Server stopped', f"now the server is stopped.")
         else:
-            self.update_log("error", "Server not started")
+            self.createInfoBar_from_thread('error', 'Server not started', f"Please start the server first.")
 
 
     def restart_server(self):
@@ -434,7 +451,7 @@ class WebServer():
             self.start_server()
             self.update_log("success", "Server restarted")
         else:
-            self.update_log("error", "Server not started")
+            self.createInfoBar_from_thread('error', 'Server not started', f"Please start the server first.")
         
 
 class MainWindow(QMainWindow):
@@ -443,40 +460,45 @@ class MainWindow(QMainWindow):
     """
     update_log_signal = pyqtSignal(str, str) # signal to update the log
     log_mutex = QMutex() # mutex to lock the log
+    infoBar_signal = pyqtSignal(str, str, str) # signal to create a info bar
     webserver = None
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.update_log_signal.connect(self.update_log) # connect the signal to the slot
+        self.infoBar_signal.connect(self.createInfoBar) # connect the signal to the slot
         self.setWindowTitle("CFBetter_LSPBridge")
+        self.setStyleSheet("background-color: #f7f9fc;")
         self.resize(800, 600)
 
-        self.log_text_edit = QTextEdit(self)
-        self.log_text_edit.setReadOnly(True)
+        # set the font
+        font = QFont("Microsoft YaHei UI")
+        font.setPointSize(10)
 
-        self.start_button = QPushButton("Start", self)
-        self.stop_button = QPushButton("Stop", self)
-        self.restart_button = QPushButton("Restart", self)
+        self.textEdit = TextEdit(self)
+        self.textEdit.setReadOnly(True)
+
+        self.start_button = PushButton("Start", self, FluentIcon.PLAY)
+        self.stop_button = PushButton("Stop", self, FluentIcon.POWER_BUTTON)
+        self.restart_button = PushButton("Restart", self, FluentIcon.ROTATE)
+        self.auto_run_label = QLabel("Run on system startup:", self)
+        self.auto_run_label.setFont(font)
+        self.auto_run_button = SwitchButton(parent=self)
+        self.auto_run_button.checkedChanged.connect(self.toggle_auto_run)
+        self.auto_run_button.setChecked(StartupRun().check_startup_run())
 
         self.host_label = QLabel("Host:", self)
-        self.host_line_edit = QLineEdit(self)
+        self.host_label.setFont(font)
+        self.host_line_edit = LineEdit(self)
         self.host_line_edit.setText(str(config.host))
         self.host_line_edit.textChanged.connect(self.update_host)
 
-
         self.port_label = QLabel("Port:", self)
-        self.port_line_edit = QLineEdit(self)
+        self.port_label.setFont(font)
+        self.port_line_edit = LineEdit(self)
         self.port_line_edit.setText(str(config.port))
         self.port_line_edit.textChanged.connect(self.update_port)
 
-        # add switch auto run
-        self.auto_run_button = QPushButton("Run on system startup", self)
-        self.auto_run_button.clicked.connect(self.toggle_auto_run)
-        self.auto_run_button.setCheckable(True)
-        self.auto_run_button.setChecked(StartupRun().check_startup_run())
-
-        # Set the style of the auto_run_button
-        self.set_auto_run_button_style()
 
         # Create the tray icon
         self.tray_icon = QSystemTrayIcon(self)
@@ -495,38 +517,6 @@ class MainWindow(QMainWindow):
         config.port = text
         config.save()
 
-    # Define the style of the auto_run_button
-    disable_auto_run = """
-        QPushButton {   
-            background-color: #f5f5f5;
-            color: #757575;
-            border: 1px solid #bdbdbd;
-            border-radius: 4px;
-            padding: 5px;
-        }
-        QPushButton:hover {
-            color: #1b5e20;
-            background-color: #c8e6c9;
-        }
-        QPushButton:checked {
-            background-color: #f5f5f5;
-        }
-    """
-    enable_auto_run = """
-        QPushButton {
-            background-color: #c8e6c9;
-            color: #1b5e20;
-            border: 1px solid #1b5e20;
-            border-radius: 4px;
-            padding: 5px;
-        }
-        QPushButton:hover {
-            background-color: #f5f5f5;
-        }
-        QPushButton:checked {
-            background-color: #c8e6c9;
-        }
-    """
 
     def toggle_auto_run(self):
         """
@@ -534,21 +524,13 @@ class MainWindow(QMainWindow):
         """
         if self.auto_run_button.isChecked():
             StartupRun().set_startup_run()
-            self.update_log("success", "Set to run on system startup.")
-            self.auto_run_button.setStyleSheet(self.enable_auto_run)
+            self.createInfoBar('success', 'Startup run enabled', f"CFBetter_LSPBridge will run on system startup.")
+            self.auto_run_button.setText('On')
         else:
             StartupRun().cancel_startup_run()
-            self.update_log("success", "Cancel the run on system startup.")
-            self.auto_run_button.setStyleSheet(self.disable_auto_run)
+            self.createInfoBar('success', 'Startup run disabled', f"CFBetter_LSPBridge will not run on system startup.")
+            self.auto_run_button.setText('Off')
 
-    def set_auto_run_button_style(self):
-        """
-        set the auto run button style when the window is shown
-        """
-        if StartupRun().check_startup_run():
-            self.auto_run_button.setStyleSheet(self.enable_auto_run)
-        else:
-            self.auto_run_button.setStyleSheet(self.disable_auto_run)
     
     def init_ui(self):
         """
@@ -560,19 +542,19 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout(central_widget)
 
         log_layout = QHBoxLayout()
-        log_layout.addWidget(QLabel("Log:", self))
-        log_layout.addStretch()
+        log_layout.addWidget(self.textEdit)
         main_layout.addLayout(log_layout)
 
-        main_layout.addWidget(self.log_text_edit)
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.start_button)
         button_layout.addWidget(self.stop_button)
         button_layout.addWidget(self.restart_button)
         button_layout.addStretch()
+        button_layout.addWidget(self.auto_run_label)
         button_layout.addWidget(self.auto_run_button, alignment=Qt.AlignRight)
         main_layout.addLayout(button_layout)
+
 
         host_layout = QHBoxLayout()
         host_layout.addWidget(self.host_label)
@@ -593,7 +575,7 @@ class MainWindow(QMainWindow):
         """
         Initialize the signal slot.
         """
-        self.webserver = WebServer(self.update_log, self.update_log_from_thread) # create a webserver
+        self.webserver = WebServer(self.update_log, self.update_log_from_thread, self.createInfoBar_from_thread) # create a webserver
         self.start_button.clicked.connect(self.webserver.start_server)
         self.stop_button.clicked.connect(self.webserver.stop_server)
         self.restart_button.clicked.connect(self.webserver.restart_server)
@@ -615,9 +597,9 @@ class MainWindow(QMainWindow):
         }
 
         font_color, font_weight, font_size, prefix = state_to_color_and_size.get(state)
-        
+
         locker = QMutexLocker(self.log_mutex)
-        self.log_text_edit.append(f"<font style='color:{font_color}; font-weight:{font_weight}; font-size:{font_size};'>{prefix} {text}</font>")
+        self.textEdit.append(f"<font style='color:{font_color}; font-weight:{font_weight}; font-size:{font_size};'>{prefix} {text}</font>")
         locker.unlock()
 
     def update_log_from_thread(self, state, text):
@@ -626,6 +608,47 @@ class MainWindow(QMainWindow):
         """
         self.update_log_signal.emit(state, text)
 
+
+    def createInfoBar(self, state, title, text):
+        """
+        Create a info bar.
+        """
+        if(state == 'success'):
+            InfoBar.success(
+                title=f"{title}",
+                content=f"{text}",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP_LEFT,
+                duration=5000,
+                parent=self
+            )
+        elif(state == 'error'):
+            InfoBar.error(
+                title=f"{title}",
+                content=f"{text}",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP_LEFT,
+                duration=5000,
+                parent=self
+            )
+        elif(state == 'warn'):
+            InfoBar.warning(
+                title=f"{title}",
+                content=f"{text}",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP_LEFT,
+                duration=5000,
+                parent=self
+            )
+
+    def createInfoBar_from_thread(self, state, title, text):
+        """
+        Emit a signal to create a info bar from a thread.
+        """
+        self.infoBar_signal.emit(state, title, text)
 
     def show_window(self, reason):
         """
@@ -652,19 +675,28 @@ class MainWindow(QMainWindow):
         """
         Handle the close event.
         """
-        reply = QMessageBox.question(self, 'Message', "Do you want to minimise the window to the tray?", QMessageBox.Yes | QMessageBox.No , QMessageBox.No)
-
-        if reply == QMessageBox.Yes:
+        reply = MessageBox(
+            'Message',
+            "Do you want to minimise the window to the tray?",
+            self)
+        reply.yesButton.setText('Backstage Running')
+        reply.cancelButton.setText('Direct close')
+        if reply.exec():
             event.ignore()
             self.hide()
             self.tray_icon.show()
-        elif reply == QMessageBox.No:
+        else:
             self.webserver.stop_server()
             event.accept()
             
 
-
 if __name__ == "__main__":
+    # set high dpi scale
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
+
     if hasattr(sys, 'frozen'):
         # rooturi when pakge to exe
         rootUri = os.path.dirname(sys.argv[0])
@@ -678,7 +710,7 @@ if __name__ == "__main__":
     processManger = ProcessManager()
     main_window = MainWindow()
     # if is startup run then hide the window
-    if "-min" in sys.argv:
+    if "min" in sys.argv:
         main_window.tray_icon.show()
     else:
         main_window.show()
