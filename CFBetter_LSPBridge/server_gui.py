@@ -131,6 +131,10 @@ class CommandChecker:
                 self.update_log_from_thread("success", f"The command for {lang} is valid.")
             except subprocess.CalledProcessError:
                 self.update_log_from_thread("error", f"The command for {lang} is invalid.")
+                if(lang == "cpp"):
+                    self.update_log_from_thread("error", "Please download clangd-windows-xxx.zip from https://github.com/clangd/clangd/releases/, extract it to your preferred location, and add the xxx/clangd_xxx/bin path to the system environment variable path.")
+                elif(lang == "python"):
+                    self.update_log_from_thread("error", "Please run the command ' pip install \"python-lsp-server[all]\" ' in the terminal (you need to have a Python environment installed), which will automatically configure the environment variables.")
             except subprocess.TimeoutExpired:
                 self.update_log_from_thread("success", f"The command for {lang} is valid.")
         self.update_log_from_thread("info", "Commands checked.")
@@ -158,7 +162,7 @@ class StartupRun():
         Set the startup.
         """
         QSetting = QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings.NativeFormat)
-        QSetting.setValue("CFBetter_LSPBridge", rootUri + " min")
+        QSetting.setValue("CFBetter_LSPBridge", rootUri + ".exe" + " min")
 
     @staticmethod
     def cancel_startup_run():
@@ -193,10 +197,32 @@ class HomeRequestHandler(web.RequestHandler):
         """
         Handle the GET request.
         """
-        self.update_log("info", "HomeRequestHandler GET")
+        self.update_log("success", "HomeRequestHandler GET")
         self.write("""
         <h1>Welcome to CFBetter_MonacoLSPBridge</h1>
         """)
+
+
+class MyCompletJsonHandler(websocket.WebSocketHandler):
+    """
+    A class that handles the mycomplet json in the mycomplt file.
+    """
+    rootUri = None
+    update_log_from_thread = None
+    
+
+    def initialize(self, rootUri, update_log_from_thread) -> None:
+        """
+        Initialize the class with the given root URI.
+        """
+        self.rootUri = rootUri
+        self.update_log_from_thread = update_log_from_thread
+
+    def get(self, *args):
+        completfile = args[0]
+        self.update_log_from_thread("success", f"MyCompletJsonHandler GET {completfile}")
+        with open(os.path.join(rootUri, 'mycomplet', completfile), 'r') as f:
+            self.write(f.read())
 
 
 class FileServerWebSocketHandler(websocket.WebSocketHandler):
@@ -269,6 +295,7 @@ class FileServerWebSocketHandler(websocket.WebSocketHandler):
         """
         self.set_header("Access-Control-Allow-Origin", "*")
         return True
+
 
 
 class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
@@ -403,6 +430,8 @@ class WebServer():
             asyncio.set_event_loop(asyncio.new_event_loop())
             webapp = web.Application([
                     (r"/", HomeRequestHandler, dict(update_log = self.update_log)),
+                    (r"/mycomplet/(.*)", MyCompletJsonHandler,
+                     dict(rootUri=rootUri, update_log_from_thread = self.update_log_from_thread)),
                     (r"/file", FileServerWebSocketHandler,
                     dict(rootUri=rootUri, update_log_from_thread = self.update_log_from_thread, connections = self.connections)),
                     (r"/(.*)", LanguageServerWebSocketHandler,
@@ -410,11 +439,19 @@ class WebServer():
                 ])
 
             self.webserver = httpserver.HTTPServer(webapp)
-            self.webserver.listen(config.port, config.host)
+            # if this port is used, asked to change the port
+            try:
+                self.webserver.listen(config.port, config.host)
+            except OSError:
+                self.webserver = None
+                self.update_log_from_thread("error", f"Port {config.port} already in use")
+                self.createInfoBar_from_thread('error', 'Port already in use', f"Please change the port.")
+                return
+            
             self.update_log_from_thread("success", f"Listening on {config.host}:{config.port}")
 
             # success!
-            self.createInfoBar_from_thread('success', 'Server started', f"Enjoy your coding!")
+            self.createInfoBar_from_thread('success', 'Server started', f"Enjoy coding! !>_<")
 
             # run until the stop event is set
             ioloop.IOLoop.current().start()
@@ -618,7 +655,7 @@ class MainWindow(QMainWindow):
                 title=f"{title}",
                 content=f"{text}",
                 orient=Qt.Horizontal,
-                isClosable=True,
+                isClosable=False,
                 position=InfoBarPosition.TOP_LEFT,
                 duration=5000,
                 parent=self
@@ -628,7 +665,7 @@ class MainWindow(QMainWindow):
                 title=f"{title}",
                 content=f"{text}",
                 orient=Qt.Horizontal,
-                isClosable=True,
+                isClosable=False,
                 position=InfoBarPosition.TOP_LEFT,
                 duration=5000,
                 parent=self
@@ -638,7 +675,7 @@ class MainWindow(QMainWindow):
                 title=f"{title}",
                 content=f"{text}",
                 orient=Qt.Horizontal,
-                isClosable=True,
+                isClosable=False,
                 position=InfoBarPosition.TOP_LEFT,
                 duration=5000,
                 parent=self

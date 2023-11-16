@@ -1,0 +1,16 @@
+{
+    "suggestions": [
+        {
+            "label": "hello world",
+            "kind": 15,
+            "documentation": "The is a hello world snippet",
+            "insertText": "hello world"
+        },
+        {
+            "label": "hello world 2",
+            "kind": 15,
+            "documentation": "The is another hello world snippet",
+            "insertText": "hello\nworld"
+        }
+    ]
+}
