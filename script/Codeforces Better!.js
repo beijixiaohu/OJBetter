@@ -5834,6 +5834,139 @@ async function createMonacoEditor(language, form, support) {
     window.CFBetter_monaco = CFBetter_monaco; // 全局方法
 
     /**
+     * 一些工具函数
+     */
+    // 将lsp格式的rang转换为Monaco格式
+    CFBetter_monaco.lspRangeToMonacoRange = function (range) {
+        const { start, end } = range;
+        return new monaco.Range(
+            start.line + 1,
+            start.character + 1,
+            end.line + 1,
+            end.character + 1
+        );
+    };
+    // 将Monaco格式的rang转为lsp格式
+    CFBetter_monaco.MonacoRangeTolspRange = function (range) {
+        return {
+            start: {
+                line: range.startLineNumber - 1,
+                character: range.startColumn - 1,
+            },
+            end: {
+                line: range.endLineNumber - 1,
+                character: range.endColumn - 1,
+            },
+        };
+    };
+    // 将Monaco格式的position转为lsp格式的
+    CFBetter_monaco.MonacoPositionTolspPosition = function (position) {
+        return {
+            line: position.lineNumber - 1,
+            character: position.column - 1,
+        };
+    };
+    // 将Monaco格式的severity转为lsp格式的
+    CFBetter_monaco.MonacoSeverityTolspSeverity = function (severity) {
+        switch (severity) {
+            case 8:
+                return 1;
+            case 1:
+                return 4;
+            case 2:
+                return 3;
+            case 4:
+                return 2;
+            default:
+                return severity;
+        }
+    };
+    // 将lsp格式的severity转为Monaco格式的
+    CFBetter_monaco.lspSeverityToMonacoSeverity = function (severity) {
+        switch (severity) {
+            case 1:
+                return 8;
+            case 4:
+                return 1;
+            case 3:
+                return 2;
+            case 2:
+                return 4;
+            default:
+                return severity;
+        }
+    };
+    // 收集Monaco数据中的rang数据
+    CFBetter_monaco.CollectRange = function (item) {
+        return {
+            startLineNumber: item.startLineNumber,
+            startColumn: item.startColumn,
+            endLineNumber: item.endLineNumber,
+            endColumn: item.endColumn,
+        };
+    };
+    // 收集Monaco position数据中的rang数据
+    CFBetter_monaco.CollectRangeByPosition = function (item) {
+        var word = model.getWordUntilPosition(item);
+        return {
+            startLineNumber: item.lineNumber,
+            endLineNumber: item.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn,
+        };
+    };
+    // 将lsp格式的Edit转换为Monaco格式
+    CFBetter_monaco.lspEditToMonacoEdit = function (edit) {
+        const edits = [];
+
+        if (language == "python") {
+            for (const item1 of edit.documentChanges) {
+                for (const item2 of item1.edits) {
+                    const newElement = {
+                        textEdit: {
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
+                            text: item2.newText,
+                        },
+                        resource: monaco.Uri.parse(item1.textDocument.uri),
+                        versionId: model.getVersionId(),
+                    };
+                    edits.push(newElement);
+                }
+            }
+        } else if (language == "java") {
+            for (const item1 in edit.changes) {
+                edit.changes[item1].forEach((item2) => {
+                    const newElement = {
+                        textEdit: {
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
+                            text: item2.newText,
+                        },
+                        resource: uri,
+                        versionId: model.getVersionId(),
+                    };
+                    edits.push(newElement);
+                });
+            }
+        } else {
+            for (const key in edit.changes) {
+                const arr = edit.changes[key];
+                for (const item of arr) {
+                    const newElement = {
+                        textEdit: {
+                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            text: item.newText,
+                        },
+                        resource: monaco.Uri.parse(key),
+                        versionId: model.getVersionId(),
+                    };
+                    edits.push(newElement);
+                }
+            }
+        }
+        return { edits: edits };
+    };
+
+    /**
      * 实例化一个editor
      */
     uri = monaco.Uri.file(uri);
@@ -6042,6 +6175,44 @@ async function createMonacoEditor(language, form, support) {
         });
     })();
 
+    /**
+     * 注册本地自动补全
+     */
+    (CFBetter_monaco.RegisterLocalComplet = async () => {
+        // 补全器注册函数
+        function registMyCompletionItemProvider(language, genre, rule) {
+            if (genre == "monaco") {
+                monaco.languages.registerCompletionItemProvider(language, {
+                    provideCompletionItems: function (model, position) {
+                        return parseMonacoCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
+                    }
+                })
+            } else if (genre == "ace") {
+                monaco.languages.registerCompletionItemProvider(language, {
+                    provideCompletionItems: function (model, position) {
+                        return parseAceCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
+                    }
+                })
+            }
+        }
+
+        // 注册acwing cpp 模板
+        if (language == "cpp" && cppCodeTemplateComplete) {
+            registMyCompletionItemProvider('cpp', 'ace', CODE_COMPLETER);
+        }
+
+        // 注册自定义的补全
+        let complet_length = CompletConfig.configurations.length;
+        if (complet_length > 0) {
+            for (let i = 0; i < complet_length; i++) {
+                let item = CompletConfig.configurations[i];
+                if (item.isChoose && item.language == language) {
+                    registMyCompletionItemProvider(item.language, item.genre, await getExternalJSON(item.jsonUrl));
+                }
+            }
+        }
+    })();
+
     if (!support || !useLSP) { return; } // 如果不支持lsp，则到此为止
 
     /**
@@ -6122,9 +6293,8 @@ async function createMonacoEditor(language, form, support) {
             CFBetter_monaco.openDocRequest(); // 打开文档
             if (!monacoEditor_language.includes(language)) {
                 monacoEditor_language.push(language);
-                CFBetter_monaco.RegistrationAfterInit(); // 注册新语言及功能
-                CFBetter_monaco.RegisterLocalComplet(); // 注册本地补全
-            } else{
+                CFBetter_monaco.RegistrationAfterInit(); // 注册语言及功能
+            } else {
                 location.reload(); // 这里有问题，先贴个补丁
             }
             CFBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
@@ -6488,139 +6658,6 @@ async function createMonacoEditor(language, form, support) {
 
         // 初始化更新文件
         updateFile(workspace, filename, fileExtension, model.getValue());
-
-        /**
-         * 一些工具函数
-         */
-        // 将lsp格式的rang转换为Monaco格式
-        CFBetter_monaco.lspRangeToMonacoRange = function (range) {
-            const { start, end } = range;
-            return new monaco.Range(
-                start.line + 1,
-                start.character + 1,
-                end.line + 1,
-                end.character + 1
-            );
-        };
-        // 将Monaco格式的rang转为lsp格式
-        CFBetter_monaco.MonacoRangeTolspRange = function (range) {
-            return {
-                start: {
-                    line: range.startLineNumber - 1,
-                    character: range.startColumn - 1,
-                },
-                end: {
-                    line: range.endLineNumber - 1,
-                    character: range.endColumn - 1,
-                },
-            };
-        };
-        // 将Monaco格式的position转为lsp格式的
-        CFBetter_monaco.MonacoPositionTolspPosition = function (position) {
-            return {
-                line: position.lineNumber - 1,
-                character: position.column - 1,
-            };
-        };
-        // 将Monaco格式的severity转为lsp格式的
-        CFBetter_monaco.MonacoSeverityTolspSeverity = function (severity) {
-            switch (severity) {
-                case 8:
-                    return 1;
-                case 1:
-                    return 4;
-                case 2:
-                    return 3;
-                case 4:
-                    return 2;
-                default:
-                    return severity;
-            }
-        };
-        // 将lsp格式的severity转为Monaco格式的
-        CFBetter_monaco.lspSeverityToMonacoSeverity = function (severity) {
-            switch (severity) {
-                case 1:
-                    return 8;
-                case 4:
-                    return 1;
-                case 3:
-                    return 2;
-                case 2:
-                    return 4;
-                default:
-                    return severity;
-            }
-        };
-        // 收集Monaco数据中的rang数据
-        CFBetter_monaco.CollectRange = function (item) {
-            return {
-                startLineNumber: item.startLineNumber,
-                startColumn: item.startColumn,
-                endLineNumber: item.endLineNumber,
-                endColumn: item.endColumn,
-            };
-        };
-        // 收集Monaco position数据中的rang数据
-        CFBetter_monaco.CollectRangeByPosition = function (item) {
-            var word = model.getWordUntilPosition(item);
-            return {
-                startLineNumber: item.lineNumber,
-                endLineNumber: item.lineNumber,
-                startColumn: word.startColumn,
-                endColumn: word.endColumn,
-            };
-        };
-        // 将lsp格式的Edit转换为Monaco格式
-        CFBetter_monaco.lspEditToMonacoEdit = function (edit) {
-            const edits = [];
-
-            if (language == "python") {
-                for (const item1 of edit.documentChanges) {
-                    for (const item2 of item1.edits) {
-                        const newElement = {
-                            textEdit: {
-                                range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
-                                text: item2.newText,
-                            },
-                            resource: monaco.Uri.parse(item1.textDocument.uri),
-                            versionId: model.getVersionId(),
-                        };
-                        edits.push(newElement);
-                    }
-                }
-            } else if (language == "java") {
-                for (const item1 in edit.changes) {
-                    edit.changes[item1].forEach((item2) => {
-                        const newElement = {
-                            textEdit: {
-                                range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
-                                text: item2.newText,
-                            },
-                            resource: uri,
-                            versionId: model.getVersionId(),
-                        };
-                        edits.push(newElement);
-                    });
-                }
-            } else {
-                for (const key in edit.changes) {
-                    const arr = edit.changes[key];
-                    for (const item of arr) {
-                        const newElement = {
-                            textEdit: {
-                                range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
-                                text: item.newText,
-                            },
-                            resource: monaco.Uri.parse(key),
-                            versionId: model.getVersionId(),
-                        };
-                        edits.push(newElement);
-                    }
-                }
-            }
-            return { edits: edits };
-        };
     }
 
     /**
@@ -7352,45 +7389,6 @@ async function createMonacoEditor(language, form, support) {
         };
     }
 
-
-    /**
-     * 注册本地自动补全
-     */
-    CFBetter_monaco.RegisterLocalComplet = async () => {
-        // 补全器注册函数
-        function registMyCompletionItemProvider(language, genre, rule) {
-            if (genre == "monaco") {
-                monaco.languages.registerCompletionItemProvider(language, {
-                    provideCompletionItems: function (model, position) {
-                        return parseMonacoCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
-                    }
-                })
-            } else if (genre == "ace") {
-                monaco.languages.registerCompletionItemProvider(language, {
-                    provideCompletionItems: function (model, position) {
-                        return parseAceCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
-                    }
-                })
-            }
-        }
-
-        // 注册acwing cpp 模板
-        if (language == "cpp" && cppCodeTemplateComplete) {
-            registMyCompletionItemProvider('cpp', 'ace', CODE_COMPLETER);
-        }
-
-        // 注册自定义的补全
-        let complet_length = CompletConfig.configurations.length;
-        if (complet_length > 0) {
-            for (let i = 0; i < complet_length; i++) {
-                let item = CompletConfig.configurations[i];
-                if (item.isChoose && item.language == language) {
-                    registMyCompletionItemProvider(item.language, item.genre, await getExternalJSON(item.jsonUrl));
-                }
-            }
-        }
-    }
-
     if (!languageSocketState) await waitForLanguageSocketState();
     CFBetter_monaco.Initialize();
 }
@@ -7417,7 +7415,7 @@ function changeMonacoLanguage(form) {
     // 创建新的编辑器
     if (nowSelect in value_monacoLanguageMap) {
         let language = value_monacoLanguageMap[nowSelect];
-        if (language == "python" || language == "cpp" || language == "java") {
+        if (language == "python" || language == "cpp") {
             createMonacoEditor(language, form, true);
         } else {
             createMonacoEditor(language, form, false);
