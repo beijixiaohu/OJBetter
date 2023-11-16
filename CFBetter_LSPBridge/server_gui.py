@@ -162,7 +162,7 @@ class StartupRun():
         Set the startup.
         """
         QSetting = QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings.NativeFormat)
-        QSetting.setValue("CFBetter_LSPBridge", rootUri + ".exe" + " min")
+        QSetting.setValue("CFBetter_LSPBridge", os.path.join(rootUri,"server_gui.exe") + " min")
 
     @staticmethod
     def cancel_startup_run():
