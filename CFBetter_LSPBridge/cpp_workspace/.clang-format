@@ -18,9 +18,9 @@ ColumnLimit: 100
 # 括号之后,水平对齐参数: Align DontAlign AlwaysBreak
 AlignAfterOpenBracket: Align
 # 连续的赋值时,对齐所有的等号
-AlignConsecutiveAssignments: true
+AlignConsecutiveAssignments: false
 # 连续声明时，对齐所有声明的变量名
-AlignConsecutiveDeclarations: true
+AlignConsecutiveDeclarations: false
 # 左对齐换行(使用反斜杠换行)的反斜杠 
 AlignEscapedNewlinesLeft: true
 # 水平对齐二元和三元表达式的操作数 
@@ -37,9 +37,9 @@ AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterDefinitionReturnType: None
 # 描述具有特殊意义的注释的正则表达式，它不应该被分割为多行或以其它方式改变
 CommentPragmas: '^ IWYU pragma:'
-#指针的*的挨着哪边
+# 指针的*的挨着哪边
 PointerAlignment: Right
-#缩进宽度
+# 缩进宽度
 IndentWidth: 4
 # 连续的空行保留几行
 MaxEmptyLinesToKeep: 1
@@ -55,25 +55,25 @@ AlignOperands: true
 SpacesInSquareBrackets: false
 # 小括号两边添加空格
 SpacesInParentheses : false
-#等号两边的空格
+# 等号两边的空格
 SpaceBeforeAssignmentOperators: true
 # 容器类的空格 例如 OC的字典
 SpacesInContainerLiterals: true
-#缩进
+# 缩进
 IndentWrappedFunctionNames: true
-#在block从空行开始
+# 在block从空行开始
 KeepEmptyLinesAtTheStartOfBlocks: true
-#在构造函数初始化时按逗号断行，并以冒号对齐
+# 在构造函数初始化时按逗号断行，并以冒号对齐
 BreakConstructorInitializersBeforeComma: true
-#括号后添加空格
+# 括号后添加空格
 SpaceAfterCStyleCast: false
 # 允许排序#include, 造成编译错误
 # SortIncludes: true 
 # 缩进 case 标签
 IndentCaseLabels: true 
-#tab键盘的宽度
+# tab键盘的宽度
 TabWidth: 4
-#使用空格代替tab键
+# 使用空格代替tab键
 UseTab: Never
 #
 # refer to https://cloud.tencent.com/developer/article/1394078

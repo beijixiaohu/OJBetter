@@ -4,3 +4,4 @@ CFBetter_LSPBridge/java_workspace/.metadata
 CFBetter_LSPBridge/jdt-language-server
 CFBetter_LSPBridge/python_workspace/*.py
 CFBetter_LSPBridge/pylsp_jsonrpc
+CFBetter_LSPBridge/server_gui.*

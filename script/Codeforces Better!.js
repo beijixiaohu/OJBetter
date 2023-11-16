@@ -64,10 +64,11 @@ var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, rende
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, filterTextWithoutEmphasis, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
-var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete;
+var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
 var compilerSelection, editorFontSize, onlineCompilerChoice;
 var CF_csrf_token;
 var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, CFBetter_MonacoLSPBridge_WorkUri, CFBetter_MonacoLSPBridge_SocketUrl;
+var monacoEditor_language = [];
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -142,11 +143,16 @@ function init() {
     problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
     cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
     onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
+    //自定义补全
+    CompletConfig = getGMValue("Complet_config", {
+        "choice": -1,
+        "configurations": []
+    });
     /**
     * 加载monaco编辑器资源
     */
     useLSP = getGMValue("useLSP", true);
-    CFBetter_MonacoLSPBridge_WorkUri = getGMValue("CFBetter_MonacoLSPBridge_WorkUri", "c:/CFBetter_LSPBridge/").replace(/\\/g, '/').replace(/\/$/, '');
+    CFBetter_MonacoLSPBridge_WorkUri = getGMValue("CFBetter_MonacoLSPBridge_WorkUri", "C:/CFBetter_LSPBridge/").replace(/\\/g, '/').replace(/\/$/, '');
     CFBetter_MonacoLSPBridge_SocketUrl = getGMValue("CFBetter_MonacoLSPBridge_SocketUrl", "ws://127.0.0.1:2323/");
     let monacoLoader = document.createElement("script");
     monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
@@ -347,7 +353,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
         html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
         html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
-        html[data-theme=dark] #config_bar_list, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
+        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
         html[data-theme=dark] #LSPLog{
             background-color: #22272e !important;
         }
@@ -368,7 +374,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] .test-for-popup pre,
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
-        html[data-theme=dark] ul#config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] ul.config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] .sampleDiv,
         html[data-theme=dark] #addCustomTest, html[data-theme=dark] #LSPLog li:nth-child(odd){
             background-color: #2d333b !important;
@@ -385,7 +391,7 @@ function handleColorSchemeChange(event) {
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
-        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] #config_bar_list,
+        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] .config_bar_list,
         html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
         html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
@@ -420,6 +426,14 @@ function handleColorSchemeChange(event) {
             border: 1px dashed #03A9F4 !important;
             background-color: #2d333b !important;
             color: #03A9F4 !important;
+        }
+        /* 无边框 */
+        html[data-theme=dark] .html2md-panel.input-output-copier {
+            border: none !important;
+        }
+        /* 无背景 */
+        html[data-theme=dark] .html2md-panel.input-output-copier:hover{
+            background-color: #ffffff00 !important;
         }
         /* focus-visible */
         html[data-theme=dark] input:focus-visible, html[data-theme=dark] textarea, html[data-theme=dark] select{
@@ -748,11 +762,11 @@ button.html2mdButton.CFBetter_setting.open {
 .CFBetter_setting_menu {
     z-index: 200;
     box-shadow: 0px 0px 0px 4px #ffffff;
-    display: grid;
     position: fixed;
     top: 50%;
     left: 50%;
     width: 500px;
+    min-height: 600px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
     background-color: #f0f4f9;
@@ -1020,6 +1034,28 @@ button.html2mdButton.CFBetter_setting.open {
     justify-content: space-between;
 }
 
+.CFBetter_setting_list.alert_warn {
+    color: #E65100;
+    background-color: #FFF3E0;
+    border: 1px solid #FF9800;
+    margin: 10px 0px;
+}
+
+.CFBetter_setting_list.alert_tip {
+    color: #009688;
+    background-color: #E0F2F1;
+    border: 1px solid #009688;
+    margin: 10px 0px;
+}
+
+.CFBetter_setting_list p:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.CFBetter_setting_list p:not(:first-child) {
+    margin-top: 10px;
+}
+
 /*设置面板-radio*/
 .CFBetter_setting_menu #translation-settings label {
     list-style-type: none;
@@ -1093,7 +1129,7 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     outline: none;
 }
 
-.CFBetter_setting_menu_input {
+.CFBetter_setting_menu_config_box {
     width: 100%;
     display: grid;
     margin-top: 5px;
@@ -1138,7 +1174,7 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     font-size: 14px;
 }
 
-.CFBetter_setting_menu #save {
+.CFBetter_setting_menu #tempConfig_save {
     cursor: pointer;
 	display: inline-flex;
     padding: 5px;
@@ -1351,7 +1387,7 @@ div#update_panel #updating a {
     display: flex;
     justify-content: space-between;
 }
-li#add_button {
+li.tempConfig_add_button {
     cursor: pointer;
     height: 40px;
     border: 1px dashed #BDBDBD;
@@ -1362,29 +1398,29 @@ li#add_button {
     align-items: center;
     justify-content: center;
 }
-li#add_button:hover {
+li.tempConfig_add_button:hover {
     border: 1px dashed #03A9F4;
     background-color: #d7f0fb8c;
     color: #03A9F4;
 }
-div#config_bar_list {
+.config_bar_list {
     display: flex;
-    width: 335px;
+    width: 340px;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
     box-sizing: border-box;
 }
-div#config_bar_list input[type="radio"] {
+.config_bar_list input[type="radio"] {
     appearance: none;
     width: 0;
     height: 0;
     overflow: hidden;
 }
-div#config_bar_list input[type="radio"] {
+.config_bar_list input[type="radio"] {
     margin: 0px;
 }
-div#config_bar_list input[type=radio]:focus {
+.config_bar_list input[type=radio]:focus {
     outline: 0px;
 }
 label.config_bar_ul_li_text {
@@ -1403,7 +1439,7 @@ label.config_bar_ul_li_text {
     box-shadow: 0px 2px 4px 0px rgba(0,0,0,.05);
     box-sizing: border-box;
 }
-ul#config_bar_ul li button {
+.config_bar_ul li button {
     background-color: #e6e6e6;
     color: #727378;
     height: 23px;
@@ -1414,7 +1450,7 @@ ul#config_bar_ul li button {
     border: none;
     box-shadow: 0 0 1px #0000004d;
 }
-ul#config_bar_ul {
+.config_bar_ul {
     display: flex;
     align-items: center;
     list-style-type: none;
@@ -1423,7 +1459,7 @@ ul#config_bar_ul {
     max-width: 100%;
     margin: 0px;
 }
-ul#config_bar_ul li {
+.config_bar_ul li {
     width: 80px;
     display: grid;
     margin: 4px 4px;
@@ -1438,24 +1474,24 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     border: 1px solid #5e7ce0;
     color: #5e7ce0;
 }
-ul#config_bar_ul::-webkit-scrollbar {
+.config_bar_ul::-webkit-scrollbar {
     width: 5px;
     height: 3px;
 }
-ul#config_bar_ul::-webkit-scrollbar-thumb {
+.config_bar_ul::-webkit-scrollbar-thumb {
     background-clip: padding-box;
     background-color: #d7d9e4;
     border-radius: 8px;
 }
-ul#config_bar_ul::-webkit-scrollbar-button:start:decrement {
+.config_bar_ul::-webkit-scrollbar-button:start:decrement {
     width: 4px;
     background-color: transparent;
 }
-ul#config_bar_ul::-webkit-scrollbar-button:end:increment {
+.config_bar_ul::-webkit-scrollbar-button:end:increment {
     width: 4px;
     background-color: transparent;
 }
-ul#config_bar_ul::-webkit-scrollbar-track {
+.config_bar_ul::-webkit-scrollbar-track {
     border-radius: 5px;
 }
 label.config_bar_ul_li_text::-webkit-scrollbar {
@@ -2076,6 +2112,29 @@ function addDraggable(element) {
         isDragging = false;
         isSpecialMouseDown = false;
         $('body').css('cursor', 'default');
+    });
+}
+
+// 获取外部json并转换为object
+function getExternalJSON(url) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: url,
+            onload: function (response) {
+                if (response.status === 200) {
+                    var json = JSON.parse(response.responseText);
+                    resolve(json);
+                } else {
+                    console.warn(`网络错误, ${url}无法访问`);
+                    resolve({});
+                }
+            },
+            onerror: function (response) {
+                console.warn(`网络错误, ${url}无法访问`);
+                resolve({});
+            }
+        });
     });
 }
 
@@ -2997,7 +3056,7 @@ function toZH_CN() {
 };
 
 // 配置管理函数
-function setupConfigManagement(element, tempConfig, structure, configHTML, checkable) {
+function setupConfigManagement(element, prefix, tempConfig, structure, configHTML, checkable) {
     let counter = 0;
     createControlBar();
     createContextMenu();
@@ -3019,13 +3078,16 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         const styleElement = createWindow();
 
         const settingMenu = $("#config_edit_menu");
-        settingMenu.on("click", "#save", () => {
+        settingMenu.on("click", "#tempConfig_save", () => {
             const config = {};
+
+            // 检查必填字段
             let allFieldsValid = true;
             for (const key in structure) {
                 let value = $(key).val();
+                if ($(key).is("input[type='checkbox']")) value = $(key).prop("checked"); // 打个补丁，单选的值是prop("checked")
                 if (value || $(key).attr('require') === 'false') {
-                    config[structure[key]] = $(key).val();
+                    config[structure[key]] = value;
                     $(key).removeClass('is_null');
                 } else {
                     $(key).addClass('is_null');
@@ -3049,8 +3111,8 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
             if (!allFieldsValid) return;
             tempConfig.configurations.push(config);
 
-            const list = $("#config_bar_ul");
-            createListItemElement(config[structure['#note']]).insertBefore($('#add_button'));
+            const list = $(`#${prefix}config_bar_ul`);
+            createListItemElement(config[structure['#note']]).insertBefore($(`#${prefix}add_button`));
 
             settingMenu.remove();
             $(styleElement).remove();
@@ -3067,7 +3129,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         const menu = $("#config_bar_menu");
         menu.css({ display: "none" });
 
-        const list = $("#config_bar_ul");
+        const list = $(`#${prefix}config_bar_ul`);
         const index = Array.from(list.children()).indexOf(this);
 
         const styleElement = createWindow();
@@ -3077,17 +3139,19 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
 
         if (configAtIndex) {
             for (const key in structure) {
-                $(key).val(configAtIndex[structure[key]]);
+                if ($(key).is("input[type='checkbox']")) $(key).prop('checked', configAtIndex[structure[key]]); // 是input[type='checkbox']的情况
+                else $(key).val(configAtIndex[structure[key]]);
             }
         }
 
-        settingMenu.on("click", "#save", () => {
+        settingMenu.on("click", "#tempConfig_save", () => {
             const config = {};
             let allFieldsValid = true;
             for (const key in structure) {
                 let value = $(key).val();
+                if ($(key).is("input[type='checkbox']")) value = $(key).prop("checked"); // 是input[type='checkbox']的情况
                 if (value || $(key).attr('require') === 'false') {
-                    config[structure[key]] = $(key).val();
+                    config[structure[key]] = value;
                     $(key).removeClass('is_null');
                 } else {
                     $(key).addClass('is_null');
@@ -3130,7 +3194,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         const menu = $("#config_bar_menu");
         menu.css({ display: "none" });
 
-        const list = $("#config_bar_ul");
+        const list = $(`#${prefix}config_bar_ul`);
         const index = Array.from(list.children()).indexOf(this);
 
         tempConfig.configurations.splice(index, 1);
@@ -3149,10 +3213,10 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
     // 创建控制面板
     function createControlBar() {
         $(element).append(`
-            <div id='configControlTip' style='color:red;'></div>
+            <div id='${prefix}configControlTip' style='color:red;'></div>
             <div class='config_bar'>
-                <div class='config_bar_list' id='config_bar_list'>
-                    <ul class='config_bar_ul' id='config_bar_ul'></ul>
+                <div class='config_bar_list' id='${prefix}config_bar_list'>
+                    <ul class='config_bar_ul' id='${prefix}config_bar_ul'></ul>
                 </div>
             </div>
         `);
@@ -3206,19 +3270,19 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
 
     // 渲染列表
     function renderList() {
-        const listContainer = $("#config_bar_list");
-        const list = $("#config_bar_ul");
+        const listContainer = $(`#${prefix}config_bar_list`);
+        const list = $(`#${prefix}config_bar_ul`);
         list.empty();
         tempConfig.configurations.forEach((item) => {
             list.append(createListItemElement(item[structure['#note']]));
         });
 
         list.append(`
-            <li id='add_button'>
+            <li id='${prefix}add_button' class="tempConfig_add_button">
                 <span>+ 添加</span>
             </li>
         `);
-        const addItem = $('#add_button');
+        const addItem = $(`#${prefix}add_button`);
         addItem.on("click", onAdd);
     };
 
@@ -3382,7 +3446,7 @@ const translation_settings_HTML = `
             </div>
         </span>
     </label>
-    <div class='CFBetter_setting_menu_input' id='openai' style='display: none;'>
+    <div class='CFBetter_setting_menu_config_box' id='openai' style='display: none;'>
         <div id="chatgpt-config"></div>
     </div>
     <h4>偏好</h4>
@@ -3485,7 +3549,7 @@ const clist_rating_settings_HTML = `
     <h3>Clist设置</h3>
     <hr>
     <h4>基本</h4>
-    <div class='CFBetter_setting_list' style="background-color: #E0F2F1;border: 1px solid #009688;">
+    <div class='CFBetter_setting_list alert_tip'>
         <div>
             <p>注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明</p>
         </div>
@@ -3574,18 +3638,19 @@ const code_editor_settings_HTML = `
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
-    <h4>自定义补全</h4>
-    <div class='CFBetter_setting_list'>
-        <label for="cppCodeTemplateComplete"><span>ACWing CPP 补全模板</span></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text">
-            <p>开启C++代码模板级补全，模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
-            <p><strong>警告：该功能仅供放松娱乐，请勿依赖，也不应将其用于任何正式比赛中</strong></p>
-            </div>
-        </div>
-        <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
-    </div>
+    <h4>在线代码调试</h4>
+    <label>
+        <input type='radio' name='compiler' value='official'>
+        <span class='CFBetter_setting_menu_label_text'>Codeforces</span>
+    </label>
+    <label>
+        <input type='radio' name='compiler' value='wandbox'>
+        <span class='CFBetter_setting_menu_label_text'>wandbox</span>
+    </label>
+    <label>
+        <input type='radio' name='compiler' value='rextester'>
+        <span class='CFBetter_setting_menu_label_text'>rextester</span>
+    </label>
     <hr>
     <h4>LSP设置</h4>
     <div class='CFBetter_setting_list'>
@@ -3609,11 +3674,11 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-                <p>你需要填写 CFBetter_MonacoLSPBridge 所在的路径：</p>
+                <p>你需要填写 CFBetter_LSPBridge 所在的路径：</p>
                 <p>使用正斜杠或反斜杠均可</p>
                 <p>默认路径：</p>
                 <div style="border: 1px solid #795548; padding: 10px;">
-                    <p>c:/CFBetter_LSPBridge/</p>
+                    <p>C:/CFBetter_LSPBridge/</p>
                 </div>
             </div>
         </div>
@@ -3628,36 +3693,43 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-                <p>你需要填写你本机中 CFBetter_MonacoLSPBridge 的Server URL</p>
-                <p>注意，你通常不需要更改这里，如果更改，请按照默认URL的格式</p>
+                <p>你需要填写你本机中 CFBetter_LSPBridge 的 Server URL</p>
+                <p>默认的URL: </p>
                 <div style="border: 1px solid #795548; padding: 10px;">
                     <p>ws://127.0.0.1:2323/</p>
                 </div>
+                <p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>
             </div>
         </div>
         <input type='text' id='CFBetter_MonacoLSPBridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写' require = true>
     </div>
     <hr>
-    <h4>在线代码调试</h4>
-    <label>
-        <input type='radio' name='compiler' value='official'>
-        <span class='CFBetter_setting_menu_label_text'>Codeforces</span>
-    </label>
-    <label>
-        <input type='radio' name='compiler' value='wandbox'>
-        <span class='CFBetter_setting_menu_label_text'>wandbox
-            <div class="help_tip">
-                ${helpCircleHTML}
-                <div class="tip_text">
-                <p>由wandbox提供</p>
-                </div>
+    <h4>静态补全增强</h4>
+    <div class='CFBetter_setting_list alert_warn'>
+        <div>
+            <p>该功能仅供放松娱乐，请勿依赖</p>
+        </div>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="cppCodeTemplateComplete"><span>ACWing CPP 补全模板</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
             </div>
-        </span>
-    </label>
-    <label>
-        <input type='radio' name='compiler' value='rextester'>
-        <span class='CFBetter_setting_menu_label_text'>rextester</span>
-    </label>
+        </div>
+        <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
+    </div>
+    <hr>
+    <h5>自定义</h5>
+    <div class='CFBetter_setting_list alert_warn'>
+        <div>
+            <p>注意：过多的静态补全规则会影响性能</p>
+        </div>
+    </div>
+    <div class='CFBetter_setting_menu_config_box' id='Complets'>
+        <div id="Complet_config"></div>
+    </div>
 </div>
 `;
 
@@ -3789,7 +3861,73 @@ const chatgptConfigEditHTML = `
             </div>
         </label>
         <textarea id="_data" placeholder='（选填）您可以在这里填写向请求data中额外添加的键值对' require = false></textarea>
-        <button id='save'>保存</button>
+        <button id='tempConfig_save'>保存</button>
+    </div>
+`;
+
+const CompletConfigEditHTML = `
+    <div class='CFBetter_setting_menu' id='config_edit_menu'>
+        <div class="tool-box">
+            <button class="btn-close">×</button>
+        </div>
+        <h4>配置</h4>
+        <hr>
+        <label for='note'>
+            <span class="input_label">备注:</span>
+        </label>
+        <input type='text' id='note' class='no_default' placeholder='请为该自定义配置取一个备注名' require = true>
+        <div class='CFBetter_setting_list'>
+        <label for="complet_isChoose"><span id="loaded_span">启用？</span></label>
+            <input type="checkbox" id="complet_isChoose" name="complet_isChoose" require = false>
+        </div>
+        <div class='CFBetter_setting_list'>
+            <label for="complet_genre" style="display: flex;">模板格式</label>
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">
+                <p>monaco 格式支持 monaco 中 
+                <a target="_blank" href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html">CompletionItem</a> 
+                几乎所有的属性, (注意: 不需要range属性, 脚本会自动计算并添加该属性)</p>
+                <p>ace 格式仅支持 ace 中 completers 有限的属性: <code>caption</code>、<code>value</code>, 脚本会自动将其转换为 monaco 格式</p>
+                <p>具体您可以前往阅读脚本页的说明</p>
+                </div>
+            </div>
+            <select id="complet_genre" name="complet_genre">
+                <option value="monaco">monaco</option>
+                <option value="ace">ace</option>
+            </select>
+        </div>
+        <div class='CFBetter_setting_list'>
+            <label for="complet_language" style="display: flex;">适用的语言</label>
+            <select id="complet_language" name="complet_language">
+                <option value="cpp">cpp</option>
+                <option value="python">python</option>
+                <option value="java">java</option>
+                <option value="c">c</option>
+            </select>
+        </div>
+        <label for='complet_jsonUrl'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">JSON Url:</span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text">
+                    <p>开启 CFBetter_LSPBridge 后, 其会响应 GET 请求<code>/mycomplet/*</code>, 并返回在<code>mycomplet</code>文件夹中寻找到的同名文件的内容</p>
+                    <p>因此你只需要在 <code>/mycomplet</code> 文件夹中放置你的 JSON 文件即可在本地访问，</p>
+                    <p>在配置中你需要填写的 URL 形如: </p>
+                    <p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <div class='CFBetter_setting_list alert_warn'>
+            <div>
+                <p>脚本会完全信任你的 JSON 数据而不进行额外的校验和检查, 因此请勿添加来源不明的 JSON Url,</p>
+                <p>特殊构造的数据可能会破坏脚本的正常工作, 甚至执行其他恶意代码</p>
+            </div>
+        </div>
+        <input type='text' id='complet_jsonUrl' class='no_default' placeholder='形如http://127.0.0.1:2323/mycomplet/xxx.json' require = true>
+        <button id='tempConfig_save'>保存</button>
     </div>
 `;
 
@@ -3865,6 +4003,7 @@ async function settingPanel() {
             $('#' + targetPageId).addClass('active');
         });
 
+        // chatgpt配置
         const chatgptStructure = {
             '#note': 'note',
             '#openai_model': 'model',
@@ -3878,7 +4017,19 @@ async function settingPanel() {
             '#_data',
         ]
         let tempConfig = GM_getValue('chatgpt-config'); // 缓存配置信息
-        tempConfig = setupConfigManagement('#chatgpt-config', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
+        tempConfig = setupConfigManagement('#chatgpt-config', 'chatgpt_config_', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
+
+        // Complet配置
+        const CompletStructure = {
+            '#note': 'note',
+            '#complet_isChoose': 'isChoose',
+            '#complet_genre': 'genre',
+            '#complet_language': 'language',
+            '#complet_jsonUrl': 'jsonUrl',
+        }
+        const Completcheckable = []
+        let tempConfig_Complet = GM_getValue('Complet_config'); // 缓存配置信息
+        tempConfig_Complet = setupConfigManagement('#Complet_config', 'complet_config_', tempConfig_Complet, CompletStructure, CompletConfigEditHTML, Completcheckable);
 
         // 状态更新
         $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
@@ -3899,8 +4050,8 @@ async function settingPanel() {
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
             $("#openai").show();
-            if (tempConfig) {
-                $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
+            if (tempConfig && $("#chatgpt_config_config_bar_ul").length) {
+                $("#chatgpt_config_config_bar_ul").find(`input[name='config_item'][value='${tempConfig.choice}']`).prop("checked", true);
             }
         }
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
@@ -3940,6 +4091,7 @@ async function settingPanel() {
         // 关闭
         const $settingMenu = $(".CFBetter_setting_menu");
         $settingMenu.on("click", ".btn-close", async () => {
+            // 设置的数据
             const settings = {
                 bottomZh_CN: $("#bottomZh_CN").prop("checked"),
                 darkMode: $("input[name='darkMode']:checked").val(),
@@ -3970,13 +4122,21 @@ async function settingPanel() {
                 CFBetter_MonacoLSPBridge_SocketUrl: $('#CFBetter_MonacoLSPBridge_SocketUrl').val(),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
             };
+            // tempConfigs的数据
+            const tempConfigs = {
+                'chatgpt-config': tempConfig,
+                'Complet_config': tempConfig_Complet
+            }
 
             // 判断是否改变
             let hasChange = false;
             for (const [key, value] of Object.entries(settings)) {
                 if (!hasChange && GM_getValue(key) != value) hasChange = true;
             }
-            if (!hasChange && JSON.stringify(GM_getValue('chatgpt-config')) != JSON.stringify(tempConfig)) hasChange = true;
+
+            for (const [key, value] of Object.entries(tempConfigs)) {
+                if (!hasChange && (JSON.stringify(GM_getValue(key)) != JSON.stringify(value))) hasChange = true;
+            }
 
             if (hasChange) {
                 const shouldSave = await saveConfirmation();
@@ -4003,7 +4163,10 @@ async function settingPanel() {
                         }
                         GM_setValue(key, value);
                     }
-                    GM_setValue('chatgpt-config', tempConfig);
+                    for (const [key, value] of Object.entries(tempConfigs)) {
+                        if (!refreshPage && (JSON.stringify(GM_getValue(key)) != JSON.stringify(value))) refreshPage = true;
+                        GM_setValue(key, value);
+                    }
 
                     if (refreshPage) location.reload();
                     else {
@@ -5593,7 +5756,7 @@ function parseAceCompleter(rules, range) {
             const parts = item.caption.split(' ');
             for (let i = 0; i < parts.length; i++) {
                 if (item.value.startsWith(parts[i])) {
-                    item.value = item.value.replace(parts[i], parts.slice(0, i+1).join(' '));
+                    item.value = item.value.replace(parts[i], parts.slice(0, i + 1).join(' '));
                     break;
                 }
             }
@@ -5609,11 +5772,28 @@ function parseAceCompleter(rules, range) {
     return { suggestions };
 }
 
+// 解析monaco格式的补全规则
+function parseMonacoCompleter(rules, range) {
+    const suggestions_ = [];
+    if (rules && rules.suggestions) {
+        const suggestion = rules.suggestions;
+        for (let i = 0; i < rules.suggestions.length; i++) {
+            const item = suggestion[i];
+            const completionItem = {
+                ...item,
+                range: range
+            };
+            suggestions_.push(completionItem);
+        }
+    }
+    return { suggestions: suggestions_ };
+}
+
 /**
- * 创建新的monaco编辑器
+ * 创建monaco编辑器的一个实例
  */
-async function createNewMonacoEdit(language, form, support) {
-    // 等待monacoLoader加载完毕
+async function createMonacoEditor(language, form, support) {
+    // 判断monacoLoader是否加载完毕
     async function waitForMonacoLoaderOnload() {
         return new Promise((resolve) => {
             const checkInitialized = () => {
@@ -5627,6 +5807,7 @@ async function createNewMonacoEdit(language, form, support) {
         });
     }
     if (!monacoLoaderOnload) await waitForMonacoLoaderOnload();
+
     /**
      * 通用参数
      */
@@ -5653,11 +5834,10 @@ async function createNewMonacoEdit(language, form, support) {
     window.CFBetter_monaco = CFBetter_monaco; // 全局方法
 
     /**
-     * 初始化monaco
+     * 实例化一个editor
      */
     uri = monaco.Uri.file(uri);
-    model = monaco.editor.getModel(uri);
-    if (!model) model = monaco.editor.createModel('', language, uri);
+    model = monaco.editor.createModel('', language, uri);
     editor = monaco.editor.create(document.getElementById("CFBetter_editor"), {
         model: model,
         rootUri: rootUri,
@@ -5684,108 +5864,110 @@ async function createNewMonacoEdit(language, form, support) {
     /**
      * 添加快捷功能
      */
-    editor.updateOptions({ fontSize: parseInt(editorFontSize) }); // 字体大小
+    (CFBetter_monaco.addShortCuts = async () => {
+        // 从配置信息更新字体大小
+        editor.updateOptions({ fontSize: parseInt(editorFontSize) });
 
-    // 调整字体大小
-    var changeSize = $(`<div><label for="fontSizeInput">字体大小：</label><input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
-    form.topRightDiv.append(changeSize);
-    changeSize.find('input#fontSizeInput').on('input', function () {
-        var size = $(this).val();
-        editor.updateOptions({ fontSize: parseInt(size) });
-        GM_setValue('editorFontSize', size);
-    });
-
-    // 全屏按钮
-    var fullscreenButton = $('<button>', {
-        'type': 'button',
-        'class': 'html2mdButton',
-        'text': '全屏'
-    });
-    form.topRightDiv.append(fullscreenButton);
-    fullscreenButton.on('click', enterFullscreen);
-
-    // 固定到底部按钮
-    var fixToBottomButton = $('<button>', {
-        'type': 'button',
-        'class': 'html2mdButton',
-        'text': '固定到底部'
-    });
-    form.topRightDiv.append(fixToBottomButton);
-    fixToBottomButton.on('click', fixToBottom);
-
-    // 固定到右侧按钮
-    var fixToRightButton = $('<button>', {
-        'type': 'button',
-        'class': 'html2mdButton',
-        'text': '固定到右侧'
-    });
-    form.topRightDiv.append(fixToRightButton);
-    fixToRightButton.on('click', fixToRight);
-
-    // 当前固定状态
-    var isFixed = false;
-
-    // 进入全屏
-    function enterFullscreen() {
-        if (isFixed) return; // 如果已经固定则不执行
-        var editor = $('#CFBetter_editor');
-        editor.addClass('fullscreen');
-        var exitButton = $('<button>', {
-            'id': 'exitButton',
-            'class': 'html2mdButton',
-            'text': '退出全屏'
-        }).addClass('exit_button').on('click', exitFullscreen);
-        $('body').append(exitButton);
-        disableButtons();
-    }
-
-    // 退出全屏
-    function exitFullscreen() {
-        var editor = $('#CFBetter_editor');
-        editor.removeClass('fullscreen');
-        $('#exitButton').remove();
-        enableButtons();
-    }
-
-    // 固定到底部
-    function fixToBottom() {
-        if (isFixed) return; // 如果已经固定则不执行
-        var editor = $('#CFBetter_editor');
-        editor.addClass('fixed');
-
-        // 创建空白框来防止遮挡下面的内容
-        var halfHeight = $(window).height() * 0.5;
-        var blankSpace = $('<div>', {
-            'id': 'blank-space',
-            'style': 'height: ' + (halfHeight + 30) + 'px;'
+        // 调整字体大小
+        var changeSize = $(`<div><label for="fontSizeInput">字体大小：</label><input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
+        form.topRightDiv.append(changeSize);
+        changeSize.find('input#fontSizeInput').on('input', function () {
+            var size = $(this).val();
+            editor.updateOptions({ fontSize: parseInt(size) });
+            GM_setValue('editorFontSize', size);
         });
-        $('body').append(blankSpace);
-        var cancelButton = $('<button>', {
-            'id': 'cancelButton',
+
+        // 全屏按钮
+        var fullscreenButton = $('<button>', {
+            'type': 'button',
             'class': 'html2mdButton',
-            'text': '取消固定'
-        }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
-        $('body').append(cancelButton);
-        disableButtons();
-    }
+            'text': '全屏'
+        });
+        form.topRightDiv.append(fullscreenButton);
+        fullscreenButton.on('click', enterFullscreen);
 
-    // 取消固定到底部
-    function cancelFixingToBottom() {
-        var editor = $('#CFBetter_editor');
-        editor.removeClass('fixed');
-        // 移除空白框和取消按钮
-        $('#blank-space').remove();
-        $('#cancelButton').remove();
-        enableButtons();
-    }
+        // 固定到底部按钮
+        var fixToBottomButton = $('<button>', {
+            'type': 'button',
+            'class': 'html2mdButton',
+            'text': '固定到底部'
+        });
+        form.topRightDiv.append(fixToBottomButton);
+        fixToBottomButton.on('click', fixToBottom);
 
-    // 固定到右侧边栏
-    var sidebarStyle;
-    function fixToRight() {
-        if (isFixed) return; // 如果已经固定则不执行
-        var sidebar = $('#sidebar');
-        sidebar.hide();
-        sidebarStyle = GM_addStyle(`
+        // 固定到右侧按钮
+        var fixToRightButton = $('<button>', {
+            'type': 'button',
+            'class': 'html2mdButton',
+            'text': '固定到右侧'
+        });
+        form.topRightDiv.append(fixToRightButton);
+        fixToRightButton.on('click', fixToRight);
+
+        // 当前固定状态
+        var isFixed = false;
+
+        // 进入全屏
+        function enterFullscreen() {
+            if (isFixed) return; // 如果已经固定则不执行
+            var editor = $('#CFBetter_editor');
+            editor.addClass('fullscreen');
+            var exitButton = $('<button>', {
+                'id': 'exitButton',
+                'class': 'html2mdButton',
+                'text': '退出全屏'
+            }).addClass('exit_button').on('click', exitFullscreen);
+            $('body').append(exitButton);
+            disableButtons();
+        }
+
+        // 退出全屏
+        function exitFullscreen() {
+            var editor = $('#CFBetter_editor');
+            editor.removeClass('fullscreen');
+            $('#exitButton').remove();
+            enableButtons();
+        }
+
+        // 固定到底部
+        function fixToBottom() {
+            if (isFixed) return; // 如果已经固定则不执行
+            var editor = $('#CFBetter_editor');
+            editor.addClass('fixed');
+
+            // 创建空白框来防止遮挡下面的内容
+            var halfHeight = $(window).height() * 0.5;
+            var blankSpace = $('<div>', {
+                'id': 'blank-space',
+                'style': 'height: ' + (halfHeight + 30) + 'px;'
+            });
+            $('body').append(blankSpace);
+            var cancelButton = $('<button>', {
+                'id': 'cancelButton',
+                'class': 'html2mdButton',
+                'text': '取消固定'
+            }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
+            $('body').append(cancelButton);
+            disableButtons();
+        }
+
+        // 取消固定到底部
+        function cancelFixingToBottom() {
+            var editor = $('#CFBetter_editor');
+            editor.removeClass('fixed');
+            // 移除空白框和取消按钮
+            $('#blank-space').remove();
+            $('#cancelButton').remove();
+            enableButtons();
+        }
+
+        // 固定到右侧边栏
+        var sidebarStyle;
+        function fixToRight() {
+            if (isFixed) return; // 如果已经固定则不执行
+            var sidebar = $('#sidebar');
+            sidebar.hide();
+            sidebarStyle = GM_addStyle(`
             #body {
                 min-width: 50vw;
                 max-width: 50vw;
@@ -5795,81 +5977,70 @@ async function createNewMonacoEdit(language, form, support) {
             }
         `);
 
-        $('#body').wrap('<div id="right-side-wrapper" style="display:flex"></div>');
-        var blankSpace = $('<div>', {
-            'id': 'blank-space',
-            'style': 'float: right; width: 50vw;'
-        });
-        $('#right-side-wrapper').append(blankSpace);
+            $('#body').wrap('<div id="right-side-wrapper" style="display:flex"></div>');
+            var blankSpace = $('<div>', {
+                'id': 'blank-space',
+                'style': 'float: right; width: 50vw;'
+            });
+            $('#right-side-wrapper').append(blankSpace);
 
-        var editor = $('#CFBetter_editor');
-        editor.addClass('right-side');
+            var editor = $('#CFBetter_editor');
+            editor.addClass('right-side');
 
-        var cancelButton = $('<button>', {
-            'id': 'cancelButton',
-            'class': 'html2mdButton',
-            'text': '取消固定'
-        }).addClass('exit_button bottom').on('click', cancelFixingToRight);
-        $('body').append(cancelButton);
-        disableButtons();
-    }
-
-    // 取消固定到右侧边栏
-    function cancelFixingToRight() {
-        var sidebar = $('#sidebar');
-        sidebar.show();
-        $('#blank-space').remove();
-        $('#cancelButton').remove();
-        $('#body').unwrap();
-
-        if (sidebarStyle) {
-            $(sidebarStyle).remove();
+            var cancelButton = $('<button>', {
+                'id': 'cancelButton',
+                'class': 'html2mdButton',
+                'text': '取消固定'
+            }).addClass('exit_button bottom').on('click', cancelFixingToRight);
+            $('body').append(cancelButton);
+            disableButtons();
         }
-        var editor = $('#CFBetter_editor');
-        editor.removeClass('right-side');
-        enableButtons();
-    }
 
-    // 禁用按钮
-    function disableButtons() {
-        fullscreenButton.prop('disabled', true);
-        fixToBottomButton.prop('disabled', true);
-        fixToRightButton.prop('disabled', true);
-    }
+        // 取消固定到右侧边栏
+        function cancelFixingToRight() {
+            var sidebar = $('#sidebar');
+            sidebar.show();
+            $('#blank-space').remove();
+            $('#cancelButton').remove();
+            $('#body').unwrap();
 
-    // 启用按钮
-    function enableButtons() {
-        fullscreenButton.prop('disabled', false);
-        fixToBottomButton.prop('disabled', false);
-        fixToRightButton.prop('disabled', false);
-    }
-
-    // 代码同步与保存
-    var nowUrl = window.location.href;
-    nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时会多出一个#，去掉
-    const code = await getCode(nowUrl);
-    if (code) {
-        editor.setValue(code); // 恢复代码
-        $('#sourceCodeTextarea').val(code);
-    }
-    editor.onDidChangeModelContent(async () => {
-        // 将monaco editor的内容同步到sourceCodeTextarea
-        const code = editor.getValue();
-        $('#sourceCodeTextarea').val(code);
-        await saveCode(nowUrl, code);
-    });
-
-    /**
-     * 注册本地补全
-     */
-    // 注册acwing cpp 模板
-    if (language == "cpp" && cppCodeTemplateComplete) {
-        monaco.languages.registerCompletionItemProvider('cpp', {
-            provideCompletionItems: function (model, position) {
-                return parseAceCompleter(CODE_COMPLETER, CFBetter_monaco.CollectRangeByPosition(position));;
+            if (sidebarStyle) {
+                $(sidebarStyle).remove();
             }
+            var editor = $('#CFBetter_editor');
+            editor.removeClass('right-side');
+            enableButtons();
+        }
+
+        // 禁用按钮
+        function disableButtons() {
+            fullscreenButton.prop('disabled', true);
+            fixToBottomButton.prop('disabled', true);
+            fixToRightButton.prop('disabled', true);
+        }
+
+        // 启用按钮
+        function enableButtons() {
+            fullscreenButton.prop('disabled', false);
+            fixToBottomButton.prop('disabled', false);
+            fixToRightButton.prop('disabled', false);
+        }
+
+        // 代码同步与保存
+        var nowUrl = window.location.href;
+        nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
+        const code = await getCode(nowUrl);
+        if (code) {
+            editor.setValue(code); // 恢复代码
+            $('#sourceCodeTextarea').val(code);
+        }
+        editor.onDidChangeModelContent(async () => {
+            // 将monaco editor的内容同步到sourceCodeTextarea
+            const code = editor.getValue();
+            $('#sourceCodeTextarea').val(code);
+            await saveCode(nowUrl, code);
         });
-    }
+    })();
 
     if (!support || !useLSP) { return; } // 如果不支持lsp，则到此为止
 
@@ -5896,6 +6067,12 @@ async function createNewMonacoEdit(language, form, support) {
         $(styleElement).remove();
     });
 
+    /**
+     * 推送新的消息到LSP日志中
+     * @param {'error' | 'warn' | 'info'} status 
+     * @param {string} msg 
+     * @param {boolean} data 
+     */
     function pushLSPLogMessage(status, msg, data) {
         var li = $('<li>').text('[' + new Date().toLocaleString() + '] ' + msg);
         if (status === 'error') {
@@ -5943,7 +6120,14 @@ async function createNewMonacoEdit(language, form, support) {
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
             CFBetter_monaco.openDocRequest(); // 打开文档
-            CFBetter_monaco.RegistrationAfterInit(); // 注册需要初始化信息的方法
+            if (!monacoEditor_language.includes(language)) {
+                monacoEditor_language.push(language);
+                CFBetter_monaco.RegistrationAfterInit(); // 注册新语言及功能
+                CFBetter_monaco.RegisterLocalComplet(); // 注册本地补全
+            } else{
+                location.reload(); // 这里有问题，先贴个补丁
+            }
+            CFBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
         } else if (message.id === 0 && message.error) {
             pushLSPLogMessage("warn", "Initialization 失败");
         } else if (message.id !== undefined && responseHandlers[message.id]) {
@@ -6440,7 +6624,7 @@ async function createNewMonacoEdit(language, form, support) {
     }
 
     /**
-     * 注册功能
+     * 注册语言及功能
      */
     CFBetter_monaco.RegistrationAfterInit = () => {
         // 注册语言
@@ -7012,63 +7196,6 @@ async function createNewMonacoEdit(language, form, support) {
             },
         });
 
-        // "实时代码诊断"
-        CFBetter_monaco.updateMarkers = function (message) {
-            const params = message.params;
-            pushLSPLogMessage("info", `Markers 当前收到的数据↓`, message);
-
-            if (!params) return;
-            const markers = params.diagnostics.map((item1) => ({
-                code: item1.code,
-                message: item1.message,
-                ...CFBetter_monaco.lspRangeToMonacoRange(item1.range),
-                relatedInformation: item1.relatedInformation
-                    ? item1.relatedInformation.map((item2) => ({
-                        ...(item2.location.range
-                            ? CFBetter_monaco.lspRangeToMonacoRange(item2.location.range)
-                            : CFBetter_monaco.lspRangeToMonacoRange(item2.location)),
-                        message: item2.message,
-                        resource: monaco.Uri.parse(item2.location.uri),
-                    }))
-                    : null,
-                severity: CFBetter_monaco.lspSeverityToMonacoSeverity(item1.severity),
-                source: item1.source,
-            }));
-
-            pushLSPLogMessage("info", `Markers 传递给monaco的数据↓`, markers);
-            monaco.editor.setModelMarkers(model, "eslint", markers);
-
-            // 更新状态底栏信息
-            const nowMarks = monaco.editor.getModelMarkers();
-            warningCount = 0;
-            errorCount = 0;
-            for (const marker of nowMarks) {
-                if (marker.severity === monaco.MarkerSeverity.Warning) {
-                    warningCount++;
-                } else if (marker.severity === monaco.MarkerSeverity.Error) {
-                    errorCount++;
-                }
-            }
-            $('#statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
-        };
-
-        // "应用服务器推送的更改"(代码修复)
-        CFBetter_monaco.applyEdit = function (message) {
-            const params = message.params;
-            pushLSPLogMessage("info", `applyEdit 当前收到的数据↓`, message);
-
-            if (!params) return;
-            const operations = Object.values(params.edit.changes)
-                .flat()
-                .map((item) => ({
-                    range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
-                    text: item.newText,
-                }));
-
-            pushLSPLogMessage("info", `applyEdit 传递给monaco的数据↓`, operations);
-            model.pushEditOperations([], operations, () => null); // 入栈编辑操作
-        };
-
         // 注册"方法签名提示"
         monaco.languages.registerSignatureHelpProvider(language, {
             signatureHelpTriggerCharacters:
@@ -7162,6 +7289,108 @@ async function createNewMonacoEdit(language, form, support) {
             });
     };
 
+    /**
+     * 被动式接收处理
+     */
+    CFBetter_monaco.PassiveReceiveHandler = () => {
+
+        // "实时代码诊断"
+        CFBetter_monaco.updateMarkers = function (message) {
+            const params = message.params;
+            pushLSPLogMessage("info", `Markers 当前收到的数据↓`, message);
+
+            if (!params) return;
+            const markers = params.diagnostics.map((item1) => ({
+                code: item1.code,
+                message: item1.message,
+                ...CFBetter_monaco.lspRangeToMonacoRange(item1.range),
+                relatedInformation: item1.relatedInformation
+                    ? item1.relatedInformation.map((item2) => ({
+                        ...(item2.location.range
+                            ? CFBetter_monaco.lspRangeToMonacoRange(item2.location.range)
+                            : CFBetter_monaco.lspRangeToMonacoRange(item2.location)),
+                        message: item2.message,
+                        resource: monaco.Uri.parse(item2.location.uri),
+                    }))
+                    : null,
+                severity: CFBetter_monaco.lspSeverityToMonacoSeverity(item1.severity),
+                source: item1.source,
+            }));
+
+            pushLSPLogMessage("info", `Markers 传递给monaco的数据↓`, markers);
+            monaco.editor.setModelMarkers(model, "eslint", markers);
+
+            // 更新状态底栏信息
+            const nowMarks = monaco.editor.getModelMarkers();
+            warningCount = 0;
+            errorCount = 0;
+            for (const marker of nowMarks) {
+                if (marker.severity === monaco.MarkerSeverity.Warning) {
+                    warningCount++;
+                } else if (marker.severity === monaco.MarkerSeverity.Error) {
+                    errorCount++;
+                }
+            }
+            $('#statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
+        };
+
+        // "应用服务器推送的更改"(代码修复)
+        CFBetter_monaco.applyEdit = function (message) {
+            const params = message.params;
+            pushLSPLogMessage("info", `applyEdit 当前收到的数据↓`, message);
+
+            if (!params) return;
+            const operations = Object.values(params.edit.changes)
+                .flat()
+                .map((item) => ({
+                    range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                    text: item.newText,
+                }));
+
+            pushLSPLogMessage("info", `applyEdit 传递给monaco的数据↓`, operations);
+            model.pushEditOperations([], operations, () => null); // 入栈编辑操作
+        };
+    }
+
+
+    /**
+     * 注册本地自动补全
+     */
+    CFBetter_monaco.RegisterLocalComplet = async () => {
+        // 补全器注册函数
+        function registMyCompletionItemProvider(language, genre, rule) {
+            if (genre == "monaco") {
+                monaco.languages.registerCompletionItemProvider(language, {
+                    provideCompletionItems: function (model, position) {
+                        return parseMonacoCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
+                    }
+                })
+            } else if (genre == "ace") {
+                monaco.languages.registerCompletionItemProvider(language, {
+                    provideCompletionItems: function (model, position) {
+                        return parseAceCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
+                    }
+                })
+            }
+        }
+
+        // 注册acwing cpp 模板
+        if (language == "cpp" && cppCodeTemplateComplete) {
+            registMyCompletionItemProvider('cpp', 'ace', CODE_COMPLETER);
+        }
+
+        // 注册自定义的补全
+        let complet_length = CompletConfig.configurations.length;
+        if (complet_length > 0) {
+            for (let i = 0; i < complet_length; i++) {
+                let item = CompletConfig.configurations[i];
+                if (item.isChoose && item.language == language) {
+                    registMyCompletionItemProvider(item.language, item.genre, await getExternalJSON(item.jsonUrl));
+                }
+            }
+        }
+    }
+
     if (!languageSocketState) await waitForLanguageSocketState();
     CFBetter_monaco.Initialize();
 }
@@ -7185,17 +7414,18 @@ function changeMonacoLanguage(form) {
     form.topRightDiv.empty();
     $('#LSPLog').remove();
     $('#statusBar').remove();
+    // 创建新的编辑器
     if (nowSelect in value_monacoLanguageMap) {
         let language = value_monacoLanguageMap[nowSelect];
         if (language == "python" || language == "cpp" || language == "java") {
-            createNewMonacoEdit(language, form, true);
+            createMonacoEditor(language, form, true);
         } else {
-            createNewMonacoEdit(language, form, false);
+            createMonacoEditor(language, form, false);
         }
     } else {
-        createNewMonacoEdit(null, false);
+        createMonacoEditor(null, false);
     }
-    // 更改在线编译器参数
+    // 更新在线编译器参数
     changeCompilerArgs(nowSelect);
 }
 
@@ -7844,10 +8074,8 @@ async function addProblemPageCodeEditor() {
     CustomTestInit(); // 自定义测试数据面板
     selectLang.val(compilerSelection);
     changeMonacoLanguage(form);
-    // updateAutocomplete();
 
     selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
-    // editor.getSession().on("changeMode", updateAutocomplete); // 切换语言监听，更新自动补全
 
     // 样例测试
     runButton.on('click', (event) => runCode(event, form.sourceDiv, form.submitDiv));

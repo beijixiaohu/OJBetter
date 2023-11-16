@@ -60,6 +60,25 @@ class HomeRequestHandler(web.RequestHandler):
         <h1>Welcome to CFBetter_MonacoLSPBridge</h1>
         """)
 
+class MyCompletJsonHandler(websocket.WebSocketHandler):
+    """
+    A class that handles the mycomplet json in the mycomplt file.
+    """
+    rootUri = None
+    
+
+    def initialize(self, rootUri) -> None:
+        """
+        Initialize the class with the given root URI.
+        """
+        self.rootUri = rootUri
+
+    def get(self, *args):
+        completfile = args[0]
+        print(f"MyCompletJsonHandler GET {completfile}")
+        with open(os.path.join(rootUri, 'mycomplet', completfile), 'r') as f:
+            self.write(f.read())
+
 
 class FileServerWebSocketHandler(websocket.WebSocketHandler):
     """
@@ -219,11 +238,6 @@ if __name__ == "__main__":
                 print("""\033[1;31m[CHECK] The command for Python is invalid. 
             Please run the command 'pip install "python-lsp-server[all]"' in the terminal 
             (you need to have a Python environment installed), which will automatically configure the environment variables.\033[0m""")
-            elif lang == "java":
-                print("""\033[1;31m[CHECK] The command for Java is invalid. 
-            To simplify the configuration, the 'cfbetter_monaco-lsp-bridge' package already includes 'jdtls', 
-            which is in the 'jdt-language-server' folder and version '1.29.0-202310261436'. 
-            You only need to add the xxx/jdt-language-server/bin path to the system environment variable path.\033[0m""")
             else:
                 print(f"""\033[1;31m[CHECK] {lang} command is invalid \u2718\033[0m""")
         except subprocess.TimeoutExpired:
@@ -231,18 +245,24 @@ if __name__ == "__main__":
     
     app = web.Application([
         (r"/", HomeRequestHandler, dict(commands=config['commands'])),
+        (r"/mycomplet/(.*)", MyCompletJsonHandler,
+         dict(rootUri=rootUri)),
         (r"/file", FileServerWebSocketHandler,
          dict(rootUri=rootUri)),
         (r"/(.*)", LanguageServerWebSocketHandler,
          dict(commands=config['commands']))
     ])
 
+    server = httpserver.HTTPServer(app)
+    try:
+        server.listen(config['port'], config['host'])
+    except OSError:
+        print(f"\033[1;31m[ERROR] Port {config['port']} is already in use. Please choose another port.\033[0m")
+        exit(1)
+
     print("\033[1;34m\nStarted Web Socket at:\n" + "\n".join(
         ["  - {}: ws://{}:{}/{}".format(lang, config['host'],
                                         config['port'], lang) for lang in config['commands'].keys()])
     + "\033[0m")
-
-    server = httpserver.HTTPServer(app)
-
-    server.listen(config['port'])
+    
     ioloop.IOLoop.current().start()
