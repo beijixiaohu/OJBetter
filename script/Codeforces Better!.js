@@ -200,14 +200,15 @@ function ShowAlertMessage() {
     if (is_submitPage && problemPageCodeEditor) {
         let newElement = $("<div></div>").addClass("alert alert-warning CFBetter_alert")
             .html(`Codeforces Better! —— 您已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
-            <p>如遇问题，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助</p>`)
+            <p>${findHelpText2}</p>`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
 }
 
 // 常量
-const findHelpText = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助\n\n';
+const findHelpText1 = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 寻求帮助\n\n';
+const findHelpText2 = '如遇问题，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 反馈';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="18" height="18"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
 const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
@@ -2077,42 +2078,49 @@ function debounce(callback) {
 // 为元素添加鼠标拖动
 function addDraggable(element) {
     let isDragging = false;
-    let initialX, initialY; // 元素的初始位置
-    let startX, startY, offsetX, offsetY; // 鼠标起始位置，移动偏移量
+    let x, y, l, t, nl, nt;
     let isSpecialMouseDown = false; // 选取某些元素时不拖动
 
     element.on('mousedown', function (e) {
-        var elem = $(this);
-        var elemOffset = elem.offset();
-        var centerX = elemOffset.left + elem.outerWidth() / 2;
-        var centerY = elemOffset.top + elem.outerHeight() / 2;
-        initialX = centerX - window.pageXOffset;
-        initialY = centerY - window.pageYOffset;
-
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-
         isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span, select');
         if (isSpecialMouseDown) return;
-        $('body').css('cursor', 'all-scroll');
+
+        isDragging = true;
+        x = e.clientX;
+        y = e.clientY;
+        l = element.offset().left - $(window).scrollLeft();
+        t = element.offset().top - $(window).scrollTop();
+
+        element.css({ left: l + 'px', top: t + 'px', transform: 'none' });
+
+        $(document).on("mousemove", drag);
+        $(document).on("mouseup", stopDrag);
+        element.css('cursor', 'all-scroll');
     });
 
-    $(document).on('mousemove', function (e) {
+    const drag = (e) => {
         if (!isDragging) return;
         // 不执行拖动操作
         if ($(e.target).is('label, p, input, textarea, span') || isSpecialMouseDown && !$(e.target).is('input, textarea')) return;
         e.preventDefault();
-        offsetX = e.clientX - startX;
-        offsetY = e.clientY - startY;
-        element.css({ top: initialY + offsetY + 'px', left: initialX + offsetX + 'px' });
-    });
 
-    $(document).on('mouseup', function () {
+        const nx = e.clientX;
+        const ny = e.clientY;
+        nl = nx - (x - l);
+        nt = ny - (y - t);
+        element.css({ transform: `translate(${nx - x}px, ${ny - y}px)` });
+    };
+
+    const stopDrag = () => {
         isDragging = false;
         isSpecialMouseDown = false;
-        $('body').css('cursor', 'default');
-    });
+        element.css('cursor', 'default');
+
+        // 在停止拖拽后，设置元素的left和top，并还原transform
+        element.css({ left: nl + 'px', top: nt + 'px', transform: 'none' });
+        $(document).off("mousemove", drag);
+        $(document).off("mouseup", stopDrag);
+    };
 }
 
 // 获取外部json并转换为object
@@ -3660,7 +3668,7 @@ const code_editor_settings_HTML = `
             <div class="tip_text">
             <p>为 Monaco 连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等…</p>
             <p>支持C++、Java、Python语言</p>
-            <p>你需要下载脚本页的 cfbetter_monaco-lsp-bridge 并启动，具体请查看脚本页的说明</p>
+            <p>你需要下载脚本页的 CFBetter_LSPBridge 并启动，具体请查看脚本页的说明</p>
             </div>
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
@@ -3711,7 +3719,7 @@ const code_editor_settings_HTML = `
         </div>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="cppCodeTemplateComplete"><span>ACWing CPP 补全模板</span></label>
+        <label for="cppCodeTemplateComplete"><span>AcWing CPP 补全模板</span></label>
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
@@ -7608,14 +7616,14 @@ async function officialCompiler(code, input) {
             },
             onload: function (responseDetails) {
                 if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `提交代码到 codeforces 服务器时发生了错误，请重试 ${findHelpText}`;
+                    result.Errors = `提交代码到 codeforces 服务器时发生了错误，请重试 ${findHelpText1}`;
                     resolve(result);
                 } else {
                     try {
                         const response = JSON.parse(responseDetails.response);
                         resolve(response.customTestSubmitId);
                     } catch (error) {
-                        result.Errors = `解析响应数据 customTestSubmitId 时发生了错误，请重试 ${findHelpText}`;
+                        result.Errors = `解析响应数据 customTestSubmitId 时发生了错误，请重试 ${findHelpText1}`;
                         resolve(result);
                     }
                 }
@@ -7643,7 +7651,7 @@ async function officialCompiler(code, input) {
                     },
                     onload: function (responseDetails) {
                         if (responseDetails.status !== 200 || !responseDetails.response) {
-                            result.Errors = `请求运行结果时发生了错误，请重试 ${findHelpText}`;
+                            result.Errors = `请求运行结果时发生了错误，请重试 ${findHelpText1}`;
                             resolve(result);
                         } else {
                             try {
@@ -7652,7 +7660,7 @@ async function officialCompiler(code, input) {
                                     retryCount++;
                                     setTimeout(makeRequest, 1000);
                                 } else if (retryCount >= 15) {
-                                    result.Errors = `结果获取已超时，请重试 ${findHelpText}`;
+                                    result.Errors = `结果获取已超时，请重试 ${findHelpText1}`;
                                     resolve(result);
                                 } else {
                                     const result = {
@@ -7734,7 +7742,7 @@ async function rextesterCompiler(code, input) {
             data: data,
             onload: function (responseDetails) {
                 if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `发生了未知的错误，请重试 ${findHelpText}`;
+                    result.Errors = `发生了未知的错误，请重试 ${findHelpText1}`;
                     resolve(result);
                 } else {
                     try {
@@ -7899,7 +7907,7 @@ async function wandboxCompiler(code, input) {
             data: JSON.stringify(data),
             onload: function (responseDetails) {
                 if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `发生了未知的错误，请重试 ${findHelpText}`;
+                    result.Errors = `发生了未知的错误，请重试 ${findHelpText1}`;
                     resolve(result);
                 } else {
                     try {
@@ -8526,17 +8534,17 @@ async function translate_openai(raw) {
             responseType: 'json',
             onload: function (response) {
                 if (!response.response) {
-                    reject("发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
+                    reject(`发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。${findHelpText1} 请注意打码响应报文的敏感部分\n\n响应报文: ${JSON.stringify(response)}`);
                 }
                 else if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
-                    resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 \n\n报错信息：" + JSON.stringify(response.response, null, '\n'));
+                    resolve(`翻译出错，请重试 ${findHelpText1} \n\n报错信息: ${JSON.stringify(response.response, null, '\n')}`);
                 } else {
                     openai_retext = response.response.choices[0].message.content;
                     resolve(openai_retext);
                 }
             },
             onerror: function (response) {
-                reject("发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
+                reject(`发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作 ${findHelpText1} 请注意打码响应报文的敏感部分\n\n响应报文: ${JSON.stringify(response)}`);
             },
         });
     });
@@ -8557,7 +8565,7 @@ async function translate_gg(raw) {
                 resolve(translatedText);
             },
             onerror: function (response) {
-                reject("发生了未知的错误，请确认你是否能正常访问Google翻译，\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码报错信息的敏感部分\n\n响应报文：" + JSON.stringify(response))
+                reject(`发生了未知的错误，请确认你是否能正常访问Google翻译， ${findHelpText1} 请注意打码报错信息的敏感部分\n\n响应报文: ${JSON.stringify(response)}`);
             }
         });
     });
@@ -8741,7 +8749,7 @@ async function BaseTranslate(name, raw, options, processer) {
             }
         }
     }
-    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请查看报错信息，并重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 寻求帮助 请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
+    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => `翻译出错，请查看报错信息，并重试或更换翻译接口 ${findHelpText1} 请注意打码报错信息的敏感部分\n\n报错信息: ${errtext} ` })
 }
 
 function Request(options) {

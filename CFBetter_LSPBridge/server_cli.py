@@ -7,7 +7,7 @@ from tornado import ioloop, process, web, websocket, httpserver
 from pylsp_jsonrpc import streams
 import ujson as json
 import pkg_resources
-
+import shutil
 print("\033[1;34m" + """
     ╔══════════════════════════════════════════════════════════╗
     ║           Welcome to CFBetter_MonacoLSPBridge            ║
@@ -225,11 +225,10 @@ if __name__ == "__main__":
     rootUri = os.path.dirname(os.path.abspath(__file__))
 
     for lang in config['commands'].keys():
-        command = config['commands'][lang][0] + " --version"
-        try:
-            subprocess.run(command, shell=True, check=True, timeout=1, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        command = config['commands'][lang][0]
+        if shutil.which(command):
             print(f"\033[1;32m[CHECK] {lang} command is valid \u2714\033[0m")
-        except subprocess.CalledProcessError:
+        else:
             if lang == "cpp":
                 print("""\033[1;31m[CHECK] The command for C++ is invalid. 
             Please download clangd-windows-xxx.zip from https://github.com/clangd/clangd/releases/, 
@@ -240,8 +239,6 @@ if __name__ == "__main__":
             (you need to have a Python environment installed), which will automatically configure the environment variables.\033[0m""")
             else:
                 print(f"""\033[1;31m[CHECK] {lang} command is invalid \u2718\033[0m""")
-        except subprocess.TimeoutExpired:
-            print(f"\033[1;32m[CHECK] {lang} command is valid \u2714\033[0m")
     
     app = web.Application([
         (r"/", HomeRequestHandler, dict(commands=config['commands'])),

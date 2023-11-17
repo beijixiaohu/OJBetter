@@ -15,7 +15,7 @@ from qfluentwidgets import TextEdit, LineEdit
 from qfluentwidgets import MessageBox, PushButton
 from qfluentwidgets import SwitchButton
 from qfluentwidgets import InfoBar, FluentIcon, InfoBarPosition
-
+import shutil
 import sys
 from PyQt5.QtGui import QFont
 
@@ -125,18 +125,15 @@ class CommandChecker:
         """
         self.update_log_from_thread("info", "Checking commands...")
         for lang in config.commands.keys():
-            command = config.commands[lang][0] + " --version"
-            try:
-                subprocess.run(command, shell=True, check=True, timeout=0.5, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+            command = config.commands[lang][0]
+            if shutil.which(command):
                 self.update_log_from_thread("success", f"The command for {lang} is valid.")
-            except subprocess.CalledProcessError:
+            else:
                 self.update_log_from_thread("error", f"The command for {lang} is invalid.")
                 if(lang == "cpp"):
                     self.update_log_from_thread("error", "Please download clangd-windows-xxx.zip from https://github.com/clangd/clangd/releases/, extract it to your preferred location, and add the xxx/clangd_xxx/bin path to the system environment variable path.")
                 elif(lang == "python"):
                     self.update_log_from_thread("error", "Please run the command ' pip install \"python-lsp-server[all]\" ' in the terminal (you need to have a Python environment installed), which will automatically configure the environment variables.")
-            except subprocess.TimeoutExpired:
-                self.update_log_from_thread("success", f"The command for {lang} is valid.")
         self.update_log_from_thread("info", "Commands checked.")
         return True
 
@@ -582,7 +579,6 @@ class MainWindow(QMainWindow):
         log_layout.addWidget(self.textEdit)
         main_layout.addLayout(log_layout)
 
-
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.start_button)
         button_layout.addWidget(self.stop_button)
@@ -591,7 +587,6 @@ class MainWindow(QMainWindow):
         button_layout.addWidget(self.auto_run_label)
         button_layout.addWidget(self.auto_run_button, alignment=Qt.AlignRight)
         main_layout.addLayout(button_layout)
-
 
         host_layout = QHBoxLayout()
         host_layout.addWidget(self.host_label)
@@ -657,7 +652,7 @@ class MainWindow(QMainWindow):
                 orient=Qt.Horizontal,
                 isClosable=False,
                 position=InfoBarPosition.TOP_LEFT,
-                duration=5000,
+                duration=1000,
                 parent=self
             )
         elif(state == 'error'):
@@ -667,7 +662,7 @@ class MainWindow(QMainWindow):
                 orient=Qt.Horizontal,
                 isClosable=False,
                 position=InfoBarPosition.TOP_LEFT,
-                duration=5000,
+                duration=1000,
                 parent=self
             )
         elif(state == 'warn'):
@@ -677,7 +672,7 @@ class MainWindow(QMainWindow):
                 orient=Qt.Horizontal,
                 isClosable=False,
                 position=InfoBarPosition.TOP_LEFT,
-                duration=5000,
+                duration=1000,
                 parent=self
             )
 
