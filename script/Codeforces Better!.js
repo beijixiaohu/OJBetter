@@ -68,7 +68,7 @@ var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletCon
 var compilerSelection, editorFontSize, onlineCompilerChoice;
 var CF_csrf_token;
 var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl;
-var monacoEditor_language = [], monacoEditor_position;
+var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -4549,27 +4549,15 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     // 选段翻译不直接移除旧结果
                     if (commentTranslationMode == "2") {
                         // 只移除即将要翻译的段的结果
-                        if (pElements.is(item.panelDiv.prev())) {
-                            if (item.translateDiv) $(item.translateDiv).remove();
-                            if (item.panelDiv) $(item.panelDiv).remove();
-                            if (!is_oldLatex && !is_acmsguru) {
-                                if (item.copyDiv) $(item.copyDiv).remove();
-                            }
+                        if (pElements.is(item.translateDiv.getDiv().prev())) {
+                            item.translateDiv.remove();
                         }
                     } else {
-                        if (item.translateDiv) $(item.translateDiv).remove();
-                        if (item.panelDiv) $(item.panelDiv).remove();
-                        if (!is_oldLatex && !is_acmsguru) {
-                            if (item.copyDiv) $(item.copyDiv).remove();
-                        }
+                        item.translateDiv.remove();
                         $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
-                    item.upButton.html(unfoldIcon);
-                    $(item.translateDiv).css({
-                        display: "none",
-                        transition: "height 2s"
-                    });
+                    item.translateDiv.foldMainDiv();
                 }
             }
 
@@ -4846,17 +4834,9 @@ async function multiChoiceTranslation() {
                 if ($this.attr('translated')) {
                     let result = $this.data("resultData");
                     if (retransAction == "0") {
-                        if (result.translateDiv) $(result.translateDiv).remove();
-                        if (result.panelDiv) $(result.panelDiv).remove();
-                        if (!is_oldLatex && !is_acmsguru) {
-                            if (result.copyDiv) $(result.copyDiv).remove();
-                        }
+                        result.translateDiv.remove();
                     } else {
-                        result.upButton.html(unfoldIcon);
-                        $(result.translateDiv).css({
-                            display: "none",
-                            transition: "height 2s"
-                        });
+                        result.translateDiv.foldMainDiv();
                     }
                 }
                 // 翻译
@@ -6037,12 +6017,15 @@ async function createMonacoEditor(language, form, support) {
         fixToRightButton.on('click', fixToRight);
 
         // 选择记忆
-        if (monacoEditor_position == "full") {
-            fullscreenButton.click();
-        } else if (monacoEditor_position == "bottom") {
-            fixToBottomButton.click();
-        } else if (monacoEditor_position == "right") {
-            fixToRightButton.click();
+        if (!monacoEditor_position_init) {
+            monacoEditor_position_init = true; // 标记是否已经初始化过
+            if (monacoEditor_position == "full") {
+                fullscreenButton.click();
+            } else if (monacoEditor_position == "bottom") {
+                fixToBottomButton.click();
+            } else if (monacoEditor_position == "right") {
+                fixToRightButton.click();
+            }
         }
 
         // 禁用按钮
@@ -6155,6 +6138,7 @@ async function createMonacoEditor(language, form, support) {
 
             // 移到右侧
             editor.prependTo('#blank-space');
+
             editor.after($('#CFBetter_statusBar'));
             editor.addClass('right-side');
 
@@ -8067,7 +8051,8 @@ async function runCode(event, sourceDiv, submitDiv) {
         } else {
             statePanel.append($(`<div class="RunState_title error">${prefix}${item} Wrong Answer</div>`));
             if ($('#DontShowDiff').prop('checked')) statePanel.append($(`<div class="outputDiff" style="white-space: break-spaces;">${result.Result.trim()}</div>`));
-            else statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>`));
+            else statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>
+            <p style="color: grey; font-size: 12px;">说明：如果该题允许多个可能的结果，你的结果也可能并不是错误的</p>`));
         }
         statePanel.append($(`<div style="color:${result.Errors ? 'red' : ''};">状态： ${result.Stats}</div>`));
     };
@@ -8093,7 +8078,7 @@ async function runCode(event, sourceDiv, submitDiv) {
 
 async function addProblemPageCodeEditor() {
     if (typeof ace === 'undefined') {
-        console.log("%c无法加载编辑器必要的数据，可能当前未登录/非题目页/比赛结束冻结期间/该比赛禁止结束后练习", "border:1px solid #000;padding:10px;");
+        console.log("%c无法加载编辑器必要的数据，可能当前未登录/未报名/非题目页/比赛结束冻结期间/该比赛禁止结束后练习", "border:1px solid #000;padding:10px;");
         return; // 未登录，不存在ace库
     }
 
@@ -8287,6 +8272,123 @@ function recoverBlock(translatedText, matches, replacements) {
 }
 
 // 翻译框/翻译处理器
+class TranslateDiv {
+    constructor(id) {
+        this.div = $('<div>').attr('id', id);
+        this.panelDiv = $('<div>').addClass('translate-problem-statement-panel');
+        this.div.append(this.panelDiv);
+        this.mainDiv = $('<div>').addClass('translate-problem-statement');
+        this.span = $('<span>');
+        this.mainDiv.append(this.span);
+        this.div.append(this.mainDiv);
+        // 信息
+        this.topText = $('<div>').addClass('topText');
+        this.panelDiv.append(this.topText);
+
+        // 右侧
+        this.rightDiv = $('<div>').css('display', 'flex');
+        this.panelDiv.append(this.rightDiv);
+        this.copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
+        this.rightDiv.append(this.copyButton);
+        this.upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
+        this.rightDiv.append(this.upButton);
+        this.closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
+        this.rightDiv.append(this.closeButton);
+    }
+
+    getDiv() {
+        return this.div;
+    }
+
+    setTopText(text) {
+        this.topText.text(text);
+    }
+
+    getTopText() {
+        return this.topText.text();
+    }
+
+    updateTranslateDiv(text, is_oldLatex, is_acmsguru) {
+        if (is_oldLatex || is_acmsguru) {
+            // oldlatex
+            text = $.parseHTML(text);
+            this.mainDiv.empty().append($(text));
+        } else {
+            // 渲染MarkDown
+            var md = window.markdownit();
+            var html = md.render(text);
+            this.mainDiv.html(html);
+            // 渲染Latex
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+        }
+    }
+
+    // 移除元素
+    remove() {
+        $(this.mainDiv).remove();
+        $(this.panelDiv).remove();
+    }
+
+    registerUpButtonEvent() {
+        this.upButton.on("click", () => {
+            if (this.upButton.html() === putawayIcon) {
+                this.upButton.html(unfoldIcon);
+                $(this.mainDiv).css({
+                    display: "none",
+                    transition: "height 2s"
+                });
+            } else {
+                // 执行收起操作
+                this.upButton.html(putawayIcon);
+                $(this.mainDiv).css({
+                    display: "",
+                    transition: "height 2s"
+                });
+            }
+        });
+    }
+
+    // 收起mainDiv
+    foldMainDiv() {
+        this.upButton.html(unfoldIcon);
+        $(this.mainDiv).css({
+            display: "none",
+            transition: "height 2s"
+        });
+    }
+
+    // 注册关闭按钮
+    registerCloseButtonEvent() {
+        this.closeButton.on("click", () => {
+            $(this.div).remove();
+            $(this.panelDiv).remove();
+        });
+    }
+
+    registerCopyButtonEvent(text) {
+        this.copyButton.on("click", () => {
+            GM_setClipboard(text);
+            this.copyButton.html(copyedIcon);
+            this.copyButton.css({ 'fill': '#8bc34a' });
+            // 更新TopText
+            let topText = this.getTopText();
+            this.topText.text("已复制");
+            // 复制提示
+            setTimeout(() => {
+                this.topText.text(topText);
+                this.copyButton.html(copyIcon);
+                this.copyButton.css({ 'fill': '' });
+            }, 2000);
+        });
+    }
+
+    // 禁用复制按钮
+    disableCopyButton() {
+        this.copyButton.css({ 'fill': '#ccc' });
+        this.copyButton.off("click");
+    }
+}
+
 var translatedText = "";
 async function translateProblemStatement(text, element_node, button, is_comment) {
     let status = 0;
@@ -8301,54 +8403,16 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         "caiyun": "彩云小译",
         "openai": "ChatGPT"
     };
-    // 创建元素并放在element_node的后面
-    const translateDiv = $('<div>').attr('id', id).addClass('translate-problem-statement');
-    const spanElement = $('<span>');
-    translateDiv.append(spanElement);
-    $(element_node).after(translateDiv);
-
-    // panel
-    var panelDiv = $('<div>').addClass('translate-problem-statement-panel');
+    // 创建翻译结果元素并放在element_node的后面
+    const translateDiv = new TranslateDiv(id);
+    $(element_node).after(translateDiv.getDiv());
     // 信息
-    var topText;
-    if (is_comment && commentTranslationChoice != "0") topText = $('<div>').text(translationService[commentTranslationChoice] + ' 翻译').addClass('topText');
-    else topText = $('<div>').text(translationService[translation] + ' 翻译').addClass('topText');
-    panelDiv.append(topText);
-    // 右侧
-    var rightDiv = $('<div>').css('display', 'flex');
-    panelDiv.append(rightDiv);
-    var copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
-    rightDiv.append(copyButton);
-    var upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
-    rightDiv.append(upButton);
-    var closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
-    rightDiv.append(closeButton);
+    if (is_comment && commentTranslationChoice != "0") translateDiv.setTopText(translationService[commentTranslationChoice] + ' 翻译');
+    else translateDiv.setTopText(translationService[translation] + ' 翻译');
 
-    panelDiv.insertBefore(translateDiv);
-
-    // 收起按钮
-    upButton.on("click", function () {
-        if (upButton.html() === putawayIcon) {
-            upButton.html(unfoldIcon);
-            $(translateDiv).css({
-                display: "none",
-                transition: "height 2s"
-            });
-        } else {
-            // 执行收起操作
-            upButton.html(putawayIcon);
-            $(translateDiv).css({
-                display: "",
-                transition: "height 2s"
-            });
-        }
-    });
-
-    // 关闭按钮
-    closeButton.on("click", function () {
-        $(translateDiv).remove();
-        $(panelDiv).remove();
-    });
+    // 注册按钮
+    translateDiv.registerUpButtonEvent();
+    translateDiv.registerCloseButtonEvent();
 
     // 替换latex公式
     if (is_oldLatex) {
@@ -8394,25 +8458,25 @@ async function translateProblemStatement(text, element_node, button, is_comment)
     async function translate(translation) {
         try {
             if (translation == "deepl") {
-                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
                 translatedText = await translate_deepl(text);
             } else if (translation == "iflyrec") {
-                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
                 translatedText = await translate_iflyrec(text);
             } else if (translation == "youdao") {
-                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
                 translatedText = await translate_youdao_mobile(text);
             } else if (translation == "google") {
-                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
                 translatedText = await translate_gg(text);
             } else if (translation == "caiyun") {
-                translateDiv.html(`正在使用 ${translationService[translation]} 翻译中……请稍等`);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
                 await translate_caiyun_startup();
                 translatedText = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.html("正在使用 ChatGPT 翻译中……" +
+                translateDiv.updateTranslateDiv("正在使用 ChatGPT 翻译中……" +
                     "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
-                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待");
+                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待", is_oldLatex, is_acmsguru);
                 translatedText = await translate_openai(text);
             }
             if (/^翻译出错/.test(translatedText)) status = 2;
@@ -8437,26 +8501,11 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         translatedText = recoverBlock(translatedText, matches, replacements);
     }
 
-    // 结果复制按钮
+    // 注册结果复制按钮
     if (!is_oldLatex && !is_acmsguru) {
-        // 创建一个隐藏的元素来保存 translatedText 的值
-        var textElement = document.createElement("div");
-        textElement.style.display = "none";
-        textElement.textContent = translatedText;
-        translateDiv.parent().insertBefore(textElement, translateDiv);
-
-        // 复制按钮
-        copyButton.on("click", function () {
-            var translatedText = textElement.textContent;
-            GM_setClipboard(translatedText);
-            copyButton.html(copyedIcon);
-            copyButton.css({ 'fill': '#8bc34a' });
-            // 复制提示
-            setTimeout(() => {
-                copyButton.html(copyIcon);
-                copyButton.css({ 'fill': '' });
-            }, 2000);
-        });
+        translateDiv.registerCopyButtonEvent(translatedText);
+    } else {
+        translateDiv.disableCopyButton();
     }
 
     // 转义LaTex中的特殊符号
@@ -8505,34 +8554,15 @@ async function translateProblemStatement(text, element_node, button, is_comment)
         translatedText = translatedText.replace(pattern, replacement);
     });
 
-    // 更新
-    if (is_oldLatex || is_acmsguru) {
-        // oldlatex
-        translatedText = $.parseHTML(translatedText);
-        translateDiv.empty().append($(translatedText));
-        return {
-            translateDiv: translateDiv,
-            status: status,
-            copyDiv: textElement,
-            panelDiv: panelDiv,
-            upButton: upButton
-        };
-    } else {
-        // 渲染MarkDown
-        var md = window.markdownit();
-        var html = md.render(translatedText);
-        translateDiv.html(html);
-        // 渲染Latex
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, translateDiv.get(0)]);
+    translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
+    return {
+        translateDiv: translateDiv,
+        status: status
+    };
+}
 
-        return {
-            translateDiv: translateDiv,
-            status: status,
-            copyDiv: textElement,
-            panelDiv: panelDiv,
-            upButton: upButton
-        };
-    }
+// 保存翻译结果及DOM关系
+function saveTranslationResults() {
 
 }
 
