@@ -148,7 +148,7 @@ class StartupRun():
         Check the startup.
         """
         QSetting = QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings.NativeFormat)
-        if QSetting.value("CFBetter_LSPBridge") == None:
+        if QSetting.value("OJBetter_Bridge") == None:
             return False
         else:
             return True
@@ -159,7 +159,7 @@ class StartupRun():
         Set the startup.
         """
         QSetting = QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings.NativeFormat)
-        QSetting.setValue("CFBetter_LSPBridge", '"{}" /background'.format(os.path.join(rootUri,"server_gui.exe")))
+        QSetting.setValue("OJBetter_Bridge", '"{}" /background'.format(os.path.join(rootUri,"server_gui.exe")))
 
     @staticmethod
     def cancel_startup_run():
@@ -167,7 +167,7 @@ class StartupRun():
         Cancel the startup.
         """
         QSetting = QSettings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings.NativeFormat)
-        QSetting.remove("CFBetter_LSPBridge")
+        QSetting.remove("OJBetter_Bridge")
 
     @staticmethod
     def change_startup_run():
@@ -501,7 +501,7 @@ class MainWindow(QMainWindow):
         super().__init__(parent)
         self.update_log_signal.connect(self.update_log) # connect the signal to the slot
         self.infoBar_signal.connect(self.createInfoBar) # connect the signal to the slot
-        self.setWindowTitle("CFBetter_LSPBridge")
+        self.setWindowTitle("OJBetter_Bridge")
         self.setStyleSheet("background-color: #f7f9fc;")
         self.resize(800, 600)
 
@@ -537,7 +537,7 @@ class MainWindow(QMainWindow):
         # Create the tray icon
         self.tray_icon = QSystemTrayIcon(self)
         self.tray_icon.setIcon(QIcon(os.path.join(rootUri, "src", "icon.svg")))
-        self.tray_icon.setToolTip("CFBetter_LSPBridge")
+        self.tray_icon.setToolTip("OJBetter_Bridge")
         self.tray_icon.show()
 
         self.init_ui()
@@ -558,11 +558,11 @@ class MainWindow(QMainWindow):
         """
         if self.auto_run_button.isChecked():
             StartupRun().set_startup_run()
-            self.createInfoBar('success', 'Startup run enabled', f"CFBetter_LSPBridge will run on system startup.")
+            self.createInfoBar('success', 'Startup run enabled', f"OJBetter_Bridge will run on system startup.")
             self.auto_run_button.setText('On')
         else:
             StartupRun().cancel_startup_run()
-            self.createInfoBar('success', 'Startup run disabled', f"CFBetter_LSPBridge will not run on system startup.")
+            self.createInfoBar('success', 'Startup run disabled', f"OJBetter_Bridge will not run on system startup.")
             self.auto_run_button.setText('Off')
 
     

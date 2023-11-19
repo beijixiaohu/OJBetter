@@ -28,11 +28,11 @@ AlignOperands: true
 # 允许函数声明的所有参数在放在下一行  
 AllowAllParametersOfDeclarationOnNextLine: true
 # 允许短的块放在同一行  
-AllowShortBlocksOnASingleLine : false
+AllowShortBlocksOnASingleLine : true
 # 允许短的case标签放在同一行
-AllowShortCaseLabelsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
 # 允许短的循环保持在同一行   
-AllowShortLoopsOnASingleLine: false 
+AllowShortLoopsOnASingleLine: true 
 # 总是在定义返回类型后换行(deprecated)   
 AlwaysBreakAfterDefinitionReturnType: None
 # 描述具有特殊意义的注释的正则表达式，它不应该被分割为多行或以其它方式改变
@@ -48,7 +48,7 @@ ObjCSpaceAfterProperty: true
 # OC block后面的缩进
 ObjCBlockIndentWidth: 4
 # 是否允许短方法单行
-AllowShortFunctionsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: true
 # 换行的时候对齐操作符
 AlignOperands: true
 # 中括号两边空格 [] 

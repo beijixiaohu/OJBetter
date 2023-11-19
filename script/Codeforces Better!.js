@@ -2,7 +2,7 @@
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
 // @version      1.69
-// @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色
+// @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -67,8 +67,8 @@ var showClistRating_contest, showClistRating_problem, showClistRating_problemset
 var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
 var compilerSelection, editorFontSize, onlineCompilerChoice;
 var CF_csrf_token;
-var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, CFBetter_MonacoLSPBridge_WorkUri, CFBetter_MonacoLSPBridge_SocketUrl;
-var monacoEditor_language = [];
+var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl;
+var monacoEditor_language = [], monacoEditor_position;
 function init() {
     const { hostname, href } = window.location;
     is_mSite = hostname.startsWith('m');
@@ -151,9 +151,10 @@ function init() {
     /**
     * 加载monaco编辑器资源
     */
-    useLSP = getGMValue("useLSP", true);
-    CFBetter_MonacoLSPBridge_WorkUri = getGMValue("CFBetter_MonacoLSPBridge_WorkUri", "C:/CFBetter_LSPBridge/").replace(/\\/g, '/').replace(/\/$/, '');
-    CFBetter_MonacoLSPBridge_SocketUrl = getGMValue("CFBetter_MonacoLSPBridge_SocketUrl", "ws://127.0.0.1:2323/");
+    useLSP = getGMValue("useLSP", false);
+    monacoEditor_position = getGMValue("monacoEditor_position", "initial");
+    OJBetter_Bridge_WorkUri = getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
+    OJBetter_Bridge_SocketUrl = getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
     let monacoLoader = document.createElement("script");
     monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
     document.head.prepend(monacoLoader);
@@ -305,7 +306,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
         html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
-        html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest{
             color: #9099a3 !important;
         }
@@ -375,7 +376,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] .test-for-popup pre,
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
-        html[data-theme=dark] ul.config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] ul.config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] .sampleDiv,
         html[data-theme=dark] #addCustomTest, html[data-theme=dark] #LSPLog li:nth-child(odd){
             background-color: #2d333b !important;
@@ -397,7 +398,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
         html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button,
-        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #CFBetter_editor, html[data-theme=dark] #CFBetter_SubmitForm #statusBar,
+        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #CFBetter_editor, html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
         html[data-theme=dark] #addCustomTest, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox{
@@ -651,6 +652,12 @@ span.mdViewContent {
     padding: 1px 5px;
     margin: 5px !important;
     border: 1px solid #dcdfe6;
+}
+.html2mdButton[disabled] {
+    cursor: not-allowed !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(168, 171, 178) !important;
+    border: 1px solid rgb(228, 231, 237) !important;
 }
 .html2mdButton:hover {
     color: #409eff;
@@ -1972,12 +1979,7 @@ input#CompilerArgsInput[disabled] {
     z-index: 100;
 }
 #CFBetter_editor.right-side {
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 48vw !important;
-    height: 100%;
-    z-index: 100;
+    height: 98vh;
 }
 .html2mdButton.exit_button {
     position: fixed;
@@ -1991,7 +1993,9 @@ input#CompilerArgsInput[disabled] {
 .html2mdButton.exit_button.bottom {
     top: 95%;
 }
-#CFBetter_SubmitForm #statusBar{
+#CFBetter_statusBar{
+    height: 100%;
+    font-size: 12px;
     color: #757575;
     border: 1px solid #d3d3d3;
     background-color: #f8f8f8;
@@ -3640,13 +3644,13 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>在问题页下面添加Monaco编辑器，代码会自动保存，提供在线代码调试</p>
+            <p>在问题页下面添加Monaco编辑器，代码会自动保存，提供在线代码运行</p>
             </div>
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
-    <h4>在线代码调试</h4>
+    <h4>在线代码运行</h4>
     <label>
         <input type='radio' name='compiler' value='official'>
         <span class='CFBetter_setting_menu_label_text'>Codeforces</span>
@@ -3666,15 +3670,15 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>为 Monaco 连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等…</p>
-            <p>支持C++、Java、Python语言</p>
-            <p>你需要下载脚本页的 CFBetter_LSPBridge 并启动，具体请查看脚本页的说明</p>
+            <p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p>
+            <p>支持C++、Python语言</p>
+            <p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>
             </div>
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for='CFBetter_MonacoLSPBridge_WorkUri'>
+        <label for='OJBetter_Bridge_WorkUri'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label">工作路径:</span>
             </div>
@@ -3682,18 +3686,18 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-                <p>你需要填写 CFBetter_LSPBridge 所在的路径：</p>
+                <p>你需要填写 OJBetter_Bridge 所在的路径：</p>
                 <p>使用正斜杠或反斜杠均可</p>
                 <p>默认路径：</p>
                 <div style="border: 1px solid #795548; padding: 10px;">
-                    <p>C:/CFBetter_LSPBridge/</p>
+                    <p>C:/OJBetter_Bridge</p>
                 </div>
             </div>
         </div>
-        <input type='text' id='CFBetter_MonacoLSPBridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/' require = true>
+        <input type='text' id='OJBetter_Bridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/' require = true>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for='CFBetter_MonacoLSPBridge_SocketUrl'>
+        <label for='OJBetter_Bridge_SocketUrl'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label">Server:</span>
             </div>
@@ -3701,7 +3705,7 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-                <p>你需要填写你本机中 CFBetter_LSPBridge 的 Server URL</p>
+                <p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p>
                 <p>默认的URL: </p>
                 <div style="border: 1px solid #795548; padding: 10px;">
                     <p>ws://127.0.0.1:2323/</p>
@@ -3709,15 +3713,10 @@ const code_editor_settings_HTML = `
                 <p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>
             </div>
         </div>
-        <input type='text' id='CFBetter_MonacoLSPBridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写' require = true>
+        <input type='text' id='OJBetter_Bridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写' require = true>
     </div>
     <hr>
     <h4>静态补全增强</h4>
-    <div class='CFBetter_setting_list alert_warn'>
-        <div>
-            <p>该功能仅供放松娱乐，请勿依赖</p>
-        </div>
-    </div>
     <div class='CFBetter_setting_list'>
         <label for="cppCodeTemplateComplete"><span>AcWing CPP 补全模板</span></label>
         <div class="help_tip">
@@ -3916,11 +3915,11 @@ const CompletConfigEditHTML = `
         </div>
         <label for='complet_jsonUrl'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">JSON Url:</span>
+                <span class="input_label">JSON URL:</span>
                 <div class="help_tip">
                     ${helpCircleHTML}
                     <div class="tip_text">
-                    <p>开启 CFBetter_LSPBridge 后, 其会响应 GET 请求<code>/mycomplet/*</code>, 并返回在<code>mycomplet</code>文件夹中寻找到的同名文件的内容</p>
+                    <p>开启 OJBetter_Bridge 后, 其会响应 GET 请求<code>/mycomplet/*</code>, 并返回在<code>mycomplet</code>文件夹中寻找到的同名文件的内容</p>
                     <p>因此你只需要在 <code>/mycomplet</code> 文件夹中放置你的 JSON 文件即可在本地访问，</p>
                     <p>在配置中你需要填写的 URL 形如: </p>
                     <p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>
@@ -3930,7 +3929,7 @@ const CompletConfigEditHTML = `
         </label>
         <div class='CFBetter_setting_list alert_warn'>
             <div>
-                <p>脚本会完全信任你的 JSON 数据而不进行额外的校验和检查, 因此请勿添加来源不明的 JSON Url,</p>
+                <p>脚本会完全信任你的 JSON 数据而不进行额外的校验和检查, 因此请勿添加来源不明的 JSON URL,</p>
                 <p>特殊构造的数据可能会破坏脚本的正常工作, 甚至执行其他恶意代码</p>
             </div>
         </div>
@@ -4072,8 +4071,8 @@ async function settingPanel() {
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
-        $("#CFBetter_MonacoLSPBridge_WorkUri").val(GM_getValue("CFBetter_MonacoLSPBridge_WorkUri"));
-        $("#CFBetter_MonacoLSPBridge_SocketUrl").val(GM_getValue("CFBetter_MonacoLSPBridge_SocketUrl"));
+        $("#OJBetter_Bridge_WorkUri").val(GM_getValue("OJBetter_Bridge_WorkUri"));
+        $("#OJBetter_Bridge_SocketUrl").val(GM_getValue("OJBetter_Bridge_SocketUrl"));
         $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
         $("input[name='compiler']").css("color", "gray");
 
@@ -4126,8 +4125,8 @@ async function settingPanel() {
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
-                CFBetter_MonacoLSPBridge_WorkUri: $('#CFBetter_MonacoLSPBridge_WorkUri').val(),
-                CFBetter_MonacoLSPBridge_SocketUrl: $('#CFBetter_MonacoLSPBridge_SocketUrl').val(),
+                OJBetter_Bridge_WorkUri: $('#OJBetter_Bridge_WorkUri').val().replace(/\\/g, '/').replace(/\/$/, ''),
+                OJBetter_Bridge_SocketUrl: $('#OJBetter_Bridge_SocketUrl').val(),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
             };
             // tempConfigs的数据
@@ -4376,12 +4375,6 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
 }
 function addButtonWithHTML2MD(parent, suffix, type) {
     if (is_oldLatex || is_acmsguru) {
-        $("#html2md-view" + suffix).css({
-            "cursor": "not-allowed",
-            "background-color": "#ffffff",
-            "color": "#a8abb2",
-            "border": "1px solid #e4e7ed"
-        });
         $("#html2md-view" + suffix).prop("disabled", true);
     }
     $(document).on("click", "#html2md-view" + suffix, debounce(function () {
@@ -4463,12 +4456,6 @@ function addButtonWithHTML2MD(parent, suffix, type) {
 
 function addButtonWithCopy(parent, suffix, type) {
     if (is_oldLatex || is_acmsguru) {
-        $("#html2md-cb" + suffix).css({
-            "cursor": "not-allowed",
-            "background-color": "#ffffff",
-            "color": "#a8abb2",
-            "border": "1px solid #e4e7ed"
-        });
         $("#html2md-cb" + suffix).prop("disabled", true);
     }
     $(document).on("click", "#html2md-cb" + suffix, debounce(function () {
@@ -5821,7 +5808,7 @@ async function createMonacoEditor(language, form, support) {
      */
     var id = 0; // 协议中的id标识
     var workspace = language + "_workspace";
-    var rootUri = CFBetter_MonacoLSPBridge_WorkUri + "/" + workspace;
+    var rootUri = OJBetter_Bridge_WorkUri + "/" + workspace;
     // 文件名
     var InstanceID = getRandomNumber(8).toString();
     var filename = language == "java" ? "hello/src/" + InstanceID : InstanceID;
@@ -6000,8 +5987,11 @@ async function createMonacoEditor(language, form, support) {
             verticalScrollbarSize: 10,
             horizontalScrollbarSize: 10,
         },
+        suggest: {
+            selectionMode: 'never' // 代码建议不自动选择
+        }
     });
-
+    
     /**
      * 添加快捷功能
      */
@@ -6045,7 +6035,30 @@ async function createMonacoEditor(language, form, support) {
         form.topRightDiv.append(fixToRightButton);
         fixToRightButton.on('click', fixToRight);
 
-        // 当前固定状态
+        // 选择记忆
+        if(monacoEditor_position == "full"){
+            fullscreenButton.click();
+        }else if(monacoEditor_position == "bottom"){
+            fixToBottomButton.click();
+        }else if(monacoEditor_position == "right"){
+            fixToRightButton.click();
+        }
+
+        // 禁用按钮
+        function disableButtons(){
+            fullscreenButton.prop("disabled", true);
+            fixToBottomButton.prop("disabled", true);
+            fixToRightButton.prop("disabled", true);
+        }
+
+        // 启用按钮
+        function enableButtons(){
+            fullscreenButton.prop("disabled", false);
+            fixToBottomButton.prop("disabled", false);
+            fixToRightButton.prop("disabled", false);
+        }
+
+        // 是否固定状态
         var isFixed = false;
 
         // 进入全屏
@@ -6060,6 +6073,7 @@ async function createMonacoEditor(language, form, support) {
             }).addClass('exit_button').on('click', exitFullscreen);
             $('body').append(exitButton);
             disableButtons();
+            GM_setValue("monacoEditor_position", "full");
         }
 
         // 退出全屏
@@ -6068,6 +6082,7 @@ async function createMonacoEditor(language, form, support) {
             editor.removeClass('fullscreen');
             $('#exitButton').remove();
             enableButtons();
+            GM_setValue("monacoEditor_position", "initial");
         }
 
         // 固定到底部
@@ -6090,6 +6105,7 @@ async function createMonacoEditor(language, form, support) {
             }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
             $('body').append(cancelButton);
             disableButtons();
+            GM_setValue("monacoEditor_position", "bottom");
         }
 
         // 取消固定到底部
@@ -6100,25 +6116,34 @@ async function createMonacoEditor(language, form, support) {
             $('#blank-space').remove();
             $('#cancelButton').remove();
             enableButtons();
+            GM_setValue("monacoEditor_position", "initial");
         }
 
         // 固定到右侧边栏
         var sidebarStyle;
         function fixToRight() {
             if (isFixed) return; // 如果已经固定则不执行
-            var sidebar = $('#sidebar');
-            sidebar.hide();
-            sidebarStyle = GM_addStyle(`
-            #body {
-                min-width: 50vw;
-                max-width: 50vw;
-            }
-            .content-with-sidebar {
-                margin-right: 0px !important;
-            }
-        `);
+            $('#sidebar').hide();
 
-            $('#body').wrap('<div id="right-side-wrapper" style="display:flex"></div>');
+            // 添加样式
+            sidebarStyle = GM_addStyle(`
+                #body {
+                    min-width: 50vw;
+                    max-width: 50vw;
+                    max-height: 100vh;
+                    overflow-y: auto;
+                    padding: 0px;
+                }
+                body {
+                    margin: 0px;
+                }
+                .content-with-sidebar {
+                    margin-right: 0px !important;
+                }
+            `);
+
+            // 包装一层div
+            $('#body').wrap('<div id="right-side-wrapper" style="display:flex; max-width: 100vw; overflow: hidden;"></div>');
             var blankSpace = $('<div>', {
                 'id': 'blank-space',
                 'style': 'float: right; width: 50vw;'
@@ -6126,6 +6151,10 @@ async function createMonacoEditor(language, form, support) {
             $('#right-side-wrapper').append(blankSpace);
 
             var editor = $('#CFBetter_editor');
+
+            // 移到右侧
+            editor.prependTo('#blank-space');
+            editor.after($('#CFBetter_statusBar'));
             editor.addClass('right-side');
 
             var cancelButton = $('<button>', {
@@ -6135,12 +6164,21 @@ async function createMonacoEditor(language, form, support) {
             }).addClass('exit_button bottom').on('click', cancelFixingToRight);
             $('body').append(cancelButton);
             disableButtons();
+            GM_setValue("monacoEditor_position", "right");
         }
 
         // 取消固定到右侧边栏
         function cancelFixingToRight() {
             var sidebar = $('#sidebar');
             sidebar.show();
+            
+            // 移回来
+            var editor = $('#CFBetter_editor');
+            editor.insertAfter('#sourceCodeTextarea');
+            editor.after($('#CFBetter_statusBar'));
+            editor.removeClass('right-side');
+
+            // 移除包装
             $('#blank-space').remove();
             $('#cancelButton').remove();
             $('#body').unwrap();
@@ -6148,23 +6186,9 @@ async function createMonacoEditor(language, form, support) {
             if (sidebarStyle) {
                 $(sidebarStyle).remove();
             }
-            var editor = $('#CFBetter_editor');
-            editor.removeClass('right-side');
+            
             enableButtons();
-        }
-
-        // 禁用按钮
-        function disableButtons() {
-            fullscreenButton.prop('disabled', true);
-            fixToBottomButton.prop('disabled', true);
-            fixToRightButton.prop('disabled', true);
-        }
-
-        // 启用按钮
-        function enableButtons() {
-            fullscreenButton.prop('disabled', false);
-            fixToBottomButton.prop('disabled', false);
-            fixToRightButton.prop('disabled', false);
+            GM_setValue("monacoEditor_position", "initial");
         }
 
         // 代码同步与保存
@@ -6275,13 +6299,13 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 添加状态底栏
      */
-    var statusBar = $('<div id="statusBar">');
+    var statusBar = $('<div id="CFBetter_statusBar">');
     form.editorDiv.after(statusBar);
 
     /**
      * languageSocket
      */
-    var url = CFBetter_MonacoLSPBridge_SocketUrl;
+    var url = OJBetter_Bridge_SocketUrl;
     var languageSocket = new WebSocket(url + language);
     monacoSocket.push(languageSocket);
     var languageSocketState = false;
@@ -6322,6 +6346,7 @@ async function createMonacoEditor(language, form, support) {
     };
     languageSocket.onerror = (error) => {
         pushLSPLogMessage("error", `languageSocket 发生错误`, error);
+        console.warn(`连接languageSocket错误: ${error}`)
     };
     languageSocket.onclose = (event) => {
         languageSocketState = false;
@@ -6399,6 +6424,9 @@ async function createMonacoEditor(language, form, support) {
         let message = JSON.parse(ev.data);
         if (message.result !== "ok")
             pushLSPLogMessage("error", `update file failed: ${ev}`);
+    };
+    fileWebSocket.onerror = (error) => {
+        console.warn(`连接fileWebSocket错误: ${error}`);
     };
     async function updateFile(workspace, filename, fileExtension, code) {
         async function waitForfileWebSocketState() {
@@ -6631,9 +6659,9 @@ async function createMonacoEditor(language, form, support) {
                 workspaceFolders: [
                     {
                         uri:
-                            "file:///" + CFBetter_MonacoLSPBridge_WorkUri + workspace,
+                            "file:///" + OJBetter_Bridge_WorkUri + workspace,
                         name:
-                            "file:///" + CFBetter_MonacoLSPBridge_WorkUri + workspace,
+                            "file:///" + OJBetter_Bridge_WorkUri + workspace,
                     },
                 ],
             },
@@ -7376,7 +7404,7 @@ async function createMonacoEditor(language, form, support) {
                     errorCount++;
                 }
             }
-            $('#statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
+            $('#CFBetter_statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
         };
 
         // "应用服务器推送的更改"(代码修复)
@@ -7419,7 +7447,7 @@ function changeMonacoLanguage(form) {
     // 移除相关元素
     form.topRightDiv.empty();
     $('#LSPLog').remove();
-    $('#statusBar').remove();
+    $('#CFBetter_statusBar').remove();
     // 创建新的编辑器
     if (nowSelect in value_monacoLanguageMap) {
         let language = value_monacoLanguageMap[nowSelect];
@@ -8053,7 +8081,7 @@ async function runCode(event, sourceDiv, submitDiv) {
 
 async function addProblemPageCodeEditor() {
     if (typeof ace === 'undefined') {
-        console.log("%c无法加载编辑器必要的数据，可能当前未登录/非题目页/比赛刚刚结束", "border:1px solid #000;padding:10px;");
+        console.log("%c无法加载编辑器必要的数据，可能当前未登录/非题目页/比赛结束冻结期间/该比赛禁止结束后练习", "border:1px solid #000;padding:10px;");
         return; // 未登录，不存在ace库
     }
 

@@ -10,7 +10,7 @@ import pkg_resources
 import shutil
 print("\033[1;34m" + """
     ╔══════════════════════════════════════════════════════════╗
-    ║           Welcome to CFBetter_MonacoLSPBridge            ║
+    ║              Welcome to OJBetter_Bridge                  ║
     ║                  Enjoy Coding !>_<                       ║
     ╚══════════════════════════════════════════════════════════╝
     """.center(80) + "\033[0m")
@@ -231,11 +231,11 @@ if __name__ == "__main__":
         else:
             if lang == "cpp":
                 print("""\033[1;31m[CHECK] The command for C++ is invalid. 
-            Please download clangd-windows-xxx.zip from https://github.com/clangd/clangd/releases/, 
+            If you used on Windows, Please download clangd-windows-xxx.zip from https://github.com/clangd/clangd/releases/, 
             extract it to your preferred location, and add the xxx/clangd_xxx/bin path to the system environment variable path.\033[0m""")
             elif lang == "python":
                 print("""\033[1;31m[CHECK] The command for Python is invalid. 
-            Please run the command 'pip install "python-lsp-server[all]"' in the terminal 
+            If you used on Windows, Please run the command 'pip install "python-lsp-server[all]"' in the terminal 
             (you need to have a Python environment installed), which will automatically configure the environment variables.\033[0m""")
             else:
                 print(f"""\033[1;31m[CHECK] {lang} command is invalid \u2718\033[0m""")

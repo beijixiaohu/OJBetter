@@ -1,8 +1,8 @@
-CFBetter_LSPBridge/cpp_workspace/*.cpp
-CFBetter_LSPBridge/java_workspace/hello/src/*.java
-CFBetter_LSPBridge/java_workspace/.metadata
-CFBetter_LSPBridge/jdt-language-server
-CFBetter_LSPBridge/python_workspace/*.py
-CFBetter_LSPBridge/pylsp_jsonrpc
-CFBetter_LSPBridge/server_gui.*
+OJBetter_Bridge/cpp_workspace/*.cpp
+OJBetter_Bridge/java_workspace/hello/src/*.java
+OJBetter_Bridge/java_workspace/.metadata
+OJBetter_Bridge/jdt-language-server
+OJBetter_Bridge/python_workspace/*.py
+OJBetter_Bridge/pylsp_jsonrpc
+OJBetter_Bridge/server_gui.exe
 tools
