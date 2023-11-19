@@ -2322,6 +2322,7 @@ function toZH_CN() {
         { match: 'Teams', replace: '队伍' },
         { match: 'Submissions', replace: '提交' },
         { match: 'Favourites', replace: '收藏' },
+        { match: 'Problemsetting', replace: '问题设置' },
         { match: 'Talks', replace: '私信' },
         { match: 'Contests', replace: '比赛' },
     ];
@@ -5991,7 +5992,7 @@ async function createMonacoEditor(language, form, support) {
             selectionMode: 'never' // 代码建议不自动选择
         }
     });
-    
+
     /**
      * 添加快捷功能
      */
@@ -6036,23 +6037,23 @@ async function createMonacoEditor(language, form, support) {
         fixToRightButton.on('click', fixToRight);
 
         // 选择记忆
-        if(monacoEditor_position == "full"){
+        if (monacoEditor_position == "full") {
             fullscreenButton.click();
-        }else if(monacoEditor_position == "bottom"){
+        } else if (monacoEditor_position == "bottom") {
             fixToBottomButton.click();
-        }else if(monacoEditor_position == "right"){
+        } else if (monacoEditor_position == "right") {
             fixToRightButton.click();
         }
 
         // 禁用按钮
-        function disableButtons(){
+        function disableButtons() {
             fullscreenButton.prop("disabled", true);
             fixToBottomButton.prop("disabled", true);
             fixToRightButton.prop("disabled", true);
         }
 
         // 启用按钮
-        function enableButtons(){
+        function enableButtons() {
             fullscreenButton.prop("disabled", false);
             fixToBottomButton.prop("disabled", false);
             fixToRightButton.prop("disabled", false);
@@ -6171,7 +6172,7 @@ async function createMonacoEditor(language, form, support) {
         function cancelFixingToRight() {
             var sidebar = $('#sidebar');
             sidebar.show();
-            
+
             // 移回来
             var editor = $('#CFBetter_editor');
             editor.insertAfter('#sourceCodeTextarea');
@@ -6186,7 +6187,7 @@ async function createMonacoEditor(language, form, support) {
             if (sidebarStyle) {
                 $(sidebarStyle).remove();
             }
-            
+
             enableButtons();
             GM_setValue("monacoEditor_position", "initial");
         }
@@ -7467,22 +7468,33 @@ function changeMonacoLanguage(form) {
 function collectTestData() {
     var testData = {};
 
+    // 从pre中获取文本信息
+    function getTextFromPre(node) {
+        let text;
+        if (node.find("br").length > 0) {
+            text = node.html().replace(/<br>/g, "\n"); // <br>作换行符的情况
+        } else {
+            text = node.text();
+        }
+        return text;
+    }
+
     $('.input').each(function (index) {
         var inputText = '';
         if ($(this).find('pre').find('div').length > 0) {
             $(this).find('pre').find('div').each(function () {
-                inputText += $(this).text() + '\n';
+                inputText += getTextFromPre($(this)) + '\n';
             });
         } else {
-            inputText = $(this).find('pre').text();
+            inputText = getTextFromPre($(this).find('pre'));
         }
         var outputText = '';
         if ($('.output').eq(index).find('pre').find('div').length > 0) {
             $('.output').eq(index).find('pre').find('div').each(function () {
-                inputText += $(this).text() + '\n';
+                inputText += getTextFromPre($(this)) + '\n';
             });
         } else {
-            outputText = $('.output').eq(index).find('pre').text();
+            outputText = getTextFromPre($('.output').eq(index).find('pre'));
         }
 
         testData[index + 1] = {
