@@ -61,6 +61,7 @@ var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
+var ttTree, memoryTranslateHistory;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
 var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, filterTextWithoutEmphasis, commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
@@ -98,6 +99,7 @@ function init() {
     translation = getGMValue("translation", "deepl");
     commentTranslationMode = getGMValue("commentTranslationMode", "0");
     commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
+    memoryTranslateHistory = getGMValue("memoryTranslateHistory", true);
     retransAction = getGMValue("retransAction", "0");
     transWaitTime = getGMValue("transWaitTime", "200");
     replaceSymbol = getGMValue("replaceSymbol", "2");
@@ -229,9 +231,10 @@ const darkenPageStyle2 = `body::before { content: ""; display: block; position: 
 var CFBetterDB;
 function initDB() {
     CFBetterDB = new Dexie('CFBetterDB');
-    CFBetterDB.version(1).stores({
+    CFBetterDB.version(2).stores({
         samplesData: `&url`,
-        editorCode: `&url`
+        editorCode: `&url`,
+        translateData: `&url`
     });
 }
 
@@ -566,6 +569,17 @@ span.mdViewContent {
     text-shadow: 0px 0px 2px #edfcf4;
 }
 /*翻译div*/
+.translateDiv.input-output-copier {
+    font-size: initial;
+    float: initial;
+    color: initial;
+    cursor: initial;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    line-height: initial;
+    text-transform: none;
+}
 .translate-problem-statement {
     justify-items: start;
     letter-spacing: 1.8px;
@@ -3499,6 +3513,17 @@ const translation_settings_HTML = `
         </select>
     </div>
     <div class='CFBetter_setting_list'>
+        <label for="memoryTranslateHistory">自动恢复历史翻译</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p>
+            <p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>
+            </div>
+        </div>
+        <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
+    </div>
+    <div class='CFBetter_setting_list'>
         <label for="translation_retransAction" style="display: flex;">重新翻译时</label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4063,6 +4088,7 @@ async function settingPanel() {
             }
         }
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
+        $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
@@ -4114,6 +4140,7 @@ async function settingPanel() {
                 translation: $("input[name='translation']:checked").val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 commentTranslationMode: $('#comment_translation_mode').val(),
+                memoryTranslateHistory: $('#memoryTranslateHistory').prop("checked"),
                 transWaitTime: $('#transWaitTime').val(),
                 replaceSymbol: $('#translation_replaceSymbol').val(),
                 filterTextWithoutEmphasis: $('#filterTextWithoutEmphasis').prop("checked"),
@@ -4359,7 +4386,7 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
     let htmlString = `<div class='html2md-panel input-output-copier'>
     <button class='html2mdButton' id='html2md-view${suffix}'>MarkDown视图</button>
     <button class='html2mdButton' id='html2md-cb${suffix}'>Copy</button>
-    <button class='html2mdButton' id='translateButton${suffix}'>${translateButtonText}</button>
+    <button class='html2mdButton translateButton' id='translateButton${suffix}'>${translateButtonText}</button>
   </div>`;
     if (type === "this_level") {
         $(parent).before(htmlString);
@@ -4374,6 +4401,73 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
 
     if (block.css("display") === "none" || block.hasClass('ojbetter-alert')) $("#translateButton" + suffix).parent().remove();
 }
+
+// 加载按钮相关函数
+async function initTranslateButtonFunc() {
+    // 设置翻译按钮状态
+    $.fn.setTransButtonState = function (state, text = null) {
+        if (state === 'normal') {
+            this
+                .trigger('mouseout')
+                .text(text ? text : '翻译')
+                .prop('disabled', false)
+                .css('cursor', 'pointer')
+                .removeClass('translating translated error');
+        } else if (state === 'translating') {
+            this
+                .trigger('mouseout')
+                .text(text ? text : '翻译中')
+                .prop('disabled', true)
+                .css('cursor', 'not-allowed')
+                .removeClass('translated error')
+                .addClass('translating');
+        } else if (state === 'translated') {
+            this
+                .trigger('mouseout')
+                .text(text ? text : '已翻译')
+                .prop('disabled', false)
+                .css('cursor', 'pointer')
+                .removeClass('translating error')
+                .addClass('translated');
+        } else if (state === 'error') {
+            this
+                .trigger('mouseout')
+                .text(text ? text : '翻译出错')
+                .prop('disabled', false)
+                .css('cursor', 'pointer')
+                .removeClass('translating translated')
+                .addClass('error');
+        }
+    }
+
+    // 存翻译结果
+    $.fn.pushResultToTransButton = function (result) {
+        let resultStack = this.data('resultStack');
+        if (!resultStack) resultStack = [];
+        resultStack.push(result);
+        this.data('resultStack', resultStack);
+    }
+
+    // 获取翻译结果
+    $.fn.getResultFromTransButton = function () {
+        return this.data('resultStack');
+    }
+
+    // 标记是否为短文本
+    $.fn.setIsShortText = function () {
+        this.data('isShortText', true);
+    }
+
+    // 判断是否已经翻译
+    $.fn.IsTranslated = function () {
+        if (this.hasAttr('translated')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 function addButtonWithHTML2MD(parent, suffix, type) {
     if (is_oldLatex || is_acmsguru) {
         $("#html2md-view" + suffix).prop("disabled", true);
@@ -4388,8 +4482,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         }
         if (target.viewmd) {
             target.viewmd = false;
-            $(this).text("MarkDown视图");
-            $(this).removeClass("mdViewed");
+            $(this).text("MarkDown视图").removeClass("mdViewed");
             $(target).html(target.original_html);
         } else {
             target.viewmd = true;
@@ -4530,18 +4623,37 @@ function addButtonWithCopy(parent, suffix, type) {
 }
 
 async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
-    var resultStack = []; // 结果  
+    // 标记目标文本是短字符文本
+    {
+        const shortTranslationText = {
+            deepl: 1000,
+            iflyrec: 1000,
+            youdao: 600,
+            google: 1000,
+            caiyun: 1000
+        };
+        let target;
+
+        if (type === "this_level") {
+            target = $("#translateButton" + suffix).parent().next().get(0);
+        } else if (type === "child_level") {
+            target = $("#translateButton" + suffix).parent().parent().get(0);
+        }
+        let text = $(target).text();
+        if (shortTranslationText.hasOwnProperty(translation) && text.length < shortTranslationText[translation]) {
+            $("#translateButton" + suffix).setIsShortText();
+            $("#translateButton" + suffix).setTransButtonState('normal', text.length);
+        }
+    }
+
     $(document).on('click', '#translateButton' + suffix, debounce(async function () {
-        $(this).trigger('mouseout')
-            .removeClass("translated")
-            .text("翻译中")
-            .css("cursor", "not-allowed")
-            .prop("disabled", true);
-        var target, element_node, block, errerNum = 0;
+        $(this).setTransButtonState('translating');
+        var target, element_node, block, errerNum = 0, skipNum = 0;
         if (type === "this_level") block = $("#translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $("#translateButton" + suffix).parent().parent();
 
         // 重新翻译
+        let resultStack = $(this).getResultFromTransButton();
         if (resultStack) {
             let pElements = block.find("p.block_selected:not(li p), li.block_selected");
             for (let item of resultStack) {
@@ -4550,10 +4662,10 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     if (commentTranslationMode == "2") {
                         // 只移除即将要翻译的段的结果
                         if (pElements.is(item.translateDiv.getDiv().prev())) {
-                            item.translateDiv.remove();
+                            item.translateDiv.close();
                         }
                     } else {
-                        item.translateDiv.remove();
+                        item.translateDiv.close();
                         $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
@@ -4578,10 +4690,11 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(pElements[i]).append("<div></div>");
                     element_node = $(pElements[i]).find("div:last-child").get(0);
                 }
-                resultStack.push(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
-
+                $(this).pushResultToTransButton(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
+                let resultStack = $(this).getResultFromTransButton();
                 let topStack = resultStack[resultStack.length - 1];
-                if (topStack.status) errerNum += 1;
+                if (topStack.status == "error") errerNum += 1;
+                else if (topStack.status == "skip") skipNum += 1;
                 $(target).remove();
                 await new Promise(resolve => setTimeout(resolve, transWaitTime));
             }
@@ -4595,10 +4708,11 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(pElements[i]).append("<div></div>");
                     element_node = $(pElements[i]).find("div:last-child").get(0);
                 }
-                resultStack.push(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
-
+                $(this).pushResultToTransButton(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
+                let resultStack = $(this).getResultFromTransButton();
                 let topStack = resultStack[resultStack.length - 1];
-                if (topStack.status) errerNum += 1;
+                if (topStack.status == "error") errerNum += 1;
+                else if (topStack.status == "skip") skipNum += 1;
                 $(target).remove();
                 await new Promise(resolve => setTimeout(resolve, transWaitTime));
             }
@@ -4621,20 +4735,16 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                     $(target).find('.html2md-panel').remove();
                 }
             }
-            resultStack.push(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
-
+            $(this).pushResultToTransButton(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
+            let resultStack = $(this).getResultFromTransButton();
             let topStack = resultStack[resultStack.length - 1];
-            if (topStack.status) errerNum += 1;
+            if (topStack.status == "error") errerNum += 1;
+            else if (topStack.status == "skip") skipNum += 1;
             $(target).remove();
         }
-        if (!errerNum) {
-            $(this).addClass("translated")
-                .text("已翻译")
-                .css("cursor", "pointer")
-                .removeClass("error")
-                .prop("disabled", false);
-        } else {
-            $(this).prop("disabled", false);
+
+        if (!errerNum && !skipNum) {
+            $(this).setTransButtonState('translated');
         }
 
         // 重新翻译
@@ -4785,20 +4895,13 @@ async function blockProcessing(target, element_node, button, is_comment) {
     const textarea = document.createElement('textarea');
     textarea.value = target.markdown;
     var result = await translateProblemStatement(textarea.value, element_node, $(button), is_comment);
-    if (result.status == 1) {
-        $(button).addClass("error")
-            .text("翻译中止")
-            .css("cursor", "pointer")
-            .prop("disabled", false);
-        $(result.translateDiv).remove();
-        $(target).remove();
-    } else if (result.status == 2) {
+    if (result.status == "error") {
         result.translateDiv.classList.add("error_translate");
-        $(button).addClass("error")
-            .text("翻译出错")
-            .css("cursor", "pointer")
-            .prop("disabled", false);
+        $(button).setTransButtonState('error', '翻译出错');
         $(target).remove();
+    } else if (result.status == "skip") {
+        $(button).setTransButtonState('error', '字数超限');
+        result.translateDiv.close();
     }
     return result;
 }
@@ -4834,7 +4937,7 @@ async function multiChoiceTranslation() {
                 if ($this.attr('translated')) {
                     let result = $this.data("resultData");
                     if (retransAction == "0") {
-                        result.translateDiv.remove();
+                        result.translateDiv.close();
                     } else {
                         result.translateDiv.foldMainDiv();
                     }
@@ -4882,6 +4985,7 @@ function acmsguruReblock() {
     }
 }
 
+// 添加按钮
 function addConversionButton() {
     // 题目页添加按钮
     if (window.location.href.includes("problem")) {
@@ -4902,8 +5006,8 @@ function addConversionButton() {
         // 是否为评论
         let is_comment = false;
         if ($(this).parents('.comments').length > 0) is_comment = true;
-        // 题目页特判
-        if (!$(this).parent().hasClass('problemindexholder') || is_acmsguru) {
+        // 题目页不添加
+        if (!is_problem || is_acmsguru) {
             let id = "_comment_" + getRandomNumber(8);
             addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(this, id, "this_level");
@@ -4996,6 +5100,662 @@ function addConversionButton() {
     });
 };
 
+// 等待LaTeX渲染队列全部完成
+function waitUntilIdleThenDo(callback) {
+    var intervalId = setInterval(function () {
+        var queue = MathJax.Hub.queue;
+        if (queue.pending === 0 && queue.running === 0) {
+            clearInterval(intervalId);
+            callback();
+        }
+    }, 100);
+}
+
+// 字数超限确认
+function showWordsExceededDialog(button, textLength, realTextLength) {
+    return new Promise(resolve => {
+        const styleElement = GM_addStyle(darkenPageStyle);
+        let htmlString = `
+      <div class="CFBetter_modal">
+          <h2>字符数超限! </h2>
+          <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
+          <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
+
+          <div style="display:flex; padding:5px 0px; align-items: center;">
+            ${helpCircleHTML}
+            <p>
+            注意，可能您选择了错误的翻译按钮<br>
+            由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
+            </p>
+          </div>
+          <p>您确定要继续翻译吗？</p>
+          <div class="buttons">
+            <button id="continueButton">继续</button><button id="cancelButton">取消</button>
+          </div>
+      </div>
+      `;
+        $('body').before(htmlString);
+        $("#continueButton").click(function () {
+            $(styleElement).remove();
+            $('.CFBetter_modal').remove();
+            resolve(true);
+        });
+        $("#cancelButton").click(function () {
+            $(styleElement).remove();
+            $('.CFBetter_modal').remove();
+            resolve(false);
+        });
+    });
+}
+
+//跳过折叠块确认
+function skiFoldingBlocks() {
+    return new Promise(resolve => {
+        const styleElement = GM_addStyle(darkenPageStyle);
+        let htmlString = `
+      <div class="CFBetter_modal">
+          <h2>是否跳过折叠块？</h2>
+          <p></p>
+          <div style="display:grid; padding:5px 0px; align-items: center;">
+            <p>
+            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在您需要选择是否跳过这些折叠块，
+            </p>
+            <p>
+            如果其中有您需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
+            </p>
+          </div>
+          <p>要跳过折叠块吗？（建议选择跳过）</p>
+          <div class="buttons">
+            <button id="cancelButton">否</button><button id="skipButton">跳过</button>
+          </div>
+      </div>
+      `;
+        $('body').before(htmlString);
+        $("#skipButton").click(function () {
+            $(styleElement).remove();
+            $('.CFBetter_modal').remove();
+            resolve(true);
+        });
+        $("#cancelButton").click(function () {
+            $(styleElement).remove();
+            $('.CFBetter_modal').remove();
+            resolve(false);
+        });
+    });
+}
+
+// latex替换
+function replaceBlock(text, matches, replacements) {
+    try {
+        for (let i = 0; i < matches.length; i++) {
+            let match = matches[i];
+            let replacement = '';
+            if (replaceSymbol === "1") {
+                replacement = `【${i + 1}】`;
+            } else if (replaceSymbol === "2") {
+                replacement = `{${i + 1}}`;
+            } else if (replaceSymbol === "3") {
+                replacement = `[${i + 1}]`;
+            }
+            text = text.replace(match, replacement);
+            replacements[replacement] = match;
+        }
+    } catch (e) { }
+    return text;
+}
+
+// latex还原
+function recoverBlock(translatedText, matches, replacements) {
+    for (let i = 0; i < matches.length; i++) {
+        let match = matches[i];
+        let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
+
+        let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+
+        let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, ...args) {
+            // LaTeX中的不替换
+            const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
+            if (groups.latex_block || groups.latex_inline) return match;
+            // 没有空格则加一个
+            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
+            let leftSpace = "", rightSpace = "";
+            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
+            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
+            return leftSpace + replacement + rightSpace;
+        });
+
+        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
+        translatedText = translatedText.replace(regex, function (match, ...args) {
+            // LaTeX中的不替换
+            const groups = args[args.length - 1];
+            if (groups.latex_block || groups.latex_inline) return match;
+            // 没有空格则加一个
+            const offset = args[args.length - 3];
+            let leftSpace = "", rightSpace = "";
+            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
+            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
+            return leftSpace + replacement + rightSpace;
+        });
+    }
+    return translatedText;
+}
+
+// 翻译框/翻译处理器
+class TranslateDiv {
+    constructor(id) {
+        this.id = id;
+        this.div = $('<div>').attr('id', id).addClass('translateDiv').addClass('input-output-copier');
+        this.panelDiv = $('<div>').addClass('translate-problem-statement-panel');
+        this.div.append(this.panelDiv);
+        this.mainDiv = $('<div>').addClass('translate-problem-statement');
+        this.span = $('<span>');
+        this.mainDiv.append(this.span);
+        this.div.append(this.mainDiv);
+        // 信息
+        this.topText = $('<div>').addClass('topText');
+        this.panelDiv.append(this.topText);
+
+        // 右侧
+        this.rightDiv = $('<div>').css('display', 'flex');
+        this.panelDiv.append(this.rightDiv);
+        this.copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
+        this.rightDiv.append(this.copyButton);
+        this.upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
+        this.rightDiv.append(this.upButton);
+        this.closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
+        this.rightDiv.append(this.closeButton);
+    }
+
+    getDiv() {
+        return this.div;
+    }
+
+    setTopText(text) {
+        this.div.attr("data-topText", text);
+        this.topText.text(text);
+    }
+
+    getTopText() {
+        return this.topText.text();
+    }
+
+    updateTranslateDiv(text, is_oldLatex, is_acmsguru) {
+        if (is_oldLatex || is_acmsguru) {
+            // oldlatex
+            text = $.parseHTML(text);
+            this.mainDiv.empty().append($(text));
+        } else {
+            // 渲染MarkDown
+            var md = window.markdownit();
+            var html = md.render(text);
+            this.mainDiv.html(html);
+            // 渲染Latex
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+        }
+    }
+
+    // 关闭元素
+    close() {
+        this.closeButton.click();
+    }
+
+    registerUpButtonEvent() {
+        this.upButton.on("click", () => {
+            if (this.upButton.html() === putawayIcon) {
+                this.upButton.html(unfoldIcon);
+                $(this.mainDiv).css({
+                    display: "none",
+                    transition: "height 2s"
+                });
+            } else {
+                // 执行收起操作
+                this.upButton.html(putawayIcon);
+                $(this.mainDiv).css({
+                    display: "",
+                    transition: "height 2s"
+                });
+            }
+        });
+    }
+
+    // 收起mainDiv
+    foldMainDiv() {
+        this.upButton.html(unfoldIcon);
+        $(this.mainDiv).css({
+            display: "none",
+            transition: "height 2s"
+        });
+    }
+
+    // 注册关闭按钮
+    registerCloseButtonEvent() {
+        this.closeButton.on("click", () => {
+            $(this.div).remove();
+            $(this.panelDiv).remove();
+            if (is_problem && memoryTranslateHistory) {
+                ttTree.rmTransResultMap(this.id); // 移除ttTree中的数据
+                ttTree.refreshNode(".ttypography");
+                updateTransDBData(ttTree.getNodeDate(), ttTree.getTransResultMap()); // 更新DB中的数据
+            }
+        });
+    }
+
+    registerCopyButtonEvent(text) {
+        this.copyButton.on("click", () => {
+            GM_setClipboard(text);
+            this.copyButton.html(copyedIcon);
+            this.copyButton.css({ 'fill': '#8bc34a' });
+            // 更新TopText
+            let topText = this.getTopText();
+            this.topText.text("已复制");
+            // 复制提示
+            setTimeout(() => {
+                this.topText.text(topText);
+                this.copyButton.html(copyIcon);
+                this.copyButton.css({ 'fill': '' });
+            }, 2000);
+        });
+    }
+
+    // 禁用复制按钮
+    disableCopyButton() {
+        this.copyButton.css({ 'fill': '#ccc' });
+        this.copyButton.off("click");
+    }
+}
+
+// 元素关系树
+class ElementsTree {
+    constructor(elements) {
+        this.node = [];
+        this.transResultMap = {};
+        this.index = 0;
+        this.init($(elements));
+    }
+
+    // Iterate through all elements, because there may be multiple ttypography
+    init(elements) {
+        elements.each((i, e) => {
+            this.node.push({}); // add one element
+            this.index = 0; // reset index
+            this.create(i, $(e));
+        });
+    }
+
+    // 刷新关系树
+    refreshNode(elements) {
+        this.node = [];
+        this.index = 0;
+        this.init($(elements));
+    }
+
+    // 创建节点间的关系树
+    create(i_, element) {
+        var prev = null;
+        var node = this.node[i_];
+        element.children().each((i, e) => {
+            // only add div and p element
+            if ($(e).prop("tagName") === "DIV" || $(e).prop("tagName") === "P") {
+                prev = this.addNode(i_, prev, e);
+            }
+            // recursively child element
+            if ($(e).children().length > 0 && prev !== null) {
+                node[prev].firstChild = this.index;
+                this.create(i_, $(e));
+            }
+        });
+    }
+
+    // 向树中添加一个节点
+    addNode(i_, prev, e) {
+        var node = this.node[i_];
+        node[this.index] = {
+            prev: prev,
+            next: null,
+            firstChild: null,
+            type: $(e).prop("tagName"),
+            isTranslateDiv: $(e).hasClass("translateDiv"),
+            topText: $(e).attr("data-topText"),
+            id: $(e).attr("id"),
+        };
+
+        if (prev !== null) {
+            node[prev].next = this.index;
+        }
+
+        prev = this.index;
+
+        this.index++;
+        return prev;
+    }
+
+    getNodeDate() {
+        return this.node;
+    }
+
+    setNodeDate(node) {
+        this.node = node;
+    }
+
+    getTransResultMap() {
+        return this.transResultMap;
+    }
+
+    setTransResultMap(transResultMap) {
+        this.transResultMap = transResultMap;
+    }
+
+    rmTransResultMap(id) {
+        delete this.transResultMap[id];
+    }
+
+    addTransResultMap(id, text) {
+        this.transResultMap[id] = text;
+    }
+
+    getTranslateDivNum(ttTree) {
+        var num = 0;
+        for (var i in ttTree) {
+            if (ttTree[i].isTranslateDiv) {
+                num++;
+            }
+        }
+        return num;
+    }
+
+    // recover translateDivs
+    recover(elements) {
+        elements.each((i, e) => {
+            var ttTreeNode = this.node[i];
+            var missingTranslateDivs = this.getTranslateDivNum(ttTreeNode);
+            if (missingTranslateDivs > 0) {
+                this.recoverOneElement($(e), ttTreeNode);
+            }
+        });
+    }
+
+    recoverOneElement(element, ttTreeNode) {
+        this.recoverOneFork(element.children().eq(0), ttTreeNode, 0);
+    }
+
+    // 恢复一个分支
+    recoverOneFork(pElement, ttTreeNode, index) {
+        do {
+            // only recover div and p element
+            while (pElement.prop("tagName") !== "DIV" && pElement.prop("tagName") !== "P") {
+                if (pElement.next().length > 0) {
+                    pElement = pElement.next();
+                } else {
+                    return;
+                }
+            }
+            if (pElement.prop("tagName") !== ttTreeNode[index].type) {
+                console.log(pElement);
+                console.log(index);
+                console.warn("类型不同, 元素结构可能已经发生了变化");
+                return;
+            } else {
+                // recursively child element
+                var node = ttTreeNode[index];
+                if (node.firstChild !== null) {
+                    this.recoverOneFork(
+                        pElement.children().eq(0),
+                        ttTreeNode,
+                        node.firstChild
+                    );
+                }
+                // check if next node is translateDiv
+                if (node.next !== null) {
+                    index = node.next;
+                    var ne_node = ttTreeNode[index];
+                    if (ne_node.isTranslateDiv) {
+                        var id = ne_node.id;
+                        var topText = ne_node.topText;
+                        var text = this.transResultMap[id];
+                        // create element after pElement
+                        this.reCreateTransDiv(pElement, id, text, topText);
+                    }
+                    pElement = pElement.next(); // go to next element
+                }
+            }
+        } while (node.next !== null);
+    }
+
+    // 重新创建translateDiv
+    reCreateTransDiv(pElement, id, translatedText, topText) {
+        const translateDiv = new TranslateDiv(id);
+        pElement.after(translateDiv.getDiv());
+        translateDiv.setTopText(topText);
+        translateDiv.registerUpButtonEvent();
+        translateDiv.registerCloseButtonEvent();
+        if (!is_oldLatex && !is_acmsguru) {
+            translateDiv.registerCopyButtonEvent(translatedText);
+        } else {
+            translateDiv.disableCopyButton();
+        }
+        translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
+        // 标记已翻译并添加到翻译按钮的结果栈中
+        let transButton = pElement.prev('.html2md-panel').find('.translateButton');
+        transButton.pushResultToTransButton({
+            translateDiv: translateDiv,
+            status: 0
+        });
+        transButton.setTransButtonState('translated');
+    }
+}
+
+// 更新TransDB中的翻译数据
+async function updateTransDBData(nodeDate, transResultMap) {
+    var url = window.location.href.replace(/#/, "");
+    try {
+        await CFBetterDB.translateData.put({ url, transResultMap, nodeDate });
+        return 'translateData saved successfully';
+    } catch (error) {
+        throw new Error(`Failed to save translateData: ${error}`);
+    }
+}
+
+// 获取TransDB中保存的翻译数据
+async function getTransDBData() {
+    var url = window.location.href.replace(/#/, "");
+    try {
+        const result = await CFBetterDB.translateData.get(url);
+        return result;
+    } catch (error) {
+        throw new Error(`Failed to get translateData: ${error}`);
+    }
+}
+
+// 初始化恢复翻译结果
+async function initTransResultsRecover() {
+    ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
+    let result = await getTransDBData();
+    if (!result) return;
+    ttTree.setNodeDate(result.nodeDate);
+    ttTree.setTransResultMap(result.transResultMap);
+    ttTree.recover($(".ttypography"));
+}
+
+var translatedText = "";
+
+// 翻译主方法
+async function translateProblemStatement(text, element_node, button, is_comment) {
+    let status = "ok";
+    let id = getRandomNumber(8);
+    let matches = [];
+    let replacements = {};
+    let translationService = {
+        "deepl": "DeepL",
+        "iflyrec": "讯飞听见",
+        "youdao": "有道",
+        "google": "Google",
+        "caiyun": "彩云小译",
+        "openai": "ChatGPT"
+    };
+    // 创建翻译结果元素并放在element_node的后面
+    const translateDiv = new TranslateDiv(id);
+    $(element_node).after(translateDiv.getDiv());
+    // 信息
+    if (is_comment && commentTranslationChoice != "0") translateDiv.setTopText(translationService[commentTranslationChoice] + ' 翻译');
+    else translateDiv.setTopText(translationService[translation] + ' 翻译');
+
+    // 注册按钮
+    translateDiv.registerUpButtonEvent();
+    translateDiv.registerCloseButtonEvent();
+
+    // 替换latex公式
+    if (is_oldLatex) {
+        let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
+        text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
+    } else if (is_acmsguru) {
+        let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
+    } else if (translation != "openai") {
+        // 使用GPT翻译时不必替换latex公式
+        let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+        matches = matches.concat(text.match(regex));
+        text = replaceBlock(text, matches, replacements);
+    }
+
+    // 过滤**号
+    if (filterTextWithoutEmphasis && GM_getValue("translation") !== "openai") {
+        text = text.replace(/\*\*/g, "");
+    }
+
+    // 字符数上限
+    const translationLimits = {
+        deepl: 5000,
+        iflyrec: 2000,
+        youdao: 600,
+        google: 5000,
+        caiyun: 5000
+    };
+    if (translationLimits.hasOwnProperty(translation) && text.length > translationLimits[translation]) {
+        const shouldContinue = await showWordsExceededDialog(button, translationLimits[translation], text.length);
+        if (!shouldContinue) {
+            return {
+                translateDiv: translateDiv,
+                status: "skip"
+            };
+        }
+    }
+    // 翻译
+    async function translate(translation) {
+        try {
+            if (translation == "deepl") {
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
+                translatedText = await translate_deepl(text);
+            } else if (translation == "iflyrec") {
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
+                translatedText = await translate_iflyrec(text);
+            } else if (translation == "youdao") {
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
+                translatedText = await translate_youdao_mobile(text);
+            } else if (translation == "google") {
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
+                translatedText = await translate_gg(text);
+            } else if (translation == "caiyun") {
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
+                await translate_caiyun_startup();
+                translatedText = await translate_caiyun(text);
+            } else if (translation == "openai") {
+                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……\n\n应用的配置： ${opneaiConfig.configurations[opneaiConfig.choice].note}\n\n使用 ChatGPT 翻译需要很长的时间，请耐心等待`,
+                    is_oldLatex, is_acmsguru);
+                translatedText = await translate_openai(text);
+            }
+            if (/^翻译出错/.test(translatedText)) status = "error";
+        } catch (error) {
+            status = "error";
+            translatedText = error;
+        }
+    }
+    if (is_comment && commentTranslationChoice != "0") await translate(commentTranslationChoice);
+    else await translate(translation);
+
+    // 还原latex公式
+    translatedText = translatedText.replace(/】\s*【/g, '】 【');
+    translatedText = translatedText.replace(/\]\s*\[/g, '] [');
+    translatedText = translatedText.replace(/\}\s*\{/g, '} {');
+    if (is_oldLatex) {
+        translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 还原为<p/>标签
+        translatedText = recoverBlock(translatedText, matches, replacements);
+    } else if (is_acmsguru) {
+        translatedText = recoverBlock(translatedText, matches, replacements);
+    } else if (translation != "openai") {
+        translatedText = recoverBlock(translatedText, matches, replacements);
+    }
+
+    // 注册结果复制按钮
+    if (!is_oldLatex && !is_acmsguru) {
+        translateDiv.registerCopyButtonEvent(translatedText);
+    } else {
+        translateDiv.disableCopyButton();
+    }
+
+    // 转义LaTex中的特殊符号
+    if (!is_oldLatex && !is_acmsguru) {
+        const escapeRules = [
+            { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
+            { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
+            { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
+            { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
+            { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
+            { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
+        ];
+
+        let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
+
+        for (const match of latexMatches) {
+            const matchedText = match[0];
+            var escapedText = matchedText;
+
+            for (const rule of escapeRules) {
+                escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
+            }
+            escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
+            translatedText = translatedText.replace(matchedText, escapedText);
+        }
+    }
+
+    // 使符合mathjx的转换语法
+    const mathjaxRuleMap = [
+        { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
+    ];
+    mathjaxRuleMap.forEach(({ pattern, replacement }) => {
+        translatedText = translatedText.replace(pattern, replacement);
+    });
+
+    // markdown修正
+    const mdRuleMap = [
+        { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
+        { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
+        { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
+        { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+        // { pattern: /：/g, replacement: ":" }, // 中文：
+        { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+    ];
+    mdRuleMap.forEach(({ pattern, replacement }) => {
+        translatedText = translatedText.replace(pattern, replacement);
+    });
+
+    // 保存翻译结果
+    if (is_problem && memoryTranslateHistory) {
+        ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
+        ttTree.addTransResultMap(id, translatedText);
+        updateTransDBData(ttTree.getNodeDate(), ttTree.getTransResultMap()); // 更新翻译结果到transDB
+    }
+
+    translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
+    return {
+        translateDiv: translateDiv,
+        status: status
+    };
+}
+
 //弹窗翻译
 function alertZh() {
     var _alert = window.alert;
@@ -5005,7 +5765,7 @@ function alertZh() {
     }
 };
 
-// 折叠块
+// 折叠块展开
 function ExpandFoldingblocks() {
     $('.spoiler').addClass('spoiler-open');
     $('.spoiler-content').attr('style', '');
@@ -5018,47 +5778,6 @@ function RenderPerfOpt() {
             contain: layout style;
         }
     `);
-    // return new Promise(function (resolve) {
-    //     var currentIndex = 0;
-    //     var delay = 50;
-    //     var maxDelay = 1000;
-
-    //     var elements = $('.spoiler-content');
-    //     var batchSize = 10;
-    //     var initialDelay = 50;
-
-    //     function processBatch(callback) {
-    //         var endIndex = currentIndex + batchSize;
-    //         for (var i = currentIndex; i < endIndex; i++) {
-    //             if (i >= elements.length) {
-    //                 callback();
-    //                 resolve();
-    //                 return;
-    //             }
-    //             var element = elements.eq(i);
-    //             var height = element.outerHeight();
-    //             element.css('contain-intrinsic-size', `auto ${height}px`);
-    //         }
-
-    //         currentIndex += batchSize;
-
-    //         // 延时
-    //         delay *= 2;
-    //         if (delay >= maxDelay) delay = initialDelay;
-
-    //         setTimeout(function () {
-    //             processBatch(callback); // 递归
-    //         }, delay);
-    //     }
-
-    //     processBatch(function () {
-    //         GM_addStyle(`
-    //             .spoiler-content {
-    //                 contain: layout style;
-    //             }
-    //         `);
-    //     });
-    // });
 }
 
 // 分页
@@ -8126,446 +8845,9 @@ async function addProblemPageCodeEditor() {
     });
 }
 
-// 等待LaTeX渲染队列全部完成
-function waitUntilIdleThenDo(callback) {
-    var intervalId = setInterval(function () {
-        var queue = MathJax.Hub.queue;
-        if (queue.pending === 0 && queue.running === 0) {
-            clearInterval(intervalId);
-            callback();
-        }
-    }, 100);
-}
 
-// 字数超限确认
-function showWordsExceededDialog(button, textLength, realTextLength) {
-    return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle);
-        $(button).removeClass("translated");
-        $(button).text("字数超限");
-        $(button).css("cursor", "not-allowed");
-        $(button).prop("disabled", true);
-        let htmlString = `
-      <div class="CFBetter_modal">
-          <h2>字符数超限! </h2>
-          <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
-          <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
-
-          <div style="display:flex; padding:5px 0px; align-items: center;">
-            ${helpCircleHTML}
-            <p>
-            注意，可能您选择了错误的翻译按钮<br>
-            由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
-            </p>
-          </div>
-          <p>您确定要继续翻译吗？</p>
-          <div class="buttons">
-            <button id="continueButton">继续</button><button id="cancelButton">取消</button>
-          </div>
-      </div>
-      `;
-        $('body').before(htmlString);
-        $("#continueButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(true);
-        });
-        $("#cancelButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(false);
-        });
-    });
-}
-
-//跳过折叠块确认
-function skiFoldingBlocks() {
-    return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle);
-        let htmlString = `
-      <div class="CFBetter_modal">
-          <h2>是否跳过折叠块？</h2>
-          <p></p>
-          <div style="display:grid; padding:5px 0px; align-items: center;">
-            <p>
-            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在您需要选择是否跳过这些折叠块，
-            </p>
-            <p>
-            如果其中有您需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
-            </p>
-          </div>
-          <p>要跳过折叠块吗？（建议选择跳过）</p>
-          <div class="buttons">
-            <button id="cancelButton">否</button><button id="skipButton">跳过</button>
-          </div>
-      </div>
-      `;
-        $('body').before(htmlString);
-        $("#skipButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(true);
-        });
-        $("#cancelButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(false);
-        });
-    });
-}
-
-// latex替换
-function replaceBlock(text, matches, replacements) {
-    try {
-        for (let i = 0; i < matches.length; i++) {
-            let match = matches[i];
-            let replacement = '';
-            if (replaceSymbol === "1") {
-                replacement = `【${i + 1}】`;
-            } else if (replaceSymbol === "2") {
-                replacement = `{${i + 1}}`;
-            } else if (replaceSymbol === "3") {
-                replacement = `[${i + 1}]`;
-            }
-            text = text.replace(match, replacement);
-            replacements[replacement] = match;
-        }
-    } catch (e) { }
-    return text;
-}
-
-// latex还原
-function recoverBlock(translatedText, matches, replacements) {
-    for (let i = 0; i < matches.length; i++) {
-        let match = matches[i];
-        let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
-
-        let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
-
-        let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, ...args) {
-            // LaTeX中的不替换
-            const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
-            if (groups.latex_block || groups.latex_inline) return match;
-            // 没有空格则加一个
-            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
-            let leftSpace = "", rightSpace = "";
-            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
-            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
-            return leftSpace + replacement + rightSpace;
-        });
-
-        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, ...args) {
-            // LaTeX中的不替换
-            const groups = args[args.length - 1];
-            if (groups.latex_block || groups.latex_inline) return match;
-            // 没有空格则加一个
-            const offset = args[args.length - 3];
-            let leftSpace = "", rightSpace = "";
-            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
-            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
-            return leftSpace + replacement + rightSpace;
-        });
-    }
-    return translatedText;
-}
-
-// 翻译框/翻译处理器
-class TranslateDiv {
-    constructor(id) {
-        this.div = $('<div>').attr('id', id);
-        this.panelDiv = $('<div>').addClass('translate-problem-statement-panel');
-        this.div.append(this.panelDiv);
-        this.mainDiv = $('<div>').addClass('translate-problem-statement');
-        this.span = $('<span>');
-        this.mainDiv.append(this.span);
-        this.div.append(this.mainDiv);
-        // 信息
-        this.topText = $('<div>').addClass('topText');
-        this.panelDiv.append(this.topText);
-
-        // 右侧
-        this.rightDiv = $('<div>').css('display', 'flex');
-        this.panelDiv.append(this.rightDiv);
-        this.copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
-        this.rightDiv.append(this.copyButton);
-        this.upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
-        this.rightDiv.append(this.upButton);
-        this.closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
-        this.rightDiv.append(this.closeButton);
-    }
-
-    getDiv() {
-        return this.div;
-    }
-
-    setTopText(text) {
-        this.topText.text(text);
-    }
-
-    getTopText() {
-        return this.topText.text();
-    }
-
-    updateTranslateDiv(text, is_oldLatex, is_acmsguru) {
-        if (is_oldLatex || is_acmsguru) {
-            // oldlatex
-            text = $.parseHTML(text);
-            this.mainDiv.empty().append($(text));
-        } else {
-            // 渲染MarkDown
-            var md = window.markdownit();
-            var html = md.render(text);
-            this.mainDiv.html(html);
-            // 渲染Latex
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
-        }
-    }
-
-    // 移除元素
-    remove() {
-        $(this.mainDiv).remove();
-        $(this.panelDiv).remove();
-    }
-
-    registerUpButtonEvent() {
-        this.upButton.on("click", () => {
-            if (this.upButton.html() === putawayIcon) {
-                this.upButton.html(unfoldIcon);
-                $(this.mainDiv).css({
-                    display: "none",
-                    transition: "height 2s"
-                });
-            } else {
-                // 执行收起操作
-                this.upButton.html(putawayIcon);
-                $(this.mainDiv).css({
-                    display: "",
-                    transition: "height 2s"
-                });
-            }
-        });
-    }
-
-    // 收起mainDiv
-    foldMainDiv() {
-        this.upButton.html(unfoldIcon);
-        $(this.mainDiv).css({
-            display: "none",
-            transition: "height 2s"
-        });
-    }
-
-    // 注册关闭按钮
-    registerCloseButtonEvent() {
-        this.closeButton.on("click", () => {
-            $(this.div).remove();
-            $(this.panelDiv).remove();
-        });
-    }
-
-    registerCopyButtonEvent(text) {
-        this.copyButton.on("click", () => {
-            GM_setClipboard(text);
-            this.copyButton.html(copyedIcon);
-            this.copyButton.css({ 'fill': '#8bc34a' });
-            // 更新TopText
-            let topText = this.getTopText();
-            this.topText.text("已复制");
-            // 复制提示
-            setTimeout(() => {
-                this.topText.text(topText);
-                this.copyButton.html(copyIcon);
-                this.copyButton.css({ 'fill': '' });
-            }, 2000);
-        });
-    }
-
-    // 禁用复制按钮
-    disableCopyButton() {
-        this.copyButton.css({ 'fill': '#ccc' });
-        this.copyButton.off("click");
-    }
-}
-
-var translatedText = "";
-async function translateProblemStatement(text, element_node, button, is_comment) {
-    let status = 0;
-    let id = getRandomNumber(8);
-    let matches = [];
-    let replacements = {};
-    let translationService = {
-        "deepl": "DeepL",
-        "iflyrec": "讯飞听见",
-        "youdao": "有道",
-        "google": "Google",
-        "caiyun": "彩云小译",
-        "openai": "ChatGPT"
-    };
-    // 创建翻译结果元素并放在element_node的后面
-    const translateDiv = new TranslateDiv(id);
-    $(element_node).after(translateDiv.getDiv());
-    // 信息
-    if (is_comment && commentTranslationChoice != "0") translateDiv.setTopText(translationService[commentTranslationChoice] + ' 翻译');
-    else translateDiv.setTopText(translationService[translation] + ' 翻译');
-
-    // 注册按钮
-    translateDiv.registerUpButtonEvent();
-    translateDiv.registerCloseButtonEvent();
-
-    // 替换latex公式
-    if (is_oldLatex) {
-        let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-        text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
-    } else if (is_acmsguru) {
-        let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-    } else if (translation != "openai") {
-        // 使用GPT翻译时不必替换latex公式
-        let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-    }
-
-    // 过滤**号
-    if (filterTextWithoutEmphasis && GM_getValue("translation") !== "openai") {
-        text = text.replace(/\*\*/g, "");
-    }
-
-    // 字符数上限
-    const translationLimits = {
-        deepl: 5000,
-        iflyrec: 2000,
-        youdao: 600,
-        google: 5000,
-        caiyun: 5000
-    };
-    if (translationLimits.hasOwnProperty(translation) && text.length > translationLimits[translation]) {
-        const shouldContinue = await showWordsExceededDialog(button, translationLimits[translation], text.length);
-        if (!shouldContinue) {
-            status = 1;
-            return {
-                translateDiv: translateDiv,
-                status: status
-            };
-        }
-    }
-    // 翻译
-    async function translate(translation) {
-        try {
-            if (translation == "deepl") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_deepl(text);
-            } else if (translation == "iflyrec") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_iflyrec(text);
-            } else if (translation == "youdao") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_youdao_mobile(text);
-            } else if (translation == "google") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_gg(text);
-            } else if (translation == "caiyun") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                await translate_caiyun_startup();
-                translatedText = await translate_caiyun(text);
-            } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv("正在使用 ChatGPT 翻译中……" +
-                    "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
-                    "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待", is_oldLatex, is_acmsguru);
-                translatedText = await translate_openai(text);
-            }
-            if (/^翻译出错/.test(translatedText)) status = 2;
-        } catch (error) {
-            status = 2;
-            translatedText = error;
-        }
-    }
-    if (is_comment && commentTranslationChoice != "0") await translate(commentTranslationChoice);
-    else await translate(translation);
-
-    // 还原latex公式
-    translatedText = translatedText.replace(/】\s*【/g, '】 【');
-    translatedText = translatedText.replace(/\]\s*\[/g, '] [');
-    translatedText = translatedText.replace(/\}\s*\{/g, '} {');
-    if (is_oldLatex) {
-        translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 还原为<p/>标签
-        translatedText = recoverBlock(translatedText, matches, replacements);
-    } else if (is_acmsguru) {
-        translatedText = recoverBlock(translatedText, matches, replacements);
-    } else if (translation != "openai") {
-        translatedText = recoverBlock(translatedText, matches, replacements);
-    }
-
-    // 注册结果复制按钮
-    if (!is_oldLatex && !is_acmsguru) {
-        translateDiv.registerCopyButtonEvent(translatedText);
-    } else {
-        translateDiv.disableCopyButton();
-    }
-
-    // 转义LaTex中的特殊符号
-    if (!is_oldLatex && !is_acmsguru) {
-        const escapeRules = [
-            { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
-            { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
-            { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-            { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
-            { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
-            { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
-        ];
-
-        let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
-
-        for (const match of latexMatches) {
-            const matchedText = match[0];
-            var escapedText = matchedText;
-
-            for (const rule of escapeRules) {
-                escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
-            }
-            escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
-            translatedText = translatedText.replace(matchedText, escapedText);
-        }
-    }
-
-    // 使符合mathjx的转换语法
-    const mathjaxRuleMap = [
-        { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
-    ];
-    mathjaxRuleMap.forEach(({ pattern, replacement }) => {
-        translatedText = translatedText.replace(pattern, replacement);
-    });
-
-    // markdown修正
-    const mdRuleMap = [
-        { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
-        { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
-        { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
-        { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
-        // { pattern: /：/g, replacement: ":" }, // 中文：
-        { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
-    ];
-    mdRuleMap.forEach(({ pattern, replacement }) => {
-        translatedText = translatedText.replace(pattern, replacement);
-    });
-
-    translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
-    return {
-        translateDiv: translateDiv,
-        status: status
-    };
-}
-
-// 保存翻译结果及DOM关系
-function saveTranslationResults() {
-
-}
-
+// 翻译服务
+//
 // ChatGPT
 async function translate_openai(raw) {
     var openai_retext = "";
@@ -8865,9 +9147,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 Promise.resolve()
                     .then(async () => {
-                        if (showLoading && is_problem) newElement.html('Codeforces Better! —— 正在连接数据库……');
+                        if (showLoading) newElement.html('Codeforces Better! —— 正在连接数据库……');
                         await delay(100);
-                        if (is_problem && problemPageCodeEditor) await initDB();
+                        await initDB();
                     })
                     .then(() => {
                         if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
@@ -8882,6 +9164,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
                     })
                     .then(() => {
+                        if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮相关函数……');
+                        return delay(100).then(() => initTranslateButtonFunc());
+                    })
+                    .then(() => {
                         if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
                         return delay(100).then(() => addConversionButton());
                     })
@@ -8893,6 +9179,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
                         await delay(100);
                         if (renderPerfOpt) await RenderPerfOpt();
+                    })
+                    .then(() => {
+                        if (showLoading && is_problem && memoryTranslateHistory) newElement.html('Codeforces Better! —— 正在恢复上一次的翻译记录……');
+                        return delay(100).then(() => { if (is_problem && memoryTranslateHistory) initTransResultsRecover() });
                     })
                     .then(async () => {
                         if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
