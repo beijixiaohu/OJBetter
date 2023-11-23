@@ -551,22 +551,27 @@ span.mdViewContent {
     white-space: pre-wrap;
 }
 /*翻译区域提示*/
-.overlay {
-    pointer-events: none;
+.overlay::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: repeating-linear-gradient(135deg, #97e7cacc, #97e7cacc 30px, #e9fbf1cc 0px, #e9fbf1cc 55px);
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    z-index: 100;
+}
+
+.overlay::after {
+    content: '目标区域';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: #00695C;
     font-size: 16px;
     font-weight: bold;
-    text-shadow: 0px 0px 2px #edfcf4;
+    z-index: 100;
 }
 /*翻译div*/
 .translateDiv.input-output-copier {
@@ -677,6 +682,7 @@ span.mdViewContent {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
+    z-index: 100;
 }
 button.html2mdButton.copied {
     background-color: #f0f9eb;
@@ -4376,46 +4382,54 @@ turndownService.addRule('bordertable', {
     }
 });
 
-// 题目markdown转换/翻译面板
-function addButtonPanel(parent, suffix, type, is_simple = false) {
-    let translateButtonText;
-    if (commentTranslationMode == "1") translateButtonText = "分段翻译";
-    else if (commentTranslationMode == "2") translateButtonText = "翻译选中";
-    else translateButtonText = "翻译";
-
-    let htmlString = `<div class='html2md-panel input-output-copier'>
-    <button class='html2mdButton' id='html2md-view${suffix}'>MarkDown视图</button>
-    <button class='html2mdButton' id='html2md-cb${suffix}'>Copy</button>
-    <button class='html2mdButton translateButton' id='translateButton${suffix}'>${translateButtonText}</button>
-  </div>`;
-    if (type === "this_level") {
-        $(parent).before(htmlString);
-        var block = $("#translateButton" + suffix).parent().next();
-    } else if (type === "child_level") {
-        $(parent).prepend(htmlString);
-        var block = $("#translateButton" + suffix).parent().parent();
-    }
-    if (is_simple) {
-        $('.html2md-panel').find('.html2mdButton#html2md-view' + suffix + ', .html2mdButton#html2md-cb' + suffix).remove();
-    }
-
-    if (block.css("display") === "none" || block.hasClass('ojbetter-alert')) $("#translateButton" + suffix).parent().remove();
-}
-
 // 加载按钮相关函数
 async function initTranslateButtonFunc() {
+    // 鼠标悬浮时为目标元素区域添加一个覆盖层
+    $.fn.addHoverOverlay = function (target) {
+        let position = $(target).css('position');
+        let display = $(target).css('display');
+
+        this.hover(() => {
+            $(target)
+                .addClass('overlay')
+                .css('position', 'relative');
+            if (display == "inline" || display == "contents") {
+                $(target).css('display', 'block');
+            }
+        }, () => {
+            $(target)
+                .removeClass('overlay')
+                .css('position', position);
+            if (display == "inline" || display == "contents") {
+                $(target).css('display', display);
+            }
+        })
+    }
+
+    /**
+     * 获取MarkDown
+     * @returns {string} MarkDown
+     */
+    $.fn.getMarkdown = function () {
+        if (this.attr("markdown")) {
+            return this.attr("markdown");
+        } else {
+            let markdown = turndownService.turndown(this.html());
+            this.attr("markdown", markdown);
+            return markdown;
+        }
+    }
+
     // 设置翻译按钮状态
     $.fn.setTransButtonState = function (state, text = null) {
         if (state === 'normal') {
             this
-                .trigger('mouseout')
                 .text(text ? text : '翻译')
                 .prop('disabled', false)
                 .css('cursor', 'pointer')
                 .removeClass('translating translated error');
         } else if (state === 'translating') {
             this
-                .trigger('mouseout')
                 .text(text ? text : '翻译中')
                 .prop('disabled', true)
                 .css('cursor', 'not-allowed')
@@ -4423,7 +4437,6 @@ async function initTranslateButtonFunc() {
                 .addClass('translating');
         } else if (state === 'translated') {
             this
-                .trigger('mouseout')
                 .text(text ? text : '已翻译')
                 .prop('disabled', false)
                 .css('cursor', 'pointer')
@@ -4431,12 +4444,24 @@ async function initTranslateButtonFunc() {
                 .addClass('translated');
         } else if (state === 'error') {
             this
-                .trigger('mouseout')
                 .text(text ? text : '翻译出错')
                 .prop('disabled', false)
                 .css('cursor', 'pointer')
                 .removeClass('translating translated')
                 .addClass('error');
+        }
+    }
+
+    // 获取翻译按钮状态
+    $.fn.getTransButtonState = function () {
+        if (this.hasClass('translating')) {
+            return 'translating';
+        } else if (this.hasClass('translated')) {
+            return 'translated';
+        } else if (this.hasClass('error')) {
+            return 'error';
+        } else {
+            return 'normal';
         }
     }
 
@@ -4468,194 +4493,158 @@ async function initTranslateButtonFunc() {
     }
 }
 
-function addButtonWithHTML2MD(parent, suffix, type) {
-    if (is_oldLatex || is_acmsguru) {
-        $("#html2md-view" + suffix).prop("disabled", true);
+// 题目markdown转换/翻译面板
+function addButtonPanel(element, suffix, type, is_simple = false) {
+    let text;
+    if (commentTranslationMode == "1") text = "分段翻译";
+    else if (commentTranslationMode == "2") text = "翻译选中";
+    else text = "翻译";
+
+    let panel = $(`<div class='html2md-panel input-output-copier'></div>`);
+    let viewButton = $(`<button class='html2mdButton' id='html2md-view${suffix}'>MarkDown视图</button>`);
+    let copyButton = $(`<button class='html2mdButton' id='html2md-cb${suffix}'>Copy</button>`);
+    let translateButton = $(`<button class='html2mdButton translateButton' id='translateButton${suffix}'>${text}</button>`);
+    if (!is_simple) panel.append(viewButton);
+    if (!is_simple) panel.append(copyButton);
+    if ($(element).css("display") !== "none" && !$(element).hasClass('ojbetter-alert')) panel.append(translateButton);
+
+    if (type === "this_level") {
+        $(element).before(panel);
+    } else if (type === "child_level") {
+        $(element).prepend(panel);
     }
-    $(document).on("click", "#html2md-view" + suffix, debounce(function () {
-        var target, removedChildren = $();
-        if (type === "this_level") {
-            target = $("#html2md-view" + suffix).parent().next().get(0);
-        } else if (type === "child_level") {
-            target = $("#html2md-view" + suffix).parent().parent().get(0);
-            removedChildren = $("#html2md-view" + suffix).parent().parent().children(':first').detach();
-        }
-        if (target.viewmd) {
-            target.viewmd = false;
-            $(this).text("MarkDown视图").removeClass("mdViewed");
-            $(target).html(target.original_html);
-        } else {
-            target.viewmd = true;
-            if (!target.original_html) {
-                target.original_html = $(target).html();
-            }
-            if (!target.markdown) {
-                target.markdown = turndownService.turndown($(target).html());
-            }
-            $(this).text("原始内容");
-            $(this).addClass("mdViewed");
-            $(target).html(`<span class="mdViewContent" oninput="$(this).parent().get(0).markdown=this.value;" style="width:auto; height:auto;">${target.markdown}</span>`);
-        }
-        // 恢复删除的元素
-        if (removedChildren) $(target).prepend(removedChildren);
-    }));
 
-    if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
-        var previousCSS;
-        $(document).on("mouseover", "#html2md-view" + suffix, function () {
-            var target;
-
-            if (type === "this_level") {
-                target = $("#html2md-view" + suffix).parent().next().get(0);
-            } else if (type === "child_level") {
-                target = $("#html2md-view" + suffix).parent().parent().get(0);
-            }
-
-            $(target).append('<div class="overlay">目标转换区域</div>');
-
-            previousCSS = {
-                "position": $(target).css("position"),
-                "display": $(target).css("display")
-            };
-            $(target).css({
-                "position": "relative",
-                "display": "block"
-            });
-
-            $("#html2md-view" + suffix).parent().css({
-                "position": "relative",
-                "z-index": "400"
-            });
-        });
-
-        $(document).on("mouseout", "#html2md-view" + suffix, function () {
-            var target;
-
-            if (type === "this_level") {
-                target = $("#html2md-view" + suffix).parent().next().get(0);
-            } else if (type === "child_level") {
-                target = $("#html2md-view" + suffix).parent().parent().get(0);
-            }
-
-            $(target).find('.overlay').remove();
-            if (previousCSS) {
-                $(target).css(previousCSS);
-            }
-            $("#html2md-view" + suffix).parent().css({
-                "position": "static"
-            });
-        });
+    return {
+        panel: panel,
+        viewButton: viewButton,
+        copyButton: copyButton,
+        translateButton: translateButton
     }
 }
 
-function addButtonWithCopy(parent, suffix, type) {
+/**
+ * 添加MD视图按钮
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {string} suffix id后缀
+ * @param {string} type 类型
+ * @returns {void}
+ */
+function addButtonWithHTML2MD(button, element, suffix, type) {
     if (is_oldLatex || is_acmsguru) {
-        $("#html2md-cb" + suffix).prop("disabled", true);
+        button.prop("disabled", true);
     }
-    $(document).on("click", "#html2md-cb" + suffix, debounce(function () {
-        var target, removedChildren;
-        if (type === "this_level") {
-            target = $("#translateButton" + suffix).parent().next().eq(0).clone();
-        } else if (type === "child_level") {
-            target = $("#translateButton" + suffix).parent().parent().eq(0).clone();
-            $(target).children(':first').remove();
+    button.click(debounce(function () {
+        var target = $(element).get(0);
+
+        /**
+         * 检查是否是MarkDown视图 
+         * @returns {boolean} 是否是MarkDown视图
+         */
+        function checkViewmd() {
+            if ($(element).attr("viewmd") === "true") {
+                return true;
+            } else {
+                return false;
+            }
         }
-        if ($(target).find('.mdViewContent').length <= 0) {
-            text = turndownService.turndown($(target).html());
+
+        /**
+         * 设置是否是MarkDown视图
+         * @param {boolean} value 是否是MarkDown视图
+         * @returns {void}
+         */
+        function setViewmd(value) {
+            $(element).attr("viewmd", value);
+            if (value) {
+                button.addClass("mdViewed").text("原始内容");
+            } else {
+                button.removeClass("mdViewed").text("MarkDown视图");
+            }
+        }
+
+        if (checkViewmd()) {
+            setViewmd(false);
+            $(element).next(".mdViewContent").remove();
+            $(element).show();
         } else {
-            text = $(target).find('.mdViewContent').text();
+            setViewmd(true);
+            var markdown = $(element).getMarkdown();
+            var mdViewContent = $(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            $(element).after(mdViewContent);
+            $(element).hide();
         }
-        GM_setClipboard(text);
-        $(this).addClass("copied");
-        $(this).text("Copied");
+    }));
+
+    if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
+        button.addHoverOverlay($(element));
+    }
+}
+
+/**
+ * 添加复制按钮
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {string} suffix 后缀
+ * @param {string} type 类型
+ */
+function addButtonWithCopy(button, element, suffix, type) {
+    if (is_oldLatex || is_acmsguru) {
+        button.prop("disabled", true);
+    }
+
+    button.click(debounce(function () {
+        var target = $(element).get(0);
+
+        var markdown = $(element).getMarkdown();
+
+        GM_setClipboard(markdown);
+
+        $(this).addClass("copied").text("Copied");
+
         // 更新复制按钮文本
         setTimeout(() => {
-            $(this).removeClass("copied");
-            $(this).text("Copy");
+            $(this).removeClass("copied").text("Copy");
         }, 2000);
-        $(target).remove();
     }));
 
     if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
-        var previousCSS;
-        $(document).on("mouseover", "#html2md-cb" + suffix, function () {
-            var target;
-
-            if (type === "this_level") {
-                target = $("#html2md-cb" + suffix).parent().next().get(0);
-            } else if (type === "child_level") {
-                target = $("#html2md-cb" + suffix).parent().parent().get(0);
-            }
-
-            $(target).append('<div class="overlay">目标复制区域</div>');
-            previousCSS = {
-                "position": $(target).css("position"),
-                "display": $(target).css("display")
-            };
-            $(target).css({
-                "position": "relative",
-                "display": "block"
-            });
-            $("#html2md-cb" + suffix).parent().css({
-                "position": "relative",
-                "z-index": "400"
-            })
-        });
-
-        $(document).on("mouseout", "#html2md-cb" + suffix, function () {
-            var target;
-
-            if (type === "this_level") {
-                target = $("#html2md-cb" + suffix).parent().next().get(0);
-            } else if (type === "child_level") {
-                target = $("#html2md-cb" + suffix).parent().parent().get(0);
-            }
-
-            $(target).find('.overlay').remove();
-            if (previousCSS) {
-                $(target).css(previousCSS);
-            }
-            $("#html2md-cb" + suffix).parent().css({
-                "position": "static"
-            })
-        });
+        button.addHoverOverlay($(element));
     }
 }
 
-async function addButtonWithTranslation(parent, suffix, type, is_comment = false) {
+/**
+ * 添加翻译按钮
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {string} suffix 后缀
+ * @param {string} type 类型
+ * @param {boolean} is_comment 是否是评论
+ */
+async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
     // 标记目标文本是短字符文本
     {
-        const shortTranslationText = {
+        const shortTexts = {
             deepl: 1000,
             iflyrec: 1000,
             youdao: 600,
             google: 1000,
             caiyun: 1000
         };
-        let target;
-
-        if (type === "this_level") {
-            target = $("#translateButton" + suffix).parent().next().get(0);
-        } else if (type === "child_level") {
-            target = $("#translateButton" + suffix).parent().parent().get(0);
-        }
-        let text = $(target).text();
-        if (shortTranslationText.hasOwnProperty(translation) && text.length < shortTranslationText[translation]) {
+        let length = $(element).getMarkdown().length;
+        if (shortTexts.hasOwnProperty(translation) && length < shortTexts[translation]) {
             $("#translateButton" + suffix).setIsShortText();
-            $("#translateButton" + suffix).setTransButtonState('normal', text.length);
         }
     }
 
     $(document).on('click', '#translateButton' + suffix, debounce(async function () {
         $(this).setTransButtonState('translating');
-        var target, element_node, block, errerNum = 0, skipNum = 0;
-        if (type === "this_level") block = $("#translateButton" + suffix).parent().next();
-        else if (type === "child_level") block = $("#translateButton" + suffix).parent().parent();
+        var target, element_node, errerNum = 0, skipNum = 0;
 
         // 重新翻译
         let resultStack = $(this).getResultFromTransButton();
         if (resultStack) {
-            let pElements = block.find("p.block_selected:not(li p), li.block_selected");
+            let pElements = $(element).find("p.block_selected:not(li p), li.block_selected");
             for (let item of resultStack) {
                 if (retransAction == "0") {
                     // 选段翻译不直接移除旧结果
@@ -4666,23 +4655,17 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                         }
                     } else {
                         item.translateDiv.close();
-                        $(block).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
+                        $($(element)).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
                     item.translateDiv.foldMainDiv();
                 }
             }
-
-            // 移除旧的事件
-            $(document).off("mouseover", "#translateButton" + suffix);
-            $(document).off("mouseout", "#translateButton" + suffix);
-            // 重新绑定悬停事件
-            if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
         }
 
         if (commentTranslationMode == "1") {
             // 分段翻译
-            var pElements = block.find("p:not(li p), li, .CFBetter_acmsguru");
+            var pElements = $(element).find("p:not(li p), li, .CFBetter_acmsguru");
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
                 element_node = pElements[i];
@@ -4700,7 +4683,7 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
             }
         } else if (commentTranslationMode == "2") {
             // 选段翻译
-            var pElements = block.find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
+            var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
             for (let i = 0; i < pElements.length; i++) {
                 target = $(pElements[i]).eq(0).clone();
                 element_node = pElements[i];
@@ -4716,15 +4699,15 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
                 $(target).remove();
                 await new Promise(resolve => setTimeout(resolve, transWaitTime));
             }
-            block.find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
+            $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
         } else {
             // 普通翻译
-            target = block.eq(0).clone();
+            target = $(element).eq(0).clone();
             if (type === "child_level") $(target).children(':first').remove();
-            element_node = $(block).get(0);
+            element_node = $($(element)).get(0);
             if (type === "child_level") {
-                $(parent).append("<div></div>");
-                element_node = $(parent).find("div:last-child").get(0);
+                $(element).append("<div></div>");
+                element_node = $(element).find("div:last-child").get(0);
             }
             //是否跳过折叠块
             if ($(target).find('.spoiler').length > 0) {
@@ -4746,76 +4729,27 @@ async function addButtonWithTranslation(parent, suffix, type, is_comment = false
         if (!errerNum && !skipNum) {
             $(this).setTransButtonState('translated');
         }
-
-        // 重新翻译
-        let currentText, is_error;
-        $(document).on("mouseover", "#translateButton" + suffix, function () {
-            currentText = $(this).text();
-            $(this).text("重新翻译");
-            if ($(this).hasClass("error")) {
-                is_error = true;
-                $(this).removeClass("error");
-            }
-        });
-
-        $(document).on("mouseout", "#translateButton" + suffix, function () {
-            $(this).text(currentText);
-            if (is_error) $(this).addClass("error");
-        });
     }));
 
+    // 重新翻译
+    let prevState;
+    button.hover(function () {
+        let state = $(this).getTransButtonState();
+        if (state !== "normal") {
+            prevState = state;
+            $(this).setTransButtonState('normal', '重新翻译');
+        }
+    }, function () {
+        if (prevState) {
+            $(this).setTransButtonState(prevState);
+            prevState = null;
+        }
+    });
+
     // 目标区域指示
-    function bindHoverEvents(suffix, type) {
-        var previousCSS;
-
-        $(document).on("mouseover", "#translateButton" + suffix, function () {
-            var target;
-
-            if (type === "this_level") {
-                target = $("#translateButton" + suffix).parent().next().get(0);
-            } else if (type === "child_level") {
-                target = $("#translateButton" + suffix).parent().parent().get(0);
-            }
-
-            $(target).append('<div class="overlay">目标翻译区域</div>');
-
-            previousCSS = {
-                "position": $(target).css("position"),
-                "display": $(target).css("display")
-            };
-            $(target).css({
-                "position": "relative",
-                "display": ($(target).hasClass('question-response')) ? "block" : $(target).css("display")
-            });
-
-            $("#translateButton" + suffix).parent().css({
-                "position": "relative",
-                "z-index": "400"
-            });
-        });
-
-        $(document).on("mouseout", "#translateButton" + suffix, function () {
-            var target;
-
-            if (type === "this_level") {
-                target = $("#translateButton" + suffix).parent().next().get(0);
-            } else if (type === "child_level") {
-                target = $("#translateButton" + suffix).parent().parent().get(0);
-            }
-
-            $(target).find('.overlay').remove();
-
-            if (previousCSS) {
-                $(target).css(previousCSS);
-            }
-
-            $("#translateButton" + suffix).parent().css({
-                "position": "static"
-            });
-        });
+    if (hoverTargetAreaDisplay) {
+        button.addHoverOverlay($(element));
     }
-
-    if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
 
     // 右键菜单
     $(document).on('contextmenu', '#translateButton' + suffix, function (e) {
@@ -4994,10 +4928,10 @@ function addConversionButton() {
             var className = $(this).attr('class');
             if (!exContentsPageClasses.includes(className)) {
                 var id = "_problem_" + getRandomNumber(8);
-                addButtonPanel(this, id, "this_level");
-                addButtonWithHTML2MD(this, id, "this_level");
-                addButtonWithCopy(this, id, "this_level");
-                addButtonWithTranslation(this, id, "this_level");
+                let panel = addButtonPanel(this, id, "this_level");
+                addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
+                addButtonWithCopy(panel.copyButton, this, id, "this_level");
+                addButtonWithTranslation(panel.translateButton, this, id, "this_level");
             }
         });
     }
@@ -5009,10 +4943,10 @@ function addConversionButton() {
         // 题目页不添加
         if (!is_problem || is_acmsguru) {
             let id = "_comment_" + getRandomNumber(8);
-            addButtonPanel(this, id, "this_level");
-            addButtonWithHTML2MD(this, id, "this_level");
-            addButtonWithCopy(this, id, "this_level");
-            addButtonWithTranslation(this, id, "this_level", is_comment);
+            let panel = addButtonPanel(this, id, "this_level");
+            addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
+            addButtonWithCopy(panel.copyButton, this, id, "this_level");
+            addButtonWithTranslation(panel.translateButton, this, id, "this_level", is_comment);
         }
     });
 
@@ -5020,45 +4954,46 @@ function addConversionButton() {
     $('.spoiler-content').each(function () {
         if ($(this).find('.html2md-panel').length === 0) {
             let id = "_spoiler_" + getRandomNumber(8);
-            addButtonPanel(this, id, "child_level");
-            addButtonWithHTML2MD(this, id, "child_level");
-            addButtonWithCopy(this, id, "child_level");
-            addButtonWithTranslation(this, id, "child_level");
+            let panel = addButtonPanel(this, id, "child_level");
+            addButtonWithHTML2MD(panel.viewButton, this, id, "child_level");
+            addButtonWithCopy(panel.copyButton, this, id, "child_level");
+            addButtonWithTranslation(panel.translateButton, this, id, "child_level");
         }
     });
 
     // 添加按钮到titled部分
     (function () {
         var elements = [".Virtual.participation", ".Attention", ".Practice"];//只为部分titled添加
-        $.each(elements, function (index, value) {
-            $(value).each(function () {
+        $.each(elements, (i, e) => {
+            $(e).each(function () {
                 let id = "_titled_" + getRandomNumber(8);
-                var $nextDiv = $(this).next().children().get(0);
-                addButtonPanel($nextDiv, id, "child_level", true);
-                addButtonWithTranslation($nextDiv, id, "child_level");
+                let nextDiv = $(this).next().children().get(0);
+                if (!nextDiv) return;
+                let panel = addButtonPanel(nextDiv, id, "child_level", true);
+                addButtonWithTranslation(panel.translateButton, nextDiv, id, "child_level");
             });
         });
     })();
     if (is_mSite) {
         $("div[class='_IndexPage_notice']").each(function () {
             let id = "_titled_" + getRandomNumber(8);
-            addButtonPanel(this, id, "this_level", true);
-            addButtonWithTranslation(this, id, "this_level");
+            let panel = addButtonPanel(this, id, "this_level", true);
+            addButtonWithTranslation(panel.translateButton, this, id, "this_level");
         });
     }
 
     // 添加按钮到比赛QA部分
     $(".question-response").each(function () {
         let id = "_question_" + getRandomNumber(8);
-        addButtonPanel(this, id, "this_level", true);
-        addButtonWithTranslation(this, id, "this_level");
+        let panel = addButtonPanel(this, id, "this_level", true);
+        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
     });
     if (is_mSite) {
         $("div._ProblemsPage_announcements table tbody tr:gt(0)").each(function () {
             var $nextDiv = $(this).find("td:first");
             let id = "_question_" + getRandomNumber(8);
-            addButtonPanel($nextDiv, id, "this_level", true);
-            addButtonWithTranslation($nextDiv, id, "this_level");
+            let panel = addButtonPanel($nextDiv, id, "this_level", true);
+            addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level");
         });
     }
 
@@ -5066,37 +5001,37 @@ function addConversionButton() {
     $(".confirm-proto").each(function () {
         let id = "_titled_" + getRandomNumber(8);
         var $nextDiv = $(this).children().get(0);
-        addButtonPanel($nextDiv, id, "this_level", true);
-        addButtonWithTranslation($nextDiv, id, "this_level");
+        let panel = addButtonPanel($nextDiv, id, "this_level", true);
+        addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level");
     });
 
     // 添加按钮到_CatalogHistorySidebarFrame_item部分
     $("._CatalogHistorySidebarFrame_item").each(function () {
         let id = "_history_sidebar_" + getRandomNumber(8);
-        addButtonPanel(this, id, "this_level", true);
-        addButtonWithTranslation(this, id, "this_level");
+        let panel = addButtonPanel(this, id, "this_level", true);
+        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
     });
 
     $(".problem-lock-link").on("click", function () {
         $(".popup .content div").each(function () {
             let id = "_popup_" + getRandomNumber(8);
-            addButtonPanel(this, id, "this_level", true);
-            addButtonWithTranslation(this, id, "this_level");
+            let panel = addButtonPanel(this, id, "this_level", true);
+            addButtonWithTranslation(panel.translateButton, this, id, "this_level");
         });
     });
 
     // 添加按钮到弹窗alert部分
     $(".alert:not(.CFBetter_alert)").each(function () {
         let id = "_alert_" + getRandomNumber(8);
-        addButtonPanel(this, id, "this_level", true);
-        addButtonWithTranslation(this, id, "this_level");
+        let panel = addButtonPanel(this, id, "this_level", true);
+        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
     });
 
     // 添加按钮到talk-text部分
     $(".talk-text").each(function () {
         let id = "_talk-text_" + getRandomNumber(8);
-        addButtonPanel(this, id, "child_level", true);
-        addButtonWithTranslation(this, id, "child_level");
+        let panel = addButtonPanel(this, id, "child_level", true);
+        addButtonWithTranslation(panel.translateButton, this, id, "child_level");
     });
 };
 
