@@ -61,9 +61,10 @@ var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
-var ttTree, memoryTranslateHistory;
+var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
-var commentTranslationMode, retransAction, transWaitTime, replaceSymbol, filterTextWithoutEmphasis, commentPaging, showJumpToLuogu, loaded;
+var commentTranslationMode, retransAction, transWaitTime, taskQueue, replaceSymbol, filterTextWithoutEmphasis;
+var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
 var compilerSelection, editorFontSize, onlineCompilerChoice;
@@ -100,8 +101,11 @@ function init() {
     commentTranslationMode = getGMValue("commentTranslationMode", "0");
     commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
     memoryTranslateHistory = getGMValue("memoryTranslateHistory", true);
+    autoTranslation = getGMValue("autoTranslation", false);
+    shortTextLength = getGMValue("shortTextLength", "2000");
     retransAction = getGMValue("retransAction", "0");
     transWaitTime = getGMValue("transWaitTime", "200");
+    taskQueue = new TaskQueue();
     replaceSymbol = getGMValue("replaceSymbol", "2");
     filterTextWithoutEmphasis = getGMValue("filterTextWithoutEmphasis", false);
     showClistRating_contest = getGMValue("showClistRating_contest", false);
@@ -3495,6 +3499,32 @@ const translation_settings_HTML = `
             <option value="openai">ChatGPT翻译</option>
         </select>
     </div>
+    <div class='CFBetter_setting_list'>
+        <label for="autoTranslation">自动翻译短文本</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p>
+            <p>当其进入浏览器窗口的 可视区域 时自动翻译</p>
+            </div>
+        </div>
+        <input type="checkbox" id="autoTranslation" name="autoTranslation">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for='shortTextLength'>
+            <div style="display: flex;align-items: center;">
+                <span>短文本最大字符数</span>
+            </div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+                <p>指定判断为短文本的最大字符上限，如果超过最大字符数，则为非短文本</p>
+            </div>
+        </div>
+        <input type='number' id='shortTextLength' class='no_default' placeholder='请输入' require = true>
+        <span>字符</span>
+    </div>
     <h4>高级</h4>
     <div class='CFBetter_setting_list'>
         <label for="comment_translation_mode" style="display: flex;">工作模式</label>
@@ -3551,7 +3581,8 @@ const translation_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-                <p>设置在 分段/选段 模式中翻译两段间的等待间隔，建议 200 + 毫秒</p>
+                <p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p>
+                <p>建议 200 + 毫秒</p>
             </div>
         </div>
         <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
@@ -4092,10 +4123,12 @@ async function settingPanel() {
             if (tempConfig && $("#chatgpt_config_config_bar_ul").length) {
                 $("#chatgpt_config_config_bar_ul").find(`input[name='config_item'][value='${tempConfig.choice}']`).prop("checked", true);
             }
-        }
+        };
+        $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
+        $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
+        $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
-        $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
         $("#filterTextWithoutEmphasis").prop("checked", GM_getValue("filterTextWithoutEmphasis") === true);
@@ -4145,6 +4178,8 @@ async function settingPanel() {
                 loaded: $("#loaded").prop("checked"),
                 translation: $("input[name='translation']:checked").val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
+                autoTranslation: $("#autoTranslation").prop("checked"),
+                shortTextLength: $('#shortTextLength').val(),
                 commentTranslationMode: $('#comment_translation_mode').val(),
                 memoryTranslateHistory: $('#memoryTranslateHistory').prop("checked"),
                 transWaitTime: $('#transWaitTime').val(),
@@ -4382,6 +4417,58 @@ turndownService.addRule('bordertable', {
     }
 });
 
+/**
+ * 任务队列
+ */
+class TaskQueue {
+    constructor() {
+        this.taskQueues = {};
+        this.isProcessing = {}; // 处理状态
+        this.delays = {}; // 等待时间（毫秒）
+    }
+
+    getDelay(type) {
+        if (type === 'openai') {
+            return 0;
+        } else {
+            return transWaitTime;
+        }
+    }
+
+    addTask(type, fn) {
+        if (!this.taskQueues[type]) {
+            this.taskQueues[type] = [];
+        }
+
+        this.taskQueues[type].push(fn);
+
+        if (!this.isProcessing[type]) {
+            this.processQueue(type);
+        }
+    }
+
+    async processQueue(type) {
+        this.isProcessing[type] = true;
+
+        while (this.taskQueues[type].length > 0) {
+            const task = this.taskQueues[type].shift();
+            await task();
+
+            if (this.taskQueues[type].length > 0) {
+                await this.wait(this.getDelay(type));
+            }
+        }
+
+        this.isProcessing[type] = false;
+    }
+
+    wait(delay) {
+        return new Promise(resolve => {
+            setTimeout(resolve, delay);
+        });
+    }
+}
+
 // 加载按钮相关函数
 async function initTranslateButtonFunc() {
     // 鼠标悬浮时为目标元素区域添加一个覆盖层
@@ -4481,6 +4568,11 @@ async function initTranslateButtonFunc() {
     // 标记是否为短文本
     $.fn.setIsShortText = function () {
         this.data('isShortText', true);
+    }
+
+    // 获取是否为短文本
+    $.fn.getIsShortText = function () {
+        return this.data('isShortText');
     }
 
     // 判断是否已经翻译
@@ -4624,23 +4716,14 @@ function addButtonWithCopy(button, element, suffix, type) {
 async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
     // 标记目标文本是短字符文本
     {
-        const shortTexts = {
-            deepl: 1000,
-            iflyrec: 1000,
-            youdao: 600,
-            google: 1000,
-            caiyun: 1000
-        };
         let length = $(element).getMarkdown().length;
-        if (shortTexts.hasOwnProperty(translation) && length < shortTexts[translation]) {
-            $("#translateButton" + suffix).setIsShortText();
+        if (length < shortTextLength) {
+            button.setIsShortText();
         }
+        // button.after(`<span>${length}</span>`); // 显示字符数
     }
 
-    $(document).on('click', '#translateButton' + suffix, debounce(async function () {
-        $(this).setTransButtonState('translating');
-        var target, element_node, errerNum = 0, skipNum = 0;
-
+    button.click(debounce(async function () {
         // 重新翻译
         let resultStack = $(this).getResultFromTransButton();
         if (resultStack) {
@@ -4663,85 +4746,22 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
             }
         }
 
-        if (commentTranslationMode == "1") {
-            // 分段翻译
-            var pElements = $(element).find("p:not(li p), li, .CFBetter_acmsguru");
-            for (let i = 0; i < pElements.length; i++) {
-                target = $(pElements[i]).eq(0).clone();
-                element_node = pElements[i];
-                if (type === "child_level") {
-                    $(pElements[i]).append("<div></div>");
-                    element_node = $(pElements[i]).find("div:last-child").get(0);
-                }
-                $(this).pushResultToTransButton(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
-                let resultStack = $(this).getResultFromTransButton();
-                let topStack = resultStack[resultStack.length - 1];
-                if (topStack.status == "error") errerNum += 1;
-                else if (topStack.status == "skip") skipNum += 1;
-                $(target).remove();
-                await new Promise(resolve => setTimeout(resolve, transWaitTime));
-            }
-        } else if (commentTranslationMode == "2") {
-            // 选段翻译
-            var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
-            for (let i = 0; i < pElements.length; i++) {
-                target = $(pElements[i]).eq(0).clone();
-                element_node = pElements[i];
-                if (type === "child_level") {
-                    $(pElements[i]).append("<div></div>");
-                    element_node = $(pElements[i]).find("div:last-child").get(0);
-                }
-                $(this).pushResultToTransButton(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
-                let resultStack = $(this).getResultFromTransButton();
-                let topStack = resultStack[resultStack.length - 1];
-                if (topStack.status == "error") errerNum += 1;
-                else if (topStack.status == "skip") skipNum += 1;
-                $(target).remove();
-                await new Promise(resolve => setTimeout(resolve, transWaitTime));
-            }
-            $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
-        } else {
-            // 普通翻译
-            target = $(element).eq(0).clone();
-            if (type === "child_level") $(target).children(':first').remove();
-            element_node = $($(element)).get(0);
-            if (type === "child_level") {
-                $(element).append("<div></div>");
-                element_node = $(element).find("div:last-child").get(0);
-            }
-            //是否跳过折叠块
-            if ($(target).find('.spoiler').length > 0) {
-                const shouldSkip = await skiFoldingBlocks();
-                if (shouldSkip) {
-                    $(target).find('.spoiler').remove();
-                } else {
-                    $(target).find('.html2md-panel').remove();
-                }
-            }
-            $(this).pushResultToTransButton(await blockProcessing(target, element_node, $("#translateButton" + suffix), is_comment));
-            let resultStack = $(this).getResultFromTransButton();
-            let topStack = resultStack[resultStack.length - 1];
-            if (topStack.status == "error") errerNum += 1;
-            else if (topStack.status == "skip") skipNum += 1;
-            $(target).remove();
-        }
-
-        if (!errerNum && !skipNum) {
-            $(this).setTransButtonState('translated');
-        }
+        // 翻译
+        button.setTransButtonState('translating', '等待翻译中');
+        taskQueue.addTask(translation, () => transTask(button, element, type, translation, is_comment));
     }));
 
-    // 重新翻译
+    // 重新翻译提示
     let prevState;
-    button.hover(function () {
-        let state = $(this).getTransButtonState();
-        if (state !== "normal") {
+    button.hover(() => {
+        let state = button.getTransButtonState();
+        if (state !== "normal" && state !== "translating") {
             prevState = state;
-            $(this).setTransButtonState('normal', '重新翻译');
+            button.setTransButtonState('normal', '重新翻译');
         }
-    }, function () {
-        if (prevState) {
-            $(this).setTransButtonState(prevState);
+    }, () => {
+        if (prevState && button.getTransButtonState() === "normal") {
+            button.setTransButtonState(prevState);
             prevState = null;
         }
     });
@@ -4818,23 +4838,96 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     });
 }
 
+/**
+ * 创建翻译任务
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {HTMLElement} element 目标元素
+ * @param {string} type 类型
+ * @param {boolean} is_comment 是否是评论
+ */
+async function transTask(button, element, type, translation, is_comment) {
+    var target, element, errerNum = 0, skipNum = 0;
+    if (commentTranslationMode == "1") {
+        // 分段翻译
+        var pElements = $(element).find("p:not(li p), li, .CFBetter_acmsguru");
+        for (let i = 0; i < pElements.length; i++) {
+            target = $(pElements[i]).eq(0).clone();
+            element_node = pElements[i];
+            await process(button, target, element_node, type, translation, is_comment);
+        }
+    } else if (commentTranslationMode == "2") {
+        // 选段翻译
+        var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
+        for (let i = 0; i < pElements.length; i++) {
+            target = $(pElements[i]).eq(0).clone();
+            element_node = pElements[i];
+            await process(button, target, element_node, type, translation, is_comment);
+        }
+        $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
+    } else {
+        // 普通翻译
+        target = $(element).eq(0).clone();
+        if (type === "child_level") $(target).children(':first').remove();
+        element_node = $($(element)).get(0);
+        await process(button, target, element_node, type, translation, is_comment);
+    }
+
+    // 翻译完成
+    if (!errerNum && !skipNum) {
+        button.setTransButtonState('translated');
+    }
+}
+
+/**
+ * 翻译处理
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {HTMLElement} target 目标元素
+ * @param {HTMLElement} element_node 目标节点
+ * @param {string} type 类型
+ * @param {boolean} is_comment 是否是评论
+ */
+async function process(button, target, element_node, type, translation, is_comment) {
+    if (type === "child_level") {
+        let div = $("<div>");
+        $(element_node).append(div);
+        element_node = div.get(0);
+    }
+
+    //是否跳过折叠块
+    if ($(target).find('.spoiler').length > 0) {
+        const shouldSkip = await skiFoldingBlocks();
+        if (shouldSkip) {
+            $(target).find('.spoiler').remove();
+        } else {
+            $(target).find('.html2md-panel').remove();
+        }
+    }
+
+    // 等待结果
+    let result;
+    button.setTransButtonState('translating');
+    result = await blockProcessing(button, target, element_node, translation, is_comment);
+    button.pushResultToTransButton(result);
+
+    if (result.status == "error") errerNum += 1;
+    else if (result.status == "skip") skipNum += 1;
+    $(target).remove();
+}
+
 // 块处理
-async function blockProcessing(target, element_node, button, is_comment) {
+async function blockProcessing(button, target, element_node, translation, is_comment) {
     if (is_oldLatex || is_acmsguru) {
-        $(target).find('.overlay').remove();
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
     }
-    const textarea = document.createElement('textarea');
-    textarea.value = target.markdown;
-    var result = await translateProblemStatement(textarea.value, element_node, $(button), is_comment);
+    var result = await translateProblemStatement(button, translation, target.markdown, element_node, is_comment);
     if (result.status == "error") {
         result.translateDiv.classList.add("error_translate");
-        $(button).setTransButtonState('error', '翻译出错');
+        button.setTransButtonState('error', '翻译出错');
         $(target).remove();
     } else if (result.status == "skip") {
-        $(button).setTransButtonState('error', '字数超限');
+        button.setTransButtonState('error', '字数超限');
         result.translateDiv.close();
     }
     return result;
@@ -4878,7 +4971,7 @@ async function multiChoiceTranslation() {
                 }
                 // 翻译
                 let target = $this.eq(0).clone();
-                let result = await blockProcessing(target, $this.eq(0), $("#translateButton_selected_" + id), false);
+                let result = await blockProcessing(translation, target, $this.eq(0), $("#translateButton_selected_" + id), false);
                 $this.data("resultData", result);
                 $this.removeClass('block_selected');
                 // 移除对应的按钮 
@@ -4919,7 +5012,9 @@ function acmsguruReblock() {
     }
 }
 
-// 添加按钮
+/**
+ * 添加按钮
+ */
 function addConversionButton() {
     // 题目页添加按钮
     if (window.location.href.includes("problem")) {
@@ -5223,6 +5318,7 @@ class TranslateDiv {
         } else {
             // 渲染MarkDown
             var md = window.markdownit();
+            if (!text) text = "";
             var html = md.render(text);
             this.mainDiv.html(html);
             // 渲染Latex
@@ -5399,7 +5495,7 @@ class ElementsTree {
         return num;
     }
 
-    // recover translateDivs
+    // 恢复目标元素中的translateDiv
     recover(elements) {
         elements.each((i, e) => {
             var ttTreeNode = this.node[i];
@@ -5512,10 +5608,39 @@ async function initTransResultsRecover() {
     ttTree.recover($(".ttypography"));
 }
 
+// 初始化自动翻译可视区域
+async function initTransWhenViewable() {
+    $('.ttypography, .comments').find('.translateButton').each((i, e) => {
+        // check if element is not normal or is not short text
+        if ($(e).getTransButtonState() !== 'normal' || !$(e).getIsShortText()) {
+            console.log($(e).getTransButtonState());
+            return;
+        }
+        // use Intersection Observer API to check if element is in view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    // define transitions
+                    let transitions = ['deepl', 'google', 'youdao', 'caiyun'];
+                    // random transition
+                    // let trans = transitions[Math.floor(Math.random() * transitions.length)];
+                    let trans = translation;
+                    // element is in view, add class to element
+                    $(entry.target).click();
+                    // stop observing element
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        // start observing
+        observer.observe(e);
+    })
+}
+
 var translatedText = "";
 
 // 翻译主方法
-async function translateProblemStatement(text, element_node, button, is_comment) {
+async function translateProblemStatement(button, translation, text, element_node, is_comment) {
     let status = "ok";
     let id = getRandomNumber(8);
     let matches = [];
@@ -9115,9 +9240,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         await delay(100);
                         if (renderPerfOpt) await RenderPerfOpt();
                     })
-                    .then(() => {
+                    .then(async () => {
                         if (showLoading && is_problem && memoryTranslateHistory) newElement.html('Codeforces Better! —— 正在恢复上一次的翻译记录……');
-                        return delay(100).then(() => { if (is_problem && memoryTranslateHistory) initTransResultsRecover() });
+                        return delay(100).then(async () => { if (is_problem && memoryTranslateHistory) await initTransResultsRecover() });
+                    })
+                    .then(async () => {
+                        if (showLoading && autoTranslation) newElement.html('Codeforces Better! —— 正在初始化短文本自动翻译……');
+                        return delay(100).then(() => { if (autoTranslation) initTransWhenViewable() });
                     })
                     .then(async () => {
                         if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
