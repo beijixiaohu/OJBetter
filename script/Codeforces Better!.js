@@ -63,7 +63,7 @@ var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_pr
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
-var commentTranslationMode, retransAction, transWaitTime, taskQueue, replaceSymbol, filterTextWithoutEmphasis;
+var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
@@ -105,6 +105,8 @@ function init() {
     shortTextLength = getGMValue("shortTextLength", "2000");
     retransAction = getGMValue("retransAction", "0");
     transWaitTime = getGMValue("transWaitTime", "200");
+    allowMixTrans = getGMValue("allowMixTrans", true);
+    mixedTranslation = getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun']);
     taskQueue = new TaskQueue();
     replaceSymbol = getGMValue("replaceSymbol", "2");
     filterTextWithoutEmphasis = getGMValue("filterTextWithoutEmphasis", false);
@@ -997,12 +999,12 @@ button.html2mdButton.CFBetter_setting.open {
     outline: 0px;
 }
 
-.CFBetter_setting_menu input[type="checkbox"] {
+.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"] {
     margin: 0px;
 	appearance: none;
     -webkit-appearance: none;
 	width: 40px;
-	height: 20px !important;
+	height: 20px;
 	border: 1.5px solid #D7CCC8;
     padding: 0px !important;
 	border-radius: 20px;
@@ -1011,40 +1013,41 @@ button.html2mdButton.CFBetter_setting.open {
 	box-sizing: border-box;
 }
 
-.CFBetter_setting_menu input[type="checkbox"]::before {
+.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]::before {
 	content: "";
-	width: 14px;
-	height: 14px;
-	background: #D7CCC8;
-	border: 1.5px solid #BCAAA4;
-	border-radius: 50%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	transform: translate(2%, 2%);
-	transition: all 0.3s ease-in-out;
+    width: 17px;
+    height: 17px;
+    background: #D7CCC8;
+    border: 1.5px solid #BCAAA4;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(2%, 2%);
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
 }
 
-.CFBetter_setting_menu input[type="checkbox"]::after {
+.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]::after {
 	content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
 	position: absolute;
 	top: 0;
 	left: 24px;
 }
 
-.CFBetter_setting_menu input[type="checkbox"]:checked {
+.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]:checked {
 	border: 1.5px solid #C5CAE9;
 	background: #E8EAF6;
 }
 
-.CFBetter_setting_menu input[type="checkbox"]:checked::before {
-	background: #C5CAE9;
-	border: 1.5px solid #7986CB;
-	transform: translate(122%, 2%);
-	transition: all 0.3s ease-in-out;
+.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]:checked::before {
+    background: #C5CAE9;
+    border: 1.5px solid #7986CB;
+    transform: translate(122%, 2%);
+    transition: all 0.3s ease-in-out;
 }
 
-.CFBetter_setting_menu input[type="checkbox"]:checked::after {
+.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     position: absolute;
     top: 1.5px;
@@ -1057,6 +1060,7 @@ button.html2mdButton.CFBetter_setting.open {
 
 .CFBetter_setting_list {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     padding: 10px;
     margin: 5px 0px;
@@ -1088,13 +1092,59 @@ button.html2mdButton.CFBetter_setting.open {
     margin-top: 10px;
 }
 
+/*设置面板-checkboxs*/
+.CFBetter_setting_menu .CFBetter_checkboxs {
+    flex-basis: 100%;
+    display: flex;
+    padding: 10px;
+    margin: 5px 0px;
+    border-bottom: 1px solid #c9c6c696;
+    border-radius: 8px;
+    border: 1px solid #c5cae9;
+    background-color: #f0f8ff;
+}
+.CFBetter_setting_menu .CFBetter_checkboxs label {
+    font-size: 13px;
+    margin: 0px 4px 0px 2px;
+}
+.CFBetter_setting_menu .CFBetter_checkboxs input[type=checkbox]:checked+label{
+    color: #7986cb;
+}
+.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"] {
+    border: none;
+    width: 17px;
+    height: 17px;
+}
+
+.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
+    background: #ffffff;
+    transform: none;
+}
+
+.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked {
+	background: none;
+    border: none;
+}
+
+.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::before {
+    background: #e8eaf6;
+	transform: none;
+}
+
+.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::after {
+    content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
+    top: 0px;
+    left: 4px;
+}
+
 /*设置面板-radio*/
-.CFBetter_setting_menu #translation-settings label {
+.CFBetter_setting_menu label {
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
     max-width: 100%;
     margin: 3px 0px;
+    overflow-x: visible;
 }
 
 .CFBetter_setting_menu_label_text {
@@ -1590,11 +1640,15 @@ div#config_bar_menu_delete:hover {
     -ms-user-select: none;
     user-select: none;
 }
+.dark-mode-selection label {
+    margin: 8px 0px 8px 8px;
+}
 .dark-mode-selection > * {
     margin: 6px;
 }
 .dark-mode-selection .CFBetter_setting_menu_label_text {
     border-radius: 8px;
+    margin-bottom: 0px;
 }
 /* 右键菜单 */
 .CFBetter_contextmenu {
@@ -3525,6 +3579,29 @@ const translation_settings_HTML = `
         <input type='number' id='shortTextLength' class='no_default' placeholder='请输入' require = true>
         <span>字符</span>
     </div>
+    <div class='CFBetter_setting_list'>
+        <label for="allowMixTrans">评论区快速翻译</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p>
+            <p>并行地进行快速翻译</p>
+            </div>
+        </div>
+        <input type="checkbox" id="allowMixTrans" name="allowMixTrans">
+        <div class='CFBetter_checkboxs'>
+            <input type="checkbox" id="deepl" name="mixedTranslation" value="deepl">
+            <label for="deepl">DeepL</label>
+            <input type="checkbox" id="iflyrec" name="mixedTranslation" value="iflyrec">
+            <label for="iflyrec">讯飞</label>
+            <input type="checkbox" id="youdao" name="mixedTranslation" value="youdao">
+            <label for="youdao">有道</label>
+            <input type="checkbox" id="google" name="mixedTranslation" value="google">
+            <label for="google">Google</label>
+            <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
+            <label for="caiyun">彩云</label>
+        </div>
+    </div>
     <h4>高级</h4>
     <div class='CFBetter_setting_list'>
         <label for="comment_translation_mode" style="display: flex;">工作模式</label>
@@ -4127,6 +4204,12 @@ async function settingPanel() {
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
+        $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
+        $('.CFBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
+            if (mixedTranslation.indexOf($(this).val()) > -1) {
+                $(this).prop('checked', true);
+            }
+        });
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
@@ -4180,6 +4263,16 @@ async function settingPanel() {
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
+                allowMixTrans: $("#allowMixTrans").prop("checked"),
+                mixedTranslation: (() => {
+                    let mixedTranslation = [];
+                    $('.CFBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
+                        if ($(this).is(":checked")) {
+                            mixedTranslation.push($(this).val());
+                        }
+                    });
+                    return mixedTranslation;
+                })(),
                 commentTranslationMode: $('#comment_translation_mode').val(),
                 memoryTranslateHistory: $('#memoryTranslateHistory').prop("checked"),
                 transWaitTime: $('#transWaitTime').val(),
@@ -4207,7 +4300,15 @@ async function settingPanel() {
             // 判断是否改变
             let hasChange = false;
             for (const [key, value] of Object.entries(settings)) {
-                if (!hasChange && GM_getValue(key) != value) hasChange = true;
+                if (!hasChange) {
+                    const storedValue = GM_getValue(key);
+
+                    if (Array.isArray(value) && Array.isArray(storedValue)) {
+                        hasChange = JSON.stringify(value) !== JSON.stringify(storedValue);
+                    } else {
+                        hasChange = value !== storedValue;
+                    }
+                }
             }
 
             for (const [key, value] of Object.entries(tempConfigs)) {
@@ -4571,7 +4672,7 @@ async function initTranslateButtonFunc() {
     }
 
     // 获取是否为短文本
-    $.fn.getIsShortText = function () {
+    $.fn.IsShortText = function () {
         return this.data('isShortText');
     }
 
@@ -4582,6 +4683,16 @@ async function initTranslateButtonFunc() {
         } else {
             return false;
         }
+    }
+
+    // 判断是否为评论区按钮
+    $.fn.IsCommentButton = function () {
+        let isCommentButton = this.data('isCommentButton');
+        if (isCommentButton == undefined) {
+            this.parents('.comments').length > 0 ? isCommentButton = true : isCommentButton = false;
+            this.data('isCommentButton', isCommentButton);
+        }
+        return isCommentButton;
     }
 }
 
@@ -4748,8 +4859,14 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // 翻译
         button.setTransButtonState('translating', '等待翻译中');
-        taskQueue.addTask(translation, () => transTask(button, element, type, translation, is_comment));
+        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment));
     }));
+
+    // 添加可指定翻译服务的方法调用
+    button.data("translatedItBy", function (translation) {
+        button.setTransButtonState('translating', '等待翻译中');
+        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation));
+    });
 
     // 重新翻译提示
     let prevState;
@@ -4776,8 +4893,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         e.preventDefault();
 
         // 是否为评论的翻译
-        let is_comment = false;
-        if ($("#translateButton" + suffix).parents('.comments').length > 0) is_comment = true;
+        let is_comment = button.IsCommentButton();
 
         // 移除旧的
         if (!$(e.target).closest('.CFBetter_contextmenu').length) {
@@ -4845,7 +4961,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  */
-async function transTask(button, element, type, translation, is_comment) {
+async function transTask(button, element, type, is_comment, translation) {
     var target, element, errerNum = 0, skipNum = 0;
     if (commentTranslationMode == "1") {
         // 分段翻译
@@ -4853,7 +4969,7 @@ async function transTask(button, element, type, translation, is_comment) {
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, translation, is_comment);
+            await process(button, target, element_node, type, is_comment, translation);
         }
     } else if (commentTranslationMode == "2") {
         // 选段翻译
@@ -4861,7 +4977,7 @@ async function transTask(button, element, type, translation, is_comment) {
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, translation, is_comment);
+            await process(button, target, element_node, type, is_comment, translation);
         }
         $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
     } else {
@@ -4869,7 +4985,7 @@ async function transTask(button, element, type, translation, is_comment) {
         target = $(element).eq(0).clone();
         if (type === "child_level") $(target).children(':first').remove();
         element_node = $($(element)).get(0);
-        await process(button, target, element_node, type, translation, is_comment);
+        await process(button, target, element_node, type, is_comment, translation);
     }
 
     // 翻译完成
@@ -4886,7 +5002,7 @@ async function transTask(button, element, type, translation, is_comment) {
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  */
-async function process(button, target, element_node, type, translation, is_comment) {
+async function process(button, target, element_node, type, is_comment, translation) {
     if (type === "child_level") {
         let div = $("<div>");
         $(element_node).append(div);
@@ -4906,7 +5022,7 @@ async function process(button, target, element_node, type, translation, is_comme
     // 等待结果
     let result;
     button.setTransButtonState('translating');
-    result = await blockProcessing(button, target, element_node, translation, is_comment);
+    result = await blockProcessing(button, target, element_node, is_comment, translation);
     button.pushResultToTransButton(result);
 
     if (result.status == "error") errerNum += 1;
@@ -4915,13 +5031,13 @@ async function process(button, target, element_node, type, translation, is_comme
 }
 
 // 块处理
-async function blockProcessing(button, target, element_node, translation, is_comment) {
+async function blockProcessing(button, target, element_node, is_comment, translation) {
     if (is_oldLatex || is_acmsguru) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
     }
-    var result = await translateProblemStatement(button, translation, target.markdown, element_node, is_comment);
+    var result = await translateProblemStatement(button, target.markdown, element_node, is_comment, translation);
     if (result.status == "error") {
         result.translateDiv.classList.add("error_translate");
         button.setTransButtonState('error', '翻译出错');
@@ -5608,25 +5724,28 @@ async function initTransResultsRecover() {
     ttTree.recover($(".ttypography"));
 }
 
-// 初始化自动翻译可视区域
+// 自动翻译
 async function initTransWhenViewable() {
     $('.ttypography, .comments').find('.translateButton').each((i, e) => {
         // check if element is not normal or is not short text
-        if ($(e).getTransButtonState() !== 'normal' || !$(e).getIsShortText()) {
-            console.log($(e).getTransButtonState());
+        if ($(e).getTransButtonState() !== 'normal' || !$(e).IsShortText()) {
             return;
         }
         // use Intersection Observer API to check if element is in view
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
+                    let button = $(entry.target);
                     // define transitions
-                    let transitions = ['deepl', 'google', 'youdao', 'caiyun'];
+                    let transitions = mixedTranslation;
                     // random transition
-                    // let trans = transitions[Math.floor(Math.random() * transitions.length)];
+                    let trans_ = transitions[Math.floor(Math.random() * transitions.length)];
                     let trans = translation;
-                    // element is in view, add class to element
-                    $(entry.target).click();
+                    // check if is comment, use random transition
+                    if (allowMixTrans && button.IsCommentButton()) {
+                        trans = trans_;
+                    }
+                    button.data("translatedItBy")(trans);
                     // stop observing element
                     observer.unobserve(entry.target);
                 }
@@ -5640,7 +5759,7 @@ async function initTransWhenViewable() {
 var translatedText = "";
 
 // 翻译主方法
-async function translateProblemStatement(button, translation, text, element_node, is_comment) {
+async function translateProblemStatement(button, text, element_node, is_comment, translation_) {
     let status = "ok";
     let id = getRandomNumber(8);
     let matches = [];
@@ -5656,9 +5775,18 @@ async function translateProblemStatement(button, translation, text, element_node
     // 创建翻译结果元素并放在element_node的后面
     const translateDiv = new TranslateDiv(id);
     $(element_node).after(translateDiv.getDiv());
+
+    // 当前实际翻译服务
+    let realTranlate;
+    if (translation_) {
+        realTranlate = translation_;
+    } else {
+        if (is_comment && commentTranslationChoice != "0") realTranlate = commentTranslationChoice;
+        else realTranlate = translation;
+    }
+
     // 信息
-    if (is_comment && commentTranslationChoice != "0") translateDiv.setTopText(translationService[commentTranslationChoice] + ' 翻译');
-    else translateDiv.setTopText(translationService[translation] + ' 翻译');
+    translateDiv.setTopText(translationService[realTranlate] + ' 翻译');
 
     // 注册按钮
     translateDiv.registerUpButtonEvent();
@@ -5674,7 +5802,7 @@ async function translateProblemStatement(button, translation, text, element_node
         let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
         matches = matches.concat(text.match(regex));
         text = replaceBlock(text, matches, replacements);
-    } else if (translation != "openai") {
+    } else if (realTranlate != "openai") {
         // 使用GPT翻译时不必替换latex公式
         let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
         matches = matches.concat(text.match(regex));
@@ -5694,8 +5822,8 @@ async function translateProblemStatement(button, translation, text, element_node
         google: 5000,
         caiyun: 5000
     };
-    if (translationLimits.hasOwnProperty(translation) && text.length > translationLimits[translation]) {
-        const shouldContinue = await showWordsExceededDialog(button, translationLimits[translation], text.length);
+    if (translationLimits.hasOwnProperty(realTranlate) && text.length > translationLimits[realTranlate]) {
+        const shouldContinue = await showWordsExceededDialog(button, translationLimits[realTranlate], text.length);
         if (!shouldContinue) {
             return {
                 translateDiv: translateDiv,
@@ -5733,8 +5861,7 @@ async function translateProblemStatement(button, translation, text, element_node
             translatedText = error;
         }
     }
-    if (is_comment && commentTranslationChoice != "0") await translate(commentTranslationChoice);
-    else await translate(translation);
+    await translate(realTranlate);
 
     // 还原latex公式
     translatedText = translatedText.replace(/】\s*【/g, '】 【');
@@ -5745,7 +5872,7 @@ async function translateProblemStatement(button, translation, text, element_node
         translatedText = recoverBlock(translatedText, matches, replacements);
     } else if (is_acmsguru) {
         translatedText = recoverBlock(translatedText, matches, replacements);
-    } else if (translation != "openai") {
+    } else if (realTranlate != "openai") {
         translatedText = recoverBlock(translatedText, matches, replacements);
     }
 
