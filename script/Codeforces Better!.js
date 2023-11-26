@@ -365,7 +365,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
         html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
         html[data-theme=dark] .config_bar_list, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
-        html[data-theme=dark] #LSPLog{
+        html[data-theme=dark] #LSPLog,
+         html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs,
+        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
             background-color: #22272e !important;
         }
         /* 背景层次2 */
@@ -387,7 +389,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
         html[data-theme=dark] ul.config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] .sampleDiv,
-        html[data-theme=dark] #addCustomTest, html[data-theme=dark] #LSPLog li:nth-child(odd){
+        html[data-theme=dark] #addCustomTest, html[data-theme=dark] #LSPLog li:nth-child(odd),
+        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::before{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
@@ -410,7 +413,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #CFBetter_editor, html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
         html[data-theme=dark] #addCustomTest, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
-        html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox{
+        html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
+        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -439,7 +443,7 @@ function handleColorSchemeChange(event) {
             color: #03A9F4 !important;
         }
         /* 无边框 */
-        html[data-theme=dark] .html2md-panel.input-output-copier {
+        html[data-theme=dark] .html2md-panel.input-output-copier, html[data-theme=dark] .translateDiv.input-output-copier {
             border: none !important;
         }
         /* 无背景 */
@@ -466,6 +470,10 @@ function handleColorSchemeChange(event) {
             background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
             color: #9099a3;
             text-shadow: 0px 0px 2px #000000;
+        }
+        /* 阴影 */
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
+            box-shadow: 0px 0px 0.5px 0.5px #30353b;
         }
         /* 其他样式 */
         html[data-theme=dark] .rated-user{
@@ -580,6 +588,7 @@ span.mdViewContent {
     z-index: 100;
 }
 /*翻译div*/
+/* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
 .translateDiv.input-output-copier {
     font-size: initial;
     float: initial;
@@ -784,7 +793,7 @@ button.html2mdButton.CFBetter_setting {
     background: #60a5fa;
     color: white;
     margin: 10px;
-    border: 0px;
+    border: 1px solid #60a5fa;
 }
 
 button.html2mdButton.CFBetter_setting.open {
@@ -947,51 +956,37 @@ button.html2mdButton.CFBetter_setting.open {
 /*设置面板-关闭按钮*/
 .CFBetter_setting_menu .tool-box {
     position: absolute;
-    align-items: center;
-    justify-content: center;
     width: 20px;
     height: 20px;
-    overflow: hidden;
-    border-radius: 10px;
     top: 3px;
     right: 3px;
 }
 
 .CFBetter_setting_menu .btn-close {
-    display: flex;
-    text-align: center;
+    cursor: pointer;
     width: 20px;
     height: 20px;
-    color: transparent;
-    font-size: 0;
-    cursor: pointer;
-    background-color: #ff000080;
+    border-radius: 50%;
     border: none;
     margin: 0px;
     padding: 0px;
-    overflow: hidden;
+    background-color: #ff000080;
     transition: .15s ease all;
-    align-items: center;
-    justify-content: center;
     box-sizing: border-box;
+    text-align: center;
+    color: transparent;
+    font-size: 17px;
 }
 
 .CFBetter_setting_menu .btn-close:hover {
-    width: 20px;
-    height: 20px !important;
-    font-size: 17px;
     color: #ffffff;
     background-color: #ff0000cc;
     box-shadow: 0 5px 5px 0 #00000026;
 }
 
 .CFBetter_setting_menu .btn-close:active {
-    width: 20px;
-    height: 20px;
-    font-size: 1px;
     color: #ffffffde;
-    --shadow-btn-close: 0 3px 3px 0 #00000026;
-    box-shadow: var(--shadow-btn-close);
+    background-color: #ff000080;
 }
 
 /*设置面板-checkbox*/
@@ -1096,8 +1091,8 @@ button.html2mdButton.CFBetter_setting.open {
 .CFBetter_setting_menu .CFBetter_checkboxs {
     flex-basis: 100%;
     display: flex;
-    padding: 10px;
-    margin: 5px 0px;
+    padding: 8px;
+    margin: 10px 0px 0px 0px;
     border-bottom: 1px solid #c9c6c696;
     border-radius: 8px;
     border: 1px solid #c5cae9;
@@ -1105,20 +1100,22 @@ button.html2mdButton.CFBetter_setting.open {
 }
 .CFBetter_setting_menu .CFBetter_checkboxs label {
     font-size: 13px;
-    margin: 0px 4px 0px 2px;
+    margin: 0px 6px 0px 3px;
 }
 .CFBetter_setting_menu .CFBetter_checkboxs input[type=checkbox]:checked+label{
     color: #7986cb;
 }
 .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"] {
     border: none;
-    width: 17px;
-    height: 17px;
+    width: 16px;
+    height: 16px;
 }
 
 .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
     background: #ffffff;
     transform: none;
+    width: 16px;
+    height: 16px;
 }
 
 .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked {
@@ -1127,6 +1124,7 @@ button.html2mdButton.CFBetter_setting.open {
 }
 
 .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::before {
+    border: 1.5px solid #95a2de;
     background: #e8eaf6;
 	transform: none;
 }
@@ -1134,7 +1132,7 @@ button.html2mdButton.CFBetter_setting.open {
 .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     top: 0px;
-    left: 4px;
+    left: 3.5px;
 }
 
 /*设置面板-radio*/
@@ -3540,6 +3538,7 @@ const translation_settings_HTML = `
     <div class='CFBetter_setting_menu_config_box' id='openai' style='display: none;'>
         <div id="chatgpt-config"></div>
     </div>
+    <hr>
     <h4>偏好</h4>
     <div class='CFBetter_setting_list'>
         <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
@@ -3553,6 +3552,8 @@ const translation_settings_HTML = `
             <option value="openai">ChatGPT翻译</option>
         </select>
     </div>
+    <hr>
+    <h4>自动翻译</h4>
     <div class='CFBetter_setting_list'>
         <label for="autoTranslation">自动翻译短文本</label>
         <div class="help_tip">
@@ -3602,6 +3603,7 @@ const translation_settings_HTML = `
             <label for="caiyun">彩云</label>
         </div>
     </div>
+    <hr>
     <h4>高级</h4>
     <div class='CFBetter_setting_list'>
         <label for="comment_translation_mode" style="display: flex;">工作模式</label>
@@ -3660,6 +3662,7 @@ const translation_settings_HTML = `
             <div class="tip_text">
                 <p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p>
                 <p>建议 200 + 毫秒</p>
+                <p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>
             </div>
         </div>
         <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
@@ -4536,15 +4539,25 @@ class TaskQueue {
         }
     }
 
-    addTask(type, fn) {
+    /**
+     * 添加任务
+     * @param {string} type 任务类型
+     * @param {function} fn 任务函数
+     * @param {boolean} isNonQueueTask 是否为非队列任务
+     */
+    addTask(type, fn, isNonQueueTask = false) {
         if (!this.taskQueues[type]) {
             this.taskQueues[type] = [];
         }
 
-        this.taskQueues[type].push(fn);
+        if (isNonQueueTask) {
+            fn();
+        } else {
+            this.taskQueues[type].push(fn);
 
-        if (!this.isProcessing[type]) {
-            this.processQueue(type);
+            if (!this.isProcessing[type]) {
+                this.processQueue(type);
+            }
         }
     }
 
@@ -4674,6 +4687,16 @@ async function initTranslateButtonFunc() {
     // 获取是否为短文本
     $.fn.IsShortText = function () {
         return this.data('isShortText');
+    }
+
+    // 标记为不自动翻译
+    $.fn.setNotAutoTranslate = function () {
+        this.data('notAutoTranslate', true);
+    }
+
+    // 获取是否为不自动翻译
+    $.fn.getNotAutoTranslate = function () {
+        return this.data('notAutoTranslate');
     }
 
     // 判断是否已经翻译
@@ -4859,13 +4882,13 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // 翻译
         button.setTransButtonState('translating', '等待翻译中');
-        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment));
+        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment), translation == 'openai');
     }));
 
     // 添加可指定翻译服务的方法调用
     button.data("translatedItBy", function (translation) {
         button.setTransButtonState('translating', '等待翻译中');
-        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation));
+        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
     });
 
     // 重新翻译提示
@@ -5133,16 +5156,17 @@ function acmsguruReblock() {
  */
 function addConversionButton() {
     // 题目页添加按钮
-    if (window.location.href.includes("problem")) {
-        var exContentsPageClasses = ["sample-tests",];
-        $('.problem-statement').children('div').each(function () {
-            var className = $(this).attr('class');
+    if (is_problem) {
+        let exContentsPageClasses = ["sample-tests"];
+        $('.problem-statement').children('div').each((i, e) => {
+            var className = $(e).attr('class');
             if (!exContentsPageClasses.includes(className)) {
                 var id = "_problem_" + getRandomNumber(8);
-                let panel = addButtonPanel(this, id, "this_level");
-                addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
-                addButtonWithCopy(panel.copyButton, this, id, "this_level");
-                addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+                let panel = addButtonPanel(e, id, "this_level");
+                addButtonWithHTML2MD(panel.viewButton, e, id, "this_level");
+                addButtonWithCopy(panel.copyButton, e, id, "this_level");
+                addButtonWithTranslation(panel.translateButton, e, id, "this_level");
+                if (i == 0) panel.translateButton.setNotAutoTranslate(); // 题目标题块跳过，不自动翻译
             }
         });
     }
@@ -5518,6 +5542,7 @@ class ElementsTree {
         this.node = [];
         this.transResultMap = {};
         this.index = 0;
+        this.tagNames = ["DIV", "P", "UL", "LI"]
         this.init($(elements));
     }
 
@@ -5542,8 +5567,8 @@ class ElementsTree {
         var prev = null;
         var node = this.node[i_];
         element.children().each((i, e) => {
-            // only add div and p element
-            if ($(e).prop("tagName") === "DIV" || $(e).prop("tagName") === "P") {
+            // only add element with tagNames
+            if (this.tagNames.includes($(e).prop("tagName"))) {
                 prev = this.addNode(i_, prev, e);
             }
             // recursively child element
@@ -5629,8 +5654,8 @@ class ElementsTree {
     // 恢复一个分支
     recoverOneFork(pElement, ttTreeNode, index) {
         do {
-            // only recover div and p element
-            while (pElement.prop("tagName") !== "DIV" && pElement.prop("tagName") !== "P") {
+            // only recover element with tagNames
+            if (!this.tagNames.includes(pElement.prop("tagName"))) {
                 if (pElement.next().length > 0) {
                     pElement = pElement.next();
                 } else {
@@ -5638,9 +5663,8 @@ class ElementsTree {
                 }
             }
             if (pElement.prop("tagName") !== ttTreeNode[index].type) {
-                console.log(pElement);
-                console.log(index);
-                console.warn("类型不同, 元素结构可能已经发生了变化");
+                // console.warn(`类型不同, 元素结构可能已经发生了变化: \nindex: ${index}`);
+                // console.warn(pElement);
                 return;
             } else {
                 // recursively child element
@@ -5684,6 +5708,10 @@ class ElementsTree {
         translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
+        if(transButton.length == 0){
+            // 如果没有找到，则应该是得在父元素中找到
+            transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
+        }
         transButton.pushResultToTransButton({
             translateDiv: translateDiv,
             status: 0
@@ -5728,7 +5756,7 @@ async function initTransResultsRecover() {
 async function initTransWhenViewable() {
     $('.ttypography, .comments').find('.translateButton').each((i, e) => {
         // check if element is not normal or is not short text
-        if ($(e).getTransButtonState() !== 'normal' || !$(e).IsShortText()) {
+        if ($(e).getTransButtonState() !== 'normal' || !$(e).IsShortText() || $(e).getNotAutoTranslate()) {
             return;
         }
         // use Intersection Observer API to check if element is in view
