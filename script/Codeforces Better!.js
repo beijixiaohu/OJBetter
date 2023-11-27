@@ -602,13 +602,15 @@ span.mdViewContent {
     line-height: initial;
     text-transform: none;
 }
+.translateDiv {
+    box-shadow: 0px 0px 0.5px 0.5px #defdf378;
+}
 .translate-problem-statement {
     justify-items: start;
     letter-spacing: 1.8px;
     color: #059669;
     background-color: #f9f9fa;
     border: 1px solid #c5ebdf;
-    box-shadow: 0px 0px 0.5px 0.5px #defdf3;
     border-radius: 0rem 0rem 0.3rem 0.3rem;
     padding: 5px;
     margin: -5px 0px 6px 0px;
@@ -663,7 +665,6 @@ span.mdViewContent {
     justify-content: space-between;
     background-color: #f9f9fa;
     border: 1px solid #c5ebdf;
-    box-shadow: 0px 0px 0.5px 0.5px #defdf3;
     border-radius: 0.3rem;
     margin: 4px 0px;
 }
