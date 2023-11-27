@@ -7,11 +7,11 @@
     </center>
     <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336" href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336" href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。</p>
     <p>请提供关于问题的详细描述，比如：链接，截图，期望的结果、实际的结果，复现方式……</p>
-    <p>此外还欢迎友善的讨论以及功能建议，但维护脚本以及提供帮助并不是作者的义务，感谢您的理解。</p>
+    <p>此外还欢迎友善的讨论以及功能建议，但维护脚本以及提供帮助并不是作者的义务，感谢你的理解。</p>
   </div>
 </div>
 <h2 id="功能">功能</h2>
-<span style="color:#009688; background-color: #E0F2F1;">提示：脚本的部分功能提供了配置项，您可以点击 <strong>整个页面右上角</strong> 的 <strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</span>
+<span style="color:#009688; background-color: #E0F2F1;">提示：脚本的部分功能提供了配置项，你可以点击 <strong>整个页面右上角</strong> 的 <strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</span>
 <h3 id="界面汉化">界面汉化</h3>
 <p>将网站的主要元素汉化为中文（可关闭）</p>
 <h3 id="题目翻译">题目翻译</h3>
@@ -20,9 +20,9 @@
 <ul>
   <li>普通模式：会一次性翻译整个区域的内容</li>
   <li>分段模式：会对区域内的每一个 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签依次进行翻译</li>
-  <li>选段模式：您可以自由点选页面上的任何 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签进行翻译</li>
+  <li>选段模式：你可以自由点选页面上的任何 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签进行翻译</li>
 </ul>
-<p>您可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择您想使用的翻译服务（默认为DeepL）以及切换脚本的工作模式。</p>
+<p>你可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择你想使用的翻译服务（默认为DeepL）以及切换脚本的工作模式。</p>
 <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
   <div style="border: 8px solid #ffffff00;">
     <p><strong>注意：</strong>分段/选段模式会产生如下问题：</p>
@@ -96,7 +96,15 @@
     </tr>
   </tbody>
 </table>
+<div style="border: 5px solid #ffffff00;"></div>
 <span style="color:#009688; background-color: #E0F2F1;">提示：右键<strong>翻译</strong>按钮，可以快速切换翻译服务哦</span>
+<p><strong>自动翻译</strong></p>
+<p>开启"自动翻译"后，对于<code>.ttypography</code>, <code>.comments</code> 区域中的短文本，当其进入浏览器窗口的 可视区域 时，自动进行翻译</p>
+<p>（可以在设置面板中指定多少字符以内为短文本）</p>
+<p>同时，开启"评论区快速翻译"后，对于评论区中的短文本，自动翻译时会在候选的服务中随机选择一个，并行地进行快速翻译</p>
+<p><strong>历史翻译恢复</strong></p>
+<p>支持自动恢复题目页的翻译历史，开启后会将页面上的翻译信息自动保存到浏览器本地的 indexDB 的 CFBetterDB 数据库的 translateData 表中</p>
+<p>刷新 / 下一次进入页面时会自动恢复翻译信息</p>
 <h3 id="ClistRating分">ClistRating分</h3>
 <p>获取 clist.by 网站的 Rating 分数据，并展示</p>
 <p>注意，不同页面工作所需要的凭证有所不同：</p>
@@ -105,8 +113,123 @@
   <li>对于题目页（problem）和题单页（problemset），需要浏览器中 clist.by 的登录 cookie 有效</li>
 </ul>
 <span style="background-color: #FFF3E0;color: #FF5722;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie 有效性通过尝试请求所返回的状态码判断</span>
+<h3 id="编辑器与LSP">编辑器与LSP</h3>
+<p><strong>题目页添加编辑器</strong></p>
+<p>在题目页的下方添加 monaco 代码编辑器(默认开启)</p>
+<p>支持代码自动保存、代码快捷提交、在线测试运行、LSP、静态补全增强等功能</p>
+<p><strong>代码自动保存</strong></p>
+<p>代码会自动保存在浏览器本地的 IndexedDB 的 CFBetterDB 数据库的 editorCode 表中</p>
+<p><strong>在线测试运行</strong></p>
+<p>你可以一键测试运行题目中的样例，还可以自定义测试样例，样例数据会自动保存在 CFBetterDB 数据库的 editorCode 表中</p>
+<p>脚本提供了多个在线代码运行服务：codeforces官方、wandbox（第三方）、rextester（第三方），它们所支持的参数选项有所不同。</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>注意：</strong></p>
+    <ul>
+      <li>
+        <p>显然，所有在线代码运行服务均无法测试交互式题目</p>
+      </li>
+      <li>
+        <p>第三方在线代码运行服务的运行环境与 codeforces 的可能有所不同，在第三方在线代码运行服务中能够运行或者结果正确的代码并不一定在 codeforces 中同样如此</p>
+      </li>
+      <li>
+        <p>无法保证你的代码不会被第三方在线代码运行服务以某种方式泄露</p>
+      </li>
+      <li>
+        <p>此外，为扩大适用范围，页面上的编译器选项与第三方在线代码运行服务实际的编译器选项也并不是严格对应的，因此很有可能得到意外的结果。</p>
+      </li>
+    </ul>
+  </div>
+</div>
+<p><strong>LSP</strong></p>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 什么是LSP？</summary>
+  <div style="border: 8px solid #ffffff00;">
+    A. <a href="https://microsoft.github.io/language-server-protocol/">LSP（Language Server Protocol）</a>是由微软发起的一种编辑器与语言服务器之间通信的协议规范。
+    <p>它将传统IDE需要实现的代码补全、诊断、建议、文档甚至项目管理等功能与编辑器相分离，使用独立的服务来完成这些功能，</p>
+    <p>而编辑器只需要按照协议规范与服务器进行通信即可，这样就大大减少了工作量，同时使编辑器可以轻松地支持各种编程语言</p>
+    <p>目前LSP的生态已经逐步完善，主流编辑器均已支持LSP或者有了对应的插件，如VSCode、Vim、Emacs等...</p>
+    <p>但是各大商业IDE厂商对此兴趣不大，基本现有的LSP Server都是开源社区在维护，因此其仍然不及专业IDE以及各种专业的插件</p>
+  </div>
+</details></div></div>
+<div style="border: 10px solid #ffffff00;"></div>
+<div style="background-color: #E3F2FD;color: #1565C0;border: 1px solid #1565c0;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>说明：</strong></p>
+    <p>尽管 LSP + Monaco 有无限可能，但本脚本中仅实现了以下这些基本的功能：</p>
+    <ul>
+      <li>自动补全、方法签名提示、代码修复</li>
+      <li>hover提示、inlay提示、文档链接</li>
+      <li>转到定义、转到引用、符号引用点击高亮</li>
+      <li>格式化、部分格式化、渐进式自动格式化、折叠范围分析、重命名</li>
+    </ul>
+    <p>并不支持本地编译，不支持断点调试，不支持多文件等……，性能上也是远远不及本地的专业IDE的（还有可能存在BUG）</p>
+    <p>因此该功能的实际意义和用处并不大，仅供感兴趣的同学体验体验</p>
+  </div>
+</div>
+<p>如何开始？只需两步：</p>
+<p>一：脚本提供了对 C++ 和 Python 语言以下两个 LSP Server 实现的支持，你需要按需安装它们：</p>
+<table>
+  <thead>
+    <tr>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">语言</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">LSP Server</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">安装方式（Windows下）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">C++</td>
+      <td style="background-color: #f9f9f9; color: black;">clangd</td>
+      <td style="background-color: #f9f9f9; color: black;">在 <a href="https://github.com/clangd/clangd/releases">clangd release</a> 中下载clangd，然后在系统环境变量的 path 中新增 clangd 的路径，例如 <code>C:\clangd_16.0.2\bin\</code></td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">Python</td>
+      <td style="background-color: #f9f9f9; color: black;">pylsp</td>
+      <td style="background-color: #f9f9f9; color: black;">执行命令： <code>pip install "python-lsp-server[all]"</code>，其会自动添加环境变量</td>
+    </tr>
+  </tbody>
+</table>
+<p>二：你还需要在 <a href="https://github.com/beijixiaohu/OJBetter/releases">GitHub release</a> 或者 <a href="https://mxyowl.lanzouj.com/b0cui6bgj">蓝奏云(密码:aaaa)</a> 中下载并解压 OJBetter_Bridge，该软件是脚本与 LSP Server 通信的桥梁，</p>
+<p>将解压后的文件夹放到C盘根目录 或者其他任何你喜欢的位置 （注意：如果你放在其他位置，你需要在设置面板中要修改"工作路径"为你的实际位置。）</p>
+<p>然后你就可以运行 OJBetter_Bridge 了，其提供了GUI版本和终端版本，Windows下推荐使用GUI版本，直接运行 <code>server_gui.exe</code> 即可</p>
+<p>OJBetter_Bridge 在启动时会自动检查命令 clangd 和 pylsp 是否有效，并给出提示。</p>
+<span style="color:#009688; background-color: #E0F2F1;">提示：在 <code>server_gui.exe</code> 的界面中可以设置让其开机自启</span>
+<p>完成上述步骤后，你就可以开启设置面板中的 "使用LSP" 并使用了。</p>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>了解更多？</summary>
+  <div style="border: 8px solid #ffffff00;">
+    对于clangd，在 cpp_workspace 文件夹中存放了两个配置文件 <code>.clangd</code>、<code>.clang-format</code>
+    <p>它们分别定义了 clangd 的 <a href="https://clangd.llvm.org/config">配置项</a> 和 <a href="https://clang.llvm.org/docs/ClangFormatStyleOptions.html">代码格式化风格</a>，你可以自行编辑修改</p>
+  </div>
+</details></div></div>
+<p><strong>静态补全增强</strong></p>
+<p>你可以在 设置面板-Monaco-静态补全增强-自定义 中为 monaco 编辑器添加自定义的静态代码补全规则</p>
+<p>补全规则为 JSON 文件，下面是一个示例(monaco格式):</p>
+<pre>
+  {
+    "suggestions": [
+        {
+            "label": "hello world",
+            "kind": 15,
+            "documentation": "The is a hello world snippet",
+            "insertText": "hello world"
+        },
+        // other suggestions...
+    ]
+  }
+</pre>
+<p>你可以使用 <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>中几乎所有的属性，(注意: 不要填写 range 属性，脚本会自动计算并添加该属性)</p>
+<p>如何开始？很简单，你只需要将JSON 文件 <code>xxx.json</code> 放置到 OJBetter_Bridge 的 /mycomplet 文件夹中</p>
+<p>然后在设置面板中新建一个配置，JSON URL为：<code>http://127.0.0.1:2323/mycomplet/xxx.json</code>。</p>
+<div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>试一试？</strong></p>
+    <p>启动 OJBetter_Bridge，初始情况下 /mycomplet 文件夹中自带一个示例 JSON 文件：<code>template.json</code>， 因此你可以添加一个配置，填写 <code>http://127.0.0.1:2323/mycomplet/template.json</code> 并保存</p>
+    <p>现在在编辑器中输入hello，你将会看到两个补全项：hello world、hello world2</p>
+  </div>
+</div>
+<p>该功能实际上并不依赖于 OJBetter_Bridge，也不依赖于该语言的 LSP Server 是否开启，你可以将 JSON 文件放到其他服务器上，只要你填写的是一个可访问的符合要求的 JSON URL 即可</p>
+<span style="background-color: #FFF3E0;color: #FF5722;">注意：由于浏览器的安全限制，URL不能是" <code>file:///xxx</code> "</span>
 <h2 id="其他功能">其他功能</h2>
-<p>部分功能可在右上角的 <code>CodeforcesBetter设置</code> 面板中更改/开关</p>
 <ul>
   <li>在题目、blog、回复等的右上角添加 <code>MrakDown视图</code> 按钮以及 <code>复制</code> 按钮</li>
   <li>让 Codeforces 支持黑暗模式，默认跟随系统</li>
@@ -157,20 +280,21 @@
 <p><strong>脚本管理器</strong></p>
 <p>仅在 Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在 Greasemonkey，Violentmonkey，ScriptCat 等中的兼容性</p>
 <p><strong>其他插件</strong></p>
-<p>与主流CF相关插件不存在兼容性问题，如果您遇到了兼容性问题，欢迎反馈。</p>
+<p>与主流CF相关插件不存在兼容性问题，如果你遇到了兼容性问题，欢迎反馈。</p>
 <p><strong>镜像站</strong></p>
-<p>支持官方轻量站 <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a href="https://m2.codeforces.com">m3</a> 、非官方镜像站 <a href="https://codeforc.es">https://codeforc.es</a></p>
+<p>支持官方轻量站 <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a href="https://m2.codeforces.com">m3</a> 、官方镜像站 <a href="https://mirror.codeforces.com/">https://mirror.codeforces.com/</a>、非官方镜像站 <a href="https://codeforc.es">https://codeforc.es</a></p>
+<p>此外，理论上也兼容任意的其他镜像站，你只需要自行再添加一行注释 <code>// @match 你的镜像站网址</code> 即可</p>
 <h2 id="常见问题">常见问题</h2>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何开始？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 您需要先安装 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然后再安装该脚本
+        A. 你需要先安装 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然后再安装该脚本
       </div>
 </details></div></div>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 更新错误？</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>A. 由于 Greasy Fork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，</p>
-        <p>通常您只需要稍等几分钟，然后再次前往更新/安装即可。</p>
-        <p>您也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</p>
+        <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可。</p>
+        <p>你也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</p>
       </div>
 </details></div></div>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 一直显示加载中？</summary>
@@ -180,13 +304,13 @@
 </details></div></div>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 Too many requests ？</summary>
       <div style="border: 8px solid #ffffff00;">
-        <p>A. 这通常是因为您短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，DeepL对翻译字数和频率是有限制的，</p>
+        <p>A. 这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，DeepL对翻译字数和频率是有限制的，</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">这是暂时的，一段时间后就恢复正常了</span>
       </div>
 </details></div></div>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 undefind 或一直显示翻译中？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 这通常是因为您所使用的网络无法正常访问 <a href="https://www.deepl.com">www.deepl.com</a>
+        A. 这通常是因为你所使用的网络无法正常访问 <a href="https://www.deepl.com">www.deepl.com</a>
       </div>
 </details></div></div>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 翻译结果中一些公式显示为 {xx} / [xx] / 【xx】？</summary>
@@ -201,7 +325,7 @@
             <p>这种实现方式能如期工作的前提是替换符不被破坏，这在绝大多数情况下都是没有问题的，</p>
             <p>但有时翻译服务会破坏替换符 ，比如 【23】 变成了 【23 / 23】 / [23]/ 【23 】/ 23 】，这些情况下脚本会通过一定的正则规则进行还原，使其仍然可以如期工作</p>
             <p>但如果翻译服务还破坏了更多的内容，产生了歧义，比如翻译服务将【2】 313 变成了 【2312，这时就无法还原了，</p>
-            <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，您可以在右上角的设置面板中选择不同的替换符，</p>
+            <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，你可以在右上角的设置面板中选择不同的替换符，</p>
             <p>经过测试，通常 <code>{}</code> 表现的效果更好，因此这也是脚本默认使用的替换符</p>
           </div>
         </div>
@@ -217,8 +341,8 @@
 </details></div></div>
 <div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用 ChatGPT 翻译？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 如果您可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，您只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。
-        <p>此外，您也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，您可以选择使用
+        A. 如果你可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，你只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。
+        <p>此外，你也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，你可以选择使用
         </p>
         <table style="border: 1px solid #bcaaa4;">
           <thead>
@@ -269,24 +393,46 @@
             <p>建议小额充值，用完再充，这些服务商可能会跑路</p>
           </div>
         </div>
-        <p>如果您使用的是 api 代理服务商 提供的服务，配置中的 KEY 应该填写 api代理服务商提供的 key，</p>
-        <p>此外，您还需要在配置中额外填写 Proxy API，</p>
+        <p>如果你使用的是 api 代理服务商 提供的服务，配置中的 KEY 应该填写 api代理服务商提供的 key，</p>
+        <p>此外，你还需要在配置中额外填写 Proxy API，</p>
         <p>Proxy API 需要填写完整的地址，这里以 <a href="https://console.closeai-asia.com/">CloseAI</a> 为例，其提供了API Base：<code>https://api.closeai-proxy.xyz</code></p>
         <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
-        <span style="background-color: #FFF3E0;color: #FF5722;">注意：由于您指定了自定义的API，Tampermonkey会对您的跨域请求进行警告，请自行点击授权</span>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注意：由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行点击授权</span>
       </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 为什么 clangd 格式化无效？</summary>
+  <div style="border: 8px solid #ffffff00;">
+    A. 这是因为你在设置面板中填写的 LSP 工作路径不正确</a>
+  </div>
+</details></div></div>
+<div style="border: 1px solid #aaa;"><div style="border: 8px solid #ffffff00;"><details><summary>Q. 为什么 clangd 无法识别我的 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 头文件？</summary>
+  <div style="border: 8px solid #ffffff00;">
+    A. 这是因为 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 不是标准头文件，因此clangd默认不支持，你需要在 OJBetter_Bridge 的 cpp_workspace 中的<code>.clangd</code>文件中通过修改编译器参数来告诉clang去哪找到这个非标准的头文件(当然也不推荐使用万能头)</a>
+  </div>
 </details></div></div>
 <h2 id="贡献代码">贡献代码</h2>
 <p>欢迎贡献代码，请前往 <a href="https://github.com/beijixiaohu/OJBetter">Github仓库</a> 创建PR</p>
+<h2 id="其他OJ?">其他OJ?</h2>
+<p>由于作者精力有限，并不会维护太多的类似脚本，如果你想为喜欢的 OJ 移植该脚本，非常欢迎，你只需要遵守 GPL-3.0 license 许可即可</p>
 <h2 id="感谢">感谢</h2>
 <ul>
   <li>早期开发中参考了以下脚本：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>、<a
       href="https://greasyfork.org/zh-CN/scripts/378277">翻译机</a></li>
-  <li>脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
-      href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a>、<a
-      href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a
-      href="https://github.com/gka/chroma.js">chroma</a>
+  <li>CodeforcesBetter 脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
+    href="https://jquery.com/">jquery</a>、<a 
+    href="https://www.mathjax.org/">MathJax</a>、<a
+    href="https://github.com/brix/crypto-js">crypto-js</a>、<a 
+    href="">base64</a>、<a
+    href="https://github.com/gka/chroma.js">chroma</a>、<a
+    href="http://xtermjs.org/">xterm</a>、<a
+    href="https://dexie.org/">dexie</a>、<a
+    href="https://github.com/microsoft/monaco-editor">monaco-editor</a>
   </li>
-  <li>特别感谢所有提供反馈和建议的朋友们。</li>
-</ul>
+  <li>OJBetter_Bridge 参考了以下仓库<a href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>，使用了以下开源库<a href="https://github.com/zhiyiYo/PyQt-Fluent-Widgets">PyQt-Fluent-Widgets</a>、<a
+    href="https://pypi.org/project/PyYAML/">PyYAML</a>、<a 
+    href="https://pypi.org/project/tornado/">tornado</a>、<a
+    href="https://pypi.org/project/ujson/">ujson</a>
+  </li>
+    <li>特别感谢所有提供反馈和建议的朋友们。</li>
+  </ul>
 <p>感谢你们，0rz</p>
