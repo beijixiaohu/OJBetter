@@ -181,34 +181,34 @@ function init() {
 function ShowAlertMessage() {
     if (is_oldLatex) {
         let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
-            .html(`Codeforces Better! —— 注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。
+            .html(`${OJBetterName} —— 注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。
                 <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
     if (is_acmsguru) {
         let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
-            .html(`Codeforces Better! —— 注意：当前页面为 acmsguru 题目（这是一道非常古老的题目），部分功能不适用。
+            .html(`${OJBetterName} —— 注意：当前页面为 acmsguru 题目（这是一道非常古老的题目），部分功能不适用。
                 <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
     if (commentTranslationMode == "1") {
         let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-            .html(`Codeforces Better! —— 注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>`)
+            .html(`${OJBetterName} —— 注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
     if (commentTranslationMode == "2") {
         let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-            .html(`Codeforces Better! —— 注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框）<br>
+            .html(`${OJBetterName} —— 注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框）<br>
             <p>如果你现在不需要翻译超长篇的博客或者题目，建议你请前往设置切换为普通模式</p>`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
     if (is_submitPage && problemPageCodeEditor) {
         let newElement = $("<div></div>").addClass("alert alert-warning CFBetter_alert")
-            .html(`Codeforces Better! —— 您已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
+            .html(`${OJBetterName} —— 您已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
             <p>${findHelpText2}</p>`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
@@ -216,6 +216,7 @@ function ShowAlertMessage() {
 }
 
 // 常量
+const OJBetterName = 'Codeforces Better!';
 const findHelpText1 = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 寻求帮助\n\n';
 const findHelpText2 = '如遇问题，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 反馈';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
@@ -3424,7 +3425,7 @@ const basic_settings_HTML = `
     <div class="help_tip">
         ${helpCircleHTML}
         <div class="tip_text">
-        <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“Codeforces Better! —— xxx”</p>
+        <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“${OJBetterName} —— xxx”</p>
         <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
         <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
         </div>
@@ -6252,7 +6253,7 @@ async function checkCookie(isContest = false) {
          <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
          <br>脚本不会获取您在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明`;
         var newElement = $("<div></div>")
-            .addClass("alert alert-error ojbetter-alert").html(`Codeforces Better! —— ${state}`)
+            .addClass("alert alert-error ojbetter-alert").html(`${OJBetterName} —— ${state}`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
     }
@@ -7084,6 +7085,14 @@ async function createMonacoEditor(language, form, support) {
             $('body').append(cancelButton);
             disableButtons();
             GM_setValue("monacoEditor_position", "right");
+
+            // 补丁：修复固定到右侧导致的样例元素.sample-test相关代码重复执行的问题（具体原因未查）
+            $('.sample-test').find('.title').each((i, e) => {
+                if ($(e).find('.input-output-copier').length > 1) {
+                    $(e).find('.input-output-copier').first().remove();
+                }
+            });
+            darkModeStyleAdjustment();
         }
 
         // 取消固定到右侧边栏
@@ -8986,7 +8995,7 @@ async function runCode(event, sourceDiv, submitDiv) {
             statePanel.append($(`<div class="RunState_title error">${prefix}${item} Wrong Answer</div>`));
             if ($('#DontShowDiff').prop('checked')) statePanel.append($(`<div class="outputDiff" style="white-space: break-spaces;">${result.Result.trim()}</div>`));
             else statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>
-            <p style="color: grey; font-size: 12px;">说明：如果该题允许多个可能的结果，你的结果也可能并不是错误的</p>`));
+            <p style="color: grey; font-size: 12px;">说明：如果该题有多个可能的答案，你的答案也可能并不是错误的</p>`));
         }
         statePanel.append($(`<div style="color:${result.Errors ? 'red' : ''};">状态： ${result.Stats}</div>`));
     };
@@ -9347,7 +9356,7 @@ document.addEventListener("DOMContentLoaded", function () {
         checkScriptVersion();
         toZH_CN();
         var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
-            .html(`Codeforces Better! —— 正在等待页面资源加载……`)
+            .html(`${OJBetterName} —— 正在等待页面资源加载……`)
             .css({
                 "margin": "1em",
                 "text-align": "center",
@@ -9356,82 +9365,81 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         async function processPage() {
-            if (showLoading) newElement.html('Codeforces Better! —— 正在等待LaTeX渲染队列全部完成……');
+            if (showLoading) newElement.html(`${OJBetterName} —— 正在等待LaTeX渲染队列全部完成……`);
             await waitUntilIdleThenDo(async function () {
                 if (showJumpToLuogu && is_problem) CF2luogu();
-
                 Promise.resolve()
                     .then(async () => {
-                        if (showLoading) newElement.html('Codeforces Better! —— 正在连接数据库……');
+                        if (showLoading) newElement.html(`${OJBetterName} —— 正在连接数据库……`);
                         await delay(100);
                         await initDB();
                     })
                     .then(() => {
-                        if (showLoading && expandFoldingblocks) newElement.html('Codeforces Better! —— 正在展开折叠块……');
+                        if (showLoading && expandFoldingblocks) newElement.html(`${OJBetterName} —— 正在展开折叠块……`);
                         return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
                     })
                     .then(() => {
-                        if (showLoading && commentPaging) newElement.html('Codeforces Better! —— 正在对评论区分页……');
+                        if (showLoading && commentPaging) newElement.html(`${OJBetterName} —— 正在对评论区分页……`);
                         return delay(100).then(() => { if (commentPaging) CommentPagination() });
                     })
                     .then(() => {
-                        if (showLoading && is_acmsguru) newElement.html('Codeforces Better! —— 正在为acmsguru题面重新划分div……');
+                        if (showLoading && is_acmsguru) newElement.html(`${OJBetterName} —— 正在为acmsguru题面重新划分div……`);
                         return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
                     })
                     .then(() => {
-                        if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮相关函数……');
+                        if (showLoading) newElement.html(`${OJBetterName} —— 正在加载按钮相关函数……`);
                         return delay(100).then(() => initTranslateButtonFunc());
                     })
                     .then(() => {
-                        if (showLoading) newElement.html('Codeforces Better! —— 正在加载按钮……');
+                        if (showLoading) newElement.html(`${OJBetterName} —— 正在加载按钮……`);
                         return delay(100).then(() => addConversionButton());
                     })
                     .then(() => {
-                        if (showLoading && commentTranslationMode == "2") newElement.html('Codeforces Better! —— 正在加载选段翻译……');
+                        if (showLoading && commentTranslationMode == "2") newElement.html(`${OJBetterName} —— 正在加载选段翻译……`);
                         return delay(100).then(() => { if (commentTranslationMode == "2") multiChoiceTranslation() });
                     })
                     .then(async () => {
-                        if (showLoading && renderPerfOpt) newElement.html('Codeforces Better! —— 正在优化折叠块渲染……');
+                        if (showLoading && renderPerfOpt) newElement.html(`${OJBetterName} —— 正在优化折叠块渲染……`);
                         await delay(100);
                         if (renderPerfOpt) await RenderPerfOpt();
                     })
                     .then(async () => {
-                        if (showLoading && is_problem && memoryTranslateHistory) newElement.html('Codeforces Better! —— 正在恢复上一次的翻译记录……');
+                        if (showLoading && is_problem && memoryTranslateHistory) newElement.html(`${OJBetterName} —— 正在恢复上一次的翻译记录……`);
                         return delay(100).then(async () => { if (is_problem && memoryTranslateHistory) await initTransResultsRecover() });
                     })
                     .then(async () => {
-                        if (showLoading && autoTranslation) newElement.html('Codeforces Better! —— 正在初始化短文本自动翻译……');
+                        if (showLoading && autoTranslation) newElement.html(`${OJBetterName} —— 正在初始化短文本自动翻译……`);
                         return delay(100).then(() => { if (autoTranslation) initTransWhenViewable() });
                     })
                     .then(async () => {
-                        if (showLoading && standingsRecolor && is_cfStandings) newElement.html('Codeforces Better! —— 正在为榜单重新着色……');
+                        if (showLoading && standingsRecolor && is_cfStandings) newElement.html(`${OJBetterName} —— 正在为榜单重新着色……`);
                         await delay(100);
                         if (standingsRecolor && is_cfStandings) await recolorStandings();
                     })
                     .then(async () => {
-                        if (showLoading && is_problem) newElement.html('Codeforces Better! —— 正在添加代码编辑器……');
+                        if (showLoading && is_problem) newElement.html(`${OJBetterName} —— 正在添加代码编辑器……`);
                         await delay(100);
                         if (is_problem && problemPageCodeEditor) await addProblemPageCodeEditor();
                     })
                     .then(async () => {
                         await delay(100);
-                        if (showLoading && showClistRating_contest && is_contest) {
-                            newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                        if (showClistRating_contest && is_contest) {
+                            if (showLoading) newElement.html(`${OJBetterName} —— 正在加载Clist数据……`);
                             await showRatingByClist_contest();
                         }
-                        if (showLoading && showClistRating_problemset && is_problemset) {
-                            newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                        if (showClistRating_problemset && is_problemset) {
+                            if (showLoading) newElement.html(`${OJBetterName} —— 正在加载Clist数据……`);
                             await showRatingByClist_problemset();
                         }
-                        if (showLoading && showClistRating_problem && is_problem) {
-                            newElement.html('Codeforces Better! —— 正在加载Clist数据……');
+                        if (showClistRating_problem && is_problem) {
+                            if (showLoading) newElement.html(`${OJBetterName} —— 正在加载Clist数据……`);
                             await showRatingByClist_problem();
                         }
                     })
                     .then(() => {
                         alertZh();
                         if (showLoading) {
-                            newElement.html('Codeforces Better! —— 加载已完成');
+                            newElement.html(`${OJBetterName} —— 加载已完成`);
                             newElement.removeClass('alert-info').addClass('alert-success');
                             setTimeout(function () {
                                 newElement.remove();
