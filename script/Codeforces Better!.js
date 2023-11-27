@@ -2229,7 +2229,7 @@ function getExternalJSON(url) {
 }
 
 /**
- * 创建对话框
+ * 创建确认对话框
  * @param {string} title 标题
  * @param {string} content 内容
  * @param {string[]} buttons 按钮
@@ -2245,10 +2245,10 @@ function createDialog(title, content, buttons, secondaryButton = "cancel") {
         </div>
         `);
         const buttonbox = $(`<div class="buttons"></div>`);
-        const continueButton = $(`<button class="continueButton">${buttons[0]}</button>`);
         const cancelButton = $(`<button class="cancelButton">${buttons[1]}</button>`);
-        buttonbox.append(continueButton);
+        const continueButton = $(`<button class="continueButton">${buttons[0]}</button>`);
         buttonbox.append(cancelButton);
+        buttonbox.append(continueButton);
         dialog.append(buttonbox);
         $('body').before(dialog);
 
@@ -9325,6 +9325,7 @@ document.addEventListener("DOMContentLoaded", function () {
     checkJQuery(50);
     function executeFunctions() {
         init();
+        alertZh();
         darkModeStyleAdjustment();
         ShowAlertMessage();
         settingPanel();
@@ -9412,7 +9413,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     })
                     .then(() => {
-                        alertZh();
                         if (showLoading) {
                             newElement.html(`${OJBetterName} —— 加载已完成`);
                             newElement.removeClass('alert-info').addClass('alert-success');
