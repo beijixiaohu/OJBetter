@@ -317,7 +317,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
         html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
         html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] #CFBetter_statusBar,
-        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest{
+        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest,
+        html[data-theme=dark] #customTestBlock{
             color: #9099a3 !important;
         }
         /* 文字颜色3 */
@@ -467,7 +468,7 @@ function handleColorSchemeChange(event) {
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
-        html[data-theme=dark] .overlay {
+        html[data-theme=dark] .overlay::before {
             background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
             color: #9099a3;
             text-shadow: 0px 0px 2px #000000;
@@ -1377,13 +1378,13 @@ span.input_label {
     border-color: #009688;
     border: none;
 }
-.CFBetter_modal button#cancelButton{
+.CFBetter_modal button.secondary{
     background-color:#4DB6AC;
 }
 .CFBetter_modal button:hover{
     background-color:#4DB6AC;
 }
-.CFBetter_modal button#cancelButton:hover {
+.CFBetter_modal button.secondary:hover {
     background-color: #80CBC4;
 }
 .CFBetter_modal .help-icon {
@@ -2223,6 +2224,51 @@ function getExternalJSON(url) {
                 console.warn(`网络错误, ${url}无法访问`);
                 resolve({});
             }
+        });
+    });
+}
+
+/**
+ * 创建对话框
+ * @param {string} title 标题
+ * @param {string} content 内容
+ * @param {string[]} buttons 按钮
+ * @param {"cancel"|"continue"} [secondaryButton="cancel"] 次要按钮
+ */
+function createDialog(title, content, buttons, secondaryButton = "cancel") {
+    return new Promise(resolve => {
+        const styleElement = GM_addStyle(darkenPageStyle2);
+        let dialog = $(`
+        <div class="CFBetter_modal">
+            <h2>${title}</h2>
+            ${content}
+        </div>
+        `);
+        const buttonbox = $(`<div class="buttons"></div>`);
+        const continueButton = $(`<button class="continueButton">${buttons[0]}</button>`);
+        const cancelButton = $(`<button class="cancelButton">${buttons[1]}</button>`);
+        buttonbox.append(continueButton);
+        buttonbox.append(cancelButton);
+        dialog.append(buttonbox);
+        $('body').before(dialog);
+
+        // set secondary button
+        if (secondaryButton === "cancel") {
+            cancelButton.addClass("secondary");
+        } else if (secondaryButton === "continue") {
+            continueButton.addClass("secondary");
+        }
+
+        continueButton.click(function () {
+            $(styleElement).remove();
+            dialog.remove();
+            resolve(true);
+        });
+
+        cancelButton.click(function () {
+            $(styleElement).remove();
+            dialog.remove();
+            resolve(false);
         });
     });
 }
@@ -4082,33 +4128,6 @@ const CompletConfigEditHTML = `
     </div>
 `;
 
-// 配置改变保存确认
-function saveConfirmation() {
-    return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle2);
-        let htmlString = `
-        <div class="CFBetter_modal">
-            <h2>配置已更改，是否保存？</h2>
-            <div class="buttons">
-                <button id="cancelButton">不保存</button><button id="saveButton">保存</button>
-            </div>
-        </div>
-      `;
-        $('body').before(htmlString);
-        addDraggable($('.CFBetter_modal'));
-        $("#saveButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(true);
-        });
-        $("#cancelButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(false);
-        });
-    });
-}
-
 // 设置按钮面板
 async function settingPanel() {
     // 添加按钮
@@ -4320,7 +4339,7 @@ async function settingPanel() {
             }
 
             if (hasChange) {
-                const shouldSave = await saveConfirmation();
+                const shouldSave = await createDialog("配置已更改，是否保存？", "", ["保存", "不保存"]); // 配置改变保存确认
                 if (shouldSave) {
                     // 数据校验
                     if (settings.translation === "openai") {
@@ -4986,14 +5005,18 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
  * @param {boolean} is_comment 是否是评论
  */
 async function transTask(button, element, type, is_comment, translation) {
-    var target, element, errerNum = 0, skipNum = 0;
+    var target, element;
+    var count = {
+        errerNum: 0,
+        skipNum: 0
+    };
     if (commentTranslationMode == "1") {
         // 分段翻译
         var pElements = $(element).find("p:not(li p), li, .CFBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, is_comment, translation);
+            await process(button, target, element_node, type, is_comment, count, translation);
         }
     } else if (commentTranslationMode == "2") {
         // 选段翻译
@@ -5001,7 +5024,7 @@ async function transTask(button, element, type, is_comment, translation) {
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, is_comment, translation);
+            await process(button, target, element_node, type, is_comment, count, translation);
         }
         $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
     } else {
@@ -5009,11 +5032,11 @@ async function transTask(button, element, type, is_comment, translation) {
         target = $(element).eq(0).clone();
         if (type === "child_level") $(target).children(':first').remove();
         element_node = $($(element)).get(0);
-        await process(button, target, element_node, type, is_comment, translation);
+        await process(button, target, element_node, type, is_comment, count, translation);
     }
 
     // 翻译完成
-    if (!errerNum && !skipNum) {
+    if (!count.errerNum && !count.skipNum) {
         button.setTransButtonState('translated');
     }
 }
@@ -5026,7 +5049,7 @@ async function transTask(button, element, type, is_comment, translation) {
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  */
-async function process(button, target, element_node, type, is_comment, translation) {
+async function process(button, target, element_node, type, is_comment, count, translation) {
     if (type === "child_level") {
         let div = $("<div>");
         $(element_node).append(div);
@@ -5035,7 +5058,18 @@ async function process(button, target, element_node, type, is_comment, translati
 
     //是否跳过折叠块
     if ($(target).find('.spoiler').length > 0) {
-        const shouldSkip = await skiFoldingBlocks();
+        let content = `
+            <div style="display:grid; padding:5px 0px; align-items: center;">
+            <p>
+            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在您需要选择是否跳过这些折叠块，
+            </p>
+            <p>
+            如果其中有您需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
+            </p>
+            </div>
+            <p>要跳过折叠块吗？（建议选择跳过）</p>
+        `;
+        const shouldSkip = await createDialog("是否跳过折叠块？", content, ["跳过", "否"]); //跳过折叠块确认
         if (shouldSkip) {
             $(target).find('.spoiler').remove();
         } else {
@@ -5049,8 +5083,8 @@ async function process(button, target, element_node, type, is_comment, translati
     result = await blockProcessing(button, target, element_node, is_comment, translation);
     button.pushResultToTransButton(result);
 
-    if (result.status == "error") errerNum += 1;
-    else if (result.status == "skip") skipNum += 1;
+    if (result.status == "error") count.errerNum += 1;
+    else if (result.status == "skip") count.skipNum += 1;
     $(target).remove();
 }
 
@@ -5280,79 +5314,6 @@ function waitUntilIdleThenDo(callback) {
             callback();
         }
     }, 100);
-}
-
-// 字数超限确认
-function showWordsExceededDialog(button, textLength, realTextLength) {
-    return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle);
-        let htmlString = `
-      <div class="CFBetter_modal">
-          <h2>字符数超限! </h2>
-          <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
-          <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
-
-          <div style="display:flex; padding:5px 0px; align-items: center;">
-            ${helpCircleHTML}
-            <p>
-            注意，可能您选择了错误的翻译按钮<br>
-            由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
-            </p>
-          </div>
-          <p>您确定要继续翻译吗？</p>
-          <div class="buttons">
-            <button id="continueButton">继续</button><button id="cancelButton">取消</button>
-          </div>
-      </div>
-      `;
-        $('body').before(htmlString);
-        $("#continueButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(true);
-        });
-        $("#cancelButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(false);
-        });
-    });
-}
-
-//跳过折叠块确认
-function skiFoldingBlocks() {
-    return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle);
-        let htmlString = `
-      <div class="CFBetter_modal">
-          <h2>是否跳过折叠块？</h2>
-          <p></p>
-          <div style="display:grid; padding:5px 0px; align-items: center;">
-            <p>
-            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在您需要选择是否跳过这些折叠块，
-            </p>
-            <p>
-            如果其中有您需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
-            </p>
-          </div>
-          <p>要跳过折叠块吗？（建议选择跳过）</p>
-          <div class="buttons">
-            <button id="cancelButton">否</button><button id="skipButton">跳过</button>
-          </div>
-      </div>
-      `;
-        $('body').before(htmlString);
-        $("#skipButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(true);
-        });
-        $("#cancelButton").click(function () {
-            $(styleElement).remove();
-            $('.CFBetter_modal').remove();
-            resolve(false);
-        });
-    });
 }
 
 // latex替换
@@ -5709,7 +5670,7 @@ class ElementsTree {
         translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
-        if(transButton.length == 0){
+        if (transButton.length == 0) {
             // 如果没有找到，则应该是得在父元素中找到
             transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
         }
@@ -5852,7 +5813,22 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         caiyun: 5000
     };
     if (translationLimits.hasOwnProperty(realTranlate) && text.length > translationLimits[realTranlate]) {
-        const shouldContinue = await showWordsExceededDialog(button, translationLimits[realTranlate], text.length);
+        let textLength = translationLimits[realTranlate];
+        let realTextLength = text.length;
+        let content = `
+        <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
+        <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
+
+        <div style="display:flex; padding:5px 0px; align-items: center;">
+        ${helpCircleHTML}
+        <p>
+        注意，可能您选择了错误的翻译按钮<br>
+        由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
+        </p>
+        </div>
+        <p>您确定要继续翻译吗？</p>
+        `;
+        const shouldContinue = await createDialog("字符数超限! ", content, ["仍要翻译", "取消"], "continue"); // 字数超限确认
         if (!shouldContinue) {
             return {
                 translateDiv: translateDiv,
@@ -6624,9 +6600,6 @@ async function CreateCodeDevForm(submitUrl, cloneHTML) {
                 </div>
                 <div style="display: flex;margin: 5px;">
                     <input type="checkbox" id="DontShowDiff"}><label for="DontShowDiff">不显示差异对比</label>
-                </div>
-                <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="secureSubmit"}><label for="secureSubmit">防止误提交(勾选后不能点击提交按钮)</label>
                 </div>
                 <button type="button" id="addCustomTest">新建</button>
             </div>
@@ -9055,9 +9028,11 @@ async function addProblemPageCodeEditor() {
     runButton.on('click', (event) => runCode(event, form.sourceDiv, form.submitDiv));
 
     // 提交
-    submitButton.on('click', function (event) {
+    submitButton.on('click', async function (event) {
         event.preventDefault();
-        if (!$('#secureSubmit').prop('checked')) {
+        let content =  ``;
+        const submit = await createDialog("确认提交代码吗", content, ['提交', '否']); //提交确认
+        if (submit) {
             submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
             $('#CFBetter_SubmitForm').submit();
         } else {
