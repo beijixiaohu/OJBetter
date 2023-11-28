@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.69
+// @version      1.70
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -73,7 +73,7 @@ var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Brid
 var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
 function init() {
     const { hostname, href } = window.location;
-    is_mSite = hostname.startsWith('m');
+    is_mSite = /^m[0-9]/.test(hostname);
     is_oldLatex = $('.tex-span').length;
     is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
@@ -145,7 +145,8 @@ function init() {
             }) : [];
     }
     // 编辑器
-    CF_csrf_token = Codeforces.getCsrfToken();
+    if (!is_mSite) CF_csrf_token = Codeforces.getCsrfToken();
+    else CF_csrf_token = "";
     compilerSelection = getGMValue("compilerSelection", "61");
     editorFontSize = getGMValue("editorFontSize", "15");
     problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
@@ -9031,7 +9032,7 @@ async function addProblemPageCodeEditor() {
     // 提交
     submitButton.on('click', async function (event) {
         event.preventDefault();
-        let content =  ``;
+        let content = ``;
         const submit = await createDialog("确认提交代码吗", content, ['提交', '否']); //提交确认
         if (submit) {
             submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
