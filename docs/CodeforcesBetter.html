@@ -13,8 +13,7 @@
   </div>
 </div>
 <h2 id="功能">功能</h2>
-<span style="color:#009688; background-color: #E0F2F1;">提示：脚本的部分功能提供了配置项，你可以点击 <strong>整个页面右上角</strong> 的
-  <strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</span>
+<span style="color:#009688; background-color: #E0F2F1;">提示：脚本的部分功能提供了配置项，你可以点击 <strong>整个页面右上角</strong> 的<strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</span>
 <h3 id="界面汉化">界面汉化</h3>
 <p>将网站的主要元素汉化为中文（可关闭）</p>
 <h3 id="题目翻译">题目翻译</h3>
@@ -99,7 +98,6 @@
     </tr>
   </tbody>
 </table>
-<div style="border: 5px solid #ffffff00;"></div>
 <span style="color:#009688; background-color: #E0F2F1;">提示：右键<strong>翻译</strong>按钮，可以快速切换翻译服务哦</span>
 <p><strong>自动翻译</strong></p>
 <p>开启"自动翻译"后，对于<code>.ttypography</code>, <code>.comments</code> 区域中的短文本，当其进入浏览器窗口的<u>可视区域</u>时，自动进行翻译</p>
@@ -115,8 +113,7 @@
   <li>对于比赛问题集页（contest），需要浏览器中 clist.by 网站的登录 cookie 有效，<strong>或者</strong>在设置面板中填写api key</li>
   <li>对于题目页（problem）和题单页（problemset），需要浏览器中 clist.by 的登录 cookie 有效</li>
 </ul>
-<span style="background-color: #FFF3E0;color: #FF5722;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie
-  有效性通过尝试请求所返回的状态码判断</span>
+<span style="background-color: #FFF3E0;color: #FF5722;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie 有效性通过尝试请求所返回的状态码判断</span>
 <h3 id="编辑器与LSP">编辑器与LSP</h3>
 <p><strong>题目页添加编辑器</strong></p>
 <p>在题目页的下方添加 monaco 代码编辑器(默认开启)</p>
@@ -171,8 +168,7 @@
     ]
   }
 </pre>
-<p>你可以使用 <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html">
-    CompletionItem </a>中几乎所有的属性，(注意: 不要填写 range 属性，脚本会自动计算并添加该属性)</p>
+<p>你可以使用 <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>中几乎所有的属性，(注意: 不要填写 range 属性，脚本会自动计算并添加该属性)</p>
 <h2 id="其他功能">其他功能</h2>
 <ul>
   <li>在题目、blog、回复等的右上角添加 <code>MrakDown视图</code> 按钮以及 <code>复制</code> 按钮</li>
@@ -233,61 +229,45 @@
 <p>此外，理论上也兼容任意的其他镜像站，你只需要自行再添加一行注释 <code>// @match 你的镜像站网址</code> 即可</p>
 <h2 id="常见问题">常见问题</h2>
 <div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 如何开始？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 你需要先安装 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然后再安装该脚本
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 更新错误？</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>A. 由于 Greasy Fork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，</p>
         <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可。</p>
         <p>你也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</p>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 一直显示加载中？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 请开启设置面板中的 ”兼容选项-不等待页面资源加载“ 选项
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 使用 DeepL 翻译报错 Too many requests ？</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>A. 这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，DeepL对翻译字数和频率是有限制的，</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">这是暂时的，一段时间后就恢复正常了</span>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 使用 DeepL 翻译报错 undefind 或一直显示翻译中？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 这通常是因为你所使用的网络无法正常访问 <a href="https://www.deepl.com">www.deepl.com</a>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 翻译结果中一些公式显示为 {xx} / [xx] / 【xx】？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 在使用普通翻译接口（DeepL/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】
@@ -313,12 +293,9 @@
           </div>
         </div>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 如何使用 ChatGPT 翻译？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 如果你可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，你只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。
@@ -386,12 +363,9 @@
         <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">注意：由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行点击授权</span>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 什么是LSP？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. <a href="https://microsoft.github.io/language-server-protocol/">LSP（Language Server
@@ -401,12 +375,9 @@
         <p>目前LSP的生态已经逐步完善，主流编辑器均已支持LSP或者有了对应的插件，如VSCode、Vim、Emacs等...</p>
         <p>但是各大商业IDE厂商对此兴趣不大，基本现有的LSP Server都是开源社区在维护，因此其仍然不及专业IDE以及各种专业的插件</p>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 如何使用LSP？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 只需两步：
@@ -454,35 +425,25 @@
           </div>
         </div>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 为什么 clangd 格式化无效？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 这是因为你在设置面板中填写的 LSP 工作路径不正确</a>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
-      <summary>Q. 为什么 clangd 无法识别我的
-        <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 头文件？</summary>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
+      <summary>Q. 为什么 clangd 无法识别我的 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 头文件？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 这是因为 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code>
         不是标准头文件，因此 clangd 默认不支持，你需要在 OJBetter_Bridge 的 cpp_workspace
         中的 <code>.clangd</code> 文件中通过修改编译器参数来告诉 clang 去哪找到这个非标准的头文件(当然也不推荐使用万能头)</a>
       </div>
-    </details>
-  </div>
-</div>
-<div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;">
-    <details>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details>
       <summary>Q. 静态补全增强可不可以使用本地的 JSON 文件？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 由于浏览器的安全限制，你并不能直接使用形如 <code>file:///xxx</code> 的 URL 来在浏览器中访问你的本地 JSON 文件。
@@ -497,8 +458,7 @@
           </div>
         </div>
       </div>
-    </details>
-  </div>
+    </details></div>
 </div>
 <h2 id="贡献代码">贡献代码</h2>
 <p>欢迎贡献代码，请前往 <a href="https://github.com/beijixiaohu/OJBetter">Github仓库</a> 创建PR</p>
@@ -515,7 +475,7 @@
       href="https://dexie.org/">dexie</a>、<a href="https://github.com/microsoft/monaco-editor">monaco-editor</a>
   </li>
   <li>OJBetter_Bridge 参考了以下仓库<a
-      href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>，使用了以下开源库<a
+      href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>，使用了以下开源库：<a
       href="https://github.com/zhiyiYo/PyQt-Fluent-Widgets">PyQt-Fluent-Widgets</a>、<a
       href="https://pypi.org/project/PyYAML/">PyYAML</a>、<a href="https://pypi.org/project/tornado/">tornado</a>、<a
       href="https://pypi.org/project/ujson/">ujson</a>
