@@ -35,9 +35,9 @@
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
-// @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/code_completer-0.0.11.min.js
 // @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
 // @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
+// @resource     acwing_cpp_code_completer https://aowuucdn.oss-cn-beijing.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
 // @license      GPL3
@@ -46,6 +46,8 @@
 // @compatible	 Edge
 // @incompatible safari
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
+// @downloadURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
+// @updateURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
 // ==/UserScript==
 
 // 状态与初始化
@@ -7133,7 +7135,8 @@ async function createMonacoEditor(language, form, support) {
 
         // 注册acwing cpp 模板
         if (language == "cpp" && cppCodeTemplateComplete) {
-            registMyCompletionItemProvider('cpp', 'ace', CODE_COMPLETER);
+            var acwing_cpp_code_completer = JSON.parse(GM_getResourceText("acwing_cpp_code_completer"));
+            registMyCompletionItemProvider('cpp', 'ace', acwing_cpp_code_completer);
         }
 
         // 注册自定义的补全
