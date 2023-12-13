@@ -46,8 +46,6 @@
 // @compatible	 Edge
 // @incompatible safari
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
-// @downloadURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
-// @updateURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
 // ==/UserScript==
 
 // 状态与初始化
@@ -211,7 +209,7 @@ function ShowAlertMessage() {
     }
     if (is_submitPage && problemPageCodeEditor) {
         let newElement = $("<div></div>").addClass("alert alert-warning CFBetter_alert")
-            .html(`${OJBetterName} —— 您已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
+            .html(`${OJBetterName} —— 你已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
             <p>${findHelpText2}</p>`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
         $(".menu-box:first").next().after(newElement);
@@ -3507,7 +3505,7 @@ const basic_settings_HTML = `
             contain: layout style;
             </p>
         </div>
-        <p>如果您的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>
+        <p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>
         </div>
     </div>
     <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
@@ -3727,7 +3725,7 @@ const translation_settings_HTML = `
             <p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p>
             <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p>
             <p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>
-            <p>具体您可以前往阅读脚本页的说明</p>
+            <p>具体你可以前往阅读脚本页的说明</p>
             </div>
         </div>
         <select id="translation_replaceSymbol" name="translation_replaceSymbol">
@@ -3785,8 +3783,8 @@ const clist_rating_settings_HTML = `
             ${helpCircleHTML}
             <div class="tip_text">
             <p>数据来源clist.by</p>
-            <p>您需要提供官方的api key</p>
-            <p>或让您的浏览器上的clist.by处于登录状态（即cookie有效）</p>
+            <p>你需要提供官方的api key</p>
+            <p>或让你的浏览器上的clist.by处于登录状态（即cookie有效）</p>
             </div>
         </div>
         <div class="badge">Cookie/API KEY</div>
@@ -3797,10 +3795,11 @@ const clist_rating_settings_HTML = `
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+            <p>你需要提供官方的api key</p>
+            <p>或让你的浏览器上的clist.by处于登录状态（即cookie有效）</p>
             </div>
         </div>
-        <div class="badge">Cookie</div>
+        <div class="badge">Cookie/API KEY</div>
         <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
     </div>
     <div class='CFBetter_setting_list'>
@@ -3808,7 +3807,7 @@ const clist_rating_settings_HTML = `
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>需要让您的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
+            <p>需要让你的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
             </div>
         </div>
         <div class="badge">Cookie</div>
@@ -3944,10 +3943,10 @@ const compatibility_settings_HTML = `
             ${helpCircleHTML}
             <div class="tip_text">
             <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
-            <p>如果您的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
-            <p><u>您首先应该确认是否是网络问题，</u></p>
-            <p>如果不是，那这可能是由于 window.onload 事件在您的浏览器中触发过早（早于DOMContentLoaded），</p>
-            <p>您可以尝试开启该选项来不再等待 window.onload 事件</p>
+            <p>如果你的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
+            <p><u>你首先应该确认是否是网络问题，</u></p>
+            <p>如果不是，那这可能是由于 window.onload 事件在你的浏览器中触发过早（早于DOMContentLoaded），</p>
+            <p>你可以尝试开启该选项来不再等待 window.onload 事件</p>
             <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
             </div>
         </div>
@@ -3996,7 +3995,7 @@ const chatgptConfigEditHTML = `
                     <div class="tip_text">
                     <p>留空则默认为：gpt-3.5-turbo</p>
                     <p>模型列表请查阅<a target="_blank" href="https://platform.openai.com/docs/models">OpenAI官方文档</a></p>
-                    <p><strong>此外，如果您使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
+                    <p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
                     </div>
                 </div>
             </div>
@@ -4008,8 +4007,8 @@ const chatgptConfigEditHTML = `
                 <div class="help_tip">
                     ${helpCircleHTML}
                     <div class="tip_text">
-                    <p>您需要输入自己的OpenAI key，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
-                    <p><b>如果您使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>
+                    <p>你需要输入自己的OpenAI key，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
+                    <p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>
                     </div>
                 </div>
             </div>
@@ -4022,9 +4021,9 @@ const chatgptConfigEditHTML = `
                     ${helpCircleHTML}
                     <div class="tip_text">
                         <p>留空则默认为OpenAI官方API</p>
-                        <p>您也可以填写指定的API来代理访问OpenAI的API，</p>
-                        <p>如果您使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p>
-                        <p><strong>由于您指定了自定义的API，Tampermonkey会对您的跨域请求进行警告，您需要自行授权</strong></p>
+                        <p>你也可以填写指定的API来代理访问OpenAI的API，</p>
+                        <p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p>
+                        <p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>
                     </div>
                 </div>
             </div>
@@ -4046,7 +4045,7 @@ const chatgptConfigEditHTML = `
                 </div>
             </div>
         </label>
-        <textarea id="_header" placeholder='（选填）您可以在这里填写向请求header中额外添加的键值对' require = false></textarea>
+        <textarea id="_header" placeholder='（选填）你可以在这里填写向请求header中额外添加的键值对' require = false></textarea>
         <label for='_data'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label">自定义data</span>
@@ -4061,7 +4060,7 @@ const chatgptConfigEditHTML = `
                 </div>
             </div>
         </label>
-        <textarea id="_data" placeholder='（选填）您可以在这里填写向请求data中额外添加的键值对' require = false></textarea>
+        <textarea id="_data" placeholder='（选填）你可以在这里填写向请求data中额外添加的键值对' require = false></textarea>
         <button id='tempConfig_save'>保存</button>
     </div>
 `;
@@ -4090,7 +4089,7 @@ const CompletConfigEditHTML = `
                 <a target="_blank" href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html">CompletionItem</a> 
                 几乎所有的属性, (注意: 不需要range属性, 脚本会自动计算并添加该属性)</p>
                 <p>ace 格式仅支持 ace 中 completers 有限的属性: <code>caption</code>、<code>value</code>, 脚本会自动将其转换为 monaco 格式</p>
-                <p>具体您可以前往阅读脚本页的说明</p>
+                <p>具体你可以前往阅读脚本页的说明</p>
                 </div>
             </div>
             <select id="complet_genre" name="complet_genre">
@@ -5065,10 +5064,10 @@ async function process(button, target, element_node, type, is_comment, count, tr
         let content = `
             <div style="display:grid; padding:5px 0px; align-items: center;">
             <p>
-            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在您需要选择是否跳过这些折叠块，
+            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在你需要选择是否跳过这些折叠块，
             </p>
             <p>
-            如果其中有您需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
+            如果其中有你需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
             </p>
             </div>
             <p>要跳过折叠块吗？（建议选择跳过）</p>
@@ -5826,11 +5825,11 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         <div style="display:flex; padding:5px 0px; align-items: center;">
         ${helpCircleHTML}
         <p>
-        注意，可能您选择了错误的翻译按钮<br>
+        注意，可能你选择了错误的翻译按钮<br>
         由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
         </p>
         </div>
-        <p>您确定要继续翻译吗？</p>
+        <p>你确定要继续翻译吗？</p>
         `;
         const shouldContinue = await createDialog("字符数超限! ", content, ["仍要翻译", "取消"], "continue"); // 字数超限确认
         if (!shouldContinue) {
@@ -6167,6 +6166,7 @@ async function CF2luogu() {
 
 // RatingClass
 const ratingClassMap = {
+    NaN: "rating_by_clist_colorNaN",
     0: "rating_by_clist_color0",
     1200: "rating_by_clist_color1",
     1400: "rating_by_clist_color2",
@@ -6179,7 +6179,8 @@ const ratingClassMap = {
     3000: "rating_by_clist_color9"
 };
 const cssMap = {
-    "rating_by_clist_color0": "#cccccc",
+    "rating_by_clist_colorNaN": "#cccccc",
+    "rating_by_clist_color0": "#808080",
     "rating_by_clist_color1": "#73e473",
     "rating_by_clist_color2": "#77ddbb",
     "rating_by_clist_color3": "#aaaaff",
@@ -6231,7 +6232,7 @@ async function checkCookie(isContest = false) {
         var state = congested ? `当前访问Clist.by网络拥堵，请求已中断，请稍后再重试` :
             `当前浏览器的Clist.by登录Cookie可能已失效，请打开<a target="_blank" href="https://clist.by/">Clist.by</a>重新登录
          <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
-         <br>脚本不会获取您在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明`;
+         <br>脚本不会获取你在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明`;
         var newElement = $("<div></div>")
             .addClass("alert alert-error ojbetter-alert").html(`${OJBetterName} —— ${state}`)
             .css({ "margin": "1em", "text-align": "center", "position": "relative" });
@@ -6306,48 +6307,88 @@ async function getRating(problem, problem_url, contest = null) {
         });
     });
 }
-// contest页显示Rating
-async function showRatingByClist_contest() {
-    if (!await checkCookie(true)) return;
-    creatRatingCss();
 
-    var clist_event = $('#sidebar').children().first().find('.rtable th').first().text();
-    var problemsMap = new Map();
-    await new Promise((resolve, reject) => {
+async function getRatingFromApi_problem(problem, problem_url) {
+    return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
             method: "GET",
-            url: "https://clist.by/api/v3/contest/?limit=1&resource_id=1&with_problems=true&event=" + encodeURIComponent(clist_event),
+            url: `https://clist.by:443/api/v4/problem/?name=${problem}&resource__regex=codeforces.com`,
             headers: {
                 "Authorization": clist_Authorization
             },
             onload: function (response) {
                 if (!response) reject('发生了未知错误！');
-                var data = JSON.parse(response.responseText);
-                var objects = data.objects;
+                let data = JSON.parse(response.responseText);
+                let objects = data.objects;
+                let problemsMap = new Map();
                 if (objects.length > 0) {
-                    var problems = objects[0].problems;
-                    for (var i = 0; i < problems.length; i++) {
-                        var problem = problems[i];
-                        problemsMap.set(problem.url, problem.rating);
+                    for (let i = 0; i < objects.length; i++) {
+                        let problem = objects[i];
+                        problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
                     }
-                    resolve();
+                    resolve(problemsMap.get(problem_url));
                 }
             }
         });
     });
+}
+
+async function getRatingFromApi_contest(event) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${event}`,
+            headers: {
+                "Authorization": clist_Authorization
+            },
+            onload: function (response) {
+                if (!response) reject('发生了未知错误！');
+                let data = JSON.parse(response.responseText);
+                let objects = data.objects;
+                let problemsMap = new Map();
+                if (objects.length > 0) {
+                    var problems = objects[0].problems;
+                    for (var i = 0; i < problems.length; i++) {
+                        var problem = problems[i];
+                        problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
+                    }
+                    resolve(problemsMap);
+                }
+            }
+        });
+    });
+}
+
+function getClassNameByRating(rating) {
+    let className = "rating_by_clist_color9";
+    if (Number.isNaN(rating)) {
+        className = "rating_by_clist_colorNaN";
+    } else {
+        let keys = Object.keys(ratingClassMap);
+        for (let i = 0; i < keys.length; i++) {
+            if (rating < keys[i]) {
+                className = ratingClassMap[keys[i - 1]];
+                break;
+            }
+        }
+    }
+    return className;
+}
+
+// contest页显示Rating
+async function showRatingByClist_contest() {
+    if (!await checkCookie(true)) return;
+    creatRatingCss();
+
+    let event = encodeURIComponent($('#sidebar').children().first().find('.rtable th').first().text());
+    let problemsMap = await getRatingFromApi_contest(event);
 
     $('.datatable .id.left').each(function () {
         let href = 'https://codeforces.com' + $(this).find('a').attr('href');
         if (problemsMap.has(href)) {
-            var rating = problemsMap.get(href);
-            let className = "rating_by_clist_color9";
-            let keys = Object.keys(ratingClassMap);
-            for (let i = 0; i < keys.length; i++) {
-                if (rating < keys[i]) {
-                    className = ratingClassMap[keys[i - 1]];
-                    break;
-                }
-            }
+            let rating = problemsMap.get(href);
+            let className = getClassNameByRating(rating);
+
             $(this).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${rating}</span></div>`);
         }
     });
@@ -6378,14 +6419,8 @@ async function showRatingByClist_problemset() {
         for (let j = i; j < endIndex; j++) {
             const result = results[j - i];
             if (result == undefined) continue;
-            let className = "rating_by_clist_color9";
-            let keys = Object.keys(ratingClassMap);
-            for (let k = 0; k < keys.length; k++) {
-                if (result.rating < keys[k]) {
-                    className = ratingClassMap[keys[k - 1]];
-                    break;
-                }
-            }
+
+            let className = getClassNameByRating(result.rating);
 
             const $tds = $($trs[j]).find('td');
             $($tds[0]).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${result.rating}</span></div>`);
@@ -6395,6 +6430,7 @@ async function showRatingByClist_problemset() {
         // await new Promise(resolve => setTimeout(resolve, 100));
     }
 }
+
 // problem页显示Rating
 async function showRatingByClist_problem() {
     if (!await checkCookie()) return;
@@ -6414,27 +6450,15 @@ async function showRatingByClist_problem() {
     if (is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com'); // 轻量站
 
     // 比赛名
-    let contest = $('#sidebar').children().first().find('.rtable th').first().text();
+    // let contest = $('#sidebar').children().first().find('.rtable th').first().text();
 
-    let result;
-    try {
-        result = await getRating(problem, problem_url, contest);
-    } catch (error) {
-        console.warn(error);
-        return;
-    }
+    // rating
+    let rating = await getRatingFromApi_problem(problem, problem_url);
+    let className = getClassNameByRating(rating);
 
-    let className = "rating_by_clist_color9";
-    let keys = Object.keys(ratingClassMap);
-    for (let i = 0; i < keys.length; i++) {
-        if (result.rating < keys[i]) {
-            className = ratingClassMap[keys[i - 1]];
-            break;
-        }
-    }
-    const RatingHtml = $(`<a id="problemLink" href="https://clist.by/problems/?search=${result.problem}&resource=1" target="_blank">
+    const RatingHtml = $(`<a id="problemLink" href="https://clist.by/problems/?search=${problem}&resource=1" target="_blank">
         <button style="height: 25px;" class="html2mdButton ratingBadges ${className}">
-        ${clistIcon}<span style="padding: 1px 0px 0px 5px;">${result.rating}</span></button>
+        ${clistIcon}<span style="padding: 1px 0px 0px 5px;">${rating}</span></button>
         </a>`);
     if ($('#CF2luoguPanel').length > 0) {
         $('#CF2luoguPanel').append(RatingHtml);
