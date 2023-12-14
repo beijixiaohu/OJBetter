@@ -62,7 +62,7 @@ var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
-var openai_model, openai_key, openai_proxy, openai_header, openai_data, opneaiConfig;
+var openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, opneaiConfig;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
@@ -116,6 +116,7 @@ function init() {
     RatingHidden = getGMValue("RatingHidden", false);
     clist_Authorization = getGMValue("clist_Authorization", "");
     //openai
+    openai_isStream = getGMValue("openai_isStream", true);
     opneaiConfig = getGMValue("chatgpt-config", {
         "choice": -1,
         "configurations": []
@@ -2235,7 +2236,7 @@ function getExternalJSON(url) {
  * @param {string} title 标题
  * @param {string} content 内容
  * @param {string[]} buttons 按钮
- * @param {"cancel"|"continue"} [secondaryButton="cancel"] 次要按钮
+ * @param {"cancel"|"continue"} [secondaryButton="cancel"] 指定次要按钮
  */
 function createDialog(title, content, buttons, secondaryButton = "cancel") {
     return new Promise(resolve => {
@@ -3578,14 +3579,26 @@ const translation_settings_HTML = `
             <div class="help_tip">
                 ${helpCircleHTML}
                 <div class="tip_text">
-                <p><b>请在下方添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p>
+                <p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p>
                 <p>具体请阅读脚本页的介绍</p>
                 </div>
             </div>
         </span>
     </label>
+    <hr>
+    <h4>ChatGPT</h4>
     <div class='CFBetter_setting_menu_config_box' id='openai' style='display: none;'>
         <div id="chatgpt-config"></div>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="openai_isStream">流式传输</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>启用数据流式传输，打字机效果</p>
+            </div>
+        </div>
+        <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
     <hr>
     <h4>偏好</h4>
@@ -4227,6 +4240,7 @@ async function settingPanel() {
                 $("#chatgpt_config_config_bar_ul").find(`input[name='config_item'][value='${tempConfig.choice}']`).prop("checked", true);
             }
         };
+        $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
@@ -4251,19 +4265,6 @@ async function settingPanel() {
         $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
         $("input[name='compiler']").css("color", "gray");
 
-        // 翻译选择情况监听
-        $("input[name='translation']").change(function () {
-            var selected = $(this).val(); // 获取当前选中的值
-            if (selected === "openai") {
-                $("#openai").show();
-                if (tempConfig) {
-                    $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
-                }
-            } else {
-                $("#openai").hide();
-            }
-        });
-
         // 配置选择情况监听
         $("input[name='config_item']").change(function () {
             var selected = $(this).val(); // 获取当前选中的值
@@ -4286,6 +4287,7 @@ async function settingPanel() {
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 loaded: $("#loaded").prop("checked"),
                 translation: $("input[name='translation']:checked").val(),
+                openai_isStream: $("#openai_isStream").prop("checked"),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
@@ -5319,7 +5321,7 @@ function waitUntilIdleThenDo(callback) {
     }, 100);
 }
 
-// latex替换
+// 块替换
 function replaceBlock(text, matches, replacements) {
     try {
         for (let i = 0; i < matches.length; i++) {
@@ -5339,7 +5341,7 @@ function replaceBlock(text, matches, replacements) {
     return text;
 }
 
-// latex还原
+// 块还原
 function recoverBlock(translatedText, matches, replacements) {
     for (let i = 0; i < matches.length; i++) {
         let match = matches[i];
@@ -5429,6 +5431,15 @@ class TranslateDiv {
             // 渲染Latex
             MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
         }
+    }
+
+    // 更新不渲染LaTeX
+    updateTranslateDiv_WithoutLaTeX(text) {
+        // 渲染MarkDown
+        var md = window.markdownit();
+        if (!text) text = "";
+        var html = md.render(text);
+        this.mainDiv.html(html);
     }
 
     // 关闭元素
@@ -5749,8 +5760,6 @@ async function initTransWhenViewable() {
     })
 }
 
-var translatedText = "";
-
 // 翻译主方法
 async function translateProblemStatement(button, text, element_node, is_comment, translation_) {
     let status = "ok";
@@ -5765,6 +5774,107 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         "caiyun": "彩云小译",
         "openai": "ChatGPT"
     };
+    let translatedText = "";
+
+    /**
+     * LaTeX替换
+     * @param {string} text 
+     * @returns {string}
+     */
+    function replaceLatex(text) {
+        if (is_oldLatex) {
+            let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
+            matches = matches.concat(text.match(regex));
+            text = replaceBlock(text, matches, replacements);
+            text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
+        } else if (is_acmsguru) {
+            let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            matches = matches.concat(text.match(regex));
+            text = replaceBlock(text, matches, replacements);
+        } else if (realTranlate != "openai") {
+            // 使用GPT翻译时不必替换latex公式
+            let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            matches = matches.concat(text.match(regex));
+            text = replaceBlock(text, matches, replacements);
+        }
+        return text;
+    }
+
+    /**
+     * LaTeX恢复
+     * @param {*} translatedText 
+     * @returns {string}
+     */
+    function recoverLatex(translatedText) {
+        translatedText = translatedText.replace(/】\s*【/g, '】 【');
+        translatedText = translatedText.replace(/\]\s*\[/g, '] [');
+        translatedText = translatedText.replace(/\}\s*\{/g, '} {');
+        if (is_oldLatex) {
+            translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 还原为<p/>标签
+            translatedText = recoverBlock(translatedText, matches, replacements);
+        } else if (is_acmsguru) {
+            translatedText = recoverBlock(translatedText, matches, replacements);
+        } else if (realTranlate != "openai") {
+            translatedText = recoverBlock(translatedText, matches, replacements);
+        }
+        return translatedText;
+    }
+
+    /**
+     * 格式化翻译结果
+     * @param {string} translatedText 
+     * @returns {string} 处理后的翻译结果
+     */
+    function formatText(translatedText) {
+        // 转义LaTex中的特殊符号
+        if (!is_oldLatex && !is_acmsguru) {
+            const escapeRules = [
+                { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
+                { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
+                { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
+                { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
+                { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
+                { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
+            ];
+
+            let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
+
+            for (const match of latexMatches) {
+                const matchedText = match[0];
+                let escapedText = matchedText;
+
+                for (const rule of escapeRules) {
+                    escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
+                }
+                escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
+                translatedText = translatedText.replace(matchedText, escapedText);
+            }
+        }
+
+        // 使符合mathjx的转换语法
+        const mathjaxRuleMap = [
+            { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
+        ];
+        mathjaxRuleMap.forEach(({ pattern, replacement }) => {
+            translatedText = translatedText.replace(pattern, replacement);
+        });
+
+        // markdown修正
+        const mdRuleMap = [
+            { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
+            { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
+            { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
+            { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+            // { pattern: /：/g, replacement: ":" }, // 中文：
+            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+        ];
+        mdRuleMap.forEach(({ pattern, replacement }) => {
+            translatedText = translatedText.replace(pattern, replacement);
+        });
+
+        return translatedText;
+    }
+
     // 创建翻译结果元素并放在element_node的后面
     const translateDiv = new TranslateDiv(id);
     $(element_node).after(translateDiv.getDiv());
@@ -5786,21 +5896,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     translateDiv.registerCloseButtonEvent();
 
     // 替换latex公式
-    if (is_oldLatex) {
-        let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-        text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
-    } else if (is_acmsguru) {
-        let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-    } else if (realTranlate != "openai") {
-        // 使用GPT翻译时不必替换latex公式
-        let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
-        matches = matches.concat(text.match(regex));
-        text = replaceBlock(text, matches, replacements);
-    }
+    text = replaceLatex(text);
 
     // 过滤**号
     if (filterTextWithoutEmphasis && GM_getValue("translation") !== "openai") {
@@ -5859,9 +5955,25 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                 await translate_caiyun_startup();
                 translatedText = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……\n\n应用的配置： ${opneaiConfig.configurations[opneaiConfig.choice].note}\n\n使用 ChatGPT 翻译需要很长的时间，请耐心等待`,
+                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${opneaiConfig.configurations[opneaiConfig.choice].note}\n\n${!openai_isStream
+                        ? "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待" : ""}`,
                     is_oldLatex, is_acmsguru);
-                translatedText = await translate_openai(text);
+                if (openai_isStream) {
+                    // 流式传输
+                    translatedText = '';
+                    try {
+                        for await (const delta of translate_openai_stream(text)) {
+                            translatedText += delta;
+                            // 翻译结果面板更新
+                            translateDiv.updateTranslateDiv_WithoutLaTeX(translatedText, is_oldLatex, is_acmsguru);
+                        }
+                    } catch (error) {
+                        console.error('Error while translating:', error);
+                    }
+                } else {
+                    // 普通模式
+                    translatedText = await translate_openai(text);
+                }
             }
             if (/^翻译出错/.test(translatedText)) status = "error";
         } catch (error) {
@@ -5872,17 +5984,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     await translate(realTranlate);
 
     // 还原latex公式
-    translatedText = translatedText.replace(/】\s*【/g, '】 【');
-    translatedText = translatedText.replace(/\]\s*\[/g, '] [');
-    translatedText = translatedText.replace(/\}\s*\{/g, '} {');
-    if (is_oldLatex) {
-        translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 还原为<p/>标签
-        translatedText = recoverBlock(translatedText, matches, replacements);
-    } else if (is_acmsguru) {
-        translatedText = recoverBlock(translatedText, matches, replacements);
-    } else if (realTranlate != "openai") {
-        translatedText = recoverBlock(translatedText, matches, replacements);
-    }
+    translatedText = recoverLatex(translatedText);
 
     // 注册结果复制按钮
     if (!is_oldLatex && !is_acmsguru) {
@@ -5891,51 +5993,8 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         translateDiv.disableCopyButton();
     }
 
-    // 转义LaTex中的特殊符号
-    if (!is_oldLatex && !is_acmsguru) {
-        const escapeRules = [
-            { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
-            { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
-            { pattern: /(?<!\\)\*/g, replacement: " &#42; " }, // *符号
-            { pattern: /(?<!\\)_/g, replacement: " &#95; " }, // _符号
-            { pattern: /(?<!\\)\\\\(?=\s)/g, replacement: "\\\\\\\\" }, // \\符号
-            { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
-        ];
-
-        let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
-
-        for (const match of latexMatches) {
-            const matchedText = match[0];
-            var escapedText = matchedText;
-
-            for (const rule of escapeRules) {
-                escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
-            }
-            escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
-            translatedText = translatedText.replace(matchedText, escapedText);
-        }
-    }
-
-    // 使符合mathjx的转换语法
-    const mathjaxRuleMap = [
-        { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
-    ];
-    mathjaxRuleMap.forEach(({ pattern, replacement }) => {
-        translatedText = translatedText.replace(pattern, replacement);
-    });
-
-    // markdown修正
-    const mdRuleMap = [
-        { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
-        { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
-        { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
-        { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
-        // { pattern: /：/g, replacement: ":" }, // 中文：
-        { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
-    ];
-    mdRuleMap.forEach(({ pattern, replacement }) => {
-        translatedText = translatedText.replace(pattern, replacement);
-    });
+    // 翻译结果格式化
+    translatedText = formatText(translatedText);
 
     // 保存翻译结果
     if (is_problem && memoryTranslateHistory) {
@@ -5944,7 +6003,9 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         updateTransDBData(ttTree.getNodeDate(), ttTree.getTransResultMap()); // 更新翻译结果到transDB
     }
 
+    // 翻译结果面板更新
     translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
+
     return {
         translateDiv: translateDiv,
         status: status
@@ -9097,7 +9158,8 @@ async function translate_openai(raw) {
                 role: "user",
                 content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
             }],
-            temperature: 0.7
+            temperature: 0.7,
+            ...Object.assign({}, ...openai_data)
         };
     };
     return new Promise(function (resolve, reject) {
@@ -9105,12 +9167,12 @@ async function translate_openai(raw) {
             method: 'POST',
             url: (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions',
 
-            data: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + openai_key,
                 ...Object.assign({}, ...openai_header)
             },
+            data: JSON.stringify(data),
             responseType: 'json',
             onload: function (response) {
                 if (!response.response) {
@@ -9128,6 +9190,82 @@ async function translate_openai(raw) {
             },
         });
     });
+}
+
+// ChatGPT 流式传输
+async function* translate_openai_stream(raw) {
+    var data;
+    if (is_oldLatex || is_acmsguru) {
+        data = {
+            model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
+            messages: [{
+                role: "user",
+                content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
+            }],
+            temperature: 0.7,
+            stream: true,
+            ...Object.assign({}, ...openai_data)
+        };
+    } else {
+        data = {
+            model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
+            messages: [{
+                role: "user",
+                content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
+            }],
+            temperature: 0.7,
+            stream: true,
+            ...Object.assign({}, ...openai_data)
+        };
+    };
+    const response = await fetch((openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + openai_key,
+            ...Object.assign({}, ...openai_header)
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = ''; // 用于累积数据片段的缓冲区
+
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true }); // 将新的数据片段追加到缓冲区
+            let lines = buffer.split("\n\n"); // 处理累积的数据
+
+            // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
+            for (let i = 0; i < lines.length - 1; i++) {
+                let line = lines[i];
+                line = line.substring(5); // 移除 'data:' 前缀
+                if (line.includes('[DONE]')) {
+                    return; // End
+                }
+                try {
+                    let data = JSON.parse(line);
+                    let delta = data['choices'][0]['delta'];
+                    let content = delta['content'] ? delta['content'] : "";
+                    yield content; // 传递数据给调用者
+                } catch (error) {
+                    console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
+                }
+            }
+
+            // 保留最后一行在缓冲区中
+            buffer = lines.slice(-1);
+        }
+    } finally {
+        reader.releaseLock();
+    }
 }
 
 //--谷歌翻译--start
