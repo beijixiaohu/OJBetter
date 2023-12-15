@@ -9279,7 +9279,7 @@ async function translate_gg(raw) {
             url: `${url}?${params}`,
             onload: function (response) {
                 const html = response.responseText;
-                const translatedText = $(html).find('.result-container').text();
+                const translatedText = $(html).filter('.result-container').text() || $(html).find('.result-container').text();
                 resolve(translatedText);
             },
             onerror: function (response) {
