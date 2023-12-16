@@ -67,7 +67,7 @@ var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTra
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
-var compilerSelection, editorFontSize, onlineCompilerChoice;
+var compilerSelection, editorFontSize, onlineCompilerChoice, isCodeSubmitConfirm;
 var CF_csrf_token;
 var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl;
 var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
@@ -153,6 +153,7 @@ function init() {
     problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
     cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
     onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
+    isCodeSubmitConfirm = getGMValue("isCodeSubmitConfirm", true);
     //自定义补全
     CompletConfig = getGMValue("Complet_config", {
         "choice": -1,
@@ -3850,10 +3851,22 @@ const code_editor_settings_HTML = `
         <div class="help_tip">
             ${helpCircleHTML}
             <div class="tip_text">
-            <p>在问题页下面添加Monaco编辑器，代码会自动保存，提供在线代码运行</p>
+            <p>在题目页下面添加Monaco编辑器，代码会自动保存，提供在线代码运行</p>
             </div>
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
+    </div>
+    <hr>
+    <h4>偏好</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="isCodeSubmitConfirm"><span>代码提交二次确认</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>点击题目页Monaco编辑器的代码提交时会弹窗二次确认，防止误提交</p>
+            </div>
+        </div>
+        <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <hr>
     <h4>在线代码运行</h4>
@@ -4258,6 +4271,7 @@ async function settingPanel() {
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
+        $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
         $("#OJBetter_Bridge_WorkUri").val(GM_getValue("OJBetter_Bridge_WorkUri"));
@@ -4313,6 +4327,7 @@ async function settingPanel() {
                 RatingHidden: $('#RatingHidden').prop("checked"),
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
+                isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
                 OJBetter_Bridge_WorkUri: $('#OJBetter_Bridge_WorkUri').val().replace(/\\/g, '/').replace(/\/$/, ''),
@@ -5956,7 +5971,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                 translatedText = await translate_caiyun(text);
             } else if (translation == "openai") {
                 translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${opneaiConfig.configurations[opneaiConfig.choice].note}\n\n${!openai_isStream
-                        ? "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待" : ""}`,
+                    ? "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待" : ""}`,
                     is_oldLatex, is_acmsguru);
                 if (openai_isStream) {
                     // 流式传输
@@ -9120,16 +9135,20 @@ async function addProblemPageCodeEditor() {
     // 提交
     submitButton.on('click', async function (event) {
         event.preventDefault();
-        let content = ``;
-        const submit = await createDialog("确认提交代码吗", content, ['提交', '否']); //提交确认
-        if (submit) {
-            submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
-            $('#CFBetter_SubmitForm').submit();
+        if (isCodeSubmitConfirm) {
+            let content = ``;
+            const submit = await createDialog("确认提交代码吗", content, ['提交', '否']); //提交确认
+            if (submit) {
+                submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
+                $('#CFBetter_SubmitForm').submit();
+            } else {
+                submitButton.addClass('disabled');
+                setTimeout(function () {
+                    submitButton.removeClass('disabled');
+                }, 300);
+            }
         } else {
-            submitButton.addClass('disabled');
-            setTimeout(function () {
-                submitButton.removeClass('disabled');
-            }, 300);
+            $('#CFBetter_SubmitForm').submit();
         }
     });
 }
