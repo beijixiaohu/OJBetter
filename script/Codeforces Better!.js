@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.70
+// @version      1.72
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -46,6 +46,8 @@
 // @compatible	 Edge
 // @incompatible safari
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
+// @downloadURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
+// @updateURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
 // ==/UserScript==
 
 // 状态与初始化
@@ -68,7 +70,7 @@ var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTra
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
 var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
-var compilerSelection, editorFontSize, onlineCompilerChoice, isCodeSubmitConfirm;
+var compilerSelection, editorFontSize, onlineCompilerChoice, isCodeSubmitConfirm, alwaysConsumeMouseWheel;
 var CF_csrf_token;
 var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl;
 var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
@@ -156,6 +158,7 @@ function init() {
     cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
     onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
     isCodeSubmitConfirm = getGMValue("isCodeSubmitConfirm", true);
+    alwaysConsumeMouseWheel = getGMValue("alwaysConsumeMouseWheel", true);
     //自定义补全
     CompletConfig = getGMValue("Complet_config", {
         "choice": -1,
@@ -185,9 +188,17 @@ function init() {
 // 公告
 async function showAnnounce() {
     if (lastReadAnnounceVer < GM_info.script.version) {
-        const title = "已更新至1.71"
+        const title = "已更新至1.72"
         const content = `
-#### 更新日志
+#### 最近更新日志
+---
+1.72
+
+- 修复ChatGPT配置面板缺失的问题
+
+- 添加一个配置开关 "鼠标滚动锁定" ，默认开启， 感谢 @caoxuanming 的建议
+---
+1.71
 
 - 更新 clist rating 的API为v4，调整题目页的数据获取方式为通过API获取，感谢 @wrkwrk 的建议
 
@@ -3914,6 +3925,16 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
+    <div class='CFBetter_setting_list'>
+        <label for="alwaysConsumeMouseWheel"><span>鼠标滚动锁定</span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">
+            <p>开启后，当鼠标指针在monaco编辑器内部时，鼠标滚动将只会滚动编辑器内的内容</p>
+            </div>
+        </div>
+        <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
+    </div>
     <hr>
     <h4>在线代码运行</h4>
     <label>
@@ -4315,6 +4336,7 @@ async function settingPanel() {
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
+        $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
         $("#OJBetter_Bridge_WorkUri").val(GM_getValue("OJBetter_Bridge_WorkUri"));
@@ -4371,6 +4393,7 @@ async function settingPanel() {
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
+                alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
                 OJBetter_Bridge_WorkUri: $('#OJBetter_Bridge_WorkUri').val().replace(/\\/g, '/').replace(/\/$/, ''),
@@ -4408,7 +4431,7 @@ async function settingPanel() {
                     if (settings.translation === "openai") {
                         var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
                         if (selectedIndex === -1) {
-                            $('#configControlTip').text('请选择一项配置！');
+                            $('#chatgpt_config_configControlTip').text('请选择一项配置！');
                             $('.CFBetter_setting_sidebar a').removeClass('active');
                             $('#sidebar-translation-settings').addClass('active');
                             $('.settings-page').removeClass('active');
@@ -7043,6 +7066,7 @@ async function createMonacoEditor(language, form, support) {
         scrollbar: {
             verticalScrollbarSize: 10,
             horizontalScrollbarSize: 10,
+            alwaysConsumeMouseWheel: alwaysConsumeMouseWheel
         },
         suggest: {
             selectionMode: 'never' // 代码建议不自动选择
