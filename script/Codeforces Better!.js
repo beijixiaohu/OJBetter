@@ -4205,17 +4205,14 @@ const CompletConfigEditHTML = `
 
 // 设置按钮面板
 async function settingPanel() {
-    // 添加按钮
-    $("div[class='lang-chooser']").each(function () {
-        $(this).before(
-            "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
-        );
-    });
-    $("div[class='enter-or-register-box']").each(function () {
-        $(this).after(
-            "<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>"
-        );
-    });
+    // 添加右上角设置按钮
+    function insertCFBetterSettingButton(location, method) {
+        $(location)[method]("<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>");
+    }
+
+    insertCFBetterSettingButton(".lang-chooser", "before");
+    insertCFBetterSettingButton(".enter-or-register-box", "after");
+    if (is_completeProblemset) insertCFBetterSettingButton(".lang", "before");
 
     const $settingBtns = $(".CFBetter_setting");
     $settingBtns.click(() => {
