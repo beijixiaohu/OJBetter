@@ -57,6 +57,7 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
+var lastReadAnnounceVer = getGMValue("lastReadAnnounceVer", "0");
 var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProblemset, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
@@ -180,6 +181,40 @@ function init() {
         });
     }
 }
+
+// 公告
+async function showAnnounce() {
+    if (lastReadAnnounceVer < GM_info.script.version) {
+        const title = "已更新至1.71"
+        const content = `
+#### 更新日志
+
+- 更新 clist rating 的API为v4，调整题目页的数据获取方式为通过API获取，感谢 @wrkwrk 的建议
+
+- 添加 ChatGPT 翻译 “流式传输” 选项，默认开启
+
+- 修复 Google 翻译结果为空的问题 感谢 @shicxin 的反馈
+
+- 添加一个配置开关 "代码提交是否二次确认" ，默认开启 感谢 @Rikkual 的建议
+
+- 在完整题目集页中添加小区域的按钮
+
+- 修复完整题目集页右键打印时不显示翻译结果的问题 感谢 @zfs732 的反馈
+
+#### 作者有话说
+
+对于功能故障（比如接口问题），一旦收到反馈，作者会立即进行修复并将更改提交至 [Github仓库](https://github.com/beijixiaohu/OJBetter/commits/main/)
+
+然而，请注意，这些修复**不会**立即以更新的形式发布。因此，如果你发现了一个可能的功能故障，请先前往 Github 查看是否已经修复。
+
+除非遇到严重问题，否则作者倾向于不发布零星的更新，而是将修改积累起来，待到合适的时机一并发布。
+`;
+        const ok = await createDialog(title, content, ["我知道了", null], undefined, true); //跳过折叠块确认
+        if (ok) {
+            GM_setValue('lastReadAnnounceVer', GM_info.script.version);
+        }
+    }
+};
 
 // 显示警告消息
 function ShowAlertMessage() {
@@ -2239,25 +2274,33 @@ function getExternalJSON(url) {
  * @param {string} content 内容
  * @param {string[]} buttons 按钮
  * @param {"cancel"|"continue"} [secondaryButton="cancel"] 指定次要按钮
+ * @param {boolean} renderMarkdown 是否使用markdown渲染文本
  */
-function createDialog(title, content, buttons, secondaryButton = "cancel") {
+function createDialog(title, content, buttons, secondaryButton = "cancel", renderMarkdown = false) {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle2);
+        let contentHtml = content;
+
+        if (renderMarkdown) {
+            const md = window.markdownit();
+            contentHtml = md.render(content);
+        }
+
         let dialog = $(`
         <div class="CFBetter_modal">
             <h2>${title}</h2>
-            ${content}
+            <div class="content">${contentHtml}</div>
         </div>
         `);
         const buttonbox = $(`<div class="buttons"></div>`);
         const cancelButton = $(`<button class="cancelButton">${buttons[1]}</button>`);
         const continueButton = $(`<button class="continueButton">${buttons[0]}</button>`);
-        buttonbox.append(cancelButton);
-        buttonbox.append(continueButton);
+        if (buttons[1] !== null) buttonbox.append(cancelButton);
+        if (buttons[0] !== null) buttonbox.append(continueButton);
         dialog.append(buttonbox);
         $('body').before(dialog);
 
-        // set secondary button
+        // 设置次要按钮
         if (secondaryButton === "cancel") {
             cancelButton.addClass("secondary");
         } else if (secondaryButton === "continue") {
@@ -2278,7 +2321,9 @@ function createDialog(title, content, buttons, secondaryButton = "cancel") {
     });
 }
 
-// 更新检查
+/**
+ * 更新检查
+ */
 function checkScriptVersion() {
     function compareVersions(version1 = "0", version2 = "0") {
         const v1Array = String(version1).split(".");
@@ -9533,6 +9578,7 @@ document.addEventListener("DOMContentLoaded", function () {
     checkJQuery(50);
     function executeFunctions() {
         init();
+        showAnnounce();
         alertZh();
         darkModeStyleAdjustment();
         ShowAlertMessage();
