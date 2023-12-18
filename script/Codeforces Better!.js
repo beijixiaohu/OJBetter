@@ -59,7 +59,7 @@ const getGMValue = (key, defaultValue) => {
 };
 var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
-var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
+var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProblemset, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, opneaiConfig;
@@ -78,6 +78,7 @@ function init() {
     is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     is_problem = href.includes('/problem/');
+    is_completeProblemset = /problems\/?$/.test(href);
     is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
     is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     is_submitPage = href.includes('/submit');
@@ -5232,13 +5233,31 @@ function addConversionButton() {
         if ($(this).parents('.comments').length > 0) is_comment = true;
         // 题目页不添加
         if (!is_problem || is_acmsguru) {
-            let id = "_comment_" + getRandomNumber(8);
+            let id = "_ttypography_" + getRandomNumber(8);
             let panel = addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
             addButtonWithCopy(panel.copyButton, this, id, "this_level");
             addButtonWithTranslation(panel.translateButton, this, id, "this_level", is_comment);
         }
     });
+
+    // 完整题目集页特殊处理
+    if (is_completeProblemset) {
+        let exContentsPageClasses = ["sample-tests"];
+        $('.problem-statement').each(function () {
+            $(this).children('div').each(function (i, e) {
+                var className = $(e).attr('class');
+                if (!exContentsPageClasses.includes(className)) {
+                    var id = "_problem_" + getRandomNumber(8);
+                    let panel = addButtonPanel(e, id, "this_level");
+                    addButtonWithHTML2MD(panel.viewButton, e, id, "this_level");
+                    addButtonWithCopy(panel.copyButton, e, id, "this_level");
+                    addButtonWithTranslation(panel.translateButton, e, id, "this_level");
+                    if (i == 0) panel.translateButton.setNotAutoTranslate(); // 题目标题块跳过，不自动翻译
+                }
+            });
+        });
+    }
 
     // 添加按钮到spoiler部分
     $('.spoiler-content').each(function () {
@@ -5397,7 +5416,10 @@ function recoverBlock(translatedText, matches, replacements) {
 class TranslateDiv {
     constructor(id) {
         this.id = id;
-        this.div = $('<div>').attr('id', id).addClass('translateDiv').addClass('input-output-copier');
+        this.div = $('<div>').attr('id', id).addClass('translateDiv');
+        if (!is_completeProblemset) {
+            this.div.addClass('input-output-copier');
+        }
         this.panelDiv = $('<div>').addClass('translate-problem-statement-panel');
         this.div.append(this.panelDiv);
         this.mainDiv = $('<div>').addClass('translate-problem-statement');
@@ -6012,7 +6034,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     translatedText = formatText(translatedText);
 
     // 保存翻译结果
-    if (is_problem && memoryTranslateHistory) {
+    if ((is_problem || is_completeProblemset) && memoryTranslateHistory) {
         ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
         ttTree.addTransResultMap(id, translatedText);
         updateTransDBData(ttTree.getNodeDate(), ttTree.getTransResultMap()); // 更新翻译结果到transDB
@@ -9567,7 +9589,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                     .then(async () => {
                         if (showLoading && is_problem && memoryTranslateHistory) newElement.html(`${OJBetterName} —— 正在恢复上一次的翻译记录……`);
-                        return delay(100).then(async () => { if (is_problem && memoryTranslateHistory) await initTransResultsRecover() });
+                        return delay(100).then(async () => { if ((is_problem || is_completeProblemset) && memoryTranslateHistory) await initTransResultsRecover() });
                     })
                     .then(async () => {
                         if (showLoading && autoTranslation) newElement.html(`${OJBetterName} —— 正在初始化短文本自动翻译……`);
