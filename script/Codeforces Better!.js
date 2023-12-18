@@ -3634,7 +3634,7 @@ const translation_settings_HTML = `
     </label>
     <hr>
     <h4>ChatGPT</h4>
-    <div class='CFBetter_setting_menu_config_box' id='openai' style='display: none;'>
+    <div class='CFBetter_setting_menu_config_box' id='openai'>
         <div id="chatgpt-config"></div>
     </div>
     <div class='CFBetter_setting_list'>
