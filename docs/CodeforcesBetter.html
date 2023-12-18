@@ -229,15 +229,13 @@
 <p>此外，理论上也兼容任意的其他镜像站，你只需要自行再添加一行注释 <code>// @match 你的镜像站网址</code> 即可</p>
 <h2 id="常见问题">常见问题</h2>
 <div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 如何开始？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何开始？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 你需要先安装 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然后再安装该脚本
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 更新错误？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 更新错误？</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>A. 由于 Greasy Fork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，</p>
         <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可。</p>
@@ -245,30 +243,26 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 一直显示加载中？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 一直显示加载中？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 请开启设置面板中的 ”兼容选项-不等待页面资源加载“ 选项
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 使用 DeepL 翻译报错 Too many requests ？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 Too many requests ？</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>A. 这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，DeepL对翻译字数和频率是有限制的，</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">这是暂时的，一段时间后就恢复正常了</span>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 使用 DeepL 翻译报错 undefind 或一直显示翻译中？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 undefind 或一直显示翻译中？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 这通常是因为你所使用的网络无法正常访问 <a href="https://www.deepl.com">www.deepl.com</a>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 翻译结果中一些公式显示为 {xx} / [xx] / 【xx】？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 翻译结果中一些公式显示为 {xx} / [xx] / 【xx】？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 在使用普通翻译接口（DeepL/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】
         <div style="border: 8px solid #ffffff00;"></div>
@@ -295,8 +289,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 如何使用 ChatGPT 翻译？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用 ChatGPT 翻译？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 如果你可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，你只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。
         <p>此外，你也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，你可以选择使用
@@ -362,14 +355,14 @@
           Base：<code>https://api.closeai-proxy.xyz</code></p>
         <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">注意：由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行点击授权</span>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注意：如果你想使用Azure OpenAI，由于其与 OpenAI 官方的接口参数不一样，你可以选择自行部署<a href="https://github.com/stulzq/azure-openai-proxy">azure-openai-proxy</a>以进行转换</span>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 什么是LSP？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 什么是LSP？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. <a href="https://microsoft.github.io/language-server-protocol/">LSP（Language Server
-          Protocol）</a>是由微软发起的一种编辑器与语言服务器之间通信的协议规范。
+        A. <a href="https://microsoft.github.io/language-server-protocol/">LSP（Language Server Protocol）</a>是由微软发起的一种编辑器与语言服务器之间通信的协议规范。
         <p>它将传统IDE需要实现的代码补全、诊断、建议、文档甚至项目管理等功能与编辑器相分离，使用独立的服务来完成这些功能，</p>
         <p>而编辑器只需要按照协议规范与服务器进行通信即可，这样就大大减少了工作量，同时使编辑器可以轻松地支持各种编程语言</p>
         <p>目前LSP的生态已经逐步完善，主流编辑器均已支持LSP或者有了对应的插件，如VSCode、Vim、Emacs等...</p>
@@ -377,8 +370,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 如何使用LSP？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用LSP？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 只需两步：
         <p>一：脚本提供了对 C++ 和 Python 语言以下两个 LSP Server 实现的支持，你需要按需安装它们：</p>
@@ -394,8 +386,7 @@
             <tr>
               <td style="background-color: #f9f9f9; color: black;">C++</td>
               <td style="background-color: #f9f9f9; color: black;">clangd</td>
-              <td style="background-color: #f9f9f9; color: black;">在 <a href="https://github.com/clangd/clangd/releases">clangd
-                  release</a> 中下载clangd，然后在系统环境变量的 path 中新增 clangd 的路径，例如 <code>C:\clangd_16.0.2\bin\</code></td>
+              <td style="background-color: #f9f9f9; color: black;">在 <a href="https://github.com/clangd/clangd/releases">clangd release</a> 中下载clangd，然后在系统环境变量的 path 中新增 clangd 的路径，例如 <code>C:\clangd_16.0.2\bin\</code></td>
             </tr>
             <tr>
               <td style="background-color: #f9f9f9; color: black;">Python</td>
@@ -427,24 +418,20 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 为什么 clangd 格式化无效？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 为什么 clangd 格式化无效？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 这是因为你在设置面板中填写的 LSP 工作路径不正确</a>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 为什么 clangd 无法识别我的 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 头文件？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 为什么 clangd 无法识别我的 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 头文件？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 这是因为 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code>
-        不是标准头文件，因此 clangd 默认不支持，你需要在 OJBetter_Bridge 的 cpp_workspace
+        A. 这是因为 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 不是标准头文件，因此 clangd 默认不支持，你需要在 OJBetter_Bridge 的 cpp_workspace
         中的 <code>.clangd</code> 文件中通过修改编译器参数来告诉 clang 去哪找到这个非标准的头文件(当然也不推荐使用万能头)</a>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details>
-      <summary>Q. 静态补全增强可不可以使用本地的 JSON 文件？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 静态补全增强可不可以使用本地的 JSON 文件？</summary>
       <div style="border: 8px solid #ffffff00;">
         A. 由于浏览器的安全限制，你并不能直接使用形如 <code>file:///xxx</code> 的 URL 来在浏览器中访问你的本地 JSON 文件。
         <p>不过你可以借助 OJBetter_Bridge 来做到，很简单，你只需要将 JSON 文件 <code>xxx.json</code> 放置到 OJBetter_Bridge 的 /mycomplet 文件夹中</p>
