@@ -1,0 +1,842 @@
+{
+    "commonReplacements": {
+        ".datatable": {
+            "class": [
+                ".datatable"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation": "バーチャル再現トーナメントに参加する",
+                "Enter": "入る",
+                "Current standings": "現在のリスト",
+                "Final standings": "最終リスト",
+                "Preliminary results": "速報結果",
+                "open hacking:": "オープン・ハッキング",
+                "School/University/City/Region Championship": "学校／大学／都市／地域の大会",
+                "Official School Contest": "学校公式大会",
+                "Training Contest": "練習試合",
+                "Training Camp Contest": "トレーニングキャンプ競技",
+                "Official ICPC Contest": "ICPC公式競技会",
+                "Official International Personal Contest": "公式国際個人戦",
+                "China": "中国",
+                "Statements": "タイトル",
+                "in Chinese": "中国語",
+                "Trainings": "電車",
+                "Prepared by": "著者",
+                "Current or upcoming contests": "現在または今後の大会",
+                "Rating: users participated in recent 6 months": "評価：過去6ヶ月間に参加したユーザー",
+                "Past contests": "過去の試合",
+                "Exclusions": "除く",
+                "Before start": "スタートまであと数分だ。",
+                "Before registration": "登録開始までまだ時間がある",
+                "Until closing ": "登録終了までまだ時間がある",
+                "Before extra registration": "追加登録はまだ始まっていない",
+                "Register »": "登録 \"",
+                "Registration completed": "在籍",
+                "Registration closed": "登録は締め切られました",
+                "Problems": "アンケート",
+                "My Submissions": "私の投稿",
+                "Standings": "名簿",
+                "Questions about problems": "問題に関する質問",
+                "Contest status": "ゲームステート",
+                "Invited users": "招待ユーザー",
+                "Invitation links": "招待リンク"
+            }
+        },
+        ".menu-list.main-menu-list": {
+            "class": [
+                ".menu-list.main-menu-list"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Home": "ホームページ",
+                "Top": "流行中",
+                "Catalog": "ガイドカタログ",
+                "Contests": "競技",
+                "Gym": "トレーニングキャンプ",
+                "Problemset": "アンケート",
+                "Groups": "組織",
+                "Rating": "格付けランキング",
+                "Edu": "耕す",
+                "Calendar": "カレンダー",
+                "Help": "手"
+            }
+        },
+        ".nav-links": {
+            "class": [
+                ".nav-links"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Settings": "セットアップ",
+                "Blog": "ブログ",
+                "Teams": "キュー",
+                "Submissions": "だす",
+                "Favourites": "ブックマーク",
+                "Problemsetting": "問題設定",
+                "Talks": "ししょ",
+                "Contests": "競技"
+            }
+        },
+        ".contest-state-phase": {
+            "class": [
+                ".contest-state-phase"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Before contest": "今後のコンペティション",
+                "Contest is running": "試合中"
+            }
+        },
+        ".notice": {
+            "class": [
+                ".notice"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "has extra registration": "追加登録期間がある",
+                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "スタート5分前までに申し込みが完了していない場合は、追加申し込み期間中に申し込むことができる。追加登録はスタート10分後から25分間行われる。",
+                "in timezone ([^)]*)": "1 タイムゾーン",
+                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "バーチャルエントリーはコンテスト終了後に許可されます。いつでもバーチャルエントリーを許可する場合は、このフィールドを空白のままにしてください。",
+                "Contest duration in minutes": "試合時間（分）",
+                "or choose": "または",
+                "Standings freeze period in minutes": "リスト凍結時間（分）",
+                "Time when final results are available": "最終結果が出るまでの時間",
+                "Is it allowed to solve contest problems unofficially after the end": "試合終了後の非公式な問題解決の可否",
+                "Is it allowed to run contest as virtual after the end": "大会終了後のバーチャルエントリーの可否",
+                "Is it allowed participate in contest out of competition": "非競技エントリーの可否",
+                "Are participants allowed to register for the contest themselves": "参加者自身の登録の可否",
+                "Can non-registered users and anonyms view contest standings, problems and other statistics": "未登録の匿名ユーザーにレースのリーダーボード、質問、その他の統計の閲覧を許可するかどうか",
+                "If unchecked they will view only personal status": "チェックを外すと、個々のステータスのみ閲覧可能になる",
+                "To manage allowed program languages": "許可されたプログラミング言語の管理",
+                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "言語によっては、システムが自動的に制限時間を調整します。教育目的のみにお勧めします。",
+                "Check it if you want to allow contestants view statements": "参加者がトピックの説明を閲覧できるようにする場合は、このボックスにチェックを入れてください。",
+                "Check it if contestants can view standings": "参加者にリーダーボードの閲覧を許可する場合は、このボックスにチェックを入れてください。",
+                "Where the contest was held originally": "大会が開催された場所",
+                "Official contest site URL": "コンテスト公式ウェブサイトURL"
+            }
+        },
+        ".propertyLinks": {
+            "class": [
+                ".propertyLinks"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contribution": "捧げる"
+            }
+        },
+        ".contests-table": {
+            "class": [
+                ".contests-table"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest history": "競技の歴史"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound ": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound "
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Register now": "今すぐ登録",
+                "No tag edit access": "タグの編集権限がない",
+                "Problem": "課題",
+                "Verdict": "裁定状況",
+                "Language:": "言語。",
+                "Participant": "出場者",
+                "Choose file:": "ファイルを選択する。"
+            }
+        },
+        ".icon-eye-close.icon-large": {
+            "class": [
+                ".icon-eye-close.icon-large"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add to exclusions": "除外リストに追加"
+            }
+        },
+        "null": {
+            "class": [
+                null
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add to exclusions for gym contests filter": "Boot Campフィルターに除外項目を追加する"
+            }
+        },
+        ".roundbox.sidebox.sidebar-menu.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.sidebar-menu.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Announcement": "会報",
+                "Statements": "統計レポート",
+                "Tutorial": "備考"
+            }
+        },
+        ".second-level-menu": {
+            "class": [
+                ".second-level-menu"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Problems": "課題",
+                "Submit Code": "コードを送信",
+                "My Submissions": "私の投稿",
+                "Status": "情勢",
+                "Standings": "名簿",
+                "Adm.": "経営上",
+                "Edit": "コンパイラ",
+                "Custom Invocation": "カスタムデバッグ",
+                "Common standings": "すべてのランキング",
+                "Friends standings": "友人のみ。",
+                "Submit": "だす",
+                "Hacks": "ハッカー",
+                "Room": "キュービクル",
+                "Custom test": "カスタムテスト",
+                "Blog": "ブログ",
+                "Teams": "キュー",
+                "Submissions": "記録の提出",
+                "Groups": "組織",
+                "Rating": "採点",
+                "Friends rating": "友人評価",
+                "Favourites": "ブックマーク",
+                "Contests": "競技",
+                "Members": "メンバー",
+                "问题etting": "問題作成への参加",
+                "Streams": "インターネット直接放送",
+                "Gym": "トレーニングキャンプ",
+                "Mashups": "お揃い",
+                "Posts": "カード",
+                "Comments": "もどす",
+                "Main": "ステープル",
+                "Settings": "セットアップ",
+                "Lists": "リスティング",
+                "General": "基本的",
+                "Sidebar": "サイドバー",
+                "Social": "しゃかいほしょう",
+                "Address": "住所",
+                "Wallets": "財布"
+            }
+        },
+        ".topic-toggle-collapse": {
+            "class": [
+                ".topic-toggle-collapse"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Expand": "開始"
+            }
+        },
+        ".topic-read-more": {
+            "class": [
+                ".topic-read-more"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Full text and comments": "続きを読む/コメント"
+            }
+        },
+        ".toggleEditorCheckboxLabel": {
+            "class": [
+                ".toggleEditorCheckboxLabel"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Switch off editor": "エディタのシンタックスハイライトをオフにする"
+            }
+        },
+        ".submit": {
+            "class": [
+                ".submit"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Registration for the contest": "大会登録"
+            }
+        },
+        "._FilterByTagsFrame_difficulty": {
+            "class": [
+                "._FilterByTagsFrame_difficulty"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Difficulty:": "難易度が高い。"
+            }
+        },
+        "._FilterByTagsFrame_addTagLink": {
+            "class": [
+                "._FilterByTagsFrame_addTagLink"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add tag": "タグを追加"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "前回のレーティング変更は一時的に戻されました。まもなく元に戻ります。",
+                "Reminder: in case of any technical issues, you can use the lightweight website": "備考：技術的な問題が発生した場合は、軽量サイトをご利用ください。",
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "リンクからCodeforcesの公式テレグラムチャンネルを購読してください！"
+            }
+        },
+        ".lang-chooser": {
+            "class": [
+                ".lang-chooser"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Enter": "サインイン",
+                "Register": "在籍",
+                "Contest rating": "テスト評価",
+                "Logout": "ログアウト"
+            }
+        },
+        ".userbox": {
+            "class": [
+                ".userbox"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Change photo": "写真の差し替え",
+                "Contest rating": "レース",
+                "Contribution": "捧げる",
+                "My friends": "親友だよ。",
+                "Change settings": "設定の変更",
+                "Last visit": "ラストアクセス",
+                "Registered": "登録",
+                "Blog entries": "ブログエントリー",
+                "comments": "解説",
+                "Write new entry": "新規エントリーの準備",
+                "View my talks": "プライベートメッセージを見る",
+                "Talks": "ししょ",
+                "Send message": "メッセージを送る"
+            }
+        },
+        "#vote-reset-filterDifficultyLowerBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyLowerBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "リビジョン"
+            }
+        },
+        "#vote-reset-filterDifficultyUpperBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyUpperBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "リビジョン"
+            }
+        },
+        ".alert.alert-info": {
+            "class": [
+                ".alert.alert-info"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "The problem statement has recently been changed.": "最近、タイトルの説明が変更された。",
+                "View the changes.": "変更を見る"
+            }
+        },
+        ".enterPage": {
+            "class": [
+                ".enterPage"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Fill in the form to login into Codeforces.": "フォームに記入してCodeforcesにログインしてください。",
+                "You can use": "を使用することもできます。",
+                "as an alternative way to enter.": "サインイン"
+            }
+        },
+        ".notice.small": {
+            "class": [
+                ".notice.small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "\\* To view the complete list, click ": "* :: 全リストを見るには、クリックしてください。"
+            }
+        },
+        ".setting-name": {
+            "class": [
+                ".setting-name"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest type:": "競技の種類：",
+                "Rated:": "定格：",
+                "Tried:": "未遂",
+                "Substring:": "キーワード"
+            }
+        },
+        ".by-form": {
+            "class": [
+                ".by-form"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Sort by:": "：。",
+                "relevance": "(そうかんせい",
+                "popularity": "一過性の熱狂",
+                "time": "回"
+            }
+        },
+        ".roundbox.borderTopRound": {
+            "class": [
+                ".roundbox.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "このコンテストに参加するためにユーザーを招待した場合、コンテストはそのユーザーの可視性に関係なく表示されます。以下のリンク：を使用してコンテストを共有することができます。",
+                "Generate link and share it with other users": "リンクを作成し、他のユーザーと共有する",
+                "Show Log »": "ショージャーナル \"",
+                "Move all to practice »": "すべてプラクティショナーに移行 \"",
+                "Remove All »": "すべて削除 \"",
+                "Add »": "追加 \"",
+                "Set »": "設定 \"",
+                "Download Archive »": "ダウンロード・アーカイブ \""
+            }
+        },
+        ".caption.titled": {
+            "class": [
+                ".caption.titled"
+            ],
+            "description": "中国語と題されたサイドバー",
+            "isStrict": false,
+            "rules": {
+                "Pay attention": "銘記する",
+                "Top rated": "格付けランキング",
+                "Top contributors": "貢献者ランキング",
+                "Find user": "ユーザーを探す",
+                "Recent actions": "最新ニュース",
+                "Training filter": "フィルタリングとスクリーニング",
+                "Find training": "検索コンテスト/問題",
+                "Virtual participation": "バーチャルエントリーとは",
+                "Contest materials": "競技関連情報",
+                "Settings": "セットアップ",
+                "Create Mashup Contest": "マッシュアップコンテストを開催",
+                "Clone Contest to Mashup": "クローンマッチからコンボ・マッシュアップへ",
+                "Invitations": "招待状",
+                "Status filter": "ステータスフィルター",
+                "Administration": "経営上",
+                "Submit": "だす",
+                "Practice": "エクササイズ",
+                "Problem tags": "質問タグ",
+                "Filter Problems": "フィルタリングの問題",
+                "Last unsolved": "前回未解決",
+                "Attention": "銘記する",
+                "Past contests filter": "過去のマッチング",
+                "About Contest": "コンペティションについて",
+                "Last submissions": "投稿履歴",
+                "Streams": "インターネット直接放送",
+                "Coach rights": "コーチングの権威",
+                "Advices to fill address": "住所の記入に関する提案",
+                "Hacks filter": "ハッカーフィルター",
+                "Score table": "評価尺度",
+                "Contests": "競技",
+                "History": "編集履歴",
+                "Login into Codeforces": "Codeforcesにログイン",
+                "Export the judgment log to DAT-file": "判定ログをDATファイルとして書き出す",
+                "Contest managers": "コンテスト管理者",
+                "Contest writers": "コンペティション作家",
+                "Spectator ranklists": "観客動員数ランキング",
+                "Ghosts:": "ゴーストプレーヤー",
+                "Export Submissions": "輸出申請"
+            }
+        },
+        "QuestionFilter1": {
+            "class": [
+                "#gym-filter-form div label",
+                "#gym-filter-form div"
+            ],
+            "description": "タイトルフィルターのオプション処理",
+            "isStrict": false,
+            "rules": {
+                "Contest type:": "コンペティションのタイプ",
+                "ICPC region:": "ICPCの地域。",
+                "Contest format:": "競技形式。",
+                "Order by:": "並べ替え",
+                "Secondary order by:": "二次オーダー。",
+                "Hide, if participated:": "参加したものは隠す。",
+                "Hide excluded gyms": "除外されている。",
+                "Season:": "期間（年間）",
+                "Duration, hours:": "所要時間（時間）。",
+                "Difficulty:": "難易度が高い。"
+            }
+        },
+        "QuestionFilter2": {
+            "class": [
+                ".setting-value select option",
+                ".setting-last-value select option"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Official ACM-ICPC Contest": "ICPC公式競技会",
+                "Official School Contest": "学校公式大会",
+                "Opencup Contest": "オープンカップ・コンペティション",
+                "School/University/City/Region Championship": "学校/大学/都市/地域選手権",
+                "Training Camp Contest": "トレーニングキャンプ競技",
+                "Official International Personal Contest": "公式国際個人戦",
+                "Training Contest": "練習試合",
+                "ID_ASC": "作成時間（昇順）",
+                "ID_DESC": "作成時間（降順）",
+                "RATING_ASC": "評価（昇順）",
+                "RATING_DESC": "格付け（降順）",
+                "DIFFICULTY_ASC": "難易度（昇順）",
+                "DIFFICULTY_DESC": "難易度（降順）",
+                "START_TIME_ASC": "開始時間（昇順）",
+                "START_TIME_DESC": "開始時間（降順）",
+                "DURATION_ASC": "期間（昇順）",
+                "DURATION_DESC": "期間（降順）",
+                "POPULARITY_ASC": "暑さ（昇順）",
+                "POPULARITY_DESC": "暑さ（降順）",
+                "UPDATE_TIME_ASC": "更新時間（昇順）",
+                "UPDATE_TIME_DESC": "更新時間（降順）"
+            }
+        },
+        "CompetitionFilter": {
+            "class": [
+                ".options li label",
+                ".CaptionCont span"
+            ],
+            "description": "レースフィルターオプション 中国語",
+            "isStrict": false,
+            "rules": {
+                "Educational": "教訓的",
+                "Global": "グローバル",
+                "VK Cup": "VKカップ",
+                "Long Rounds": "長期間",
+                "April Fools": "四月馬鹿",
+                "Team Contests": "団体戦",
+                "ICPC Scoring": "ICPC採点",
+                "Doesn't matter": "----",
+                "Any": "所有権",
+                "Yes": "であります",
+                "No": "詰り",
+                "No submission(s)": "提出なし",
+                "Have submission(s)": "提出済み",
+                "No solved problem(s)": "問題解決なし",
+                "Have solved problem(s)": "問題解決。"
+            }
+        },
+        "RightSidebox": {
+            "class": [
+                ".sidebox div label"
+            ],
+            "description": "右サイドボックス 中国語",
+            "isStrict": false,
+            "rules": {
+                "Show tags for unsolved problems": "未解決問題のラベルを表示しています",
+                "Hide solved problems": "解決済みの問題を隠す"
+            }
+        },
+        "FormField-name": {
+            "class": [
+                "td.field-name label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Postal/zip code": "郵便番号",
+                "Country (English)": "国名（英語）",
+                "State (English)": "都道府県（英語）",
+                "City (English)": "都市（英語）",
+                "Address (English)": "住所（英語）",
+                "Recipient (English)": "受取人の名前（英語）",
+                "Country (Native)": "国名（現地語）",
+                "State (Native)": "都道府県（母国語）",
+                "City (Native)": "都市（現地語）",
+                "Address (Native)": "住所（現地語）",
+                "Recipient (Native)": "受取人の名前（現地語）",
+                "Phone": "電話機",
+                "TON Wallet:": "トン・ウォレット",
+                "Secret Code:": "キャプチャ",
+                "Terms of agreement:": "契約条件。",
+                "Choose team:": "セレクト・チーム"
+            }
+        },
+        "QuestionTag": {
+            "class": [
+                "._FilterByTagsFrame_addTagLabel select option",
+                "._FilterByTagsFrame_tagBoxCaption",
+                ".notice",
+                ".tag-box"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "combine tags by OR": "ロジックまたは私の選択の組み合わせによるラベル",
+                "combine-tags-by-or": "選んだタグをロジックで組み合わせるか（combine-tags-by-or）",
+                "2-sat": "二部グラフの充足可能性問題 (2-sat)",
+                "binary search": "バイナリサーチ",
+                "bitmasks": "ビットマスク",
+                "brute force": "ブルートフォース列挙。",
+                "chinese remainder theorem": "中国剩余定理",
+                "combinatorics": "組み合わせ論",
+                "constructive algorithms": "構成的アルゴリズム（構成的アルゴリズム）",
+                "data structures": "データ構造",
+                "dfs and similar": "深さ優先探索とその亜種（dsfとそれに類するもの）",
+                "divide and conquer": "分割統治アルゴリズム。",
+                "dp": "動的計画法（dp）",
+                "dsu": "パラレル・サーチ・セット（dsu）",
+                "expression parsing": "式の解析",
+                "fft": "高速フーリエ変換 (fft)",
+                "flows": "フロー",
+                "games": "ゲーム理論（ゲーム）",
+                "geometry": "計算幾何学",
+                "graph matchings": "グラフのマッチング",
+                "graphs": "グラフ理論（グラフ）",
+                "greedy": "貪欲",
+                "hashing": "ハッシュテーブル（ハッシュ）",
+                "implementation": "実装問題、プログラミングスキル、シミュレーション（実装）",
+                "interactive": "双方向性の問題（インタラクティブ）",
+                "math": "数学",
+                "matrices": "マトリックス",
+                "meet-in-the-middle": "ミート・イン・ザ・ミドルアルゴリズム(meet-in-the-middle algorithm)",
+                "number theory": "整数論",
+                "probabilities": "確率",
+                "schedules": "スケジューリング・アルゴリズム（スケジュール）",
+                "shortest paths": "最短経路アルゴリズム（ショートパス）",
+                "sortings": "ソートアルゴリズム（ソート）",
+                "string suffix structures": "文字列接尾辞構造",
+                "strings": "文字列の取り扱い（文字列）",
+                "ternary search": "三項検索",
+                "trees": "木の構造（樹木）",
+                "two pointers": "2ポインタ・アルゴリズム（2つのポインタ）"
+            }
+        },
+        "SettingField-name": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "ページ内のフィールドの設定",
+            "isStrict": false,
+            "rules": {
+                "Hide sidebar block \"Find user\"": "サイドバーのブロック「ユーザーを探す」を非表示にする。",
+                "Hide sidebar block \"Current user\"": "サイドバーのブロック「現在のユーザー」を非表示にする。",
+                "Hide sidebar block \"Recent аctions\"": "サイドバーの \"What's New \"ブロックを隠す。",
+                "Hide sidebar block \"Favourite groups\"": "サイドバーのブロック「お気に入りグループ」を非表示にする。",
+                "Hide sidebar block \"Top contributors\"": "サイドバーのブロック「投稿者ランキング」を非表示にする。",
+                "Hide sidebar block \"Top rated\"": "サイドバーのブロック「評価ランキング」を非表示にする。",
+                "Hide sidebar block \"Streams\"": "サイドバー \"ライブ \"ブロックを隠す",
+                "Old password": "旧パスワード",
+                "New password": "新しいパスワード",
+                "Confirm new password": "新しいパスワードの確認",
+                "Contest email notification": "コンペメール通知",
+                "Send email on new user talk": "新規ユーザーのダイアログがあったときにメールを送信する",
+                "Send email on new comment": "新しいコメントが追加されたらメールを送信する",
+                "Hide contact information": "連絡先を隠す",
+                "Remember me by Gmail, Facebook and etc": "GmailやFacebookなどで私を覚えておいてください。",
+                "Show tags for unsolved problems": "未解決問題のラベルを表示しています",
+                "Hide solved problems from problemset": "問題セットから解決済みの問題を隠す",
+                "Hide low rated blogs": "評価の低いブログを隠す",
+                "Offer to publish great rating rises": "レイティングの著しい改善を証明する機会を提供する",
+                "Enforce https": "HTTPSを強制する",
+                "Show private activity in the profile": "プロフィールにプライベートな活動を表示する",
+                "Show diagnostics": "診断情報の表示"
+            }
+        },
+        "CloneContestFormField": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "コンテストをバーチャル・マッシュアップ設定フォームにクローンする",
+            "isStrict": false,
+            "rules": {
+                "Problem:": "タイトル",
+                "Language:": "言語。",
+                "Source code:": "ソースコード",
+                "Or choose file:": "またはファイルを選択します。",
+                "Choose file:": "ファイルを選択する。",
+                "Notice:": "注意。",
+                "virtual participation:": "バーチャル参加。",
+                "Registration for the contest:": "レースエントリー",
+                "Take part:": "参加する。",
+                "as individual participant:": "個人参加者として。",
+                "as a team member:": "チームメンバーとして。",
+                "Virtual start time:": "仮想スタート時間。",
+                "Complete problemset:": "質問一式",
+                "First name \\(English\\)": "名前（英語）",
+                "Last name \\(English\\)": "苗字（英語）",
+                "First name \\(Native\\)": "氏名（現地語）",
+                "Last name \\(Native\\)": "姓（現地語）",
+                "Birth date": "生年月日",
+                "Country": "列国",
+                "City": "市町村",
+                "Organization": "組織",
+                "Handle/Email": "口座番号/Eメール",
+                "Password": "暗号化",
+                "Training name \\(English\\):": "研修名（英語）。",
+                "Training name \\(Russian\\):": "研修名（ロシア語）。",
+                "Contest format:": "競技形式。",
+                "Start time:": "開始時間",
+                "Duration:": "期間",
+                "Visibility:": "視認性。",
+                "Attach parent contest\\?:": "サイアーマッチ？",
+                "Participation type:": "参加タイプ。",
+                "Freeze period:": "凍結期間。",
+                "Unfreeze time:": "解凍時間。",
+                "Is practice allowed\\?:": "練習は許可されているのか？",
+                "Is virtual allowed\\?:": "バーチャルエントリーは可能ですか？",
+                "Is out of competition allowed\\?:": "競技以外のエントリーは可能ですか？",
+                "Is self-registration allowed\\?:": "自己登録は可能ですか？",
+                "Can non-registered view the contest\\?:": "未登録のユーザーが大会を見ることはできますか？",
+                "Can participants view common status\\?:": "参加者は共有状況を確認できますか？",
+                "Contest testdata policy:": "マッチテストのデータ戦略。",
+                "Allow view other submissions to:": "他の投稿の閲覧を許可する。",
+                "Manage program languages:": "マネージド・プログラミング言語。",
+                "Use time limits scaling policy\\?:": "期間限定のスケーリング・ポリシーを使うか？",
+                "Allow statements\\?:": "タイトルの説明を表示できますか？",
+                "Allow standings\\?:": "ランキングの閲覧を許可するか？",
+                "Season:": "シーズンだ。",
+                "Contest type:": "コンペティションのタイプ",
+                "ICPC region:": "ICPCの地域",
+                "Country:": "国",
+                "City:": "都市。",
+                "Contest difficulty:": "レースの難易度",
+                "Website URL:": "ウェブリンク",
+                "Description \\(English\\):": "説明（英語）。",
+                "Description \\(Russian\\):": "説明（ロシア語）。",
+                "Registration confirmation text \\(English\\):": "登録確認テキスト（英語）。",
+                "Registration confirmation text \\(Russian\\):": "登録確認テキスト（ロシア語）。",
+                "Logo \\(English\\):": "ロゴ（英語）。",
+                "Logo \\(Russian\\):": "ロゴ（ロシア語）。",
+                "End time:": "終了時間",
+                "Name:": "名前",
+                "Contest\\(s\\):": "コンペティションだ。",
+                "Add contest:": "コンテストを追加する。",
+                "Show Contestants:": "ショーの出場者",
+                "Show Out of Competition Participants:": "非コンペティション参加者",
+                "Show Practices:": "エクササイズを見せる。",
+                "Show Virtuals:": "バーチャルプレーヤーを表示する。",
+                "Show Ghosts:": "ゴースト・プレーヤーを表示する。",
+                "Text:": "テキスト",
+                "Rewrite Examples:": "リライトのサンプル。",
+                "Add images:": "画像を追加",
+                "Do not use:": "不使用。",
+                "Problem short name:": "タイトルの略称。",
+                "Source problem:": "ソースの問題",
+                "Problem name \\(English\\):": "タイトル（英語）",
+                "Input file name:": "入力ファイル名。",
+                "Output file name:": "出力ファイル名。",
+                "Time Limit:": "タイムリミット。",
+                "Memory Limit:": "メモリの制限。",
+                "Output only:": "出力のみ。"
+            }
+        },
+        ".ask-question-link": {
+            "class": [
+                ".ask-question-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Ask a question": "質問する"
+            }
+        },
+        "add-announcement-link": {
+            "class": [
+                ".add-announcement-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add announcement": "お知らせを追加"
+            }
+        },
+        "demo": {
+            "class": [
+                "Class"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "SourceText": "TargetText"
+            }
+        }
+    },
+    "InputValueReplacements": {
+        "InputSubmit": {
+            "class": [
+                "input[type='submit']"
+            ],
+            "description": "中国語を投稿する",
+            "isStrict": false,
+            "rules": {
+                "Register for virtual participation": "バーチャルエントリー登録",
+                "Register for practice": "ログインして練習を開始する",
+                "Apply": "アプライアンス",
+                "Register": "名前を書く",
+                "Login": "サインイン",
+                "Run": "うごきだす",
+                "Start virtual contest": "バーチャルエントリー開始",
+                "Manage invitations": "経営陣の招待",
+                "Disable manager mode": "管理モードの一時閉鎖",
+                "Enable manager mode": "オープン管理モード",
+                "Clone Contest": "クローン・コンペティション",
+                "Submit": "だす",
+                "Save changes": "設定の保存",
+                "Filter": "ろ過",
+                "Find": "見つける",
+                "Save": "セーブ",
+                "Create Mashup Contest": "マッシュアップコンテストを開催",
+                "Delete problem": "質問を削除する",
+                "Restore problem": "リカバリーの問題"
+            }
+        },
+        "InputButton": {
+            "class": [
+                "input[type='button']"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "リビジョン",
+                "Delete contest": "マッチ削除",
+                "Preview": "プレビュー"
+            }
+        }
+    }
+}
