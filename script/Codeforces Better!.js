@@ -37,6 +37,7 @@
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
 // @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
 // @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
+// @resource     subs_zh https://aowuucdn.oss-cn-beijing.aliyuncs.com/local/subs/subs-cf-zh-v1.0.json
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-cn-beijing.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
@@ -194,9 +195,9 @@ async function showAnnounce() {
 ---
 1.72
 
-- 修复ChatGPT配置面板缺失的问题
+- 修复 ChatGPT 配置面板不显示的问题，感谢 @caoxuanming 的反馈
 
-- 添加一个配置开关 "鼠标滚动锁定" ，默认开启， 感谢 @caoxuanming 的建议
+- 添加一个配置开关 "鼠标滚动锁定" ，默认开启， 感谢 @liuhao6 的建议
 ---
 1.71
 
@@ -2422,772 +2423,111 @@ function toZH_CN() {
     var htmlTag = document.getElementsByTagName("html")[0];
     htmlTag.setAttribute("lang", "zh-CN");
 
-    // 文本节点遍历替换
-    function traverseTextNodes(node, rules) {
-        if (!node) return;
-        if (node.nodeType === Node.TEXT_NODE) {
-            rules.forEach(rule => {
-                const regex = new RegExp(rule.match, 'g');
-                node.textContent = node.textContent.replace(regex, rule.replace);
-            });
-        } else {
-            $(node).contents().each((_, child) => traverseTextNodes(child, rules));
-        }
+    // 获取汉化数据
+    var subs_zh = JSON.parse(GM_getResourceText("subs_zh"));
+
+    /**
+     * 文本节点遍历替换
+     * @param {JQuery} $nodes jQuery对象
+     * @param {Array} textReplaceRules 文本替换规则
+     */
+    function traverseTextNodes($nodes, textReplaceRules) {
+        if (!$nodes) return;
+
+        $nodes.each(function () {
+            let node = this;
+            if (node.nodeType === Node.TEXT_NODE) {
+                textReplaceRules.forEach(rule => {
+                    const regex = new RegExp(rule.match, 'g');
+                    node.textContent = node.textContent.replace(regex, rule.replace);
+                });
+            } else {
+                $(node).contents().each(function () {
+                    traverseTextNodes($(this), textReplaceRules);
+                });
+            }
+        });
     }
 
-    // 严格
-    function strictTraverseTextNodes(node, rules) {
-        if (!node) return;
-        if (node.nodeType === Node.TEXT_NODE) {
-            const nodeText = node.textContent.trim();
-            rules.forEach(rule => {
-                if (nodeText === rule.match) {
-                    node.textContent = rule.replace;
-                }
-            });
-        } else {
-            $(node).contents().each((_, child) => strictTraverseTextNodes(child, rules));
-        }
+    /**
+     * value替换
+     * @param {JQuery} $nodes jQuery对象
+     * @param {Array} valueReplaceRules 值替换规则
+     */
+    function traverseValueNodes($nodes, valueReplaceRules) {
+        if (!$nodes) return;
+
+        $nodes.each(function () {
+            let $node = $(this);
+            if ($node.is('[value]')) {
+                valueReplaceRules.forEach(rule => {
+                    const regex = new RegExp(rule.match, 'g');
+                    let currentValue = $node.val();
+                    let newValue = currentValue.replace(regex, rule.replace);
+                    $node.val(newValue);
+                });
+            } else {
+                $node.children().each(function () {
+                    traverseValueNodes($(this), valueReplaceRules);
+                });
+            }
+        });
     }
 
-    const rules1 = [
-        { match: 'Virtual participation', replace: '参加虚拟重现赛' },
-        { match: 'Enter', replace: '进入' },
-        { match: 'Current standings', replace: '当前榜单' },
-        { match: 'Final standings', replace: '最终榜单' },
-        { match: 'Preliminary results', replace: '初步结果' },
-        { match: 'open hacking:', replace: '公开黑客攻击中' },
-        { match: 'School/University/City/Region Championship', replace: '学校/大学/城市/区域比赛' },
-        { match: 'Official School Contest', replace: '学校官方比赛' },
-        { match: 'Training Contest', replace: '训练赛' },
-        { match: 'Training Camp Contest', replace: '训练营比赛' },
-        { match: 'Official ICPC Contest', replace: 'ICPC官方比赛' },
-        { match: 'Official International Personal Contest', replace: '官方国际个人赛' },
-        { match: 'China', replace: '中国' },
-        { match: 'Statements', replace: '题目描述' },
-        { match: 'in Chinese', replace: '中文' },
-        { match: 'Trainings', replace: '训练' },
-        { match: 'Prepared by', replace: '编写人' },
-        { match: 'Current or upcoming contests', replace: '当前或即将举行的比赛' },
-        { match: 'Rating: users participated in recent 6 months', replace: '评级：最近 6 个月有参与的用户' },
-        { match: 'Past contests', replace: '过去的比赛' },
-        { match: 'Exclusions', replace: '排除' },
-        { match: 'Before start', replace: '距比赛开始还有' },
-        { match: 'Before registration', replace: '距报名开始还有' },
-        { match: 'Until closing ', replace: '距报名结束还有' },
-        { match: 'Before extra registration', replace: '额外报名还未开始' },
-        { match: 'Register »', replace: '报名 »' },
-        { match: 'Registration completed', replace: '已报名' },
-        { match: 'Registration closed', replace: '报名已结束' },
-        { match: 'Problems', replace: '问题集' },
-        { match: 'Questions about problems', replace: '关于问题的提问' },
-        { match: 'Contest status', replace: '比赛状态' },
-    ];
-    traverseTextNodes($('.datatable'), rules1);
-
-    const rules2 = [
-        { match: 'Home', replace: '主页' },
-        { match: 'Top', replace: '热门' },
-        { match: 'Catalog', replace: '指南目录' },
-        { match: 'Contests', replace: '比赛' },
-        { match: 'Gym', replace: '训练营' },
-        { match: 'Problemset', replace: '题单' },
-        { match: 'Groups', replace: '团体' },
-        { match: 'Rating', replace: 'Rating(评级)排行榜' },
-        { match: 'Edu', replace: '培训' },
-        { match: 'Calendar', replace: '日历' },
-        { match: 'Help', replace: '帮助' }
-    ];
-    traverseTextNodes($('.menu-list.main-menu-list'), rules2);
-
-    const rules3 = [
-        { match: 'Settings', replace: '设置' },
-        { match: 'Blog', replace: '博客' },
-        { match: 'Teams', replace: '队伍' },
-        { match: 'Submissions', replace: '提交' },
-        { match: 'Favourites', replace: '收藏' },
-        { match: 'Problemsetting', replace: '问题设置' },
-        { match: 'Talks', replace: '私信' },
-        { match: 'Contests', replace: '比赛' },
-    ];
-    traverseTextNodes($('.nav-links'), rules3);
-
-    const rules4 = [
-        { match: 'Before contest', replace: '即将进行的比赛' },
-        { match: 'Contest is running', replace: '比赛进行中' },
-    ];
-    traverseTextNodes($('.contest-state-phase'), rules4);
-
-    const rules5 = [
-        { match: 'has extra registration', replace: '有额外的报名时期' },
-        { match: 'If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.', replace: '如果您在比赛开始前5分钟前还未报名，您可以在额外的报名期间稍后报名。额外的报名将在比赛开始后10分钟开放，并持续25分钟。' },
-    ];
-    traverseTextNodes($('.notice'), rules5);
-
-    const rules6 = [
-        { match: 'Contribution', replace: '贡献' },
-    ];
-    traverseTextNodes($('.propertyLinks'), rules6);
-
-    const rules7 = [
-        { match: 'Contest history', replace: '比赛历史' },
-    ];
-    traverseTextNodes($('.contests-table'), rules7);
-
-    const rules8 = [
-        { match: 'Register now', replace: '现在报名' },
-        { match: 'No tag edit access', replace: '没有标签编辑权限' },
-        { match: 'Language:', replace: '语言:' },
-        { match: 'Choose file:', replace: '选择文件:' },
-    ];
-    traverseTextNodes($('.roundbox.sidebox.borderTopRound '), rules8);
-
-    const rules9 = [
-        { match: 'Add to exclusions', replace: '添加到排除列表' },
-    ];
-    traverseTextNodes($('.icon-eye-close.icon-large'), rules9);
-
-    const rules10 = [
-        { match: 'Add to exclusions for gym contests filter', replace: '添加训练营过滤器的排除项' },
-    ];
-    traverseTextNodes($("._ContestFilterExclusionsManageFrame_addExclusionLink"), rules10);
-
-    const rules11 = [
-        { match: 'Announcement', replace: '公告' },
-        { match: 'Statements', replace: '统计报表' },
-        { match: 'Tutorial', replace: '题解' },
-    ];
-    traverseTextNodes($('.roundbox.sidebox.sidebar-menu.borderTopRound '), rules11);
-
-    const rules12 = [
-        { match: 'Problems', replace: '问题' },
-        { match: 'Submit Code', replace: '提交代码' },
-        { match: 'My Submissions', replace: '我的提交' },
-        { match: 'Status', replace: '状态' },
-        { match: 'Standings', replace: '榜单' },
-        { match: 'Adm.', replace: '管理' },
-        { match: 'Edit', replace: '编辑' },
-        { match: 'Custom Invocation', replace: '自定义调试' },
-        { match: 'Common standings', replace: '全部排行' },
-        { match: 'Friends standings', replace: '只看朋友' },
-        { match: 'Submit', replace: '提交' },
-        { match: 'Hacks', replace: '黑客' },
-        { match: 'Room', replace: '房间' },
-        { match: 'Custom test', replace: '自定义测试' },
-        { match: 'Blog', replace: '博客' },
-        { match: 'Teams', replace: '队伍' },
-        { match: 'Submissions', replace: '提交记录' },
-        { match: 'Groups', replace: '团体' },
-        { match: 'Rating', replace: '评级' },
-        { match: 'Friends rating', replace: '朋友的评级' },
-        { match: 'Favourites', replace: '收藏' },
-        { match: 'Contests', replace: '比赛' },
-        { match: 'Members', replace: '成员' },
-        { match: '问题etting', replace: '参与编写的问题' },
-        { match: 'Streams', replace: '直播' },
-        { match: 'Gym', replace: '训练营' },
-        { match: 'Mashups', replace: '组合混搭' },
-        { match: 'Posts', replace: '帖子' },
-        { match: 'Comments', replace: '回复' },
-        { match: 'Main', replace: '主要的' },
-        { match: 'Settings', replace: '设置' },
-        { match: 'Lists', replace: '列表' },
-        { match: 'General', replace: '基本' },
-        { match: 'Sidebar', replace: '侧边栏' },
-        { match: 'Social', replace: '社会信息' },
-        { match: 'Address', replace: '地址' },
-        { match: 'Wallets', replace: '钱包' },
-    ];
-    traverseTextNodes($('.second-level-menu'), rules12);
-    if (is_mSite) {
-        traverseTextNodes($('nav'), rules12);
-    }
-
-    const rules13 = [
-        { match: 'Expand', replace: '展开' }
-    ];
-    traverseTextNodes($('.topic-toggle-collapse'), rules13);
-
-    const rules14 = [
-        { match: 'Full text and comments', replace: '阅读全文/评论' }
-    ];
-    traverseTextNodes($('.topic-read-more'), rules14);
-
-    const rules15 = [
-        { match: 'Switch off editor', replace: '关闭编辑器语法高亮' }
-    ];
-    traverseTextNodes($('.toggleEditorCheckboxLabel'), rules15);
-
-    const rules16 = [
-        { match: 'Registration for the contest', replace: '比赛报名' }
-    ];
-    traverseTextNodes($('.submit'), rules16);
-
-    const rules17 = [
-        { match: 'Difficulty:', replace: '难度:' },
-    ];
-    traverseTextNodes($('._FilterByTagsFrame_difficulty'), rules17);
-
-    const rules18 = [
-        { match: 'Add tag', replace: '添加标签' }
-    ];
-    traverseTextNodes($('._FilterByTagsFrame_addTagLink'), rules18);
-
-    const rules19 = [
-        { match: 'Rating changes for last rounds are temporarily rolled back. They will be returned soon.', replace: '上一轮的评级变化暂时回滚。它们将很快恢复。' },
-        { match: 'Reminder: in case of any technical issues, you can use the lightweight website', replace: '提醒：如果出现任何技术问题，您可以使用轻量网站' },
-        { match: 'Please subscribe to the official Codeforces channel in Telegram via the link ', replace: '请通过链接订阅Codeforces的官方Telegram频道' }
-    ];
-    traverseTextNodes($('.alert'), rules19);
-
-    const rules20 = [
-        { match: 'Enter', replace: '登录' },
-        { match: 'Register', replace: '注册' },
-        { match: 'Contest rating', replace: '测试 rating' },
-        { match: 'Logout', replace: '退出登录' }
-    ];
-    traverseTextNodes($('.lang-chooser'), rules20);
-
-    const rules21 = [
-        { match: 'Change photo', replace: '更换图片' },
-        { match: 'Contest rating', replace: '比赛Rating' },
-        { match: 'Contribution', replace: '贡献' },
-        { match: 'My friends', replace: '我的好友' },
-        { match: 'Change settings', replace: '改变设置' },
-        { match: 'Last visit', replace: '最后访问' },
-        { match: 'Registered', replace: '注册于' },
-        { match: 'Blog entries', replace: '博客条目' },
-        { match: 'comments', replace: '评论' },
-        { match: 'Write new entry', replace: '编写新条目' },
-        { match: 'View my talks', replace: '查看我的私信' },
-        { match: 'Talks', replace: '私信' },
-        { match: 'Send message', replace: '发送消息' },
-    ];
-    traverseTextNodes($('.userbox'), rules21);
-
-    const rules22 = [
-        { match: 'Reset', replace: '重置' },
-    ];
-    traverseTextNodes($('#vote-reset-filterDifficultyLowerBorder'), rules22);
-    traverseTextNodes($('#vote-reset-filterDifficultyUpperBorder'), rules22);
-
-    const rules23 = [
-        { match: 'The problem statement has recently been changed.', replace: '题目描述最近已被更改。' },
-        { match: 'View the changes.', replace: '查看更改' },
-    ];
-    traverseTextNodes($('.alert.alert-info'), rules23);
-
-    const rules24 = [
-        { match: 'Fill in the form to login into Codeforces.', replace: '填写表单以登录到Codeforces。' },
-        { match: 'You can use', replace: '你也可以使用' },
-        { match: 'as an alternative way to enter.', replace: '登录' },
-    ];
-    traverseTextNodes($('.enterPage'), rules24);
-
-    const rules25 = [
-        { match: '\\* To view the complete list, click ', replace: '* 要查看完整列表，请点击' },
-    ];
-    traverseTextNodes($('.notice.small'), rules25);
-
-    const rules26 = [
-        { match: 'Contest type:', replace: '比赛类型：' },
-        { match: 'Rated:', replace: '已评级：' },
-        { match: 'Tried:', replace: '已尝试' },
-        { match: 'Substring:', replace: '关键字' },
-    ];
-    traverseTextNodes($('.setting-name'), rules26);
-
-    const rules27 = [
-        { match: 'Sort by:', replace: '排序依据：' },
-        { match: 'relevance', replace: '相关' },
-        { match: 'popularity', replace: '热度' },
-        { match: 'time', replace: '时间' },
-    ];
-    traverseTextNodes($('.by-form'), rules27);
-
-    // 组合混搭管理汉化
-    const rules28 = [
-        { match: 'If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:', replace: '如果您邀请用户参加此竞赛，则无论其可见性如何，该竞赛都将对用户可见。您可以使用以下链接分享比赛：' },
-    ];
-    traverseTextNodes($('.roundbox.borderTopRound '), rules28);
-
-    const rules29 = [
-        { match: 'Show Log »', replace: '展示日志 »' },
-        { match: 'Move all to practice »', replace: '全部移至练习者 »' },
-        { match: 'Remove All »', replace: '移除全部 »' },
-        { match: 'Add »', replace: '添加 »' },
-        { match: 'Set »', replace: '设置 »' },
-        { match: 'Download Archive »', replace: '下载归档 »' },
-    ];
-    traverseTextNodes($('.roundbox.borderTopRound '), rules29);
-
-    // 元素选择替换
-    // 侧栏titled汉化
-    (function () {
-        var translations = {
-            "Pay attention": "→ 注意",
-            "Top rated": "→ 评级排行",
-            "Top contributors": "→ 贡献者排行",
-            "Find user": "→ 查找用户",
-            "Recent actions": "→ 最新动态",
-            "Training filter": "→ 过滤筛选",
-            "Find training": "→ 搜索比赛/问题",
-            "Virtual participation": "→ 什么是虚拟参赛",
-            "Contest materials": "→ 比赛相关资料",
-            "Settings": "→ 设置",
-            "Create Mashup Contest": "→ 克隆比赛到组合混搭",
-            "Clone Contest to Mashup": "→ 克隆比赛到组合混搭",
-            "Invitations": "→ 邀请",
-            "Administration": "→ 管理",
-            "Create Mashup Contest": "→ 创建混搭比赛",
-            "Submit": "→ 提交",
-            "Practice": "→ 练习",
-            "Problem tags": "→ 问题标签",
-            "Filter Problems": "→ 过滤问题",
-            "Attention": "→ 注意",
-            "Past contests filter": "→ 过去的比赛筛选",
-            "About Contest": "→ 关于比赛",
-            "Last submissions": "→ 提交历史",
-            "Streams": "→ 直播",
-            "Coach rights": "→ 教练权限",
-            "Advices to fill address": "→ 填写地址的建议",
-            "Hacks filter": "→ 黑客过滤器",
-            "Score table": "→ 评分表",
-            "Contests": "→ 比赛",
-            "History": "→ 编辑历史",
-            "Login into Codeforces": "登录 Codeforces",
-            "Export the judgment log to DAT-file": "→ 导出判题日志为 DAT 文件",
-            "Contest managers": "→ 比赛管理员",
-            "Contest writers": "→ 比赛编写者",
-            "Spectator ranklists": "→ 观众排名列表",
-            "Ghosts:": "→ 幽灵选手",
-            "Export Submissions": "→ 导出提交",
-        };
-
-        $(".caption.titled").each(function () {
-            var tag = $(this).text();
-            for (var property in translations) {
-                if (tag.match(property)) {
-                    $(this).addClass(property);
-                    $(this).text(translations[property]);
-                    break;
-                }
-            }
-        });
-    })();
-    // 题目Tag汉化
-    (function () {
-        var parentElement = $('._FilterByTagsFrame_addTagLabel');
-        var selectElement = parentElement.find('select');
-        var translations = {
-            "*combine tags by OR": "*按逻辑或组合我选择的标签",
-            "combine-tags-by-or": "*按逻辑或组合我选择的标签（combine-tags-by-or）",
-            "2-sat": "二分图可满足性问题（2-sat）",
-            "binary search": "二分搜索（binary search）",
-            "bitmasks": "位掩码（bitmasks）",
-            "brute force": "暴力枚举（brute force）",
-            "chinese remainder theorem": "中国剩余定理（chinese remainder theorem）",
-            "combinatorics": "组合数学（combinatorics）",
-            "constructive algorithms": "构造算法（constructive algorithms）",
-            "data structures": "数据结构（data structures）",
-            "dfs and similar": "深度优先搜索及其变种（dfs and similar）",
-            "divide and conquer": "分治算法（divide and conquer）",
-            "dp": "动态规划（dp）",
-            "dsu": "并查集（dsu）",
-            "expression parsing": "表达式解析（expression parsing）",
-            "fft": "快速傅里叶变换（fft）",
-            "flows": "流（flows）",
-            "games": "博弈论（games）",
-            "geometry": "计算几何（geometry）",
-            "graph matchings": "图匹配（graph matchings）",
-            "graphs": "图论（graphs）",
-            "greedy": "贪心策略（greedy）",
-            "hashing": "哈希表（hashing）",
-            "implementation": "实现问题，编程技巧，模拟（implementation）",
-            "interactive": "交互性问题（interactive）",
-            "math": "数学（math）",
-            "matrices": "矩阵（matrices）",
-            "meet-in-the-middle": "meet-in-the-middle算法（meet-in-the-middle）",
-            "number theory": "数论（number theory）",
-            "probabilities": "概率论（probabilities）",
-            "schedules": "调度算法（schedules）",
-            "shortest paths": "最短路算法（shortest paths）",
-            "sortings": "排序算法（sortings）",
-            "string suffix structures": "字符串后缀结构（string suffix structures）",
-            "strings": "字符串处理（strings）",
-            "ternary search": "三分搜索（ternary search）",
-            "trees": "树形结构（trees）",
-            "two pointers": "双指针算法（two pointers）"
-        };
-        selectElement.find("option").each(function () {
-            var optionValue = $(this).val();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-        $("._FilterByTagsFrame_tagBoxCaption").each(function () {
-            var tag = $(this).text();
-            if (tag in translations) {
-                $(this).text(translations[tag]);
-            }
-        });
-        $(".notice").each(function () {
-            var tag = $(this).text();
-            if (tag in translations) {
-                $(this).text(translations[tag]);
-            }
-        });
-        $(".tag-box").each(function () {
-            var tag = $(this).text();
-            for (var property in translations) {
-                property = property.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-                if (tag.match(property)) {
-                    $(this).text(translations[property]);
-                    break;
-                }
-            }
-        });
-    })();
-    // 题目过滤器选项汉化
-    (function () {
-        var parentElement = $('#gym-filter-form');
-        var selectElement = parentElement.find('div');
-        var translations = {
-            "Contest type:": "比赛类型:",
-            "ICPC region:": "ICPC地区:",
-            "Contest format:": "比赛形式:",
-            "Order by:": "排序方式:",
-            "Secondary order by:": "次要排序方式:",
-            "Hide, if participated:": "隐藏我参加过的:",
-        };
-        selectElement.find("label").each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-        translations = {
-            "Season:": "时间范围（年度）",
-            "Duration, hours:": "持续时间（小时）:",
-            "Difficulty:": "难度:"
-        };
-        selectElement.each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-    })();
-    (function () {
-        var parentElement = $('.setting-value');
-        var selectElement = parentElement.find('select');
-        var translations = {
-            "Official ACM-ICPC Contest": "ICPC官方比赛",
-            "Official School Contest": "学校官方比赛",
-            "Opencup Contest": "Opencup比赛",
-            "School/University/City/Region Championship": "学校/大学/城市/地区锦标赛",
-            "Training Camp Contest": "训练营比赛",
-            "Official International Personal Contest": "官方国际个人赛",
-            "Training Contest": "训练比赛",
-            "ID_ASC": "创建时间（升序）",
-            "ID_DESC": "创建时间（降序）",
-            "RATING_ASC": "评分（升序）",
-            "RATING_DESC": "评分（降序）",
-            "DIFFICULTY_ASC": "难度（升序）",
-            "DIFFICULTY_DESC": "难度（降序）",
-            "START_TIME_ASC": "开始时间（升序）",
-            "START_TIME_DESC": "开始时间（降序）",
-            "DURATION_ASC": "持续时间（升序）",
-            "DURATION_DESC": "持续时间（降序）",
-            "POPULARITY_ASC": "热度（升序）",
-            "POPULARITY_DESC": "热度（降序）",
-            "UPDATE_TIME_ASC": "更新时间（升序）",
-            "UPDATE_TIME_DESC": "更新时间（降序）"
-        };
-        selectElement.find("option").each(function () {
-            var optionValue = $(this).val();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-        parentElement = $('.setting-last-value');
-        selectElement = parentElement.find('select');
-        selectElement.find("option").each(function () {
-            var optionValue = $(this).val();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-    })();
-    // 比赛过滤器选项汉化
-    (function () {
-        var parentElement = $('.options');
-        var selectElement = parentElement.find('li');
-        var translations = {
-            "Educational": "教育性",
-            "Global": "全球",
-            "VK Cup": "VK杯",
-            "Long Rounds": "长期回合",
-            "April Fools": "愚人节",
-            "Team Contests": "团队比赛",
-            "ICPC Scoring": "ICPC计分",
-            "Doesn't matter": "----",
-            "Any": "所有",
-            "Yes": "是",
-            "No": "否",
-            "No submission(s)": "无提交",
-            "Have submission(s)": "有提交",
-            "No solved problem(s)": "无解决问题",
-            "Have solved problem(s)": "有解决问题"
-        };
-        selectElement.find('label').each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-        $('.CaptionCont').find('span').each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-    })();
-    // 右侧sidebox通用汉化
-    (function () {
-        var parentElement = $('.sidebox');
-        var selectElement = parentElement.find('div');
-        var translations = {
-            "Show tags for unsolved problems": "显示未解决问题的标签",
-            "Hide solved problems": "隐藏已解决的问题",
-        };
-        selectElement.find("label").each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-    })();
-    // 表单字段名汉化
-    (function () {
-        var translations = {
-            "Problem:": "题目:",
-            "Language:": "语言:",
-            "Source code:": "源代码:",
-            "Or choose file:": "或者选择文件:",
-            "Choose file:": "选择文件:",
-            "Notice:": "注意:",
-            "virtual participation:": "虚拟参与:",
-            "Registration for the contest:": "比赛报名:",
-            "Take part:": "参与:",
-            "as individual participant:": "作为个人参与者:",
-            "as a team member:": "作为团队成员:",
-            "Virtual start time:": "虚拟开始时间:",
-            "Complete problemset:": "完整的问题集:",
-            "First name (English)": "名字（英文）",
-            "Last name (English)": "姓氏（英文）",
-            "First name (Native)": "名字（本地语言）",
-            "Last name (Native)": "姓氏（本地语言）",
-            "Birth date": "出生日期",
-            "Country": "国家",
-            "City": "城市",
-            "Organization": "组织",
-            "Handle/Email": "账号/邮箱",
-            "Password": "密码",
-            "Training name (English):": "训练名称（英文）:",
-            "Training name (Russian):": "训练名称（俄语）:",
-            "Contest format:": "比赛格式:",
-            "Start time:": "开始时间:",
-            "Duration:": "持续时间:",
-            "Visibility:": "可见性:",
-            "Attach parent contest?:": "关联父级比赛?",
-            "Participation type:": "参与类型:",
-            "Freeze period:": "冻结期间:",
-            "Unfreeze time:": "解冻时间:",
-            "Is practice allowed?:": "是否允许练习?",
-            "Is virtual allowed?:": "是否允许虚拟参赛?",
-            "Is out of competition allowed?:": "是否允许非竞赛参赛?",
-            "Is self-registration allowed?:": "是否允许自助注册?",
-            "Can non-registered view the contest?:": "未注册用户能否查看比赛?",
-            "Can participants view common status?:": "参赛选手能否查看共享状态?",
-            "Contest testdata policy:": "比赛测试数据策略:",
-            "Allow view other submissions to:": "允许查看其他提交给:",
-            "Manage program languages:": "管理编程语言:",
-            "Use time limits scaling policy?:": "使用时间限制缩放策略?",
-            "Allow statements?:": "允许陈述?",
-            "Allow standings?:": "允许排名?",
-            "Season:": "季节:",
-            "Contest type:": "比赛类型:",
-            "ICPC region:": "ICPC 地区:",
-            "Country:": "国家:",
-            "City:": "城市:",
-            "Contest difficulty:": "比赛难度:",
-            "Website URL:": "网站链接:",
-            "Description (English):": "描述（英文）:",
-            "Description (Russian):": "描述（俄语）:",
-            "Registration confirmation text (English):": "注册确认文字（英文）:",
-            "Registration confirmation text (Russian):": "注册确认文字（俄语）:",
-            "Logo (English):": "徽标（英文）:",
-            "Logo (Russian):": "徽标（俄语）:",
-            "End time:": "结束时间:",
-            "Name:": "名称:",
-            "Contest(s):": "比赛（们）:",
-            "Add contest:": "添加比赛:",
-            "Show Contestants:": "显示参赛选手:",
-            "Show Out of Competition Participants:": "显示非竞赛参与者:",
-            "Show Practices:": "显示练习:",
-            "Show Virtuals:": "显示虚拟选手:",
-            "Show Ghosts:": "显示幽灵选手:",
-            "Name:": "名称:",
-            "Text:": "文本:",
-            "Rewrite Examples:": "重写样例:",
-            "Add images:": "添加图片:",
-            "Do not use:": "不使用:",
-            "Problem short name:": "题目简称:",
-            "Source problem:": "源问题:",
-            "Problem name (English):": "题目名称（英文）:",
-            "Input file name:": "输入文件名:",
-            "Output file name:": "输出文件名:",
-            "Time Limit:": "时间限制:",
-            "Memory Limit:": "内存限制:",
-            "Output only:": "仅输出:"
-        };
-        $(".field-name").each(function () {
-            var field = $(this);
-            field.contents().each(function () {
-                if (this.nodeType === Node.TEXT_NODE) {
-                    var optionValue = this.textContent.trim();
-                    if (translations[optionValue]) {
-                        this.textContent = translations[optionValue];
+    /**
+     * 严格的文本节点遍历替换
+     * @param {JQuery} $node jQuery对象
+     * @param {Array} textReplaceRules 文本替换规则
+     */
+    function strictTraverseTextNodes($nodes, textReplaceRules) {
+        if (!$nodes) return;
+        
+        $nodes.each(function () {
+            let $node = $(this);
+            if ($node.nodeType === Node.TEXT_NODE) {
+                const trimmedNodeText = $node.textContent.trim();
+                textReplaceRules.forEach(rule => {
+                    if (trimmedNodeText === rule.match) {
+                        $node.textContent = rule.replace;
                     }
-                } else if (this.nodeType === Node.ELEMENT_NODE && this.tagName.toLowerCase() === 'label') {
-                    var optionValue = this.textContent.trim();
-                    if (translations[optionValue]) {
-                        this.textContent = translations[optionValue];
-                    }
-                }
-            });
-        });
-    })();
-    (function () {
-        var translations = {
-            "Terms of agreement:": "协议条款:",
-            "Choose team:": "选择团队:"
-        };
-        $(".field-name label").each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
+                });
+            } else {
+                $($node).contents().each(function () { 
+                    strictTraverseTextNodes($(this), textReplaceRules); 
+                });
             }
         });
-    })();
-    (function () {
-        var translations = {
-            "Hide sidebar block \"Find user\"": "隐藏侧边栏块“查找用户”",
-            "Hide sidebar block \"Current user\"": "隐藏侧边栏块“当前用户”",
-            "Hide sidebar block \"Recent аctions\"": "隐藏侧边栏块“最新动态”",
-            "Hide sidebar block \"Favourite groups\"": "隐藏侧边栏块“收藏组”",
-            "Hide sidebar block \"Top contributors\"": "隐藏侧边栏块“贡献者排行”",
-            "Hide sidebar block \"Top rated\"": "隐藏侧边栏块“评级排行”",
-            "Hide sidebar block \"Streams\"": "隐藏侧边栏块“直播”",
-            "Old password": "旧密码",
-            "New password": "新密码",
-            "Confirm new password": "确认新密码",
-            "Contest email notification": "比赛邮件通知",
-            "Send email on new user talk": "在有新用户对话时发送电子邮件",
-            "Send email on new comment": "在有新评论时发送电子邮件",
-            "Hide contact information": "隐藏联系人信息",
-            "Remember me by Gmail, Facebook and etc": "通过 Gmail、Facebook 等记住我",
-            "Show tags for unsolved problems": "显示未解决问题的标签",
-            "Hide solved problems from problemset": "从问题集中隐藏已解决的问题",
-            "Hide low rated blogs": "隐藏评级较低的博客",
-            "Offer to publish great rating rises": "提供展示Rating显著提升的机会",
-            "Enforce https": "强制 HTTPS",
-            "Show private activity in the profile": "在个人资料中显示私人活动",
-            "Show diagnostics": "显示诊断信息"
-        };
-        $(".field-name").each(function () {
-            var tag = $(this).text();
-            for (var property in translations) {
-                property = property.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
-                if (tag.match(property)) {
-                    $(this).text(translations[property]);
-                    break;
-                }
-            }
-        });
-    })();
-    (function () {
-        var translations = {
-            "Postal/zip code": "邮政编码/邮编",
-            "Country (English)": "国家（英文）",
-            "State (English)": "州/省份（英文）",
-            "City (English)": "城市（英文）",
-            "Address (English)": "地址（英文）",
-            "Recipient (English)": "收件人姓名（英文）",
-            "Country (Native)": "国家（本地语言）",
-            "State (Native)": "州/省份（本地语言）",
-            "City (Native)": "城市（本地语言）",
-            "Address (Native)": "地址（本地语言）",
-            "Recipient (Native)": "收件人姓名（本地语言）",
-            "Phone": "电话",
-            "TON Wallet:": "TON 钱包:",
-            "Secret Code:": "验证码:"
-        };
-        $("td.field-name label").each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-    })();
+    }
 
-    // 按钮汉化input[type="submit"]
-    (function () {
-        var translations = {
-            "Register for virtual participation": "报名虚拟参赛",
-            "Register for practice": "登录以开始练习",
-            "Apply": "应用",
-            "Register": "报名",
-            "Login": "登录",
-            "Run": "运行",
-            "Start virtual contest": "开始虚拟参赛",
-            "Manage invitations": "管理邀请",
-            "Disable manager mode": "临时关闭管理模式",
-            "Enable manager mode": "开启管理模式",
-            "Clone Contest": "克隆比赛",
-            "Submit": "提交",
-            "Save changes": "保存设置",
-            "Filter": "过滤",
-            "Find": "查找",
-            "Save": "保存",
-            "Create Mashup Contest": "创建混搭比赛",
-            "Delete problem": "删除问题",
-            "Restore problem": "恢复问题"
-        };
-        $('input[type="submit"]').each(function () {
-            var optionValue = $(this).val();
-            if (translations[optionValue]) {
-                $(this).val(translations[optionValue]);
+    /**
+     * 应用文本替换
+     */
+    let commonReplacements = subs_zh.commonReplacements;
+    Object.entries(commonReplacements).forEach(([key, value]) => {
+        const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
+        classSelectors.forEach(classSelector => {
+            if (value.isStrict) {
+                strictTraverseTextNodes($(`${classSelector}`), value.rules);
+            } else {
+                traverseTextNodes($(`${classSelector}`), value.rules);
             }
         });
-    })();
-    (function () {
-        var translations = {
-            "Reset": "重置",
-            "Delete contest": "删除比赛",
-            "Preview": "预览",
-        };
-        $('input[type="button"]').each(function () {
-            var optionValue = $(this).val();
-            if (translations[optionValue]) {
-                $(this).val(translations[optionValue]);
-            }
-        });
-    })();
+    });
 
-    // 选项汉化input[type="radio"]
+    /**
+     * 应用value替换
+     */
+    let InputValueReplacements = subs_zh.InputValueReplacements;
+    Object.entries(InputValueReplacements).forEach(([key, value]) => {
+        const classSelectors = Array.isArray(value.class) ? value.class : [value.class];
+        classSelectors.forEach(classSelector => {
+            traverseValueNodes($(`${classSelector}`), value.rules);
+        });
+    });
+
+    // 杂项
     (function () {
+        // 选项汉化input[type="radio"]
         var translations = {
             "as individual participant": "个人",
             "as a team member": "作为一个团队成员",
@@ -3206,8 +2546,6 @@ function toZH_CN() {
             }
         });
     })();
-
-    // 杂项
     (function () {
         var translations = {
             "(standard input\/output)": "标准输入/输出",
@@ -3222,19 +2560,11 @@ function toZH_CN() {
             }
         });
     })();
-    (function () {
-        var translations = {
-            "Ask a question": "提一个问题",
-        };
-        $(".ask-question-link").each(function () {
-            var optionValue = $(this).text();
-            if (translations[optionValue]) {
-                $(this).text(translations[optionValue]);
-            }
-        });
-    })();
 
     // 轻量站特殊
+    if (is_mSite) {
+        traverseTextNodes($('nav'), commonReplacements['.second-level-menu']['rules']);
+    }
     if (is_mSite) {
         (function () {
             var translations = {

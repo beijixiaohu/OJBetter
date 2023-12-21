@@ -1,0 +1,2171 @@
+{
+    "commonReplacements": {
+        ".datatable": {
+            "class": [
+                ".datatable"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Virtual participation",
+                    "replace": "参加虚拟重现赛"
+                },
+                {
+                    "match": "Enter",
+                    "replace": "进入"
+                },
+                {
+                    "match": "Current standings",
+                    "replace": "当前榜单"
+                },
+                {
+                    "match": "Final standings",
+                    "replace": "最终榜单"
+                },
+                {
+                    "match": "Preliminary results",
+                    "replace": "初步结果"
+                },
+                {
+                    "match": "open hacking:",
+                    "replace": "开放黑客攻击中"
+                },
+                {
+                    "match": "School/University/City/Region Championship",
+                    "replace": "学校/大学/城市/区域比赛"
+                },
+                {
+                    "match": "Official School Contest",
+                    "replace": "学校官方比赛"
+                },
+                {
+                    "match": "Training Contest",
+                    "replace": "训练赛"
+                },
+                {
+                    "match": "Training Camp Contest",
+                    "replace": "训练营比赛"
+                },
+                {
+                    "match": "Official ICPC Contest",
+                    "replace": "ICPC官方比赛"
+                },
+                {
+                    "match": "Official International Personal Contest",
+                    "replace": "官方国际个人赛"
+                },
+                {
+                    "match": "China",
+                    "replace": "中国"
+                },
+                {
+                    "match": "Statements",
+                    "replace": "题目描述"
+                },
+                {
+                    "match": "in Chinese",
+                    "replace": "中文"
+                },
+                {
+                    "match": "Trainings",
+                    "replace": "训练"
+                },
+                {
+                    "match": "Prepared by",
+                    "replace": "编写人"
+                },
+                {
+                    "match": "Current or upcoming contests",
+                    "replace": "当前或即将举行的比赛"
+                },
+                {
+                    "match": "Rating: users participated in recent 6 months",
+                    "replace": "评级：最近 6 个月有参与的用户"
+                },
+                {
+                    "match": "Past contests",
+                    "replace": "过去的比赛"
+                },
+                {
+                    "match": "Exclusions",
+                    "replace": "排除"
+                },
+                {
+                    "match": "Before start",
+                    "replace": "距比赛开始还有"
+                },
+                {
+                    "match": "Before registration",
+                    "replace": "距报名开始还有"
+                },
+                {
+                    "match": "Until closing ",
+                    "replace": "距报名结束还有"
+                },
+                {
+                    "match": "Before extra registration",
+                    "replace": "额外报名还未开始"
+                },
+                {
+                    "match": "Register »",
+                    "replace": "报名 »"
+                },
+                {
+                    "match": "Registration completed",
+                    "replace": "已报名"
+                },
+                {
+                    "match": "Registration closed",
+                    "replace": "报名已结束"
+                },
+                {
+                    "match": "Problems",
+                    "replace": "问题集"
+                },
+                {
+                    "match":"My Submissions",
+                    "replace":"我的提交"
+                },
+                {
+                    "match":"Standings",
+                    "replace":"榜单"
+                },
+                {
+                    "match": "Questions about problems",
+                    "replace": "关于问题的提问"
+                },
+                {
+                    "match": "Contest status",
+                    "replace": "比赛状态"
+                },
+                {
+                    "match":"Invited users",
+                    "replace":"邀请的用户"
+                },
+                {
+                    "match":"Invitation links",
+                    "replace":"邀请链接"
+                }
+            ]
+        },
+        ".menu-list.main-menu-list": {
+            "class": [
+                ".menu-list.main-menu-list"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Home",
+                    "replace": "主页"
+                },
+                {
+                    "match": "Top",
+                    "replace": "热门"
+                },
+                {
+                    "match": "Catalog",
+                    "replace": "指南目录"
+                },
+                {
+                    "match": "Contests",
+                    "replace": "比赛"
+                },
+                {
+                    "match": "Gym",
+                    "replace": "训练营"
+                },
+                {
+                    "match": "Problemset",
+                    "replace": "题单"
+                },
+                {
+                    "match": "Groups",
+                    "replace": "团体"
+                },
+                {
+                    "match": "Rating",
+                    "replace": "Rating(评级)排行榜"
+                },
+                {
+                    "match": "Edu",
+                    "replace": "培训"
+                },
+                {
+                    "match": "Calendar",
+                    "replace": "日历"
+                },
+                {
+                    "match": "Help",
+                    "replace": "帮助"
+                }
+            ]
+        },
+        ".nav-links": {
+            "class": [
+                ".nav-links"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Settings",
+                    "replace": "设置"
+                },
+                {
+                    "match": "Blog",
+                    "replace": "博客"
+                },
+                {
+                    "match": "Teams",
+                    "replace": "队伍"
+                },
+                {
+                    "match": "Submissions",
+                    "replace": "提交"
+                },
+                {
+                    "match": "Favourites",
+                    "replace": "收藏"
+                },
+                {
+                    "match": "Problemsetting",
+                    "replace": "问题设置"
+                },
+                {
+                    "match": "Talks",
+                    "replace": "私信"
+                },
+                {
+                    "match": "Contests",
+                    "replace": "比赛"
+                }
+            ]
+        },
+        ".contest-state-phase": {
+            "class": [
+                ".contest-state-phase"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Before contest",
+                    "replace": "即将进行的比赛"
+                },
+                {
+                    "match": "Contest is running",
+                    "replace": "比赛进行中"
+                }
+            ]
+        },
+        ".notice": {
+            "class": [
+                ".notice"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "has extra registration",
+                    "replace": "有额外的报名时期"
+                },
+                {
+                    "match": "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.",
+                    "replace": "如果您在比赛开始前5分钟前还未报名，您可以在额外的报名期间稍后报名。额外的报名将在比赛开始后10分钟开放，并持续25分钟。"
+                },
+                {
+                    "match":"in timezone ([^)]*)",
+                    "replace":"$1 时区"
+                },
+                {
+                    "match":"Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time",
+                    "replace":"比赛结束后将允许虚拟参赛。将此字段留空以允许随时进行虚拟参赛"
+                },
+                {
+                    "match":"Contest duration in minutes",
+                    "replace":"比赛持续时间（分钟）"
+                },
+                {
+                    "match":"or choose",
+                    "replace":"或选择"
+                },
+                {
+                    "match":"Standings freeze period in minutes",
+                    "replace":"榜单冻结时间（分钟）"
+                },
+                {
+                    "match":"Time when final results are available",
+                    "replace":"最终结果可用时间"
+                },
+                {
+                    "match":"Is it allowed to solve contest problems unofficially after the end",
+                    "replace":"比赛结束后是否允许非官方解决比赛问题"
+                },
+                {
+                    "match":"Is it allowed to run contest as virtual after the end",
+                    "replace":"比赛结束后是否允许虚拟参赛"
+                },
+                {
+                    "match":"Is it allowed participate in contest out of competition",
+                    "replace":"是否允许非竞赛参赛"
+                },
+                {
+                    "match":"Are participants allowed to register for the contest themselves",
+                    "replace":"是否允许参赛者自行报名"
+                },
+                {
+                    "match":"Can non-registered users and anonyms view contest standings, problems and other statistics",
+                    "replace":"是否允许未注册用户和匿名用户查看比赛榜单、问题和其他统计信息"
+                },
+                {
+                    "match":"If unchecked they will view only personal status",
+                    "replace":"如果未选中，他们将只能查看个人状态"
+                },
+                {
+                    "match":"To manage allowed program languages",
+                    "replace":"管理允许的编程语言"
+                },
+                {
+                    "match":"The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.",
+                    "replace":"系统将自动调整某些语言的时间限制。仅建议用于教育目的。"
+                },
+                {
+                    "match":"Check it if you want to allow contestants view statements",
+                    "replace":"如果允许参赛者查看题目描述，请勾选此项"
+                },
+                {
+                    "match":"Check it if contestants can view standings",
+                    "replace":"如果允许参赛者查看榜单，请勾选此项"
+                },
+                {
+                    "match":"Where the contest was held originally",
+                    "replace":"比赛原本举办的地点"
+                },
+                {
+                    "match":"Official contest site URL",
+                    "replace":"官方比赛网站URL"
+                }
+            ]
+        },
+        ".propertyLinks": {
+            "class": [
+                ".propertyLinks"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Contribution",
+                    "replace": "贡献"
+                }
+            ]
+        },
+        ".contests-table": {
+            "class": [
+                ".contests-table"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Contest history",
+                    "replace": "比赛历史"
+                }
+            ]
+        },
+        ".roundbox.sidebox.borderTopRound ": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound "
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Register now",
+                    "replace": "现在报名"
+                },
+                {
+                    "match": "No tag edit access",
+                    "replace": "没有标签编辑权限"
+                },
+                {
+                    "match":"Problem",
+                    "replace":"问题"
+                },
+                {
+                    "match":"Verdict",
+                    "replace":"判题状态"
+                },
+                {
+                    "match": "Language:",
+                    "replace": "语言:"
+                },
+                {
+                    "match":"Participant",
+                    "replace":"参赛者"
+                },
+                {
+                    "match": "Choose file:",
+                    "replace": "选择文件:"
+                }
+            ]
+        },
+        ".icon-eye-close.icon-large": {
+            "class": [
+                ".icon-eye-close.icon-large"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Add to exclusions",
+                    "replace": "添加到排除列表"
+                }
+            ]
+        },
+        "null": {
+            "class": [
+                null
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Add to exclusions for gym contests filter",
+                    "replace": "添加训练营过滤器的排除项"
+                }
+            ]
+        },
+        ".roundbox.sidebox.sidebar-menu.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.sidebar-menu.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Announcement",
+                    "replace": "公告"
+                },
+                {
+                    "match": "Statements",
+                    "replace": "统计报表"
+                },
+                {
+                    "match": "Tutorial",
+                    "replace": "题解"
+                }
+            ]
+        },
+        ".second-level-menu": {
+            "class": [
+                ".second-level-menu"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Problems",
+                    "replace": "问题"
+                },
+                {
+                    "match": "Submit Code",
+                    "replace": "提交代码"
+                },
+                {
+                    "match": "My Submissions",
+                    "replace": "我的提交"
+                },
+                {
+                    "match": "Status",
+                    "replace": "状态"
+                },
+                {
+                    "match": "Standings",
+                    "replace": "榜单"
+                },
+                {
+                    "match": "Adm.",
+                    "replace": "管理"
+                },
+                {
+                    "match": "Edit",
+                    "replace": "编辑"
+                },
+                {
+                    "match": "Custom Invocation",
+                    "replace": "自定义调试"
+                },
+                {
+                    "match": "Common standings",
+                    "replace": "全部排行"
+                },
+                {
+                    "match": "Friends standings",
+                    "replace": "只看朋友"
+                },
+                {
+                    "match": "Submit",
+                    "replace": "提交"
+                },
+                {
+                    "match": "Hacks",
+                    "replace": "黑客"
+                },
+                {
+                    "match": "Room",
+                    "replace": "房间"
+                },
+                {
+                    "match": "Custom test",
+                    "replace": "自定义测试"
+                },
+                {
+                    "match": "Blog",
+                    "replace": "博客"
+                },
+                {
+                    "match": "Teams",
+                    "replace": "队伍"
+                },
+                {
+                    "match": "Submissions",
+                    "replace": "提交记录"
+                },
+                {
+                    "match": "Groups",
+                    "replace": "团体"
+                },
+                {
+                    "match": "Rating",
+                    "replace": "评级"
+                },
+                {
+                    "match": "Friends rating",
+                    "replace": "朋友的评级"
+                },
+                {
+                    "match": "Favourites",
+                    "replace": "收藏"
+                },
+                {
+                    "match": "Contests",
+                    "replace": "比赛"
+                },
+                {
+                    "match": "Members",
+                    "replace": "成员"
+                },
+                {
+                    "match": "问题etting",
+                    "replace": "参与编写的问题"
+                },
+                {
+                    "match": "Streams",
+                    "replace": "直播"
+                },
+                {
+                    "match": "Gym",
+                    "replace": "训练营"
+                },
+                {
+                    "match": "Mashups",
+                    "replace": "组合混搭"
+                },
+                {
+                    "match": "Posts",
+                    "replace": "帖子"
+                },
+                {
+                    "match": "Comments",
+                    "replace": "回复"
+                },
+                {
+                    "match": "Main",
+                    "replace": "主要的"
+                },
+                {
+                    "match": "Settings",
+                    "replace": "设置"
+                },
+                {
+                    "match": "Lists",
+                    "replace": "列表"
+                },
+                {
+                    "match": "General",
+                    "replace": "基本"
+                },
+                {
+                    "match": "Sidebar",
+                    "replace": "侧边栏"
+                },
+                {
+                    "match": "Social",
+                    "replace": "社会信息"
+                },
+                {
+                    "match": "Address",
+                    "replace": "地址"
+                },
+                {
+                    "match": "Wallets",
+                    "replace": "钱包"
+                }
+            ]
+        },
+        ".topic-toggle-collapse": {
+            "class": [
+                ".topic-toggle-collapse"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Expand",
+                    "replace": "展开"
+                }
+            ]
+        },
+        ".topic-read-more": {
+            "class": [
+                ".topic-read-more"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Full text and comments",
+                    "replace": "阅读全文/评论"
+                }
+            ]
+        },
+        ".toggleEditorCheckboxLabel": {
+            "class": [
+                ".toggleEditorCheckboxLabel"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Switch off editor",
+                    "replace": "关闭编辑器语法高亮"
+                }
+            ]
+        },
+        ".submit": {
+            "class": [
+                ".submit"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Registration for the contest",
+                    "replace": "比赛报名"
+                }
+            ]
+        },
+        "._FilterByTagsFrame_difficulty": {
+            "class": [
+                "._FilterByTagsFrame_difficulty"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Difficulty:",
+                    "replace": "难度:"
+                }
+            ]
+        },
+        "._FilterByTagsFrame_addTagLink": {
+            "class": [
+                "._FilterByTagsFrame_addTagLink"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Add tag",
+                    "replace": "添加标签"
+                }
+            ]
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Rating changes for last rounds are temporarily rolled back. They will be returned soon.",
+                    "replace": "上一轮的评级变化暂时回滚。它们将很快恢复。"
+                },
+                {
+                    "match": "Reminder: in case of any technical issues, you can use the lightweight website",
+                    "replace": "提醒：如果出现任何技术问题，您可以使用轻量网站"
+                },
+                {
+                    "match": "Please subscribe to the official Codeforces channel in Telegram via the link ",
+                    "replace": "请通过链接订阅Codeforces的官方Telegram频道"
+                }
+            ]
+        },
+        ".lang-chooser": {
+            "class": [
+                ".lang-chooser"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Enter",
+                    "replace": "登录"
+                },
+                {
+                    "match": "Register",
+                    "replace": "注册"
+                },
+                {
+                    "match": "Contest rating",
+                    "replace": "测试 rating"
+                },
+                {
+                    "match": "Logout",
+                    "replace": "退出登录"
+                }
+            ]
+        },
+        ".userbox": {
+            "class": [
+                ".userbox"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Change photo",
+                    "replace": "更换图片"
+                },
+                {
+                    "match": "Contest rating",
+                    "replace": "比赛Rating"
+                },
+                {
+                    "match": "Contribution",
+                    "replace": "贡献"
+                },
+                {
+                    "match": "My friends",
+                    "replace": "我的好友"
+                },
+                {
+                    "match": "Change settings",
+                    "replace": "改变设置"
+                },
+                {
+                    "match": "Last visit",
+                    "replace": "最后访问"
+                },
+                {
+                    "match": "Registered",
+                    "replace": "注册于"
+                },
+                {
+                    "match": "Blog entries",
+                    "replace": "博客条目"
+                },
+                {
+                    "match": "comments",
+                    "replace": "评论"
+                },
+                {
+                    "match": "Write new entry",
+                    "replace": "编写新条目"
+                },
+                {
+                    "match": "View my talks",
+                    "replace": "查看我的私信"
+                },
+                {
+                    "match": "Talks",
+                    "replace": "私信"
+                },
+                {
+                    "match": "Send message",
+                    "replace": "发送消息"
+                }
+            ]
+        },
+        "#vote-reset-filterDifficultyLowerBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyLowerBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Reset",
+                    "replace": "重置"
+                }
+            ]
+        },
+        "#vote-reset-filterDifficultyUpperBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyUpperBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Reset",
+                    "replace": "重置"
+                }
+            ]
+        },
+        ".alert.alert-info": {
+            "class": [
+                ".alert.alert-info"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "The problem statement has recently been changed.",
+                    "replace": "题目描述最近已被更改。"
+                },
+                {
+                    "match": "View the changes.",
+                    "replace": "查看更改"
+                }
+            ]
+        },
+        ".enterPage": {
+            "class": [
+                ".enterPage"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Fill in the form to login into Codeforces.",
+                    "replace": "填写表单以登录到Codeforces。"
+                },
+                {
+                    "match": "You can use",
+                    "replace": "你也可以使用"
+                },
+                {
+                    "match": "as an alternative way to enter.",
+                    "replace": "登录"
+                }
+            ]
+        },
+        ".notice.small": {
+            "class": [
+                ".notice.small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "\\* To view the complete list, click ",
+                    "replace": "* 要查看完整列表，请点击"
+                }
+            ]
+        },
+        ".setting-name": {
+            "class": [
+                ".setting-name"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Contest type:",
+                    "replace": "比赛类型："
+                },
+                {
+                    "match": "Rated:",
+                    "replace": "已评级："
+                },
+                {
+                    "match": "Tried:",
+                    "replace": "已尝试"
+                },
+                {
+                    "match": "Substring:",
+                    "replace": "关键字"
+                }
+            ]
+        },
+        ".by-form": {
+            "class": [
+                ".by-form"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Sort by:",
+                    "replace": "排序依据："
+                },
+                {
+                    "match": "relevance",
+                    "replace": "相关"
+                },
+                {
+                    "match": "popularity",
+                    "replace": "热度"
+                },
+                {
+                    "match": "time",
+                    "replace": "时间"
+                }
+            ]
+        },
+        ".roundbox.borderTopRound": {
+            "class": [
+                ".roundbox.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:",
+                    "replace": "如果您邀请用户参加此竞赛，则无论其可见性如何，该竞赛都将对用户可见。您可以使用以下链接分享比赛："
+                },
+                {
+                    "match":"Generate link and share it with other users",
+                    "replace":"生成链接并与其他用户共享"
+                },
+                {
+                    "match": "Show Log »",
+                    "replace": "展示日志 »"
+                },
+                {
+                    "match": "Move all to practice »",
+                    "replace": "全部移至练习者 »"
+                },
+                {
+                    "match": "Remove All »",
+                    "replace": "移除全部 »"
+                },
+                {
+                    "match": "Add »",
+                    "replace": "添加 »"
+                },
+                {
+                    "match": "Set »",
+                    "replace": "设置 »"
+                },
+                {
+                    "match": "Download Archive »",
+                    "replace": "下载归档 »"
+                }
+            ]
+        },
+        ".caption.titled": {
+            "class": [
+                ".caption.titled"
+            ],
+            "description": "侧栏titled汉化",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Pay attention",
+                    "replace": "注意"
+                },
+                {
+                    "match": "Top rated",
+                    "replace": "评级排行"
+                },
+                {
+                    "match": "Top contributors",
+                    "replace": "贡献者排行"
+                },
+                {
+                    "match": "Find user",
+                    "replace": "查找用户"
+                },
+                {
+                    "match": "Recent actions",
+                    "replace": "最新动态"
+                },
+                {
+                    "match": "Training filter",
+                    "replace": "过滤筛选"
+                },
+                {
+                    "match": "Find training",
+                    "replace": "搜索比赛/问题"
+                },
+                {
+                    "match": "Virtual participation",
+                    "replace": "什么是虚拟参赛"
+                },
+                {
+                    "match": "Contest materials",
+                    "replace": "比赛相关资料"
+                },
+                {
+                    "match": "Settings",
+                    "replace": "设置"
+                },
+                {
+                    "match": "Create Mashup Contest",
+                    "replace": "创建混搭比赛"
+                },
+                {
+                    "match": "Clone Contest to Mashup",
+                    "replace": "克隆比赛到组合混搭"
+                },
+                {
+                    "match": "Invitations",
+                    "replace": "邀请"
+                },
+                {
+                    "match": "Status filter",
+                    "replace": "状态过滤器"
+                },
+                {
+                    "match": "Administration",
+                    "replace": "管理"
+                },
+                {
+                    "match": "Submit",
+                    "replace": "提交"
+                },
+                {
+                    "match": "Practice",
+                    "replace": "练习"
+                },
+                {
+                    "match": "Problem tags",
+                    "replace": "问题标签"
+                },
+                {
+                    "match": "Filter Problems",
+                    "replace": "过滤问题"
+                },
+                {
+                    "match": "Last unsolved",
+                    "replace": "上次未解决"
+                },
+                {
+                    "match": "Attention",
+                    "replace": "注意"
+                },
+                {
+                    "match": "Past contests filter",
+                    "replace": "过去的比赛筛选"
+                },
+                {
+                    "match": "About Contest",
+                    "replace": "关于比赛"
+                },
+                {
+                    "match": "Last submissions",
+                    "replace": "提交历史"
+                },
+                {
+                    "match": "Streams",
+                    "replace": "直播"
+                },
+                {
+                    "match": "Coach rights",
+                    "replace": "教练权限"
+                },
+                {
+                    "match": "Advices to fill address",
+                    "replace": "填写地址的建议"
+                },
+                {
+                    "match": "Hacks filter",
+                    "replace": "黑客过滤器"
+                },
+                {
+                    "match": "Score table",
+                    "replace": "评分表"
+                },
+                {
+                    "match": "Contests",
+                    "replace": "比赛"
+                },
+                {
+                    "match": "History",
+                    "replace": "编辑历史"
+                },
+                {
+                    "match": "Login into Codeforces",
+                    "replace": "登录 Codeforces"
+                },
+                {
+                    "match": "Export the judgment log to DAT-file",
+                    "replace": "导出判题日志为 DAT 文件"
+                },
+                {
+                    "match": "Contest managers",
+                    "replace": "比赛管理员"
+                },
+                {
+                    "match": "Contest writers",
+                    "replace": "比赛编写者"
+                },
+                {
+                    "match": "Spectator ranklists",
+                    "replace": "观众排名列表"
+                },
+                {
+                    "match": "Ghosts:",
+                    "replace": "幽灵选手"
+                },
+                {
+                    "match": "Export Submissions",
+                    "replace": "导出提交"
+                }
+            ]
+        },
+        "QuestionFilter1": {
+            "class": [
+                "#gym-filter-form div label",
+                "#gym-filter-form div"
+            ],
+            "description": "题目过滤器选项汉化",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Contest type:",
+                    "replace": "比赛类型:"
+                },
+                {
+                    "match": "ICPC region:",
+                    "replace": "ICPC地区:"
+                },
+                {
+                    "match": "Contest format:",
+                    "replace": "比赛形式:"
+                },
+                {
+                    "match": "Order by:",
+                    "replace": "排序方式:"
+                },
+                {
+                    "match": "Secondary order by:",
+                    "replace": "次要排序方式:"
+                },
+                {
+                    "match": "Hide, if participated:",
+                    "replace": "隐藏我参加过的:"
+                },
+                {
+                    "match": "Hide excluded gyms",
+                    "replace": "隐藏已排除的:"
+                },
+                {
+                    "match": "Season:",
+                    "replace": "时间范围（年度）"
+                },
+                {
+                    "match": "Duration, hours:",
+                    "replace": "持续时间（小时）:"
+                },
+                {
+                    "match": "Difficulty:",
+                    "replace": "难度:"
+                }
+            ]
+        },
+        "QuestionFilter2": {
+            "class": [
+                ".setting-value select option",
+                ".setting-last-value select option"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Official ACM-ICPC Contest",
+                    "replace": "ICPC官方比赛"
+                },
+                {
+                    "match": "Official School Contest",
+                    "replace": "学校官方比赛"
+                },
+                {
+                    "match": "Opencup Contest",
+                    "replace": "Opencup比赛"
+                },
+                {
+                    "match": "School/University/City/Region Championship",
+                    "replace": "学校/大学/城市/地区锦标赛"
+                },
+                {
+                    "match": "Training Camp Contest",
+                    "replace": "训练营比赛"
+                },
+                {
+                    "match": "Official International Personal Contest",
+                    "replace": "官方国际个人赛"
+                },
+                {
+                    "match": "Training Contest",
+                    "replace": "训练比赛"
+                },
+                {
+                    "match": "ID_ASC",
+                    "replace": "创建时间（升序）"
+                },
+                {
+                    "match": "ID_DESC",
+                    "replace": "创建时间（降序）"
+                },
+                {
+                    "match": "RATING_ASC",
+                    "replace": "评分（升序）"
+                },
+                {
+                    "match": "RATING_DESC",
+                    "replace": "评分（降序）"
+                },
+                {
+                    "match": "DIFFICULTY_ASC",
+                    "replace": "难度（升序）"
+                },
+                {
+                    "match": "DIFFICULTY_DESC",
+                    "replace": "难度（降序）"
+                },
+                {
+                    "match": "START_TIME_ASC",
+                    "replace": "开始时间（升序）"
+                },
+                {
+                    "match": "START_TIME_DESC",
+                    "replace": "开始时间（降序）"
+                },
+                {
+                    "match": "DURATION_ASC",
+                    "replace": "持续时间（升序）"
+                },
+                {
+                    "match": "DURATION_DESC",
+                    "replace": "持续时间（降序）"
+                },
+                {
+                    "match": "POPULARITY_ASC",
+                    "replace": "热度（升序）"
+                },
+                {
+                    "match": "POPULARITY_DESC",
+                    "replace": "热度（降序）"
+                },
+                {
+                    "match": "UPDATE_TIME_ASC",
+                    "replace": "更新时间（升序）"
+                },
+                {
+                    "match": "UPDATE_TIME_DESC",
+                    "replace": "更新时间（降序）"
+                }
+            ]
+        },
+        "CompetitionFilter": {
+            "class": [
+                ".options li label",
+                ".CaptionCont span"
+            ],
+            "description": "比赛过滤器选项汉化",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Educational",
+                    "replace": "教育性"
+                },
+                {
+                    "match": "Global",
+                    "replace": "全球"
+                },
+                {
+                    "match": "VK Cup",
+                    "replace": "VK杯"
+                },
+                {
+                    "match": "Long Rounds",
+                    "replace": "长期回合"
+                },
+                {
+                    "match": "April Fools",
+                    "replace": "愚人节"
+                },
+                {
+                    "match": "Team Contests",
+                    "replace": "团队比赛"
+                },
+                {
+                    "match": "ICPC Scoring",
+                    "replace": "ICPC计分"
+                },
+                {
+                    "match": "Doesn't matter",
+                    "replace": "----"
+                },
+                {
+                    "match": "Any",
+                    "replace": "所有"
+                },
+                {
+                    "match": "Yes",
+                    "replace": "是"
+                },
+                {
+                    "match": "No",
+                    "replace": "否"
+                },
+                {
+                    "match": "No submission(s)",
+                    "replace": "无提交"
+                },
+                {
+                    "match": "Have submission(s)",
+                    "replace": "有提交"
+                },
+                {
+                    "match": "No solved problem(s)",
+                    "replace": "无解决问题"
+                },
+                {
+                    "match": "Have solved problem(s)",
+                    "replace": "有解决问题"
+                }
+            ]
+        },
+        "RightSidebox": {
+            "class": [
+                ".sidebox div label"
+            ],
+            "description": "右侧sidebox汉化",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Show tags for unsolved problems",
+                    "replace": "显示未解决问题的标签"
+                },
+                {
+                    "match": "Hide solved problems",
+                    "replace": "隐藏已解决的问题"
+                }
+            ]
+        },
+        "FormField-name": {
+            "class": [
+                "td.field-name label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Postal/zip code",
+                    "replace": "邮政编码/邮编"
+                },
+                {
+                    "match": "Country (English)",
+                    "replace": "国家（英文）"
+                },
+                {
+                    "match": "State (English)",
+                    "replace": "州/省份（英文）"
+                },
+                {
+                    "match": "City (English)",
+                    "replace": "城市（英文）"
+                },
+                {
+                    "match": "Address (English)",
+                    "replace": "地址（英文）"
+                },
+                {
+                    "match": "Recipient (English)",
+                    "replace": "收件人姓名（英文）"
+                },
+                {
+                    "match": "Country (Native)",
+                    "replace": "国家（本地语言）"
+                },
+                {
+                    "match": "State (Native)",
+                    "replace": "州/省份（本地语言）"
+                },
+                {
+                    "match": "City (Native)",
+                    "replace": "城市（本地语言）"
+                },
+                {
+                    "match": "Address (Native)",
+                    "replace": "地址（本地语言）"
+                },
+                {
+                    "match": "Recipient (Native)",
+                    "replace": "收件人姓名（本地语言）"
+                },
+                {
+                    "match": "Phone",
+                    "replace": "电话"
+                },
+                {
+                    "match": "TON Wallet:",
+                    "replace": "TON 钱包:"
+                },
+                {
+                    "match": "Secret Code:",
+                    "replace": "验证码:"
+                },
+                {
+                    "match": "Terms of agreement:",
+                    "replace": "协议条款:"
+                },
+                {
+                    "match": "Choose team:",
+                    "replace": "选择团队:"
+                }
+            ]
+        },
+        "QuestionTag": {
+            "class": [
+                "._FilterByTagsFrame_addTagLabel select option",
+                "._FilterByTagsFrame_tagBoxCaption",
+                ".notice",
+                ".tag-box"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "combine tags by OR",
+                    "replace": "按逻辑或组合我选择的标签"
+                },
+                {
+                    "match": "combine-tags-by-or",
+                    "replace": "按逻辑或组合我选择的标签（combine-tags-by-or）"
+                },
+                {
+                    "match": "2-sat",
+                    "replace": "二分图可满足性问题（2-sat）"
+                },
+                {
+                    "match": "binary search",
+                    "replace": "二分搜索（binary search）"
+                },
+                {
+                    "match": "bitmasks",
+                    "replace": "位掩码（bitmasks）"
+                },
+                {
+                    "match": "brute force",
+                    "replace": "暴力枚举（brute force）"
+                },
+                {
+                    "match": "chinese remainder theorem",
+                    "replace": "中国剩余定理（chinese remainder theorem）"
+                },
+                {
+                    "match": "combinatorics",
+                    "replace": "组合数学（combinatorics）"
+                },
+                {
+                    "match": "constructive algorithms",
+                    "replace": "构造算法（constructive algorithms）"
+                },
+                {
+                    "match": "data structures",
+                    "replace": "数据结构（data structures）"
+                },
+                {
+                    "match": "dfs and similar",
+                    "replace": "深度优先搜索及其变种（dfs and similar）"
+                },
+                {
+                    "match": "divide and conquer",
+                    "replace": "分治算法（divide and conquer）"
+                },
+                {
+                    "match": "dp",
+                    "replace": "动态规划（dp）"
+                },
+                {
+                    "match": "dsu",
+                    "replace": "并查集（dsu）"
+                },
+                {
+                    "match": "expression parsing",
+                    "replace": "表达式解析（expression parsing）"
+                },
+                {
+                    "match": "fft",
+                    "replace": "快速傅里叶变换（fft）"
+                },
+                {
+                    "match": "flows",
+                    "replace": "流（flows）"
+                },
+                {
+                    "match": "games",
+                    "replace": "博弈论（games）"
+                },
+                {
+                    "match": "geometry",
+                    "replace": "计算几何（geometry）"
+                },
+                {
+                    "match": "graph matchings",
+                    "replace": "图匹配（graph matchings）"
+                },
+                {
+                    "match": "graphs",
+                    "replace": "图论（graphs）"
+                },
+                {
+                    "match": "greedy",
+                    "replace": "贪心策略（greedy）"
+                },
+                {
+                    "match": "hashing",
+                    "replace": "哈希表（hashing）"
+                },
+                {
+                    "match": "implementation",
+                    "replace": "实现问题，编程技巧，模拟（implementation）"
+                },
+                {
+                    "match": "interactive",
+                    "replace": "交互性问题（interactive）"
+                },
+                {
+                    "match": "math",
+                    "replace": "数学（math）"
+                },
+                {
+                    "match": "matrices",
+                    "replace": "矩阵（matrices）"
+                },
+                {
+                    "match": "meet-in-the-middle",
+                    "replace": "meet-in-the-middle算法（meet-in-the-middle）"
+                },
+                {
+                    "match": "number theory",
+                    "replace": "数论（number theory）"
+                },
+                {
+                    "match": "probabilities",
+                    "replace": "概率论（probabilities）"
+                },
+                {
+                    "match": "schedules",
+                    "replace": "调度算法（schedules）"
+                },
+                {
+                    "match": "shortest paths",
+                    "replace": "最短路算法（shortest paths）"
+                },
+                {
+                    "match": "sortings",
+                    "replace": "排序算法（sortings）"
+                },
+                {
+                    "match": "string suffix structures",
+                    "replace": "字符串后缀结构（string suffix structures）"
+                },
+                {
+                    "match": "strings",
+                    "replace": "字符串处理（strings）"
+                },
+                {
+                    "match": "ternary search",
+                    "replace": "三分搜索（ternary search）"
+                },
+                {
+                    "match": "trees",
+                    "replace": "树形结构（trees）"
+                },
+                {
+                    "match": "two pointers",
+                    "replace": "双指针算法（two pointers）"
+                }
+            ]
+        },
+        "SettingField-name": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "设置页中的字段",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Hide sidebar block \"Find user\"",
+                    "replace": "隐藏侧边栏块“查找用户”"
+                },
+                {
+                    "match": "Hide sidebar block \"Current user\"",
+                    "replace": "隐藏侧边栏块“当前用户”"
+                },
+                {
+                    "match": "Hide sidebar block \"Recent аctions\"",
+                    "replace": "隐藏侧边栏块“最新动态”"
+                },
+                {
+                    "match": "Hide sidebar block \"Favourite groups\"",
+                    "replace": "隐藏侧边栏块“收藏组”"
+                },
+                {
+                    "match": "Hide sidebar block \"Top contributors\"",
+                    "replace": "隐藏侧边栏块“贡献者排行”"
+                },
+                {
+                    "match": "Hide sidebar block \"Top rated\"",
+                    "replace": "隐藏侧边栏块“评级排行”"
+                },
+                {
+                    "match": "Hide sidebar block \"Streams\"",
+                    "replace": "隐藏侧边栏块“直播”"
+                },
+                {
+                    "match": "Old password",
+                    "replace": "旧密码"
+                },
+                {
+                    "match": "New password",
+                    "replace": "新密码"
+                },
+                {
+                    "match": "Confirm new password",
+                    "replace": "确认新密码"
+                },
+                {
+                    "match": "Contest email notification",
+                    "replace": "比赛邮件通知"
+                },
+                {
+                    "match": "Send email on new user talk",
+                    "replace": "在有新用户对话时发送电子邮件"
+                },
+                {
+                    "match": "Send email on new comment",
+                    "replace": "在有新评论时发送电子邮件"
+                },
+                {
+                    "match": "Hide contact information",
+                    "replace": "隐藏联系人信息"
+                },
+                {
+                    "match": "Remember me by Gmail, Facebook and etc",
+                    "replace": "通过 Gmail、Facebook 等记住我"
+                },
+                {
+                    "match": "Show tags for unsolved problems",
+                    "replace": "显示未解决问题的标签"
+                },
+                {
+                    "match": "Hide solved problems from problemset",
+                    "replace": "从问题集中隐藏已解决的问题"
+                },
+                {
+                    "match": "Hide low rated blogs",
+                    "replace": "隐藏评级较低的博客"
+                },
+                {
+                    "match": "Offer to publish great rating rises",
+                    "replace": "提供展示Rating显著提升的机会"
+                },
+                {
+                    "match": "Enforce https",
+                    "replace": "强制 HTTPS"
+                },
+                {
+                    "match": "Show private activity in the profile",
+                    "replace": "在个人资料中显示私人活动"
+                },
+                {
+                    "match": "Show diagnostics",
+                    "replace": "显示诊断信息"
+                }
+            ]
+        },
+        "CloneContestFormField": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "克隆比赛到虚拟混搭设置表单",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Problem:",
+                    "replace": "题目:"
+                },
+                {
+                    "match": "Language:",
+                    "replace": "语言:"
+                },
+                {
+                    "match": "Source code:",
+                    "replace": "源代码:"
+                },
+                {
+                    "match": "Or choose file:",
+                    "replace": "或者选择文件:"
+                },
+                {
+                    "match": "Choose file:",
+                    "replace": "选择文件:"
+                },
+                {
+                    "match": "Notice:",
+                    "replace": "注意:"
+                },
+                {
+                    "match": "virtual participation:",
+                    "replace": "虚拟参与:"
+                },
+                {
+                    "match": "Registration for the contest:",
+                    "replace": "比赛报名:"
+                },
+                {
+                    "match": "Take part:",
+                    "replace": "参与:"
+                },
+                {
+                    "match": "as individual participant:",
+                    "replace": "作为个人参与者:"
+                },
+                {
+                    "match": "as a team member:",
+                    "replace": "作为团队成员:"
+                },
+                {
+                    "match": "Virtual start time:",
+                    "replace": "虚拟开始时间:"
+                },
+                {
+                    "match": "Complete problemset:",
+                    "replace": "完整的问题集:"
+                },
+                {
+                    "match": "First name \\(English\\)",
+                    "replace": "名字（英文）"
+                },
+                {
+                    "match": "Last name \\(English\\)",
+                    "replace": "姓氏（英文）"
+                },
+                {
+                    "match": "First name \\(Native\\)",
+                    "replace": "名字（本地语言）"
+                },
+                {
+                    "match": "Last name \\(Native\\)",
+                    "replace": "姓氏（本地语言）"
+                },
+                {
+                    "match": "Birth date",
+                    "replace": "出生日期"
+                },
+                {
+                    "match": "Country",
+                    "replace": "国家"
+                },
+                {
+                    "match": "City",
+                    "replace": "城市"
+                },
+                {
+                    "match": "Organization",
+                    "replace": "组织"
+                },
+                {
+                    "match": "Handle/Email",
+                    "replace": "账号/邮箱"
+                },
+                {
+                    "match": "Password",
+                    "replace": "密码"
+                },
+                {
+                    "match": "Training name \\(English\\):",
+                    "replace": "训练名称（英文）:"
+                },
+                {
+                    "match": "Training name \\(Russian\\):",
+                    "replace": "训练名称（俄语）:"
+                },
+                {
+                    "match": "Contest format:",
+                    "replace": "比赛格式:"
+                },
+                {
+                    "match": "Start time:",
+                    "replace": "开始时间:"
+                },
+                {
+                    "match": "Duration:",
+                    "replace": "持续时间:"
+                },
+                {
+                    "match": "Visibility:",
+                    "replace": "可见性:"
+                },
+                {
+                    "match": "Attach parent contest\\?:",
+                    "replace": "关联父级比赛?"
+                },
+                {
+                    "match": "Participation type:",
+                    "replace": "参与类型:"
+                },
+                {
+                    "match": "Freeze period:",
+                    "replace": "冻结期间:"
+                },
+                {
+                    "match": "Unfreeze time:",
+                    "replace": "解冻时间:"
+                },
+                {
+                    "match": "Is practice allowed\\?:",
+                    "replace": "是否允许练习?"
+                },
+                {
+                    "match": "Is virtual allowed\\?:",
+                    "replace": "是否允许虚拟参赛?"
+                },
+                {
+                    "match": "Is out of competition allowed\\?:",
+                    "replace": "是否允许非竞赛参赛?"
+                },
+                {
+                    "match": "Is self-registration allowed\\?:",
+                    "replace": "是否允许自助注册?"
+                },
+                {
+                    "match": "Can non-registered view the contest\\?:",
+                    "replace": "未注册用户能否查看比赛?"
+                },
+                {
+                    "match": "Can participants view common status\\?:",
+                    "replace": "参赛选手能否查看共享状态?"
+                },
+                {
+                    "match": "Contest testdata policy:",
+                    "replace": "比赛测试数据策略:"
+                },
+                {
+                    "match": "Allow view other submissions to:",
+                    "replace": "允许查看其他提交给:"
+                },
+                {
+                    "match": "Manage program languages:",
+                    "replace": "管理编程语言:"
+                },
+                {
+                    "match": "Use time limits scaling policy\\?:",
+                    "replace": "使用时间限制缩放策略?"
+                },
+                {
+                    "match": "Allow statements\\?:",
+                    "replace": "允许查看题目描述?"
+                },
+                {
+                    "match": "Allow standings\\?:",
+                    "replace": "允许查看排名?"
+                },
+                {
+                    "match": "Season:",
+                    "replace": "季节:"
+                },
+                {
+                    "match": "Contest type:",
+                    "replace": "比赛类型:"
+                },
+                {
+                    "match": "ICPC region:",
+                    "replace": "ICPC 地区:"
+                },
+                {
+                    "match": "Country:",
+                    "replace": "国家:"
+                },
+                {
+                    "match": "City:",
+                    "replace": "城市:"
+                },
+                {
+                    "match": "Contest difficulty:",
+                    "replace": "比赛难度:"
+                },
+                {
+                    "match": "Website URL:",
+                    "replace": "网站链接:"
+                },
+                {
+                    "match": "Description \\(English\\):",
+                    "replace": "描述（英文）:"
+                },
+                {
+                    "match": "Description \\(Russian\\):",
+                    "replace": "描述（俄语）:"
+                },
+                {
+                    "match": "Registration confirmation text \\(English\\):",
+                    "replace": "注册确认文字（英文）:"
+                },
+                {
+                    "match": "Registration confirmation text \\(Russian\\):",
+                    "replace": "注册确认文字（俄语）:"
+                },
+                {
+                    "match": "Logo \\(English\\):",
+                    "replace": "徽标（英文）:"
+                },
+                {
+                    "match": "Logo \\(Russian\\):",
+                    "replace": "徽标（俄语）:"
+                },
+                {
+                    "match": "End time:",
+                    "replace": "结束时间:"
+                },
+                {
+                    "match": "Name:",
+                    "replace": "名称:"
+                },
+                {
+                    "match": "Contest\\(s\\):",
+                    "replace": "比赛（们）:"
+                },
+                {
+                    "match": "Add contest:",
+                    "replace": "添加比赛:"
+                },
+                {
+                    "match": "Show Contestants:",
+                    "replace": "显示参赛选手:"
+                },
+                {
+                    "match": "Show Out of Competition Participants:",
+                    "replace": "显示非竞赛参与者:"
+                },
+                {
+                    "match": "Show Practices:",
+                    "replace": "显示练习:"
+                },
+                {
+                    "match": "Show Virtuals:",
+                    "replace": "显示虚拟选手:"
+                },
+                {
+                    "match": "Show Ghosts:",
+                    "replace": "显示幽灵选手:"
+                },
+                {
+                    "match": "Text:",
+                    "replace": "文本:"
+                },
+                {
+                    "match": "Rewrite Examples:",
+                    "replace": "重写样例:"
+                },
+                {
+                    "match": "Add images:",
+                    "replace": "添加图片:"
+                },
+                {
+                    "match": "Do not use:",
+                    "replace": "不使用:"
+                },
+                {
+                    "match": "Problem short name:",
+                    "replace": "题目简称:"
+                },
+                {
+                    "match": "Source problem:",
+                    "replace": "源问题:"
+                },
+                {
+                    "match": "Problem name \\(English\\):",
+                    "replace": "题目名称（英文）:"
+                },
+                {
+                    "match": "Input file name:",
+                    "replace": "输入文件名:"
+                },
+                {
+                    "match": "Output file name:",
+                    "replace": "输出文件名:"
+                },
+                {
+                    "match": "Time Limit:",
+                    "replace": "时间限制:"
+                },
+                {
+                    "match": "Memory Limit:",
+                    "replace": "内存限制:"
+                },
+                {
+                    "match": "Output only:",
+                    "replace": "仅输出:"
+                }
+            ]
+        },
+        ".ask-question-link": {
+            "class": [
+                ".ask-question-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Ask a question",
+                    "replace": "提一个问题"
+                }
+            ]
+        },
+        "add-announcement-link":{
+            "class": [
+                ".add-announcement-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Add announcement",
+                    "replace": "添加公告"
+                }
+            ]
+        },
+        "demo": {
+            "class": [
+                "Class"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "SourceText",
+                    "replace": "TargetText"
+                }
+            ]
+        }
+    },
+    "InputValueReplacements": {
+        "InputSubmit": {
+            "class": [
+                "input[type='submit']"
+            ],
+            "description": "submit汉化",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Register for virtual participation",
+                    "replace": "报名虚拟参赛"
+                },
+                {
+                    "match": "Register for practice",
+                    "replace": "登录以开始练习"
+                },
+                {
+                    "match": "Apply",
+                    "replace": "应用"
+                },
+                {
+                    "match": "Register",
+                    "replace": "报名"
+                },
+                {
+                    "match": "Login",
+                    "replace": "登录"
+                },
+                {
+                    "match": "Run",
+                    "replace": "运行"
+                },
+                {
+                    "match": "Start virtual contest",
+                    "replace": "开始虚拟参赛"
+                },
+                {
+                    "match": "Manage invitations",
+                    "replace": "管理邀请"
+                },
+                {
+                    "match": "Disable manager mode",
+                    "replace": "临时关闭管理模式"
+                },
+                {
+                    "match": "Enable manager mode",
+                    "replace": "开启管理模式"
+                },
+                {
+                    "match": "Clone Contest",
+                    "replace": "克隆比赛"
+                },
+                {
+                    "match": "Submit",
+                    "replace": "提交"
+                },
+                {
+                    "match": "Save changes",
+                    "replace": "保存设置"
+                },
+                {
+                    "match": "Filter",
+                    "replace": "过滤"
+                },
+                {
+                    "match": "Find",
+                    "replace": "查找"
+                },
+                {
+                    "match": "Save",
+                    "replace": "保存"
+                },
+                {
+                    "match": "Create Mashup Contest",
+                    "replace": "创建混搭比赛"
+                },
+                {
+                    "match": "Delete problem",
+                    "replace": "删除问题"
+                },
+                {
+                    "match": "Restore problem",
+                    "replace": "恢复问题"
+                }
+            ]
+        },
+        "InputButton": {
+            "class": [
+                "input[type='button']"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": [
+                {
+                    "match": "Reset",
+                    "replace": "重置"
+                },
+                {
+                    "match": "Delete contest",
+                    "replace": "删除比赛"
+                },
+                {
+                    "match": "Preview",
+                    "replace": "预览"
+                }
+            ]
+        }
+    }
+}
