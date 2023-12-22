@@ -3,7 +3,7 @@
 <h2 id="功能">官能性</h2>
 <p><strong>ヒント：スクリプトは、いくつかの機能の設定項目を提供しています。 <strong><code>AtCoderBetter Settings</code></strong> のページ全体の右上隅にある</strong> のボタンをクリックすると、設定パネルを開くことができます。</p>
 <h3 id="界面汉化">中国語インターフェース</h3>
-<p>サイトの主な要素は中国語に翻訳されます。もしどこかに間違いや不十分な翻訳があれば、フィードバックを歓迎します。</p>
+<p>サイトの主な要素は中国語に翻訳されます。 もしどこかに間違いや不十分な翻訳があれば、フィードバックを歓迎します。</p>
 <p><code>AtCoderBetter設定</code> 右上のパネルで、ローカリゼーションのオン/オフを選択できます。</p>
 <h3 id="题目翻译">タイトルの翻訳</h3>
 <p>タイトル、ブログ、コメントなどの右上に翻訳ボタンを追加し、Latexの公式が崩れないようにしながら、ワンクリックで中国語に翻訳！</p>
@@ -125,7 +125,7 @@
 <p><strong>スクリプト・マネージャー</strong></p>
 <p>Greasemonkey、Violentmonkey、ScriptCatなどとの互換性は保証されません！</p>
 <p><strong>その他のプラグイン</strong></p>
-<p>主流のCF関連プラグインとの互換性の問題はありません。もし互換性の問題が発生したら、フィードバックを歓迎します。</p>
+<p>主流のCF関連プラグインとの互換性の問題はありません。 もし互換性の問題が発生したら、フィードバックを歓迎します。</p>
 <h2 id="常见问题">一般的な問題</h2>
 <ul>
   <p><strong>Q. 何から始めればいいですか？</strong></p>
@@ -136,6 +136,7 @@
   <p><strong>Q. アップデートエラーは？</strong></p>
   <ul>
     <li>A. Greasyforkのプラットフォーム上、新しいバージョンがリリースされると、実際のアップデート/インストールが前のバージョンになってしまうことがあります。
+      また、スクリプトの更新アラートボックスの赤いクエスチョンマークにマウスを合わせ、ポップアップメッセージの下にある「Don't update yet（まだ更新しないでください）」ボタンをクリックすることもできます。
       また、スクリプトの更新アラートボックスの赤いクエスチョンマークにマウスを合わせ、ポップアップメッセージの下にある「Don't update yet（まだ更新しないでください）」ボタンをクリックすることもできます。</li>
   </ul>
   <p><strong>Q. ローディング中と表示され続けますか？</strong></p>
@@ -155,20 +156,20 @@
       <p>LaTeXの数式が翻訳中に壊れないようにするため、スクリプトは最初にすべてのLaTeXの数式を取り出し、置換文字{xx}/[xx]/[xx]を使って配置します。</p>
       <p>これらの置換は翻訳中に破損しない確率が高いので、翻訳後に置換に基づいてLaTeXの数式に戻すことが可能です。</p>
       <p>この実装は、置換文字が壊れていなければ期待通りに機能する。</p>
-      <p>しかし、翻訳サービスが置換を壊してしまうことがある。例えば、[23]が[23 / 23] / [23]/ [23 】/ [23 】になってしまう。</p>
+      <p>しかし、翻訳サービスが置換を壊してしまうことがある。 例えば、[23]が[23 / 23] / [23]/ [23 】/ [23 】になってしまう。</p>
       <p>しかし、翻訳サービスによってさらに内容が破壊され、曖昧さが生じた場合、例えば、翻訳サービスによって[2] 313が[2312]になった場合、それを復元することはできません。</p>
       <p>各翻訳サービスでは、異なる置換は、それ自体が破損する確率が異なっており、あなたは右上隅にある設定パネルで異なる置換を選択することができます。</p>
       <p>テストした結果、 <code>{}</code> の方が通常性能が良いので、これがスクリプトで使われるデフォルトの置換である。</p>
     </div>
     <div style="background-color: #009688; color: #ffffff;">
       <p><strong>先端：</strong></p>
-      <p>この問題はChatGPTで翻訳する場合には存在しません。ChatGPTはプロンプトワードで直接「LaTeXの数式を翻訳せずに保持する」ように指示できるからです。</p>
+      <p>この問題はChatGPTで翻訳する場合には存在しません。 ChatGPTはプロンプトワードで直接「LaTeXの数式を翻訳せずに保持する」ように指示できるからです。</p>
       <p>スマートなChatGPTはこれに非常によく対応でき、これはスクリプトを翻訳するための推奨方法です。</p>
     </div>
   </ul>
   <p><strong>Q. ChatGPT Translatorの使い方は？</strong></p>
   <ul>
-    <li>A. もしOpenAIのインターフェースに直接アクセスでき、アカウントを持っているのであれば、"ChatGPT Translation (API) "をチェックし、下の "Add "ボタンをクリックして、新しい設定を作成し、必要事項を入力してください。をクリックし、フィールドに記入してください。</li>
+    <li>A. もしOpenAIのインターフェースに直接アクセスでき、アカウントを持っているのであれば、"ChatGPT Translation (API) "をチェックし、下の "Add "ボタンをクリックして、新しい設定を作成し、必要事項を入力してください。</li>
     <p>また、ChatGPTを使用するためにAPIプロキシサービスを購入することができます、次の表は、いくつかのAPIサービスプロバイダを収集し、あなたが使用することを選択できます。
     </p>
     <table style="border: 1px solid #bcaaa4;">
@@ -219,7 +220,7 @@
     </div>
     <p>apiプロキシ・サービス・プロバイダーが提供するサービスを使用する場合、コンフィギュレーションのKEYは、apiプロキシ・サービス・プロバイダーが提供するKEYでなければならない。</p>
     <p>さらに、プロキシAPIをコンフィギュレーションに追加入力する必要があります。</p>
-    <p>プロキシAPIは全項目を入力する必要があります。以下は、APIを提供する <a href="https://console.closeai-asia.com/">CloseAI</a> の例です。
+    <p>プロキシAPIは全項目を入力する必要があります。 以下は、APIを提供する <a href="https://console.closeai-asia.com/">CloseAI</a> の例です。
       Base：<code>https://api.closeai-proxy.xyz</code></p>
     <p>そして、プロキシAPIの後には、 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>が続くはずである。</p>
     <p style="color: #F44336;">注：カスタムAPIを指定しているため、Tampermonkeyはクロスドメインリクエストについて警告を表示します！</p>
@@ -231,9 +232,9 @@
 <p><a href="https://github.com/beijixiaohu/OJBetter">Github リポジトリ</a> PR を作成してください。</p>
 <h2 id="感谢">有り難い</h2>
 <ul>
-  <li>このスクリプトは、 <a href="https://greasyfork.org/zh-CN/scripts/465777">Codeforces Better！</a> Codeforces Better！の姉妹作で、開発初期に以下のスクリプトを参照した。：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>,<a
+  <li>このスクリプトは、 <a href="https://greasyfork.org/zh-CN/scripts/465777">Codeforces Better！ </a> Codeforces Better！ の姉妹作で、開発初期に以下のスクリプトを参照した。 ：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>,<a
       href="https://greasyfork.org/zh-CN/scripts/378277">Translator</a></li>
-  <li>スクリプトは以下のオープンソースライブラリを使用しています。：<a href="https://github.com/mixmark-io/turndown">turndown</a>,<a
+  <li>スクリプトは以下のオープンソースライブラリを使用しています。 ：<a href="https://github.com/mixmark-io/turndown">turndown</a>,<a
       href="https://jquery.com/">jquery</a>,<a href="https://www.mathjax.org/">MathJax</a>,<a
       href="https://github.com/brix/crypto-js">crypto-js</a>,<a href="">base64</a>,<a href="https://github.com/gka/chroma.js">chroma</a>
   </li>
