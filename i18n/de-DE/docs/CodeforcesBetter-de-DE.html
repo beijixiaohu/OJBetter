@@ -5,7 +5,9 @@
     <center>
       <h3>Schreiben Sie vorab：Feedback-Notizen</h3>
     </center>
-    <p>Wenn Sie Probleme haben, lesen Sie bitte zuerst die <a style="color:#F44336" href="#常见问题">#FAQ</a> Anweisungen unten.Wenn das Problem nicht behoben ist, gehen Sie bitte auf die Feedback-Seite <a style="color:#F44336"
+    <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。Wenn Sie Probleme haben, lesen Sie bitte zuerst die <a style="color:#F44336" href="#常见问题">#FAQ</a> Anweisungen unten.Wenn das Problem nicht behoben ist, gehen Sie bitte auf die Feedback-Seite <a style="color:#F44336"
         href="https://greasyfork.org/zh-CN/scripts/465777/feedback"></a> oder <a style="color:#F44336"
         href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> , um Feedback zu geben.</p>
     <p>Bitte geben Sie eine detaillierte Beschreibung des Problems, z.B.：Link, Screenshots, gewünschte Ergebnisse, tatsächliche Ergebnisse, Reproduktion……</p>
@@ -164,8 +166,7 @@
             "documentation": "The is a hello world snippet",
             "insertText": "hello world"
         },
-        // other Vorschläge...
-    ]
+        // other Vorschläge... ]
 }
 </pre>
 <p>Sie können fast alle Eigenschaften von <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>verwenden. (Hinweis: Geben Sie die Eigenschaft range nicht ein, das Skript wird sie automatisch berechnen und hinzufügen).</p>
@@ -262,7 +263,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>F. Einige Formeln werden als {xx} / [xx] / [xx] im Übersetzungsergebnis angezeigt?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Einige Formeln werden als {xx} / [xx] / [xx] im Übersetzungsergebnis angezeigt?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Bei der Verwendung der gemeinsamen Übersetzungsschnittstelle (DeepL/Youdao/google) für die Übersetzung, die durch die Art und Weise, wie das Skript implementiert ist, eingeschränkt ist, kann es{xx}/[xx]/[xx]
         <div style="border: 8px solid #ffffff00;"></div>
@@ -289,7 +290,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>F. Wie kann ich mit ChatGPT übersetzen?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Wie kann ich mit ChatGPT übersetzen?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Wenn Sie direkten Zugriff auf die Schnittstelle von OpenAI haben und über ein Konto verfügen, brauchen Sie nur "ChatGPT-Übersetzung (API) verwenden" anzukreuzen und auf die Schaltfläche "Hinzufügen" unten zu klicken, um eine neue Konfiguration zu erstellen und die in der Schaltfläche "Hinzufügen" unten aus und füllen Sie sie aus.
         <p>Darüber hinaus können Sie auch Api-Proxy-Dienste erwerben, um ChatGPT zu nutzen. In der folgenden Tabelle sind einige Api-Dienstanbieter aufgelistet, die Sie nutzen können
@@ -360,7 +361,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>F. Was ist LSP?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Was ist LSP?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. <a href="https://microsoft.github.io/language-server-protocol/">LSP (Language Server Protocol)</a>ist eine von Microsoft initiierte Protokollspezifikation für die Kommunikation zwischen Redakteuren und Sprachservern.
         <p>Es trennt die Funktionen der Code-Vervollständigung, der Diagnose, der Vorschläge, der Dokumentation und sogar des Projektmanagements, die herkömmliche IDEs implementieren müssen, vom Editor und verwendet unabhängige Dienste, um diese Funktionen auszuführen.</p>
@@ -370,7 +371,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>F. Wie verwende ich den LSP?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Wie verwende ich den LSP?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Nur zwei Schritte：
         <p>Das Skript：bietet Unterstützung für die folgenden zwei Implementierungen von LSP Server in C++ und Python, die Sie bei Bedarf installieren müssen：</p>
@@ -418,7 +419,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>F. Warum funktioniert die clangd Formatierung nicht?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Warum funktioniert die clangd Formatierung nicht?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Das liegt daran, dass Sie im Fenster Einstellungen den falschen LSP-Arbeitspfad eingegeben haben.</a>
       </div>
@@ -431,7 +432,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>F. Ist es möglich, lokale JSON-Dateien für statische Ergänzungen zu verwenden?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Ist es möglich, lokale JSON-Dateien für statische Ergänzungen zu verwenden?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Aufgrund von Sicherheitsbeschränkungen des Browsers können Sie mit einer URL wie <code>file:///xxx</code> nicht direkt auf Ihre lokale JSON-Datei im Browser zugreifen.
         <p>Aber Sie können es mit OJBetter_Bridge tun, es ist sehr einfach, Sie müssen nur die JSON-Datei <code>xxx.json</code> in den Ordner /mycomplet von OJBetter_Bridge legen.</p>
