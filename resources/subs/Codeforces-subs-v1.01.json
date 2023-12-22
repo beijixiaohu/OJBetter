@@ -41,7 +41,8 @@
                 "Questions about problems": "关于问题的提问",
                 "Contest status": "比赛状态",
                 "Invited users": "邀请的用户",
-                "Invitation links": "邀请链接"
+                "Invitation links": "邀请链接",
+                "API keys": "API密钥"
             }
         },
         ".menu-list.main-menu-list": {
@@ -118,7 +119,9 @@
                 "Check it if you want to allow contestants view statements": "如果允许参赛者查看题目描述，请勾选此项",
                 "Check it if contestants can view standings": "如果允许参赛者查看榜单，请勾选此项",
                 "Where the contest was held originally": "比赛原本举办的地点",
-                "Official contest site URL": "官方比赛网站URL"
+                "Official contest site URL": "官方比赛网站URL",
+                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。",
             }
         },
         ".propertyLinks": {
@@ -218,6 +221,8 @@
                 "Friends rating": "朋友的评级",
                 "Favourites": "收藏",
                 "Contests": "比赛",
+                "Magic": "魔法",
+                "Handle": "账号",
                 "Members": "成员",
                 "问题etting": "参与编写的问题",
                 "Streams": "直播",
@@ -333,6 +338,7 @@
                 "My friends": "我的好友",
                 "Change settings": "改变设置",
                 "Last visit": "最后访问",
+                "not visible": "不可见",
                 "Registered": "注册于",
                 "Blog entries": "博客条目",
                 "comments": "评论",
@@ -580,16 +586,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "邮政编码/邮编",
-                "Country (English)": "国家（英文）",
-                "State (English)": "州/省份（英文）",
-                "City (English)": "城市（英文）",
-                "Address (English)": "地址（英文）",
-                "Recipient (English)": "收件人姓名（英文）",
-                "Country (Native)": "国家（本地语言）",
-                "State (Native)": "州/省份（本地语言）",
-                "City (Native)": "城市（本地语言）",
-                "Address (Native)": "地址（本地语言）",
-                "Recipient (Native)": "收件人姓名（本地语言）",
+                "Country //(English//)": "国家（英文）",
+                "State //(English//)": "州/省份（英文）",
+                "City //(English//)": "城市（英文）",
+                "Address //(English//)": "地址（英文）",
+                "Recipient //(English//)": "收件人姓名（英文）",
+                "Country //(Native//)": "国家（本地语言）",
+                "State //(Native//)": "州/省份（本地语言）",
+                "City //(Native//)": "城市（本地语言）",
+                "Address //(Native//)": "地址（本地语言）",
+                "Recipient //(Native//)": "收件人姓名（本地语言）",
                 "Phone": "电话",
                 "TON Wallet:": "TON 钱包:",
                 "Secret Code:": "验证码:",
@@ -707,7 +713,9 @@
                 "City": "城市",
                 "Organization": "组织",
                 "Handle/Email": "账号/邮箱",
+                "Name": "名称",
                 "Password": "密码",
+                "New Rank": "新的Rank",
                 "Training name \\(English\\):": "训练名称（英文）:",
                 "Training name \\(Russian\\):": "训练名称（俄语）:",
                 "Contest format:": "比赛格式:",
@@ -823,7 +831,8 @@
                 "Save": "保存",
                 "Create Mashup Contest": "创建混搭比赛",
                 "Delete problem": "删除问题",
-                "Restore problem": "恢复问题"
+                "Restore problem": "恢复问题",
+                "Generate": "生成"
             }
         },
         "InputButton": {
