@@ -1,7 +1,7 @@
 files:
   - source: /
     ignore:
-      - /OJ
+      - /OJBetter_Bridge
       - tools
       - .gitignore
       - LICENSE
