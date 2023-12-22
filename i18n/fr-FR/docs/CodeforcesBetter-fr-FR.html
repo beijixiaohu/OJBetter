@@ -1,0 +1,472 @@
+<h1 id="codeforces-better🎈">Codeforces Better!🎈</h1>
+<p>Interface Codeforces en chinois, prise en charge du mode sombre, traduction des titres, vue markdown, copie des titres en un clic, saut vers Logu, page de différenciation des commentaires, affichage du score ClistRating, recoloration des listes</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <center>
+      <h3>Rédigez à l'avance：Notes de retour d'information</h3>
+    </center>
+    <p>Si vous rencontrez des problèmes, veuillez d'abord lire les instructions <a style="color:#F44336" href="#常见问题">#FAQ</a> ci-dessous.Si le problème n'est pas résolu, veuillez consulter la page de commentaires <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback"></a> ou <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> pour faire part de vos commentaires.</p>
+    <p>Veuillez fournir une description détaillée du problème, par exemple :：lien, captures d'écran, résultats souhaités, résultats réels, reproduction……</p>
+    <p>Les discussions amicales et les suggestions de fonctionnalités sont également les bienvenues, mais l'auteur n'est pas tenu de maintenir les scripts et de fournir de l'aide, merci de votre compréhension.</p>
+  </div>
+</div>
+<h2 id="功能">Fonctionnalité</h2>
+<span style="color:#009688; background-color: #E0F2F1;">Astuce Certaines fonctionnalités du script：fournissent des éléments de configuration, vous pouvez ouvrir le panneau de configuration en cliquant sur le bouton<strong><code>CodeforcesBetter Settings</code></strong> à</strong> dans le coin supérieur droit de la page entière de <strong>.</span>
+<h3 id="界面汉化">Interface en langue chinoise</h3>
+<p>Siniciser les principaux éléments du site web en chinois (peut être désactivé)</p>
+<h3 id="题目翻译">Traduction du titre</h3>
+<p>Ajoutez un bouton de traduction dans le coin supérieur droit des titres, blogs, commentaires, etc. pour traduire en chinois en un seul clic, tout en veillant à ce que la formule Latex ne soit pas rompue !</p>
+<p>Sur cette base, le script prévoit trois modes de traduction：</p>
+<ul>
+  <li>Mode normal：traduit toute la région en une seule fois</li>
+  <li>Le mode de segmentation：traduit chacune des balises <code>&#60;&#112;&#47;&#62;</code> et <code>&#60;&#105;&#47;&#62;</code> de la région à tour de rôle</li>
+  <li>Mode de segmentation：Vous pouvez librement cliquer sur l'un des onglets <code>&#60;&#112;&#47;&#62;</code> et <code>&#60;&#105;&#47;&#62;</code> de la page pour traduire.</li>
+</ul>
+<p>Vous pouvez sélectionner le service de traduction que vous souhaitez utiliser (DeepL par défaut) et changer le mode de travail du script dans le panneau <code>CodeforcesBetter settings</code> dans le coin supérieur droit.</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>Note：</strong>Le mode de segmentation/sélection crée les problèmes suivants：</p>
+    <p>- L'impossibilité pour l'interface de traduction de connaître les informations contextuelles de l'ensemble du texte peut réduire la qualité de la traduction.</p>
+    <p>- Certaines parties du contenu ne seront pas traduites/ne pourront pas être sélectionnées parce qu'il ne s'agit pas d'éléments&#60;&#112;&#47;&#62;ou&#60;&#105;&#47;&#62;.</p>
+  </div>
+</div>
+<p>Le script propose les interfaces de traduction suivantes：(la valeur par défaut est DeepL)</p>
+<table style="border: 1px solid #bcaaa4;">
+  <thead>
+    <tr>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">&nbsp;
+      </th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">KEY
+      </th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">Qualité de la traduction</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">fiabilité</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">Nombre maximum de caractères
+      </th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">prendre une période de (x temps)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="background-color: #1976D2; color: #E3F2FD;">Traduction de DeepL (✨ recommandé)</td>
+      <td style="background-color: #f9f9f9; color: black;">inutile</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Certaines zones peuvent être inaccessibles ou lentes</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">tranchant (des couteaux ou de l'esprit)</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">Xunfei Hear Translate</td>
+      <td style="background-color: #f9f9f9; color: black;">inutile</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">Généralement fiable</td>
+      <td style="background-color: #f9f9f9; color: black;">2000</td>
+      <td style="background-color: #f9f9f9; color: black;">tranchant (des couteaux ou de l'esprit)</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">Traduction sur Youtube</td>
+      <td style="background-color: #f9f9f9; color: black;">inutile</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">Généralement fiable</td>
+      <td style="background-color: #FFC107; color: #3e2723;">600</td>
+      <td style="background-color: #f9f9f9; color: black;">tranchant (des couteaux ou de l'esprit)</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">Google Translate</td>
+      <td style="background-color: #f9f9f9; color: black;">inutile</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Nécessite un accès internet à Google</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">tranchant (des couteaux ou de l'esprit)</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color:black;">Traduction des nuages colorés</td>
+      <td style="background-color: #f9f9f9; color: black;">inutile</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">Généralement fiable</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">tranchant (des couteaux ou de l'esprit)</td>
+    </tr>
+    <tr>
+      <td style="background-color: #1976D2; color: #E3F2FD;">Traduction avec ChatGPT (✨ recommandé)</td>
+      <td style="background-color: #f9f9f9; color: black;">Clé API requise</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">Cela dépend de la qualité du fournisseur de services et de l'affluence à l'OpenAI.</td>
+      <td style="background-color: #f9f9f9; color: black;">Dépend du modèle</td>
+      <td style="background-color: #FFC107; color: #3e2723;">plus lent</td>
+    </tr>
+  </tbody>
+</table>
+<span style="color:#009688; background-color: #E0F2F1;">Astuce：Cliquez avec le bouton droit de la souris sur le bouton<strong>Translate</strong>pour passer rapidement d'un service de traduction à l'autre !</span>
+<p><strong>traduction automatique</strong></p>
+<p>Lorsque l'option "Traduction automatique" est activée, les textes courts de la zone<code>.ttypography</code>, <code>.comments</code> sont automatiquement traduits lorsqu'ils entrent dans la zone<u>consultable</u>de la fenêtre du navigateur.</p>
+<p>(Vous pouvez spécifier le nombre de caractères ou moins d'un texte court dans le panneau des paramètres)</p>
+<p>En outre, lorsque l'option "Traduction rapide dans la zone de commentaires" est activée, pour les textes courts dans la zone de commentaires, la traduction automatique sélectionne de manière aléatoire l'un des services candidats et effectue une traduction rapide en parallèle.</p>
+<p><strong>Récupération historique des traductions</strong></p>
+<p>Lorsque l'option "Restauration automatique des traductions historiques" est activée, les informations relatives à la traduction de la page de titre<u></u>sont automatiquement enregistrées dans la table translateData de la base de données CFBetterDB d'indexDB localement dans le navigateur.</p>
+<p>L'actualisation / rétablit automatiquement les informations relatives à la traduction lorsque vous accédez à nouveau à la page.</p>
+<h3 id="ClistRating分">Note de classement</h3>
+<p>Obtenez les données du Rating score pour le site clist.by et affichez-les !</p>
+<p>Notez que les informations d'identification requises pour les différents travaux de page varient：</p>
+<ul>
+  <li>Pour la page du concours, le cookie de connexion du site clist.by doit être valide dans le navigateur,<strong>ou</strong>. Remplissez la clé api dans le panneau de configuration.</li>
+  <li>Pour les pages de problèmes et de questions, le cookie de connexion à clist.by dans le navigateur est nécessaire.</li>
+</ul>
+<span style="background-color: #FFF3E0;color: #FF5722;">Le script n'obtient pas de cookie spécifique pour clist.by, l'information sur le cookie est automatiquement transmise par le navigateur lorsqu'il envoie la requête, et la validité du cookie est déterminée par le code d'état renvoyé par la tentative de requête.</span>
+<h3 id="编辑器与LSP">Rédacteur et FSL</h3>
+<p><strong>Ajouter un éditeur à la page de titre</strong></p>
+<p>Ajoutez l'éditeur de code monaco au bas de la page de titre (activé par défaut).</p>
+<p>Prise en charge de la sauvegarde automatique du code, de la soumission rapide du code, du test en ligne, du LSP, des améliorations complémentaires statiques et d'autres fonctionnalités.</p>
+<p><strong>Code autosave</strong></p>
+<p>Le code est automatiquement enregistré dans la table editorCode de la base de données CFBetterDB d'IndexedDB locale au navigateur.</p>
+<p><strong>Test en ligne</strong></p>
+<p>Vous pouvez exécuter les échantillons du titre en un seul clic, et vous pouvez également personnaliser les échantillons de test, qui sont automatiquement enregistrés dans la table editorCode de la base de données CFBetterDB.</p>
+<p>Le script fournit plusieurs services d'exécution de code en ligne：codeforces official, wandbox (3rd party), rextester (3rd party) qui prennent en charge différentes options de paramètres.</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>Note：</strong></p>
+    <ul>
+      <li>
+        <p>Il est évident que tous les services d'exécution de code en ligne ne sont pas en mesure de tester les sujets interactifs.</p>
+      </li>
+      <li>
+        <p>Les services d'exécution de code en ligne de tiers peuvent fonctionner dans des environnements différents des Codeforces, et le code qui fonctionne ou se révèle correct dans un service d'exécution de code en ligne de tiers ne l'est pas nécessairement dans les Codeforces.</p>
+      </li>
+      <li>
+        <p>Il n'y a aucune garantie que votre code ne sera pas divulgué d'une manière ou d'une autre par un service tiers d'exécution de code en ligne.</p>
+      </li>
+      <li>
+        <p>En outre, pour une application plus large, les options de compilateur sur la page ne correspondent pas strictement aux options de compilateur réelles du service tiers d'exécution de code en ligne, de sorte qu'il est tout à fait possible d'obtenir des résultats inattendus.</p>
+      </li>
+    </ul>
+  </div>
+</div>
+<p><strong>LSP</strong></p>
+<p>Après avoir configuré le FSL, vous pouvez fournir les fonctions suivantes à l'éditeur (langages C++ et Python uniquement)：</p>
+<ul>
+  <li>Autocomplétion, indications sur la signature des méthodes, corrections de code</li>
+  <li>Conseils pour le survol, conseils pour l'incrustation, liens vers des documents</li>
+  <li>Aller aux définitions, Aller aux références, Symbole Références Cliquer pour mettre en évidence</li>
+  <li>Formatage, formatage partiel, formatage automatique progressif, analyse des plages de réduction, renommage</li>
+</ul>
+<p>Bien entendu, il ne prend pas en charge la compilation locale, le débogage par points d'arrêt, les fichiers multiples, etc.……, les performances ne sont pas aussi bonnes que celles des IDE locaux spéciaux.</p>
+<p>En bref, cette fonction n'est pas très significative ou utile, donc si vous êtes intéressé, consultez la section FAQ ci-dessous pour en savoir plus !</p>
+<p><strong>Amélioration de la complétion statique</strong></p>
+<p>Vous pouvez ajouter des règles de complétion de code statique personnalisées à l'éditeur monaco dans Panneau de configuration - Monaco - Améliorations de la complétion statique - Personnalisées.</p>
+<p>Les règles d'achèvement sont au format JSON, voici un exemple (au format monaco).</p>
+<pre>
+  {
+    "suggestions" : [
+        {
+            "label" : "hello world",
+            "kind" : 15,
+            "documentation" : "The is a hello world snippet",
+            "insertText" : "hello world"
+        },
+        // autres suggestions...
+    ]
+}
+</pre>
+<p>Vous pouvez utiliser presque toutes les propriétés de <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>, (note : ne remplissez pas la propriété range, le script la calculera et l'ajoutera automatiquement).</p>
+<h2 id="其他功能">Autres fonctions</h2>
+<ul>
+  <li>Ajoutez le bouton <code>MrakDown view</code> et le bouton <code>copy</code> dans le coin supérieur droit des titres, des blogs, des réponses, etc.</li>
+  <li>Faire en sorte que Codeforces prenne en charge le mode sombre, qui suit le système par défaut</li>
+  <li>Dépliage des blocs pliés, dépliage automatique de tous les blocs pliés</li>
+  <li>Rocky Valley Jump, un saut en un clic vers la page correspondante de la question à Rocky Valley</li>
+  <li>Page de différenciation des commentaires, page de retournement, page de saut, possibilité de choisir le nombre d'étages principaux affichés sur chaque page.</li>
+  <li>Optimisation du rendu, ajout de contraintes de rendu aux éléments de blocs réduits (contenant : style de mise en page ;)</li>
+  <li>Recoloration des classements, qui pour les tournois Codeforces sont recolorés avec un dégradé pour le score dans la plage "Score/Total".</li>
+</ul>
+<h2 id="兼容性">la compatibilité</h2>
+<p><strong>navigateur (logiciel)</strong></p>
+<table style="border: 1px solid #bcaaa4;">
+  <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
+      <th style="border-bottom: 1px solid #bcaaa4;">adjuvant</th>
+      <th style="border-bottom: 1px solid #bcaaa4;">version minimale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: white;">
+      <td style="background-color: #009688; color: #ffffff;">Chrome</td>
+      <td style="background-color: #009688; color: #ffffff;">adjuvant</td>
+      <td style="background-color: #f9f9f9;">96</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #009688; color: #ffffff;">Edge</td>
+      <td style="background-color: #009688; color: #ffffff;">adjuvant</td>
+      <td style="background-color: #f9f9f9;">96</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #f9f9f9;">Affaire du chrome domestique</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Compatibilité de base, mais des erreurs inattendues peuvent se produire</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Version du noyau Chromium ≥96</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #009688; color: #ffffff;">FireFox (y compris mobile)</td>
+      <td style="background-color: #009688; color: #ffffff;">adjuvant</td>
+      <td style="background-color: #f9f9f9;">103</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #f9f9f9;">Safari</td>
+      <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">sans soutien</td>
+      <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">\</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Gestionnaire de script</strong></p>
+<p>Testé uniquement avec le gestionnaire de scripts Tampermonkey, la compatibilité avec Greasemonkey, Violentmonkey, ScriptCat, etc. n'est pas garantie.</p>
+<p><strong>Autres plug-ins</strong></p>
+<p>Il n'y a pas de problèmes de compatibilité avec les principaux plug-ins liés à la FC. Si vous rencontrez des problèmes de compatibilité, n'hésitez pas à nous faire part de vos commentaires.</p>
+<p><strong>miroir (informatique)</strong></p>
+<p>Soutenez le site léger officiel <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a
+    href="https://m2.codeforces.com">m3</a> , le site miroir officiel <a
+    href="https://mirror.codeforces.com/">https://mirror.codeforces.com/</a>, le site miroir non officiel <a
+    href="https://codeforc.es">https://codeforc.es</a></p>
+<p>De plus, il est théoriquement compatible avec n'importe quel autre miroir, il vous suffit d'ajouter une ligne de commentaires <code>// @match your mirror URL</code> et c'est tout !</p>
+<h2 id="常见问题">problèmes courants</h2>
+<div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Comment commencer ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. Vous devez installer <a href="https://www.tampermonkey.net/">Tampermonkey</a> avant d'installer le script.
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Erreur de mise à jour ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <p>R. En raison de la plateforme Greasy Fork, lorsqu'une nouvelle version est publiée, il peut arriver que la mise à jour/installation actuelle soit la version précédente.</p>
+        <p>En général, il vous suffit d'attendre quelques minutes, puis de procéder à une nouvelle mise à jour/installation.</p>
+        <p>Vous pouvez également déplacer votre souris sur le point d'interrogation rouge dans la boîte d'alerte de mise à jour du script et cliquer sur le bouton "Ne pas mettre à jour maintenant" au bas du message contextuel.</p>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Le chargement s'affiche-t-il en permanence ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        R. Veuillez activer l'option "Options de compatibilité - Ne pas attendre le chargement des ressources de la page" dans le panneau des paramètres.
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Utilisation de DeepL erreur de traduction Trop de demandes ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <p>R. Ce problème est généralement dû au fait que vous avez traduit fréquemment en peu de temps ou que vous avez traduit plus de 5 000 caractères de texte en une seule fois. DeepL a une limite sur le nombre de mots et la fréquence des traductions.</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">C'est temporaire, cela reviendra à la normale au bout d'un moment.</span>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. J'obtiens une erreur de non-définition lorsque j'utilise DeepL ou la traduction est toujours en cours ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        R. Cela est généralement dû au fait que le réseau que vous utilisez ne dispose pas d'un accès approprié à <a href="https://www.deepl.com">www.deepl.com</a>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Certaines formules sont présentées comme {xx} / [xx] / [xx] dans le résultat de la traduction ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. Lorsque vous utilisez l'interface de traduction commune (DeepL/Youdao/google) pour la traduction, limitée par la manière dont le script est implémenté, il peut y avoir{xx}/[xx]/[xx]
+        <div style="border: 8px solid #ffffff00;"></div>
+        <div style="background-color: #E3F2FD;color: #1565C0;border: 1px solid #1565c0;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>Traitement des formules par le script</strong></p>
+            <p>Afin d'éviter que les formules LaTeX ne soient corrompues lors de la traduction, le script retire d'abord toutes les formules LaTeX et les place en utilisant le caractère de substitution{xx}/[xx]/[xx], la balise</p>
+            <p>Comme il est probable que ces substitutions ne seront pas corrompues lors de la traduction, il est possible de restaurer les formules LaTeX basées sur les substitutions après la traduction.</p>
+            <p>Cette implémentation fonctionne comme prévu à condition que le caractère de substitution ne soit pas cassé, ce qui ne pose pas de problème dans la grande majorité des cas.</p>
+            <p>Mais il arrive que les services de traduction rompent les substitutions, par exemple, [23] devient [23 / 23] / [23]/ [23 】/ 23 】, auquel cas le script sera restauré par certaines règles régulières de sorte qu'il fonctionne toujours comme prévu.</p>
+            <p>Toutefois, si le service de traduction détruit également davantage de contenu et crée une ambiguïté, par exemple si le service de traduction transforme [2] 313 en [2312], il n'est pas possible de le restaurer.</p>
+            <p>Pour chaque service de traduction, les différentes substitutions ont des probabilités différentes d'être elles-mêmes corrompues. Vous pouvez sélectionner différentes substitutions dans le panneau de configuration situé dans le coin supérieur droit de la fenêtre de traduction.</p>
+            <p>Après des tests, <code>{}</code> donne généralement de meilleurs résultats, c'est donc la substitution par défaut utilisée par les scripts.</p>
+          </div>
+        </div>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>Astuce：</strong></p>
+            <p>Ce problème ne se pose pas lors de la traduction avec ChatGPT, car il est possible de demander directement à ChatGPT de "garder les formules LaTeX non traduites" par le biais d'un mot d'invite.</p>
+            <p>Un ChatGPT intelligent peut très bien s'y conformer, et c'est la méthode recommandée pour la traduction des scripts.</p>
+          </div>
+        </div>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Comment traduire avec ChatGPT ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        R. Si vous avez un accès direct à l'interface d'OpenAI et que vous disposez d'un compte, il vous suffit de cocher la case " Utiliser la traduction ChatGPT (API) " et de cliquer sur le bouton " Ajouter " ci-dessous pour créer une nouvelle configuration et remplir le formulaire de configuration. Cliquez sur le bouton "Ajouter" ci-dessous et remplissez-le.
+        <p>En outre, vous pouvez également acheter des services proxy api pour utiliser ChatGPT, le tableau suivant rassemble certains fournisseurs de services api, vous pouvez choisir d'utiliser
+        </p>
+        <table style="border: 1px solid #bcaaa4;">
+          <thead>
+            <tr style="background-color: #f2f2f2;">
+              <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">site officiel</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">Méthode d'acquisition</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">API2D</td>
+              <td style="background-color: #f9f9f9;"><a href="https://api2d.com/" target="_blank"
+                  class="url">https://api2d.com/</a></td>
+              <td style="background-color: #f9f9f9;">site officiel</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">CloseAI</td>
+              <td style="background-color: #f9f9f9;"><a href="https://console.closeai-asia.com/" target="_blank"
+                  class="url">https://console.closeai-asia.com/</a></td>
+              <td style="background-color: #f9f9f9;">site officiel</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">OhMyGPT</td>
+              <td style="background-color: #f9f9f9;"><a href="https://aigptx.top/" target="_blank"
+                  class="url">https://aigptx.top/</a></td>
+              <td style="background-color: #f9f9f9;">site officiel</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">OpenAI-SB</td>
+              <td style="background-color: #f9f9f9;"><a href="https://openai-sb.com/" target="_blank"
+                  class="url">https://openai-sb.com/</a></td>
+              <td style="background-color: #f9f9f9;">Bots Telegram</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">API2GPT</td>
+              <td style="background-color: #f9f9f9;"><a href="https://www.api2gpt.com/" target="_blank"
+                  class="url">https://www.api2gpt.com/</a></td>
+              <td style="background-color: #f9f9f9;">site officiel</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">AI Proxy</td>
+              <td style="background-color: #f9f9f9;"><a href="https://aiproxy.io/" target="_blank"
+                  class="url">https://aiproxy.io/</a></td>
+              <td style="background-color: #f9f9f9;">site officiel</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>Clause de non-responsabilité：</strong></p>
+            <p>L'auteur collecte et partage uniquement dans le but de partager, ne reçoit aucun revenu et ne garantit pas la stabilité des plateformes susmentionnées, et tout comportement des plateformes n'a rien à voir avec l'auteur.</p>
+            <p>Il est recommandé de recharger par petites quantités et de tout utiliser, car ces fournisseurs de services risquent de faire faillite.</p>
+          </div>
+        </div>
+        <p>Si vous utilisez un service fourni par un prestataire de services proxy api, la clé KEY dans la configuration doit être la clé fournie par le prestataire de services proxy api.</p>
+        <p>En outre, vous devez compléter l'API Proxy dans la configuration, le champ</p>
+        <p>L'API Proxy doit être remplie dans son intégralité, voici un exemple de <a href="https://console.closeai-asia.com/">CloseAI</a> qui fournit l'API
+          Base：<code>https://api.closeai-proxy.xyz</code></p>
+        <p>Ensuite, l'API Proxy doit être suivie de <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>, le</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">Note：Comme vous avez spécifié une API personnalisée, Tampermonkey vous avertira des requêtes inter-domaines, veuillez cliquer sur Autoriser vous-même !</span>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <span style="background-color: #FFF3E0;color: #FF5722;">Note：Si vous souhaitez utiliser Azure OpenAI, comme ses paramètres d'interface ne sont pas les mêmes que l'interface officielle d'OpenAI, vous pouvez choisir de déployer<a href="https://github.com/stulzq/azure-openai-proxy">azure-openai-proxy</a>par vous-même afin de convertir l'interface d'Azure OpenAI en interface d'OpenAI.</span>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Qu'est-ce qu'un LSP ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. <a href="https://microsoft.github.io/language-server-protocol/">LSP (Language Server Protocol)</a>est une spécification de protocole initiée par Microsoft pour la communication entre les éditeurs et les serveurs de langues.
+        <p>Il sépare de l'éditeur les fonctions de complétion de code, de diagnostic, de suggestions, de documentation et même de gestion de projet que les IDE traditionnels doivent mettre en œuvre, et utilise des services indépendants pour exécuter ces fonctions.</p>
+        <p>L'éditeur n'a qu'à communiquer avec le serveur conformément à la spécification du protocole, ce qui réduit considérablement la charge de travail et permet à l'éditeur de prendre facilement en charge divers langages de programmation.</p>
+        <p>À l'heure actuelle, l'écologie de LSP s'est progressivement améliorée, les principaux éditeurs ont pris en charge LSP ou disposent des plug-ins correspondants, tels que VSCode, Vim, Emacs, etc.....</p>
+        <p>Cependant, les principaux fournisseurs d'IDE commerciaux ne s'intéressent guère à cette question, et le serveur LSP existant est essentiellement maintenu par la communauté open source, de sorte qu'il n'est pas encore aussi performant que les IDE professionnels et une variété de modules d'extension professionnels.</p>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Comment utiliser le FSL ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. Deux pas seulement：
+        <p>Le script：prend en charge les deux implémentations suivantes du serveur LSP en C++ et en Python, que vous devez installer selon les besoins：</p>
+        <table>
+          <thead>
+            <tr>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">multilinguisme</th>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">LSP Server</th>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">Méthode d'installation (sous Windows)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="background-color: #f9f9f9; color: black;">C++</td>
+              <td style="background-color: #f9f9f9; color: black;">clangd</td>
+              <td style="background-color: #f9f9f9; color: black;">Téléchargez clangd à partir de <a href="https://github.com/clangd/clangd/releases">clangd release</a> et ajoutez le chemin de clangd au chemin de la variable d'environnement du système, par exemple <code>C:\Nclangd_16.0.2\Nbin\N</code></td>
+            </tr>
+            <tr>
+              <td style="background-color: #f9f9f9; color: black;">Python</td>
+              <td style="background-color: #f9f9f9; color: black;">pylsp</td>
+              <td style="background-color: #f9f9f9; color: black;">Exécutez la commande：
+                <code>pip install "python-lsp-server[all]"</code>et la variable d'environnement sera automatiquement ajoutée.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>II：Vous devrez également télécharger et décompresser OJBetter_Bridge à partir de <a href="https://github.com/beijixiaohu/OJBetter/releases">GitHub release</a> ou <a
+            href="https://mxyowl.lanzouj.com/b0cui6bgj">Blue Rhythm Cloud (password:aaaa)</a> , qui assure la communication entre les scripts et le serveur LSP.</p>
+        <p>Placez le dossier extrait dans le répertoire racine de votre disque C ou à tout autre endroit de votre choix (note：Si vous le placez à un autre endroit, vous devez modifier le "Work Path" (chemin de travail) dans le panneau Settings (paramètres) pour l'adapter à votre emplacement réel).</p>
+        <p>Ensuite, vous pouvez exécuter OJBetter_Bridge, qui fournit une version GUI et une version terminal, la version GUI est recommandée pour Windows, exécutez <code>server_gui.exe</code> directement.</p>
+        <p>OJBetter_Bridge vérifie automatiquement si les commandes clangd et pylsp sont valides au démarrage et affiche une invite.</p>
+        <span style="color:#009688; background-color: #E0F2F1;">Conseil :：Dans l'interface de <code>server_gui.exe</code> vous pouvez le configurer pour qu'il démarre.</span>
+        <p>Après avoir effectué les étapes ci-dessus, vous pouvez activer l'option "Use LSP" dans le panneau de configuration et l'utiliser.</p>
+        <div style="border: 1px solid #aaa;">
+          <div style="border: 8px solid #ffffff00;">
+            <details>
+              <summary>En savoir plus ?</summary>
+              <div style="border: 8px solid #ffffff00;">
+                Pour clangd, il existe deux fichiers de configuration stockés dans le dossier cpp_workspace <code>.clangd</code>,<code>.clang-format</code>
+                <p>Ils définissent les éléments de configuration <a href="https://clangd.llvm.org/config"></a> et <a
+                    href="https://clang.llvm.org/docs/ClangFormatStyleOptions.html">style de formatage de code</a>de clangd, que vous pouvez modifier.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Pourquoi le formatage clangd ne fonctionne-t-il pas ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        R. C'est parce que vous avez indiqué un chemin de travail LSP incorrect dans le panneau de configuration.</a>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Pourquoi clangd ne reconnaît-il pas mes en-têtes <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        R. C'est parce que <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> n'est pas un fichier d'en-tête standard, donc clangd ne le supporte pas par défaut, vous devez dire à clang où trouver ce fichier d'en-tête non-standard en modifiant le paramètre de compilation dans le fichier <code>.clangd</code> dans le cpp_workspace
+        de OJBetter_Bridge (et bien sûr l'utilisation d'un en-tête universel n'est pas recommandée).</a>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. Est-il possible d'utiliser des fichiers JSON locaux pour améliorer la complétion statique ?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        R. En raison des restrictions de sécurité du navigateur, vous ne pouvez pas accéder directement à votre fichier JSON local dans le navigateur à l'aide d'une URL telle que <code>file:///xxx</code> .
+        <p>Mais vous pouvez le faire avec OJBetter_Bridge, c'est très simple, il vous suffit de placer le fichier JSON <code>xxx.json</code> dans le dossier /mycomplet d'OJBetter_Bridge.</p>
+        <p>En lançant OJBetter_Bridge, vous pourrez créer une nouvelle configuration dans le panneau "Settings" avec une URL JSON de：<code>http://127.0.0.1:2323/mycomplet/xxx.json</code>.</p>
+        <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>Essayez-le ?</strong></p>
+            <p>Démarrez OJBetter_Bridge, initialement le dossier /mycomplet est livré avec un fichier JSON d'exemple：<code>template.json</code>, vous pouvez donc ajouter une configuration, remplir
+              <code>http://127.0.0.1:2323/mycomplet/template.json</code> et sauvegarder !</p>
+            <p>Tapez maintenant hello dans l'éditeur et vous verrez deux entrées complémentaires：hello world, hello world2</p>
+          </div>
+        </div>
+      </div>
+    </details></div>
+</div>
+<h2 id="贡献代码">Contribuer au code</h2>
+<p>N'hésitez pas à contribuer au code, allez sur <a href="https://github.com/beijixiaohu/OJBetter">Github repository</a> Créez un PR</p>
+<h2 id="其他OJ?">Autre JO ?</h2>
+<p>Les auteurs ne maintiennent pas beaucoup de scripts similaires en raison de ressources limitées, donc si vous voulez porter ce script pour votre OJ préféré, vous êtes plus que bienvenu, vous devez juste vous conformer à la licence GPL-3.0 !</p>
+<h2 id="感谢">reconnaissant</h2>
+<ul>
+  <li>Les scripts suivants ont été référencés au début du développement：<a href="https://greasyfork.org/zh-CN/scripts/441750">Conversion du contenu en markdown</a>,<a
+      href="https://greasyfork.org/zh-CN/scripts/378277">Traducteur</a></li>
+  <li>Le script CodeforcesBetter utilise les bibliothèques open source suivantes：<a href="https://github.com/mixmark-io/turndown">turndown</a>,<a
+      href="https://jquery.com/">jquery</a>,<a href="https://www.mathjax.org/">MathJax</a>,<a
+      href="https://github.com/brix/crypto-js">crypto-js</a>,<a href="">base64</a>,<a
+      href="https://github.com/gka/chroma.js">chroma</a>,<a href="http://xtermjs.org/">xterm</a>,<a
+      href="https://dexie.org/">dexie</a>,<a href="https://github.com/microsoft/monaco-editor">monaco-editor</a>
+  </li>
+  <li>OJBetter_Bridge fait référence aux dépôts suivants<a
+      href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>et utilise les bibliothèques open source suivantes：<a
+      href="https://github.com/zhiyiYo/PyQt-Fluent-Widgets">PyQt-Fluent-Widgets</a>,<a
+      href="https://pypi.org/project/PyYAML/">PyYAML</a>,<a href="https://pypi.org/project/tornado/">tornado</a>,<a
+      href="https://pypi.org/project/ujson/">ujson</a>
+  </li>
+  <li>Nous remercions tout particulièrement tous ceux qui nous ont fait part de leurs réactions et de leurs suggestions.</li>
+</ul>
+<p>Merci, 0rz.</p>
