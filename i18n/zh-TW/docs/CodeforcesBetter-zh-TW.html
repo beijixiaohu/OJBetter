@@ -1,38 +1,38 @@
 <h1 id="codeforces-better🎈">Codeforces Better!🎈</h1>
-<p>Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色</p>
+<p>Codeforces介面漢化、黑暗模式支援、主題翻譯、markdown視圖、一鍵複製題目、跳到洛谷、評論區分頁、ClistRating分顯示、榜單重新著色</p>
 <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
   <div style="border: 8px solid #ffffff00;">
     <center>
-      <h3>写在前面：反馈须知</h3>
+      <h3>寫在前面：反饋須知</h3>
     </center>
-    <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336"
-        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336"
-        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。</p>
-    <p>请提供关于问题的详细描述，比如：链接，截图，期望的结果、实际的结果，复现方式……</p>
-    <p>此外还欢迎友善的讨论以及功能建议，但维护脚本以及提供帮助并不是作者的义务，感谢你的理解。</p>
+    <p>如遇問題，請先閱讀下方的 <a style="color:#F44336" href="#常见问题">#常見問題</a> 說明。如果沒有解決，請前往 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">回饋頁</a> 或 <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 回饋。</p>
+    <p>請提供關於問題的詳細描述，例如：鏈接，截圖，期望的結果、實際的結果，復現方式……</p>
+    <p>另外也歡迎友善的討論以及功能建議，但維護腳本以及提供幫助並不是作者的義務，感謝你的理解。</p>
   </div>
 </div>
 <h2 id="功能">功能</h2>
-<span style="color:#009688; background-color: #E0F2F1;">提示：脚本的部分功能提供了配置项，你可以点击 <strong>整个页面右上角</strong> 的<strong><code>CodeforcesBetter设置</code></strong> 按钮打开设置面板。</span>
-<h3 id="界面汉化">界面汉化</h3>
-<p>将网站的主要元素汉化为中文（可关闭）</p>
-<h3 id="题目翻译">题目翻译</h3>
-<p>在题目、blog、评论等的右上角添加翻译按钮，一键即可翻译为中文，同时确保不破坏Latex公式</p>
-<p>在此基础上，脚本提供了三种翻译模式：</p>
+<span style="color:#009688; background-color: #E0F2F1;">提示：腳本的部分功能提供了配置項，你可以點選 <strong>整個頁面右上角</strong> 的<strong><code>CodeforcesBetter設定</code></strong> 按鈕開啟設定面板。</span>
+<h3 id="界面汉化">介面漢化</h3>
+<p>將網站的主要元素漢化為中文（可關閉）</p>
+<h3 id="题目翻译">題目翻譯</h3>
+<p>在題目、blog、留言等的右上角加入翻譯按鈕，一鍵即可翻譯為中文，同時確保不破壞Latex公式</p>
+<p>在此基礎上，腳本提供了三種翻譯模式：</p>
 <ul>
-  <li>普通模式：会一次性翻译整个区域的内容</li>
-  <li>分段模式：会对区域内的每一个 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签依次进行翻译</li>
-  <li>选段模式：你可以自由点选页面上的任何 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 标签进行翻译</li>
+  <li>普通模式：會一次翻譯整個區域的內容</li>
+  <li>分段模式：會對區域內的每一個 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 標籤依序翻譯</li>
+  <li>選段模式：你可以自由點選頁面上的任何 <code>&#60;&#112;&#47;&#62;</code> 和 <code>&#60;&#105;&#47;&#62;</code> 標籤進行翻譯</li>
 </ul>
-<p>你可以在右上角的 <code>CodeforcesBetter设置</code> 面板中选择你想使用的翻译服务（默认为DeepL）以及切换脚本的工作模式。</p>
+<p>你可以在右上角的 <code>CodeforcesBetter設定</code> 面板中選擇你想使用的翻譯服務（預設為DeepL）以及切換腳本的工作模式。</p>
 <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
   <div style="border: 8px solid #ffffff00;">
-    <p><strong>注意：</strong>分段/选段模式会产生如下问题：</p>
-    <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-    <p>- 会有部分内容不会被翻译/不能被选中，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
+    <p><strong>注意：</strong>分段/選段模式會產生下列問題：</p>
+    <p>- 使得翻譯介面無法知曉整個文字的上下文訊息，會降低翻譯品質。</p>
+    <p>- 會有部分內容不會被翻譯/不能被選中，因為它們不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
   </div>
 </div>
-<p>脚本提供了如下翻译接口可供选择：（默认为DeepL）</p>
+<p>腳本提供如下翻譯介面可供選擇：（預設為DeepL）</p>
 <table style="border: 1px solid #bcaaa4;">
   <thead>
     <tr>
@@ -40,24 +40,24 @@
       </th>
       <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">KEY
       </th>
-      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">翻译质量</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">翻譯品質</th>
       <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">可靠性</th>
-      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">字符数上限
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">字元數上限
       </th>
-      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">耗时</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">耗時</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td style="background-color: #1976D2; color: #E3F2FD;">DeepL翻译（✨推荐）</td>
+      <td style="background-color: #1976D2; color: #E3F2FD;">DeepL翻譯（✨推薦）</td>
       <td style="background-color: #f9f9f9; color: black;">不需要</td>
       <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️</td>
-      <td style="background-color: #FFC107; color: #3e2723;">部分地区可能无法访问或较慢</td>
+      <td style="background-color: #FFC107; color: #3e2723;">部分地區可能無法訪問或較慢</td>
       <td style="background-color: #f9f9f9; color: black;">5000</td>
       <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="background-color: #f9f9f9; color: black;">讯飞听见翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">訊飛聽見翻譯</td>
       <td style="background-color: #f9f9f9; color: black;">不需要</td>
       <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
       <td style="background-color: #f9f9f9; color: black;">通常可靠</td>
@@ -65,7 +65,7 @@
       <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="background-color: #f9f9f9; color: black;">有道翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">有道翻譯</td>
       <td style="background-color: #f9f9f9; color: black;">不需要</td>
       <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
       <td style="background-color: #f9f9f9; color: black;">通常可靠</td>
@@ -73,15 +73,15 @@
       <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="background-color: #f9f9f9; color: black;">Google翻译</td>
+      <td style="background-color: #f9f9f9; color: black;">Google翻譯</td>
       <td style="background-color: #f9f9f9; color: black;">不需要</td>
       <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
-      <td style="background-color: #FFC107; color: #3e2723;">需要当前网络能顺利访问Google</td>
+      <td style="background-color: #FFC107; color: #3e2723;">需要當前網路能順利存取Google</td>
       <td style="background-color: #f9f9f9; color: black;">5000</td>
       <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="background-color: #f9f9f9; color:black;">彩云翻译</td>
+      <td style="background-color: #f9f9f9; color:black;">彩雲翻譯</td>
       <td style="background-color: #f9f9f9; color: black;">不需要</td>
       <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
       <td style="background-color: #f9f9f9; color: black;">通常可靠</td>
@@ -89,72 +89,72 @@
       <td style="background-color: #f9f9f9; color: black;">快</td>
     </tr>
     <tr>
-      <td style="background-color: #1976D2; color: #E3F2FD;">使用ChatGPT翻译（✨推荐）</td>
+      <td style="background-color: #1976D2; color: #E3F2FD;">使用ChatGPT翻譯（✨推薦）</td>
       <td style="background-color: #f9f9f9; color: black;">需要API Key</td>
       <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️⭐️</td>
-      <td style="background-color: #f9f9f9; color: black;">取决于服务商质量以及 OpenAI 的拥挤程度</td>
-      <td style="background-color: #f9f9f9; color: black;">取决于模型</td>
-      <td style="background-color: #FFC107; color: #3e2723;">较慢</td>
+      <td style="background-color: #f9f9f9; color: black;">取決於服務商品質以及OpenAI 的擁擠程度</td>
+      <td style="background-color: #f9f9f9; color: black;">取決於模型</td>
+      <td style="background-color: #FFC107; color: #3e2723;">較慢</td>
     </tr>
   </tbody>
 </table>
-<span style="color:#009688; background-color: #E0F2F1;">提示：右键<strong>翻译</strong>按钮，可以快速切换翻译服务哦</span>
-<p><strong>自动翻译</strong></p>
-<p>开启"自动翻译"后，对于<code>.ttypography</code>, <code>.comments</code> 区域中的短文本，当其进入浏览器窗口的<u>可视区域</u>时，自动进行翻译</p>
-<p>（可以在设置面板中指定多少字符以内为短文本）</p>
-<p>此外，开启"评论区快速翻译"后，对于评论区中的短文本，自动翻译时会在候选的服务中随机选择一个，并行地进行快速翻译</p>
-<p><strong>历史翻译恢复</strong></p>
-<p>开启"自动恢复历史翻译"后，会将<u>题目页面</u>上的翻译信息自动保存到浏览器本地的 indexDB 的 CFBetterDB 数据库的 translateData 表中</p>
-<p>刷新 / 下一次进入页面时会自动恢复翻译信息</p>
+<span style="color:#009688; background-color: #E0F2F1;">提示：右鍵<strong>翻譯</strong>按鈕，可以快速切換翻譯服務哦</span>
+<p><strong>自動翻譯</strong></p>
+<p>開啟"自動翻譯"後，對於<code>.ttypography</code>, <code>.comments</code> 區域中的短文本，當其進入瀏覽器視窗的<u>可視區域</u>時，自動進行翻譯</p>
+<p>（設定面板中可指定多少字元以內為短文字）</p>
+<p>此外，開啟"評論區快速翻譯"後，對於評論區中的短文本，自動翻譯時會在候選的服務中隨機選擇一個，並行地進行快速翻譯</p>
+<p><strong>歷史翻譯恢復</strong></p>
+<p>開啟"自動復原歷史翻譯"後，會將<u>題目頁面</u>上的翻譯資訊自動儲存到瀏覽器本機的indexDB 的CFBetterDB 資料庫的translateData 表中</p>
+<p>刷新/ 下次進入頁面時會自動恢復翻譯訊息</p>
 <h3 id="ClistRating分">ClistRating分</h3>
-<p>获取 clist.by 网站的 Rating 分数据，并展示</p>
-<p>注意，不同页面工作所需要的凭证有所不同：</p>
+<p>取得clist.by 網站的Rating 分數據，並展示</p>
+<p>注意，不同頁面工作所需的憑證有所不同：</p>
 <ul>
-  <li>对于比赛问题集页（contest），需要浏览器中 clist.by 网站的登录 cookie 有效，<strong>或者</strong>在设置面板中填写api key</li>
-  <li>对于题目页（problem）和题单页（problemset），需要浏览器中 clist.by 的登录 cookie 有效</li>
+  <li>對於比賽問題集頁（contest），需要瀏覽器中clist.by 網站的登入cookie 有效，<strong>或</strong>在設定面板中填寫api key</li>
+  <li>對於題目頁（problem）和題單頁（problemset），需要瀏覽器中clist.by 的登入cookie 有效</li>
 </ul>
-<span style="background-color: #FFF3E0;color: #FF5722;">脚本不获取 clist.by 的具体 cookie ，cookie 信息由浏览器发送请求时自动携带，cookie 有效性通过尝试请求所返回的状态码判断</span>
-<h3 id="编辑器与LSP">编辑器与LSP</h3>
-<p><strong>题目页添加编辑器</strong></p>
-<p>在题目页的下方添加 monaco 代码编辑器(默认开启)</p>
-<p>支持代码自动保存、代码快捷提交、在线测试运行、LSP、静态补全增强等功能</p>
-<p><strong>代码自动保存</strong></p>
-<p>代码会自动保存在浏览器本地的 IndexedDB 的 CFBetterDB 数据库的 editorCode 表中</p>
-<p><strong>在线测试运行</strong></p>
-<p>你可以一键测试运行题目中的样例，还可以自定义测试样例，样例数据会自动保存在 CFBetterDB 数据库的 editorCode 表中</p>
-<p>脚本提供了多个在线代码运行服务：codeforces官方、wandbox（第三方）、rextester（第三方），它们所支持的参数选项有所不同。</p>
+<span style="background-color: #FFF3E0;color: #FF5722;">腳本不取得clist.by 的特定cookie ，cookie 資訊由瀏覽器傳送請求時自動攜帶，cookie 有效性透過嘗試要求所傳回的狀態碼判斷</span>
+<h3 id="编辑器与LSP">編輯器與LSP</h3>
+<p><strong>題目頁新增編輯器</strong></p>
+<p>在題目頁的下方加入monaco 程式碼編輯器(預設開啟)</p>
+<p>支援程式碼自動儲存、程式碼快捷提交、線上測試運行、LSP、靜態補全增強等功能</p>
+<p><strong>程式碼自動儲存</strong></p>
+<p>程式碼會自動儲存在瀏覽器本機的IndexedDB 的CFBetterDB 資料庫的editorCode 表中</p>
+<p><strong>線上測試運行</strong></p>
+<p>你可以一鍵測試運行題目中的範例，還可以自訂測試範例，範例資料會自動儲存在CFBetterDB 資料庫的editorCode 表中</p>
+<p>腳本提供了多個線上程式碼運行服務：codeforces官方、wandbox（第三方）、rextester（第三方），它們所支援的參數選項有所不同。</p>
 <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
   <div style="border: 8px solid #ffffff00;">
     <p><strong>注意：</strong></p>
     <ul>
       <li>
-        <p>显然，所有在线代码运行服务均无法测试交互式题目</p>
+        <p>顯然，所有線上程式碼運行服務均無法測試互動式題目</p>
       </li>
       <li>
-        <p>第三方在线代码运行服务的运行环境与 codeforces 的可能有所不同，在第三方在线代码运行服务中能够运行或者结果正确的代码并不一定在 codeforces 中同样如此</p>
+        <p>第三方線上程式碼運行服務的運作環境與codeforces 的環境可能有所不同，在第三方線上程式碼運行服務中能夠運行或結果正確的程式碼並不一定在codeforces 中同樣如此</p>
       </li>
       <li>
-        <p>无法保证你的代码不会被第三方在线代码运行服务以某种方式泄露</p>
+        <p>無法保證你的程式碼不會被第三方線上程式碼運行服務以某種方式洩露</p>
       </li>
       <li>
-        <p>此外，为扩大适用范围，页面上的编译器选项与第三方在线代码运行服务实际的编译器选项也并不是严格对应的，因此很有可能得到意外的结果。</p>
+        <p>此外，為擴大適用範圍，頁面上的編譯器選項與第三方線上程式碼運行服務實際的編譯器選項也並不是嚴格對應的，因此很有可能得到意外的結果。</p>
       </li>
     </ul>
   </div>
 </div>
 <p><strong>LSP</strong></p>
-<p>配置好 LSP 后，可以为编辑器提供如下功能（限C++、Python语言）：</p>
+<p>配置好LSP 後，可以為編輯器提供以下功能（限C++、Python語言）：</p>
 <ul>
-  <li>自动补全、方法签名提示、代码修复</li>
-  <li>hover提示、inlay提示、文档链接</li>
-  <li>转到定义、转到引用、符号引用点击高亮</li>
-  <li>格式化、部分格式化、渐进式自动格式化、折叠范围分析、重命名</li>
+  <li>自動補全、方法簽名提示、程式碼修復</li>
+  <li>hover提示、inlay提示、文件鏈接</li>
+  <li>轉到定義、轉到引用、符號引用點擊高亮</li>
+  <li>格式化、部分格式化、漸進式自動格式化、折疊範圍分析、重新命名</li>
 </ul>
-<p>当然，其不支持本地编译，不支持断点调试，不支持多文件等……，性能上也是不及本地的专门的 IDE 的</p>
-<p>总之，该功能的实际意义和用处并不大，如果你对此感兴趣，请查看后文的 常见问题 部分以了解更多</p>
-<p><strong>静态补全增强</strong></p>
-<p>你可以在 设置面板-Monaco-静态补全增强-自定义 中为 monaco 编辑器添加自定义的静态代码补全规则</p>
-<p>补全规则为 JSON 格式，下面是一个示例(monaco格式):</p>
+<p>當然，其不支援本地編譯，不支援斷點調試，不支援多文件等……，性能上也是不及本地的專門的IDE 的</p>
+<p>總之，該功能的實際意義和用處並不大，如果你對此感興趣，請查看後文的常見問題部分以了解更多</p>
+<p><strong>靜態補全增強</strong></p>
+<p>你可以在設定面板-Monaco-靜態補全增強-自訂中為monaco 編輯器新增自訂的靜態程式碼補全規則</p>
+<p>補全規則為JSON 格式，下面是一個範例(monaco格式):</p>
 <pre>
   {
     "suggestions": [
@@ -164,142 +164,142 @@
             "documentation": "The is a hello world snippet",
             "insertText": "hello world"
         },
-        // other suggestions...
+        // 其他 suggestions...
     ]
-  }
+}
 </pre>
-<p>你可以使用 <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>中几乎所有的属性，(注意: 不要填写 range 属性，脚本会自动计算并添加该属性)</p>
+<p>你可以使用 <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>中幾乎所有的屬性，(注意: 不要填入range 屬性，腳本會自動計算並加入該屬性)</p>
 <h2 id="其他功能">其他功能</h2>
 <ul>
-  <li>在题目、blog、回复等的右上角添加 <code>MrakDown视图</code> 按钮以及 <code>复制</code> 按钮</li>
-  <li>让 Codeforces 支持黑暗模式，默认跟随系统</li>
-  <li>展开折叠块，自动展开所有的折叠块</li>
-  <li>洛谷跳转，一键跳转到该题在洛谷对应的页面</li>
-  <li>评论区分页，支持翻页、跳转、可选择每页显示的主楼数</li>
-  <li>渲染优化，为折叠块元素添加渲染限制（contain: layout style;）</li>
-  <li>榜单重新着色，对于采用 Codeforces 赛制的比赛的榜单，按照“得分/总分”所在的范围为分数重新渐变着色</li>
+  <li>在主題、blog、回復等的右上角新增 <code>MrakDown視圖</code> 按鈕以及 <code>複製</code> 按鈕</li>
+  <li>讓Codeforces 支援黑暗模式，預設跟隨系統</li>
+  <li>展開折疊塊，自動展開所有的折疊塊</li>
+  <li>洛谷跳轉，一鍵跳到該題在洛谷對應的頁面</li>
+  <li>評論區分頁，支援翻頁、跳轉、可選擇每頁顯示的主樓數</li>
+  <li>渲染優化，為折疊塊元素新增渲染限制（contain: layout style;）</li>
+  <li>名單重新著色，對於採用Codeforces 賽制的比賽的榜單，按照「得分/總分」所在的範圍為分數重新漸變著色</li>
 </ul>
-<h2 id="兼容性">兼容性</h2>
-<p><strong>浏览器</strong></p>
+<h2 id="兼容性">相容性</h2>
+<p><strong>瀏覽器</strong></p>
 <table style="border: 1px solid #bcaaa4;">
   <thead>
     <tr style="background-color: #f2f2f2;">
       <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
-      <th style="border-bottom: 1px solid #bcaaa4;">支持</th>
+      <th style="border-bottom: 1px solid #bcaaa4;">支援</th>
       <th style="border-bottom: 1px solid #bcaaa4;">最低版本</th>
     </tr>
   </thead>
   <tbody>
     <tr style="background-color: white;">
       <td style="background-color: #009688; color: #ffffff;">Chrome</td>
-      <td style="background-color: #009688; color: #ffffff;">支持</td>
+      <td style="background-color: #009688; color: #ffffff;">支援</td>
       <td style="background-color: #f9f9f9;">96</td>
     </tr>
     <tr style="background-color: white;">
       <td style="background-color: #009688; color: #ffffff;">Edge</td>
-      <td style="background-color: #009688; color: #ffffff;">支持</td>
+      <td style="background-color: #009688; color: #ffffff;">支援</td>
       <td style="background-color: #f9f9f9;">96</td>
     </tr>
     <tr style="background-color: white;">
-      <td style="background-color: #f9f9f9;">国产Chromium套壳</td>
-      <td style="background-color: #FFC107; color: #3e2723;">基本兼容，但可能出现意外的错误</td>
-      <td style="background-color: #FFC107; color: #3e2723;">Chromium 内核版本≥96</td>
+      <td style="background-color: #f9f9f9;">國產Chromium套殼</td>
+      <td style="background-color: #FFC107; color: #3e2723;">基本上相容，但可能出現意外的錯誤</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Chromium 內核版本≥96</td>
     </tr>
     <tr style="background-color: white;">
-      <td style="background-color: #009688; color: #ffffff;">FireFox（包括移动端）</td>
-      <td style="background-color: #009688; color: #ffffff;">支持</td>
+      <td style="background-color: #009688; color: #ffffff;">FireFox（含行動端）</td>
+      <td style="background-color: #009688; color: #ffffff;">支援</td>
       <td style="background-color: #f9f9f9;">103</td>
     </tr>
     <tr style="background-color: white;">
       <td style="background-color: #f9f9f9;">Safari</td>
-      <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">不支持</td>
+      <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">不支援</td>
       <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">\</td>
     </tr>
   </tbody>
 </table>
-<p><strong>脚本管理器</strong></p>
-<p>仅在 Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在 Greasemonkey，Violentmonkey，ScriptCat 等中的兼容性</p>
+<p><strong>腳本管理器</strong></p>
+<p>僅在Tampermonkey（篡改猴）腳本管理器中進行測試，不保證在Greasemonkey，Violentmonkey，ScriptCat 等中的兼容性</p>
 <p><strong>其他插件</strong></p>
-<p>与主流CF相关插件不存在兼容性问题，如果你遇到了兼容性问题，欢迎反馈。</p>
-<p><strong>镜像站</strong></p>
-<p>支持官方轻量站 <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a
-    href="https://m2.codeforces.com">m3</a> 、官方镜像站 <a
-    href="https://mirror.codeforces.com/">https://mirror.codeforces.com/</a>、非官方镜像站 <a
+<p>與主流CF相關外掛程式不存在相容性問題，如果你遇到了相容性問題，歡迎回饋。</p>
+<p><strong>鏡像站</strong></p>
+<p>支援官方輕量站 <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a
+    href="https://m2.codeforces.com">m3</a> 、官方鏡像站 <a
+    href="https://mirror.codeforces.com/">https://mirror.codeforces.com/</a>、非官方鏡像站 <a
     href="https://codeforc.es">https://codeforc.es</a></p>
-<p>此外，理论上也兼容任意的其他镜像站，你只需要自行再添加一行注释 <code>// @match 你的镜像站网址</code> 即可</p>
-<h2 id="常见问题">常见问题</h2>
+<p>此外，理論上也相容於任意的其他鏡像站，你只需要自行再加入一行註解 <code>// @match 你的鏡像站網址</code> 即可</p>
+<h2 id="常见问题">常見問題</h2>
 <div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何开始？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何開始？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 你需要先安装 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然后再安装该脚本
+        A. 你需要先安裝 <a href="https://www.tampermonkey.net/">Tampermonkey</a> ，然後再安裝該腳本
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 更新错误？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 更新錯誤？</summary>
       <div style="border: 8px solid #ffffff00;">
-        <p>A. 由于 Greasy Fork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，</p>
-        <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可。</p>
-        <p>你也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</p>
+        <p>A. 由於Greasy Fork 平台的原因，當新版本剛發佈時，可能會出現實際更新/安裝的卻是上一個版本的情況，</p>
+        <p>通常你只需要稍等幾分鐘，然後再次前往更新/安裝。</p>
+        <p>你也可以將滑鼠移到腳本的更新提示框中的紅色問號上，然後點擊彈出訊息底部的「暫不更新」 按鈕。</p>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 一直显示加载中？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 一直顯示載入中？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 请开启设置面板中的 ”兼容选项-不等待页面资源加载“ 选项
+        A. 請開啟設定面板中的”相容選項-不等待頁面資源載入“ 選項
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 Too many requests ？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用DeepL 翻譯報錯Too many requests ？</summary>
       <div style="border: 8px solid #ffffff00;">
-        <p>A. 这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，DeepL对翻译字数和频率是有限制的，</p>
-        <span style="background-color: #FFF3E0;color: #FF5722;">这是暂时的，一段时间后就恢复正常了</span>
+        <p>A. 這通常是因為你短時間內頻繁翻譯，或者一次性翻譯了超過5000字符的文本導致的，DeepL對翻譯字數和頻率是有限制的，</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">這是暫時的，一段時間後就恢復正常了</span>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用 DeepL 翻译报错 undefind 或一直显示翻译中？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 使用DeepL 翻譯報錯undefind 或一直顯示翻譯中？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 这通常是因为你所使用的网络无法正常访问 <a href="https://www.deepl.com">www.deepl.com</a>
+        A. 這通常是因為你所使用的網路無法正常存取 <a href="https://www.deepl.com">www.deepl.com</a>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 翻译结果中一些公式显示为 {xx} / [xx] / 【xx】？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 翻譯結果中一些公式顯示為 {xx} / [xx] / 【xx】？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 在使用普通翻译接口（DeepL/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】
+        A. 使用普通翻譯介面（DeepL/有道/google）進行翻譯時，受腳本的實作方式所限，可能會出現{xx}/[xx]/【xx】
         <div style="border: 8px solid #ffffff00;"></div>
         <div style="background-color: #E3F2FD;color: #1565C0;border: 1px solid #1565c0;">
           <div style="border: 8px solid #ffffff00;">
-            <p><strong>脚本对公式的处理方式</strong></p>
-            <p>为了保护LaTeX公式在翻译时不被破坏，脚本会先取出所有的LaTeX公式，并使用替换符{xx}/[xx]/【xx】来占位，</p>
-            <p>由于这些替换符大概率不会在翻译的过程中遭到破坏，因此可以在翻译后再根据替换符还原回LaTeX公式。</p>
-            <p>这种实现方式能如期工作的前提是替换符不被破坏，这在绝大多数情况下都是没有问题的，</p>
-            <p>但有时翻译服务会破坏替换符 ，比如 【23】 变成了 【23 / 23】 / [23]/ 【23 】/ 23 】，这些情况下脚本会通过一定的正则规则进行还原，使其仍然可以如期工作</p>
-            <p>但如果翻译服务还破坏了更多的内容，产生了歧义，比如翻译服务将【2】 313 变成了 【2312，这时就无法还原了，</p>
-            <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，你可以在右上角的设置面板中选择不同的替换符，</p>
-            <p>经过测试，通常 <code>{}</code> 表现的效果更好，因此这也是脚本默认使用的替换符</p>
+            <p><strong>腳本對公式的處理方式</strong></p>
+            <p>為了保護LaTeX公式在翻譯時不被破壞，腳本會先取出所有的LaTeX公式，並使用替換符{xx}/[xx]/【xx】來佔位，</p>
+            <p>由於這些替換符大機率不會在翻譯的過程中遭到破壞，因此可以在翻譯後再根據替換符還原回LaTeX公式。</p>
+            <p>這種實現方式能如期工作的前提是替換符不被破壞，這在絕大多數情況下都是沒有問題的，</p>
+            <p>但有時翻譯服務會破壞替換符，例如【23】 變成了【23 / 23】 / [23]/ 【23 】/ 23 】，這些情況下腳本會透過一定的正規規則進行還原，使其仍然可以如期工作</p>
+            <p>但如果翻譯服務還破壞了更多的內容，產生了歧義，例如翻譯服務將【2】 313 變成了【2312，這時就無法還原了，</p>
+            <p>對於各個翻譯服務，不同的替換符本身遭到破壞的機率有所不同，你可以在右上角的設定面板中選擇不同的替換符，</p>
+            <p>經過測試，通常 <code>{}</code> 表現的效果更好，因此這也是腳本預設使用的替換符</p>
           </div>
         </div>
         <div style="border: 10px solid #ffffff00;"></div>
         <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
           <div style="border: 8px solid #ffffff00;">
             <p><strong>提示：</strong></p>
-            <p>在使用 ChatGPT 进行翻译时不会存在这个问题，因为可以通过提示词直接告诉 ChatGPT “保持其中的LaTeX公式不翻译”，</p>
-            <p>聪明的 ChatGPT 可以很好的遵守这一点，这也是脚本推荐的翻译方式。</p>
+            <p>在使用ChatGPT 進行翻譯時不會存在這個問題，因為可以透過提示詞直接告訴ChatGPT “保持其中的LaTeX公式不翻譯”，</p>
+            <p>聰明的ChatGPT 可以很好的遵守這一點，這也是腳本推薦的翻譯方式。</p>
           </div>
         </div>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用 ChatGPT 翻译？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用ChatGPT 翻譯？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 如果你可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，你只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。
-        <p>此外，你也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，你可以选择使用
+        A. 如果你可以直接訪問OpenAI 的接口，並且擁有帳號，那麼非常棒，你只需要選中“使用ChatGPT翻譯(API)”，然後點擊下方的“添加” 按鈕新建一個配置並填寫即可。
+        <p>此外，你也可以購買api 代理服務來使用ChatGPT，下表收集了一些api 服務商，你可以選擇使用
         </p>
         <table style="border: 1px solid #bcaaa4;">
           <thead>
             <tr style="background-color: #f2f2f2;">
               <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
-              <th style="border-bottom: 1px solid #bcaaa4;">官网</th>
-              <th style="border-bottom: 1px solid #bcaaa4;">获取方式</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">官網</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">獲取方式</th>
             </tr>
           </thead>
           <tbody>
@@ -307,110 +307,110 @@
               <td style="background-color: #f9f9f9;">API2D</td>
               <td style="background-color: #f9f9f9;"><a href="https://api2d.com/" target="_blank"
                   class="url">https://api2d.com/</a></td>
-              <td style="background-color: #f9f9f9;">官网</td>
+              <td style="background-color: #f9f9f9;">官網</td>
             </tr>
             <tr style="background-color: white;">
               <td style="background-color: #f9f9f9;">CloseAI</td>
               <td style="background-color: #f9f9f9;"><a href="https://console.closeai-asia.com/" target="_blank"
                   class="url">https://console.closeai-asia.com/</a></td>
-              <td style="background-color: #f9f9f9;">官网</td>
+              <td style="background-color: #f9f9f9;">官網</td>
             </tr>
             <tr style="background-color: white;">
               <td style="background-color: #f9f9f9;">OhMyGPT</td>
               <td style="background-color: #f9f9f9;"><a href="https://aigptx.top/" target="_blank"
                   class="url">https://aigptx.top/</a></td>
-              <td style="background-color: #f9f9f9;">官网</td>
+              <td style="background-color: #f9f9f9;">官網</td>
             </tr>
             <tr style="background-color: white;">
               <td style="background-color: #f9f9f9;">OpenAI-SB</td>
               <td style="background-color: #f9f9f9;"><a href="https://openai-sb.com/" target="_blank"
                   class="url">https://openai-sb.com/</a></td>
-              <td style="background-color: #f9f9f9;">Telegram机器人</td>
+              <td style="background-color: #f9f9f9;">Telegram機器人</td>
             </tr>
             <tr style="background-color: white;">
               <td style="background-color: #f9f9f9;">API2GPT</td>
               <td style="background-color: #f9f9f9;"><a href="https://www.api2gpt.com/" target="_blank"
                   class="url">https://www.api2gpt.com/</a></td>
-              <td style="background-color: #f9f9f9;">官网</td>
+              <td style="background-color: #f9f9f9;">官網</td>
             </tr>
             <tr style="background-color: white;">
               <td style="background-color: #f9f9f9;">AI Proxy</td>
               <td style="background-color: #f9f9f9;"><a href="https://aiproxy.io/" target="_blank"
                   class="url">https://aiproxy.io/</a></td>
-              <td style="background-color: #f9f9f9;">官网</td>
+              <td style="background-color: #f9f9f9;">官網</td>
             </tr>
           </tbody>
         </table>
         <div style="border: 10px solid #ffffff00;"></div>
         <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
           <div style="border: 8px solid #ffffff00;">
-            <p><strong>免责：</strong></p>
-            <p>作者仅为收集分享，没有获得任何收益，亦不保证上述平台的稳定性，平台的任何行为均与作者无关。</p>
-            <p>建议小额充值，用完再充，这些服务商可能会跑路</p>
+            <p><strong>免責：</strong></p>
+            <p>作者僅為收集分享，沒有獲得任何收益，亦不保證上述平台的穩定性，平台的任何行為均與作者無關。</p>
+            <p>建議小額儲值，用完再充，這些服務商可能會跑路</p>
           </div>
         </div>
-        <p>如果你使用的是 api 代理服务商 提供的服务，配置中的 KEY 应该填写 api代理服务商提供的 key，</p>
-        <p>此外，你还需要在配置中额外填写 Proxy API，</p>
-        <p>Proxy API 需要填写完整的地址，这里以 <a href="https://console.closeai-asia.com/">CloseAI</a> 为例，其提供了API
+        <p>如果你使用的是api 代理服務商提供的服務，設定中的KEY 應該填寫api代理服務商提供的key，</p>
+        <p>此外，你還需要在設定中額外填寫Proxy API，</p>
+        <p>Proxy API 需要填寫完整的位址，這裡以 <a href="https://console.closeai-asia.com/">CloseAI</a> 為例，其提供了API
           Base：<code>https://api.closeai-proxy.xyz</code></p>
-        <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
-        <span style="background-color: #FFF3E0;color: #FF5722;">注意：由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，请自行点击授权</span>
+        <p>那麼Proxy API 後面要填的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注意：由於你指定了自訂的API，Tampermonkey會對你的跨域請求進行警告，請自行點擊授權</span>
         <div style="border: 10px solid #ffffff00;"></div>
-        <span style="background-color: #FFF3E0;color: #FF5722;">注意：如果你想使用Azure OpenAI，由于其与 OpenAI 官方的接口参数不一样，你可以选择自行部署<a href="https://github.com/stulzq/azure-openai-proxy">azure-openai-proxy</a>以进行转换</span>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注意：如果你想使用Azure OpenAI，由於其與OpenAI 官方的介面參數不一樣，你可以選擇自行部署<a href="https://github.com/stulzq/azure-openai-proxy">azure-openai-proxy</a>以進行轉換</span>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 什么是LSP？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 什麼是LSP？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. <a href="https://microsoft.github.io/language-server-protocol/">LSP（Language Server Protocol）</a>是由微软发起的一种编辑器与语言服务器之间通信的协议规范。
-        <p>它将传统IDE需要实现的代码补全、诊断、建议、文档甚至项目管理等功能与编辑器相分离，使用独立的服务来完成这些功能，</p>
-        <p>而编辑器只需要按照协议规范与服务器进行通信即可，这样就大大减少了工作量，同时使编辑器可以轻松地支持各种编程语言</p>
-        <p>目前LSP的生态已经逐步完善，主流编辑器均已支持LSP或者有了对应的插件，如VSCode、Vim、Emacs等...</p>
-        <p>但是各大商业IDE厂商对此兴趣不大，基本现有的LSP Server都是开源社区在维护，因此其仍然不及专业IDE以及各种专业的插件</p>
+        A. <a href="https://microsoft.github.io/language-server-protocol/">LSP（Language Server Protocol）</a>是由微軟發起的一種編輯器與語言伺服器之間通訊的協定規範。
+        <p>它將傳統IDE需要實現的程式碼補全、診斷、建議、文件甚至專案管理等功能與編輯器分離，使用獨立的服務來完成這些功能，</p>
+        <p>而編輯器只需要按照協定規範與伺服器進行通訊即可，這樣就大大減少了工作量，同時使編輯器可以輕鬆地支援各種程式語言</p>
+        <p>目前LSP的生態已經逐步完善，主流編輯器都支援LSP或有了對應的插件，如VSCode、Vim、Emacs等...</p>
+        <p>但各大商業IDE廠商對此興趣不大，基本現有的LSP Server都是開源社群在維護，因此仍不及專業IDE以及各種專業的插件</p>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
   <div style="border: 8px solid #ffffff00;"><details><summary>Q. 如何使用LSP？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 只需两步：
-        <p>一：脚本提供了对 C++ 和 Python 语言以下两个 LSP Server 实现的支持，你需要按需安装它们：</p>
+        A. 只需兩步驟：
+        <p>一：腳本提供了對C++ 和Python 語言以下兩個LSP Server 實作的支持，你需要按需安裝它們：</p>
         <table>
           <thead>
             <tr>
-              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">语言</th>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">語言</th>
               <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">LSP Server</th>
-              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">安装方式（Windows下）</th>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">安裝方式（Windows下）</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td style="background-color: #f9f9f9; color: black;">C++</td>
               <td style="background-color: #f9f9f9; color: black;">clangd</td>
-              <td style="background-color: #f9f9f9; color: black;">在 <a href="https://github.com/clangd/clangd/releases">clangd release</a> 中下载clangd，然后在系统环境变量的 path 中新增 clangd 的路径，例如 <code>C:\clangd_16.0.2\bin\</code></td>
+              <td style="background-color: #f9f9f9; color: black;">在 <a href="https://github.com/clangd/clangd/releases">clangd release</a> 中下載clangd，然後在系統環境變數的path 中新增clangd 的路徑，例如 <code>C:\clangd_16.0.2\bin\</code></td>
             </tr>
             <tr>
               <td style="background-color: #f9f9f9; color: black;">Python</td>
               <td style="background-color: #f9f9f9; color: black;">pylsp</td>
-              <td style="background-color: #f9f9f9; color: black;">执行命令：
-                <code>pip install "python-lsp-server[all]"</code>，其会自动添加环境变量</td>
+              <td style="background-color: #f9f9f9; color: black;">執行指令：
+                <code>pip install "python-lsp-server[all]"</code>，其會自動加入環境變量</td>
             </tr>
           </tbody>
         </table>
-        <p>二：你还需要在 <a href="https://github.com/beijixiaohu/OJBetter/releases">GitHub release</a> 或者 <a
-            href="https://mxyowl.lanzouj.com/b0cui6bgj">蓝奏云(密码:aaaa)</a> 中下载并解压 OJBetter_Bridge，该软件是脚本与 LSP Server 通信的桥梁，</p>
-        <p>将解压后的文件夹放到C盘根目录 或者其他任何你喜欢的位置 （注意：如果你放在其他位置，你需要在设置面板中要修改"工作路径"为你的实际位置。）</p>
-        <p>然后你就可以运行 OJBetter_Bridge 了，其提供了GUI版本和终端版本，Windows下推荐使用GUI版本，直接运行 <code>server_gui.exe</code> 即可</p>
-        <p>OJBetter_Bridge 在启动时会自动检查命令 clangd 和 pylsp 是否有效，并给出提示。</p>
-        <span style="color:#009688; background-color: #E0F2F1;">提示：在 <code>server_gui.exe</code> 的界面中可以设置让其开机自启</span>
-        <p>完成上述步骤后，你就可以开启设置面板中的 "使用LSP" 并使用了。</p>
+        <p>二：你還需要在 <a href="https://github.com/beijixiaohu/OJBetter/releases">GitHub release</a> 或 <a
+            href="https://mxyowl.lanzouj.com/b0cui6bgj">藍奏雲(密碼:aaaa)</a> 下載並解壓縮OJBetter_Bridge，該軟體是腳本與LSP Server 通訊的橋樑，</p>
+        <p>將解壓縮後的資料夾放到C盤根目錄或其他任何你喜歡的位置（注意：如果你放在其他位置，你需要在設定面板中要修改"工作路徑"為你的實際位置。）</p>
+        <p>然後你就可以執行OJBetter_Bridge 了，其提供了GUI版本和終端版本，Windows下推薦使用GUI版本，直接執行 <code>server_gui.exe</code> 即可</p>
+        <p>OJBetter_Bridge 在啟動時會自動檢查指令clangd 和pylsp 是否有效，並給予提示。</p>
+        <span style="color:#009688; background-color: #E0F2F1;">提示：在 <code>server_gui.exe</code> 的介面中可以設定讓其開機自啟</span>
+        <p>完成上述步驟後，你就可以開啟設定面板中的"使用LSP" 並使用了。</p>
         <div style="border: 1px solid #aaa;">
           <div style="border: 8px solid #ffffff00;">
             <details>
               <summary>了解更多？</summary>
               <div style="border: 8px solid #ffffff00;">
-                对于clangd，在 cpp_workspace 文件夹中存放了两个配置文件 <code>.clangd</code>、<code>.clang-format</code>
-                <p>它们分别定义了 clangd 的 <a href="https://clangd.llvm.org/config">配置项</a> 和 <a
-                    href="https://clang.llvm.org/docs/ClangFormatStyleOptions.html">代码格式化风格</a>，你可以自行编辑修改</p>
+                對於clangd，在cpp_workspace 資料夾中存放了兩個設定檔 <code>.clangd</code>、<code>.clang-format</code>
+                <p>它們分別定義了clangd 的 <a href="https://clangd.llvm.org/config">配置項目</a> 和 <a
+                    href="https://clang.llvm.org/docs/ClangFormatStyleOptions.html">代碼格式化風格</a>，你可以自行編輯修改</p>
               </div>
             </details>
           </div>
@@ -418,55 +418,55 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 为什么 clangd 格式化无效？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 為什麼clangd 格式化無效？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 这是因为你在设置面板中填写的 LSP 工作路径不正确</a>
+        A. 這是因為你在設定面板中填寫的LSP 工作路徑不正確</a>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 为什么 clangd 无法识别我的 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 头文件？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 為什麼clangd 無法辨識我的 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 頭檔？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 这是因为 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 不是标准头文件，因此 clangd 默认不支持，你需要在 OJBetter_Bridge 的 cpp_workspace
-        中的 <code>.clangd</code> 文件中通过修改编译器参数来告诉 clang 去哪找到这个非标准的头文件(当然也不推荐使用万能头)</a>
+        A. 這是因為 <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> 不是標準頭文件，因此clangd 預設不支持，你需要在OJBetter_Bridge 的cpp_workspace
+        中的 <code>.clangd 19Better_Bridge 的cpp_workspace 17中的</code> .clangd 19Better編譯器參數來告訴clang 要去哪裡找到這個非標準的頭檔(當然也不建議使用萬用頭)</a>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 静态补全增强可不可以使用本地的 JSON 文件？</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 靜態補全增強可不可以使用本地的JSON 檔案？</summary>
       <div style="border: 8px solid #ffffff00;">
-        A. 由于浏览器的安全限制，你并不能直接使用形如 <code>file:///xxx</code> 的 URL 来在浏览器中访问你的本地 JSON 文件。
-        <p>不过你可以借助 OJBetter_Bridge 来做到，很简单，你只需要将 JSON 文件 <code>xxx.json</code> 放置到 OJBetter_Bridge 的 /mycomplet 文件夹中</p>
-        <p>启动 OJBetter_Bridge，就可以在设置面板中新建配置，JSON URL为：<code>http://127.0.0.1:2323/mycomplet/xxx.json</code>。</p>
+        A. 由於瀏覽器的安全限制，你並不能直接使用形如 <code>file:///xxx</code> 的URL 來在瀏覽器中存取你的本機JSON 檔案。
+        <p>不過你可以藉助OJBetter_Bridge 來做到，很簡單，你只要將JSON 檔案 <code>xxx.json</code> 放置到OJBetter_Bridge 的/mycomplet 資料夾中</p>
+        <p>啟動OJBetter_Bridge，就可以在設定面板中新建配置，JSON URL為：<code>http://127.0.0.1:2323/mycomplet/xxx.json</code>。</p>
         <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
           <div style="border: 8px solid #ffffff00;">
-            <p><strong>试一试？</strong></p>
-            <p>启动 OJBetter_Bridge，初始情况下 /mycomplet 文件夹中自带一个示例 JSON 文件：<code>template.json</code>， 因此你可以添加一个配置，填写
-              <code>http://127.0.0.1:2323/mycomplet/template.json</code> 并保存</p>
-            <p>现在在编辑器中输入hello，你将会看到两个补全项：hello world、hello world2</p>
+            <p><strong>試一試？</strong></p>
+            <p>啟動OJBetter_Bridge，初始情況下/mycomplet 資料夾中自帶一個範例JSON 檔案：<code>template.json</code>， 因此你可以新增一個配置，填入
+              <code>http://127.0.0.1:2323/mycomplet/template.json</code> 並保存</p>
+            <p>現在在編輯器中輸入hello，你將會看到兩個補全項：hello world、hello world2</p>
           </div>
         </div>
       </div>
     </details></div>
 </div>
-<h2 id="贡献代码">贡献代码</h2>
-<p>欢迎贡献代码，请前往 <a href="https://github.com/beijixiaohu/OJBetter">Github仓库</a> 创建PR</p>
+<h2 id="贡献代码">貢獻程式碼</h2>
+<p>歡迎貢獻代碼，請前往 <a href="https://github.com/beijixiaohu/OJBetter">Github倉庫</a> 建立PR</p>
 <h2 id="其他OJ?">其他OJ?</h2>
-<p>由于作者精力有限，并不会维护太多的类似脚本，如果你想为喜欢的 OJ 移植该脚本，非常欢迎，你只需要遵守 GPL-3.0 license 许可即可</p>
-<h2 id="感谢">感谢</h2>
+<p>由於作者精力有限，並不會維護太多的類似腳本，如果你想為喜歡的OJ 移植該腳本，非常歡迎，你只需要遵守GPL-3.0 license 許可即可</p>
+<h2 id="感谢">感謝</h2>
 <ul>
-  <li>早期开发中参考了以下脚本：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>、<a
-      href="https://greasyfork.org/zh-CN/scripts/378277">翻译机</a></li>
-  <li>CodeforcesBetter 脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
-      href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a>、<a
+  <li>早期開發中參考了以下腳本：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>、<a
+      href="https://greasyfork.org/zh-CN/scripts/378277">翻譯機</a></li>
+  <li>CodeforcesBetter 腳本使用了以下開源函式庫：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
+      href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a><a
+      href="https://dexie.org/"><a
       href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a
-      href="https://github.com/gka/chroma.js">chroma</a>、<a href="http://xtermjs.org/">xterm</a>、<a
-      href="https://dexie.org/">dexie</a>、<a href="https://github.com/microsoft/monaco-editor">monaco-editor</a>
+      href="https://github.com/gka/chroma.js">chroma</a>、<a href="http://xtermjs.org/"></a></a><a href="https://github.com/microsoft/monaco-editor"></a>
   </li>
-  <li>OJBetter_Bridge 参考了以下仓库<a
-      href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>，使用了以下开源库：<a
+  <li>OJBetter_Bridge 參考了以下倉庫<a
+      href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>，使用了以下開源函式庫：<a
       href="https://github.com/zhiyiYo/PyQt-Fluent-Widgets">PyQt-Fluent-Widgets</a>、<a
       href="https://pypi.org/project/PyYAML/">PyYAML</a>、<a href="https://pypi.org/project/tornado/">tornado</a>、<a
       href="https://pypi.org/project/ujson/">ujson</a>
   </li>
-  <li>特别感谢所有提供反馈和建议的朋友们。</li>
+  <li>特別感謝所有提供回饋和建議的朋友。</li>
 </ul>
-<p>感谢你们，0rz</p>
+<p>感謝你們，0rz</p>
