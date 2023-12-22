@@ -5,7 +5,9 @@
     <center>
       <h3>Scriva in anticipo：Note di feedback</h3>
     </center>
-    <p>In caso di problemi, legga prima le istruzioni <a style="color:#F44336" href="#常见问题">#FAQ</a> qui sotto.Se il problema non viene risolto, la invitiamo a visitare la pagina di feedback <a style="color:#F44336"
+    <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。In caso di problemi, legga prima le istruzioni <a style="color:#F44336" href="#常见问题">#FAQ</a> qui sotto.Se il problema non viene risolto, la invitiamo a visitare la pagina di feedback <a style="color:#F44336"
         href="https://greasyfork.org/zh-CN/scripts/465777/feedback"></a> o <a style="color:#F44336"
         href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> per fornire un feedback.</p>
     <p>Fornisca una descrizione dettagliata del problema, ad esempio：link, screenshot, risultati desiderati, risultati effettivi, riproduzione……</p>
@@ -164,8 +166,7 @@
             "documentation": "The is a hello world snippet",
             "insertText": "hello world"
         },
-        // altro suggerimenti...
-    ]
+        // altro suggerimenti... ]
 }
 </pre>
 <p>Può utilizzare quasi tutte le proprietà di <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>, (nota: non compili la proprietà range, lo script la calcolerà e la aggiungerà automaticamente).</p>
@@ -235,7 +236,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. Errore di aggiornamento?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Errore di aggiornamento?</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>R. A causa della piattaforma Greasy Fork, quando viene rilasciata una nuova versione, può accadere che l'aggiornamento/installazione effettiva sia la versione precedente.</p>
         <p>Di solito è sufficiente attendere qualche minuto e poi aggiornare/installare di nuovo.</p>
@@ -249,14 +250,14 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. Utilizzo di DeepL Errore di traduzione Troppe richieste?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Utilizzo di DeepL Errore di traduzione Troppe richieste?</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>R. Di solito questo è dovuto al fatto che ha tradotto frequentemente in un breve periodo di tempo, oppure ha tradotto più di 5.000 caratteri di testo in una sola volta. DeepL ha un limite sul numero di parole e sulla frequenza delle traduzioni.</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">È temporaneo. Tornerà alla normalità dopo un po'.</span>
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. Ricevo un errore di undefind quando utilizzo DeepL o continua a mostrare la traduzione in corso?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Ricevo un errore di undefind quando utilizzo DeepL o continua a mostrare la traduzione in corso?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Di solito questo accade perché la rete che si sta utilizzando non ha un accesso adeguato a <a href="https://www.deepl.com">www.deepl.com</a>
       </div>
@@ -289,7 +290,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. Come faccio a tradurre con ChatGPT?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Come faccio a tradurre con ChatGPT?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Se ha accesso diretto all'interfaccia di OpenAI e dispone di un account, allora è perfetto, tutto ciò che deve fare è selezionare "Usa ChatGPT Translation (API)" e fare clic sul pulsante "Aggiungi" qui sotto per creare una nuova configurazione e riempire il nel pulsante "Aggiungi" qui sotto e compilarlo.
         <p>Inoltre, può anche acquistare servizi di proxy api per utilizzare ChatGPT, la seguente tabella raccoglie alcuni fornitori di servizi api, che può scegliere di utilizzare
@@ -360,7 +361,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. Che cos'è l'LSP?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Che cos'è l'LSP?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. <a href="https://microsoft.github.io/language-server-protocol/">LSP (Language Server Protocol)</a>è una specifica di protocollo avviata da Microsoft per la comunicazione tra editori e server linguistici.
         <p>Separa le funzioni di completamento del codice, diagnostica, suggerimenti, documentazione e persino gestione del progetto che gli IDE tradizionali devono implementare dall'editor, e utilizza servizi indipendenti per svolgere queste funzioni.</p>
@@ -370,7 +371,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. Come si usa l'LSP?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Come si usa l'LSP?</summary>
       <div style="border: 8px solid #ffffff00;">
         A. Solo due passi：
         <p>Lo script：fornisce il supporto per le seguenti due implementazioni di LSP Server in C++ e Python, che deve installare come richiesto：</p>
@@ -431,7 +432,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>D. È possibile utilizzare i file JSON locali per i miglioramenti del completamento statico?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>È possibile utilizzare i file JSON locali per i miglioramenti del completamento statico?</summary>
       <div style="border: 8px solid #ffffff00;">
         A causa delle restrizioni di sicurezza del browser, non può accedere direttamente al suo file JSON locale nel browser utilizzando un URL come <code>file:///xxx</code> .
         <p>Ma può farlo con OJBetter_Bridge, è molto semplice, deve solo inserire il file JSON <code>xxx.json</code> nella cartella /mycomplet di OJBetter_Bridge.</p>
