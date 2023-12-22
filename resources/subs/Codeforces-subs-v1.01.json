@@ -122,7 +122,7 @@
                 "Where the contest was held originally": "比赛原本举办的地点",
                 "Official contest site URL": "官方比赛网站URL",
                 "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
-                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
             }
         },
         ".propertyLinks": {
