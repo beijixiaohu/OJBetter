@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'OJBetter/resources/**'
+      - 'resources/**'
 
 jobs:
   sync:
@@ -30,4 +30,4 @@ jobs:
           OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
           OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
-          ./ossutil64 sync ./OJBetter/resources/ oss://$OSS_BUCKET/resources/
+          ./ossutil64 sync ./resources/ oss://$OSS_BUCKET/resources/
