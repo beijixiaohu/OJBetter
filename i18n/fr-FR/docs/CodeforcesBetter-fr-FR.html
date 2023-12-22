@@ -5,7 +5,9 @@
     <center>
       <h3>Rédigez à l'avance：Notes de retour d'information</h3>
     </center>
-    <p>Si vous rencontrez des problèmes, veuillez d'abord lire les instructions <a style="color:#F44336" href="#常见问题">#FAQ</a> ci-dessous.Si le problème n'est pas résolu, veuillez consulter la page de commentaires <a style="color:#F44336"
+    <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。Si vous rencontrez des problèmes, veuillez d'abord lire les instructions <a style="color:#F44336" href="#常见问题">#FAQ</a> ci-dessous.Si le problème n'est pas résolu, veuillez consulter la page de commentaires <a style="color:#F44336"
         href="https://greasyfork.org/zh-CN/scripts/465777/feedback"></a> ou <a style="color:#F44336"
         href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> pour faire part de vos commentaires.</p>
     <p>Veuillez fournir une description détaillée du problème, par exemple :：lien, captures d'écran, résultats souhaités, résultats réels, reproduction……</p>
@@ -164,8 +166,7 @@
             "documentation" : "The is a hello world snippet",
             "insertText" : "hello world"
         },
-        // autres suggestions...
-    ]
+        // autres suggestions... ]
 }
 </pre>
 <p>Vous pouvez utiliser presque toutes les propriétés de <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>, (note : ne remplissez pas la propriété range, le script la calculera et l'ajoutera automatiquement).</p>
@@ -426,7 +427,7 @@
 </div><div style="border: 1px solid #aaa;">
   <div style="border: 8px solid #ffffff00;"><details><summary>Q. Pourquoi clangd ne reconnaît-il pas mes en-têtes <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> ?</summary>
       <div style="border: 8px solid #ffffff00;">
-        R. C'est parce que <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> n'est pas un fichier d'en-tête standard, donc clangd ne le supporte pas par défaut, vous devez dire à clang où trouver ce fichier d'en-tête non-standard en modifiant le paramètre de compilation dans le fichier <code>.clangd</code> dans le cpp_workspace
+        C'est parce que <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> n'est pas un fichier d'en-tête standard, donc clangd ne le supporte pas par défaut, vous devez dire à clang où trouver ce fichier d'en-tête non-standard en modifiant le paramètre de compilation dans le fichier <code>.clangd</code> dans le cpp_workspace
         de OJBetter_Bridge (et bien sûr l'utilisation d'un en-tête universel n'est pas recommandée).</a>
       </div>
     </details></div>
