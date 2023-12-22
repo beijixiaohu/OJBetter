@@ -5,7 +5,9 @@
     <center>
       <h3>Escriba antes：Notas de retroalimentación</h3>
     </center>
-    <p>Si tiene problemas, lea primero las instrucciones de <a style="color:#F44336" href="#常见问题">#FAQ</a> .Si esto no se resuelve, por favor vaya a la página de comentarios <a style="color:#F44336"
+    <p>如遇问题，请先阅读下方的 <a style="color:#F44336" href="#常见问题">#常见问题</a> 说明。如果没有得到解决，请前往 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 或者 <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 反馈。Si tiene problemas, lea primero las instrucciones de <a style="color:#F44336" href="#常见问题">#FAQ</a> .Si esto no se resuelve, por favor vaya a la página de comentarios <a style="color:#F44336"
         href="https://greasyfork.org/zh-CN/scripts/465777/feedback"></a> o <a style="color:#F44336"
         href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> para dar su opinión.</p>
     <p>Por favor, proporcione una descripción detallada del problema, por ejemplo:：enlace, capturas de pantalla, resultados deseados, resultados reales, reproducción……</p>
@@ -164,8 +166,7 @@
             "documentation": "The is a hello world snippet",
             "insertText": "hello world"
         },
-        // otras sugerencias...
-    ]
+        // otras sugerencias... ]
 }
 </pre>
 <p>Puede utilizar casi todas las propiedades de <a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>, (nota: no rellene la propiedad de rango, el script calculará y añadirá automáticamente esa propiedad).</p>
@@ -235,7 +236,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>P. ¿Error de actualización?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>¿Error de actualización?</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>R. Debido a la plataforma Greasy Fork, cuando se publica una nueva versión, puede ocurrir que la actualización/instalación real sea la de la versión anterior.</p>
         <p>Normalmente sólo tiene que esperar unos minutos y volver a actualizar/instalar.</p>
@@ -249,7 +250,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>P. Utilizando DeepL error de traducción ¿Demasiadas solicitudes?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>Utilizando DeepL error de traducción ¿Demasiadas solicitudes?</summary>
       <div style="border: 8px solid #ffffff00;">
         <p>R. Esto suele deberse a que ha traducido con frecuencia en un corto periodo de tiempo, o a que ha traducido más de 5.000 caracteres de texto de una sola vez. DeepL tiene un límite en el número de palabras y la frecuencia de las traducciones.</p>
         <span style="background-color: #FFF3E0;color: #FF5722;">Es temporal. Volverá a la normalidad después de un tiempo.</span>
@@ -418,7 +419,7 @@
       </div>
     </details></div>
 </div><div style="border: 1px solid #aaa;">
-  <div style="border: 8px solid #ffffff00;"><details><summary>P. ¿Por qué no funciona el formato clangd?</summary>
+  <div style="border: 8px solid #ffffff00;"><details><summary>¿Por qué no funciona el formato clangd?</summary>
       <div style="border: 8px solid #ffffff00;">
         R. Esto se debe a que ha rellenado una ruta de trabajo LSP incorrecta en el panel de Configuración.</a>
       </div>
@@ -426,7 +427,7 @@
 </div><div style="border: 1px solid #aaa;">
   <div style="border: 8px solid #ffffff00;"><details><summary>P. ¿Por qué clangd no reconoce mis cabeceras <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> ?</summary>
       <div style="border: 8px solid #ffffff00;">
-        R. Esto se debe a que <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> no es un archivo de cabecera estándar, por lo que clangd no lo soporta por defecto, necesita decirle a clang dónde encontrar este archivo de cabecera no estándar modificando el parámetro del compilador en el archivo <code>.clangd</code> en el cpp_workspace
+        Esto se debe a que <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> no es un archivo de cabecera estándar, por lo que clangd no lo soporta por defecto, necesita decirle a clang dónde encontrar este archivo de cabecera no estándar modificando el parámetro del compilador en el archivo <code>.clangd</code> en el cpp_workspace
         de OJBetter_Bridge (y por supuesto no se recomienda el uso de una cabecera universal).</a>
       </div>
     </details></div>
