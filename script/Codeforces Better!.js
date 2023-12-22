@@ -37,7 +37,7 @@
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
 // @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
 // @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
-// @resource     subs_zh https://aowuucdn.oss-cn-beijing.aliyuncs.com/local/subs/subs-cf-zh-v1.0.json
+// @resource     subs_zh https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/subs/Codeforces-subs-v1.01.json
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-cn-beijing.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
