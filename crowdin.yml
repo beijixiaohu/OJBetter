@@ -1,9 +1,10 @@
 files:
   - source: /
     ignore:
-      - /OJ
+      - /OJBetter_Bridge
       - tools
       - .gitignore
       - LICENSE
       - /i18
-    translation: /i18n/%locale%/%file_name%-%locale%.%file_extension%
+      - /script
+    translation: /i18n/%locale%/%original_path%/%file_name%-%locale%.%file_extension%
