@@ -8,7 +8,7 @@ on:
       - 'resources/**'
 
 jobs:
-  sync:
+  sync_to_oss:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -20,14 +20,15 @@ jobs:
           chmod 755 ossutil64
 
       - name: Config ossutil
+        env:
+          OSS_ENDPOINT: 'oss-cn-beijing.aliyuncs.com'
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
           ./ossutil64 config -e $OSS_ENDPOINT -i $OSS_ACCESS_KEY_ID -k $OSS_ACCESS_KEY_SECRET
 
       - name: Sync files to OSS
         env:
-          OSS_ENDPOINT: 'oss-cn-beijing.aliyuncs.com'
           OSS_BUCKET: 'aowuucdn'
-          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
-          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
         run: |
           ./ossutil64 sync ./resources/ oss://$OSS_BUCKET/resources/
