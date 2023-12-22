@@ -6,4 +6,5 @@ files:
       - .gitignore
       - LICENSE
       - /i18
+      - /script
     translation: /i18n/%locale%/%file_name%-%locale%.%file_extension%
