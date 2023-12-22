@@ -7,5 +7,4 @@ files:
       - LICENSE
       - /i18
       - /script
-      - /docs/At
-    translation: /i18n/%locale%/%file_name%-%locale%.%file_extension%
+    translation: /i18n/%locale%/%original_path%/%file_name%-%locale%.%file_extension%
