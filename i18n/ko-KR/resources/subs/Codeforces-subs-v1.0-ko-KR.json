@@ -7,41 +7,41 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "参加虚拟重现赛",
-                "Enter": "进入",
-                "Current standings": "当前榜单",
-                "Final standings": "最终榜单",
-                "Preliminary results": "初步结果",
-                "open hacking:": "开放黑客攻击中",
-                "School/University/City/Region Championship": "学校/大学/城市/区域比赛",
-                "Official School Contest": "学校官方比赛",
-                "Training Contest": "训练赛",
-                "Training Camp Contest": "训练营比赛",
-                "Official ICPC Contest": "ICPC官方比赛",
-                "Official International Personal Contest": "官方国际个人赛",
-                "China": "中国",
-                "Statements": "题目描述",
-                "in Chinese": "中文",
-                "Trainings": "训练",
-                "Prepared by": "编写人",
-                "Current or upcoming contests": "当前或即将举行的比赛",
-                "Rating: users participated in recent 6 months": "评级：最近 6 个月有参与的用户",
-                "Past contests": "过去的比赛",
-                "Exclusions": "排除",
-                "Before start": "距比赛开始还有",
-                "Before registration": "距报名开始还有",
-                "Until closing ": "距报名结束还有",
-                "Before extra registration": "额外报名还未开始",
-                "Register »": "报名 »",
-                "Registration completed": "已报名",
-                "Registration closed": "报名已结束",
-                "Problems": "问题集",
-                "My Submissions": "我的提交",
-                "Standings": "榜单",
-                "Questions about problems": "关于问题的提问",
-                "Contest status": "比赛状态",
-                "Invited users": "邀请的用户",
-                "Invitation links": "邀请链接"
+                "Virtual participation": "가상 재연 토너먼트에 참여하기",
+                "Enter": "로 이동",
+                "Current standings": "현재 목록",
+                "Final standings": "최종 목록",
+                "Preliminary results": "예비 결과",
+                "open hacking:": "오픈 해킹",
+                "School/University/City/Region Championship": "학교/대학/도시/지역 대회",
+                "Official School Contest": "공식 학교 대회",
+                "Training Contest": "트레이닝 경기",
+                "Training Camp Contest": "훈련 캠프 경쟁",
+                "Official ICPC Contest": "ICPC 공식 대회",
+                "Official International Personal Contest": "공식 국제 개인전",
+                "China": "sino",
+                "Statements": "제목 설명",
+                "in Chinese": "중국어",
+                "Trainings": "기차",
+                "Prepared by": "작성자",
+                "Current or upcoming contests": "현재 진행 중이거나 예정된 대회",
+                "Rating: users participated in recent 6 months": "평가：지난 6개월 동안 참여한 적이 있는 사용자",
+                "Past contests": "지난 경기",
+                "Exclusions": "제외",
+                "Before start": "레이스 시작까지 몇 분 남지 않았습니다.",
+                "Before registration": "등록이 시작되기까지 아직 시간이 남아 있습니다.",
+                "Until closing ": "아직 등록을 마감할 시간이 남아 있습니다.",
+                "Before extra registration": "추가 등록은 아직 열려 있지 않습니다.",
+                "Register »": "등록 \"",
+                "Registration completed": "등록",
+                "Registration closed": "등록이 마감되었습니다.",
+                "Problems": "설문지",
+                "My Submissions": "내 제출물",
+                "Standings": "이름 목록",
+                "Questions about problems": "이슈에 대한 질문",
+                "Contest status": "게임 상태",
+                "Invited users": "초대된 사용자",
+                "Invitation links": "초대 링크"
             }
         },
         ".menu-list.main-menu-list": {
@@ -51,17 +51,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Home": "主页",
-                "Top": "热门",
-                "Catalog": "指南目录",
-                "Contests": "比赛",
-                "Gym": "训练营",
-                "Problemset": "题单",
-                "Groups": "团体",
-                "Rating": "Rating(评级)排行榜",
-                "Edu": "培训",
-                "Calendar": "日历",
-                "Help": "帮助"
+                "Home": "홈페이지",
+                "Top": "유행 중",
+                "Catalog": "가이드 카탈로그",
+                "Contests": "대회(스포츠 등)",
+                "Gym": "훈련 캠프",
+                "Problemset": "설문지",
+                "Groups": "조직",
+                "Rating": "평가 순위",
+                "Edu": "재배",
+                "Calendar": "캘린더",
+                "Help": "손"
             }
         },
         ".nav-links": {
@@ -71,14 +71,14 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Settings": "设置",
-                "Blog": "博客",
-                "Teams": "队伍",
-                "Submissions": "提交",
-                "Favourites": "收藏",
-                "Problemsetting": "问题设置",
-                "Talks": "私信",
-                "Contests": "比赛"
+                "Settings": "설정",
+                "Blog": "블로그(외래어)",
+                "Teams": "대기열",
+                "Submissions": "제출(보고서 등)",
+                "Favourites": "북마크(인터넷)",
+                "Problemsetting": "문제 설정",
+                "Talks": "비공개 편지",
+                "Contests": "대회(스포츠 등)"
             }
         },
         ".contest-state-phase": {
@@ -88,8 +88,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Before contest": "即将进行的比赛",
-                "Contest is running": "比赛进行中"
+                "Before contest": "다가오는 대회",
+                "Contest is running": "경기 진행 중"
             }
         },
         ".notice": {
@@ -99,26 +99,26 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "has extra registration": "有额外的报名时期",
-                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "如果您在比赛开始前5分钟前还未报名，您可以在额外的报名期间稍后报名。额外的报名将在比赛开始后10分钟开放，并持续25分钟。",
-                "in timezone ([^)]*)": "$1 时区",
-                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "比赛结束后将允许虚拟参赛。将此字段留空以允许随时进行虚拟参赛",
-                "Contest duration in minutes": "比赛持续时间（分钟）",
-                "or choose": "或选择",
-                "Standings freeze period in minutes": "榜单冻结时间（分钟）",
-                "Time when final results are available": "最终结果可用时间",
-                "Is it allowed to solve contest problems unofficially after the end": "比赛结束后是否允许非官方解决比赛问题",
-                "Is it allowed to run contest as virtual after the end": "比赛结束后是否允许虚拟参赛",
-                "Is it allowed participate in contest out of competition": "是否允许非竞赛参赛",
-                "Are participants allowed to register for the contest themselves": "是否允许参赛者自行报名",
-                "Can non-registered users and anonyms view contest standings, problems and other statistics": "是否允许未注册用户和匿名用户查看比赛榜单、问题和其他统计信息",
-                "If unchecked they will view only personal status": "如果未选中，他们将只能查看个人状态",
-                "To manage allowed program languages": "管理允许的编程语言",
-                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "系统将自动调整某些语言的时间限制。仅建议用于教育目的。",
-                "Check it if you want to allow contestants view statements": "如果允许参赛者查看题目描述，请勾选此项",
-                "Check it if contestants can view standings": "如果允许参赛者查看榜单，请勾选此项",
-                "Where the contest was held originally": "比赛原本举办的地点",
-                "Official contest site URL": "官方比赛网站URL"
+                "has extra registration": "추가 등록 기간이 있습니다.",
+                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "레이스 시작 5분 전까지 등록하지 않은 경우, 추가 등록 기간 동안 나중에 등록할 수 있습니다. 추가 등록은 레이스 시작 10분 후부터 시작되어 25분 동안 진행됩니다.",
+                "in timezone ([^)]*)": "1 시간대",
+                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "콘테스트가 종료된 후 가상 참가가 허용됩니다. 언제든지 가상 참가를 허용하려면 이 필드를 비워 두세요.",
+                "Contest duration in minutes": "경기 시간(분)",
+                "or choose": "를 클릭하거나",
+                "Standings freeze period in minutes": "목록 고정 시간(분)",
+                "Time when final results are available": "최종 결과를 확인할 수 있는 시간",
+                "Is it allowed to solve contest problems unofficially after the end": "경기 종료 후 비공식적인 경기 문제 해결이 허용되는지 여부",
+                "Is it allowed to run contest as virtual after the end": "대회 후 가상 참가 허용 여부",
+                "Is it allowed participate in contest out of competition": "비경쟁 출품작 허용 여부",
+                "Are participants allowed to register for the contest themselves": "참가자가 직접 등록할 수 있는지 여부",
+                "Can non-registered users and anonyms view contest standings, problems and other statistics": "미등록 및 익명 사용자가 레이스 순위표, 질문 및 기타 통계를 볼 수 있도록 허용할지 여부",
+                "If unchecked they will view only personal status": "이 옵션을 선택하지 않으면 개별 상태만 볼 수 있습니다.",
+                "To manage allowed program languages": "허용된 프로그래밍 언어 관리",
+                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "특정 언어의 경우 시스템이 자동으로 시간 제한을 조정합니다. 교육 목적으로만 사용하는 것이 좋습니다.",
+                "Check it if you want to allow contestants view statements": "참가자가 문제의 설명을 볼 수 있도록 하려면 이 확인란을 선택합니다.",
+                "Check it if contestants can view standings": "참가자가 순위표를 볼 수 있도록 허용하려면 이 확인란을 선택합니다.",
+                "Where the contest was held originally": "원래 대회가 열렸던 장소",
+                "Official contest site URL": "공식 콘테스트 웹사이트 URL"
             }
         },
         ".propertyLinks": {
@@ -128,7 +128,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Contribution": "贡献"
+                "Contribution": "헌신"
             }
         },
         ".contests-table": {
@@ -138,7 +138,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Contest history": "比赛历史"
+                "Contest history": "대회 기록"
             }
         },
         ".roundbox.sidebox.borderTopRound ": {
@@ -148,13 +148,13 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Register now": "现在报名",
-                "No tag edit access": "没有标签编辑权限",
-                "Problem": "问题",
-                "Verdict": "判题状态",
-                "Language:": "语言:",
-                "Participant": "参赛者",
-                "Choose file:": "选择文件:"
+                "Register now": "지금 등록하기",
+                "No tag edit access": "태그 편집 권한 없음",
+                "Problem": "이슈",
+                "Verdict": "판결 상태",
+                "Language:": "언어.",
+                "Participant": "참가자",
+                "Choose file:": "파일을 선택합니다."
             }
         },
         ".icon-eye-close.icon-large": {
@@ -164,7 +164,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add to exclusions": "添加到排除列表"
+                "Add to exclusions": "제외 목록에 추가"
             }
         },
         "null": {
@@ -174,7 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add to exclusions for gym contests filter": "添加训练营过滤器的排除项"
+                "Add to exclusions for gym contests filter": "Boot Camp 필터에 제외 항목 추가하기"
             }
         },
         ".roundbox.sidebox.sidebar-menu.borderTopRound": {
@@ -184,9 +184,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Announcement": "公告",
-                "Statements": "统计报表",
-                "Tutorial": "题解"
+                "Announcement": "게시판",
+                "Statements": "통계 보고서",
+                "Tutorial": "메모"
             }
         },
         ".second-level-menu": {
@@ -196,43 +196,43 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Problems": "问题",
-                "Submit Code": "提交代码",
-                "My Submissions": "我的提交",
-                "Status": "状态",
-                "Standings": "榜单",
-                "Adm.": "管理",
-                "Edit": "编辑",
-                "Custom Invocation": "自定义调试",
-                "Common standings": "全部排行",
-                "Friends standings": "只看朋友",
-                "Submit": "提交",
-                "Hacks": "黑客",
-                "Room": "房间",
-                "Custom test": "自定义测试",
-                "Blog": "博客",
-                "Teams": "队伍",
-                "Submissions": "提交记录",
-                "Groups": "团体",
-                "Rating": "评级",
-                "Friends rating": "朋友的评级",
-                "Favourites": "收藏",
-                "Contests": "比赛",
-                "Members": "成员",
-                "问题etting": "参与编写的问题",
-                "Streams": "直播",
-                "Gym": "训练营",
-                "Mashups": "组合混搭",
-                "Posts": "帖子",
-                "Comments": "回复",
-                "Main": "主要的",
-                "Settings": "设置",
-                "Lists": "列表",
-                "General": "基本",
-                "Sidebar": "侧边栏",
-                "Social": "社会信息",
-                "Address": "地址",
-                "Wallets": "钱包"
+                "Problems": "이슈",
+                "Submit Code": "코드 제출",
+                "My Submissions": "내 제출물",
+                "Status": "상태",
+                "Standings": "이름 목록",
+                "Adm.": "관리",
+                "Edit": "컴파일러",
+                "Custom Invocation": "사용자 지정 디버깅",
+                "Common standings": "모든 순위",
+                "Friends standings": "친구 전용.",
+                "Submit": "제출(보고서 등)",
+                "Hacks": "해커 (컴퓨팅) (외래어)",
+                "Room": "큐비클",
+                "Custom test": "사용자 지정 테스트",
+                "Blog": "블로그(외래어)",
+                "Teams": "대기열",
+                "Submissions": "기록 제출",
+                "Groups": "조직",
+                "Rating": "등급",
+                "Friends rating": "친구 평가",
+                "Favourites": "북마크(인터넷)",
+                "Contests": "대회(스포츠 등)",
+                "Members": "멤버",
+                "问题etting": "이슈 준비에 참여",
+                "Streams": "직접 인터넷 방송",
+                "Gym": "훈련 캠프",
+                "Mashups": "믹스 앤 매치(의류 등)",
+                "Posts": "카드",
+                "Comments": "반환(이전 조건으로)",
+                "Main": "스테이플",
+                "Settings": "설정",
+                "Lists": "리스팅",
+                "General": "기본",
+                "Sidebar": "사이드바(소프트웨어)",
+                "Social": "사회 보장(연금, 의료 보험)",
+                "Address": "주소",
+                "Wallets": "지갑"
             }
         },
         ".topic-toggle-collapse": {
@@ -242,7 +242,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Expand": "展开"
+                "Expand": "시작"
             }
         },
         ".topic-read-more": {
@@ -252,7 +252,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Full text and comments": "阅读全文/评论"
+                "Full text and comments": "자세히 보기/댓글 달기"
             }
         },
         ".toggleEditorCheckboxLabel": {
@@ -262,7 +262,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Switch off editor": "关闭编辑器语法高亮"
+                "Switch off editor": "편집기 구문 강조 표시 끄기"
             }
         },
         ".submit": {
@@ -272,7 +272,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Registration for the contest": "比赛报名"
+                "Registration for the contest": "대회 등록"
             }
         },
         "._FilterByTagsFrame_difficulty": {
@@ -282,7 +282,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Difficulty:": "难度:"
+                "Difficulty:": "난이도."
             }
         },
         "._FilterByTagsFrame_addTagLink": {
@@ -292,7 +292,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add tag": "添加标签"
+                "Add tag": "태그 추가"
             }
         },
         ".alert": {
@@ -302,9 +302,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "上一轮的评级变化暂时回滚。它们将很快恢复。",
-                "Reminder: in case of any technical issues, you can use the lightweight website": "提醒：如果出现任何技术问题，您可以使用轻量网站",
-                "Please subscribe to the official Codeforces channel in Telegram via the link ": "请通过链接订阅Codeforces的官方Telegram频道"
+                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "이전 라운드의 등급 변경 사항이 일시적으로 롤백되었습니다. 곧 복구될 예정입니다.",
+                "Reminder: in case of any technical issues, you can use the lightweight website": "알림：기술적인 문제가 발생하면 라이트웨이트 사이트를 이용할 수 있습니다.",
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "링크를 통해 코드포스의 공식 텔레그램 채널을 구독해 주세요!"
             }
         },
         ".lang-chooser": {
@@ -314,10 +314,10 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Enter": "登录",
-                "Register": "注册",
-                "Contest rating": "测试 rating",
-                "Logout": "退出登录"
+                "Enter": "로그인",
+                "Register": "등록",
+                "Contest rating": "테스트 평가",
+                "Logout": "로그아웃"
             }
         },
         ".userbox": {
@@ -327,19 +327,19 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Change photo": "更换图片",
-                "Contest rating": "比赛Rating",
-                "Contribution": "贡献",
-                "My friends": "我的好友",
-                "Change settings": "改变设置",
-                "Last visit": "最后访问",
-                "Registered": "注册于",
-                "Blog entries": "博客条目",
-                "comments": "评论",
-                "Write new entry": "编写新条目",
-                "View my talks": "查看我的私信",
-                "Talks": "私信",
-                "Send message": "发送消息"
+                "Change photo": "사진 교체",
+                "Contest rating": "레이싱",
+                "Contribution": "헌신",
+                "My friends": "내 가장 친한 친구.",
+                "Change settings": "설정 변경",
+                "Last visit": "마지막 액세스",
+                "Registered": "에 등록",
+                "Blog entries": "블로그 항목",
+                "comments": "해설",
+                "Write new entry": "새 항목 준비",
+                "View my talks": "내 비공개 메시지 보기",
+                "Talks": "비공개 편지",
+                "Send message": "메시지 보내기"
             }
         },
         "#vote-reset-filterDifficultyLowerBorder": {
@@ -349,7 +349,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Reset": "重置"
+                "Reset": "재프로비저닝"
             }
         },
         "#vote-reset-filterDifficultyUpperBorder": {
@@ -359,7 +359,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Reset": "重置"
+                "Reset": "재프로비저닝"
             }
         },
         ".alert.alert-info": {
@@ -369,8 +369,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "The problem statement has recently been changed.": "题目描述最近已被更改。",
-                "View the changes.": "查看更改"
+                "The problem statement has recently been changed.": "제목 설명이 최근 변경되었습니다.",
+                "View the changes.": "변경 사항 보기"
             }
         },
         ".enterPage": {
@@ -380,9 +380,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Fill in the form to login into Codeforces.": "填写表单以登录到Codeforces。",
-                "You can use": "你也可以使用",
-                "as an alternative way to enter.": "登录"
+                "Fill in the form to login into Codeforces.": "양식을 작성하여 코드포스에 로그인하세요.",
+                "You can use": "또한",
+                "as an alternative way to enter.": "로그인"
             }
         },
         ".notice.small": {
@@ -392,7 +392,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "\\* To view the complete list, click ": "* 要查看完整列表，请点击"
+                "\\* To view the complete list, click ": "* :: 전체 목록을 보려면 다음을 클릭하세요."
             }
         },
         ".setting-name": {
@@ -402,10 +402,10 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Contest type:": "比赛类型：",
-                "Rated:": "已评级：",
-                "Tried:": "已尝试",
-                "Substring:": "关键字"
+                "Contest type:": "대회 유형：",
+                "Rated:": "평가：",
+                "Tried:": "시도됨",
+                "Substring:": "키워드"
             }
         },
         ".by-form": {
@@ -415,10 +415,10 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Sort by:": "排序依据：",
-                "relevance": "相关",
-                "popularity": "热度",
-                "time": "时间"
+                "Sort by:": "정렬 기준：",
+                "relevance": "(통계) 상관관계",
+                "popularity": "단명하는 열정",
+                "time": "times"
             }
         },
         ".roundbox.borderTopRound": {
@@ -428,61 +428,61 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "如果您邀请用户参加此竞赛，则无论其可见性如何，该竞赛都将对用户可见。您可以使用以下链接分享比赛：",
-                "Generate link and share it with other users": "生成链接并与其他用户共享",
-                "Show Log »": "展示日志 »",
-                "Move all to practice »": "全部移至练习者 »",
-                "Remove All »": "移除全部 »",
-                "Add »": "添加 »",
-                "Set »": "设置 »",
-                "Download Archive »": "下载归档 »"
+                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "이 콘테스트에 사용자를 초대하면 해당 사용자의 공개 여부와 관계없이 콘테스트가 해당 사용자에게 표시됩니다. 다음 링크(：)를 사용하여 콘테스트를 공유할 수 있습니다.",
+                "Generate link and share it with other users": "링크를 생성하여 다른 사용자와 공유",
+                "Show Log »": "저널 표시 \"",
+                "Move all to practice »": "모두 실무자로 이동 \"",
+                "Remove All »": "모두 제거 \"",
+                "Add »": "추가\"",
+                "Set »": "설정 \"",
+                "Download Archive »": "아카이브 다운로드 \""
             }
         },
         ".caption.titled": {
             "class": [
                 ".caption.titled"
             ],
-            "description": "侧栏titled汉化",
+            "description": "중국어 제목의 사이드바",
             "isStrict": false,
             "rules": {
-                "Pay attention": "注意",
-                "Top rated": "评级排行",
-                "Top contributors": "贡献者排行",
-                "Find user": "查找用户",
-                "Recent actions": "最新动态",
-                "Training filter": "过滤筛选",
-                "Find training": "搜索比赛/问题",
-                "Virtual participation": "什么是虚拟参赛",
-                "Contest materials": "比赛相关资料",
-                "Settings": "设置",
-                "Create Mashup Contest": "创建混搭比赛",
-                "Clone Contest to Mashup": "克隆比赛到组合混搭",
-                "Invitations": "邀请",
-                "Status filter": "状态过滤器",
-                "Administration": "管理",
-                "Submit": "提交",
-                "Practice": "练习",
-                "Problem tags": "问题标签",
-                "Filter Problems": "过滤问题",
-                "Last unsolved": "上次未解决",
-                "Attention": "注意",
-                "Past contests filter": "过去的比赛筛选",
-                "About Contest": "关于比赛",
-                "Last submissions": "提交历史",
-                "Streams": "直播",
-                "Coach rights": "教练权限",
-                "Advices to fill address": "填写地址的建议",
-                "Hacks filter": "黑客过滤器",
-                "Score table": "评分表",
-                "Contests": "比赛",
-                "History": "编辑历史",
-                "Login into Codeforces": "登录 Codeforces",
-                "Export the judgment log to DAT-file": "导出判题日志为 DAT 文件",
-                "Contest managers": "比赛管理员",
-                "Contest writers": "比赛编写者",
-                "Spectator ranklists": "观众排名列表",
-                "Ghosts:": "幽灵选手",
-                "Export Submissions": "导出提交"
+                "Pay attention": "다음 사항에 유의하세요.",
+                "Top rated": "평점 순위",
+                "Top contributors": "기여자 순위",
+                "Find user": "사용자 찾기",
+                "Recent actions": "최신 뉴스",
+                "Training filter": "필터링 및 심사",
+                "Find training": "콘테스트/이슈 검색",
+                "Virtual participation": "가상 항목이란 무엇인가요?",
+                "Contest materials": "대회 관련 정보",
+                "Settings": "설정",
+                "Create Mashup Contest": "매시업 콘테스트 만들기",
+                "Clone Contest to Mashup": "클론 매치에서 콤보 매시업으로",
+                "Invitations": "초대장",
+                "Status filter": "상태 필터",
+                "Administration": "관리",
+                "Submit": "제출(보고서 등)",
+                "Practice": "운동",
+                "Problem tags": "질문 태그",
+                "Filter Problems": "필터링 문제",
+                "Last unsolved": "지난번에 해결되지 않음",
+                "Attention": "다음 사항에 유의하세요.",
+                "Past contests filter": "지난 경기 심사",
+                "About Contest": "대회 정보",
+                "Last submissions": "제출 기록",
+                "Streams": "직접 인터넷 방송",
+                "Coach rights": "코칭 권한",
+                "Advices to fill address": "주소 입력을 위한 제안 사항",
+                "Hacks filter": "해커 필터",
+                "Score table": "평가 척도",
+                "Contests": "대회(스포츠 등)",
+                "History": "편집 역사",
+                "Login into Codeforces": "코드포스에 로그인",
+                "Export the judgment log to DAT-file": "심사 로그를 DAT 파일로 내보내기",
+                "Contest managers": "콘테스트 관리자",
+                "Contest writers": "공모전 작가",
+                "Spectator ranklists": "관객 순위 목록",
+                "Ghosts:": "고스트 플레이어",
+                "Export Submissions": "내보내기 제출"
             }
         },
         "QuestionFilter1": {
@@ -490,19 +490,19 @@
                 "#gym-filter-form div label",
                 "#gym-filter-form div"
             ],
-            "description": "题目过滤器选项汉化",
+            "description": "제목 필터 옵션 처리",
             "isStrict": false,
             "rules": {
-                "Contest type:": "比赛类型:",
-                "ICPC region:": "ICPC地区:",
-                "Contest format:": "比赛形式:",
-                "Order by:": "排序方式:",
-                "Secondary order by:": "次要排序方式:",
-                "Hide, if participated:": "隐藏我参加过的:",
-                "Hide excluded gyms": "隐藏已排除的:",
-                "Season:": "时间范围（年度）",
-                "Duration, hours:": "持续时间（小时）:",
-                "Difficulty:": "难度:"
+                "Contest type:": "경쟁 유형.",
+                "ICPC region:": "ICPC 지역.",
+                "Contest format:": "경쟁 형식.",
+                "Order by:": "정렬 기준.",
+                "Secondary order by:": "보조 주문.",
+                "Hide, if participated:": "내가 참여한 것을 숨깁니다.",
+                "Hide excluded gyms": "제외된 숨기기.",
+                "Season:": "기간(연간)",
+                "Duration, hours:": "기간(시간).",
+                "Difficulty:": "난이도."
             }
         },
         "QuestionFilter2": {
@@ -513,27 +513,27 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Official ACM-ICPC Contest": "ICPC官方比赛",
-                "Official School Contest": "学校官方比赛",
-                "Opencup Contest": "Opencup比赛",
-                "School/University/City/Region Championship": "学校/大学/城市/地区锦标赛",
-                "Training Camp Contest": "训练营比赛",
-                "Official International Personal Contest": "官方国际个人赛",
-                "Training Contest": "训练比赛",
-                "ID_ASC": "创建时间（升序）",
-                "ID_DESC": "创建时间（降序）",
-                "RATING_ASC": "评分（升序）",
-                "RATING_DESC": "评分（降序）",
-                "DIFFICULTY_ASC": "难度（升序）",
-                "DIFFICULTY_DESC": "难度（降序）",
-                "START_TIME_ASC": "开始时间（升序）",
-                "START_TIME_DESC": "开始时间（降序）",
-                "DURATION_ASC": "持续时间（升序）",
-                "DURATION_DESC": "持续时间（降序）",
-                "POPULARITY_ASC": "热度（升序）",
-                "POPULARITY_DESC": "热度（降序）",
-                "UPDATE_TIME_ASC": "更新时间（升序）",
-                "UPDATE_TIME_DESC": "更新时间（降序）"
+                "Official ACM-ICPC Contest": "ICPC 공식 대회",
+                "Official School Contest": "공식 학교 대회",
+                "Opencup Contest": "오픈컵 대회",
+                "School/University/City/Region Championship": "학교/대학/도시/지역 챔피언십",
+                "Training Camp Contest": "훈련 캠프 경쟁",
+                "Official International Personal Contest": "공식 국제 개인전",
+                "Training Contest": "트레이닝 경기",
+                "ID_ASC": "생성 시간(오름차순)",
+                "ID_DESC": "생성 시간(내림차순)",
+                "RATING_ASC": "등급(오름차순)",
+                "RATING_DESC": "등급(내림차순)",
+                "DIFFICULTY_ASC": "난이도(오름차순)",
+                "DIFFICULTY_DESC": "난이도(내림차순)",
+                "START_TIME_ASC": "시작 시간(오름차순)",
+                "START_TIME_DESC": "시작 시간(내림차순)",
+                "DURATION_ASC": "기간(오름차순)",
+                "DURATION_DESC": "기간(내림차순)",
+                "POPULARITY_ASC": "열(오름차순)",
+                "POPULARITY_DESC": "열(내림차순)",
+                "UPDATE_TIME_ASC": "업데이트 시간(오름차순)",
+                "UPDATE_TIME_DESC": "업데이트 시간(내림차순)"
             }
         },
         "CompetitionFilter": {
@@ -541,35 +541,35 @@
                 ".options li label",
                 ".CaptionCont span"
             ],
-            "description": "比赛过滤器选项汉化",
+            "description": "인종 필터 옵션 중국어",
             "isStrict": false,
             "rules": {
-                "Educational": "教育性",
-                "Global": "全球",
-                "VK Cup": "VK杯",
-                "Long Rounds": "长期回合",
-                "April Fools": "愚人节",
-                "Team Contests": "团队比赛",
-                "ICPC Scoring": "ICPC计分",
+                "Educational": "유익한 정보",
+                "Global": "전 세계",
+                "VK Cup": "VK컵",
+                "Long Rounds": "오랜 기간",
+                "April Fools": "만우절",
+                "Team Contests": "팀 경쟁",
+                "ICPC Scoring": "ICPC 점수",
                 "Doesn't matter": "----",
-                "Any": "所有",
-                "Yes": "是",
-                "No": "否",
-                "No submission(s)": "无提交",
-                "Have submission(s)": "有提交",
-                "No solved problem(s)": "无解决问题",
-                "Have solved problem(s)": "有解决问题"
+                "Any": "소유권",
+                "Yes": "be",
+                "No": "막힘",
+                "No submission(s)": "제출하지 않음",
+                "Have submission(s)": "제출됨",
+                "No solved problem(s)": "문제 해결 없음",
+                "Have solved problem(s)": "문제 해결."
             }
         },
         "RightSidebox": {
             "class": [
                 ".sidebox div label"
             ],
-            "description": "右侧sidebox汉化",
+            "description": "오른쪽 사이드박스 중국어",
             "isStrict": false,
             "rules": {
-                "Show tags for unsolved problems": "显示未解决问题的标签",
-                "Hide solved problems": "隐藏已解决的问题"
+                "Show tags for unsolved problems": "해결되지 않은 문제에 대한 레이블 표시",
+                "Hide solved problems": "해결된 문제 숨기기"
             }
         },
         "FormField-name": {
@@ -579,22 +579,22 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Postal/zip code": "邮政编码/邮编",
-                "Country (English)": "国家（英文）",
-                "State (English)": "州/省份（英文）",
-                "City (English)": "城市（英文）",
-                "Address (English)": "地址（英文）",
-                "Recipient (English)": "收件人姓名（英文）",
-                "Country (Native)": "国家（本地语言）",
-                "State (Native)": "州/省份（本地语言）",
-                "City (Native)": "城市（本地语言）",
-                "Address (Native)": "地址（本地语言）",
-                "Recipient (Native)": "收件人姓名（本地语言）",
-                "Phone": "电话",
-                "TON Wallet:": "TON 钱包:",
-                "Secret Code:": "验证码:",
-                "Terms of agreement:": "协议条款:",
-                "Choose team:": "选择团队:"
+                "Postal/zip code": "우편/우편 번호",
+                "Country (English)": "국가(영어)",
+                "State (English)": "주/도(영어)",
+                "City (English)": "도시 (영어)",
+                "Address (English)": "주소(영어)",
+                "Recipient (English)": "수신자 이름(영문)",
+                "Country (Native)": "국가(현지 언어)",
+                "State (Native)": "주/도(모국어)",
+                "City (Native)": "도시(현지 언어)",
+                "Address (Native)": "주소(현지 언어)",
+                "Recipient (Native)": "수신자 이름(현지 언어)",
+                "Phone": "전화",
+                "TON Wallet:": "톤 월렛.",
+                "Secret Code:": "캡차.",
+                "Terms of agreement:": "계약 조건.",
+                "Choose team:": "팀을 선택합니다."
             }
         },
         "QuestionTag": {
@@ -607,163 +607,163 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "combine tags by OR": "按逻辑或组合我选择的标签",
-                "combine-tags-by-or": "按逻辑或组合我选择的标签（combine-tags-by-or）",
-                "2-sat": "二分图可满足性问题（2-sat）",
-                "binary search": "二分搜索（binary search）",
-                "bitmasks": "位掩码（bitmasks）",
-                "brute force": "暴力枚举（brute force）",
-                "chinese remainder theorem": "中国剩余定理（chinese remainder theorem）",
-                "combinatorics": "组合数学（combinatorics）",
-                "constructive algorithms": "构造算法（constructive algorithms）",
-                "data structures": "数据结构（data structures）",
-                "dfs and similar": "深度优先搜索及其变种（dfs and similar）",
-                "divide and conquer": "分治算法（divide and conquer）",
-                "dp": "动态规划（dp）",
-                "dsu": "并查集（dsu）",
-                "expression parsing": "表达式解析（expression parsing）",
-                "fft": "快速傅里叶变换（fft）",
-                "flows": "流（flows）",
-                "games": "博弈论（games）",
-                "geometry": "计算几何（geometry）",
-                "graph matchings": "图匹配（graph matchings）",
-                "graphs": "图论（graphs）",
-                "greedy": "贪心策略（greedy）",
-                "hashing": "哈希表（hashing）",
-                "implementation": "实现问题，编程技巧，模拟（implementation）",
-                "interactive": "交互性问题（interactive）",
-                "math": "数学（math）",
-                "matrices": "矩阵（matrices）",
-                "meet-in-the-middle": "meet-in-the-middle算法（meet-in-the-middle）",
-                "number theory": "数论（number theory）",
-                "probabilities": "概率论（probabilities）",
-                "schedules": "调度算法（schedules）",
-                "shortest paths": "最短路算法（shortest paths）",
-                "sortings": "排序算法（sortings）",
-                "string suffix structures": "字符串后缀结构（string suffix structures）",
-                "strings": "字符串处理（strings）",
-                "ternary search": "三分搜索（ternary search）",
-                "trees": "树形结构（trees）",
-                "two pointers": "双指针算法（two pointers）"
+                "combine tags by OR": "논리 또는 내가 선택한 조합으로 레이블 지정하기",
+                "combine-tags-by-or": "내가 선택한 태그를 논리 또는 (결합-태그-기준 또는)으로 결합하기",
+                "2-sat": "이분 그래프 만족도 문제 (2 수능)",
+                "binary search": "이진 검색",
+                "bitmasks": "비트 마스크",
+                "brute force": "무차별 강제 열거.",
+                "chinese remainder theorem": "중국 나머지 정리(中国剩余定理)",
+                "combinatorics": "조합학",
+                "constructive algorithms": "건설적 알고리즘(건설적 알고리즘)",
+                "data structures": "데이터 구조",
+                "dfs and similar": "심도 우선 검색 및 그 변형(DFS 및 유사)",
+                "divide and conquer": "분할 및 정복 알고리즘.",
+                "dp": "동적 프로그래밍(dp)",
+                "dsu": "병렬 검색 세트(DSU)",
+                "expression parsing": "표현식 구문 분석",
+                "fft": "고속 푸리에 변환(fft)",
+                "flows": "흐름",
+                "games": "게임 이론(게임)",
+                "geometry": "계산 기하학",
+                "graph matchings": "그래프 매칭",
+                "graphs": "그래프 이론(그래프)",
+                "greedy": "욕심쟁이",
+                "hashing": "해시 테이블(해싱)",
+                "implementation": "구현 문제, 프로그래밍 기술, 시뮬레이션(구현)",
+                "interactive": "상호 작용 문제(대화형)",
+                "math": "수학(수학)",
+                "matrices": "행렬",
+                "meet-in-the-middle": "중간에서 만나기 알고리즘(중간에서 만나기)",
+                "number theory": "수 이론",
+                "probabilities": "확률",
+                "schedules": "스케줄링 알고리즘(일정)",
+                "shortest paths": "최단 경로 알고리즘(최단 경로)",
+                "sortings": "정렬 알고리즘(정렬)",
+                "string suffix structures": "문자열 접미사 구조",
+                "strings": "문자열 처리(문자열)",
+                "ternary search": "삼항식 검색",
+                "trees": "트리 구조(나무)",
+                "two pointers": "두 개의 포인터 알고리즘(두 개의 포인터)"
             }
         },
         "SettingField-name": {
             "class": [
                 ".field-name"
             ],
-            "description": "设置页中的字段",
+            "description": "페이지에서 필드 설정",
             "isStrict": false,
             "rules": {
-                "Hide sidebar block \"Find user\"": "隐藏侧边栏块“查找用户”",
-                "Hide sidebar block \"Current user\"": "隐藏侧边栏块“当前用户”",
-                "Hide sidebar block \"Recent аctions\"": "隐藏侧边栏块“最新动态”",
-                "Hide sidebar block \"Favourite groups\"": "隐藏侧边栏块“收藏组”",
-                "Hide sidebar block \"Top contributors\"": "隐藏侧边栏块“贡献者排行”",
-                "Hide sidebar block \"Top rated\"": "隐藏侧边栏块“评级排行”",
-                "Hide sidebar block \"Streams\"": "隐藏侧边栏块“直播”",
-                "Old password": "旧密码",
-                "New password": "新密码",
-                "Confirm new password": "确认新密码",
-                "Contest email notification": "比赛邮件通知",
-                "Send email on new user talk": "在有新用户对话时发送电子邮件",
-                "Send email on new comment": "在有新评论时发送电子邮件",
-                "Hide contact information": "隐藏联系人信息",
-                "Remember me by Gmail, Facebook and etc": "通过 Gmail、Facebook 等记住我",
-                "Show tags for unsolved problems": "显示未解决问题的标签",
-                "Hide solved problems from problemset": "从问题集中隐藏已解决的问题",
-                "Hide low rated blogs": "隐藏评级较低的博客",
-                "Offer to publish great rating rises": "提供展示Rating显著提升的机会",
-                "Enforce https": "强制 HTTPS",
-                "Show private activity in the profile": "在个人资料中显示私人活动",
-                "Show diagnostics": "显示诊断信息"
+                "Hide sidebar block \"Find user\"": "사이드바 블록 '사용자 찾기'를 숨깁니다.",
+                "Hide sidebar block \"Current user\"": "사이드바 블록 '현재 사용자'를 숨깁니다.",
+                "Hide sidebar block \"Recent аctions\"": "사이드바에서 '새로운 소식' 블록을 숨깁니다.",
+                "Hide sidebar block \"Favourite groups\"": "사이드바 블록 '즐겨찾는 그룹'을 숨깁니다.",
+                "Hide sidebar block \"Top contributors\"": "사이드바 블록 \"기여자 순위\"를 숨깁니다.",
+                "Hide sidebar block \"Top rated\"": "사이드바 블록 \"평점 순위\"를 숨깁니다.",
+                "Hide sidebar block \"Streams\"": "사이드바 블록 \"라이브\" 숨기기",
+                "Old password": "이전 비밀번호",
+                "New password": "새 비밀번호",
+                "Confirm new password": "새 비밀번호 확인",
+                "Contest email notification": "대회 이메일 알림",
+                "Send email on new user talk": "새 사용자 대화가 있을 때 이메일 보내기",
+                "Send email on new comment": "새 댓글이 추가되면 이메일 보내기",
+                "Hide contact information": "연락처 정보 숨기기",
+                "Remember me by Gmail, Facebook and etc": "Gmail, Facebook 등에서 저를 기억하세요.",
+                "Show tags for unsolved problems": "해결되지 않은 문제에 대한 레이블 표시",
+                "Hide solved problems from problemset": "문제 세트에서 해결된 문제 숨기기",
+                "Hide low rated blogs": "평점이 낮은 블로그 숨기기",
+                "Offer to publish great rating rises": "등급이 크게 개선되었음을 입증할 수 있는 기회 제공",
+                "Enforce https": "HTTPS 강제 적용",
+                "Show private activity in the profile": "프로필에 비공개 활동 표시",
+                "Show diagnostics": "진단 정보 표시"
             }
         },
         "CloneContestFormField": {
             "class": [
                 ".field-name"
             ],
-            "description": "克隆比赛到虚拟混搭设置表单",
+            "description": "가상 매시업 설정 양식에 대한 복제 콘테스트",
             "isStrict": false,
             "rules": {
-                "Problem:": "题目:",
-                "Language:": "语言:",
-                "Source code:": "源代码:",
-                "Or choose file:": "或者选择文件:",
-                "Choose file:": "选择文件:",
-                "Notice:": "注意:",
-                "virtual participation:": "虚拟参与:",
-                "Registration for the contest:": "比赛报名:",
-                "Take part:": "参与:",
-                "as individual participant:": "作为个人参与者:",
-                "as a team member:": "作为团队成员:",
-                "Virtual start time:": "虚拟开始时间:",
-                "Complete problemset:": "完整的问题集:",
-                "First name \\(English\\)": "名字（英文）",
-                "Last name \\(English\\)": "姓氏（英文）",
-                "First name \\(Native\\)": "名字（本地语言）",
-                "Last name \\(Native\\)": "姓氏（本地语言）",
-                "Birth date": "出生日期",
-                "Country": "国家",
-                "City": "城市",
-                "Organization": "组织",
-                "Handle/Email": "账号/邮箱",
-                "Password": "密码",
-                "Training name \\(English\\):": "训练名称（英文）:",
-                "Training name \\(Russian\\):": "训练名称（俄语）:",
-                "Contest format:": "比赛格式:",
-                "Start time:": "开始时间:",
-                "Duration:": "持续时间:",
-                "Visibility:": "可见性:",
-                "Attach parent contest\\?:": "关联父级比赛?",
-                "Participation type:": "参与类型:",
-                "Freeze period:": "冻结期间:",
-                "Unfreeze time:": "解冻时间:",
-                "Is practice allowed\\?:": "是否允许练习?",
-                "Is virtual allowed\\?:": "是否允许虚拟参赛?",
-                "Is out of competition allowed\\?:": "是否允许非竞赛参赛?",
-                "Is self-registration allowed\\?:": "是否允许自助注册?",
-                "Can non-registered view the contest\\?:": "未注册用户能否查看比赛?",
-                "Can participants view common status\\?:": "参赛选手能否查看共享状态?",
-                "Contest testdata policy:": "比赛测试数据策略:",
-                "Allow view other submissions to:": "允许查看其他提交给:",
-                "Manage program languages:": "管理编程语言:",
-                "Use time limits scaling policy\\?:": "使用时间限制缩放策略?",
-                "Allow statements\\?:": "允许查看题目描述?",
-                "Allow standings\\?:": "允许查看排名?",
-                "Season:": "季节:",
-                "Contest type:": "比赛类型:",
-                "ICPC region:": "ICPC 地区:",
-                "Country:": "国家:",
-                "City:": "城市:",
-                "Contest difficulty:": "比赛难度:",
-                "Website URL:": "网站链接:",
-                "Description \\(English\\):": "描述（英文）:",
-                "Description \\(Russian\\):": "描述（俄语）:",
-                "Registration confirmation text \\(English\\):": "注册确认文字（英文）:",
-                "Registration confirmation text \\(Russian\\):": "注册确认文字（俄语）:",
-                "Logo \\(English\\):": "徽标（英文）:",
-                "Logo \\(Russian\\):": "徽标（俄语）:",
-                "End time:": "结束时间:",
-                "Name:": "名称:",
-                "Contest\\(s\\):": "比赛（们）:",
-                "Add contest:": "添加比赛:",
-                "Show Contestants:": "显示参赛选手:",
-                "Show Out of Competition Participants:": "显示非竞赛参与者:",
-                "Show Practices:": "显示练习:",
-                "Show Virtuals:": "显示虚拟选手:",
-                "Show Ghosts:": "显示幽灵选手:",
-                "Text:": "文本:",
-                "Rewrite Examples:": "重写样例:",
-                "Add images:": "添加图片:",
-                "Do not use:": "不使用:",
-                "Problem short name:": "题目简称:",
-                "Source problem:": "源问题:",
-                "Problem name \\(English\\):": "题目名称（英文）:",
-                "Input file name:": "输入文件名:",
-                "Output file name:": "输出文件名:",
-                "Time Limit:": "时间限制:",
-                "Memory Limit:": "内存限制:",
-                "Output only:": "仅输出:"
+                "Problem:": "제목.",
+                "Language:": "언어.",
+                "Source code:": "소스 코드.",
+                "Or choose file:": "또는 파일을 선택합니다.",
+                "Choose file:": "파일을 선택합니다.",
+                "Notice:": "주의.",
+                "virtual participation:": "가상 참여.",
+                "Registration for the contest:": "레이스 참가.",
+                "Take part:": "참여.",
+                "as individual participant:": "개별 참가자로서.",
+                "as a team member:": "팀원으로서.",
+                "Virtual start time:": "가상 시작 시간.",
+                "Complete problemset:": "전체 질문 세트.",
+                "First name \\(English\\)": "이름 (영어)",
+                "Last name \\(English\\)": "성 (영어)",
+                "First name \\(Native\\)": "이름(현지 언어)",
+                "Last name \\(Native\\)": "성(현지 언어)",
+                "Birth date": "생년월일",
+                "Country": "국가",
+                "City": "지자체",
+                "Organization": "조직",
+                "Handle/Email": "계정 번호/이메일",
+                "Password": "암호화",
+                "Training name \\(English\\):": "교육 이름(영어).",
+                "Training name \\(Russian\\):": "교육 이름(러시아어).",
+                "Contest format:": "경쟁 형식.",
+                "Start time:": "시작 시간.",
+                "Duration:": "지속 시간.",
+                "Visibility:": "가시성.",
+                "Attach parent contest\\?:": "연관된 사이어 매치?",
+                "Participation type:": "참여 유형.",
+                "Freeze period:": "동결 기간.",
+                "Unfreeze time:": "해동 시간.",
+                "Is practice allowed\\?:": "연습이 허용되나요?",
+                "Is virtual allowed\\?:": "가상 출품이 허용되나요?",
+                "Is out of competition allowed\\?:": "비경쟁 출품작도 허용되나요?",
+                "Is self-registration allowed\\?:": "셀프 등록이 가능한가요?",
+                "Can non-registered view the contest\\?:": "등록하지 않은 사용자도 대회를 볼 수 있나요?",
+                "Can participants view common status\\?:": "참가자가 공유 상태를 확인할 수 있나요?",
+                "Contest testdata policy:": "매치 테스트 데이터 전략.",
+                "Allow view other submissions to:": "다른 제출물을 볼 수 있도록 허용합니다.",
+                "Manage program languages:": "관리형 프로그래밍 언어.",
+                "Use time limits scaling policy\\?:": "시간 제한 확장 정책을 사용하시나요?",
+                "Allow statements\\?:": "제목 설명을 볼 수 있도록 허용하시겠습니까?",
+                "Allow standings\\?:": "순위 보기를 허용하시겠습니까?",
+                "Season:": "시즌.",
+                "Contest type:": "경쟁 유형.",
+                "ICPC region:": "ICPC 지역.",
+                "Country:": "국가.",
+                "City:": "도시.",
+                "Contest difficulty:": "종족 난이도.",
+                "Website URL:": "웹 링크.",
+                "Description \\(English\\):": "설명 (영어).",
+                "Description \\(Russian\\):": "설명(러시아어).",
+                "Registration confirmation text \\(English\\):": "등록 확인 텍스트(영어).",
+                "Registration confirmation text \\(Russian\\):": "등록 확인 텍스트(러시아어).",
+                "Logo \\(English\\):": "로고(영어).",
+                "Logo \\(Russian\\):": "로고(러시아어).",
+                "End time:": "종료 시간.",
+                "Name:": "이름.",
+                "Contest\\(s\\):": "경쟁.",
+                "Add contest:": "콘테스트 추가.",
+                "Show Contestants:": "참가자를 표시합니다.",
+                "Show Out of Competition Participants:": "비경쟁 참가자를 표시합니다.",
+                "Show Practices:": "운동 표시.",
+                "Show Virtuals:": "가상 플레이어 표시.",
+                "Show Ghosts:": "고스트 플레이어 표시.",
+                "Text:": "텍스트.",
+                "Rewrite Examples:": "샘플을 다시 작성합니다.",
+                "Add images:": "이미지를 추가합니다.",
+                "Do not use:": "사용되지 않음.",
+                "Problem short name:": "제목 약어입니다.",
+                "Source problem:": "소스 문제.",
+                "Problem name \\(English\\):": "제목(영문).",
+                "Input file name:": "파일 이름을 입력합니다.",
+                "Output file name:": "출력 파일 이름입니다.",
+                "Time Limit:": "시간 제한.",
+                "Memory Limit:": "메모리 제한.",
+                "Output only:": "출력 전용입니다."
             }
         },
         ".ask-question-link": {
@@ -773,7 +773,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Ask a question": "提一个问题"
+                "Ask a question": "질문하기."
             }
         },
         "add-announcement-link": {
@@ -783,7 +783,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add announcement": "添加公告"
+                "Add announcement": "공지 사항 추가"
             }
         },
         "demo": {
@@ -802,28 +802,28 @@
             "class": [
                 "input[type='submit']"
             ],
-            "description": "submit汉化",
+            "description": "중국어 제출",
             "isStrict": false,
             "rules": {
-                "Register for virtual participation": "报名虚拟参赛",
-                "Register for practice": "登录以开始练习",
-                "Apply": "应用",
-                "Register": "报名",
-                "Login": "登录",
-                "Run": "运行",
-                "Start virtual contest": "开始虚拟参赛",
-                "Manage invitations": "管理邀请",
-                "Disable manager mode": "临时关闭管理模式",
-                "Enable manager mode": "开启管理模式",
-                "Clone Contest": "克隆比赛",
-                "Submit": "提交",
-                "Save changes": "保存设置",
-                "Filter": "过滤",
-                "Find": "查找",
-                "Save": "保存",
-                "Create Mashup Contest": "创建混搭比赛",
-                "Delete problem": "删除问题",
-                "Restore problem": "恢复问题"
+                "Register for virtual participation": "가상 참가 신청하기",
+                "Register for practice": "로그인하여 연습 시작하기",
+                "Apply": "어플라이언스",
+                "Register": "이름 입력",
+                "Login": "로그인",
+                "Run": "움직이고 있음",
+                "Start virtual contest": "가상 입장 시작",
+                "Manage invitations": "경영진 초대",
+                "Disable manager mode": "관리 모드 임시 종료",
+                "Enable manager mode": "개방형 관리 모드",
+                "Clone Contest": "복제 경쟁",
+                "Submit": "제출(보고서 등)",
+                "Save changes": "설정 저장",
+                "Filter": "필터링",
+                "Find": "찾기",
+                "Save": "(파일 등) 저장(컴퓨팅)",
+                "Create Mashup Contest": "매시업 콘테스트 만들기",
+                "Delete problem": "질문 삭제하기",
+                "Restore problem": "복구 문제"
             }
         },
         "InputButton": {
@@ -833,9 +833,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Reset": "重置",
-                "Delete contest": "删除比赛",
-                "Preview": "预览"
+                "Reset": "재프로비저닝",
+                "Delete contest": "경기 삭제",
+                "Preview": "미리 보기"
             }
         }
     }
