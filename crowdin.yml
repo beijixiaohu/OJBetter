@@ -1,0 +1,9 @@
+files:
+  - source: /
+    ignore:
+      - /OJ
+      - tools
+      - .gitignore
+      - LICENSE
+      - /i18
+    translation: /i18n/%locale%/%file_name%-%locale%.%file_extension%
