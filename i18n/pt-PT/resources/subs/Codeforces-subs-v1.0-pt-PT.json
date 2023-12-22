@@ -7,41 +7,41 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "参加虚拟重现赛",
-                "Enter": "进入",
-                "Current standings": "当前榜单",
-                "Final standings": "最终榜单",
-                "Preliminary results": "初步结果",
-                "open hacking:": "开放黑客攻击中",
-                "School/University/City/Region Championship": "学校/大学/城市/区域比赛",
-                "Official School Contest": "学校官方比赛",
-                "Training Contest": "训练赛",
-                "Training Camp Contest": "训练营比赛",
-                "Official ICPC Contest": "ICPC官方比赛",
-                "Official International Personal Contest": "官方国际个人赛",
-                "China": "中国",
-                "Statements": "题目描述",
-                "in Chinese": "中文",
-                "Trainings": "训练",
-                "Prepared by": "编写人",
-                "Current or upcoming contests": "当前或即将举行的比赛",
-                "Rating: users participated in recent 6 months": "评级：最近 6 个月有参与的用户",
-                "Past contests": "过去的比赛",
-                "Exclusions": "排除",
-                "Before start": "距比赛开始还有",
-                "Before registration": "距报名开始还有",
-                "Until closing ": "距报名结束还有",
-                "Before extra registration": "额外报名还未开始",
-                "Register »": "报名 »",
-                "Registration completed": "已报名",
-                "Registration closed": "报名已结束",
-                "Problems": "问题集",
-                "My Submissions": "我的提交",
-                "Standings": "榜单",
-                "Questions about problems": "关于问题的提问",
-                "Contest status": "比赛状态",
-                "Invited users": "邀请的用户",
-                "Invitation links": "邀请链接"
+                "Virtual participation": "Participe no torneio de reconstituição virtual",
+                "Enter": "entrar em",
+                "Current standings": "Lista atual",
+                "Final standings": "Lista final",
+                "Preliminary results": "Resultados preliminares",
+                "open hacking:": "Hacking aberto",
+                "School/University/City/Region Championship": "Concursos escolares/universitários/cidades/regionais",
+                "Official School Contest": "Concursos escolares oficiais",
+                "Training Contest": "jogo de treino",
+                "Training Camp Contest": "Competição do Campo de Treino",
+                "Official ICPC Contest": "Concurso oficial ICPC",
+                "Official International Personal Contest": "Concurso Internacional Individual Oficial",
+                "China": "sino",
+                "Statements": "Título Descrição",
+                "in Chinese": "Chinês",
+                "Trainings": "comboio",
+                "Prepared by": "autor",
+                "Current or upcoming contests": "Concursos actuais ou futuros",
+                "Rating: users participated in recent 6 months": "Classificação：Utilizadores que participaram nos últimos 6 meses",
+                "Past contests": "Jogos anteriores",
+                "Exclusions": "excluir",
+                "Before start": "Faltam alguns minutos para o início da corrida.",
+                "Before registration": "Ainda há tempo para a abertura das inscrições",
+                "Until closing ": "Ainda há tempo para encerrar o registo",
+                "Before extra registration": "O registo suplementar ainda não está aberto",
+                "Register »": "Inscrição \"",
+                "Registration completed": "Inscrito",
+                "Registration closed": "As inscrições estão encerradas",
+                "Problems": "questionário",
+                "My Submissions": "A minha submissão",
+                "Standings": "lista de nomes",
+                "Questions about problems": "Perguntas sobre questões",
+                "Contest status": "estado do jogo",
+                "Invited users": "Utilizadores convidados",
+                "Invitation links": "Ligação de convite"
             }
         },
         ".menu-list.main-menu-list": {
@@ -51,17 +51,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Home": "主页",
-                "Top": "热门",
-                "Catalog": "指南目录",
-                "Contests": "比赛",
-                "Gym": "训练营",
-                "Problemset": "题单",
-                "Groups": "团体",
-                "Rating": "Rating(评级)排行榜",
-                "Edu": "培训",
-                "Calendar": "日历",
-                "Help": "帮助"
+                "Home": "página inicial",
+                "Top": "em voga",
+                "Catalog": "Catálogo de guias",
+                "Contests": "competição (desporto, etc.)",
+                "Gym": "campo de treino",
+                "Problemset": "questionário",
+                "Groups": "organizações",
+                "Rating": "Classificação das classificações",
+                "Edu": "cultivar",
+                "Calendar": "calendário",
+                "Help": "mão"
             }
         },
         ".nav-links": {
@@ -71,14 +71,14 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Settings": "设置",
-                "Blog": "博客",
-                "Teams": "队伍",
-                "Submissions": "提交",
-                "Favourites": "收藏",
-                "Problemsetting": "问题设置",
-                "Talks": "私信",
-                "Contests": "比赛"
+                "Settings": "preparar",
+                "Blog": "blogue (palavra emprestada)",
+                "Teams": "fila",
+                "Submissions": "apresentar (um relatório, etc.)",
+                "Favourites": "marcador (Internet)",
+                "Problemsetting": "Definição do problema",
+                "Talks": "carta privada",
+                "Contests": "competição (desporto, etc.)"
             }
         },
         ".contest-state-phase": {
@@ -88,8 +88,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Before contest": "即将进行的比赛",
-                "Contest is running": "比赛进行中"
+                "Before contest": "próximo concurso",
+                "Contest is running": "Jogo em curso"
             }
         },
         ".notice": {
@@ -99,26 +99,26 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "has extra registration": "有额外的报名时期",
-                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "如果您在比赛开始前5分钟前还未报名，您可以在额外的报名期间稍后报名。额外的报名将在比赛开始后10分钟开放，并持续25分钟。",
-                "in timezone ([^)]*)": "$1 时区",
-                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "比赛结束后将允许虚拟参赛。将此字段留空以允许随时进行虚拟参赛",
-                "Contest duration in minutes": "比赛持续时间（分钟）",
-                "or choose": "或选择",
-                "Standings freeze period in minutes": "榜单冻结时间（分钟）",
-                "Time when final results are available": "最终结果可用时间",
-                "Is it allowed to solve contest problems unofficially after the end": "比赛结束后是否允许非官方解决比赛问题",
-                "Is it allowed to run contest as virtual after the end": "比赛结束后是否允许虚拟参赛",
-                "Is it allowed participate in contest out of competition": "是否允许非竞赛参赛",
-                "Are participants allowed to register for the contest themselves": "是否允许参赛者自行报名",
-                "Can non-registered users and anonyms view contest standings, problems and other statistics": "是否允许未注册用户和匿名用户查看比赛榜单、问题和其他统计信息",
-                "If unchecked they will view only personal status": "如果未选中，他们将只能查看个人状态",
-                "To manage allowed program languages": "管理允许的编程语言",
-                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "系统将自动调整某些语言的时间限制。仅建议用于教育目的。",
-                "Check it if you want to allow contestants view statements": "如果允许参赛者查看题目描述，请勾选此项",
-                "Check it if contestants can view standings": "如果允许参赛者查看榜单，请勾选此项",
-                "Where the contest was held originally": "比赛原本举办的地点",
-                "Official contest site URL": "官方比赛网站URL"
+                "has extra registration": "Existem períodos de inscrição adicionais",
+                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "Se não se tiver inscrito até 5 minutos antes do início da corrida, pode inscrever-se mais tarde durante o período de inscrição suplementar. As inscrições suplementares serão abertas 10 minutos após o início da corrida e terão uma duração de 25 minutos.",
+                "in timezone ([^)]*)": "1 Fuso horário",
+                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "As participações virtuais serão permitidas após o fim do concurso. Deixe este campo em branco para permitir entradas virtuais em qualquer altura",
+                "Contest duration in minutes": "Duração do jogo (minutos)",
+                "or choose": "ou seleccione",
+                "Standings freeze period in minutes": "Tempo de congelamento da lista (minutos)",
+                "Time when final results are available": "Tempo disponível para os resultados finais",
+                "Is it allowed to solve contest problems unofficially after the end": "Se é permitida a resolução não oficial de questões do jogo após o seu termo",
+                "Is it allowed to run contest as virtual after the end": "Se são permitidas inscrições virtuais após o concurso",
+                "Is it allowed participate in contest out of competition": "Se são permitidas inscrições não competitivas",
+                "Are participants allowed to register for the contest themselves": "Se os participantes estão autorizados a registar-se a si próprios",
+                "Can non-registered users and anonyms view contest standings, problems and other statistics": "Se deve permitir que utilizadores não registados e anónimos vejam as tabelas de classificação das corridas, perguntas e outras estatísticas",
+                "If unchecked they will view only personal status": "Se não estiver selecionado, só poderá ver os estados individuais",
+                "To manage allowed program languages": "Gerir as linguagens de programação permitidas",
+                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "O sistema ajustará automaticamente o limite de tempo para determinadas línguas. Recomendado apenas para fins educativos.",
+                "Check it if you want to allow contestants view statements": "Assinale esta caixa se pretender que o participante possa ver a descrição da pergunta.",
+                "Check it if contestants can view standings": "Assinale esta caixa se pretender permitir que os participantes vejam as tabelas de classificação",
+                "Where the contest was held originally": "Local onde o concurso foi originalmente realizado",
+                "Official contest site URL": "URL do sítio Web oficial do concurso"
             }
         },
         ".propertyLinks": {
@@ -128,7 +128,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Contribution": "贡献"
+                "Contribution": "dedicar"
             }
         },
         ".contests-table": {
@@ -138,7 +138,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Contest history": "比赛历史"
+                "Contest history": "História do concurso"
             }
         },
         ".roundbox.sidebox.borderTopRound ": {
@@ -148,13 +148,13 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Register now": "现在报名",
-                "No tag edit access": "没有标签编辑权限",
-                "Problem": "问题",
-                "Verdict": "判题状态",
-                "Language:": "语言:",
-                "Participant": "参赛者",
-                "Choose file:": "选择文件:"
+                "Register now": "Inscreva-se agora",
+                "No tag edit access": "Não tem privilégios de edição de etiquetas",
+                "Problem": "questões",
+                "Verdict": "estado da adjudicação",
+                "Language:": "Línguas.",
+                "Participant": "concorrentes",
+                "Choose file:": "Seleccione o ficheiro."
             }
         },
         ".icon-eye-close.icon-large": {
@@ -164,7 +164,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add to exclusions": "添加到排除列表"
+                "Add to exclusions": "Adicionar à lista de exclusão"
             }
         },
         "null": {
@@ -174,7 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add to exclusions for gym contests filter": "添加训练营过滤器的排除项"
+                "Add to exclusions for gym contests filter": "Adicionar exclusões ao filtro do Boot Camp"
             }
         },
         ".roundbox.sidebox.sidebar-menu.borderTopRound": {
@@ -184,9 +184,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Announcement": "公告",
-                "Statements": "统计报表",
-                "Tutorial": "题解"
+                "Announcement": "boletim",
+                "Statements": "Relatórios estatísticos",
+                "Tutorial": "notas"
             }
         },
         ".second-level-menu": {
@@ -196,43 +196,43 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Problems": "问题",
-                "Submit Code": "提交代码",
-                "My Submissions": "我的提交",
-                "Status": "状态",
-                "Standings": "榜单",
-                "Adm.": "管理",
-                "Edit": "编辑",
-                "Custom Invocation": "自定义调试",
-                "Common standings": "全部排行",
-                "Friends standings": "只看朋友",
-                "Submit": "提交",
-                "Hacks": "黑客",
-                "Room": "房间",
-                "Custom test": "自定义测试",
-                "Blog": "博客",
-                "Teams": "队伍",
-                "Submissions": "提交记录",
-                "Groups": "团体",
-                "Rating": "评级",
-                "Friends rating": "朋友的评级",
-                "Favourites": "收藏",
-                "Contests": "比赛",
-                "Members": "成员",
-                "问题etting": "参与编写的问题",
-                "Streams": "直播",
-                "Gym": "训练营",
-                "Mashups": "组合混搭",
-                "Posts": "帖子",
-                "Comments": "回复",
-                "Main": "主要的",
-                "Settings": "设置",
-                "Lists": "列表",
-                "General": "基本",
-                "Sidebar": "侧边栏",
-                "Social": "社会信息",
-                "Address": "地址",
-                "Wallets": "钱包"
+                "Problems": "questões",
+                "Submit Code": "Enviar código",
+                "My Submissions": "A minha submissão",
+                "Status": "estado das coisas",
+                "Standings": "lista de nomes",
+                "Adm.": "de gestão",
+                "Edit": "compilador",
+                "Custom Invocation": "Depuração personalizada",
+                "Common standings": "Todos os rankings",
+                "Friends standings": "Só para amigos.",
+                "Submit": "apresentar (um relatório, etc.)",
+                "Hacks": "hacker (informática) (palavra emprestada)",
+                "Room": "cubículos",
+                "Custom test": "Testes personalizados",
+                "Blog": "blogue (palavra emprestada)",
+                "Teams": "fila",
+                "Submissions": "Apresentação de registos",
+                "Groups": "organizações",
+                "Rating": "classificações",
+                "Friends rating": "Classificação de amigos",
+                "Favourites": "marcador (Internet)",
+                "Contests": "competição (desporto, etc.)",
+                "Members": "membros",
+                "问题etting": "Participação na preparação das questões",
+                "Streams": "transmissão em direto (não gravada)",
+                "Gym": "campo de treino",
+                "Mashups": "misturar e combinar (de vestuário, etc.)",
+                "Posts": "cartão",
+                "Comments": "regressar (a uma condição anterior)",
+                "Main": "grampo",
+                "Settings": "preparar",
+                "Lists": "listagens",
+                "General": "fundamental",
+                "Sidebar": "uma barra lateral (em software)",
+                "Social": "segurança social (pensões, seguro de saúde)",
+                "Address": "endereço",
+                "Wallets": "bolsas"
             }
         },
         ".topic-toggle-collapse": {
@@ -242,7 +242,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Expand": "展开"
+                "Expand": "início"
             }
         },
         ".topic-read-more": {
@@ -252,7 +252,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Full text and comments": "阅读全文/评论"
+                "Full text and comments": "Ler mais/comentários"
             }
         },
         ".toggleEditorCheckboxLabel": {
@@ -262,7 +262,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Switch off editor": "关闭编辑器语法高亮"
+                "Switch off editor": "Desactive o realce de sintaxe do editor"
             }
         },
         ".submit": {
@@ -272,7 +272,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Registration for the contest": "比赛报名"
+                "Registration for the contest": "Inscrição no concurso"
             }
         },
         "._FilterByTagsFrame_difficulty": {
@@ -282,7 +282,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Difficulty:": "难度:"
+                "Difficulty:": "Dificuldade."
             }
         },
         "._FilterByTagsFrame_addTagLink": {
@@ -292,7 +292,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add tag": "添加标签"
+                "Add tag": "Adicionar etiquetas"
             }
         },
         ".alert": {
@@ -302,9 +302,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "上一轮的评级变化暂时回滚。它们将很快恢复。",
-                "Reminder: in case of any technical issues, you can use the lightweight website": "提醒：如果出现任何技术问题，您可以使用轻量网站",
-                "Please subscribe to the official Codeforces channel in Telegram via the link ": "请通过链接订阅Codeforces的官方Telegram频道"
+                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "As alterações de classificação da ronda anterior foram temporariamente anuladas. Serão restauradas em breve.",
+                "Reminder: in case of any technical issues, you can use the lightweight website": "Lembrete：Em caso de problemas técnicos, pode utilizar o sítio ligeiro",
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "Subscreva o canal oficial do Telegram da Codeforces através do link!"
             }
         },
         ".lang-chooser": {
@@ -314,10 +314,10 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Enter": "登录",
-                "Register": "注册",
-                "Contest rating": "测试 rating",
-                "Logout": "退出登录"
+                "Enter": "inicie sessão",
+                "Register": "inscrição",
+                "Contest rating": "Classificação do teste",
+                "Logout": "Termine a sessão"
             }
         },
         ".userbox": {
@@ -327,19 +327,19 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Change photo": "更换图片",
-                "Contest rating": "比赛Rating",
-                "Contribution": "贡献",
-                "My friends": "我的好友",
-                "Change settings": "改变设置",
-                "Last visit": "最后访问",
-                "Registered": "注册于",
-                "Blog entries": "博客条目",
-                "comments": "评论",
-                "Write new entry": "编写新条目",
-                "View my talks": "查看我的私信",
-                "Talks": "私信",
-                "Send message": "发送消息"
+                "Change photo": "Substituição de imagens",
+                "Contest rating": "Corrida",
+                "Contribution": "dedicar",
+                "My friends": "O meu melhor amigo.",
+                "Change settings": "Alterar definições",
+                "Last visit": "último acesso",
+                "Registered": "registado em",
+                "Blog entries": "Entradas no blogue",
+                "comments": "comentários",
+                "Write new entry": "Preparação de novos registos",
+                "View my talks": "Ver as minhas mensagens privadas",
+                "Talks": "carta privada",
+                "Send message": "envie uma mensagem"
             }
         },
         "#vote-reset-filterDifficultyLowerBorder": {
@@ -349,7 +349,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Reset": "重置"
+                "Reset": "reprovisão"
             }
         },
         "#vote-reset-filterDifficultyUpperBorder": {
@@ -359,7 +359,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Reset": "重置"
+                "Reset": "reprovisão"
             }
         },
         ".alert.alert-info": {
@@ -369,8 +369,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "The problem statement has recently been changed.": "题目描述最近已被更改。",
-                "View the changes.": "查看更改"
+                "The problem statement has recently been changed.": "A descrição do título foi recentemente alterada.",
+                "View the changes.": "Ver alterações"
             }
         },
         ".enterPage": {
@@ -380,9 +380,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Fill in the form to login into Codeforces.": "填写表单以登录到Codeforces。",
-                "You can use": "你也可以使用",
-                "as an alternative way to enter.": "登录"
+                "Fill in the form to login into Codeforces.": "Preencha o formulário para iniciar sessão no Codeforces.",
+                "You can use": "Também pode utilizar o",
+                "as an alternative way to enter.": "inicie sessão"
             }
         },
         ".notice.small": {
@@ -392,7 +392,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "\\* To view the complete list, click ": "* 要查看完整列表，请点击"
+                "\\* To view the complete list, click ": "* :: Para ver a lista completa, clique em"
             }
         },
         ".setting-name": {
@@ -402,10 +402,10 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Contest type:": "比赛类型：",
-                "Rated:": "已评级：",
-                "Tried:": "已尝试",
-                "Substring:": "关键字"
+                "Contest type:": "Tipo de concurso：",
+                "Rated:": "Classificado：",
+                "Tried:": "tentado",
+                "Substring:": "palavras-chave"
             }
         },
         ".by-form": {
@@ -415,10 +415,10 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Sort by:": "排序依据：",
-                "relevance": "相关",
-                "popularity": "热度",
-                "time": "时间"
+                "Sort by:": "Ordenado por：",
+                "relevance": "correlação (estatística)",
+                "popularity": "entusiasmo de curta duração",
+                "time": "tempos"
             }
         },
         ".roundbox.borderTopRound": {
@@ -428,61 +428,61 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "如果您邀请用户参加此竞赛，则无论其可见性如何，该竞赛都将对用户可见。您可以使用以下链接分享比赛：",
-                "Generate link and share it with other users": "生成链接并与其他用户共享",
-                "Show Log »": "展示日志 »",
-                "Move all to practice »": "全部移至练习者 »",
-                "Remove All »": "移除全部 »",
-                "Add »": "添加 »",
-                "Set »": "设置 »",
-                "Download Archive »": "下载归档 »"
+                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "Se convidar um utilizador a participar neste concurso, o concurso será visível para o utilizador, independentemente da sua visibilidade. Pode partilhar o concurso utilizando a seguinte ligação：",
+                "Generate link and share it with other users": "Crie ligações e partilhe-as com outros utilizadores",
+                "Show Log »": "Mostrar diário \"",
+                "Move all to practice »": "Todos mudaram para Praticante \"",
+                "Remove All »": "Remover tudo \"",
+                "Add »": "Acrescente \"",
+                "Set »": "Definições \"",
+                "Download Archive »": "Descarregar Arquivo \""
             }
         },
         ".caption.titled": {
             "class": [
                 ".caption.titled"
             ],
-            "description": "侧栏titled汉化",
+            "description": "Barra lateral intitulada Chinês",
             "isStrict": false,
             "rules": {
-                "Pay attention": "注意",
-                "Top rated": "评级排行",
-                "Top contributors": "贡献者排行",
-                "Find user": "查找用户",
-                "Recent actions": "最新动态",
-                "Training filter": "过滤筛选",
-                "Find training": "搜索比赛/问题",
-                "Virtual participation": "什么是虚拟参赛",
-                "Contest materials": "比赛相关资料",
-                "Settings": "设置",
-                "Create Mashup Contest": "创建混搭比赛",
-                "Clone Contest to Mashup": "克隆比赛到组合混搭",
-                "Invitations": "邀请",
-                "Status filter": "状态过滤器",
-                "Administration": "管理",
-                "Submit": "提交",
-                "Practice": "练习",
-                "Problem tags": "问题标签",
-                "Filter Problems": "过滤问题",
-                "Last unsolved": "上次未解决",
-                "Attention": "注意",
-                "Past contests filter": "过去的比赛筛选",
-                "About Contest": "关于比赛",
-                "Last submissions": "提交历史",
-                "Streams": "直播",
-                "Coach rights": "教练权限",
-                "Advices to fill address": "填写地址的建议",
-                "Hacks filter": "黑客过滤器",
-                "Score table": "评分表",
-                "Contests": "比赛",
-                "History": "编辑历史",
-                "Login into Codeforces": "登录 Codeforces",
-                "Export the judgment log to DAT-file": "导出判题日志为 DAT 文件",
-                "Contest managers": "比赛管理员",
-                "Contest writers": "比赛编写者",
-                "Spectator ranklists": "观众排名列表",
-                "Ghosts:": "幽灵选手",
-                "Export Submissions": "导出提交"
+                "Pay attention": "tome nota de",
+                "Top rated": "classificação",
+                "Top contributors": "Classificação dos contribuintes",
+                "Find user": "Procurar utilizadores",
+                "Recent actions": "Últimas notícias",
+                "Training filter": "Filtragem e seleção",
+                "Find training": "Pesquise concursos/questões",
+                "Virtual participation": "O que é uma entrada virtual",
+                "Contest materials": "Informações relativas à concorrência",
+                "Settings": "preparar",
+                "Create Mashup Contest": "Crie um concurso de mashups",
+                "Clone Contest to Mashup": "Clone Match to Combo Mashup",
+                "Invitations": "convites",
+                "Status filter": "Filtro de estado",
+                "Administration": "de gestão",
+                "Submit": "apresentar (um relatório, etc.)",
+                "Practice": "exercício",
+                "Problem tags": "etiqueta de pergunta",
+                "Filter Problems": "Problemas de filtragem",
+                "Last unsolved": "Não resolvido da última vez",
+                "Attention": "tome nota de",
+                "Past contests filter": "Seleção de jogos anteriores",
+                "About Contest": "Sobre o concurso",
+                "Last submissions": "Histórico de submissão",
+                "Streams": "transmissão em direto (não gravada)",
+                "Coach rights": "Autoridade de Coaching",
+                "Advices to fill address": "Sugestões para preencher o seu endereço",
+                "Hacks filter": "Filtro Hacker",
+                "Score table": "escala de classificação",
+                "Contests": "competição (desporto, etc.)",
+                "History": "História editorial",
+                "Login into Codeforces": "Inicie sessão no Codeforces",
+                "Export the judgment log to DAT-file": "Exporte o registo de julgamentos como um ficheiro DAT",
+                "Contest managers": "Administrador do concurso",
+                "Contest writers": "Redactores de concursos",
+                "Spectator ranklists": "Lista de classificação do público",
+                "Ghosts:": "jogador fantasma",
+                "Export Submissions": "Apresentação de exportações"
             }
         },
         "QuestionFilter1": {
@@ -490,19 +490,19 @@
                 "#gym-filter-form div label",
                 "#gym-filter-form div"
             ],
-            "description": "题目过滤器选项汉化",
+            "description": "Tratamento da opção de filtro de título",
             "isStrict": false,
             "rules": {
-                "Contest type:": "比赛类型:",
-                "ICPC region:": "ICPC地区:",
-                "Contest format:": "比赛形式:",
-                "Order by:": "排序方式:",
-                "Secondary order by:": "次要排序方式:",
-                "Hide, if participated:": "隐藏我参加过的:",
-                "Hide excluded gyms": "隐藏已排除的:",
-                "Season:": "时间范围（年度）",
-                "Duration, hours:": "持续时间（小时）:",
-                "Difficulty:": "难度:"
+                "Contest type:": "Tipo de concurso.",
+                "ICPC region:": "Regiões do ICPC.",
+                "Contest format:": "Formato do concurso.",
+                "Order by:": "Seleccione por.",
+                "Secondary order by:": "Encomenda secundária.",
+                "Hide, if participated:": "Esconda os que já participei.",
+                "Hide excluded gyms": "Esconda-se excluído.",
+                "Season:": "Calendário (anual)",
+                "Duration, hours:": "Duração (horas).",
+                "Difficulty:": "Dificuldade."
             }
         },
         "QuestionFilter2": {
@@ -513,27 +513,27 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Official ACM-ICPC Contest": "ICPC官方比赛",
-                "Official School Contest": "学校官方比赛",
-                "Opencup Contest": "Opencup比赛",
-                "School/University/City/Region Championship": "学校/大学/城市/地区锦标赛",
-                "Training Camp Contest": "训练营比赛",
-                "Official International Personal Contest": "官方国际个人赛",
-                "Training Contest": "训练比赛",
-                "ID_ASC": "创建时间（升序）",
-                "ID_DESC": "创建时间（降序）",
-                "RATING_ASC": "评分（升序）",
-                "RATING_DESC": "评分（降序）",
-                "DIFFICULTY_ASC": "难度（升序）",
-                "DIFFICULTY_DESC": "难度（降序）",
-                "START_TIME_ASC": "开始时间（升序）",
-                "START_TIME_DESC": "开始时间（降序）",
-                "DURATION_ASC": "持续时间（升序）",
-                "DURATION_DESC": "持续时间（降序）",
-                "POPULARITY_ASC": "热度（升序）",
-                "POPULARITY_DESC": "热度（降序）",
-                "UPDATE_TIME_ASC": "更新时间（升序）",
-                "UPDATE_TIME_DESC": "更新时间（降序）"
+                "Official ACM-ICPC Contest": "Concurso oficial ICPC",
+                "Official School Contest": "Concursos escolares oficiais",
+                "Opencup Contest": "Concurso Opencup",
+                "School/University/City/Region Championship": "Campeonatos de escola/universidade/cidade/região",
+                "Training Camp Contest": "Competição do Campo de Treino",
+                "Official International Personal Contest": "Concurso Internacional Individual Oficial",
+                "Training Contest": "jogo de treino",
+                "ID_ASC": "Hora de criação (ordem crescente)",
+                "ID_DESC": "Hora de criação (decrescente)",
+                "RATING_ASC": "Classificação (ordem ascendente)",
+                "RATING_DESC": "Classificação (decrescente)",
+                "DIFFICULTY_ASC": "Dificuldade (ordem crescente)",
+                "DIFFICULTY_DESC": "Dificuldade (descendente)",
+                "START_TIME_ASC": "Hora de início (ordem crescente)",
+                "START_TIME_DESC": "Hora de início (decrescente)",
+                "DURATION_ASC": "Duração (ascendente)",
+                "DURATION_DESC": "Duração (decrescente)",
+                "POPULARITY_ASC": "Calor (ordem ascendente)",
+                "POPULARITY_DESC": "Calor (ordem decrescente)",
+                "UPDATE_TIME_ASC": "Hora de atualização (ordem ascendente)",
+                "UPDATE_TIME_DESC": "Tempo de atualização (decrescente)"
             }
         },
         "CompetitionFilter": {
@@ -541,35 +541,35 @@
                 ".options li label",
                 ".CaptionCont span"
             ],
-            "description": "比赛过滤器选项汉化",
+            "description": "Opções de filtro de corrida chinês",
             "isStrict": false,
             "rules": {
-                "Educational": "教育性",
-                "Global": "全球",
-                "VK Cup": "VK杯",
-                "Long Rounds": "长期回合",
-                "April Fools": "愚人节",
-                "Team Contests": "团队比赛",
-                "ICPC Scoring": "ICPC计分",
+                "Educational": "instrutivo",
+                "Global": "globalmente",
+                "VK Cup": "Taça VK",
+                "Long Rounds": "longo período de tempo",
+                "April Fools": "Dia da mentira",
+                "Team Contests": "competição por equipas",
+                "ICPC Scoring": "Pontuação da ICPC",
                 "Doesn't matter": "----",
-                "Any": "所有",
-                "Yes": "是",
-                "No": "否",
-                "No submission(s)": "无提交",
-                "Have submission(s)": "有提交",
-                "No solved problem(s)": "无解决问题",
-                "Have solved problem(s)": "有解决问题"
+                "Any": "propriedade",
+                "Yes": "ser",
+                "No": "entupido",
+                "No submission(s)": "Sem apresentação",
+                "Have submission(s)": "Enviado",
+                "No solved problem(s)": "Não resolver problemas",
+                "Have solved problem(s)": "Resolução de problemas."
             }
         },
         "RightSidebox": {
             "class": [
                 ".sidebox div label"
             ],
-            "description": "右侧sidebox汉化",
+            "description": "Caixa lateral direita chinesa",
             "isStrict": false,
             "rules": {
-                "Show tags for unsolved problems": "显示未解决问题的标签",
-                "Hide solved problems": "隐藏已解决的问题"
+                "Show tags for unsolved problems": "Mostrar etiquetas para questões não resolvidas",
+                "Hide solved problems": "Ocultar problemas resolvidos"
             }
         },
         "FormField-name": {
@@ -579,22 +579,22 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Postal/zip code": "邮政编码/邮编",
-                "Country (English)": "国家（英文）",
-                "State (English)": "州/省份（英文）",
-                "City (English)": "城市（英文）",
-                "Address (English)": "地址（英文）",
-                "Recipient (English)": "收件人姓名（英文）",
-                "Country (Native)": "国家（本地语言）",
-                "State (Native)": "州/省份（本地语言）",
-                "City (Native)": "城市（本地语言）",
-                "Address (Native)": "地址（本地语言）",
-                "Recipient (Native)": "收件人姓名（本地语言）",
-                "Phone": "电话",
-                "TON Wallet:": "TON 钱包:",
-                "Secret Code:": "验证码:",
-                "Terms of agreement:": "协议条款:",
-                "Choose team:": "选择团队:"
+                "Postal/zip code": "Código postal",
+                "Country (English)": "País (inglês)",
+                "State (English)": "Estado/Província (inglês)",
+                "City (English)": "Cidades (Inglês)",
+                "Address (English)": "Endereço (inglês)",
+                "Recipient (English)": "Nome do destinatário (inglês)",
+                "Country (Native)": "País (língua local)",
+                "State (Native)": "Estado/Província (língua materna)",
+                "City (Native)": "Cidade (língua local)",
+                "Address (Native)": "Endereço (língua local)",
+                "Recipient (Native)": "Nome do destinatário (língua local)",
+                "Phone": "telefones",
+                "TON Wallet:": "TON WALLET.",
+                "Secret Code:": "Captcha.",
+                "Terms of agreement:": "Termos do acordo.",
+                "Choose team:": "Seleccione a equipa."
             }
         },
         "QuestionTag": {
@@ -607,163 +607,163 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "combine tags by OR": "按逻辑或组合我选择的标签",
-                "combine-tags-by-or": "按逻辑或组合我选择的标签（combine-tags-by-or）",
-                "2-sat": "二分图可满足性问题（2-sat）",
-                "binary search": "二分搜索（binary search）",
-                "bitmasks": "位掩码（bitmasks）",
-                "brute force": "暴力枚举（brute force）",
-                "chinese remainder theorem": "中国剩余定理（chinese remainder theorem）",
-                "combinatorics": "组合数学（combinatorics）",
-                "constructive algorithms": "构造算法（constructive algorithms）",
-                "data structures": "数据结构（data structures）",
-                "dfs and similar": "深度优先搜索及其变种（dfs and similar）",
-                "divide and conquer": "分治算法（divide and conquer）",
-                "dp": "动态规划（dp）",
-                "dsu": "并查集（dsu）",
-                "expression parsing": "表达式解析（expression parsing）",
-                "fft": "快速傅里叶变换（fft）",
-                "flows": "流（flows）",
-                "games": "博弈论（games）",
-                "geometry": "计算几何（geometry）",
-                "graph matchings": "图匹配（graph matchings）",
-                "graphs": "图论（graphs）",
-                "greedy": "贪心策略（greedy）",
-                "hashing": "哈希表（hashing）",
-                "implementation": "实现问题，编程技巧，模拟（implementation）",
-                "interactive": "交互性问题（interactive）",
-                "math": "数学（math）",
-                "matrices": "矩阵（matrices）",
-                "meet-in-the-middle": "meet-in-the-middle算法（meet-in-the-middle）",
-                "number theory": "数论（number theory）",
-                "probabilities": "概率论（probabilities）",
-                "schedules": "调度算法（schedules）",
-                "shortest paths": "最短路算法（shortest paths）",
-                "sortings": "排序算法（sortings）",
-                "string suffix structures": "字符串后缀结构（string suffix structures）",
-                "strings": "字符串处理（strings）",
-                "ternary search": "三分搜索（ternary search）",
-                "trees": "树形结构（trees）",
-                "two pointers": "双指针算法（two pointers）"
+                "combine tags by OR": "Etiquetas por lógica ou combinação das minhas escolhas",
+                "combine-tags-by-or": "Combine a minha escolha de etiquetas por lógica ou (combine-tags-by-or)",
+                "2-sat": "Problema de satisfazibilidade de grafos bipartidos (2-sat)",
+                "binary search": "Pesquisa binária",
+                "bitmasks": "Bitmasks",
+                "brute force": "Enumeração por força bruta.",
+                "chinese remainder theorem": "teorema do resto chinês (中国剩余定理)",
+                "combinatorics": "Combinatória",
+                "constructive algorithms": "Algoritmos construtivos (algoritmos construtivos)",
+                "data structures": "Estruturas de dados",
+                "dfs and similar": "Pesquisa em profundidade e suas variantes (dfs e similares)",
+                "divide and conquer": "Algoritmo de divisão e conquista.",
+                "dp": "Programação dinâmica (dp)",
+                "dsu": "Conjunto de pesquisa paralela (dsu)",
+                "expression parsing": "Análise de expressões",
+                "fft": "Transformada rápida de Fourier (fft)",
+                "flows": "Fluxos",
+                "games": "Teoria dos jogos (jogos)",
+                "geometry": "Geometria computacional",
+                "graph matchings": "Correspondências de gráficos",
+                "graphs": "Teoria dos grafos (grafos)",
+                "greedy": "Ganancioso",
+                "hashing": "Tabela de hash (hashing)",
+                "implementation": "Questões de implementação, competências de programação, simulação (implementação)",
+                "interactive": "Questões de interatividade (interativo)",
+                "math": "Matemática (math)",
+                "matrices": "Matrizes",
+                "meet-in-the-middle": "algoritmo \"meet-in-the-middle\" (encontrar no meio)",
+                "number theory": "Teoria dos números",
+                "probabilities": "Probabilidades",
+                "schedules": "Algoritmos de programação (horários)",
+                "shortest paths": "Algoritmos de caminho mais curto (caminhos mais curtos)",
+                "sortings": "Algoritmos de ordenação (sortings)",
+                "string suffix structures": "Estruturas de sufixos de strings",
+                "strings": "Tratamento de cadeias de caracteres (strings)",
+                "ternary search": "Pesquisa ternária",
+                "trees": "Estrutura das árvores (árvores)",
+                "two pointers": "Algoritmo de dois ponteiros (dois ponteiros)"
             }
         },
         "SettingField-name": {
             "class": [
                 ".field-name"
             ],
-            "description": "设置页中的字段",
+            "description": "Configurar os campos na página",
             "isStrict": false,
             "rules": {
-                "Hide sidebar block \"Find user\"": "隐藏侧边栏块“查找用户”",
-                "Hide sidebar block \"Current user\"": "隐藏侧边栏块“当前用户”",
-                "Hide sidebar block \"Recent аctions\"": "隐藏侧边栏块“最新动态”",
-                "Hide sidebar block \"Favourite groups\"": "隐藏侧边栏块“收藏组”",
-                "Hide sidebar block \"Top contributors\"": "隐藏侧边栏块“贡献者排行”",
-                "Hide sidebar block \"Top rated\"": "隐藏侧边栏块“评级排行”",
-                "Hide sidebar block \"Streams\"": "隐藏侧边栏块“直播”",
-                "Old password": "旧密码",
-                "New password": "新密码",
-                "Confirm new password": "确认新密码",
-                "Contest email notification": "比赛邮件通知",
-                "Send email on new user talk": "在有新用户对话时发送电子邮件",
-                "Send email on new comment": "在有新评论时发送电子邮件",
-                "Hide contact information": "隐藏联系人信息",
-                "Remember me by Gmail, Facebook and etc": "通过 Gmail、Facebook 等记住我",
-                "Show tags for unsolved problems": "显示未解决问题的标签",
-                "Hide solved problems from problemset": "从问题集中隐藏已解决的问题",
-                "Hide low rated blogs": "隐藏评级较低的博客",
-                "Offer to publish great rating rises": "提供展示Rating显著提升的机会",
-                "Enforce https": "强制 HTTPS",
-                "Show private activity in the profile": "在个人资料中显示私人活动",
-                "Show diagnostics": "显示诊断信息"
+                "Hide sidebar block \"Find user\"": "Oculte o bloco da barra lateral \"Encontrar utilizadores\".",
+                "Hide sidebar block \"Current user\"": "Oculte o bloco da barra lateral \"Utilizador atual\".",
+                "Hide sidebar block \"Recent аctions\"": "Oculte o bloco \"Novidades\" na barra lateral.",
+                "Hide sidebar block \"Favourite groups\"": "Oculte o bloco da barra lateral \"Grupos favoritos\".",
+                "Hide sidebar block \"Top contributors\"": "Oculte o bloco da barra lateral \"Classificação dos contribuidores\".",
+                "Hide sidebar block \"Top rated\"": "Oculte o bloco da barra lateral \"Classificação\".",
+                "Hide sidebar block \"Streams\"": "Ocultar o bloco da barra lateral \"Em direto\"",
+                "Old password": "palavra-passe antiga",
+                "New password": "nova palavra-passe",
+                "Confirm new password": "Confirme a nova palavra-passe",
+                "Contest email notification": "Notificação por correio eletrónico do concurso",
+                "Send email on new user talk": "Envie um e-mail quando houver um novo diálogo de utilizador",
+                "Send email on new comment": "Envie um e-mail quando um novo comentário for adicionado",
+                "Hide contact information": "Ocultar informações de contacto",
+                "Remember me by Gmail, Facebook and etc": "Lembre-se de mim no Gmail, Facebook, etc.",
+                "Show tags for unsolved problems": "Mostrar etiquetas para questões não resolvidas",
+                "Hide solved problems from problemset": "Oculte os problemas resolvidos dos conjuntos de problemas",
+                "Hide low rated blogs": "Ocultar blogues com classificações baixas",
+                "Offer to publish great rating rises": "Proporciona uma oportunidade para demonstrar a melhoria significativa da classificação",
+                "Enforce https": "Forçar HTTPS",
+                "Show private activity in the profile": "Mostrar actividades privadas no perfil",
+                "Show diagnostics": "Visualizar informações de diagnóstico"
             }
         },
         "CloneContestFormField": {
             "class": [
                 ".field-name"
             ],
-            "description": "克隆比赛到虚拟混搭设置表单",
+            "description": "Clonagem do concurso para o formulário de configuração do mashup virtual",
             "isStrict": false,
             "rules": {
-                "Problem:": "题目:",
-                "Language:": "语言:",
-                "Source code:": "源代码:",
-                "Or choose file:": "或者选择文件:",
-                "Choose file:": "选择文件:",
-                "Notice:": "注意:",
-                "virtual participation:": "虚拟参与:",
-                "Registration for the contest:": "比赛报名:",
-                "Take part:": "参与:",
-                "as individual participant:": "作为个人参与者:",
-                "as a team member:": "作为团队成员:",
-                "Virtual start time:": "虚拟开始时间:",
-                "Complete problemset:": "完整的问题集:",
-                "First name \\(English\\)": "名字（英文）",
-                "Last name \\(English\\)": "姓氏（英文）",
-                "First name \\(Native\\)": "名字（本地语言）",
-                "Last name \\(Native\\)": "姓氏（本地语言）",
-                "Birth date": "出生日期",
-                "Country": "国家",
-                "City": "城市",
-                "Organization": "组织",
-                "Handle/Email": "账号/邮箱",
-                "Password": "密码",
-                "Training name \\(English\\):": "训练名称（英文）:",
-                "Training name \\(Russian\\):": "训练名称（俄语）:",
-                "Contest format:": "比赛格式:",
-                "Start time:": "开始时间:",
-                "Duration:": "持续时间:",
-                "Visibility:": "可见性:",
-                "Attach parent contest\\?:": "关联父级比赛?",
-                "Participation type:": "参与类型:",
-                "Freeze period:": "冻结期间:",
-                "Unfreeze time:": "解冻时间:",
-                "Is practice allowed\\?:": "是否允许练习?",
-                "Is virtual allowed\\?:": "是否允许虚拟参赛?",
-                "Is out of competition allowed\\?:": "是否允许非竞赛参赛?",
-                "Is self-registration allowed\\?:": "是否允许自助注册?",
-                "Can non-registered view the contest\\?:": "未注册用户能否查看比赛?",
-                "Can participants view common status\\?:": "参赛选手能否查看共享状态?",
-                "Contest testdata policy:": "比赛测试数据策略:",
-                "Allow view other submissions to:": "允许查看其他提交给:",
-                "Manage program languages:": "管理编程语言:",
-                "Use time limits scaling policy\\?:": "使用时间限制缩放策略?",
-                "Allow statements\\?:": "允许查看题目描述?",
-                "Allow standings\\?:": "允许查看排名?",
-                "Season:": "季节:",
-                "Contest type:": "比赛类型:",
-                "ICPC region:": "ICPC 地区:",
-                "Country:": "国家:",
-                "City:": "城市:",
-                "Contest difficulty:": "比赛难度:",
-                "Website URL:": "网站链接:",
-                "Description \\(English\\):": "描述（英文）:",
-                "Description \\(Russian\\):": "描述（俄语）:",
-                "Registration confirmation text \\(English\\):": "注册确认文字（英文）:",
-                "Registration confirmation text \\(Russian\\):": "注册确认文字（俄语）:",
-                "Logo \\(English\\):": "徽标（英文）:",
-                "Logo \\(Russian\\):": "徽标（俄语）:",
-                "End time:": "结束时间:",
-                "Name:": "名称:",
-                "Contest\\(s\\):": "比赛（们）:",
-                "Add contest:": "添加比赛:",
-                "Show Contestants:": "显示参赛选手:",
-                "Show Out of Competition Participants:": "显示非竞赛参与者:",
-                "Show Practices:": "显示练习:",
-                "Show Virtuals:": "显示虚拟选手:",
-                "Show Ghosts:": "显示幽灵选手:",
-                "Text:": "文本:",
-                "Rewrite Examples:": "重写样例:",
-                "Add images:": "添加图片:",
-                "Do not use:": "不使用:",
-                "Problem short name:": "题目简称:",
-                "Source problem:": "源问题:",
-                "Problem name \\(English\\):": "题目名称（英文）:",
-                "Input file name:": "输入文件名:",
-                "Output file name:": "输出文件名:",
-                "Time Limit:": "时间限制:",
-                "Memory Limit:": "内存限制:",
-                "Output only:": "仅输出:"
+                "Problem:": "Título.",
+                "Language:": "Línguas.",
+                "Source code:": "Código fonte.",
+                "Or choose file:": "Ou seleccione o ficheiro.",
+                "Choose file:": "Seleccione o ficheiro.",
+                "Notice:": "Tenha cuidado.",
+                "virtual participation:": "Participação virtual.",
+                "Registration for the contest:": "Inscrição na corrida.",
+                "Take part:": "Participação.",
+                "as individual participant:": "Como participantes individuais.",
+                "as a team member:": "Como membro da equipa.",
+                "Virtual start time:": "Hora de início virtual.",
+                "Complete problemset:": "Conjunto completo de perguntas.",
+                "First name \\(English\\)": "Nome (inglês)",
+                "Last name \\(English\\)": "Apelido (inglês)",
+                "First name \\(Native\\)": "Nome (língua local)",
+                "Last name \\(Native\\)": "Apelido (língua local)",
+                "Birth date": "data de nascimento",
+                "Country": "nações",
+                "City": "municípios",
+                "Organization": "organizações",
+                "Handle/Email": "Número de conta/E-mail",
+                "Password": "criptográfico",
+                "Training name \\(English\\):": "Nome da formação (inglês).",
+                "Training name \\(Russian\\):": "Nome da formação (em russo).",
+                "Contest format:": "Formato do concurso.",
+                "Start time:": "Hora de início.",
+                "Duration:": "Duração.",
+                "Visibility:": "Visibilidade.",
+                "Attach parent contest\\?:": "Combinação de patronos associados?",
+                "Participation type:": "Tipo de participação.",
+                "Freeze period:": "Período de congelamento.",
+                "Unfreeze time:": "Tempo de descongelação.",
+                "Is practice allowed\\?:": "A prática é permitida?",
+                "Is virtual allowed\\?:": "São permitidas entradas virtuais?",
+                "Is out of competition allowed\\?:": "São permitidas participações não competitivas?",
+                "Is self-registration allowed\\?:": "É permitido o auto-registo?",
+                "Can non-registered view the contest\\?:": "Os utilizadores não registados podem ver o concurso?",
+                "Can participants view common status\\?:": "Os participantes podem verificar o estado da partilha?",
+                "Contest testdata policy:": "Estratégia de dados de testes de partida.",
+                "Allow view other submissions to:": "Permita a visualização de outros envios para.",
+                "Manage program languages:": "Linguagens de programação geridas.",
+                "Use time limits scaling policy\\?:": "Utiliza uma política de escalonamento limitada no tempo?",
+                "Allow statements\\?:": "Permite-lhe ver a descrição do título?",
+                "Allow standings\\?:": "Permite-lhe ver as classificações?",
+                "Season:": "Época.",
+                "Contest type:": "Tipo de concurso.",
+                "ICPC region:": "Regiões da ICPC.",
+                "Country:": "País.",
+                "City:": "Cidades.",
+                "Contest difficulty:": "Dificuldade da corrida.",
+                "Website URL:": "Ligação Web.",
+                "Description \\(English\\):": "Descrição (inglês).",
+                "Description \\(Russian\\):": "Descrição (em russo).",
+                "Registration confirmation text \\(English\\):": "Texto de confirmação do registo (inglês).",
+                "Registration confirmation text \\(Russian\\):": "Texto de confirmação do registo (em russo).",
+                "Logo \\(English\\):": "Logótipo (inglês).",
+                "Logo \\(Russian\\):": "Logótipo (russo).",
+                "End time:": "Hora de fim.",
+                "Name:": "O seu nome.",
+                "Contest\\(s\\):": "Concurso.",
+                "Add contest:": "Adicionar concurso.",
+                "Show Contestants:": "Concorrentes do espetáculo.",
+                "Show Out of Competition Participants:": "Mostre os participantes não competitivos.",
+                "Show Practices:": "Mostre o exercício.",
+                "Show Virtuals:": "Mostre os jogadores virtuais.",
+                "Show Ghosts:": "Mostre o Ghost Player.",
+                "Text:": "Texto.",
+                "Rewrite Examples:": "Reescreva a amostra.",
+                "Add images:": "Adicione uma imagem.",
+                "Do not use:": "Não utilizado.",
+                "Problem short name:": "Abreviatura do título.",
+                "Source problem:": "Edição de origem.",
+                "Problem name \\(English\\):": "Título (em inglês).",
+                "Input file name:": "Nome do ficheiro de entrada.",
+                "Output file name:": "Nome do ficheiro de saída.",
+                "Time Limit:": "Limite de tempo.",
+                "Memory Limit:": "Limitações de memória.",
+                "Output only:": "Apenas saída."
             }
         },
         ".ask-question-link": {
@@ -773,7 +773,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Ask a question": "提一个问题"
+                "Ask a question": "Faça uma pergunta."
             }
         },
         "add-announcement-link": {
@@ -783,7 +783,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Add announcement": "添加公告"
+                "Add announcement": "Adicionar anúncio"
             }
         },
         "demo": {
@@ -802,28 +802,28 @@
             "class": [
                 "input[type='submit']"
             ],
-            "description": "submit汉化",
+            "description": "Submeter chinês",
             "isStrict": false,
             "rules": {
-                "Register for virtual participation": "报名虚拟参赛",
-                "Register for practice": "登录以开始练习",
-                "Apply": "应用",
-                "Register": "报名",
-                "Login": "登录",
-                "Run": "运行",
-                "Start virtual contest": "开始虚拟参赛",
-                "Manage invitations": "管理邀请",
-                "Disable manager mode": "临时关闭管理模式",
-                "Enable manager mode": "开启管理模式",
-                "Clone Contest": "克隆比赛",
-                "Submit": "提交",
-                "Save changes": "保存设置",
-                "Filter": "过滤",
-                "Find": "查找",
-                "Save": "保存",
-                "Create Mashup Contest": "创建混搭比赛",
-                "Delete problem": "删除问题",
-                "Restore problem": "恢复问题"
+                "Register for virtual participation": "Registe-se para as Entradas Virtuais",
+                "Register for practice": "Inicie sessão para começar a praticar",
+                "Apply": "aparelho",
+                "Register": "introduza o seu nome",
+                "Login": "inicie sessão",
+                "Run": "estar em movimento",
+                "Start virtual contest": "Iniciar entrada virtual",
+                "Manage invitations": "Convites de gestão",
+                "Disable manager mode": "Encerramento temporário do modo de gestão",
+                "Enable manager mode": "Modo de gestão aberto",
+                "Clone Contest": "concurso de clonagem",
+                "Submit": "apresentar (um relatório, etc.)",
+                "Save changes": "Guardar definições",
+                "Filter": "filtragem",
+                "Find": "localizar",
+                "Save": "guardar (um ficheiro, etc.) (informática)",
+                "Create Mashup Contest": "Crie um concurso de mashups",
+                "Delete problem": "Apague a pergunta",
+                "Restore problem": "Problemas de recuperação"
             }
         },
         "InputButton": {
@@ -833,9 +833,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Reset": "重置",
-                "Delete contest": "删除比赛",
-                "Preview": "预览"
+                "Reset": "reprovisão",
+                "Delete contest": "Eliminar correspondência",
+                "Preview": "antevisões"
             }
         }
     }
