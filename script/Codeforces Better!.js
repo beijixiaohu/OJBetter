@@ -2429,7 +2429,7 @@ function toZH_CN() {
     /**
      * 文本节点遍历替换
      * @param {JQuery} $nodes jQuery对象
-     * @param {Array} textReplaceRules 文本替换规则
+     * @param {Object} textReplaceRules 文本替换规则对象
      */
     function traverseTextNodes($nodes, textReplaceRules) {
         if (!$nodes) return;
@@ -2437,9 +2437,10 @@ function toZH_CN() {
         $nodes.each(function () {
             let node = this;
             if (node.nodeType === Node.TEXT_NODE) {
-                textReplaceRules.forEach(rule => {
-                    const regex = new RegExp(rule.match, 'g');
-                    node.textContent = node.textContent.replace(regex, rule.replace);
+                Object.keys(textReplaceRules).forEach(match => {
+                    const replace = textReplaceRules[match];
+                    const regex = new RegExp(match, 'g');
+                    node.textContent = node.textContent.replace(regex, replace);
                 });
             } else {
                 $(node).contents().each(function () {
@@ -2449,10 +2450,11 @@ function toZH_CN() {
         });
     }
 
+
     /**
      * value替换
      * @param {JQuery} $nodes jQuery对象
-     * @param {Array} valueReplaceRules 值替换规则
+     * @param {Object} valueReplaceRules 值替换规则对象
      */
     function traverseValueNodes($nodes, valueReplaceRules) {
         if (!$nodes) return;
@@ -2460,10 +2462,11 @@ function toZH_CN() {
         $nodes.each(function () {
             let $node = $(this);
             if ($node.is('[value]')) {
-                valueReplaceRules.forEach(rule => {
-                    const regex = new RegExp(rule.match, 'g');
+                Object.keys(valueReplaceRules).forEach(match => {
+                    const replace = valueReplaceRules[match];
+                    const regex = new RegExp(match, 'g');
                     let currentValue = $node.val();
-                    let newValue = currentValue.replace(regex, rule.replace);
+                    let newValue = currentValue.replace(regex, replace);
                     $node.val(newValue);
                 });
             } else {
@@ -2477,23 +2480,23 @@ function toZH_CN() {
     /**
      * 严格的文本节点遍历替换
      * @param {JQuery} $node jQuery对象
-     * @param {Array} textReplaceRules 文本替换规则
+     * @param {Object} textReplaceRules 文本替换规则对象
      */
     function strictTraverseTextNodes($nodes, textReplaceRules) {
         if (!$nodes) return;
-        
+
         $nodes.each(function () {
             let $node = $(this);
             if ($node.nodeType === Node.TEXT_NODE) {
                 const trimmedNodeText = $node.textContent.trim();
-                textReplaceRules.forEach(rule => {
-                    if (trimmedNodeText === rule.match) {
-                        $node.textContent = rule.replace;
+                Object.keys(textReplaceRules).forEach(match => {
+                    if (trimmedNodeText === match) {
+                        $node.textContent = textReplaceRules[match];
                     }
                 });
             } else {
-                $($node).contents().each(function () { 
-                    strictTraverseTextNodes($(this), textReplaceRules); 
+                $($node).contents().each(function () {
+                    strictTraverseTextNodes($(this), textReplaceRules);
                 });
             }
         });
