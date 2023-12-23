@@ -154,7 +154,7 @@
             "rules": {
                 "Register now": "지금 등록하기",
                 "No tag edit access": "태그 편집 권한 없음",
-                "Problem": "이슈",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "판결 상태",
                 "Language:": "언어.",
                 "Participant": "참가자",
@@ -489,7 +489,8 @@
                 "Contest writers": "공모전 작가",
                 "Spectator ranklists": "관객 순위 목록",
                 "Ghosts:": "고스트 플레이어",
-                "Export Submissions": "내보내기 제출"
+                "Export Submissions": "내보내기 제출",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -693,6 +694,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "제목.",
+                "Question": "问题",
                 "Language:": "언어.",
                 "Source code:": "소스 코드.",
                 "Or choose file:": "또는 파일을 선택합니다.",
@@ -715,6 +717,9 @@
                 "Organization": "조직",
                 "Handle/Email": "계정 번호/이메일",
                 "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "암호화",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "교육 이름(영어).",
@@ -833,7 +838,8 @@
                 "Create Mashup Contest": "매시업 콘테스트 만들기",
                 "Delete problem": "질문 삭제하기",
                 "Restore problem": "복구 문제",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {
