@@ -1,0 +1,471 @@
+<h1 id="codeforces-better🎈">Codeforces Better!🎈</h1>
+<p>Codeforcesインターフェース中国語、ダークモードサポート、タイトル翻訳、マークダウンビュー、ワンクリックでタイトルコピー、Loguへジャンプ、コメント差別化ページ、ClistRatingスコア表示、リスト再カラーリング</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <center>
+      <h3>：フィードバックノート</h3>
+    </center>
+    <p>問題がある場合は、まず以下の <a style="color:#F44336" href="#常见问题">#FAQ</a> の説明をお読みください。解決しない場合は、 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">フィードバックページ</a> または <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> にアクセスしてフィードバックしてください。</p>
+    <p>問題の詳細（例：：リンク、スクリーンショット、希望する結果、実際の結果、再現例：…… ）をご記入ください。</p>
+    <p>友好的な議論や機能の提案も歓迎しますが、スクリプトのメンテナンスやヘルプを提供することは作者の義務ではありません。</p>
+  </div>
+</div>
+<h2 id="功能">官能性</h2>
+<span style="color:#009688; background-color: #E0F2F1;"><strong>ヒント：スクリプトのいくつかの機能には設定項目があります。 <strong><code>CodeforcesBetter Settings</code></strong> のページ全体の右上隅にある</strong> のボタンをクリックすると、設定パネルを開くことができます。</span>
+<h3 id="界面汉化">中国語インターフェース</h3>
+<p>ウェブサイトの主な要素を中国語に翻訳する（オフにすることもできます）</p>
+<h3 id="题目翻译">タイトルの翻訳</h3>
+<p>タイトル、ブログ、コメントなどの右上に翻訳ボタンを追加し、Latexの公式が崩れないようにしながら、ワンクリックで中国語に翻訳！</p>
+<p>これに基づいて、スクリプトは3つの翻訳モードを提供します。 ：</p>
+<ul>
+  <li>通常モード：一度に全領域を翻訳する</li>
+  <li>セグメンテーション・モード：は、領域内の <code>&#60;&#112;&#47;&#62;</code> と <code>&#60;&#105;&#47;&#62;</code> の各タグを順番に翻訳する。</li>
+  <li>セグメンテーションモード：ページ上の <code>&#60;&#112;&#47;&#62;</code> と <code>&#60;&#105;&#47;&#62;</code> のタブを自由にクリックして翻訳することができます。</li>
+</ul>
+<p>右上隅の <code>CodeforcesBetter設定</code> パネルで、使用する翻訳サービス（デフォルトではDeepL）を選択したり、スクリプトの作業モードを切り替えたりできます。</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>注：</strong>セグメンテーション／セレクション・モードは、以下の問題を引き起こす：</p>
+    <p>- 翻訳インターフェイスがテキスト全体の文脈情報を知ることを不可能にすることは、翻訳の質を低下させる可能性がある。</p>
+    <p>-&#60;&#112;&#47;&#62;、&#60;&#105;&#47;&#62;要素でないため、翻訳されない／選択できないコンテンツがある。</p>
+  </div>
+</div>
+<p>スクリプトは、：(既定は DeepL) から選択できる以下の翻訳インタフェースを提供します。</p>
+<table style="border: 1px solid #bcaaa4;">
+  <thead>
+    <tr>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">&nbsp;
+      </th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">KEY
+      </th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">翻訳の質</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">信頼性</th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">最大文字数
+      </th>
+      <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">かける</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="background-color: #1976D2; color: #E3F2FD;">DeepLの翻訳（✨推奨）</td>
+      <td style="background-color: #f9f9f9; color: black;">不要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️</td>
+      <td style="background-color: #FFC107; color: #3e2723;">エリアによってはアクセスできない、または速度が遅い場合がある</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">切れる</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">宣飛翻訳を聞く</td>
+      <td style="background-color: #f9f9f9; color: black;">不要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">通常は信頼できる</td>
+      <td style="background-color: #f9f9f9; color: black;">2000</td>
+      <td style="background-color: #f9f9f9; color: black;">切れる</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">Youtube翻訳</td>
+      <td style="background-color: #f9f9f9; color: black;">不要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">通常は信頼できる</td>
+      <td style="background-color: #FFC107; color: #3e2723;">600</td>
+      <td style="background-color: #f9f9f9; color: black;">切れる</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color: black;">グーグル翻訳</td>
+      <td style="background-color: #f9f9f9; color: black;">不要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Googleへのインターネット接続が必要</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">切れる</td>
+    </tr>
+    <tr>
+      <td style="background-color: #f9f9f9; color:black;">カラフルな雲の翻訳</td>
+      <td style="background-color: #f9f9f9; color: black;">不要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">通常は信頼できる</td>
+      <td style="background-color: #f9f9f9; color: black;">5000</td>
+      <td style="background-color: #f9f9f9; color: black;">切れる</td>
+    </tr>
+    <tr>
+      <td style="background-color: #1976D2; color: #E3F2FD;">ChatGPTを使った翻訳（✨推奨）</td>
+      <td style="background-color: #f9f9f9; color: black;">APIキーが必要</td>
+      <td style="background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️⭐️</td>
+      <td style="background-color: #f9f9f9; color: black;">サービス・プロバイダーの質とOpenAIの混み具合による</td>
+      <td style="background-color: #f9f9f9; color: black;">モデルによる</td>
+      <td style="background-color: #FFC107; color: #3e2723;">低調</td>
+    </tr>
+  </tbody>
+</table>
+<span style="color:#009688; background-color: #E0F2F1;">ヒント：<strong>Translate</strong>ボタンを右クリックすると、翻訳サービスをすばやく切り替えることができます！</span>
+<p><strong>自動翻訳</strong></p>
+<p>自動翻訳」を有効にすると、<code>.ttypography</code>、 <code>.comments</code> エリアにある短いテキストは、ブラウザウィンドウの<u>表示可能エリア</u>に入ると自動的に翻訳されます。</p>
+<p>(設定パネルで何文字以下を短文とするか指定できます）</p>
+<p>また、「コメントエリアでのクイック翻訳」を有効にすると、コメントエリアの短い文章に対して、自動翻訳が候補サービスの中からランダムに選択し、並行してクイック翻訳を行います。</p>
+<p><strong>歴史的翻訳回復</strong></p>
+<p>Auto restore historical translations "を有効にすると、<u>タイトルページ</u>の翻訳情報が、ブラウザのローカルにある indexDB の CFBetterDB データベースの translateData テーブルに自動的に保存されます。</p>
+<p>Refresh / 次回ページに入ると自動的に翻訳が復元されます。</p>
+<h3 id="ClistRating分">クライストレイティング</h3>
+<p>clist.byサイトのレーティングスコアデータを取得し、表示する！</p>
+<p>ページ・ジョブによって必要な認証情報は異なることに注意：</p>
+<ul>
+  <li>コンテストページでは、clist.byウェブサイトからのログインクッキーがブラウザ、<strong>または</strong>で有効であることが必要です。 設定パネルでapiキーを記入してください。</li>
+  <li>問題と問題集のページでは、ブラウザのclist.byのログインクッキーが必要です。</li>
+</ul>
+<span style="background-color: #FFF3E0;color: #FF5722;">スクリプトは、clist.byの特定のクッキーを取得しません。 クッキー情報は、リクエストを送信するときにブラウザによって自動的に運ばれ、クッキーの有効性は、試行されたリクエストによって返されたステータスコードによって決定されます。</span>
+<h3 id="编辑器与LSP">編集者とLSP</h3>
+<p><strong>タイトルページにエディターを追加</strong></p>
+<p>タイトルページの下にモナコ・コード・エディターを追加する（デフォルトで有効）。</p>
+<p>コード自動保存、コード高速送信、オンラインテスト実行、LSP、静的補完機能およびその他の機能をサポートします。</p>
+<p><strong>コードの自動保存</strong></p>
+<p>コードは自動的にブラウザにローカルなIndexedDBのCFBetterDBデータベースのeditorCodeテーブルに保存されます。</p>
+<p><strong>オンライン・テスト走行</strong></p>
+<p>また、CFBetterDBデータベースのeditorCodeテーブルに自動的に保存されるテストサンプルをカスタマイズすることもできます。</p>
+<p>このスクリプトは、：codeforces official, wandbox (third party), rextester (third party) などのオンライン・コード実行サービスを提供しており、さまざまなパラメータ・オプションをサポートしている。</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <p><strong>注：</strong></p>
+    <ul>
+      <li>
+        <p>明らかに、すべてのオンラインコード実行サービスは、インタラクティブなトピックをテストすることはできません。</p>
+      </li>
+      <li>
+        <p>サードパーティのオンライン・コード実行サービスは、codeforcesとは異なる環境で実行される可能性があり、サードパーティのオンライン・コード実行サービスで動作するコードや正しく動作するコードが、codeforcesで動作するとは限りません。</p>
+      </li>
+      <li>
+        <p>サードパーティのオンラインコード実行サービスによって、あなたのコードが何らかの形で流出しないという保証はありません。</p>
+      </li>
+      <li>
+        <p>加えて、より広い用途の場合、ページ上のコンパイラ・オプションは、サードパーティのオンライン・コード実行サービスの実際のコンパイラ・オプションと厳密には一致しないので、予期せぬ結果を得る可能性は十分にある。</p>
+      </li>
+    </ul>
+  </div>
+</div>
+<p><strong>LSP</strong></p>
+<p>LSPを設定した後、エディタ（C++およびPython言語のみ）：に以下の機能を提供できます。</p>
+<ul>
+  <li>自動補完、メソッドシグネチャのヒント、コードの修正</li>
+  <li>ホバー・チップ、インレイ・チップ、ドキュメント・リンク</li>
+  <li>定義]、[参考文献]、[記号の参考文献] をクリックする。</li>
+  <li>書式設定、部分書式設定、プログレッシブ自動書式設定、折りたたみ範囲分析、名前の変更</li>
+</ul>
+<p>もちろん、ローカルコンパイル、ブレークポイントデバッグ、複数ファイルなどはサポートされていません。…… 、パフォーマンスはローカルの特別なIDEほど良くありません。</p>
+<p>要するに、この機能はあまり意味がなく、役に立つものでもないので、興味のある方は以下のFAQセクションをチェックしてみてください！</p>
+<p><strong>スタティック・コンプリートの強化</strong></p>
+<p>設定パネル - Monaco - 静的コード補完機能 - カスタムで、モナコエディタにカスタムの静的コード補完ルールを追加できます。</p>
+<p>補完ルールはJSON形式である。 以下はその例である（モナコ形式）。</p>
+<pre>
+  {
+    "suggestions": [
+        {
+            "label": "hello world",
+            "kind": 15,
+            "documentation": "The is a hello world snippet",
+            "insertText": "hello world"
+        },
+        // その他提案... ]
+}.
+</pre>
+<p><a href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html"> CompletionItem </a>のほぼすべてのプロパティを使用できます（注意：範囲プロパティは記入しないでください、スクリプトが自動的に計算して追加します）。</p>
+<h2 id="其他功能">その他の機能</h2>
+<ul>
+  <li>タイトル、ブログ、返信などの右上に <code>MrakDown view</code> ボタンと <code>copy</code> ボタンを追加。</li>
+  <li>Codeforcesをダークモードに対応させ、デフォルトでシステムに従うようにする。</li>
+  <li>折り畳みブロックの展開、すべての折り畳みブロックの自動展開</li>
+  <li>ロッキーバレージャンプ、ロッキーバレーの質問の該当ページへワンクリックでジャンプ</li>
+  <li>コメント差別化ページ、サポートページフリップ、ジャンプ、各ページに表示されるメインフロアの数を選択することができます。</li>
+  <li>レンダリングの最適化で、折りたたまれたブロック要素にレンダリング制約を追加しました。</li>
+  <li>Codeforcesトーナメントでは、「スコア/合計」範囲のスコアに対してグラデーションで色を変更。</li>
+</ul>
+<h2 id="兼容性">互換性</h2>
+<p><strong>ブラウザ</strong></p>
+<table style="border: 1px solid #bcaaa4;">
+  <thead>
+    <tr style="background-color: #f2f2f2;">
+      <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
+      <th style="border-bottom: 1px solid #bcaaa4;">アジュバント</th>
+      <th style="border-bottom: 1px solid #bcaaa4;">最小バージョン</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: white;">
+      <td style="background-color: #009688; color: #ffffff;">Chrome</td>
+      <td style="background-color: #009688; color: #ffffff;">アジュバント</td>
+      <td style="background-color: #f9f9f9;">96</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #009688; color: #ffffff;">Edge</td>
+      <td style="background-color: #009688; color: #ffffff;">アジュバント</td>
+      <td style="background-color: #f9f9f9;">96</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #f9f9f9;">国内クロムケース</td>
+      <td style="background-color: #FFC107; color: #3e2723;">基本的な互換性はあるが、予期せぬエラーが発生する可能性がある</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Chromiumカーネル・バージョン ≥96</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #009688; color: #ffffff;">FireFox（モバイルを含む）</td>
+      <td style="background-color: #009688; color: #ffffff;">アジュバント</td>
+      <td style="background-color: #f9f9f9;">103</td>
+    </tr>
+    <tr style="background-color: white;">
+      <td style="background-color: #f9f9f9;">Safari</td>
+      <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">非対応</td>
+      <td style="background-color: #f9f9f9; background-color: #f44336; color: white;">\</td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>スクリプト・マネージャー</strong></p>
+<p>Greasemonkey、Violentmonkey、ScriptCatなどとの互換性は保証されません。</p>
+<p><strong>その他のプラグイン</strong></p>
+<p>主流のCF関連プラグインとの互換性の問題はないので、互換性の問題が発生した場合はフィードバックを歓迎する。</p>
+<p><strong>ミラー</strong></p>
+<p>公式ライトサイト <a href="https://m1.codeforces.com">m1</a> / <a href="https://m2.codeforces.com">m2</a> / <a
+    href="https://m2.codeforces.com">m3</a> 、公式ミラーサイト <a
+    href="https://mirror.codeforces.com/">https://mirror.codeforces.com/</a>、非公式ミラーサイト <a
+    href="https://codeforc.es">https://codeforc.es</a>をサポート。</p>
+<p>さらに、理論的には他のどのミラーとも互換性がある。 <code>// @match your mirror URL</code> というコメントをもう1行追加すればいいだけだ！</p>
+<h2 id="常见问题">一般的な問題</h2>
+<div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 何から始めればいいですか？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. スクリプトをインストールする前に、 <a href="https://www.tampermonkey.net/">Tampermonkey</a> をインストールする必要があります。
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. アップデートエラーは？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <p>A. Greasy Forkプラットフォームのため、新しいバージョンがリリースされた場合、実際のアップデート/インストールは以前のバージョンになることがあります。</p>
+        <p>通常は、数分待ってから再度アップデート/インストールを行う必要がある。</p>
+        <p>また、スクリプトの更新アラートボックスの赤いクエスチョンマークにマウスを合わせ、ポップアップメッセージの下にある「Don't update yet（まだ更新しないでください）」ボタンをクリックすることもできます。</p>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. ローディング中と表示され続けますか？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 設定パネルの「互換性オプション - ページリソースの読み込みを待たない」オプションを有効にしてください。
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. DeepL翻訳エラーの使用 リクエストが多すぎますか?</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <p>A. これは通常、短期間に頻繁に翻訳しているか、一度に 5,000 文字以上のテキストを翻訳していることが原因です。 DeepL には、翻訳の単語数と頻度に制限があります。</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">一時的なもので、しばらくすれば元に戻るよ。</span>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. DeepLを使用すると、undefindエラーが発生したり、翻訳中と表示されたりします。</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. これは通常、使用しているネットワークが <a href="https://www.deepl.com">www.deepl.com</a>に正しくアクセスしていないことが原因です。
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 翻訳結果で {xx} / [xx] / [xx] と表示される数式がありますが？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 翻訳に共通の翻訳インターフェース（DeepL/Youdao/google）を使用する場合、スクリプトの実装方法によって制限されますが、{xx}/[xx]/[xx] が発生する可能性があります。
+        <div style="border: 8px solid #ffffff00;"></div>
+        <div style="background-color: #E3F2FD;color: #1565C0;border: 1px solid #1565c0;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>スクリプトによる数式の処理</strong></p>
+            <p>LaTeXの数式が翻訳中に壊れないようにするため、スクリプトは最初にすべてのLaTeXの数式を取り出し、置換文字{xx}/[xx]/[xx]を使って配置します。</p>
+            <p>これらの置換は翻訳中に破損しない確率が高いので、翻訳後に置換に基づいてLaTeXの数式に戻すことが可能です。</p>
+            <p>この実装は、置換文字が壊れていなければ期待通りに機能する。</p>
+            <p>しかし、翻訳サービスが置換を壊してしまうことがある。 例えば、[23]が[23 / 23] / [23]/ [23 】/ [23 】になってしまう。</p>
+            <p>しかし、翻訳サービスによってさらに内容が破壊され、曖昧さが生じた場合、例えば、翻訳サービスによって[2] 313が[2312]になった場合、それを復元することはできません。</p>
+            <p>各翻訳サービスでは、異なる置換はそれ自体が破損する確率が異なります。</p>
+            <p>テストした結果、 <code>{}</code> の方が通常性能が良いので、これがスクリプトで使われるデフォルトの置換である。</p>
+          </div>
+        </div>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>ヒント：</strong></p>
+            <p>この問題はChatGPTで翻訳する場合には存在しません。 ChatGPTはプロンプトワードで直接「LaTeXの数式を翻訳せずに保持する」ように指示できるからです。</p>
+            <p>スマートなChatGPTはこれに非常によく対応でき、これはスクリプトを翻訳するための推奨方法です。</p>
+          </div>
+        </div>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. ChatGPTで翻訳するには？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. もしOpenAIのインターフェースに直接アクセスでき、アカウントを持っているのであれば、"ChatGPT Translation (API) "にチェックを入れ、下の "Add "ボタンをクリックして新しい設定を作成し、必要事項を記入してください。
+        <p>また、ChatGPTを使用するためにAPIプロキシサービスを購入することができます、次の表は、いくつかのAPIサービスプロバイダを収集し、あなたが使用することを選択できます。
+        </p>
+        <table style="border: 1px solid #bcaaa4;">
+          <thead>
+            <tr style="background-color: #f2f2f2;">
+              <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">公式サイト</th>
+              <th style="border-bottom: 1px solid #bcaaa4;">取得方法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">API2D</td>
+              <td style="background-color: #f9f9f9;"><a href="https://api2d.com/" target="_blank"
+                  class="url">https://api2d.com/</a></td>
+              <td style="background-color: #f9f9f9;">公式サイト</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">CloseAI</td>
+              <td style="background-color: #f9f9f9;"><a href="https://console.closeai-asia.com/" target="_blank"
+                  class="url">https://console.closeai-asia.com/</a></td>
+              <td style="background-color: #f9f9f9;">公式サイト</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">OhMyGPT</td>
+              <td style="background-color: #f9f9f9;"><a href="https://aigptx.top/" target="_blank"
+                  class="url">https://aigptx.top/</a></td>
+              <td style="background-color: #f9f9f9;">公式サイト</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">OpenAI-SB</td>
+              <td style="background-color: #f9f9f9;"><a href="https://openai-sb.com/" target="_blank"
+                  class="url">https://openai-sb.com/</a></td>
+              <td style="background-color: #f9f9f9;">テレグラムのボット</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">API2GPT</td>
+              <td style="background-color: #f9f9f9;"><a href="https://www.api2gpt.com/" target="_blank"
+                  class="url">https://www.api2gpt.com/</a></td>
+              <td style="background-color: #f9f9f9;">公式サイト</td>
+            </tr>
+            <tr style="background-color: white;">
+              <td style="background-color: #f9f9f9;">AI Proxy</td>
+              <td style="background-color: #f9f9f9;"><a href="https://aiproxy.io/" target="_blank"
+                  class="url">https://aiproxy.io/</a></td>
+              <td style="background-color: #f9f9f9;">公式サイト</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>免責事項：</strong></p>
+            <p>筆者は共有の目的で収集・共有しているだけであり、いかなる収益も受け取っておらず、上記プラットフォームの安定性を保証するものではなく、プラットフォームのいかなる挙動も筆者とは無関係である。</p>
+            <p>このようなサービス・プロバイダーは廃業する可能性がある。</p>
+          </div>
+        </div>
+        <p>apiプロキシ・サービス・プロバイダーが提供するサービスを使用する場合、コンフィギュレーションのKEYはapiプロキシ・サービス・プロバイダーが提供するKEYでなければならない。</p>
+        <p>さらに、プロキシAPIをコンフィギュレーションに追加入力する必要があります。</p>
+        <p>プロキシAPIは全項目を入力する必要があります。 以下は、APIを提供する <a href="https://console.closeai-asia.com/">CloseAI</a> の例です。
+          Base：<code>https://api.closeai-proxy.xyz</code></p>
+        <p>そして、プロキシAPIの後には、 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>が続くはずである。</p>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注意：カスタムAPIを指定しているため、Tampermonkeyはクロスドメインリクエストについて警告を表示します！</span>
+        <div style="border: 10px solid #ffffff00;"></div>
+        <span style="background-color: #FFF3E0;color: #FF5722;">注：Azure OpenAI を使いたい場合、そのインターフェース・パラメータは公式の OpenAI インターフェースと同じではないので、<a href="https://github.com/stulzq/azure-openai-proxy">azure-openai-proxy</a>を自分でデプロイして変換することができます。</span>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. LSPとは何ですか？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. <a href="https://microsoft.github.io/language-server-protocol/">LSP (Language Server Protocol)</a>は、エディターと言語サーバー間の通信のために、マイクロソフトによって始められたプロトコル仕様です。
+        <p>従来のIDEが実装する必要があったコード補完、診断、提案、文書化、さらにはプロジェクト管理機能をエディタから切り離し、独立したサービスを使ってこれらの機能を実行する。</p>
+        <p>エディタはプロトコル仕様に従ってサーバーと通信するだけでよいので、作業負荷が大幅に軽減され、さまざまなプログラミング言語を簡単にサポートできる。</p>
+        <p>現在、LSPの生態系は徐々に改善され、VSCode、Vim、Emacsなど、主流のエディタがLSPをサポートしたり、対応するプラグインを持っている。</p>
+        <p>しかし、主要な商用IDEベンダーはこれにほとんど関心を持っておらず、基本的に既存のLSPサーバーはオープンソースコミュニティによってメンテナンスされているため、プロフェッショナルなIDEや様々なプロフェッショナルなプラグインにはまだ及ばない。</p>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. LSPの使い方は？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. 2歩だけ：
+        <p>：スクリプトは、C++ と Python による LSP Server の次の 2 つの実装をサポートしています。 ：必要に応じてインストールする必要があります。</p>
+        <table>
+          <thead>
+            <tr>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">多言語主義</th>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">LSP Server</th>
+              <th style="background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">インストール方法（Windowsの場合）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="background-color: #f9f9f9; color: black;">C++</td>
+              <td style="background-color: #f9f9f9; color: black;">clangd</td>
+              <td style="background-color: #f9f9f9; color: black;"><a href="https://github.com/clangd/clangd/releases">clangd release</a> からclangdをダウンロードし、システム環境変数のパスにclangdのパスを追加する。 例えば、 <code>C:˶clangd_16.0.2bin</code></td>
+            </tr>
+            <tr>
+              <td style="background-color: #f9f9f9; color: black;">Python</td>
+              <td style="background-color: #f9f9f9; color: black;">pylsp</td>
+              <td style="background-color: #f9f9f9; color: black;">コマンド：
+                <code>pip install "python-lsp-server[all]"</code>を実行すると、環境変数が自動的に追加されます。</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>II：また、スクリプトとLSPサーバー間の通信を橋渡しするOJBetter_Bridgeを <a href="https://github.com/beijixiaohu/OJBetter/releases">GitHubリリース</a> または <a
+            href="https://mxyowl.lanzouj.com/b0cui6bgj">Blue Rhythm Cloud (password:aaaa)</a> からダウンロードして解凍する必要があります。</p>
+        <p>解凍したフォルダーをCドライブのルート・ディレクトリー、または他のお好きな場所に置きます。 (注意：他の場所に置く場合は、設定パネルの「作業パス」を実際の場所に変更する必要があります)</p>
+        <p>OJBetter_BridgeはGUI版とターミナル版があり、WindowsではGUI版をお勧めします。 <code>server_gui.exe</code> を直接実行してください。</p>
+        <p>OJBetter_Bridgeは、起動時にclangdとpylspコマンドが有効かどうかを自動的にチェックし、プロンプトを表示する。</p>
+        <span style="color:#009688; background-color: #E0F2F1;">ヒント：： <code>server_gui.exe</code> のインターフェースで、起動するように設定できる。</span>
+        <p>以上の手順が完了したら、設定パネルで「LSPを使用する」をオンにして使用することができます。</p>
+        <div style="border: 1px solid #aaa;">
+          <div style="border: 8px solid #ffffff00;">
+            <details>
+              <summary>詳しくは？</summary>
+              <div style="border: 8px solid #ffffff00;">
+                clangdの場合、cpp_workspaceフォルダに2つの設定ファイルが格納されている <code>.clangd</code>,<code>.clang-format</code>
+                <p>これらは、 <a href="https://clangd.llvm.org/config">設定項目</a> と <a
+                    href="https://clang.llvm.org/docs/ClangFormatStyleOptions.html">clangdのコード書式スタイル</a>を定義しており、編集することができます。</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. クラングド・フォーマットが機能しないのはなぜですか？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. これは、設定パネルのLSP作業パスが正しくないためです。</a>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. clangdが私の <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> ヘッダーを認識できないのはなぜですか？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. これは <code>&#60;&#98;&#105;&#116;&#115;&#47;&#115;&#116;&#100;&#99;&#43;&#43;&#46;&#104;&#62;</code> が標準のヘッダファイルではないためで、clangdはデフォルトではサポートしていません。 OJBetter_Bridgeのcpp_workspace
+        にある <code>.clangd</code> ファイルのコンパイラパラメータを修正することで、clangにこの非標準のヘッダファイルがどこにあるかを教える必要があります（もちろん、ユニバーサルヘッダの使用は推奨されません）。</a>
+      </div>
+    </details></div>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>Q. 静的補完の強化にローカルのJSONファイルを使用することは可能ですか？</summary>
+      <div style="border: 8px solid #ffffff00;">
+        A. ブラウザのセキュリティ制限により、 <code>file:///xxx</code> のようなURLを使用して、ブラウザでローカルのJSONファイルに直接アクセスすることはできません。
+        <p>OJBetter_Bridgeの/mycompletフォルダにJSONファイル <code>xxx.json</code> を置くだけです。</p>
+        <p>OJBetter_Bridgeを起動すると、：<code>http://127.0.0.1:2323/mycomplet/xxx.json</code>のJSON URLで設定パネルに新しい設定を作成できます。</p>
+        <div style="background-color: #E0F2F1;color: #009688;border: 1px solid #009688;">
+          <div style="border: 8px solid #ffffff00;">
+            <p><strong>試してみる？</strong></p>
+            <p>OJBetter_Bridgeを起動し、最初は/mycompletフォルダにサンプルのJSONファイル：<code>template.json</code>が入っているので、設定を追加し、
+              <code>http://127.0.0.1:2323/mycomplet/template.json</code> を埋めて保存します！</p>
+            <p>エディターでhelloと入力すると、：hello world, hello world2の2つの補完的なエントリーが表示される。</p>
+          </div>
+        </div>
+      </div>
+    </details></div>
+</div>
+<h2 id="贡献代码">コードを投稿する</h2>
+<p><a href="https://github.com/beijixiaohu/OJBetter">Github リポジトリ</a> PR を作成してください。</p>
+<h2 id="其他OJ?">他のOJ？</h2>
+<p>もしこのスクリプトをあなたの好きなOJ用に移植したいのであれば、GPL-3.0ライセンスに従うだけでよい！</p>
+<h2 id="感谢">有り難い</h2>
+<ul>
+  <li>：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>,<a
+      href="https://greasyfork.org/zh-CN/scripts/378277">Translator</a>以下のスクリプトは開発初期に参照された。</li>
+  <li>CodeforcesBetterスクリプトは、以下のオープンソースライブラリを使用しています。 ：<a href="https://github.com/mixmark-io/turndown">turndown</a>,<a
+      href="https://jquery.com/">jquery</a>,<a href="https://www.mathjax.org/">MathJax</a>,<a
+      href="https://github.com/brix/crypto-js">crypto-js</a>,<a href="">base64</a>,<a
+      href="https://github.com/gka/chroma.js">chroma</a>,<a href="http://xtermjs.org/">xterm</a>,<a
+      href="https://dexie.org/">dexie</a>,<a href="https://github.com/microsoft/monaco-editor">monaco-editor</a>
+  </li>
+  <li>OJBetter_Bridgeは以下のリポジトリを参照しています<a
+      href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>そして以下のオープンソースライブラリを使用しています：<a
+      href="https://github.com/zhiyiYo/PyQt-Fluent-Widgets">PyQt-Fluent-Widgets</a>,<a
+      href="https://pypi.org/project/PyYAML/">PyYAML</a>,<a href="https://pypi.org/project/tornado/">tornado</a>,<a
+      href="https://pypi.org/project/ujson/">ujson</a>
+  </li>
+  <li>ご意見、ご感想をお寄せくださったすべての方々に感謝する。</li>
+</ul>
+<p>ありがとう、0rz。</p>
