@@ -154,7 +154,7 @@
             "rules": {
                 "Register now": "अभी साइनअप करें",
                 "No tag edit access": "कोई टैग संपादन अनुमति नहीं",
-                "Problem": "सवाल",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "फैसले की स्थिति",
                 "Language:": "भाषा:",
                 "Participant": "प्रतियोगियों",
@@ -489,7 +489,8 @@
                 "Contest writers": "प्रतियोगिता लेखक",
                 "Spectator ranklists": "दर्शकों की रैंकिंग सूची",
                 "Ghosts:": "भूत खिलाड़ी",
-                "Export Submissions": "निर्यात प्रस्तुतीकरण"
+                "Export Submissions": "निर्यात प्रस्तुतीकरण",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -693,6 +694,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "विषय:",
+                "Question": "问题",
                 "Language:": "भाषा:",
                 "Source code:": "सोर्स कोड:",
                 "Or choose file:": "या एक फ़ाइल चुनें:",
@@ -715,6 +717,9 @@
                 "Organization": "आयोजन",
                 "Handle/Email": "खाता ई - मेल",
                 "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "पासवर्ड",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "प्रशिक्षण का नाम (अंग्रेजी):",
@@ -833,7 +838,8 @@
                 "Create Mashup Contest": "एक मैशअप मैच बनाएं",
                 "Delete problem": "प्रश्न हटाएं",
                 "Restore problem": "पुनर्प्राप्ति मुद्दे",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {
