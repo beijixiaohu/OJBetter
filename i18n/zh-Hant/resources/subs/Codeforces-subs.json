@@ -123,7 +123,7 @@
                 "Where the contest was held originally": "比賽原本舉辦的地點",
                 "Official contest site URL": "官方比賽網站URL",
                 "Enter a name for your new API key. It should describe what this key is used for.": "為您的新API金鑰輸入名稱。它應該描述這個密鑰的用途。",
-                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "輸入您的帳戶密碼以確認存取。如果您沒有密碼，請登出並使用密碼恢復功能。"
             }
         },
         ".propertyLinks": {
@@ -155,7 +155,7 @@
             "rules": {
                 "Register now": "現在報名",
                 "No tag edit access": "沒有標籤編輯權限",
-                "Problem([\\s]*)$": "问题",
+                "Problem([\\s]*)$": "問題",
                 "Verdict": "判題狀態",
                 "Language:": "語言:",
                 "Participant": "參賽者",
@@ -224,7 +224,7 @@
                 "Favourites": "收藏",
                 "Contests": "比賽",
                 "Magic": "魔法",
-                "Handle": "账号",
+                "Handle": "帳號",
                 "Members": "成員",
                 "问题etting": "參與編寫的問題",
                 "Streams": "直播",
@@ -340,7 +340,7 @@
                 "My friends": "我的好友",
                 "Change settings": "改變設定",
                 "Last visit": "最後訪問",
-                "not visible": "不可见的",
+                "not visible": "不可見的",
                 "Registered": "註冊於",
                 "Blog entries": "部落格條目",
                 "comments": "評論",
@@ -491,7 +491,7 @@
                 "Spectator ranklists": "觀眾排名列表",
                 "Ghosts:": "幽靈選手",
                 "Export Submissions": "匯出提交",
-                "Register in Codeforces": "注册 Codeforces"
+                "Register in Codeforces": "註冊Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -589,16 +589,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "郵遞區號/郵編",
-                "Country //(English//)": "国家（英文）",
-                "State //(English//)": "州/省份（英文）",
+                "Country //(English//)": "國家（英文）",
+                "State //(English//)": "州/省（英文）",
                 "City //(English//)": "城市（英文）",
                 "Address //(English//)": "地址（英文）",
                 "Recipient //(English//)": "收件人姓名（英文）",
-                "Country //(Native//)": "国家（本地语言）",
-                "State //(Native//)": "州/省份（本地语言）",
-                "City //(Native//)": "城市（本地语言）",
-                "Address //(Native//)": "地址（本地语言）",
-                "Recipient //(Native//)": "收件人姓名（本地语言）",
+                "Country //(Native//)": "國家（本地語言）",
+                "State //(Native//)": "州/省（本地語言）",
+                "City //(Native//)": "城市（本地語言）",
+                "Address //(Native//)": "地址（本地語言）",
+                "Recipient //(Native//)": "收件人姓名（本地語言）",
                 "Phone": "電話",
                 "TON Wallet:": "TON 皮夾:",
                 "Secret Code:": "驗證碼:",
@@ -695,7 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "題目:",
-                "Question": "问题",
+                "Question": "問題",
                 "Language:": "語言:",
                 "Source code:": "原始碼:",
                 "Or choose file:": "或選擇文件:",
@@ -717,10 +717,10 @@
                 "City": "城市",
                 "Organization": "組織",
                 "Handle/Email": "帳號/信箱",
-                "Name": "名称",
-                "Handle": "账号",
-                "Email": "邮箱",
-                "Confirm": "确认",
+                "Name": "名稱",
+                "Handle": "帳號",
+                "Email": "信箱",
+                "Confirm": "確認",
                 "Password": "密碼",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "訓練名稱（英文）:",
@@ -839,8 +839,8 @@
                 "Create Mashup Contest": "創建混搭比賽",
                 "Delete problem": "刪除問題",
                 "Restore problem": "恢復問題",
-                "Generate": "生成",
-                "Send": "发送"
+                "Generate": "產生",
+                "Send": "傳送"
             }
         },
         "InputButton": {
