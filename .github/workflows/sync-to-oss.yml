@@ -6,8 +6,18 @@ on:
       - main
     paths:
       - 'resources/**'
+      - 'i18n/**'
 
 jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Check JSON
+        run: |
+          find . -name "*.json" -print0 | xargs -0 -n1 jq . >/dev/null
   sync_to_oss:
     runs-on: ubuntu-latest
     steps:
@@ -31,4 +41,5 @@ jobs:
         env:
           OSS_BUCKET: 'aowuucdn'
         run: |
-          ./ossutil64 sync ./resources/ oss://$OSS_BUCKET/resources/
+          ./ossutil64 sync -u -f ./resources/ oss://$OSS_BUCKET/resources/
+          ./ossutil64 sync -u -f ./i18n/ oss://$OSS_BUCKET/i18n/
