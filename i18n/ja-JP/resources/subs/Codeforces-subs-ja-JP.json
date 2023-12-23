@@ -154,7 +154,7 @@
             "rules": {
                 "Register now": "今すぐ登録",
                 "No tag edit access": "タグの編集権限がない",
-                "Problem": "課題",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "裁定状況",
                 "Language:": "言語。",
                 "Participant": "出場者",
@@ -489,7 +489,8 @@
                 "Contest writers": "コンペティション作家",
                 "Spectator ranklists": "観客動員数ランキング",
                 "Ghosts:": "ゴーストプレーヤー",
-                "Export Submissions": "輸出申請"
+                "Export Submissions": "輸出申請",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -693,6 +694,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "タイトル",
+                "Question": "问题",
                 "Language:": "言語。",
                 "Source code:": "ソースコード",
                 "Or choose file:": "またはファイルを選択します。",
@@ -715,6 +717,9 @@
                 "Organization": "組織",
                 "Handle/Email": "口座番号/Eメール",
                 "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "暗号化",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "研修名（英語）。",
@@ -833,7 +838,8 @@
                 "Create Mashup Contest": "マッシュアップコンテストを開催",
                 "Delete problem": "質問を削除する",
                 "Restore problem": "リカバリーの問題",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {
