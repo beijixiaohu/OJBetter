@@ -1,0 +1,242 @@
+{
+    "sidebar": {
+        "basic": "基本",
+        "localization": "本地化",
+        "translation": "翻译",
+        "clist": "Clist",
+        "monaco": "Monaco",
+        "compatibility": "兼容"
+    },
+    "basicSettings": {
+        "title": "基本设置",
+        "darkMode": {
+            "name": "黑暗模式",
+            "options": {
+                "dark": "黑暗",
+                "light": "白天",
+                "system": "跟随系统"
+            }
+        },
+        "loadingInfo": {
+            "label": "显示加载提示信息",
+            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
+        },
+        "targetArea": {
+            "label": "显示目标区域范围",
+            "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
+        },
+        "expandBlocks": "自动展开折叠块",
+        "renderOptimization": {
+            "label": "折叠块渲染优化",
+            "helpText": "<p>为折叠块元素添加 contain 约束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>"
+        },
+        "paging": {
+            "label": "评论区分页",
+            "helpText": "对评论区分页显示，每页显示指定数量的<strong>主楼</strong>。"
+        },
+        "luoguJump": {
+            "label": "显示跳转到洛谷",
+            "helpText": "<p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p><p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p><p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>"
+        },
+        "recolor": {
+            "label": "重新着色榜单",
+            "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
+        }
+    },
+    "localizationSettings": {
+        "title": "本地化设置",
+        "scriptLanguageLabel": "脚本语言",
+        "websiteLanguageLabel": "网站语言"
+    },
+    "translationSettings": {
+        "title": "翻译设置",
+        "options": {
+            "title": "首选项",
+            "translationServices": {
+                "deepl": "DeepL翻译",
+                "iflyrec": "讯飞听见翻译",
+                "youdao": "有道翻译",
+                "google": "谷歌翻译",
+                "caiyun": "彩云小译",
+                "openai": {
+                    "name": "ChatGPT翻译",
+                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
+                }
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "流式传输",
+                "helpText": "<p>启用数据流式传输，打字机效果</p>"
+            }
+        },
+        "preference": {
+            "title": "偏好",
+            "comment_translation_choice": "评论区翻译",
+            "translationServices": {
+                "follow": "跟随首选项",
+                "deepl": "DeepL翻译",
+                "iflyrec": "讯飞听见翻译",
+                "youdao": "有道翻译",
+                "google": "谷歌翻译",
+                "caiyun": "彩云小译",
+                "openai": "ChatGPT翻译"
+            }
+        },
+        "autoTranslation": {
+            "title": "自动翻译",
+            "enable": "启用自动翻译",
+            "helpText": "<p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
+            "shortTextLength": {
+                "name": "短文本长度",
+                "helpText": "<p>当文本长度小于该值时，视为短文本</p>",
+                "end": "字符"
+            },
+            "allowMixTrans": {
+                "name": "评论区混合翻译",
+                "helpText": "<p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p><p>并行地进行翻译</p>",
+                "checkboxs": {
+                    "deepl": "DeepL",
+                    "iflyrec": "讯飞",
+                    "youdao": "有道",
+                    "google": "谷歌",
+                    "caiyun": "彩云"
+                }
+            }
+        },
+        "advanced": {
+            "name": "高级",
+            "mode": {
+                "name": "工作模式",
+                "helpText": "<p>你可以选择脚本的工作方式</p><p>○ 普通模式：会一次性翻译整个区域的内容</p><p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p><p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p><div style='color:#f44336;'><p><u>注意：分段/选段模式会产生如下问题：</u></p><p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p><p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p></div>",
+                "options": {
+                    "0": "普通模式",
+                    "1": "分段模式",
+                    "2": "选段模式"
+                }
+            },
+            "memory": {
+                "name": "自动恢复历史翻译",
+                "helpText": "<p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p><p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>"
+            },
+            "retrans": {
+                "name": "重新翻译时",
+                "helpText": "<p>选择在重新翻译时是'关闭旧的结果'还是'收起旧的结果'</p>",
+                "options": {
+                    "0": "关闭旧的结果",
+                    "1": "收起旧的结果"
+                }
+            },
+            "transWaitTime": {
+                "name": "等待间隔",
+                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
+                "end": "毫秒"
+            },
+            "replaceSymbol": {
+                "name": "LaTeX替换符",
+                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p><p>具体你可以前往阅读脚本页的说明</p>",
+                "options": {
+                    "1": "使用【】",
+                    "2": "使用{}",
+                    "3": "使用[]"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "过滤文本中的**号",
+                "helpText": " <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用ChatGPT会忽略该项) </p>"
+            }
+        }
+    },
+    "clistSettings": {
+        "title": "Clist 设置",
+        "basics": {
+            "name": "基本",
+            "notice": "注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明。",
+            "key": {
+                "title": "KEY:",
+                "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
+                "keyPlaceholder": "请输入 KEY"
+            }
+        },
+        "displayRating": {
+            "title": "显示Rating分",
+            "contest": {
+                "name": "比赛问题集页",
+                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "badge": "Cookie/API KEY"
+            },
+            "problem": {
+                "name": "题目页",
+                "helpText": "<p><p>你需要提供官方的api key</p><p>或让你的浏览器上的clist.by处于登录状态（即cookie有效）</p",
+                "badge": "Cookie/API KEY"
+            },
+            "problemset": {
+                "name": "题单页",
+                "helpText": "<p>需要让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）才能正常工作</p>",
+                "badge": "Cookie"
+            }
+        },
+        "spoilerProtection": {
+            "title": "防剧透",
+            "helpText": "<p>只有当鼠标移动到Rating分展示区域上时才显示</p>"
+        }
+    },
+    "codeEditorSettings": {
+        "title": "Monaco 编辑器设置",
+        "basics": "基本",
+        "problemPageCodeEditor": {
+            "label": "题目页添加编辑器",
+            "helpText": "在题目页下面添加 Monaco 编辑器，代码会自动保存，提供在线代码运行"
+        },
+        "preferences": {
+            "title": "偏好",
+            "isCodeSubmitConfirm": {
+                "label": "代码提交二次确认",
+                "helpText": "点击题目页 Monaco 编辑器的代码提交时会弹窗二次确认，防止误提交"
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "鼠标滚动锁定",
+                "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "在线代码运行",
+            "compilerOptions": {
+                "codeforces": "Codeforces",
+                "wandbox": "wandbox",
+                "rextester": "rextester"
+            }
+        },
+        "lspSettings": {
+            "title": "LSP 设置",
+            "useLSP": {
+                "label": "使用 LSP",
+                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>"
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "工作路径:",
+                "helpText": "<p>你需要填写 OJBetter_Bridge 所在的路径</p><p>使用正斜杠或反斜杠均可</p><p>默认路径：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "Server:",
+                "helpText": "<p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p><p>默认的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>"
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "静态补全增强",
+            "cppCodeTemplateComplete": {
+                "label": "AcWing CPP 补全模板",
+                "helpText": "<p>模板来自<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+            },
+            "customization": "自定义",
+            "performanceWarning": "注意：过多的静态补全规则会影响性能"
+        }
+    },
+    "compatibilitySettings": {
+        "title": "兼容设置",
+        "loaded": {
+            "label": "不等待页面资源加载",
+            "helpText": "<p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p><p>如果你的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p><p><u>你首先应该确认是否是网络问题，</u></p><p>如果不是，那这可能是由于 window.onload 事件在你的浏览器中触发过早（早于DOMContentLoaded），</p><p>你可以尝试开启该选项来不再等待 window.onload 事件</p><p><u>注意：如果没有上述问题，请不要开启该选项</u></p>"
+        }
+    }
+}

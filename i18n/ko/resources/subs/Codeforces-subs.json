@@ -1,0 +1,859 @@
+{
+    "version": "1.0.0",
+    "commonReplacements": {
+        ".datatable": {
+            "class": [
+                ".datatable"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation": "가상 재연 토너먼트에 참여하기",
+                "Enter": "로 이동",
+                "Current standings": "현재 목록",
+                "Final standings": "최종 목록",
+                "Preliminary results": "예비 결과",
+                "open hacking:": "오픈 해킹",
+                "School/University/City/Region Championship": "학교/대학/도시/지역 대회",
+                "Official School Contest": "공식 학교 대회",
+                "Training Contest": "트레이닝 경기",
+                "Training Camp Contest": "훈련 캠프 경쟁",
+                "Official ICPC Contest": "ICPC 공식 대회",
+                "Official International Personal Contest": "공식 국제 개인전",
+                "China": "sino",
+                "Statements": "제목 설명",
+                "in Chinese": "중국어",
+                "Trainings": "기차",
+                "Prepared by": "작성자",
+                "Current or upcoming contests": "현재 진행 중이거나 예정된 대회",
+                "Rating: users participated in recent 6 months": "평가：지난 6개월 동안 참여한 적이 있는 사용자",
+                "Past contests": "지난 경기",
+                "Exclusions": "제외",
+                "Before start": "레이스 시작까지 몇 분 남지 않았습니다.",
+                "Before registration": "등록이 시작되기까지 아직 시간이 남아 있습니다.",
+                "Until closing ": "아직 등록을 마감할 시간이 남아 있습니다.",
+                "Before extra registration": "추가 등록은 아직 열려 있지 않습니다.",
+                "Register »": "등록 \"",
+                "Registration completed": "등록",
+                "Registration closed": "등록이 마감되었습니다.",
+                "Problems\n": "설문지",
+                "My Submissions": "내 제출물",
+                "Standings": "이름 목록",
+                "Questions about problems": "이슈에 대한 질문",
+                "Contest status": "게임 상태",
+                "Invited users": "초대된 사용자",
+                "Invitation links": "초대 링크",
+                "API keys": "API 키"
+            }
+        },
+        ".menu-list.main-menu-list": {
+            "class": [
+                ".menu-list.main-menu-list"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Home": "홈페이지",
+                "Top": "유행 중",
+                "Catalog": "가이드 카탈로그",
+                "Contests": "대회(스포츠 등)",
+                "Gym": "훈련 캠프",
+                "Problemset": "설문지",
+                "Groups": "조직",
+                "Rating": "평가 순위",
+                "Edu": "재배",
+                "Calendar": "캘린더",
+                "ICPC Challenge": "ICPC 챌린지",
+                "Help": "손"
+            }
+        },
+        ".nav-links": {
+            "class": [
+                ".nav-links"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Settings": "설정",
+                "Blog": "블로그(외래어)",
+                "Teams": "대기열",
+                "Submissions": "제출(보고서 등)",
+                "Favourites": "북마크(인터넷)",
+                "Problemsetting": "문제 설정",
+                "Talks": "비공개 편지",
+                "Contests": "대회(스포츠 등)"
+            }
+        },
+        ".contest-state-phase": {
+            "class": [
+                ".contest-state-phase"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Before contest": "다가오는 대회",
+                "Contest is running": "경기 진행 중"
+            }
+        },
+        ".notice": {
+            "class": [
+                ".notice"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "has extra registration": "추가 등록 기간이 있습니다.",
+                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "레이스 시작 5분 전까지 등록하지 않은 경우, 추가 등록 기간 동안 나중에 등록할 수 있습니다. 추가 등록은 레이스 시작 10분 후부터 시작되어 25분 동안 진행됩니다.",
+                "in timezone ([^)]*)": "1 시간대",
+                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "콘테스트가 종료된 후 가상 참가가 허용됩니다. 언제든지 가상 참가를 허용하려면 이 필드를 비워 두세요.",
+                "Contest duration in minutes": "경기 시간(분)",
+                "or choose": "를 클릭하거나",
+                "Standings freeze period in minutes": "목록 고정 시간(분)",
+                "Time when final results are available": "최종 결과를 확인할 수 있는 시간",
+                "Is it allowed to solve contest problems unofficially after the end": "경기 종료 후 비공식적인 경기 문제 해결이 허용되는지 여부",
+                "Is it allowed to run contest as virtual after the end": "대회 후 가상 참가 허용 여부",
+                "Is it allowed participate in contest out of competition": "비경쟁 출품작 허용 여부",
+                "Are participants allowed to register for the contest themselves": "참가자가 직접 등록할 수 있는지 여부",
+                "Can non-registered users and anonyms view contest standings, problems and other statistics": "미등록 및 익명 사용자가 레이스 순위표, 질문 및 기타 통계를 볼 수 있도록 허용할지 여부",
+                "If unchecked they will view only personal status": "이 옵션을 선택하지 않으면 개별 상태만 볼 수 있습니다.",
+                "To manage allowed program languages": "허용된 프로그래밍 언어 관리",
+                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "특정 언어의 경우 시스템이 자동으로 시간 제한을 조정합니다. 교육 목적으로만 사용하는 것이 좋습니다.",
+                "Check it if you want to allow contestants view statements": "참가자가 문제의 설명을 볼 수 있도록 하려면 이 확인란을 선택합니다.",
+                "Check it if contestants can view standings": "참가자가 순위표를 볼 수 있도록 허용하려면 이 확인란을 선택합니다.",
+                "Where the contest was held originally": "원래 대회가 열렸던 장소",
+                "Official contest site URL": "공식 콘테스트 웹사이트 URL",
+                "Enter a name for your new API key. It should describe what this key is used for.": "새 API 키의 이름을 입력합니다. 이 키의 용도를 설명해야 합니다.",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "계정 비밀번호를 입력하여 액세스를 확인합니다. 비밀번호가 없는 경우 로그아웃한 후 비밀번호 복구 기능을 사용하세요."
+            }
+        },
+        ".propertyLinks": {
+            "class": [
+                ".propertyLinks"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contribution": "헌신"
+            }
+        },
+        ".contests-table": {
+            "class": [
+                ".contests-table"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest history": "대회 기록"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound ": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound "
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Register now": "지금 등록하기",
+                "No tag edit access": "태그 편집 권한 없음",
+                "Problem([\\s]*)$": "이슈",
+                "Verdict": "판결 상태",
+                "Language:": "언어.",
+                "Participant": "참가자",
+                "Choose file:": "파일을 선택합니다."
+            }
+        },
+        ".icon-eye-close.icon-large": {
+            "class": [
+                ".icon-eye-close.icon-large"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add to exclusions": "제외 목록에 추가"
+            }
+        },
+        "null": {
+            "class": [
+                null
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add to exclusions for gym contests filter": "Boot Camp 필터에 제외 항목 추가하기"
+            }
+        },
+        ".roundbox.sidebox.sidebar-menu.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.sidebar-menu.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Announcement": "게시판",
+                "Statements": "통계 보고서",
+                "Tutorial": "메모"
+            }
+        },
+        ".second-level-menu": {
+            "class": [
+                ".second-level-menu"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Problems": "이슈",
+                "Submit Code": "코드 제출",
+                "My Submissions": "내 제출물",
+                "Status": "상태",
+                "Standings": "이름 목록",
+                "Adm.": "관리",
+                "Edit": "컴파일러",
+                "Custom Invocation": "사용자 지정 디버깅",
+                "Common standings": "모든 순위",
+                "Friends standings": "친구 전용.",
+                "Submit": "제출(보고서 등)",
+                "Hacks": "해커 (컴퓨팅) (외래어)",
+                "Room": "큐비클",
+                "Custom test": "사용자 지정 테스트",
+                "Blog": "블로그(외래어)",
+                "Teams": "대기열",
+                "Submissions": "기록 제출",
+                "Groups": "조직",
+                "Rating": "등급",
+                "Friends rating": "친구 평가",
+                "Favourites": "북마크(인터넷)",
+                "Contests": "대회(스포츠 등)",
+                "Magic": "마법사",
+                "Handle": "사용자 이름",
+                "Members": "멤버",
+                "问题etting": "이슈 준비에 참여",
+                "Streams": "직접 인터넷 방송",
+                "Gym": "훈련 캠프",
+                "Mashups": "믹스 앤 매치(의류 등)",
+                "Posts": "카드",
+                "Comments": "반환(이전 조건으로)",
+                "Main": "스테이플",
+                "Settings": "설정",
+                "Lists": "리스팅",
+                "General": "기본",
+                "Sidebar": "사이드바(소프트웨어)",
+                "Social": "사회 보장(연금, 의료 보험)",
+                "Address": "주소",
+                "Wallets": "지갑"
+            }
+        },
+        ".topic-toggle-collapse": {
+            "class": [
+                ".topic-toggle-collapse"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Expand": "시작"
+            }
+        },
+        ".topic-read-more": {
+            "class": [
+                ".topic-read-more"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Full text and comments": "자세히 보기/댓글 달기"
+            }
+        },
+        ".toggleEditorCheckboxLabel": {
+            "class": [
+                ".toggleEditorCheckboxLabel"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Switch off editor": "편집기 구문 강조 표시 끄기"
+            }
+        },
+        ".submit": {
+            "class": [
+                ".submit"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Registration for the contest": "대회 등록"
+            }
+        },
+        "._FilterByTagsFrame_difficulty": {
+            "class": [
+                "._FilterByTagsFrame_difficulty"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Difficulty:": "난이도."
+            }
+        },
+        "._FilterByTagsFrame_addTagLink": {
+            "class": [
+                "._FilterByTagsFrame_addTagLink"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add tag": "태그 추가"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "이전 라운드의 등급 변경 사항이 일시적으로 롤백되었습니다. 곧 복구될 예정입니다.",
+                "Reminder: in case of any technical issues, you can use the lightweight website": "알림：기술적인 문제가 발생하면 라이트웨이트 사이트를 이용할 수 있습니다.",
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "링크를 통해 코드포스의 공식 텔레그램 채널을 구독해 주세요!"
+            }
+        },
+        ".lang-chooser": {
+            "class": [
+                ".lang-chooser"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Enter": "로그인",
+                "Register": "등록",
+                "Contest rating": "테스트 평가",
+                "Logout": "로그아웃"
+            }
+        },
+        ".userbox": {
+            "class": [
+                ".userbox"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Change photo": "사진 교체",
+                "Contest rating": "레이싱",
+                "Contribution": "헌신",
+                "My friends": "내 가장 친한 친구.",
+                "Change settings": "설정 변경",
+                "Last visit": "마지막 액세스",
+                "not visible": "보이지 않는",
+                "Registered": "에 등록",
+                "Blog entries": "블로그 항목",
+                "comments": "해설",
+                "Write new entry": "새 항목 준비",
+                "View my talks": "내 비공개 메시지 보기",
+                "Talks": "비공개 편지",
+                "Send message": "메시지 보내기"
+            }
+        },
+        "#vote-reset-filterDifficultyLowerBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyLowerBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "재프로비저닝"
+            }
+        },
+        "#vote-reset-filterDifficultyUpperBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyUpperBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "재프로비저닝"
+            }
+        },
+        ".alert.alert-info": {
+            "class": [
+                ".alert.alert-info"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "The problem statement has recently been changed.": "제목 설명이 최근 변경되었습니다.",
+                "View the changes.": "변경 사항 보기"
+            }
+        },
+        ".enterPage": {
+            "class": [
+                ".enterPage"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Fill in the form to login into Codeforces.": "양식을 작성하여 코드포스에 로그인하세요.",
+                "You can use": "또한",
+                "as an alternative way to enter.": "로그인"
+            }
+        },
+        ".notice.small": {
+            "class": [
+                ".notice.small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "\\* To view the complete list, click ": "* :: 전체 목록을 보려면 다음을 클릭하세요."
+            }
+        },
+        ".setting-name": {
+            "class": [
+                ".setting-name"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest type:": "대회 유형：",
+                "Rated:": "평가：",
+                "Tried:": "시도됨",
+                "Substring:": "키워드"
+            }
+        },
+        ".by-form": {
+            "class": [
+                ".by-form"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Sort by:": "정렬 기준：",
+                "relevance": "(통계) 상관관계",
+                "popularity": "단명하는 열정",
+                "time": "times"
+            }
+        },
+        ".roundbox.borderTopRound": {
+            "class": [
+                ".roundbox.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "이 콘테스트에 사용자를 초대하면 해당 사용자의 공개 여부와 관계없이 콘테스트가 해당 사용자에게 표시됩니다. 다음 링크(：)를 사용하여 콘테스트를 공유할 수 있습니다.",
+                "Generate link and share it with other users": "링크를 생성하여 다른 사용자와 공유",
+                "Show Log »": "저널 표시 \"",
+                "Move all to practice »": "모두 실무자로 이동 \"",
+                "Remove All »": "모두 제거 \"",
+                "Add »": "추가\"",
+                "Set »": "설정 \"",
+                "Download Archive »": "아카이브 다운로드 \""
+            }
+        },
+        ".caption.titled": {
+            "class": [
+                ".caption.titled"
+            ],
+            "description": "중국어 제목의 사이드바",
+            "isStrict": false,
+            "rules": {
+                "Pay attention": "다음 사항에 유의하세요.",
+                "Top rated": "평점 순위",
+                "Top contributors": "기여자 순위",
+                "Find user": "사용자 찾기",
+                "Recent actions": "최신 뉴스",
+                "Training filter": "필터링 및 심사",
+                "Find training": "콘테스트/이슈 검색",
+                "Virtual participation": "가상 항목이란 무엇인가요?",
+                "Contest materials": "대회 관련 정보",
+                "Settings": "설정",
+                "Create Mashup Contest": "매시업 콘테스트 만들기",
+                "Clone Contest to Mashup": "클론 매치에서 콤보 매시업으로",
+                "Invitations": "초대장",
+                "Status filter": "상태 필터",
+                "Administration": "관리",
+                "Submit": "제출(보고서 등)",
+                "Practice": "운동",
+                "Problem tags": "질문 태그",
+                "Filter Problems": "필터링 문제",
+                "Last unsolved": "지난번에 해결되지 않음",
+                "Attention": "다음 사항에 유의하세요.",
+                "Past contests filter": "지난 경기 심사",
+                "About Contest": "대회 정보",
+                "Last submissions": "제출 기록",
+                "Streams": "직접 인터넷 방송",
+                "Coach rights": "코칭 권한",
+                "Advices to fill address": "주소 입력을 위한 제안 사항",
+                "Hacks filter": "해커 필터",
+                "Score table": "평가 척도",
+                "Contests": "대회(스포츠 등)",
+                "History": "편집 역사",
+                "Login into Codeforces": "코드포스에 로그인",
+                "Export the judgment log to DAT-file": "심사 로그를 DAT 파일로 내보내기",
+                "Contest managers": "콘테스트 관리자",
+                "Contest writers": "공모전 작가",
+                "Spectator ranklists": "관객 순위 목록",
+                "Ghosts:": "고스트 플레이어",
+                "Export Submissions": "내보내기 제출",
+                "Register in Codeforces": "코드포스에 등록하기"
+            }
+        },
+        "QuestionFilter1": {
+            "class": [
+                "#gym-filter-form div label",
+                "#gym-filter-form div"
+            ],
+            "description": "제목 필터 옵션 처리",
+            "isStrict": false,
+            "rules": {
+                "Contest type:": "경쟁 유형.",
+                "ICPC region:": "ICPC 지역.",
+                "Contest format:": "경쟁 형식.",
+                "Order by:": "정렬 기준.",
+                "Secondary order by:": "보조 주문.",
+                "Hide, if participated:": "내가 참여한 것을 숨깁니다.",
+                "Hide excluded gyms": "제외된 숨기기.",
+                "Season:": "기간(연간)",
+                "Duration, hours:": "기간(시간).",
+                "Difficulty:": "난이도."
+            }
+        },
+        "QuestionFilter2": {
+            "class": [
+                ".setting-value select option",
+                ".setting-last-value select option"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Official ACM-ICPC Contest": "ICPC 공식 대회",
+                "Official School Contest": "공식 학교 대회",
+                "Opencup Contest": "오픈컵 대회",
+                "School/University/City/Region Championship": "학교/대학/도시/지역 챔피언십",
+                "Training Camp Contest": "훈련 캠프 경쟁",
+                "Official International Personal Contest": "공식 국제 개인전",
+                "Training Contest": "트레이닝 경기",
+                "ID_ASC": "생성 시간(오름차순)",
+                "ID_DESC": "생성 시간(내림차순)",
+                "RATING_ASC": "등급(오름차순)",
+                "RATING_DESC": "등급(내림차순)",
+                "DIFFICULTY_ASC": "난이도(오름차순)",
+                "DIFFICULTY_DESC": "난이도(내림차순)",
+                "START_TIME_ASC": "시작 시간(오름차순)",
+                "START_TIME_DESC": "시작 시간(내림차순)",
+                "DURATION_ASC": "기간(오름차순)",
+                "DURATION_DESC": "기간(내림차순)",
+                "POPULARITY_ASC": "열(오름차순)",
+                "POPULARITY_DESC": "열(내림차순)",
+                "UPDATE_TIME_ASC": "업데이트 시간(오름차순)",
+                "UPDATE_TIME_DESC": "업데이트 시간(내림차순)"
+            }
+        },
+        "CompetitionFilter": {
+            "class": [
+                ".options li label",
+                ".CaptionCont span"
+            ],
+            "description": "인종 필터 옵션 중국어",
+            "isStrict": false,
+            "rules": {
+                "Educational": "유익한 정보",
+                "Global": "전 세계",
+                "VK Cup": "VK컵",
+                "Long Rounds": "오랜 기간",
+                "April Fools": "만우절",
+                "Team Contests": "팀 경쟁",
+                "ICPC Scoring": "ICPC 점수",
+                "Doesn't matter": "----",
+                "Any": "소유권",
+                "Yes$": "be",
+                "No$": "막힘",
+                "No submission(s)": "제출하지 않음",
+                "Have submission(s)": "제출됨",
+                "No solved problem(s)": "문제 해결 없음",
+                "Have solved problem(s)": "문제 해결."
+            }
+        },
+        "RightSidebox": {
+            "class": [
+                ".sidebox div label"
+            ],
+            "description": "오른쪽 사이드박스 중국어",
+            "isStrict": false,
+            "rules": {
+                "Show tags for unsolved problems": "해결되지 않은 문제에 대한 레이블 표시",
+                "Hide solved problems": "해결된 문제 숨기기"
+            }
+        },
+        "FormField-name": {
+            "class": [
+                "td.field-name label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Postal/zip code": "우편/우편 번호",
+                "Country //(English//)": "국가(영어)",
+                "State //(English//)": "주/도(영어)",
+                "City //(English//)": "도시 (영어)",
+                "Address //(English//)": "주소(영어)",
+                "Recipient //(English//)": "수신자 이름(영문)",
+                "Country //(Native//)": "국가(현지 언어)",
+                "State //(Native//)": "주/도(모국어)",
+                "City //(Native//)": "도시(현지 언어)",
+                "Address //(Native//)": "주소(현지 언어)",
+                "Recipient //(Native//)": "수신자 이름(현지 언어)",
+                "Phone": "전화",
+                "TON Wallet:": "톤 월렛.",
+                "Secret Code:": "캡차.",
+                "Terms of agreement:": "계약 조건.",
+                "Choose team:": "팀을 선택합니다."
+            }
+        },
+        "QuestionTag": {
+            "class": [
+                "._FilterByTagsFrame_addTagLabel select option",
+                "._FilterByTagsFrame_tagBoxCaption",
+                ".notice",
+                ".tag-box"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "combine tags by OR": "논리 또는 내가 선택한 조합으로 레이블 지정하기",
+                "combine-tags-by-or": "내가 선택한 태그를 논리 또는 (결합-태그-기준 또는)으로 결합하기",
+                "2-sat": "이분 그래프 만족도 문제 (2 수능)",
+                "binary search": "이진 검색",
+                "bitmasks": "비트 마스크",
+                "brute force": "무차별 강제 열거.",
+                "chinese remainder theorem": "중국 나머지 정리(中国剩余定理)",
+                "combinatorics": "조합학",
+                "constructive algorithms": "건설적 알고리즘(건설적 알고리즘)",
+                "data structures": "데이터 구조",
+                "dfs and similar": "심도 우선 검색 및 그 변형(DFS 및 유사)",
+                "divide and conquer": "분할 및 정복 알고리즘.",
+                "dp": "동적 프로그래밍(dp)",
+                "dsu": "병렬 검색 세트(DSU)",
+                "expression parsing": "표현식 구문 분석",
+                "fft": "고속 푸리에 변환(fft)",
+                "flows": "흐름",
+                "games": "게임 이론(게임)",
+                "geometry": "계산 기하학",
+                "graph matchings": "그래프 매칭",
+                "graphs": "그래프 이론(그래프)",
+                "greedy": "욕심쟁이",
+                "hashing": "해시 테이블(해싱)",
+                "implementation": "구현 문제, 프로그래밍 기술, 시뮬레이션(구현)",
+                "interactive": "상호 작용 문제(대화형)",
+                "math": "수학(수학)",
+                "matrices": "행렬",
+                "meet-in-the-middle": "중간에서 만나기 알고리즘(중간에서 만나기)",
+                "number theory": "수 이론",
+                "probabilities": "확률",
+                "schedules": "스케줄링 알고리즘(일정)",
+                "shortest paths": "최단 경로 알고리즘(최단 경로)",
+                "sortings": "정렬 알고리즘(정렬)",
+                "string suffix structures": "문자열 접미사 구조",
+                "strings": "문자열 처리(문자열)",
+                "ternary search": "삼항식 검색",
+                "trees": "트리 구조(나무)",
+                "two pointers": "두 개의 포인터 알고리즘(두 개의 포인터)"
+            }
+        },
+        "SettingField-name": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "페이지에서 필드 설정",
+            "isStrict": false,
+            "rules": {
+                "Hide sidebar block \"Find user\"": "사이드바 블록 '사용자 찾기'를 숨깁니다.",
+                "Hide sidebar block \"Current user\"": "사이드바 블록 '현재 사용자'를 숨깁니다.",
+                "Hide sidebar block \"Recent аctions\"": "사이드바에서 '새로운 소식' 블록을 숨깁니다.",
+                "Hide sidebar block \"Favourite groups\"": "사이드바 블록 '즐겨찾는 그룹'을 숨깁니다.",
+                "Hide sidebar block \"Top contributors\"": "사이드바 블록 \"기여자 순위\"를 숨깁니다.",
+                "Hide sidebar block \"Top rated\"": "사이드바 블록 \"평점 순위\"를 숨깁니다.",
+                "Hide sidebar block \"Streams\"": "사이드바 블록 \"라이브\" 숨기기",
+                "Old password": "이전 비밀번호",
+                "New password": "새 비밀번호",
+                "Confirm new password": "새 비밀번호 확인",
+                "Contest email notification": "대회 이메일 알림",
+                "Send email on new user talk": "새 사용자 대화가 있을 때 이메일 보내기",
+                "Send email on new comment": "새 댓글이 추가되면 이메일 보내기",
+                "Hide contact information": "연락처 정보 숨기기",
+                "Remember me by Gmail, Facebook and etc": "Gmail, Facebook 등에서 저를 기억하세요.",
+                "Show tags for unsolved problems": "해결되지 않은 문제에 대한 레이블 표시",
+                "Hide solved problems from problemset": "문제 세트에서 해결된 문제 숨기기",
+                "Hide low rated blogs": "평점이 낮은 블로그 숨기기",
+                "Offer to publish great rating rises": "등급이 크게 개선되었음을 입증할 수 있는 기회 제공",
+                "Enforce https": "HTTPS 강제 적용",
+                "Show private activity in the profile": "프로필에 비공개 활동 표시",
+                "Show diagnostics": "진단 정보 표시"
+            }
+        },
+        "CloneContestFormField": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "가상 매시업 설정 양식에 대한 복제 콘테스트",
+            "isStrict": false,
+            "rules": {
+                "Problem:": "제목.",
+                "Question": "이슈",
+                "Language:": "언어.",
+                "Source code:": "소스 코드.",
+                "Or choose file:": "또는 파일을 선택합니다.",
+                "Choose file:": "파일을 선택합니다.",
+                "Notice:": "주의.",
+                "virtual participation:": "가상 참여.",
+                "Registration for the contest:": "레이스 참가.",
+                "Take part:": "참여.",
+                "as individual participant:": "개별 참가자로서.",
+                "as a team member:": "팀원으로서.",
+                "Virtual start time:": "가상 시작 시간.",
+                "Complete problemset:": "전체 질문 세트.",
+                "First name \\(English\\)": "이름 (영어)",
+                "Last name \\(English\\)": "성 (영어)",
+                "First name \\(Native\\)": "이름(현지 언어)",
+                "Last name \\(Native\\)": "성(현지 언어)",
+                "Birth date": "생년월일",
+                "Country": "국가",
+                "City": "지자체",
+                "Organization": "조직",
+                "Handle/Email": "계정 번호/이메일",
+                "Name": "(사물의) 이름",
+                "Handle": "사용자 이름",
+                "Email": "받은 편지함",
+                "Confirm": "인식",
+                "Password": "암호화",
+                "New Rank": "새로운 계급",
+                "Training name \\(English\\):": "교육 이름(영어).",
+                "Training name \\(Russian\\):": "교육 이름(러시아어).",
+                "Contest format:": "경쟁 형식.",
+                "Start time:": "시작 시간.",
+                "Duration:": "지속 시간.",
+                "Visibility:": "가시성.",
+                "Attach parent contest\\?:": "연관된 사이어 매치?",
+                "Participation type:": "참여 유형.",
+                "Freeze period:": "동결 기간.",
+                "Unfreeze time:": "해동 시간.",
+                "Is practice allowed\\?:": "연습이 허용되나요?",
+                "Is virtual allowed\\?:": "가상 출품이 허용되나요?",
+                "Is out of competition allowed\\?:": "비경쟁 출품작도 허용되나요?",
+                "Is self-registration allowed\\?:": "셀프 등록이 가능한가요?",
+                "Can non-registered view the contest\\?:": "등록하지 않은 사용자도 대회를 볼 수 있나요?",
+                "Can participants view common status\\?:": "참가자가 공유 상태를 확인할 수 있나요?",
+                "Contest testdata policy:": "매치 테스트 데이터 전략.",
+                "Allow view other submissions to:": "다른 제출물을 볼 수 있도록 허용합니다.",
+                "Manage program languages:": "관리형 프로그래밍 언어.",
+                "Use time limits scaling policy\\?:": "시간 제한 확장 정책을 사용하시나요?",
+                "Allow statements\\?:": "제목 설명을 볼 수 있도록 허용하시겠습니까?",
+                "Allow standings\\?:": "순위 보기를 허용하시겠습니까?",
+                "Season:": "시즌.",
+                "Contest type:": "경쟁 유형.",
+                "ICPC region:": "ICPC 지역.",
+                "Country:": "국가.",
+                "City:": "도시.",
+                "Contest difficulty:": "종족 난이도.",
+                "Website URL:": "웹 링크.",
+                "Description \\(English\\):": "설명 (영어).",
+                "Description \\(Russian\\):": "설명(러시아어).",
+                "Registration confirmation text \\(English\\):": "등록 확인 텍스트(영어).",
+                "Registration confirmation text \\(Russian\\):": "등록 확인 텍스트(러시아어).",
+                "Logo \\(English\\):": "로고(영어).",
+                "Logo \\(Russian\\):": "로고(러시아어).",
+                "End time:": "종료 시간.",
+                "Name:": "이름.",
+                "Contest\\(s\\):": "경쟁.",
+                "Add contest:": "콘테스트 추가.",
+                "Show Contestants:": "참가자를 표시합니다.",
+                "Show Out of Competition Participants:": "비경쟁 참가자를 표시합니다.",
+                "Show Practices:": "운동 표시.",
+                "Show Virtuals:": "가상 플레이어 표시.",
+                "Show Ghosts:": "고스트 플레이어 표시.",
+                "Text:": "텍스트.",
+                "Rewrite Examples:": "샘플을 다시 작성합니다.",
+                "Add images:": "이미지를 추가합니다.",
+                "Do not use:": "사용되지 않음.",
+                "Problem short name:": "제목 약어입니다.",
+                "Source problem:": "소스 문제.",
+                "Problem name \\(English\\):": "제목(영문).",
+                "Input file name:": "파일 이름을 입력합니다.",
+                "Output file name:": "출력 파일 이름입니다.",
+                "Time Limit:": "시간 제한.",
+                "Memory Limit:": "메모리 제한.",
+                "Output only:": "출력 전용입니다."
+            }
+        },
+        ".ask-question-link": {
+            "class": [
+                ".ask-question-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Ask a question": "질문하기."
+            }
+        },
+        "add-announcement-link": {
+            "class": [
+                ".add-announcement-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add announcement": "공지 사항 추가"
+            }
+        },
+        "demo": {
+            "class": [
+                "Class"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "SourceText": "TargetText"
+            }
+        }
+    },
+    "InputValueReplacements": {
+        "InputSubmit": {
+            "class": [
+                "input[type='submit']"
+            ],
+            "description": "중국어 제출",
+            "isStrict": false,
+            "rules": {
+                "Register for virtual participation": "가상 참가 신청하기",
+                "Register for practice": "로그인하여 연습 시작하기",
+                "Apply": "어플라이언스",
+                "Register": "이름 입력",
+                "Login": "로그인",
+                "Run": "움직이고 있음",
+                "Start virtual contest": "가상 입장 시작",
+                "Manage invitations": "경영진 초대",
+                "Disable manager mode": "관리 모드 임시 종료",
+                "Enable manager mode": "개방형 관리 모드",
+                "Clone Contest": "복제 경쟁",
+                "Submit": "제출(보고서 등)",
+                "Save changes": "설정 저장",
+                "Filter": "필터링",
+                "Find": "찾기",
+                "Save": "(파일 등) 저장(컴퓨팅)",
+                "Create Mashup Contest": "매시업 콘테스트 만들기",
+                "Delete problem": "질문 삭제하기",
+                "Restore problem": "복구 문제",
+                "Generate": "생성",
+                "Send": "보내기"
+            }
+        },
+        "InputButton": {
+            "class": [
+                "input[type='button']"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "재프로비저닝",
+                "Delete contest": "경기 삭제",
+                "Preview": "미리 보기"
+            }
+        }
+    }
+}

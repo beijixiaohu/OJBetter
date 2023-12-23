@@ -1,0 +1,242 @@
+{
+    "sidebar": {
+        "basic": "基本的",
+        "localization": "ローカリゼーション",
+        "translation": "レンダリング",
+        "clist": "クライスト",
+        "monaco": "モナコ",
+        "compatibility": "互換性"
+    },
+    "basicSettings": {
+        "title": "基本設定",
+        "darkMode": {
+            "name": "ダークモード",
+            "options": {
+                "dark": "ほのぼの",
+                "light": "昼間",
+                "system": "フォローアップシステム"
+            }
+        },
+        "loadingInfo": {
+            "label": "ローディング警告メッセージの表示",
+            "helpText": "<p>ロード情報を表示するをオンにすると、ページがロードされるたびに、ロード情報のプロンプトが上部に表示されます：\"CodeforcesBetter -- xxx\"</p><p>これは、スクリプトが現在どのように動作しているかを確認するために使用されます<strong>もし表示したくない場合は、以下を選択できます。オフ</strong></p><p><u>なお、スクリプトの読み込みに関する問題のフィードバックが必要な場合は、スクリーンショットを撮る前にこのオプションをオンにして、問題を分析できるようにしてください</u></p>"
+        },
+        "targetArea": {
+            "label": "ターゲットエリアの範囲を表示",
+            "helpText": "オンの場合、MD表示/コピー/変換ボタン上にマウスを置くと、そのターゲット領域の範囲が表示されます。"
+        },
+        "expandBlocks": "折りたたみブロックの自動展開",
+        "renderOptimization": {
+            "label": "折りたたみブロックレンダリングの最適化",
+            "helpText": "<p>折りたたまれたブロック要素にcontain制約を追加する</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>大量の折りたたまれたブロックを表示する際にブラウザの動作が重くなる場合は、<strong>これをオンにすると</strong>多少改善されるかもしれない</p>"
+        },
+        "paging": {
+            "label": "コメント区別ページ",
+            "helpText": "コメントは別ページに表示され、1ページあたり指定された数の<strong>メインフロア</strong>。"
+        },
+        "luoguJump": {
+            "label": "ロックバレーへのジャンプを表示",
+            "helpText": "<p>Codeforcesのタイトルの一部はLOGU OJに収録されており、一部のタイトルには翻訳と解説があります</p><p>表示をオンにすると、現在のタイトルが収録されている場合、タイトルの右上にLOGUのロゴが表示されます</p><p>これをクリックすると、そのタイトルに対応するLOGUのページにワンクリックでジャンプできます。</strong></p>"
+        },
+        "recolor": {
+            "label": "色変更リスト",
+            "helpText": "<p>Codeforces システムを使用した試合の順位表について</p><p>「得点/合計」の範囲に応じて、得点の色を変更</p><p>範囲：1~0.7~0.45~0 濃い緑→薄いオレンジ→濃いオレンジ→赤</p>"
+        }
+    },
+    "localizationSettings": {
+        "title": "ローカリゼーション",
+        "scriptLanguageLabel": "スクリプト言語",
+        "websiteLanguageLabel": "ウェブサイト言語"
+    },
+    "translationSettings": {
+        "title": "翻訳設定",
+        "options": {
+            "title": "プリファレンス",
+            "translationServices": {
+                "deepl": "DeepLの翻訳",
+                "iflyrec": "宣飛翻訳を聞く",
+                "youdao": "Youtube翻訳",
+                "google": "グーグル翻訳",
+                "caiyun": "カラフルな雲と小さな翻訳",
+                "openai": {
+                    "name": "ChatGPT翻訳",
+                    "helpText": "<p><b>下記のChatGPTコンフィギュレーションで使用したいコンフィギュレーション情報を追加・選択し、右クリックでコンフィギュレーションを修正・削除してください</b></p><p>詳細はスクリプトページをお読みください</p>"
+                }
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "ストリーミング",
+                "helpText": "<p>データストリーミングの有効化、タイプライター効果</p>"
+            }
+        },
+        "preference": {
+            "title": "プリファレンス",
+            "comment_translation_choice": "コメント欄の翻訳",
+            "translationServices": {
+                "follow": "プリファレンスに従う",
+                "deepl": "DeepLの翻訳",
+                "iflyrec": "宣飛翻訳を聞く",
+                "youdao": "Youtube翻訳",
+                "google": "グーグル翻訳",
+                "caiyun": "カラフルな雲と小さな翻訳",
+                "openai": "ChatGPT翻訳"
+            }
+        },
+        "autoTranslation": {
+            "title": "自動翻訳",
+            "enable": "自動翻訳を有効にする",
+            "helpText": "<p><strong>.ttypography、.comments領域</strong></p><p>の短いテキストは、ブラウザウィンドウ</p>の可視領域に入ると自動的に翻訳されます。",
+            "shortTextLength": {
+                "name": "テキストの長さ",
+                "helpText": "<p>テキストの長さがこの値より短い場合、短いテキストとみなされる</p>",
+                "end": "性格"
+            },
+            "allowMixTrans": {
+                "name": "コメント欄の混訳",
+                "helpText": "<p>自動翻訳を行う場合、コメント欄の短いテキストエリアごとに、以下にチェックしたサービスのいずれかを独立してランダムに選択する</p><p>並列翻訳</p>",
+                "checkboxs": {
+                    "deepl": "ディープエル",
+                    "iflyrec": "迅飛",
+                    "youdao": "真理と正義の原則を守る",
+                    "google": "グーグル",
+                    "caiyun": "ばらぐも"
+                }
+            }
+        },
+        "advanced": {
+            "name": "ハイレベル",
+            "mode": {
+                "name": "動作モード",
+                "helpText": "<p>スクリプトがどのように動作するか選択することができます</p><p>○通常モード：一度に全領域を翻訳します</p><p>○分割モード：領域内の各&#60;&#112;&#47;&#62;と&#60;&#105;&#47;&#62;タグを順番に翻訳します</p><p>○選択分割モード：ページ上の任意の&#60;&#112;&#47;&#62;と&#60;&#105;&#47;&#62;タグを自由にクリックして翻訳することができます</p><div style='color:#f44336;'><p><u>注意：分割/選択分割モードは次の問題を生じます：</u></p><p>- 翻訳インターフェースがテキストの文脈全体を知ることができなくなり、翻訳の質が低下します。</p><p></strong></p></div>-&#60;&#112;&#47;&#62;、&#60;&#105;&#47;&#62;要素ではないため、翻訳されない/選択できない<strong>セクションが存在する。",
+                "options": {
+                    "0": "ノーマルモード",
+                    "1": "セグメンテーションモデル",
+                    "2": "セグメンテーションモデル"
+                }
+            },
+            "memory": {
+                "name": "過去の翻訳の自動復元",
+                "helpText": "<p><strong>タイトルページ</strong>の翻訳情報をローカルの indexDB に自動保存</p><p>次回アクセス時に翻訳情報をリフレッシュ／自動復元</p>"
+            },
+            "retrans": {
+                "name": "再翻訳にあたって",
+                "helpText": "<p>再翻訳時に「古い結果を閉じる」か「古い結果を片付ける」かを選択する</p>",
+                "options": {
+                    "0": "古い結果を閉じる",
+                    "1": "古い結果を片付ける"
+                }
+            },
+            "transWaitTime": {
+                "name": "待機時間",
+                "helpText": "<p>2つの翻訳リクエスト間の待機間隔を設定します。この設定はグローバルに適用され、各翻訳サービスごとに独立して計算されます</p><p>推奨 200 + ミリ秒</p><p>説明：ChatGPT翻訳はこの設定を無視し、待機しません</p>",
+                "end": "ミリ秒"
+            },
+            "replaceSymbol": {
+                "name": "LaTeXの置き換え",
+                "helpText": "<p>このスクリプトは、まずLaTeXの数式をすべて取り出し、プレースホルダを使うことで、数式が翻訳インターフェースによって壊されないようにします</p><p>置換自体が壊される確率は翻訳サービスによって異なります。詳しくはスクリプトページの説明を読んでください</p><p>なお、：ChatGPTを使った翻訳では上記の必要はないので、このオプションの影響は受けません</p><p>詳しくはスクリプトページの説明を読んでください</p>",
+                "options": {
+                    "1": "を使用する。",
+                    "2": "を使う。",
+                    "3": "を使用する。"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "テキスト中の**記号のフィルタリング",
+                "helpText": " <p>一部の翻訳サービス(DeepLなど)では、MarkDownでの強調の扱いが間違っています <strong>**</strong> </p><p>これにより、翻訳がラップされた内容を見逃す可能性があります。強調を削除することもできます(ChatGPTを使用すると無視されます) </p>"
+            }
+        }
+    },
+    "clistSettings": {
+        "title": "クライスト・セッティング",
+        "basics": {
+            "name": "基本的",
+            "notice": "注：各ページで作業するために必要な認証情報は異なりますので、対応するオプションのラベル付き説明を参照してください。",
+            "key": {
+                "title": "キー",
+                "helpText": "<p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "キーを入力してください"
+            }
+        },
+        "displayRating": {
+            "title": "ショーの評価スコア",
+            "contest": {
+                "name": "コンテスト問題セットページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
+            },
+            "problem": {
+                "name": "タイトルページ",
+                "helpText": "<p><p>公式のapiキー（</p><p>）を提供するか、ブラウザのclist.byをログインしたまま（つまりクッキーが有効な状態）にしておく必要があります</p",
+                "badge": "クッキー/APIキー"
+            },
+            "problemset": {
+                "name": "タイトルページ",
+                "helpText": "<p>これを機能させるには、ブラウザでclist.byにログインしておく（つまりクッキーを有効にしておく）必要がある</p>",
+                "badge": "クッキー"
+            }
+        },
+        "spoilerProtection": {
+            "title": "ネタバレ防止",
+            "helpText": "<p>評価サブ表示エリアにマウスを移動したときのみ表示</p>"
+        }
+    },
+    "codeEditorSettings": {
+        "title": "モナコ・エディターの設定",
+        "basics": "基本的",
+        "problemPageCodeEditor": {
+            "label": "タイトルページにエディターを追加",
+            "helpText": "タイトルページの下にMonacoエディタを追加すると、コードが自動的に保存され、オンラインコードが実行される。"
+        },
+        "preferences": {
+            "title": "プリファレンス",
+            "isCodeSubmitConfirm": {
+                "label": "コード提出の二次確認",
+                "helpText": "Monacoエディターのタイトルページをクリックすると、誤送信を防ぐためにコード送信時に2度目のポップアップが表示されます。"
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "マウスのスクロールロック",
+                "helpText": "オンにすると、マウス・ポインタがモナコ・エディタ内にあるとき、マウス・スクロールはエディタ内のコンテンツのみをスクロールします。"
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "オンライン・コード・ラン",
+            "compilerOptions": {
+                "codeforces": "コードフォース",
+                "wandbox": "ワンドボックス",
+                "rextester": "再試験者"
+            }
+        },
+        "lspSettings": {
+            "title": "LSP設定",
+            "useLSP": {
+                "label": "LSPの使用",
+                "helpText": "<p>コード補完、コード診断、書式設定、定義への移動などを有効にするためにLSPサーバーに接続</p><p>C++、Python言語をサポート</p><p>OJBetter_Bridgeを起動する必要があります。手順についてはスクリプトのページを参照してください</p>"
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "仕事の道",
+                "helpText": "<p>OJBetter_Bridgeが配置されているパスを記入する必要があります</p><p>フォワードまたはバックスラッシュのいずれかを使用</p><p>デフォルトパス：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "サーバー",
+                "helpText": "<p>ローカルマシンのOJBetter_BridgeのサーバーURLを記入する必要があります</p><p>デフォルトURL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>なお、通常はここを変更する必要はありません。変更する必要がある場合は、デフォルトのURL形式と一致させてください</p>"
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "スタティック・コンプリートの強化",
+            "cppCodeTemplateComplete": {
+                "label": "AcWing CPP補完テンプレート",
+                "helpText": "<p><a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>のテンプレート"
+            },
+            "customization": "カスタマイズ",
+            "performanceWarning": "注：静的補完ルールが多すぎるとパフォーマンスに影響することがある"
+        }
+    },
+    "compatibilitySettings": {
+        "title": "互換性のある設定",
+        "loaded": {
+            "label": "ページリソースの読み込みを待たされない",
+            "helpText": "<p>ページリソース（主に様々なjs）の読み込みが完了する前にスクリプトが実行されることによる予期せぬエラーを防ぐため、スクリプトはデフォルトでwindow.onloadイベントを待ちます</p><p>ページの読み込みがすでに完了しているにもかかわらず、ページ上部の読み込みメッセージが常に：\"Waiting for page resources to load \"のままである場合</p><p><u>まず、ネットワークの問題かどうかを確認する必要があります。</u></p><p>そうでない場合は、ブラウザのwindow.onloadイベントが早すぎる（DOMContentLoadedの前）ことが原因かもしれません。</p><p>このオプションをオンにして、window.onloadイベントの待機を停止してみてください</p><p><u>注意：上記の問題がない場合は、このオプションをオンにしないでください</u></p>"
+        }
+    }
+}

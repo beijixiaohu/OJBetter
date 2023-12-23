@@ -8,4 +8,4 @@ files:
       - /i18
       - /script
       - /*github
-    translation: /i18n/%locale%/%original_path%/%original_file_name%
+    translation: /i18n/%osx_locale%/%original_path%/%original_file_name%
