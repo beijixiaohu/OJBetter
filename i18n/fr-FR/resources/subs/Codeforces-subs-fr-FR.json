@@ -154,7 +154,7 @@
             "rules": {
                 "Register now": "S'inscrire maintenant",
                 "No tag edit access": "Pas de privilèges d'édition de tags",
-                "Problem": "questions",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "état d'avancement de l'adjudication",
                 "Language:": "Langues.",
                 "Participant": "candidats",
@@ -489,7 +489,8 @@
                 "Contest writers": "Rédacteurs de concours",
                 "Spectator ranklists": "Liste de classement de l'audience",
                 "Ghosts:": "joueur fantôme",
-                "Export Submissions": "Soumission à l'exportation"
+                "Export Submissions": "Soumission à l'exportation",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -693,6 +694,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "Titre.",
+                "Question": "问题",
                 "Language:": "Langues.",
                 "Source code:": "Code source.",
                 "Or choose file:": "Ou sélectionnez le fichier.",
@@ -715,6 +717,9 @@
                 "Organization": "organisations",
                 "Handle/Email": "Numéro de compte/Email",
                 "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "cryptographique",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "Nom de la formation (anglais).",
@@ -833,7 +838,8 @@
                 "Create Mashup Contest": "Créez un concours de mashups",
                 "Delete problem": "Supprimer la question",
                 "Restore problem": "Questions relatives à la récupération",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {
