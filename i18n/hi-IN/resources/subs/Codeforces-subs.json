@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -35,13 +36,14 @@
                 "Register »": "साइन अप करें\"",
                 "Registration completed": "दर्ज कराई",
                 "Registration closed": "पंजीकरण समाप्त हो गया है",
-                "Problems": "समस्या सेट",
+                "Problems\n": "问题集",
                 "My Submissions": "मेरा समर्पण",
                 "Standings": "सूची",
                 "Questions about problems": "समस्या के बारे में प्रश्न",
                 "Contest status": "खेल की स्थिति",
                 "Invited users": "उपयोगकर्ताओं को आमंत्रित किया गया",
-                "Invitation links": "आमंत्रण लिंक"
+                "Invitation links": "आमंत्रण लिंक",
+                "API keys": "API密钥"
             }
         },
         ".menu-list.main-menu-list": {
@@ -61,6 +63,7 @@
                 "Rating": "रेटिंग रैंकिंग सूची",
                 "Edu": "प्रशिक्षण",
                 "Calendar": "पंचांग",
+                "ICPC Challenge": "ICPC挑战赛",
                 "Help": "मदद"
             }
         },
@@ -118,7 +121,9 @@
                 "Check it if you want to allow contestants view statements": "यदि आप प्रतियोगियों को समस्या विवरण देखने की अनुमति देना चाहते हैं तो कृपया इस बॉक्स को चेक करें।",
                 "Check it if contestants can view standings": "यदि प्रतियोगियों को लीडरबोर्ड देखने की अनुमति है तो कृपया इस बॉक्स को चेक करें",
                 "Where the contest was held originally": "प्रतियोगिता का मूल स्थान",
-                "Official contest site URL": "आधिकारिक प्रतियोगिता वेबसाइट यूआरएल"
+                "Official contest site URL": "आधिकारिक प्रतियोगिता वेबसाइट यूआरएल",
+                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
             }
         },
         ".propertyLinks": {
@@ -150,7 +155,7 @@
             "rules": {
                 "Register now": "अभी साइनअप करें",
                 "No tag edit access": "कोई टैग संपादन अनुमति नहीं",
-                "Problem": "सवाल",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "फैसले की स्थिति",
                 "Language:": "भाषा:",
                 "Participant": "प्रतियोगियों",
@@ -218,6 +223,8 @@
                 "Friends rating": "मित्र की रेटिंग",
                 "Favourites": "इकट्ठा करना",
                 "Contests": "प्रतियोगिता",
+                "Magic": "魔法",
+                "Handle": "账号",
                 "Members": "सदस्य",
                 "问题etting": "लेखन मुद्दों में भाग लें",
                 "Streams": "सीधा आ रहा है",
@@ -333,6 +340,7 @@
                 "My friends": "मेरी अच्छी दोस्त",
                 "Change settings": "सेटिंग्स परिवर्तित करना",
                 "Last visit": "अंतिम बार दौरा किया",
+                "not visible": "不可见的",
                 "Registered": "पर पंजीकृत",
                 "Blog entries": "ब्लॉग प्रविष्टि",
                 "comments": "टिप्पणी",
@@ -482,7 +490,8 @@
                 "Contest writers": "प्रतियोगिता लेखक",
                 "Spectator ranklists": "दर्शकों की रैंकिंग सूची",
                 "Ghosts:": "भूत खिलाड़ी",
-                "Export Submissions": "निर्यात प्रस्तुतीकरण"
+                "Export Submissions": "निर्यात प्रस्तुतीकरण",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -580,16 +589,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "पोस्टल कोड/डाक कोड",
-                "Country (English)": "देश (अंग्रेज़ी)",
-                "State (English)": "राज्य/प्रांत (अंग्रेजी)",
-                "City (English)": "शहर (अंग्रेज़ी)",
-                "Address (English)": "पता (अंग्रेजी)",
-                "Recipient (English)": "प्राप्तकर्ता का नाम (अंग्रेजी)",
-                "Country (Native)": "देश (स्थानीय भाषा)",
-                "State (Native)": "राज्य/प्रांत (स्थानीय भाषा)",
-                "City (Native)": "शहर (स्थानीय भाषा)",
-                "Address (Native)": "पता (स्थानीय भाषा)",
-                "Recipient (Native)": "प्राप्तकर्ता का नाम (स्थानीय भाषा)",
+                "Country //(English//)": "国家（英文）",
+                "State //(English//)": "州/省份（英文）",
+                "City //(English//)": "城市（英文）",
+                "Address //(English//)": "地址（英文）",
+                "Recipient //(English//)": "收件人姓名（英文）",
+                "Country //(Native//)": "国家（本地语言）",
+                "State //(Native//)": "州/省份（本地语言）",
+                "City //(Native//)": "城市（本地语言）",
+                "Address //(Native//)": "地址（本地语言）",
+                "Recipient //(Native//)": "收件人姓名（本地语言）",
                 "Phone": "टेलीफ़ोन",
                 "TON Wallet:": "टन बटुआ:",
                 "Secret Code:": "सत्यापन कोड:",
@@ -686,6 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "विषय:",
+                "Question": "问题",
                 "Language:": "भाषा:",
                 "Source code:": "सोर्स कोड:",
                 "Or choose file:": "या एक फ़ाइल चुनें:",
@@ -707,7 +717,12 @@
                 "City": "शहर",
                 "Organization": "आयोजन",
                 "Handle/Email": "खाता ई - मेल",
+                "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "पासवर्ड",
+                "New Rank": "新的Rank",
                 "Training name \\(English\\):": "प्रशिक्षण का नाम (अंग्रेजी):",
                 "Training name \\(Russian\\):": "प्रशिक्षण का नाम (रूसी):",
                 "Contest format:": "प्रतियोगिता प्रारूप:",
@@ -823,7 +838,9 @@
                 "Save": "बचाना",
                 "Create Mashup Contest": "एक मैशअप मैच बनाएं",
                 "Delete problem": "प्रश्न हटाएं",
-                "Restore problem": "पुनर्प्राप्ति मुद्दे"
+                "Restore problem": "पुनर्प्राप्ति मुद्दे",
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {

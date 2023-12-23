@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -154,7 +155,7 @@
             "rules": {
                 "Register now": "Si iscriva ora",
                 "No tag edit access": "Nessun privilegio di modifica dei tag",
-                "Problem": "problemi",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "stato di giudizio",
                 "Language:": "Lingue.",
                 "Participant": "concorrenti",
@@ -339,7 +340,7 @@
                 "My friends": "Il mio migliore amico.",
                 "Change settings": "Modificare le impostazioni",
                 "Last visit": "ultimo accesso",
-                "not visible": "不可见",
+                "not visible": "不可见的",
                 "Registered": "registrato in",
                 "Blog entries": "Voci del blog",
                 "comments": "commenti",
@@ -489,7 +490,8 @@
                 "Contest writers": "Scrittori a concorso",
                 "Spectator ranklists": "Lista di classificazione del pubblico",
                 "Ghosts:": "giocatore fantasma",
-                "Export Submissions": "Esportazione di documenti"
+                "Export Submissions": "Esportazione di documenti",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -693,6 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "Titolo.",
+                "Question": "问题",
                 "Language:": "Lingue.",
                 "Source code:": "Codice sorgente.",
                 "Or choose file:": "Oppure selezioni il file.",
@@ -715,6 +718,9 @@
                 "Organization": "organizzazioni",
                 "Handle/Email": "Numero di conto/Email",
                 "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "crittografico",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "Nome della formazione (inglese).",
@@ -833,7 +839,8 @@
                 "Create Mashup Contest": "Creare un concorso mashup",
                 "Delete problem": "Cancellare la domanda",
                 "Restore problem": "Problemi di recupero",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {

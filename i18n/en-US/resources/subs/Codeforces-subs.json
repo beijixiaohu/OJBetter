@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -35,14 +36,14 @@
                 "Register »": "Enrollment \"",
                 "Registration completed": "Enrolled",
                 "Registration closed": "Registration is now closed",
-                "Problems\n": "问题集",
+                "Problems\n": "questionnaire",
                 "My Submissions": "My Submission",
                 "Standings": "list of names",
                 "Questions about problems": "Questions on issues",
                 "Contest status": "competition status",
                 "Invited users": "Invited users",
                 "Invitation links": "Invitation Links",
-                "API keys": "API密钥"
+                "API keys": "API key"
             }
         },
         ".menu-list.main-menu-list": {
@@ -62,7 +63,7 @@
                 "Rating": "Rating Rankings",
                 "Edu": "cultivate",
                 "Calendar": "calendar",
-                "ICPC Challenge": "ICPC挑战赛",
+                "ICPC Challenge": "ICPC Challenge",
                 "Help": "hand"
             }
         },
@@ -121,8 +122,8 @@
                 "Check it if contestants can view standings": "Check this box if you would like to allow participants to view the leaderboards",
                 "Where the contest was held originally": "Location where the competition was originally held",
                 "Official contest site URL": "Official Contest Website URL",
-                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
-                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
+                "Enter a name for your new API key. It should describe what this key is used for.": "Enter a name for your new API key. It should describe what this key will be used for.",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "Enter your account password to confirm access. If you do not have a password, log out and use the password recovery feature."
             }
         },
         ".propertyLinks": {
@@ -154,7 +155,7 @@
             "rules": {
                 "Register now": "Enroll Now",
                 "No tag edit access": "No tag editing privileges",
-                "Problem": "concern",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "status of adjudication",
                 "Language:": "Languages.",
                 "Participant": "contestants",
@@ -222,8 +223,8 @@
                 "Friends rating": "Friend rating",
                 "Favourites": "favorite",
                 "Contests": "competition (sports etc)",
-                "Magic": "魔法",
-                "Handle": "账号",
+                "Magic": "magical",
+                "Handle": "username",
                 "Members": "members",
                 "问题etting": "Participation in the preparation of issues",
                 "Streams": "live broadcast (not recorded)",
@@ -339,7 +340,7 @@
                 "My friends": "My best friend.",
                 "Change settings": "Change settings",
                 "Last visit": "last access",
-                "not visible": "不可见",
+                "not visible": "不可见的",
                 "Registered": "registered in",
                 "Blog entries": "Blog Entries",
                 "comments": "commentaries",
@@ -489,7 +490,8 @@
                 "Contest writers": "Competition writers",
                 "Spectator ranklists": "Audience Ranking List",
                 "Ghosts:": "ghost player",
-                "Export Submissions": "Export Submission"
+                "Export Submissions": "Export Submission",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -587,16 +589,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "Postal/zip code",
-                "Country //(English//)": "国家（英文）",
-                "State //(English//)": "州/省份（英文）",
-                "City //(English//)": "城市（英文）",
-                "Address //(English//)": "地址（英文）",
-                "Recipient //(English//)": "收件人姓名（英文）",
-                "Country //(Native//)": "国家（本地语言）",
-                "State //(Native//)": "州/省份（本地语言）",
-                "City //(Native//)": "城市（本地语言）",
-                "Address //(Native//)": "地址（本地语言）",
-                "Recipient //(Native//)": "收件人姓名（本地语言）",
+                "Country //(English//)": "Country (English)",
+                "State //(English//)": "State/Province (English)",
+                "City //(English//)": "Cities (English)",
+                "Address //(English//)": "Address (English)",
+                "Recipient //(English//)": "Recipient's name (English)",
+                "Country //(Native//)": "Country (local language)",
+                "State //(Native//)": "State/Province (native language)",
+                "City //(Native//)": "City (local language)",
+                "Address //(Native//)": "Address (local language)",
+                "Recipient //(Native//)": "Recipient's name (local language)",
                 "Phone": "telephones",
                 "TON Wallet:": "TON WALLET.",
                 "Secret Code:": "CAPTCHA.",
@@ -693,6 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "Title.",
+                "Question": "问题",
                 "Language:": "Languages.",
                 "Source code:": "Source Code.",
                 "Or choose file:": "Or select the file.",
@@ -714,9 +717,12 @@
                 "City": "municipalities",
                 "Organization": "organization",
                 "Handle/Email": "Account number/email address",
-                "Name": "名称",
+                "Name": "name (of a thing)",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "cryptographic",
-                "New Rank": "新的Rank",
+                "New Rank": "New Rank",
                 "Training name \\(English\\):": "Name of training (in English).",
                 "Training name \\(Russian\\):": "Name of training (in Russian).",
                 "Contest format:": "Contest Format.",
@@ -833,7 +839,8 @@
                 "Create Mashup Contest": "Create a mashup contest",
                 "Delete problem": "Delete the question",
                 "Restore problem": "Recovery issues",
-                "Generate": "生成"
+                "Generate": "generating",
+                "Send": "发送"
             }
         },
         "InputButton": {
