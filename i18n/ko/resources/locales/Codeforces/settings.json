@@ -1,0 +1,243 @@
+{
+    "sidebar": {
+        "basic": "기본",
+        "localization": "현지화",
+        "translation": "렌더링",
+        "clist": "Clist",
+        "monaco": "모나코",
+        "compatibility": "호환성"
+    },
+    "basicSettings": {
+        "title": "기본 설정",
+        "darkMode": {
+            "name": "다크 모드",
+            "options": {
+                "dark": "어둡게",
+                "light": "낮 시간",
+                "system": "후속 조치 시스템"
+            }
+        },
+        "localization": "중국어 인터페이스",
+        "loadingInfo": {
+            "label": "로딩 경고 메시지 표시",
+            "helpText": "<p>로딩 정보 표시를 켜면 페이지가 로드될 때마다 상단에 로딩 정보 프롬프트가 표시됩니다：\"CodeforcesBetter -- xxx\"</p><p>이것은 스크립트가 현재 어떻게 작동하는지 확인하는 데 사용됩니다<strong>보고 싶지 않다면 다음을 선택할 수 있습니다. 끄기</strong></p><p><u>스크립트의 로딩 문제에 대한 피드백이 필요한 경우 스크린샷을 찍기 전에 이 옵션을 켜서 문제를 분석할 수 있도록</u></p>"
+        },
+        "targetArea": {
+            "label": "대상 영역의 범위 표시",
+            "helpText": "켜져 있으면 MD 보기/복사/번역 버튼 위에 마우스를 갖다 대면 대상 영역의 범위가 표시됩니다."
+        },
+        "expandBlocks": "접이식 블록 자동 펼치기",
+        "renderOptimization": {
+            "label": "폴딩 블록 렌더링 최적화",
+            "helpText": "<p>접힌 블록 요소에 포함 제약 조건 추가</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>포함: 레이아웃 스타일;</p></div><p>많은 수의 접힌 블록을 볼 때 브라우저가 느려지는 경우<strong>을 켜면</strong>다소 개선될 수 있습니다</p>."
+        },
+        "paging": {
+            "label": "댓글 구분 페이지",
+            "helpText": "댓글은 별도의 페이지에 표시되며, 페이지당 지정된 수의<strong>메인 페이지</strong>로 표시됩니다."
+        },
+        "luoguJump": {
+            "label": "바위 계곡으로 점프 표시",
+            "helpText": "<p>코드포스 타이틀 중 일부는 LOGU OJ에 포함되어 있으며, 일부 타이틀에는 번역과 설명이 있습니다</p><p>디스플레이를 켰을 때 현재 타이틀이 포함되어 있으면 타이틀 오른쪽 상단에 LOGU 로고가 표시되며,</p><p>이를 클릭하면 해당 타이틀의 LOGU 페이지로 클릭 한 번으로 이동할 수 있습니다.</strong></p>"
+        },
+        "recolor": {
+            "label": "목록 색상 다시 지정하기",
+            "helpText": "<p>코드포스 시스템을 사용하는 게임의 순위</p><p>\"점수/총계\" 범위에 따라 점수를 다시 채색</p><p>범위：1~0.7~0.45~0 진한 녹색→연한 주황색→진한 주황색→빨간색</p>"
+        }
+    },
+    "localizationSettings": {
+        "title": "현지화",
+        "scriptLanguageLabel": "스크립팅 언어",
+        "websiteLanguageLabel": "웹사이트 언어"
+    },
+    "translationSettings": {
+        "title": "번역 설정",
+        "options": {
+            "title": "환경설정",
+            "translationServices": {
+                "deepl": "DeepL 의 번역",
+                "iflyrec": "쉰페이 듣기 번역",
+                "youdao": "유튜브 번역",
+                "google": "Google 번역",
+                "caiyun": "조명. 다채로운 구름과 작은 번역",
+                "openai": {
+                    "name": "ChatGPT 번역",
+                    "helpText": "<p><b>아래 ChatGPT 구성에서 사용할 구성 정보를 추가하고 선택한 후 마우스 오른쪽 버튼을 클릭하여 구성을 수정 및 삭제하세요</b></p><p>자세한 내용은 스크립트 페이지</p>를 참조하세요."
+                }
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "스트리밍",
+                "helpText": "<p>데이터 스트리밍 활성화, 타자기 효과</p>"
+            }
+        },
+        "preference": {
+            "title": "환경설정",
+            "comment_translation_choice": "댓글 섹션 번역",
+            "translationServices": {
+                "follow": "환경설정 팔로우",
+                "deepl": "DeepL 의 번역",
+                "iflyrec": "쉰페이 듣기 번역",
+                "youdao": "유튜브 번역",
+                "google": "Google 번역",
+                "caiyun": "조명. 다채로운 구름과 작은 번역",
+                "openai": "ChatGPT 번역"
+            }
+        },
+        "autoTranslation": {
+            "title": "자동 번역",
+            "enable": "자동 번역 사용",
+            "helpText": "<p><strong>.ttypography, .comments 영역의 짧은 텍스트의 경우</strong></p><p>브라우저 창의 표시 영역(</p>)에 들어가면 자동으로 번역됩니다.",
+            "shortTextLength": {
+                "name": "텍스트 길이",
+                "helpText": "<p>텍스트 길이가 이 값보다 작으면 짧은 텍스트</p>로 간주됩니다.",
+                "end": "캐릭터"
+            },
+            "allowMixTrans": {
+                "name": "댓글 섹션의 혼합 번역",
+                "helpText": "<p>자동 번역 시 댓글 섹션의 각 짧은 텍스트 영역에 대해 아래 체크 표시된 서비스 중 하나를 독립적으로 무작위로 선택합니다.</p><p>병렬로 번역하기</p>",
+                "checkboxs": {
+                    "deepl": "DeepL",
+                    "iflyrec": "쉰페이(통신 회사)",
+                    "youdao": "진실과 옳음의 원칙을 준수합니다.",
+                    "google": "구글",
+                    "caiyun": "장밋빛 구름"
+                }
+            }
+        },
+        "advanced": {
+            "name": "높은 수준",
+            "mode": {
+                "name": "작동 모드",
+                "helpText": "<p>스크립트 작동 방식을 선택할 수 있습니다</p><p>○ 일반 모드：는 전체 영역을 한 번에 번역합니다</p><p>○ 세그먼트 모드：는 영역 내의 각&#60;&#112;&#47;&#62;및&#60;&#105;&#47;&#62;태그를 차례로 번역합니다</p><p>○ 선택된 세그먼트 모드：페이지에서&#60;&#112;&#47;&#62;및&#60;&#105;&#47;&#62;태그를 자유롭게 클릭하여 번역할 수 있습니다</p><div style='color:#f44336;'><p><u>참고：세그먼트/선택된 세그먼트 모드에서는 다음과 같은 문제가 발생합니다：</u></p><p>- 번역 인터페이스가 텍스트의 전체 맥락을 알 수 없어 번역의 품질이 저하됩니다.</p><p>-&#60;&#112;&#47;&#62;또는&#60;&#105;&#47;&#62;요소가 아니기 때문에 번역되지 않거나</strong>선택할 수 없는<strong>섹션이</p></div>있습니다.",
+                "options": {
+                    "0": "일반 모드",
+                    "1": "세분화 모델",
+                    "2": "세분화 모델"
+                }
+            },
+            "memory": {
+                "name": "이전 번역 자동 복구",
+                "helpText": "<p><strong>제목 페이지</strong>의 번역 정보를 로컬 인덱스DB에 자동 저장</p><p>다음에 페이지에 들어갈 때 번역 정보를 새로 고침/자동 복원</p>"
+            },
+            "retrans": {
+                "name": "재번역 시",
+                "helpText": "<p>재번역 시 '이전 결과 닫기' 또는 '이전 결과 버리기' 여부 선택</p>",
+                "options": {
+                    "0": "이전 결과 닫기",
+                    "1": "오래된 결과 정리하기"
+                }
+            },
+            "transWaitTime": {
+                "name": "대기 간격",
+                "helpText": "<p>두 번역 요청 사이의 대기 간격을 설정하면 이 설정은 전 세계적으로 적용되며 각 번역 서비스에 대해 독립적으로 계산됩니다.</p><p>권장 사항 200 + 밀리초</p><p>설명：ChatGPT 번역은 이 설정을 무시하고 기다리지 않습니다</p>.",
+                "end": "밀리초"
+            },
+            "replaceSymbol": {
+                "name": "라텍스 교체",
+                "helpText": "<p>이 스크립트는 먼저 모든 라텍스 수식을 제거하고 그 자리에 자리 표시자를 사용하여 수식이 번역 인터페이스에 의해 손상되지 않도록 합니다</p><p>대체물 자체가 손상될 확률은 번역 서비스마다 다르므로 자세한 내용은 스크립트 페이지의 지침을 참조하세요</p><p>참고：ChatGPT로 번역하는 경우 위 사항이 필요하지 않으므로 이 옵션의 영향을 받지 않습니다</p><p>자세한 내용은 스크립트 페이지에서 지침을 참조하세요</p>",
+                "options": {
+                    "1": "사용 [ ]를 사용합니다.",
+                    "2": "사용 {}",
+                    "3": "사용 []"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "텍스트에서 ** 기호 필터링",
+                "helpText": " <p>일부 번역 서비스(예: DeepL)는 마크다운에서 강조를 잘못 처리합니다. <strong>**</strong> </p><p>이로 인해 번역이 래핑된 콘텐츠를 놓칠 수 있으며, 강조를 제거하도록 선택할 수 있습니다(ChatGPT를 사용하면 이를 무시함) </p>."
+            }
+        }
+    },
+    "clistSettings": {
+        "title": "클리스트 설정",
+        "basics": {
+            "name": "기본",
+            "notice": "참고：페이지마다 작업하는 데 필요한 자격 증명이 다르므로 해당 옵션의 레이블이 지정된 설명을 참조하세요.",
+            "key": {
+                "title": "KEY.",
+                "helpText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "키를 입력하세요."
+            }
+        },
+        "displayRating": {
+            "title": "평가 점수 표시",
+            "contest": {
+                "name": "콘테스트 문제 세트 페이지",
+                "helpText": "<p>데이터 소스 clist.by</p><p>공식 API 키를 제공해야 함</p><p>또는 브라우저에 clist.by를 로그인 상태로 유지(예: 쿠키가 유효함)</p>",
+                "badge": "쿠키/API 키"
+            },
+            "problem": {
+                "name": "제목 페이지",
+                "helpText": "<p><p>공식 API 키(</p><p>)를 제공하거나 로그인한 브라우저에서 clist.by를 그대로 두어야 합니다(즉, 쿠키가 유효함).",
+                "badge": "쿠키/API 키"
+            },
+            "problemset": {
+                "name": "제목 페이지",
+                "helpText": "<p>이 기능이 작동하려면 브라우저에서 clist.by를 로그인(즉, 쿠키 활성화)한 상태로 유지해야 합니다</p>.",
+                "badge": "쿠키"
+            }
+        },
+        "spoilerProtection": {
+            "title": "스포일러 방지",
+            "helpText": "<p>등급 하위 표시 영역 위로 마우스를 이동했을 때만 표시됨</p>"
+        }
+    },
+    "codeEditorSettings": {
+        "title": "모나코 편집기 설정",
+        "basics": "기본",
+        "problemPageCodeEditor": {
+            "label": "제목 페이지에 편집기 추가",
+            "helpText": "제목 페이지 아래에 모나코 편집기를 추가하면 코드가 자동으로 저장되어 온라인 코드 실행이 가능합니다."
+        },
+        "preferences": {
+            "title": "환경설정",
+            "isCodeSubmitConfirm": {
+                "label": "코드 제출에 대한 2차 확인",
+                "helpText": "모나코 편집기의 제목 페이지를 클릭하면 잘못된 제출을 방지하기 위해 코드가 제출될 때 두 번째로 팝업이 표시됩니다."
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "마우스 스크롤 잠금",
+                "helpText": "이 기능을 켜면 마우스 포인터가 모나코 편집기 내부에 있을 때 마우스 스크롤은 편집기의 콘텐츠만 스크롤합니다."
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "온라인 코드 실행",
+            "compilerOptions": {
+                "codeforces": "코드포스",
+                "wandbox": "완드박스",
+                "rextester": "렉스터"
+            }
+        },
+        "lspSettings": {
+            "title": "LSP 설정",
+            "useLSP": {
+                "label": "LSP 사용",
+                "helpText": "<p>LSP 서버에 연결하여 코드 완성, 코드 진단, 서식 지정, 정의로 이동 등을 활성화합니다.</p><p>C++, Python 언어 지원</p><p>OJBetter_Bridge를 시작해야 하며, 지침은 스크립트 페이지</p>를 참조하세요."
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "작업 경로.",
+                "helpText": "<p>OJBetter_Bridge가 위치한 경로를 입력해야 합니다.</p><p>슬래시 또는 백슬래시 사용</p><p>기본 경로：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "서버.",
+                "helpText": "<p>로컬 머신에 OJBetter_Bridge의 서버 URL을 입력해야 합니다.</p><p>기본 URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>일반적으로는 여기서 변경할 필요가 없으며, 변경해야 하는 경우 기본 URL 형식(</p>)과 일치하도록 하세요."
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "정적 완성도 향상",
+            "cppCodeTemplateComplete": {
+                "label": "AcWing CPP 보완 템플릿",
+                "helpText": "<p>템플릿 출처:<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+            },
+            "customization": "사용자 지정",
+            "performanceWarning": "참고：정적 보완 규칙이 너무 많으면 성능에 영향을 줄 수 있습니다."
+        }
+    },
+    "compatibilitySettings": {
+        "title": "호환 설정",
+        "loaded": {
+            "label": "페이지 리소스가 로드될 때까지 기다릴 필요 없음",
+            "helpText": "<p>페이지 리소스(주로 다양한 자바스크립트)의 로드가 완료되기 전에 스크립트가 실행되어 예기치 않은 오류가 발생하는 것을 방지하기 위해 스크립트는 기본적으로 window.onload 이벤트를 기다립니다</p><p>페이지 상단의 로딩 메시지가 항상：\"페이지 리소스가 로드되기를 기다리는 중\"에 머무르는 경우 페이지 로드가 이미 완료되었음에도 불구하고</p><p><u>먼저 다음 사항을 확인해야 합니다. 네트워크 문제인지 여부</u></p><p>그렇지 않은 경우 브라우저에서 window.onload 이벤트가 너무 일찍(DOMContentLoaded 이전) 트리거되었기 때문일 수 있습니다.</p><p>이 옵션을 켜서 window.onload 이벤트 대기를 중지할 수 있습니다</p><p><u>참고：위의 문제가 없는 경우 이 옵션을 켜지 마시기 바랍니다</u></p>"
+        }
+    }
+}
