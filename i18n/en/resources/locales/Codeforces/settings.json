@@ -1,0 +1,243 @@
+{
+    "sidebar": {
+        "basic": "fundamental",
+        "localization": "localization",
+        "translation": "rendering",
+        "clist": "Clist",
+        "monaco": "Monaco",
+        "compatibility": "compatibility"
+    },
+    "basicSettings": {
+        "title": "Basic settings",
+        "darkMode": {
+            "name": "dark mode",
+            "options": {
+                "dark": "darkly",
+                "light": "daytime",
+                "system": "follow-up system"
+            }
+        },
+        "localization": "Chinese characterization of the interface",
+        "loadingInfo": {
+            "label": "Show load alert message",
+            "helpText": "<p>When you turn on Show loading info, a loading info prompt will be displayed at the top every time the page loads：\"CodeforcesBetter -- xxx\"</p><p>This is used to see how the script is currently working<strong>If you don't want to see it, you can choose to Off</strong></p><p><u>It is important to note that if you need feedback on any loading issues with the script, please turn this option on before taking a screenshot to make it easier to analyze the issue</u></p>"
+        },
+        "targetArea": {
+            "label": "Display target area range",
+            "helpText": "When turned on, the range of its target area is displayed when the mouse is hovered over the MD View/Copy/Translate button."
+        },
+        "expandBlocks": "Automatic unfolding of folding blocks",
+        "renderOptimization": {
+            "label": "Folded block rendering optimization",
+            "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser lags when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
+        },
+        "paging": {
+            "label": "Comments Distinction Page",
+            "helpText": "The comments are displayed on separate pages, with a specified number of<strong>main floor</strong>per page."
+        },
+        "luoguJump": {
+            "label": "Show Jump to Rock Valley",
+            "helpText": "<p>Some of the Codeforces titles are included on LOGU OJ, some titles have translations and explanations</p><p>When the display is turned on, if the current title is included, the LOGU logo will be displayed in the upper right corner of the title,</p><p>Click on it and you can jump to the corresponding LOGU page for that title with one click.</strong></p>"
+        },
+        "recolor": {
+            "label": "The list is recolored",
+            "helpText": "<p>For the list of races using the Codeforces system</p><p>Recolor the scores according to the range of \"Score/Total\"</p><p>Range：1~0.7~0.45~0 Dark Green→Light Orange→Dark Orange→Red</p>"
+        }
+    },
+    "localizationSettings": {
+        "title": "Localization settings",
+        "scriptLanguageLabel": "scripting language",
+        "websiteLanguageLabel": "Website Language"
+    },
+    "translationSettings": {
+        "title": "Translation settings",
+        "options": {
+            "title": "preferences",
+            "translationServices": {
+                "deepl": "Translation of DeepL",
+                "iflyrec": "Xunfei Hear Translate",
+                "youdao": "Youtube translation",
+                "google": "Google Translate",
+                "caiyun": "colorful clouds and small translations",
+                "openai": {
+                    "name": "ChatGPT Translation",
+                    "helpText": "<p><b>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right click to modify and delete the configuration</b></p><p>Please read the script page for details</p>"
+                }
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "streaming",
+                "helpText": "<p>Enabling data streaming, typewriter effect</p>"
+            }
+        },
+        "preference": {
+            "title": "preferences",
+            "comment_translation_choice": "Translation of the comments section",
+            "translationServices": {
+                "follow": "Follow Preferences",
+                "deepl": "Translation of DeepL",
+                "iflyrec": "Xunfei Hear Translate",
+                "youdao": "Youtube translation",
+                "google": "Google Translate",
+                "caiyun": "colorful clouds and small translations",
+                "openai": "ChatGPT Translation"
+            }
+        },
+        "autoTranslation": {
+            "title": "automatic translation",
+            "enable": "Enable automatic translation",
+            "helpText": "<p>For short texts in the<strong>.ttypography, .comments area</strong></p><p>are automatically translated when they enter the visible area of the browser window</p>",
+            "shortTextLength": {
+                "name": "Text length",
+                "helpText": "<p>When the text length is less than this value, it is considered as a short text</p>",
+                "end": "character"
+            },
+            "allowMixTrans": {
+                "name": "Mixed translation of the comments section",
+                "helpText": "<p>When translating automatically, for each short text area in the comments section, independently and randomly select one of the services checked below</p><p>Translate in parallel</p>",
+                "checkboxs": {
+                    "deepl": "DeepL",
+                    "iflyrec": "Xunfei (telecommunications company)",
+                    "youdao": "learned and virtuous",
+                    "google": "google",
+                    "caiyun": "rosy clouds"
+                }
+            }
+        },
+        "advanced": {
+            "name": "high level",
+            "mode": {
+                "name": "operating mode",
+                "helpText": "<p>You can choose how the script works</p><p>○ Normal mode：will translate the whole area at once</p><p>○ Segmented mode：will translate each&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tag in the area in turn</p><p>○ Selected segmented mode：You are free to click on any&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tags on the page to translate them</p><div style='color:#f44336;'><p><u>NOTE：Segmented/selected segmented modes cause the following problems：</u></p><p>- they make it impossible for the translation interface to know the whole text in context and reduce the quality of the translation.</p><p>- There will be<strong>sections that will not be translated/cannot be selected</strong>because they are not&#60;&#112;&#47;&#62;or&#60;&#105;&#47;&#62;elements</p></div>",
+                "options": {
+                    "0": "normal mode",
+                    "1": "segmentation model",
+                    "2": "segmentation model"
+                }
+            },
+            "memory": {
+                "name": "Automatic recovery of historical translations",
+                "helpText": "<p>Automatically saves the translation information on the<strong>title page</strong>to the local indexDB</p><p>Automatically restores the translation information when refreshing/next entering the page</p>"
+            },
+            "retrans": {
+                "name": "Upon retranslation",
+                "helpText": "<p>Choose whether to 'close old results' or 'put away old results' on retranslation</p>",
+                "options": {
+                    "0": "Close old results",
+                    "1": "Putting away old results"
+                }
+            },
+            "transWaitTime": {
+                "name": "Waiting Interval",
+                "helpText": "<p>Sets the waiting interval between two translation requests, this setting takes effect globally and is calculated independently for each translation service</p><p>Recommendation 200 + milliseconds</p><p>Description：ChatGPT translations ignore this setting and do not wait</p>",
+                "end": "millisecond"
+            },
+            "replaceSymbol": {
+                "name": "LaTeX Replacement",
+                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and placing them with substitutions</p><p>The probability of the substitutions themselves being corrupted varies from translation service to translation service, please read the instructions on the script page for more information</p><p>Note that：Translating with ChatGPT does not require the above actions, and is therefore not affected by this option</p><p>For more information, you can go to the script page for more information</p>",
+                "options": {
+                    "1": "Use [ ]",
+                    "2": "Use {}",
+                    "3": "Use []"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "Filtering of ** symbols in text",
+                "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
+            }
+        }
+    },
+    "clistSettings": {
+        "title": "Clist Settings",
+        "basics": {
+            "name": "fundamental",
+            "notice": "Note：The credentials required to work on different pages vary, see the labeled descriptions of the corresponding options.",
+            "key": {
+                "title": "KEY.",
+                "helpText": "<p>Sample format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "Please enter KEY"
+            }
+        },
+        "displayRating": {
+            "title": "Show Rating Score",
+            "contest": {
+                "name": "Contest Question Set Page",
+                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
+                "badge": "Cookie/API KEY"
+            },
+            "problem": {
+                "name": "title page",
+                "helpText": "<p><p>You'll need to provide the official api key</p><p>or leave clist.by on your browser logged in (i.e. cookie is valid)</p",
+                "badge": "Cookie/API KEY"
+            },
+            "problemset": {
+                "name": "title page",
+                "helpText": "<p>Need to keep clist.by logged in (i.e. cookie active) on your browser for this to work</p>",
+                "badge": "Cookie"
+            }
+        },
+        "spoilerProtection": {
+            "title": "spoiler-proof",
+            "helpText": "<p>Displayed only when the mouse is moved over the Rating sub-display area</p>"
+        }
+    },
+    "codeEditorSettings": {
+        "title": "Monaco Editor Settings",
+        "basics": "fundamental",
+        "problemPageCodeEditor": {
+            "label": "Add editor to title page",
+            "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
+        },
+        "preferences": {
+            "title": "preferences",
+            "isCodeSubmitConfirm": {
+                "label": "Secondary confirmation of code submission",
+                "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "Mouse scroll lock",
+                "helpText": "When turned on, when the mouse pointer is inside the monaco editor, mouse scrolling will only scroll the content inside the editor"
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "Online Code Run",
+            "compilerOptions": {
+                "codeforces": "Codeforces",
+                "wandbox": "wandbox",
+                "rextester": "rextester"
+            }
+        },
+        "lspSettings": {
+            "title": "LSP Settings",
+            "useLSP": {
+                "label": "Using the LSP",
+                "helpText": "<p>Connect to LSP Server to enable code completion, code diagnostics, formatting, go to definitions, etc.</p><p>Support for C++, Python languages</p><p>You will need to start OJBetter_Bridge, as described on the scripts page</p>"
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "Work path.",
+                "helpText": "<p>You need to fill in the path where OJBetter_Bridge is located</p><p>Use either forward slash or backslash</p><p>Default path：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "Server.",
+                "helpText": "<p>You need to fill in the Server URL of OJBetter_Bridge in your local machine</p><p>Default URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Note that you usually don't need to change it here, if you need to change it, please be consistent with the default URL format</p>"
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "Static Completion Enhancement",
+            "cppCodeTemplateComplete": {
+                "label": "AcWing CPP Complementary Templates",
+                "helpText": "<p>Template from<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+            },
+            "customization": "customizable",
+            "performanceWarning": "Note：Too many static complementary rules can affect performance"
+        }
+    },
+    "compatibilitySettings": {
+        "title": "Compatible Settings",
+        "loaded": {
+            "label": "No waiting for page resources to load",
+            "helpText": "<p>To prevent unexpected errors from executing scripts before the page resources have finished loading (mainly various js), scripts wait for the window.onload event by default</p><p>If the loading message at the top of your page always stays at：\"Waiting for page resources to load\" even though the page has already finished loading</p><p><u>you should first check to see if whether it is a network problem,</u></p><p>if not, it may be due to the window.onload event being triggered too early in your browser (before DOMContentLoaded),</p><p>you can try to turn on this option to stop waiting for the window.onload event</p><p><u>Note：if you don't have any of the above problems, please don't turn on this option</u></p>"
+        }
+    }
+}

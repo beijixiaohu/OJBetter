@@ -36,14 +36,14 @@
                 "Register »": "Inscripción \"",
                 "Registration completed": "Inscrito",
                 "Registration closed": "La inscripción ya está cerrada",
-                "Problems\n": "问题集",
+                "Problems\n": "cuestionario",
                 "My Submissions": "Mi presentación",
                 "Standings": "lista de nombres",
                 "Questions about problems": "Preguntas sobre temas",
                 "Contest status": "estado del juego",
                 "Invited users": "Usuarios invitados",
                 "Invitation links": "Enlace de invitación",
-                "API keys": "API密钥"
+                "API keys": "Clave API"
             }
         },
         ".menu-list.main-menu-list": {
@@ -63,7 +63,7 @@
                 "Rating": "Clasificación",
                 "Edu": "cultive",
                 "Calendar": "calendario",
-                "ICPC Challenge": "ICPC挑战赛",
+                "ICPC Challenge": "Desafío del CIPC",
                 "Help": "mano"
             }
         },
@@ -122,8 +122,8 @@
                 "Check it if contestants can view standings": "Marque esta casilla si desea permitir a los participantes ver las tablas de clasificación",
                 "Where the contest was held originally": "Lugar donde se celebró originalmente el concurso",
                 "Official contest site URL": "URL del sitio web oficial del concurso",
-                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
-                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
+                "Enter a name for your new API key. It should describe what this key is used for.": "Introduzca un nombre para su nueva clave API. Debe describir para qué se utilizará esta clave.",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "Introduzca la contraseña de su cuenta para confirmar el acceso. Si no tiene contraseña, cierre la sesión y utilice la función de recuperación de contraseña."
             }
         },
         ".propertyLinks": {
@@ -155,7 +155,7 @@
             "rules": {
                 "Register now": "Inscríbase ahora",
                 "No tag edit access": "Sin privilegios de edición de etiquetas",
-                "Problem([\\s]*)$": "问题",
+                "Problem([\\s]*)$": "cuestiones",
                 "Verdict": "estado de la adjudicación",
                 "Language:": "Idiomas.",
                 "Participant": "concursantes",
@@ -223,8 +223,8 @@
                 "Friends rating": "Calificación de amigo",
                 "Favourites": "marcador (Internet)",
                 "Contests": "competición (deportes, etc.)",
-                "Magic": "魔法",
-                "Handle": "账号",
+                "Magic": "hechicería",
+                "Handle": "nombre de usuario",
                 "Members": "miembros",
                 "问题etting": "Participación en la preparación de los temas",
                 "Streams": "difusión directa por Internet",
@@ -340,7 +340,7 @@
                 "My friends": "Mi mejor amigo.",
                 "Change settings": "Cambiar ajustes",
                 "Last visit": "último acceso",
-                "not visible": "不可见的",
+                "not visible": "invisible",
                 "Registered": "registrado en",
                 "Blog entries": "Entradas de blog",
                 "comments": "comentarios",
@@ -491,7 +491,7 @@
                 "Spectator ranklists": "Lista de clasificación de la audiencia",
                 "Ghosts:": "jugador fantasma",
                 "Export Submissions": "Exportación",
-                "Register in Codeforces": "注册 Codeforces"
+                "Register in Codeforces": "Regístrese en Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -562,8 +562,8 @@
                 "ICPC Scoring": "Puntuación del CIPC",
                 "Doesn't matter": "----",
                 "Any": "propiedad",
-                "Yes$": "是",
-                "No$": "否",
+                "Yes$": "sea",
+                "No$": "obstruido",
                 "No submission(s)": "No presentación",
                 "Have submission(s)": "Enviado",
                 "No solved problem(s)": "Sin resolución de problemas",
@@ -589,16 +589,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "Código postal",
-                "Country //(English//)": "国家（英文）",
-                "State //(English//)": "州/省份（英文）",
-                "City //(English//)": "城市（英文）",
-                "Address //(English//)": "地址（英文）",
-                "Recipient //(English//)": "收件人姓名（英文）",
-                "Country //(Native//)": "国家（本地语言）",
-                "State //(Native//)": "州/省份（本地语言）",
-                "City //(Native//)": "城市（本地语言）",
-                "Address //(Native//)": "地址（本地语言）",
-                "Recipient //(Native//)": "收件人姓名（本地语言）",
+                "Country //(English//)": "País (inglés)",
+                "State //(English//)": "Estado/Provincia (inglés)",
+                "City //(English//)": "Ciudades (inglés)",
+                "Address //(English//)": "Dirección (inglés)",
+                "Recipient //(English//)": "Nombre del destinatario (en inglés)",
+                "Country //(Native//)": "País (lengua local)",
+                "State //(Native//)": "Estado/Provincia (lengua materna)",
+                "City //(Native//)": "Ciudad (lengua local)",
+                "Address //(Native//)": "Dirección (idioma local)",
+                "Recipient //(Native//)": "Nombre del destinatario (idioma local)",
                 "Phone": "teléfonos",
                 "TON Wallet:": "BOLSA TON.",
                 "Secret Code:": "Captcha.",
@@ -695,7 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "Título.",
-                "Question": "问题",
+                "Question": "cuestiones",
                 "Language:": "Idiomas.",
                 "Source code:": "Código fuente.",
                 "Or choose file:": "O seleccione el archivo.",
@@ -717,12 +717,12 @@
                 "City": "municipios",
                 "Organization": "organizaciones",
                 "Handle/Email": "Número de cuenta/Correo electrónico",
-                "Name": "名称",
-                "Handle": "账号",
-                "Email": "邮箱",
-                "Confirm": "确认",
+                "Name": "nombre (de una cosa)",
+                "Handle": "nombre de usuario",
+                "Email": "bandeja de entrada",
+                "Confirm": "reconocer",
                 "Password": "criptográfico",
-                "New Rank": "新的Rank",
+                "New Rank": "Nuevo rango",
                 "Training name \\(English\\):": "Nombre de la formación (en inglés).",
                 "Training name \\(Russian\\):": "Nombre de la formación (en ruso).",
                 "Contest format:": "Formato del concurso.",
@@ -839,8 +839,8 @@
                 "Create Mashup Contest": "Crear un concurso de mashups",
                 "Delete problem": "Borrar la pregunta",
                 "Restore problem": "Problemas de recuperación",
-                "Generate": "生成",
-                "Send": "发送"
+                "Generate": "generando",
+                "Send": "enviando"
             }
         },
         "InputButton": {

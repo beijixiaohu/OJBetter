@@ -155,7 +155,7 @@
             "rules": {
                 "Register now": "Enroll Now",
                 "No tag edit access": "No tag editing privileges",
-                "Problem([\\s]*)$": "问题",
+                "Problem([\\s]*)$": "concern",
                 "Verdict": "status of adjudication",
                 "Language:": "Languages.",
                 "Participant": "contestants",
@@ -340,7 +340,7 @@
                 "My friends": "My best friend.",
                 "Change settings": "Change settings",
                 "Last visit": "last access",
-                "not visible": "不可见的",
+                "not visible": "invisible",
                 "Registered": "registered in",
                 "Blog entries": "Blog Entries",
                 "comments": "commentaries",
@@ -491,7 +491,7 @@
                 "Spectator ranklists": "Audience Ranking List",
                 "Ghosts:": "ghost player",
                 "Export Submissions": "Export Submission",
-                "Register in Codeforces": "注册 Codeforces"
+                "Register in Codeforces": "Register for Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -562,8 +562,8 @@
                 "ICPC Scoring": "ICPC scoring",
                 "Doesn't matter": "----",
                 "Any": "possess",
-                "Yes$": "是",
-                "No$": "否",
+                "Yes$": "be",
+                "No$": "clogged",
                 "No submission(s)": "No submission",
                 "Have submission(s)": "Submitted",
                 "No solved problem(s)": "No problem solving",
@@ -695,7 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "Title.",
-                "Question": "问题",
+                "Question": "concern",
                 "Language:": "Languages.",
                 "Source code:": "Source Code.",
                 "Or choose file:": "Or select the file.",
@@ -718,9 +718,9 @@
                 "Organization": "organization",
                 "Handle/Email": "Account number/email address",
                 "Name": "name (of a thing)",
-                "Handle": "账号",
-                "Email": "邮箱",
-                "Confirm": "确认",
+                "Handle": "username",
+                "Email": "inbox",
+                "Confirm": "recognize",
                 "Password": "cryptographic",
                 "New Rank": "New Rank",
                 "Training name \\(English\\):": "Name of training (in English).",
@@ -840,7 +840,7 @@
                 "Delete problem": "Delete the question",
                 "Restore problem": "Recovery issues",
                 "Generate": "generating",
-                "Send": "发送"
+                "Send": "dispatch"
             }
         },
         "InputButton": {

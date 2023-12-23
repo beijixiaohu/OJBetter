@@ -1,0 +1,243 @@
+{
+    "sidebar": {
+        "basic": "grundlegend",
+        "localization": "Lokalisierung",
+        "translation": "Rendering",
+        "clist": "Clist",
+        "monaco": "Monaco",
+        "compatibility": "Kompatibilität"
+    },
+    "basicSettings": {
+        "title": "Grundeinstellungen",
+        "darkMode": {
+            "name": "Dunkelmodus",
+            "options": {
+                "dark": "düster",
+                "light": "tagsüber",
+                "system": "Follow-up-System"
+            }
+        },
+        "localization": "Chinesische Sprachschnittstelle",
+        "loadingInfo": {
+            "label": "Anzeige einer Warnmeldung beim Laden",
+            "helpText": "<p>Wenn Sie die Option Ladeinformationen anzeigen aktivieren, wird jedes Mal, wenn die Seite geladen wird, oben eine Ladeinformationsabfrage angezeigt：\"CodeforcesBetter -- xxx\"</p><p>Dies dient dazu, zu sehen, wie das Skript derzeit funktioniert<strong>Wenn Sie dies nicht sehen möchten, können Sie die Option Aus</strong></p><p><u>Wenn Sie Feedback zu Ladeproblemen mit dem Skript benötigen, schalten Sie diese Option bitte ein, bevor Sie einen Screenshot machen, damit das Problem analysiert werden kann</u></p>"
+        },
+        "targetArea": {
+            "label": "Anzeige der Reichweite des Zielgebiets",
+            "helpText": "Wenn diese Funktion aktiviert ist, wird der Bereich des Zielbereichs angezeigt, wenn Sie den Mauszeiger über die Schaltfläche MD Ansicht/Kopieren/Translieren bewegen."
+        },
+        "expandBlocks": "Automatisches Entfalten von Faltblöcken",
+        "renderOptimization": {
+            "label": "Optimierung des Renderings von Faltblöcken",
+            "helpText": "<p>Fügen Sie \"contain\"-Einschränkungen zu gefalteten Blockelementen hinzu</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Wenn Ihr Browser bei der Anzeige einer großen Anzahl von gefalteten Blöcken lahmt, kann das Einschalten dieser Funktion<strong></strong>die Situation etwas verbessern</p>"
+        },
+        "paging": {
+            "label": "Kommentare Unterscheidung Seite",
+            "helpText": "Die Kommentare werden auf separaten Seiten angezeigt, mit einer bestimmten Anzahl von<strong>main floor</strong>pro Seite."
+        },
+        "luoguJump": {
+            "label": "Sprung nach Rock Valley anzeigen",
+            "helpText": "<p>Einige der Codeforces-Titel sind in LOGU OJ enthalten, und für einige Titel gibt es Übersetzungen und Erklärungen</p><p>. Wenn das Display eingeschaltet ist und der aktuelle Titel enthalten ist, wird das LOGU-Logo in der oberen rechten Ecke des Titels angezeigt,</p><p>. Wenn Sie darauf klicken, können Sie mit einem Klick auf die entsprechende LOGU-Seite für diesen Titel springen.</strong></p>"
+        },
+        "recolor": {
+            "label": "Die Liste neu färben",
+            "helpText": "<p>Für die Rangliste der Spiele, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
+        }
+    },
+    "localizationSettings": {
+        "title": "Lokalisierung",
+        "scriptLanguageLabel": "Skriptsprache",
+        "websiteLanguageLabel": "Website Sprache"
+    },
+    "translationSettings": {
+        "title": "Einstellungen für die Übersetzung",
+        "options": {
+            "title": "Einstellungen",
+            "translationServices": {
+                "deepl": "Übersetzung von DeepL",
+                "iflyrec": "Xunfei Hear Übersetzen",
+                "youdao": "Youtube Übersetzung",
+                "google": "Google Übersetzen",
+                "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
+                "openai": {
+                    "name": "ChatGPT Übersetzung",
+                    "helpText": "<p><b>Sie müssen die Konfigurationsinformationen, die Sie in der ChatGPT-Konfiguration unten verwenden möchten, hinzufügen und auswählen. Klicken Sie mit der rechten Maustaste, um die Konfiguration zu ändern und zu löschen</b></p><p>Bitte lesen Sie die Skriptseite für Details</p>"
+                }
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "Streaming",
+                "helpText": "<p>Ermöglicht das Streamen von Daten, Schreibmaschineneffekt</p>"
+            }
+        },
+        "preference": {
+            "title": "Einstellungen",
+            "comment_translation_choice": "Übersetzung des Kommentarbereichs",
+            "translationServices": {
+                "follow": "Präferenzen folgen",
+                "deepl": "Übersetzung von DeepL",
+                "iflyrec": "Xunfei Hear Übersetzen",
+                "youdao": "Youtube Übersetzung",
+                "google": "Google Übersetzen",
+                "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
+                "openai": "ChatGPT Übersetzung"
+            }
+        },
+        "autoTranslation": {
+            "title": "automatische Übersetzung",
+            "enable": "Automatische Übersetzung einschalten",
+            "helpText": "<p>Kurze Texte im Bereich<strong>.ttypography, .comments</strong></p><p>werden automatisch übersetzt, wenn sie in den sichtbaren Bereich des Browserfensters gelangen</p>",
+            "shortTextLength": {
+                "name": "Textlänge",
+                "helpText": "<p>Wenn der Text kürzer als dieser Wert ist, wird er als Kurztext betrachtet</p>",
+                "end": "Zeichen"
+            },
+            "allowMixTrans": {
+                "name": "Gemischte Übersetzung des Kommentarbereichs",
+                "helpText": "<p>Wählen Sie bei der automatischen Übersetzung für jeden kurzen Textbereich im Kommentarbereich unabhängig und zufällig einen der unten angekreuzten Dienste aus</p><p>Parallel übersetzen</p>",
+                "checkboxs": {
+                    "deepl": "DeepL",
+                    "iflyrec": "Xunfei (Telekommunikationsunternehmen)",
+                    "youdao": "an den Prinzipien von Wahrheit und Recht festhalten",
+                    "google": "Google",
+                    "caiyun": "rosige Wolken"
+                }
+            }
+        },
+        "advanced": {
+            "name": "hohes Niveau",
+            "mode": {
+                "name": "Betriebsart",
+                "helpText": "<p>Sie können wählen, wie das Skript funktioniert</p><p>○ Normaler Modus：übersetzt den gesamten Bereich auf einmal</p><p>○ Segmentierter Modus：übersetzt jedes&#60;&#112;&#47;&#62;und&#60;&#105;&#47;&#62;Tag innerhalb des Bereichs der Reihe nach</p><p>○ Ausgewählter segmentierter Modus：Sie können auf jedes&#60;&#112;&#47;&#62;und&#60;&#105;&#47;&#62;Tag auf der Seite klicken, um es zu übersetzen</p><div style='color:#f44336;'><p><u>HINWEIS：Segmentierter/Ausgewählter segmentierter Modus führt zu folgenden Problemen：</u></p><p>- die Übersetzungsschnittstelle kann nicht den gesamten Kontext des Textes kennen, was die Qualität der Übersetzung mindert.</p><p>- Es gibt<strong>Abschnitte, die nicht übersetzt/ausgewählt werden können</strong>, weil sie keine&#60;&#112;&#47;&#62;oder&#60;&#105;&#47;&#62;Elemente sind</p></div>",
+                "options": {
+                    "0": "Normaler Modus",
+                    "1": "Segmentierungsmodell",
+                    "2": "Segmentierungsmodell"
+                }
+            },
+            "memory": {
+                "name": "Automatische Wiederherstellung von historischen Übersetzungen",
+                "helpText": "<p>Speichert die Übersetzungsinformationen auf der Titelseite<strong></strong>automatisch in der lokalen indexDB</p><p>Aktualisiert / stellt die Übersetzungsinformationen automatisch wieder her, wenn die Seite das nächste Mal aufgerufen wird</p>"
+            },
+            "retrans": {
+                "name": "Nach der Rückübersetzung",
+                "helpText": "<p>Wählen Sie, ob Sie bei einer Neuübersetzung alte Ergebnisse schließen oder weglegen möchten</p>",
+                "options": {
+                    "0": "Alte Ergebnisse schließen",
+                    "1": "Alte Ergebnisse beiseite legen"
+                }
+            },
+            "transWaitTime": {
+                "name": "Wartezeit Intervall",
+                "helpText": "<p>Legen Sie das Warteintervall zwischen zwei Übersetzungsanfragen fest. Diese Einstellung wird global wirksam und wird für jeden Übersetzungsdienst unabhängig berechnet</p><p>Empfehlung 200 + Millisekunden</p><p>Beschreibung：ChatGPT-Übersetzungen ignorieren diese Einstellung und warten nicht</p>",
+                "end": "Millisekunde"
+            },
+            "replaceSymbol": {
+                "name": "LaTeX-Ersatz",
+                "helpText": "<p>Das Skript stellt sicher, dass die Formeln nicht durch die Übersetzungsschnittstelle beschädigt werden, indem es zunächst alle LaTeX-Formeln entfernt und Platzhalter für sie verwendet</p><p>Die Wahrscheinlichkeit, dass die Ersetzungen selbst beschädigt werden, variiert von Übersetzungsdienst zu Übersetzungsdienst, bitte lesen Sie die Anweisungen auf der Skriptseite für Details</p><p>Beachten Sie, dass：Übersetzen mit ChatGPT das oben genannte nicht erfordert und daher von dieser Option nicht betroffen ist</p><p>Für Details können Sie die Skriptseite für Anweisungen besuchen</p>",
+                "options": {
+                    "1": "Verwenden Sie [ ]",
+                    "2": "Verwenden Sie {}",
+                    "3": "Verwenden Sie []"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "Filtern von ** Zeichen im Text",
+                "helpText": " <p>Einige Übersetzungsdienste (z.B. DeepL) behandeln die Hervorhebung in MarkDown nicht korrekt <strong>**</strong> </p><p>Dies kann dazu führen, dass die Übersetzung ihren verpackten Inhalt nicht erhält. Sie können die Hervorhebung entfernen (mit ChatGPT wird dies ignoriert) </p>"
+            }
+        }
+    },
+    "clistSettings": {
+        "title": "Clist Einstellungen",
+        "basics": {
+            "name": "grundlegend",
+            "notice": "Hinweis：Die Anmeldedaten, die für die verschiedenen Seiten erforderlich sind, variieren, siehe die beschrifteten Beschreibungen der entsprechenden Optionen.",
+            "key": {
+                "title": "SCHLÜSSEL.",
+                "helpText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "Bitte KEY eingeben"
+            }
+        },
+        "displayRating": {
+            "title": "Bewertungspunktzahl anzeigen",
+            "contest": {
+                "name": "Seite mit den Gewinnspielfragen",
+                "helpText": "<p>Datenquelle clist.by</p><p>Sie müssen den offiziellen API-Schlüssel</p><p>angeben oder clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist gültig)</p>",
+                "badge": "Cookie/API-Schlüssel"
+            },
+            "problem": {
+                "name": "Titelseite",
+                "helpText": "<p><p>Sie müssen den offiziellen Api-Schlüssel</p><p>angeben oder clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist gültig)</p",
+                "badge": "Cookie/API-Schlüssel"
+            },
+            "problemset": {
+                "name": "Titelseite",
+                "helpText": "<p>Damit dies funktioniert, müssen Sie clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist aktiv)</p>",
+                "badge": "Keks"
+            }
+        },
+        "spoilerProtection": {
+            "title": "Spoilerfest",
+            "helpText": "<p>Wird nur angezeigt, wenn die Maus über den Unteranzeigebereich Bewertung bewegt wird</p>"
+        }
+    },
+    "codeEditorSettings": {
+        "title": "Monaco Editor Einstellungen",
+        "basics": "grundlegend",
+        "problemPageCodeEditor": {
+            "label": "Editor zur Titelseite hinzufügen",
+            "helpText": "Fügen Sie den Monaco-Editor unterhalb der Titelseite hinzu und der Code wird automatisch gespeichert, so dass der Code online ausgeführt werden kann."
+        },
+        "preferences": {
+            "title": "Einstellungen",
+            "isCodeSubmitConfirm": {
+                "label": "Sekundäre Bestätigung der Codeübermittlung",
+                "helpText": "Wenn Sie auf die Titelseite des Monaco-Editors klicken, wird ein zweites Mal ein Popup-Fenster angezeigt, wenn der Code eingereicht wird, um falsche Eingaben zu verhindern."
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "Maus-Scrollsperre",
+                "helpText": "Wenn diese Option aktiviert ist und sich der Mauszeiger innerhalb des Monaco-Editors befindet, wird beim Scrollen mit der Maus nur der Inhalt innerhalb des Editors gescrollt."
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "Online Code Lauf",
+            "compilerOptions": {
+                "codeforces": "Codeforces",
+                "wandbox": "wandbox",
+                "rextester": "rextester"
+            }
+        },
+        "lspSettings": {
+            "title": "LSP-Einstellungen",
+            "useLSP": {
+                "label": "Verwendung des LSP",
+                "helpText": "<p>Verbinden Sie sich mit LSP Server, um Code-Vervollständigung, Code-Diagnose, Formatierung, Go-to-Definitionen usw. zu ermöglichen.</p><p>Unterstützung für C++, Python-Sprachen</p><p>Sie müssen OJBetter_Bridge starten, Anweisungen finden Sie auf der Skript-Seite</p>"
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "Arbeitsweg.",
+                "helpText": "<p>Sie müssen den Pfad angeben, in dem sich OJBetter_Bridge befindet</p><p>Verwenden Sie entweder einen Schrägstrich oder einen Backslash</p><p>Standardpfad：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "Server.",
+                "helpText": "<p>Sie müssen die Server-URL von OJBetter_Bridge auf Ihrem lokalen Rechner eingeben</p><p>Standard-URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Beachten Sie, dass Sie hier in der Regel keine Änderungen vornehmen müssen. Wenn Sie sie ändern müssen, passen Sie sie bitte an das Standard-URL-Format an</p>"
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "Verbesserung der statischen Vervollständigung",
+            "cppCodeTemplateComplete": {
+                "label": "AcWing CPP-Ergänzungsvorlagen",
+                "helpText": "<p>Vorlage von<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+            },
+            "customization": "Personalisierung",
+            "performanceWarning": "Hinweis：Zu viele statische ergänzende Regeln können die Leistung beeinträchtigen"
+        }
+    },
+    "compatibilitySettings": {
+        "title": "Kompatible Einstellungen",
+        "loaded": {
+            "label": "Kein Warten auf das Laden von Seitenressourcen",
+            "helpText": "<p>Um zu verhindern, dass unerwartete Fehler durch die Ausführung von Skripten auftreten, bevor die Ressourcen der Seite fertig geladen sind (vor allem verschiedene js), warten Skripte standardmäßig auf das Ereignis window.onload</p><p>Wenn die Lademeldung oben auf Ihrer Seite immer bei：\"Waiting for page resources to load\" bleibt, obwohl die Seite bereits fertig geladen ist</p><p><u>, sollten Sie zunächst prüfen, ob ob es sich um ein Netzwerkproblem handelt,</u></p><p>wenn nicht, kann es daran liegen, dass das Ereignis window.onload in Ihrem Browser zu früh ausgelöst wird (vor DOMContentLoaded),</p><p>dann können Sie versuchen, diese Option zu aktivieren, um nicht mehr auf das Ereignis window.onload zu warten</p><p><u>Hinweis：wenn Sie keines der oben genannten Probleme haben, schalten Sie diese Option bitte nicht ein</u></p>"
+        }
+    }
+}
