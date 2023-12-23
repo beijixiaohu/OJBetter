@@ -154,7 +154,7 @@
             "rules": {
                 "Register now": "現在報名",
                 "No tag edit access": "沒有標籤編輯權限",
-                "Problem": "問題",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "判題狀態",
                 "Language:": "語言:",
                 "Participant": "參賽者",
@@ -489,7 +489,8 @@
                 "Contest writers": "比賽編寫者",
                 "Spectator ranklists": "觀眾排名列表",
                 "Ghosts:": "幽靈選手",
-                "Export Submissions": "匯出提交"
+                "Export Submissions": "匯出提交",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -693,6 +694,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "題目:",
+                "Question": "问题",
                 "Language:": "語言:",
                 "Source code:": "原始碼:",
                 "Or choose file:": "或選擇文件:",
@@ -715,6 +717,9 @@
                 "Organization": "組織",
                 "Handle/Email": "帳號/信箱",
                 "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "密碼",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "訓練名稱（英文）:",
@@ -833,7 +838,8 @@
                 "Create Mashup Contest": "創建混搭比賽",
                 "Delete problem": "刪除問題",
                 "Restore problem": "恢復問題",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {
