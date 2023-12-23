@@ -1,0 +1,859 @@
+{
+    "version": "1.0.0",
+    "commonReplacements": {
+        ".datatable": {
+            "class": [
+                ".datatable"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation": "एक आभासी पुनर्मूल्यांकन प्रतियोगिता में भाग लें",
+                "Enter": "प्रवेश करना",
+                "Current standings": "वर्तमान सूची",
+                "Final standings": "अंतिम सूची",
+                "Preliminary results": "प्रारंभिक परिणाम",
+                "open hacking:": "हैकर्स के लिए खुला",
+                "School/University/City/Region Championship": "स्कूल/विश्वविद्यालय/शहर/क्षेत्रीय प्रतियोगिता",
+                "Official School Contest": "आधिकारिक स्कूल प्रतियोगिता",
+                "Training Contest": "प्रशिक्षण मैच",
+                "Training Camp Contest": "प्रशिक्षण शिविर खेल",
+                "Official ICPC Contest": "आईसीपीसी आधिकारिक प्रतियोगिता",
+                "Official International Personal Contest": "आधिकारिक अंतर्राष्ट्रीय व्यक्तिगत प्रतियोगिता",
+                "China": "चीन",
+                "Statements": "प्रश्न विवरण",
+                "in Chinese": "चीनी",
+                "Trainings": "रेलगाड़ी",
+                "Prepared by": "संपादक",
+                "Current or upcoming contests": "वर्तमान या आगामी प्रतियोगिताएँ",
+                "Rating: users participated in recent 6 months": "रेटिंग：उपयोगकर्ता जिन्होंने पिछले 6 महीनों में भाग लिया है",
+                "Past contests": "पिछले खेल",
+                "Exclusions": "निकालना",
+                "Before start": "खेल शुरू होने में अभी समय है",
+                "Before registration": "रजिस्ट्रेशन शुरू होने में अभी समय है",
+                "Until closing ": "रजिस्ट्रेशन बंद होने में अभी भी समय बाकी है",
+                "Before extra registration": "अतिरिक्त पंजीकरण अभी शुरू नहीं हुआ है",
+                "Register »": "साइन अप करें\"",
+                "Registration completed": "दर्ज कराई",
+                "Registration closed": "पंजीकरण समाप्त हो गया है",
+                "Problems\n": "问题集",
+                "My Submissions": "मेरा समर्पण",
+                "Standings": "सूची",
+                "Questions about problems": "समस्या के बारे में प्रश्न",
+                "Contest status": "खेल की स्थिति",
+                "Invited users": "उपयोगकर्ताओं को आमंत्रित किया गया",
+                "Invitation links": "आमंत्रण लिंक",
+                "API keys": "API密钥"
+            }
+        },
+        ".menu-list.main-menu-list": {
+            "class": [
+                ".menu-list.main-menu-list"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Home": "होम पेज",
+                "Top": "लोकप्रिय",
+                "Catalog": "सामग्री की गाइड तालिका",
+                "Contests": "प्रतियोगिता",
+                "Gym": "प्रशिक्षण शिविर",
+                "Problemset": "प्रश्न पत्र",
+                "Groups": "समूह",
+                "Rating": "रेटिंग रैंकिंग सूची",
+                "Edu": "प्रशिक्षण",
+                "Calendar": "पंचांग",
+                "ICPC Challenge": "ICPC挑战赛",
+                "Help": "मदद"
+            }
+        },
+        ".nav-links": {
+            "class": [
+                ".nav-links"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Settings": "स्थापित करना",
+                "Blog": "ब्लॉग",
+                "Teams": "टीम",
+                "Submissions": "जमा करना",
+                "Favourites": "इकट्ठा करना",
+                "Problemsetting": "प्रश्न सेटिंग",
+                "Talks": "निजी पत्र",
+                "Contests": "प्रतियोगिता"
+            }
+        },
+        ".contest-state-phase": {
+            "class": [
+                ".contest-state-phase"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Before contest": "आगामी मैच",
+                "Contest is running": "खेल प्रगति पर है"
+            }
+        },
+        ".notice": {
+            "class": [
+                ".notice"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "has extra registration": "एक अतिरिक्त पंजीकरण अवधि है",
+                "If you are late to register in 5 minutes before the start, you can register later during the extra registration. Extra registration opens 10 minutes after the contest starts and lasts 25 minutes.": "यदि आपने खेल शुरू होने से 5 मिनट पहले पंजीकरण नहीं कराया है, तो आप बाद में अतिरिक्त पंजीकरण अवधि के दौरान पंजीकरण कर सकते हैं। अतिरिक्त पंजीकरण खेल शुरू होने के 10 मिनट बाद खुलेगा और 25 मिनट तक चलेगा।",
+                "in timezone ([^)]*)": "$1 समय क्षेत्र",
+                "Contest will be available for virtual participation when over. Leave this field blank to allow virtual participation at any time": "प्रतियोगिता के बाद वर्चुअल प्रविष्टियों की अनुमति दी जाएगी। किसी भी समय आभासी प्रविष्टियों की अनुमति देने के लिए इस फ़ील्ड को खाली छोड़ दें",
+                "Contest duration in minutes": "मैच की अवधि (मिनट)",
+                "or choose": "या चुनें",
+                "Standings freeze period in minutes": "सूची जमने का समय (मिनट)",
+                "Time when final results are available": "अंतिम परिणाम उपलब्ध समय",
+                "Is it allowed to solve contest problems unofficially after the end": "क्या खेल समाप्त होने के बाद खेल के मुद्दों के अनौपचारिक समाधान की अनुमति है",
+                "Is it allowed to run contest as virtual after the end": "क्या प्रतियोगिता के बाद आभासी प्रविष्टियों की अनुमति दी जाएगी?",
+                "Is it allowed participate in contest out of competition": "क्या गैर-प्रतियोगिता प्रविष्टियों की अनुमति है",
+                "Are participants allowed to register for the contest themselves": "क्या प्रतियोगियों को स्वयं पंजीकरण करने की अनुमति है",
+                "Can non-registered users and anonyms view contest standings, problems and other statistics": "क्या अपंजीकृत और गुमनाम उपयोगकर्ताओं को प्रतियोगिता लीडरबोर्ड, प्रश्न और अन्य आँकड़े देखने की अनुमति दी जाए",
+                "If unchecked they will view only personal status": "यदि अनियंत्रित है, तो वे केवल व्यक्तिगत स्थिति देख पाएंगे",
+                "To manage allowed program languages": "अनुमत प्रोग्रामिंग भाषाएँ प्रबंधित करें",
+                "The system will automatically adjust time limits for some languages. Recommended for use only for educational purpose.": "सिस्टम कुछ भाषाओं के लिए समय सीमा को स्वचालित रूप से समायोजित कर देगा। केवल शैक्षिक उद्देश्यों के लिए अनुशंसित।",
+                "Check it if you want to allow contestants view statements": "यदि आप प्रतियोगियों को समस्या विवरण देखने की अनुमति देना चाहते हैं तो कृपया इस बॉक्स को चेक करें।",
+                "Check it if contestants can view standings": "यदि प्रतियोगियों को लीडरबोर्ड देखने की अनुमति है तो कृपया इस बॉक्स को चेक करें",
+                "Where the contest was held originally": "प्रतियोगिता का मूल स्थान",
+                "Official contest site URL": "आधिकारिक प्रतियोगिता वेबसाइट यूआरएल",
+                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
+            }
+        },
+        ".propertyLinks": {
+            "class": [
+                ".propertyLinks"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contribution": "योगदान देना"
+            }
+        },
+        ".contests-table": {
+            "class": [
+                ".contests-table"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest history": "मैच का इतिहास"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound ": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound "
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Register now": "अभी साइनअप करें",
+                "No tag edit access": "कोई टैग संपादन अनुमति नहीं",
+                "Problem([\\s]*)$": "问题",
+                "Verdict": "फैसले की स्थिति",
+                "Language:": "भाषा:",
+                "Participant": "प्रतियोगियों",
+                "Choose file:": "एक दस्तावेज़ चुनें:"
+            }
+        },
+        ".icon-eye-close.icon-large": {
+            "class": [
+                ".icon-eye-close.icon-large"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add to exclusions": "बहिष्करण सूची में जोड़ें"
+            }
+        },
+        "null": {
+            "class": [
+                null
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add to exclusions for gym contests filter": "बूटकैम्प फ़िल्टर के लिए बहिष्करण जोड़ें"
+            }
+        },
+        ".roundbox.sidebox.sidebar-menu.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.sidebar-menu.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Announcement": "घोषणा",
+                "Statements": "सांख्यिकीय रिपोर्ट",
+                "Tutorial": "उत्तर"
+            }
+        },
+        ".second-level-menu": {
+            "class": [
+                ".second-level-menu"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Problems": "सवाल",
+                "Submit Code": "कोड प्रस्तुत करें",
+                "My Submissions": "मेरा समर्पण",
+                "Status": "राज्य",
+                "Standings": "सूची",
+                "Adm.": "प्रबंधित करना",
+                "Edit": "संपादन करना",
+                "Custom Invocation": "कस्टम डिबगिंग",
+                "Common standings": "सभी रैंकिंग",
+                "Friends standings": "केवल दोस्तों को देखें",
+                "Submit": "जमा करना",
+                "Hacks": "हैकर",
+                "Room": "कमरा",
+                "Custom test": "कस्टम परीक्षण",
+                "Blog": "ब्लॉग",
+                "Teams": "टीम",
+                "Submissions": "रिकॉर्ड जमा करें",
+                "Groups": "समूह",
+                "Rating": "रेटिंग",
+                "Friends rating": "मित्र की रेटिंग",
+                "Favourites": "इकट्ठा करना",
+                "Contests": "प्रतियोगिता",
+                "Magic": "魔法",
+                "Handle": "账号",
+                "Members": "सदस्य",
+                "问题etting": "लेखन मुद्दों में भाग लें",
+                "Streams": "सीधा आ रहा है",
+                "Gym": "प्रशिक्षण शिविर",
+                "Mashups": "मिश्रण और मैच",
+                "Posts": "डाक",
+                "Comments": "जवाब",
+                "Main": "मुख्य",
+                "Settings": "स्थापित करना",
+                "Lists": "सूची",
+                "General": "बुनियादी",
+                "Sidebar": "साइड बार",
+                "Social": "सामाजिक जानकारी",
+                "Address": "पता",
+                "Wallets": "बटुआ"
+            }
+        },
+        ".topic-toggle-collapse": {
+            "class": [
+                ".topic-toggle-collapse"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Expand": "बढ़ाना"
+            }
+        },
+        ".topic-read-more": {
+            "class": [
+                ".topic-read-more"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Full text and comments": "पूरा लेख/टिप्पणियाँ पढ़ें"
+            }
+        },
+        ".toggleEditorCheckboxLabel": {
+            "class": [
+                ".toggleEditorCheckboxLabel"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Switch off editor": "संपादक सिंटैक्स हाइलाइटिंग बंद करें"
+            }
+        },
+        ".submit": {
+            "class": [
+                ".submit"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Registration for the contest": "प्रतियोगिता पंजीकरण"
+            }
+        },
+        "._FilterByTagsFrame_difficulty": {
+            "class": [
+                "._FilterByTagsFrame_difficulty"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Difficulty:": "कठिनाई:"
+            }
+        },
+        "._FilterByTagsFrame_addTagLink": {
+            "class": [
+                "._FilterByTagsFrame_addTagLink"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add tag": "टैग जोड़ो"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "रेटिंग परिवर्तन के पिछले दौर को अस्थायी रूप से वापस ले लिया गया है। वे जल्द ही ठीक हो जायेंगे.",
+                "Reminder: in case of any technical issues, you can use the lightweight website": "अनुस्मारक：यदि कोई तकनीकी समस्या आती है, तो आप एक हल्की वेबसाइट का उपयोग कर सकते हैं",
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "कृपया लिंक के माध्यम से कोडफोर्स के आधिकारिक टेलीग्राम चैनल की सदस्यता लें"
+            }
+        },
+        ".lang-chooser": {
+            "class": [
+                ".lang-chooser"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Enter": "लॉग इन करें",
+                "Register": "पंजीकरण करवाना",
+                "Contest rating": "परीक्षण रेटिंग",
+                "Logout": "साइन आउट"
+            }
+        },
+        ".userbox": {
+            "class": [
+                ".userbox"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Change photo": "चित्र बदलें",
+                "Contest rating": "प्रतिस्पर्धा रेटिंग",
+                "Contribution": "योगदान देना",
+                "My friends": "मेरी अच्छी दोस्त",
+                "Change settings": "सेटिंग्स परिवर्तित करना",
+                "Last visit": "अंतिम बार दौरा किया",
+                "not visible": "不可见的",
+                "Registered": "पर पंजीकृत",
+                "Blog entries": "ब्लॉग प्रविष्टि",
+                "comments": "टिप्पणी",
+                "Write new entry": "नई प्रविष्टि लिखें",
+                "View my talks": "मेरे निजी संदेश देखें",
+                "Talks": "निजी पत्र",
+                "Send message": "एक संदेश भेजो"
+            }
+        },
+        "#vote-reset-filterDifficultyLowerBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyLowerBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "रीसेट"
+            }
+        },
+        "#vote-reset-filterDifficultyUpperBorder": {
+            "class": [
+                "#vote-reset-filterDifficultyUpperBorder"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "रीसेट"
+            }
+        },
+        ".alert.alert-info": {
+            "class": [
+                ".alert.alert-info"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "The problem statement has recently been changed.": "प्रश्न विवरण हाल ही में बदल दिया गया है।",
+                "View the changes.": "परिवर्तन देखें"
+            }
+        },
+        ".enterPage": {
+            "class": [
+                ".enterPage"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Fill in the form to login into Codeforces.": "कोडफोर्सेस में लॉग इन करने के लिए फॉर्म भरें।",
+                "You can use": "आप भी उपयोग कर सकते हैं",
+                "as an alternative way to enter.": "लॉग इन करें"
+            }
+        },
+        ".notice.small": {
+            "class": [
+                ".notice.small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "\\* To view the complete list, click ": "* पूरी सूची देखने के लिए क्लिक करें"
+            }
+        },
+        ".setting-name": {
+            "class": [
+                ".setting-name"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest type:": "खेल प्रकार：",
+                "Rated:": "रेटेड：",
+                "Tried:": "कोशिश की",
+                "Substring:": "कीवर्ड"
+            }
+        },
+        ".by-form": {
+            "class": [
+                ".by-form"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Sort by:": "：के अनुसार क्रमबद्ध करें",
+                "relevance": "संबंधित",
+                "popularity": "गर्मी",
+                "time": "समय"
+            }
+        },
+        ".roundbox.borderTopRound": {
+            "class": [
+                ".roundbox.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "If you invite users to this contest, the contest will become visible to them regardless of its visibility. You can share the contest using the link:": "यदि आप किसी उपयोगकर्ता को इस प्रतियोगिता में आमंत्रित करते हैं, तो प्रतियोगिता उपयोगकर्ता को उनकी दृश्यता की परवाह किए बिना दिखाई देगी। आप：लिंक का उपयोग करके मैच साझा कर सकते हैं",
+                "Generate link and share it with other users": "लिंक बनाएं और उन्हें अन्य उपयोगकर्ताओं के साथ साझा करें",
+                "Show Log »": "प्रवेश देखें \"",
+                "Move all to practice »": "सभी को प्रैक्टिशनर्स में ले जाएँ »",
+                "Remove All »": "सभी हटाएं \"",
+                "Add »": "इसमें जोड़ें\"",
+                "Set »": "स्थापित करना\"",
+                "Download Archive »": "पुरालेख डाउनलोड करें »"
+            }
+        },
+        ".caption.titled": {
+            "class": [
+                ".caption.titled"
+            ],
+            "description": "चीनी साइडबार शीर्षक",
+            "isStrict": false,
+            "rules": {
+                "Pay attention": "सूचना",
+                "Top rated": "रेटिंग रैंकिंग",
+                "Top contributors": "योगदानकर्ता रैंकिंग",
+                "Find user": "उपयोगकर्ता खोजें",
+                "Recent actions": "ताजा खबर",
+                "Training filter": "फ़िल्टर फ़िल्टर",
+                "Find training": "प्रतियोगिता/प्रश्न खोजें",
+                "Virtual participation": "वर्चुअल एंट्री क्या है",
+                "Contest materials": "प्रतियोगिता संबंधी जानकारी",
+                "Settings": "स्थापित करना",
+                "Create Mashup Contest": "एक मैशअप मैच बनाएं",
+                "Clone Contest to Mashup": "क्लोन कॉम्बो मैशअप में मेल खाता है",
+                "Invitations": "आमंत्रित करना",
+                "Status filter": "स्थिति फ़िल्टर",
+                "Administration": "प्रबंधित करना",
+                "Submit": "जमा करना",
+                "Practice": "अभ्यास",
+                "Problem tags": "प्रश्न टैग",
+                "Filter Problems": "फ़िल्टरिंग मुद्दे",
+                "Last unsolved": "पिछली बार अनसुलझा",
+                "Attention": "सूचना",
+                "Past contests filter": "पिछले खेलों के आधार पर फ़िल्टर करें",
+                "About Contest": "प्रतियोगिता के बारे में",
+                "Last submissions": "इतिहास प्रतिबद्ध करें",
+                "Streams": "सीधा आ रहा है",
+                "Coach rights": "कोचिंग अनुमतियाँ",
+                "Advices to fill address": "अपना पता भरने के लिए सुझाव",
+                "Hacks filter": "हैकर फ़िल्टर",
+                "Score table": "मूल्यांकन प्रपत्र",
+                "Contests": "प्रतियोगिता",
+                "History": "इतिहास संपादित करें",
+                "Login into Codeforces": "कोडफोर्सेस में लॉग इन करें",
+                "Export the judgment log to DAT-file": "निर्णय लॉग को DAT फ़ाइल के रूप में निर्यात करें",
+                "Contest managers": "टूर्नामेंट प्रशासक",
+                "Contest writers": "प्रतियोगिता लेखक",
+                "Spectator ranklists": "दर्शकों की रैंकिंग सूची",
+                "Ghosts:": "भूत खिलाड़ी",
+                "Export Submissions": "निर्यात प्रस्तुतीकरण",
+                "Register in Codeforces": "注册 Codeforces"
+            }
+        },
+        "QuestionFilter1": {
+            "class": [
+                "#gym-filter-form div label",
+                "#gym-filter-form div"
+            ],
+            "description": "प्रश्न फ़िल्टर विकल्पों का चीनी संस्करण",
+            "isStrict": false,
+            "rules": {
+                "Contest type:": "प्रतियोगिता का प्रकार:",
+                "ICPC region:": "आईसीपीसी क्षेत्र:",
+                "Contest format:": "प्रतियोगिता प्रारूप:",
+                "Order by:": "इसके अनुसार क्रमबद्ध करें:",
+                "Secondary order by:": "माध्यमिक छँटाई:",
+                "Hide, if participated:": "इसमें मेरी भागीदारी छिपाएँ:",
+                "Hide excluded gyms": "छिपाएँ बहिष्कृत:",
+                "Season:": "समय सीमा (वार्षिक)",
+                "Duration, hours:": "अवधि (घंटे):",
+                "Difficulty:": "कठिनाई:"
+            }
+        },
+        "QuestionFilter2": {
+            "class": [
+                ".setting-value select option",
+                ".setting-last-value select option"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Official ACM-ICPC Contest": "आईसीपीसी आधिकारिक प्रतियोगिता",
+                "Official School Contest": "आधिकारिक स्कूल प्रतियोगिता",
+                "Opencup Contest": "ओपनकप प्रतियोगिता",
+                "School/University/City/Region Championship": "स्कूल/कॉलेज/शहर/क्षेत्रीय चैम्पियनशिप",
+                "Training Camp Contest": "प्रशिक्षण शिविर खेल",
+                "Official International Personal Contest": "आधिकारिक अंतर्राष्ट्रीय व्यक्तिगत प्रतियोगिता",
+                "Training Contest": "प्रशिक्षण खेल",
+                "ID_ASC": "निर्माण समय (आरोही क्रम)",
+                "ID_DESC": "निर्माण समय (घटते क्रम)",
+                "RATING_ASC": "रेटिंग (आरोही)",
+                "RATING_DESC": "रेटिंग (घटते क्रम)",
+                "DIFFICULTY_ASC": "कठिनाई (आरोही क्रम)",
+                "DIFFICULTY_DESC": "कठिनाई (घटते क्रम)",
+                "START_TIME_ASC": "प्रारंभ समय (आरोही क्रम)",
+                "START_TIME_DESC": "प्रारंभ समय (घटते क्रम)",
+                "DURATION_ASC": "अवधि (आरोही क्रम)",
+                "DURATION_DESC": "अवधि (घटते क्रम)",
+                "POPULARITY_ASC": "लोकप्रियता (आरोही क्रम)",
+                "POPULARITY_DESC": "लोकप्रियता (अवरोही क्रम)",
+                "UPDATE_TIME_ASC": "अद्यतन समय (आरोही क्रम)",
+                "UPDATE_TIME_DESC": "अद्यतन समय (अवरोही क्रम)"
+            }
+        },
+        "CompetitionFilter": {
+            "class": [
+                ".options li label",
+                ".CaptionCont span"
+            ],
+            "description": "मिलान फ़िल्टर विकल्पों का चीनी संस्करण",
+            "isStrict": false,
+            "rules": {
+                "Educational": "शिक्षात्मक",
+                "Global": "दुनिया भर",
+                "VK Cup": "वीके कप",
+                "Long Rounds": "लंबा दौर",
+                "April Fools": "अप्रैल मूर्ख दिवस",
+                "Team Contests": "टीम खेल",
+                "ICPC Scoring": "आईसीपीसी स्कोरिंग",
+                "Doesn't matter": "----",
+                "Any": "सभी",
+                "Yes": "हाँ",
+                "No": "नहीं",
+                "No submission(s)": "कोई समर्पण नहीं",
+                "Have submission(s)": "प्रस्तुत",
+                "No solved problem(s)": "कोई समस्या हल नहीं हुई",
+                "Have solved problem(s)": "समस्या का समाधान हो गया"
+            }
+        },
+        "RightSidebox": {
+            "class": [
+                ".sidebox div label"
+            ],
+            "description": "दाएँ साइडबॉक्स का चीनी संस्करण",
+            "isStrict": false,
+            "rules": {
+                "Show tags for unsolved problems": "अनसुलझे मुद्दों के लिए लेबल दिखाएं",
+                "Hide solved problems": "सुलझे हुए मुद्दे छुपाएं"
+            }
+        },
+        "FormField-name": {
+            "class": [
+                "td.field-name label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Postal/zip code": "पोस्टल कोड/डाक कोड",
+                "Country //(English//)": "国家（英文）",
+                "State //(English//)": "州/省份（英文）",
+                "City //(English//)": "城市（英文）",
+                "Address //(English//)": "地址（英文）",
+                "Recipient //(English//)": "收件人姓名（英文）",
+                "Country //(Native//)": "国家（本地语言）",
+                "State //(Native//)": "州/省份（本地语言）",
+                "City //(Native//)": "城市（本地语言）",
+                "Address //(Native//)": "地址（本地语言）",
+                "Recipient //(Native//)": "收件人姓名（本地语言）",
+                "Phone": "टेलीफ़ोन",
+                "TON Wallet:": "टन बटुआ:",
+                "Secret Code:": "सत्यापन कोड:",
+                "Terms of agreement:": "समझौते की शर्तें:",
+                "Choose team:": "एक टीम चुनें:"
+            }
+        },
+        "QuestionTag": {
+            "class": [
+                "._FilterByTagsFrame_addTagLabel select option",
+                "._FilterByTagsFrame_tagBoxCaption",
+                ".notice",
+                ".tag-box"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "combine tags by OR": "तार्किक रूप से या मेरे चयनित टैग को संयोजित करें",
+                "combine-tags-by-or": "मेरे चयनित टैग को तार्किक OR द्वारा संयोजित करें (combine-tags-by-or)",
+                "2-sat": "द्विदलीय ग्राफ संतुष्टि समस्या (2-शनि)",
+                "binary search": "द्विआधारी खोज",
+                "bitmasks": "बिटमास्क",
+                "brute force": "पाशविक बल",
+                "chinese remainder theorem": "चीनी शेषफल प्रमेय",
+                "combinatorics": "साहचर्य",
+                "constructive algorithms": "रचनात्मक एल्गोरिदम",
+                "data structures": "डेटा संरचनाएं",
+                "dfs and similar": "गहराई-पहली खोज और उसके प्रकार (dfs और समान)",
+                "divide and conquer": "फूट डालो और जीतो एल्गोरिथ्म",
+                "dp": "गतिशील प्रोग्रामिंग (डीपी)",
+                "dsu": "संघ खोज (डीएसयू)",
+                "expression parsing": "अभिव्यक्ति विश्लेषण",
+                "fft": "फास्ट फूरियर ट्रांसफॉर्म (एफएफटी)",
+                "flows": "प्रवाह",
+                "games": "खेल सिद्धांत(खेल)",
+                "geometry": "कम्प्यूटेशनल ज्यामिति",
+                "graph matchings": "ग्राफ मिलान",
+                "graphs": "रेखांकन",
+                "greedy": "लालची रणनीति (लालची)",
+                "hashing": "हैशिंग",
+                "implementation": "कार्यान्वयन के मुद्दे, प्रोग्रामिंग कौशल, सिमुलेशन (कार्यान्वयन)",
+                "interactive": "इंटरैक्टिव मुद्दे",
+                "math": "अंक शास्त्र",
+                "matrices": "मैट्रिक्स",
+                "meet-in-the-middle": "बीच में मिलो एल्गोरिथ्म (बीच में मिलो)",
+                "number theory": "संख्या सिद्धांत",
+                "probabilities": "संभावनाओं",
+                "schedules": "शेड्यूलिंग एल्गोरिदम (शेड्यूल)",
+                "shortest paths": "सबसे छोटा पथ एल्गोरिदम",
+                "sortings": "सॉर्टिंग एल्गोरिदम (सॉर्टिंग)",
+                "string suffix structures": "स्ट्रिंग प्रत्यय संरचनाएँ",
+                "strings": "स्ट्रिंग प्रोसेसिंग (स्ट्रिंग्स)",
+                "ternary search": "त्रिगुट खोज",
+                "trees": "पेड़",
+                "two pointers": "दोहरा सूचक अंकगणित (दो सूचक)"
+            }
+        },
+        "SettingField-name": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "पृष्ठ पर फ़ील्ड सेट करें",
+            "isStrict": false,
+            "rules": {
+                "Hide sidebar block \"Find user\"": "साइडबार छुपाएं ब्लॉक \"उपयोगकर्ता ढूंढें\"",
+                "Hide sidebar block \"Current user\"": "साइडबार ब्लॉक \"वर्तमान उपयोगकर्ता\" छुपाएं",
+                "Hide sidebar block \"Recent аctions\"": "साइडबार ब्लॉक छुपाएं \"नवीनतम समाचार\"",
+                "Hide sidebar block \"Favourite groups\"": "साइडबार ब्लॉक \"पसंदीदा समूह\" छुपाएं",
+                "Hide sidebar block \"Top contributors\"": "साइडबार ब्लॉक \"योगदानकर्ता रैंकिंग\" छुपाएं",
+                "Hide sidebar block \"Top rated\"": "साइडबार ब्लॉक \"रेटिंग\" छुपाएं",
+                "Hide sidebar block \"Streams\"": "साइडबार ब्लॉक छिपाएँ \"लाइव प्रसारण\"",
+                "Old password": "पुराना पासवर्ड",
+                "New password": "नया पासवर्ड",
+                "Confirm new password": "नये पासवर्ड की पुष्टि करें",
+                "Contest email notification": "प्रतियोगिता ईमेल अधिसूचना",
+                "Send email on new user talk": "जब कोई नया उपयोगकर्ता वार्तालाप हो तो ईमेल भेजें",
+                "Send email on new comment": "नई टिप्पणियाँ आने पर ईमेल भेजें",
+                "Hide contact information": "संपर्क जानकारी छिपाएँ",
+                "Remember me by Gmail, Facebook and etc": "मुझे जीमेल, फेसबुक आदि के माध्यम से याद रखें।",
+                "Show tags for unsolved problems": "अनसुलझे मुद्दों के लिए लेबल दिखाएं",
+                "Hide solved problems from problemset": "समस्या सेट से हल किए गए मुद्दों को छिपाएँ",
+                "Hide low rated blogs": "कम रेटिंग वाले ब्लॉग छुपाएं",
+                "Offer to publish great rating rises": "रेटिंग में महत्वपूर्ण सुधार प्रदर्शित करने का अवसर प्रदान करें",
+                "Enforce https": "बलपूर्वक HTTPS",
+                "Show private activity in the profile": "प्रोफ़ाइल पर निजी ईवेंट दिखाएं",
+                "Show diagnostics": "निदान संबंधी जानकारी दिखाएँ"
+            }
+        },
+        "CloneContestFormField": {
+            "class": [
+                ".field-name"
+            ],
+            "description": "वर्चुअल मैशअप सेटअप फॉर्म से क्लोन का मिलान",
+            "isStrict": false,
+            "rules": {
+                "Problem:": "विषय:",
+                "Question": "问题",
+                "Language:": "भाषा:",
+                "Source code:": "सोर्स कोड:",
+                "Or choose file:": "या एक फ़ाइल चुनें:",
+                "Choose file:": "एक दस्तावेज़ चुनें:",
+                "Notice:": "सूचना:",
+                "virtual participation:": "आभासी भागीदारी:",
+                "Registration for the contest:": "प्रतियोगिता पंजीकरण:",
+                "Take part:": "हिस्सा लेना:",
+                "as individual participant:": "एक व्यक्तिगत भागीदार के रूप में:",
+                "as a team member:": "एक टीम सदस्य के रूप में:",
+                "Virtual start time:": "आभासी प्रारंभ समय:",
+                "Complete problemset:": "पूरा प्रश्न सेट:",
+                "First name \\(English\\)": "नाम (अंग्रेजी)",
+                "Last name \\(English\\)": "अंतिम नाम (अंग्रेजी)",
+                "First name \\(Native\\)": "प्रथम नाम (स्थानीय भाषा)",
+                "Last name \\(Native\\)": "अंतिम नाम (स्थानीय भाषा)",
+                "Birth date": "जन्म की तारीख",
+                "Country": "राष्ट्र",
+                "City": "शहर",
+                "Organization": "आयोजन",
+                "Handle/Email": "खाता ई - मेल",
+                "Name": "名称",
+                "Handle": "账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
+                "Password": "पासवर्ड",
+                "New Rank": "新的Rank",
+                "Training name \\(English\\):": "प्रशिक्षण का नाम (अंग्रेजी):",
+                "Training name \\(Russian\\):": "प्रशिक्षण का नाम (रूसी):",
+                "Contest format:": "प्रतियोगिता प्रारूप:",
+                "Start time:": "प्रारम्भ का समय:",
+                "Duration:": "अवधि:",
+                "Visibility:": "दृश्यता:",
+                "Attach parent contest\\?:": "पेरेंट मैच लिंक करें?",
+                "Participation type:": "भागीदारी प्रकार:",
+                "Freeze period:": "फ्रीज अवधि:",
+                "Unfreeze time:": "पिघलने का समय:",
+                "Is practice allowed\\?:": "क्या अभ्यास की अनुमति है?",
+                "Is virtual allowed\\?:": "क्या आभासी प्रविष्टियों की अनुमति है?",
+                "Is out of competition allowed\\?:": "क्या गैर-प्रतियोगिता प्रविष्टियों की अनुमति है?",
+                "Is self-registration allowed\\?:": "क्या स्व-सेवा पंजीकरण की अनुमति है?",
+                "Can non-registered view the contest\\?:": "क्या अपंजीकृत उपयोगकर्ता प्रतियोगिता देख सकते हैं?",
+                "Can participants view common status\\?:": "क्या प्रतियोगी साझाकरण स्थिति की जाँच कर सकते हैं?",
+                "Contest testdata policy:": "प्रतियोगिता परीक्षण डेटा रणनीति:",
+                "Allow view other submissions to:": "अन्य सबमिशन देखने की अनुमति दें:",
+                "Manage program languages:": "प्रबंधन प्रोग्रामिंग भाषा:",
+                "Use time limits scaling policy\\?:": "समय-सीमित स्केलिंग रणनीति का उपयोग कर रहे हैं?",
+                "Allow statements\\?:": "प्रश्न विवरण देखने की अनुमति दें?",
+                "Allow standings\\?:": "रैंकिंग देखने की अनुमति दें?",
+                "Season:": "मौसम:",
+                "Contest type:": "प्रतियोगिता का प्रकार:",
+                "ICPC region:": "आईसीपीसी क्षेत्र:",
+                "Country:": "राष्ट्र:",
+                "City:": "शहर:",
+                "Contest difficulty:": "खेल कठिनाई:",
+                "Website URL:": "वेबसाइट की लिंक:",
+                "Description \\(English\\):": "विवरण (अंग्रेजी):",
+                "Description \\(Russian\\):": "विवरण (रूसी):",
+                "Registration confirmation text \\(English\\):": "पंजीकरण पुष्टिकरण पाठ (अंग्रेजी):",
+                "Registration confirmation text \\(Russian\\):": "पंजीकरण पुष्टिकरण पाठ (रूसी):",
+                "Logo \\(English\\):": "लोगो (अंग्रेजी):",
+                "Logo \\(Russian\\):": "लोगो (रूसी):",
+                "End time:": "अंत समय:",
+                "Name:": "नाम:",
+                "Contest\\(s\\):": "प्रतियोगिताएं):",
+                "Add contest:": "एक प्रतियोगिता जोड़ें:",
+                "Show Contestants:": "प्रतियोगी दिखाएं:",
+                "Show Out of Competition Participants:": "गैर-प्रतियोगिता प्रतिभागियों को दिखाएँ:",
+                "Show Practices:": "व्यायाम दिखाएँ:",
+                "Show Virtuals:": "आभासी खिलाड़ी दिखाएँ:",
+                "Show Ghosts:": "भूत खिलाड़ी दिखाएँ:",
+                "Text:": "मूलपाठ:",
+                "Rewrite Examples:": "उदाहरण पुनः लिखें:",
+                "Add images:": "चित्र जोड़ें:",
+                "Do not use:": "उपयोग नहीं करो:",
+                "Problem short name:": "शीर्षक संक्षिप्तीकरण:",
+                "Source problem:": "स्रोत प्रश्न:",
+                "Problem name \\(English\\):": "विषय का शीर्षक (अंग्रेजी):",
+                "Input file name:": "फ़ाइल नाम दर्ज करें:",
+                "Output file name:": "आउटपुट फ़ाइल नाम:",
+                "Time Limit:": "समय सीमा:",
+                "Memory Limit:": "मेमोरी सीमा:",
+                "Output only:": "केवल आउटपुट:"
+            }
+        },
+        ".ask-question-link": {
+            "class": [
+                ".ask-question-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Ask a question": "प्रश्न पूछें"
+            }
+        },
+        "add-announcement-link": {
+            "class": [
+                ".add-announcement-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Add announcement": "घोषणा जोड़ें"
+            }
+        },
+        "demo": {
+            "class": [
+                "Class"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "SourceText": "TargetText"
+            }
+        }
+    },
+    "InputValueReplacements": {
+        "InputSubmit": {
+            "class": [
+                "input[type='submit']"
+            ],
+            "description": "सबमिट करेंचीनी",
+            "isStrict": false,
+            "rules": {
+                "Register for virtual participation": "वर्चुअल प्रविष्टि के लिए साइन अप करें",
+                "Register for practice": "अभ्यास शुरू करने के लिए साइन इन करें",
+                "Apply": "आवेदन",
+                "Register": "साइन अप करें",
+                "Login": "लॉग इन करें",
+                "Run": "दौड़ना",
+                "Start virtual contest": "आभासी प्रविष्टि प्रारंभ करें",
+                "Manage invitations": "निमंत्रण प्रबंधित करें",
+                "Disable manager mode": "प्रबंधन मोड को अस्थायी रूप से बंद करें",
+                "Enable manager mode": "प्रबंधन मोड सक्षम करें",
+                "Clone Contest": "क्लोन प्रतियोगिता",
+                "Submit": "जमा करना",
+                "Save changes": "सेटिंग्स सेव करें",
+                "Filter": "फ़िल्टर",
+                "Find": "खोजो",
+                "Save": "बचाना",
+                "Create Mashup Contest": "एक मैशअप मैच बनाएं",
+                "Delete problem": "प्रश्न हटाएं",
+                "Restore problem": "पुनर्प्राप्ति मुद्दे",
+                "Generate": "生成",
+                "Send": "发送"
+            }
+        },
+        "InputButton": {
+            "class": [
+                "input[type='button']"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "रीसेट",
+                "Delete contest": "मिलान हटाएँ",
+                "Preview": "पूर्व दर्शन"
+            }
+        }
+    }
+}
