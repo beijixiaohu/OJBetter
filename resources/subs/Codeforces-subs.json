@@ -154,7 +154,7 @@
             "rules": {
                 "Register now": "现在报名",
                 "No tag edit access": "没有标签编辑权限",
-                "Problem": "问题",
+                "Problem([\\s]*)$": "问题",
                 "Verdict": "判题状态",
                 "Language:": "语言:",
                 "Participant": "参赛者",
@@ -449,7 +449,7 @@
             "class": [
                 ".caption.titled"
             ],
-            "description": "侧栏titled汉化",
+            "description": "Sidebar titled",
             "isStrict": false,
             "rules": {
                 "Pay attention": "注意",
@@ -473,7 +473,7 @@
                 "Filter Problems": "过滤问题",
                 "Last unsolved": "上次未解决",
                 "Attention": "注意",
-                "Past contests filter": "过去的比赛筛选",
+                "Past contests filter": "筛选过去的比赛",
                 "About Contest": "关于比赛",
                 "Last submissions": "提交历史",
                 "Streams": "直播",
@@ -694,6 +694,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "题目:",
+                "Question": "问题",
                 "Language:": "语言:",
                 "Source code:": "源代码:",
                 "Or choose file:": "或者选择文件:",
@@ -815,7 +816,7 @@
             "class": [
                 "input[type='submit']"
             ],
-            "description": "submit汉化",
+            "description": "submit type input",
             "isStrict": false,
             "rules": {
                 "Register for virtual participation": "报名虚拟参赛",
@@ -837,7 +838,8 @@
                 "Create Mashup Contest": "创建混搭比赛",
                 "Delete problem": "删除问题",
                 "Restore problem": "恢复问题",
-                "Generate": "生成"
+                "Generate": "生成",
+                "Send": "发送"
             }
         },
         "InputButton": {
