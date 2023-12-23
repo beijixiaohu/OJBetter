@@ -489,7 +489,8 @@
                 "Contest writers": "比赛编写者",
                 "Spectator ranklists": "观众排名列表",
                 "Ghosts:": "幽灵选手",
-                "Export Submissions": "导出提交"
+                "Export Submissions": "导出提交",
+                "Register in Codeforces": "注册 Codeforces"
             }
         },
         "QuestionFilter1": {
@@ -715,6 +716,9 @@
                 "Organization": "组织",
                 "Handle/Email": "账号/邮箱",
                 "Name": "名称",
+                "Handle":"账号",
+                "Email": "邮箱",
+                "Confirm": "确认",
                 "Password": "密码",
                 "New Rank": "新的Rank",
                 "Training name \\(English\\):": "训练名称（英文）:",
