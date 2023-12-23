@@ -36,14 +36,14 @@
                 "Register »": "登録 \"",
                 "Registration completed": "在籍",
                 "Registration closed": "登録は締め切られました",
-                "Problems\n": "问题集",
+                "Problems\n": "アンケート",
                 "My Submissions": "私の投稿",
                 "Standings": "名簿",
                 "Questions about problems": "問題に関する質問",
                 "Contest status": "ゲームステート",
                 "Invited users": "招待ユーザー",
                 "Invitation links": "招待リンク",
-                "API keys": "API密钥"
+                "API keys": "APIキー"
             }
         },
         ".menu-list.main-menu-list": {
@@ -63,7 +63,7 @@
                 "Rating": "格付けランキング",
                 "Edu": "耕す",
                 "Calendar": "カレンダー",
-                "ICPC Challenge": "ICPC挑战赛",
+                "ICPC Challenge": "ICPCの挑戦",
                 "Help": "手"
             }
         },
@@ -122,8 +122,8 @@
                 "Check it if contestants can view standings": "参加者にリーダーボードの閲覧を許可する場合は、このボックスにチェックを入れてください。",
                 "Where the contest was held originally": "大会が開催された場所",
                 "Official contest site URL": "コンテスト公式ウェブサイトURL",
-                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
-                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
+                "Enter a name for your new API key. It should describe what this key is used for.": "新しいAPIキーの名前を入力します。このキーが何に使用されるかを記述する必要があります。",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "アカウントのパスワードを入力してアクセスを確認します。パスワードをお持ちでない場合は、ログアウトしてパスワード回復機能をご利用ください。"
             }
         },
         ".propertyLinks": {
@@ -155,7 +155,7 @@
             "rules": {
                 "Register now": "今すぐ登録",
                 "No tag edit access": "タグの編集権限がない",
-                "Problem([\\s]*)$": "问题",
+                "Problem([\\s]*)$": "課題",
                 "Verdict": "裁定状況",
                 "Language:": "言語。",
                 "Participant": "出場者",
@@ -223,8 +223,8 @@
                 "Friends rating": "友人評価",
                 "Favourites": "ブックマーク",
                 "Contests": "競技",
-                "Magic": "魔法",
-                "Handle": "账号",
+                "Magic": "せんじゅつ",
+                "Handle": "ユーザー名",
                 "Members": "メンバー",
                 "问题etting": "問題作成への参加",
                 "Streams": "インターネット直接放送",
@@ -340,7 +340,7 @@
                 "My friends": "親友だよ。",
                 "Change settings": "設定の変更",
                 "Last visit": "ラストアクセス",
-                "not visible": "不可见的",
+                "not visible": "インビジブル",
                 "Registered": "登録",
                 "Blog entries": "ブログエントリー",
                 "comments": "解説",
@@ -491,7 +491,7 @@
                 "Spectator ranklists": "観客動員数ランキング",
                 "Ghosts:": "ゴーストプレーヤー",
                 "Export Submissions": "輸出申請",
-                "Register in Codeforces": "注册 Codeforces"
+                "Register in Codeforces": "Codeforcesに登録する"
             }
         },
         "QuestionFilter1": {
@@ -562,8 +562,8 @@
                 "ICPC Scoring": "ICPC採点",
                 "Doesn't matter": "----",
                 "Any": "所有権",
-                "Yes$": "是",
-                "No$": "否",
+                "Yes$": "であります",
+                "No$": "詰り",
                 "No submission(s)": "提出なし",
                 "Have submission(s)": "提出済み",
                 "No solved problem(s)": "問題解決なし",
@@ -589,16 +589,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "郵便番号",
-                "Country //(English//)": "国家（英文）",
-                "State //(English//)": "州/省份（英文）",
-                "City //(English//)": "城市（英文）",
-                "Address //(English//)": "地址（英文）",
-                "Recipient //(English//)": "收件人姓名（英文）",
-                "Country //(Native//)": "国家（本地语言）",
-                "State //(Native//)": "州/省份（本地语言）",
-                "City //(Native//)": "城市（本地语言）",
-                "Address //(Native//)": "地址（本地语言）",
-                "Recipient //(Native//)": "收件人姓名（本地语言）",
+                "Country //(English//)": "国名（英語）",
+                "State //(English//)": "都道府県（英語）",
+                "City //(English//)": "都市（英語）",
+                "Address //(English//)": "住所（英語）",
+                "Recipient //(English//)": "受取人の名前（英語）",
+                "Country //(Native//)": "国名（現地語）",
+                "State //(Native//)": "都道府県（母国語）",
+                "City //(Native//)": "都市（現地語）",
+                "Address //(Native//)": "住所（現地語）",
+                "Recipient //(Native//)": "受取人の名前（現地語）",
                 "Phone": "電話機",
                 "TON Wallet:": "トン・ウォレット",
                 "Secret Code:": "キャプチャ",
@@ -695,7 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "タイトル",
-                "Question": "问题",
+                "Question": "課題",
                 "Language:": "言語。",
                 "Source code:": "ソースコード",
                 "Or choose file:": "またはファイルを選択します。",
@@ -717,12 +717,12 @@
                 "City": "市町村",
                 "Organization": "組織",
                 "Handle/Email": "口座番号/Eメール",
-                "Name": "名称",
-                "Handle": "账号",
-                "Email": "邮箱",
-                "Confirm": "确认",
+                "Name": "な",
+                "Handle": "ユーザー名",
+                "Email": "受信箱",
+                "Confirm": "認識する",
                 "Password": "暗号化",
-                "New Rank": "新的Rank",
+                "New Rank": "新ランク",
                 "Training name \\(English\\):": "研修名（英語）。",
                 "Training name \\(Russian\\):": "研修名（ロシア語）。",
                 "Contest format:": "競技形式。",
@@ -840,7 +840,7 @@
                 "Delete problem": "質問を削除する",
                 "Restore problem": "リカバリーの問題",
                 "Generate": "生成",
-                "Send": "发送"
+                "Send": "送信"
             }
         },
         "InputButton": {
