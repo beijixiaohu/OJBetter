@@ -36,14 +36,14 @@
                 "Register »": "등록 \"",
                 "Registration completed": "등록",
                 "Registration closed": "등록이 마감되었습니다.",
-                "Problems\n": "问题集",
+                "Problems\n": "설문지",
                 "My Submissions": "내 제출물",
                 "Standings": "이름 목록",
                 "Questions about problems": "이슈에 대한 질문",
                 "Contest status": "게임 상태",
                 "Invited users": "초대된 사용자",
                 "Invitation links": "초대 링크",
-                "API keys": "API密钥"
+                "API keys": "API 키"
             }
         },
         ".menu-list.main-menu-list": {
@@ -63,7 +63,7 @@
                 "Rating": "평가 순위",
                 "Edu": "재배",
                 "Calendar": "캘린더",
-                "ICPC Challenge": "ICPC挑战赛",
+                "ICPC Challenge": "ICPC 챌린지",
                 "Help": "손"
             }
         },
@@ -122,8 +122,8 @@
                 "Check it if contestants can view standings": "참가자가 순위표를 볼 수 있도록 허용하려면 이 확인란을 선택합니다.",
                 "Where the contest was held originally": "원래 대회가 열렸던 장소",
                 "Official contest site URL": "공식 콘테스트 웹사이트 URL",
-                "Enter a name for your new API key. It should describe what this key is used for.": "为您的新API密钥输入一个名称。它应该描述这个密钥的用途。",
-                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "输入您的账户密码以确认访问。如果您没有密码，请注销并使用密码恢复功能。"
+                "Enter a name for your new API key. It should describe what this key is used for.": "새 API 키의 이름을 입력합니다. 이 키의 용도를 설명해야 합니다.",
+                "Enter your account password to confirm access. If you do not have password, logout and use password recovery feature.": "계정 비밀번호를 입력하여 액세스를 확인합니다. 비밀번호가 없는 경우 로그아웃한 후 비밀번호 복구 기능을 사용하세요."
             }
         },
         ".propertyLinks": {
@@ -155,7 +155,7 @@
             "rules": {
                 "Register now": "지금 등록하기",
                 "No tag edit access": "태그 편집 권한 없음",
-                "Problem([\\s]*)$": "问题",
+                "Problem([\\s]*)$": "이슈",
                 "Verdict": "판결 상태",
                 "Language:": "언어.",
                 "Participant": "참가자",
@@ -223,8 +223,8 @@
                 "Friends rating": "친구 평가",
                 "Favourites": "북마크(인터넷)",
                 "Contests": "대회(스포츠 등)",
-                "Magic": "魔法",
-                "Handle": "账号",
+                "Magic": "마법사",
+                "Handle": "사용자 이름",
                 "Members": "멤버",
                 "问题etting": "이슈 준비에 참여",
                 "Streams": "직접 인터넷 방송",
@@ -340,7 +340,7 @@
                 "My friends": "내 가장 친한 친구.",
                 "Change settings": "설정 변경",
                 "Last visit": "마지막 액세스",
-                "not visible": "不可见的",
+                "not visible": "보이지 않는",
                 "Registered": "에 등록",
                 "Blog entries": "블로그 항목",
                 "comments": "해설",
@@ -491,7 +491,7 @@
                 "Spectator ranklists": "관객 순위 목록",
                 "Ghosts:": "고스트 플레이어",
                 "Export Submissions": "내보내기 제출",
-                "Register in Codeforces": "注册 Codeforces"
+                "Register in Codeforces": "코드포스에 등록하기"
             }
         },
         "QuestionFilter1": {
@@ -562,8 +562,8 @@
                 "ICPC Scoring": "ICPC 점수",
                 "Doesn't matter": "----",
                 "Any": "소유권",
-                "Yes$": "是",
-                "No$": "否",
+                "Yes$": "be",
+                "No$": "막힘",
                 "No submission(s)": "제출하지 않음",
                 "Have submission(s)": "제출됨",
                 "No solved problem(s)": "문제 해결 없음",
@@ -589,16 +589,16 @@
             "isStrict": false,
             "rules": {
                 "Postal/zip code": "우편/우편 번호",
-                "Country //(English//)": "国家（英文）",
-                "State //(English//)": "州/省份（英文）",
-                "City //(English//)": "城市（英文）",
-                "Address //(English//)": "地址（英文）",
-                "Recipient //(English//)": "收件人姓名（英文）",
-                "Country //(Native//)": "国家（本地语言）",
-                "State //(Native//)": "州/省份（本地语言）",
-                "City //(Native//)": "城市（本地语言）",
-                "Address //(Native//)": "地址（本地语言）",
-                "Recipient //(Native//)": "收件人姓名（本地语言）",
+                "Country //(English//)": "국가(영어)",
+                "State //(English//)": "주/도(영어)",
+                "City //(English//)": "도시 (영어)",
+                "Address //(English//)": "주소(영어)",
+                "Recipient //(English//)": "수신자 이름(영문)",
+                "Country //(Native//)": "국가(현지 언어)",
+                "State //(Native//)": "주/도(모국어)",
+                "City //(Native//)": "도시(현지 언어)",
+                "Address //(Native//)": "주소(현지 언어)",
+                "Recipient //(Native//)": "수신자 이름(현지 언어)",
                 "Phone": "전화",
                 "TON Wallet:": "톤 월렛.",
                 "Secret Code:": "캡차.",
@@ -695,7 +695,7 @@
             "isStrict": false,
             "rules": {
                 "Problem:": "제목.",
-                "Question": "问题",
+                "Question": "이슈",
                 "Language:": "언어.",
                 "Source code:": "소스 코드.",
                 "Or choose file:": "또는 파일을 선택합니다.",
@@ -717,12 +717,12 @@
                 "City": "지자체",
                 "Organization": "조직",
                 "Handle/Email": "계정 번호/이메일",
-                "Name": "名称",
-                "Handle": "账号",
-                "Email": "邮箱",
-                "Confirm": "确认",
+                "Name": "(사물의) 이름",
+                "Handle": "사용자 이름",
+                "Email": "받은 편지함",
+                "Confirm": "인식",
                 "Password": "암호화",
-                "New Rank": "新的Rank",
+                "New Rank": "새로운 계급",
                 "Training name \\(English\\):": "교육 이름(영어).",
                 "Training name \\(Russian\\):": "교육 이름(러시아어).",
                 "Contest format:": "경쟁 형식.",
@@ -839,8 +839,8 @@
                 "Create Mashup Contest": "매시업 콘테스트 만들기",
                 "Delete problem": "질문 삭제하기",
                 "Restore problem": "복구 문제",
-                "Generate": "生成",
-                "Send": "发送"
+                "Generate": "생성",
+                "Send": "보내기"
             }
         },
         "InputButton": {
