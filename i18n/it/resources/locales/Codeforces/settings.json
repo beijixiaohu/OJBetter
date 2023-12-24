@@ -17,7 +17,6 @@
                 "system": "Sistema di follow-up"
             }
         },
-        "localization": "Interfaccia in lingua cinese",
         "loadingInfo": {
             "label": "Visualizzazione di un messaggio di avviso di caricamento",
             "helpText": "<p>Quando attiva l'opzione Mostra informazioni sul caricamento, un messaggio di informazioni sul caricamento verrà visualizzato nella parte superiore ogni volta che la pagina viene caricata：\"CodeforcesBetter -- xxx\"</p><p>Questo viene utilizzato per vedere come lo script sta attualmente lavorando<strong>Se non desidera vederlo, può scegliere di Off</strong></p><p><u>Si noti che se ha bisogno di un feedback su eventuali problemi di caricamento dello script, la preghiamo di attivare questa opzione prima di scattare uno screenshot, in modo che il problema possa essere analizzato</u></p>"
@@ -40,7 +39,7 @@
             "helpText": "<p>Alcuni titoli di Codeforces sono inclusi in LOGU OJ, e alcuni titoli hanno traduzioni e spiegazioni</p><p>Quando il display è acceso, se il titolo corrente è incluso, il logo LOGU sarà visualizzato nell'angolo superiore destro del titolo,</p><p>Facendo clic su di esso potrà saltare alla pagina LOGU corrispondente per quel titolo con un solo clic.</strong></p>"
         },
         "recolor": {
-            "label": "Ricolorare l'elenco",
+            "label": "Elenco ricolora",
             "helpText": "<p>Per le classifiche delle partite che utilizzano il sistema Codeforces</p><p>Ricolori i punteggi in base all'intervallo \"Punteggio/Totale\"</p><p>Intervallo：1~0,7~0,45~0 Verde scuro→Arancio chiaro→Arancio scuro→Rosso</p>"
         }
     },
