@@ -71,8 +71,8 @@
             }
         },
         "preference": {
-            "title": "preferences",
-            "comment_translation_choice": "Translation of the comments section",
+            "title": "Preferences",
+            "comment_translation_choice": "Translate comments section",
             "translationServices": {
                 "follow": "Follow Preferences",
                 "deepl": "DeepL Translation",
@@ -85,12 +85,12 @@
         },
         "autoTranslation": {
             "title": "Automatically translate",
-            "enable": "Enable automatic translation",
+            "enable": "Enable Auto Translate",
             "helpText": "<p>For short texts in the<strong>.ttypography, .comments area</strong></p><p>are automatically translated when they enter the visible area of the browser window</p>",
             "shortTextLength": {
-                "name": "Text length",
+                "name": "short text length",
                 "helpText": "<p>When the text length is less than this value, it is considered as a short text</p>",
-                "end": "character"
+                "end": "chars."
             },
             "allowMixTrans": {
                 "name": "Mixed translation of the comments section",
@@ -108,7 +108,7 @@
             "name": "Advanced",
             "mode": {
                 "name": "Operating mode",
-                "helpText": "<p>You can choose how the script works</p><p>○ Normal mode：will translate the whole area at once</p><p>○ Segmented mode：will translate each&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tag in the area in turn</p><p>○ Selected segmented mode：You are free to click on any&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tags on the page to translate them</p><div style='color:#f44336;'><p><u>NOTE：Segmented/selected segmented modes cause the following problems：</u></p><p>- they make it impossible for the translation interface to know the whole text in context and reduce the quality of the translation.</p><p>- There will be<strong>sections that will not be translated/cannot be selected</strong>because they are not&#60;&#112;&#47;&#62;or&#60;&#105;&#47;&#62;elements</p></div>",
+                "helpText": "<p>You can choose how the script works</p><p>○ Normal mode：will translate the whole area at once</p><p>○ Segment Mode：will translate each&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tag in the area in turn</p><p>○ Selection Mode：You are free to click on any&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tags on the page to translate them</p><div style='color:#f44336;'><p><u>Note：Segmented/Selection segmented modes cause the following problems：</u></p><p>- they make it impossible for the translation interface to know the whole text in context and reduce the quality of the translation.</p><p>- There will be<strong>sections that will not be translated/cannot be selected</strong>because they are not&#60;&#112;&#47;&#62;or&#60;&#105;&#47;&#62;elements</p></div>",
                 "options": {
                     "0": "Normal Mode",
                     "1": "Segment Mode",
@@ -120,30 +120,30 @@
                 "helpText": "<p>Automatically saves the translation information on the<strong>title page</strong>to the local indexDB</p><p>Automatically restores the translation information when refreshing/next entering the page</p>"
             },
             "retrans": {
-                "name": "Upon retranslation",
-                "helpText": "<p>Choose whether to 'close old results' or 'put away old results' on retranslation</p>",
+                "name": "When retranslating",
+                "helpText": "<p>Choose whether to 'Close old results' or 'Collapse old results' when retranslating</p>",
                 "options": {
                     "0": "Close old results",
-                    "1": "Putting away old results"
+                    "1": "Collapse old results"
                 }
             },
             "transWaitTime": {
                 "name": "Waiting Interval",
                 "helpText": "<p>Sets the waiting interval between two translation requests, this setting takes effect globally and is calculated independently for each translation service</p><p>Recommendation 200 + milliseconds</p><p>Description：ChatGPT translations ignore this setting and do not wait</p>",
-                "end": "millisecond"
+                "end": "ms"
             },
             "replaceSymbol": {
                 "name": "LaTeX Replacement",
-                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and placing them with substitutions</p><p>The probability of the substitutions themselves being corrupted varies from translation service to translation service, please read the instructions on the script page for more information</p><p>Note that：Translating with ChatGPT does not require the above actions, and is therefore not affected by this option</p><p>For more information, you can go to the script page for more information</p>",
+                "helpText": "<p>The script ensures that all LaTeX formulas are extracted and placeholder symbols are used to prevent them from being disrupted by translation interfaces.</p><p>For different translation services, the probability of the placeholder symbols themselves being disrupted varies. Please refer to the instructions on the script page for details.</p><p>Note: This option does not apply when translating with ChatGPT, so it is not affected by this option.</p><p>You can find more information in the instructions on the script page.</p>",
                 "options": {
-                    "1": "Use [ ]",
-                    "2": "Use {}",
-                    "3": "Use []"
+                    "1": "use【】",
+                    "2": "use{}",
+                    "3": "use[]"
                 }
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtering of ** symbols in text",
-                "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
+                "helpText": " <p>Some translation services (such as DeepL) mishandle the emphasis symbol in Markdown <strong>**</strong></p><p>This may cause the translated result to omit the wrapped content. You can choose to remove the emphasis symbol (this will be ignored when using ChatGPT)</p>"
             }
         }
     },
@@ -161,38 +161,38 @@
         "displayRating": {
             "title": "Show Rating Score",
             "contest": {
-                "name": "Contest Question Set Page",
+                "name": "Contest ProblemSet Page",
                 "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
                 "badge": "Cookie/API KEY"
             },
             "problem": {
-                "name": "title page",
+                "name": "Title Page",
                 "helpText": "<p><p>You'll need to provide the official api key</p><p>or leave clist.by on your browser logged in (i.e. cookie is valid)</p",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
-                "name": "title page",
+                "name": "Problemset Page",
                 "helpText": "<p>Need to keep clist.by logged in (i.e. cookie active) on your browser for this to work</p>",
                 "badge": "Cookie"
             }
         },
         "spoilerProtection": {
-            "title": "spoiler-proof",
+            "title": "Spoiler-proof",
             "helpText": "<p>Displayed only when the mouse is moved over the Rating sub-display area</p>"
         }
     },
     "codeEditorSettings": {
         "title": "Monaco Editor Settings",
-        "basics": "fundamental",
+        "basics": "Basic",
         "problemPageCodeEditor": {
-            "label": "Add editor to title page",
-            "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
+            "label": "Add editor to problem page",
+            "helpText": "Add Monaco editor below the problem page and the code will be saved automatically, providing online code running"
         },
         "preferences": {
             "title": "Preferences",
             "isCodeSubmitConfirm": {
                 "label": "Secondary confirmation of code submission",
-                "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
+                "helpText": "Clicking on the problem page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",
@@ -210,11 +210,11 @@
         "lspSettings": {
             "title": "LSP Settings",
             "useLSP": {
-                "label": "Using the LSP",
+                "label": "Use LSP",
                 "helpText": "<p>Connect to LSP Server to enable code completion, code diagnostics, formatting, go to definitions, etc.</p><p>Support for C++, Python languages</p><p>You will need to start OJBetter_Bridge, as described on the scripts page</p>"
             },
             "OJBetter_Bridge_WorkUri": {
-                "label": "Work path.",
+                "label": "Working Directory",
                 "helpText": "<p>You need to fill in the path where OJBetter_Bridge is located</p><p>Use either forward slash or backslash</p><p>Default path：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
@@ -228,7 +228,7 @@
                 "label": "AcWing CPP Complementary Templates",
                 "helpText": "<p>Template from<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
             },
-            "customization": "customizable",
+            "customization": "Custom",
             "performanceWarning": "Note：Too many static complementary rules can affect performance"
         }
     },
