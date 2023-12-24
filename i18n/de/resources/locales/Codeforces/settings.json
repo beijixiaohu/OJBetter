@@ -39,7 +39,7 @@
             "helpText": "<p>Einige der Codeforces-Titel sind in LOGU OJ enthalten, und für einige Titel gibt es Übersetzungen und Erklärungen</p><p>. Wenn das Display eingeschaltet ist und der aktuelle Titel enthalten ist, wird das LOGU-Logo in der oberen rechten Ecke des Titels angezeigt,</p><p>. Wenn Sie darauf klicken, können Sie mit einem Klick auf die entsprechende LOGU-Seite für diesen Titel springen.</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
+            "label": "Liste neu einfärben",
             "helpText": "<p>Für die Rangliste der Spiele, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
         }
     },
