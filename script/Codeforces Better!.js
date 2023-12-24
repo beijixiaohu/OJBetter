@@ -70,7 +70,7 @@ var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProbl
 var localizationLanguage, scriptL10nLanguage;
 var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
-var openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, opneaiConfig;
+var openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
@@ -127,33 +127,35 @@ function init() {
     clist_Authorization = getGMValue("clist_Authorization", "");
     //openai
     openai_isStream = getGMValue("openai_isStream", true);
-    opneaiConfig = getGMValue("chatgpt-config", {
-        "choice": -1,
+    chatgpt_config = getGMValue("chatgpt_config", {
+        "choice": "",
         "configurations": []
     });
-    if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
-        const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
+    if (chatgpt_config.choice !== -1 && chatgpt_config.configurations.length !== 0) {
+        const choice = chatgpt_config.choice;
+        if (choice !== "" && choice !== -1) {
+            const configuration = chatgpt_config.configurations.find(obj => obj.name === choice);;
+            if (configuration == undefined) {
+                let existingConfig = GM_getValue('chatgpt_config');
+                existingConfig.choice = "";
+                GM_setValue('chatgpt_config', existingConfig);
+                location.reload();
+            }
 
-        if (configAtIndex == undefined) {
-            let existingConfig = GM_getValue('chatgpt-config');
-            existingConfig.choice = 0;
-            GM_setValue('chatgpt-config', existingConfig);
-            location.reload();
+            openai_model = configuration.model;
+            openai_key = configuration.key;
+            openai_proxy = configuration.proxy;
+            openai_header = configuration._header ?
+                configuration._header.split("\n").map(header => {
+                    const [key, value] = header.split(":");
+                    return { [key.trim()]: value.trim() };
+                }) : [];
+            openai_data = configuration._data ?
+                configuration._data.split("\n").map(header => {
+                    const [key, value] = header.split(":");
+                    return { [key.trim()]: value.trim() };
+                }) : [];
         }
-
-        openai_model = configAtIndex.model;
-        openai_key = configAtIndex.key;
-        openai_proxy = configAtIndex.proxy;
-        openai_header = configAtIndex._header ?
-            configAtIndex._header.split("\n").map(header => {
-                const [key, value] = header.split(":");
-                return { [key.trim()]: value.trim() };
-            }) : [];
-        openai_data = configAtIndex._data ?
-            configAtIndex._data.split("\n").map(header => {
-                const [key, value] = header.split(":");
-                return { [key.trim()]: value.trim() };
-            }) : [];
     }
     // 编辑器
     if (!is_mSite) CF_csrf_token = Codeforces.getCsrfToken();
@@ -1530,9 +1532,14 @@ li.tempConfig_add_button:hover {
     background-color: #d7f0fb8c;
     color: #03A9F4;
 }
+.config{
+    width: 100%;
+    margin: 10px 0px;
+}
 .config_bar_list {
     display: flex;
-    width: 340px;
+    width: 100%;
+    padding-bottom: 2px;
     border: 1px solid #c5cae9;
     border-radius: 8px;
     background-color: #f0f8ff;
@@ -1585,6 +1592,7 @@ label.config_bar_ul_li_text {
     overflow-x: auto;
     max-width: 100%;
     margin: 0px;
+    padding: 5px;
 }
 .config_bar_ul li {
     width: 80px;
@@ -1603,7 +1611,7 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
 }
 .config_bar_ul::-webkit-scrollbar {
     width: 5px;
-    height: 3px;
+    height: 4px;
 }
 .config_bar_ul::-webkit-scrollbar-thumb {
     background-clip: padding-box;
@@ -2625,239 +2633,345 @@ async function initI18next() {
         });
 };
 
-// 配置管理函数
-function setupConfigManagement(element, prefix, tempConfig, structure, configHTML, checkable) {
-    let counter = 0;
-    createControlBar();
-    createContextMenu();
+/**
+ * 验证器
+ */
+class Validator {
+    /**
+     * 表单必填项空值校验
+     */
+    static required(structure) {
+        let config = {};
+        let allFieldsValid = true;
+        for (const key in structure) {
+            let value = key.type == 'checkbox' ?
+                $(key).prop("checked") : $(key).val();
 
-    // 键值对校验
-    function valiKeyValue(value) {
+            config[structure[key].value] = value;
+
+            if (value || structure[key].require === false) {
+                $(key).removeClass('is_null');
+            } else {
+                $(key).addClass('is_null');
+                allFieldsValid = false;
+            }
+        }
+        return {
+            valid: allFieldsValid,
+            config: config
+        };
+    }
+
+    /**
+     * 表单键值对项校验
+     */
+    static checkKeyValuePairs(structure, config) {
+        let errorKey = [];
+        let allFieldsValid = true;
+        for (const key in structure) {
+            if (structure[key].check === 'keyValuePairs') {
+                const value = config[structure[key].value];
+                if (value && !Validator.keyValuePairs(value)) {
+                    if (!$(key).prev('span.text-error').length) {
+                        $(key).before('<span class="text-error" style="color: red;">格式不符或存在非法字符</span>');
+                    }
+                    allFieldsValid = false;
+                    errorKey.push(key);
+                } else {
+                    $(key).prev('span.text-error').remove();
+                }
+            }
+        }
+        return {
+            valid: allFieldsValid,
+            errorKey: errorKey
+        }
+    }
+
+    /**
+     * 键值对合法性校验
+     * @param {string} value
+     * @returns {boolean}
+     */
+    static keyValuePairs(value) {
         const keyValuePairs = value.split('\n');
         const regex = /^[a-zA-Z0-9_-]+\s*:\s*[a-zA-Z0-9_-]+$/;
-        for (let i = 0; i < keyValuePairs.length; i++) {
-            if (!regex.test(keyValuePairs[i])) {
-                return false;
-            }
-        }
-        return true;
+        return keyValuePairs.every(pair => regex.test(pair));
+    }
+}
+
+/**
+ * 配置管理
+ */
+class ConfigManager {
+    /**
+     * @param {HTMLElement} element - 挂载容器
+     * @param {string} prefix - 前缀
+     * @param {object} tempConfig - 配置内容
+     * @param {object} structure - 配置结构
+     * @param {object} configHTML - 配置编辑页面HTML
+     * @param {boolean} allowChoice - 是否允许选择列表项
+     */
+    constructor(element, prefix, tempConfig, structure, configHTML, allowChoice = true) {
+        this.element = $(element);
+        this.prefix = prefix;
+        this.tempConfig = tempConfig;
+        this.structure = structure;
+        this.configHTML = configHTML;
+        this.allowChoice = allowChoice;
+
+        this.controlTip = null;
+        this.config_bar_list = null;
+        this.config_bar_ul = null;
+        this.config_add_button = null;
+        this.menu = null;
+        this.editItem = null;
+        this.deleteItem = null;
+
+        // 绑定方法
+        this.onAdd = this.onAdd.bind(this);
+        this.onEdit = this.onEdit.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.createListItemElement = this.createListItemElement.bind(this);
+
+        this.lastItemId = 0; // 列表中当前最后一个元素的id号
+        this.init();
     }
 
-    // 新增数据
-    function onAdd() {
-        const styleElement = createWindow();
-
-        const settingMenu = $("#config_edit_menu");
-        settingMenu.on("click", "#tempConfig_save", () => {
-            const config = {};
-
-            // 检查必填字段
-            let allFieldsValid = true;
-            for (const key in structure) {
-                let value = $(key).val();
-                if ($(key).is("input[type='checkbox']")) value = $(key).prop("checked"); // 打个补丁，单选的值是prop("checked")
-                if (value || $(key).attr('require') === 'false') {
-                    config[structure[key]] = value;
-                    $(key).removeClass('is_null');
-                } else {
-                    $(key).addClass('is_null');
-                    allFieldsValid = false;
-                }
-            }
-
-            // 校验提示
-            for (let i = 0, len = checkable.length; i < len; i++) {
-                let value = $(checkable[i]).val();
-                if (value && !valiKeyValue(value)) {
-                    if (!$(checkable[i]).prev('span.text-error').length) {
-                        $(checkable[i]).before('<span class="text-error" style="color: red;">格式不符或存在非法字符</span>');
-                    }
-                    allFieldsValid = false;
-                } else {
-                    $(checkable[i]).prev('span.text-error').remove();
-                }
-            }
-
-            if (!allFieldsValid) return;
-            tempConfig.configurations.push(config);
-
-            const list = $(`#${prefix}config_bar_ul`);
-            createListItemElement(config[structure['#note']]).insertBefore($(`#${prefix}add_button`));
-
-            settingMenu.remove();
-            $(styleElement).remove();
-        });
-
-        settingMenu.on("click", ".btn-close", () => {
-            settingMenu.remove();
-            $(styleElement).remove();
-        });
+    init() {
+        this.createControlBar();
+        this.createContextMenu();
+        this.renderList();
     }
 
-    // 编辑数据
-    function onEdit() {
-        const menu = $("#config_bar_menu");
-        menu.css({ display: "none" });
-
-        const list = $(`#${prefix}config_bar_ul`);
-        const index = Array.from(list.children()).indexOf(this);
-
-        const styleElement = createWindow();
-
-        const settingMenu = $("#config_edit_menu");
-        const configAtIndex = tempConfig.configurations[index];
-
-        if (configAtIndex) {
-            for (const key in structure) {
-                if ($(key).is("input[type='checkbox']")) $(key).prop('checked', configAtIndex[structure[key]]); // 是input[type='checkbox']的情况
-                else $(key).val(configAtIndex[structure[key]]);
-            }
-        }
-
-        settingMenu.on("click", "#tempConfig_save", () => {
-            const config = {};
-            let allFieldsValid = true;
-            for (const key in structure) {
-                let value = $(key).val();
-                if ($(key).is("input[type='checkbox']")) value = $(key).prop("checked"); // 是input[type='checkbox']的情况
-                if (value || $(key).attr('require') === 'false') {
-                    config[structure[key]] = value;
-                    $(key).removeClass('is_null');
-                } else {
-                    $(key).addClass('is_null');
-                    allFieldsValid = false;
-                }
-            }
-
-            // 校验提示
-            for (let i = 0, len = checkable.length; i < len; i++) {
-                let value = $(checkable[i]).val();
-                if (value && !valiKeyValue(value)) {
-                    if (!$(checkable[i]).prev('span.text-error').length) {
-                        $(checkable[i]).before('<span class="text-error" style="color: red;">格式不符或存在非法字符</span>');
-                    }
-                    allFieldsValid = false;
-                } else {
-                    $(checkable[i]).prev('span.text-error').remove();
-                }
-            }
-
-            if (!allFieldsValid) return;
-            tempConfig.configurations[index] = config;
-
-            settingMenu.remove();
-            $(styleElement).remove();
-            menu.css({ display: "none" });
-
-            list.children().eq(index).find("label").text(config.note);
-        });
-
-        // 关闭按钮
-        settingMenu.on("click", ".btn-close", () => {
-            settingMenu.remove();
-            $(styleElement).remove();
-        });
+    /**
+     * 创建控制栏
+     */
+    createControlBar() {
+        this.controlTip = $(`<div id='${this.prefix}configControlTip' style='color:red;'></div>`);
+        this.config_bar_list = $(`<div class='config_bar_list' id='${this.prefix}config_bar_list'></div>`);
+        this.config_bar_ul = $(`<ul class='config_bar_ul' id='${this.prefix}config_bar_ul'></ul>`);
+        this.element.append(this.controlTip);
+        this.element.append(this.config_bar_list);
+        this.config_bar_list.append(this.config_bar_ul);
     }
 
-    // 删除数据
-    function onDelete() {
-        const menu = $("#config_bar_menu");
-        menu.css({ display: "none" });
-
-        const list = $(`#${prefix}config_bar_ul`);
-        const index = Array.from(list.children()).indexOf(this);
-
-        tempConfig.configurations.splice(index, 1);
-
-        list.children().eq(index).remove();
+    /**
+     * 创建右键菜单
+     */
+    createContextMenu() {
+        const menu = $(`<div id='config_bar_menu' style='display: none;'></div>`);
+        const editItem = $(`<div class='config_bar_menu_item' id='config_bar_menu_edit'>修改</div>`);
+        const deleteItem = $(`<div class='config_bar_menu_item' id='config_bar_menu_delete'>删除</div>`);
+        menu.append(editItem);
+        menu.append(deleteItem);
+        this.editItem = editItem;
+        this.deleteItem = deleteItem;
+        this.menu = menu;
+        $('body').append(menu);
     }
 
-    // 创建编辑窗口
-    function createWindow() {
-        const styleElement = GM_addStyle(darkenPageStyle2);
-        $("body").append(configHTML);
-        addDraggable($('#config_edit_menu'));
-        return styleElement;
+    /**
+     * 关闭右键菜单
+     */
+    closeContextMenu() {
+        this.menu.css({ display: "none" });
     }
 
-    // 创建控制面板
-    function createControlBar() {
-        $(element).append(`
-            <div id='${prefix}configControlTip' style='color:red;'></div>
-            <div class='config_bar'>
-                <div class='config_bar_list' id='${prefix}config_bar_list'>
-                    <ul class='config_bar_ul' id='${prefix}config_bar_ul'></ul>
-                </div>
-            </div>
-        `);
-    }
-
-    // 创建右键菜单
-    function createContextMenu() {
-        const menu = $("<div id='config_bar_menu' style='display: none;'></div>");
-        menu.html(`
-			<div class='config_bar_menu_item' id='config_bar_menu_edit'>修改</div>
-			<div class='config_bar_menu_item' id='config_bar_menu_delete'>删除</div>
-		`);
-        $("body").append(menu);
-    }
-
-    // 创建新的li元素
-    function createListItemElement(text) {
+    /**
+     * 创建列表项
+     * @param {string} text - 列表项文本
+     * @returns {HTMLElement} - 列表项
+     */
+    createListItemElement(text) {
+        const id = getRandomNumber(4);
         const li = $("<li></li>");
-        const radio = $("<input type='radio' name='config_item'></input>").appendTo(li);
-        radio.attr("value", counter).attr("id", counter++);
-        const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("value")).appendTo(li);
+        const radio = $("<input type='radio' name='config_item'></input>")
+            .attr("value", text)
+            .attr("id", id)
+            .attr("prev_id", this.lastItemId)
+            .appendTo(li);
+        if (!this.allowChoice) {
+            radio.prop("disabled", true);
+        }
+        const label = $(`<label for='${id}' class='config_bar_ul_li_text'>${text}</label>`).appendTo(li);
+
+
+        this.lastItemId = id;
 
         // 添加右键菜单
-        li.on("contextmenu", function (event) {
+        li.on("contextmenu", (event) => {
             event.preventDefault();
-            const menu = $("#config_bar_menu");
-            menu.css({ display: "block", left: event.pageX, top: event.pageY });
+            this.menu.css({
+                display: "block",
+                left: event.pageX, top: event.pageY
+            });
 
-            const deleteItem = $("#config_bar_menu_delete");
-            const editItem = $("#config_bar_menu_edit");
+            const deleteItem = this.deleteItem;
+            const editItem = this.editItem;
 
             // 移除旧事件
             deleteItem.off("click");
             editItem.off("click");
 
-            deleteItem.on("click", onDelete.bind(this));
-            editItem.on("click", onEdit.bind(this));
+            // 获取 li 在 ul 中的索引
+            const index = li.index();
+
+            deleteItem.on("click", () => this.onDelete(index, li));
+            editItem.on("click", () => this.onEdit(index, li));
 
             $(document).one("click", (event) => {
-                if (!menu.get(0).contains(event.target)) {
-                    menu.css({ display: "none" });
-                    deleteItem.off("click", onDelete);
-                    editItem.off("click", onEdit);
+                if (!this.menu.get(0).contains(event.target)) {
+                    this.closeContextMenu();
+                    deleteItem.off("click", () => this.onDelete);
+                    editItem.off("click", () => this.onEdit);
                 }
             });
         });
 
-
         return li;
     }
 
-    // 渲染列表
-    function renderList() {
-        const listContainer = $(`#${prefix}config_bar_list`);
-        const list = $(`#${prefix}config_bar_ul`);
-        list.empty();
-        tempConfig.configurations.forEach((item) => {
-            list.append(createListItemElement(item[structure['#note']]));
+    /**
+     * 渲染配置列表
+     */
+    renderList() {
+        const list = this.config_bar_ul;
+        list.empty(); // 清空
+        this.tempConfig.configurations.forEach((item) => {
+            list.append(this.createListItemElement(item['name']));
         });
 
-        list.append(`
-            <li id='${prefix}add_button' class="tempConfig_add_button">
-                <span>+ 添加</span>
-            </li>
-        `);
-        const addItem = $(`#${prefix}add_button`);
-        addItem.on("click", onAdd);
-    };
+        // 添加添加按钮
+        let addButton = $(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
+            <span>+ 添加</span>
+        </li>`);
+        this.config_add_button = addButton;
+        list.append(addButton);
+        addButton.on("click", this.onAdd);
+    }
 
-    renderList();
-    return tempConfig;
+    /**
+     * 添加配置项
+     */
+    onAdd() {
+        const { maskStyle, configMenu } = this.createConfigHTML();
+        const structure = this.structure;
+
+        configMenu.on("click", "#tempConfig_save", () => {
+
+            // 检查必填字段
+            const { valid, config } = Validator.required(structure);
+            if (!valid) return;
+
+            // 检查键值对
+            const { valid: checkOk, errorKey } = Validator.checkKeyValuePairs(structure, config);
+            if (!checkOk) return;
+
+            this.tempConfig.configurations.push(config);
+
+            this.createListItemElement(config.name).insertBefore(this.config_add_button);
+
+            configMenu.remove();
+            $(maskStyle).remove();
+        });
+
+        configMenu.on("click", ".btn-close", () => {
+            configMenu.remove();
+            $(maskStyle).remove();
+        });
+    }
+
+    /**
+     * 修改配置项
+     * @param {number} index - 配置项索引
+     * @param {HTMLElement} li - 配置项
+     * @returns {void}
+     */
+    onEdit(index, li) {
+        const { maskStyle, configMenu } = this.createConfigHTML();
+        const structure = this.structure;
+
+        this.closeContextMenu();
+
+        // 填充表单
+        for (const [key, { value, type }] of Object.entries(this.structure)) {
+            const configValue = this.tempConfig.configurations[index][value];
+            const $element = $(key);
+            if (type === 'checkbox') {
+                $element.prop("checked", configValue);
+            } else {
+                $element.val(configValue);
+            }
+        }
+
+        configMenu.on("click", "#tempConfig_save", () => {
+            // 检查必填字段
+            const { valid, config } = Validator.required(structure);
+            if (!valid) return;
+
+            // 检查键值对
+            const { valid: checkOk, errorKey } = Validator.checkKeyValuePairs(structure, config);
+            if (!checkOk) return;
+
+            // 更新配置
+            this.tempConfig.configurations[index] = config;
+            li.find('label').text(config.name);
+
+            configMenu.remove();
+            $(maskStyle).remove();
+        });
+
+        configMenu.on("click", ".btn-close", () => {
+            configMenu.remove();
+            $(maskStyle).remove();
+        });
+    }
+
+    /**
+     * 删除配置项
+     * @param {number} index - 配置项索引
+     * @param {HTMLElement} li - 配置项
+     * @returns {void}
+     */
+    onDelete(index, li) {
+        this.closeContextMenu();
+        this.tempConfig.configurations.splice(index, 1);
+        li.remove();
+    }
+
+    /**
+     * 创建配置编辑页面
+     * @returns {object} - {maskStyle, configMenu}
+     */
+    createConfigHTML() {
+        const maskStyle = GM_addStyle(darkenPageStyle2);
+        let configMenu = $(this.configHTML);
+        $("body").append(configMenu);
+        addDraggable(configMenu);
+        return {
+            maskStyle: maskStyle,
+            configMenu: configMenu
+        }
+    }
+
+    /**
+     * 获取配置内容
+     * @returns {object} - 配置内容
+     */
+    getTempConfig() {
+        return this.tempConfig;
+    }
+
+    /**
+     * 注册列表项选中改变监听
+     */
+    registerChoiceChange() {
+        this.config_bar_ul.on("change", "input[type='radio']", (event) => {
+            const value = event.target.value;
+            this.tempConfig.choice = value;
+        });
+    }
 }
 
 const CFBetter_setting_sidebar_HTML = `
@@ -3037,9 +3151,7 @@ const translation_settings_HTML = `
     </label>
     <hr>
     <h4>ChatGPT</h4>
-    <div class='CFBetter_setting_menu_config_box' id='openai'>
-        <div id="chatgpt-config"></div>
-    </div>
+    <div id="chatgpt_config" class="config"></div>
     <div class='CFBetter_setting_list'>
         <label for="openai_isStream" data-i18n="translationSettings.chatgpt.isStream.name"></label>
         <div class="help_tip">
@@ -3350,9 +3462,7 @@ const code_editor_settings_HTML = `
             <p data-i18n="codeEditorSettings.staticCompletionEnhancement.performanceWarning"></p>
         </div>
     </div>
-    <div class='CFBetter_setting_menu_config_box' id='Complets'>
-        <div id="Complet_config"></div>
-    </div>
+    <div id="Complet_config" class="config"></div>
 </div>
 `;
 
@@ -3401,10 +3511,10 @@ const chatgptConfigEditHTML = `
         <h4>配置</h4>
         <h5>基本</h5>
         <hr>
-        <label for='note'>
-            <span class="input_label">备注:</span>
+        <label for='name'>
+            <span class="input_label">名称:</span>
         </label>
-        <input type='text' id='note' class='no_default' placeholder='请为该配置取一个备注名' require = true>
+        <input type='text' id='name' class='no_default' placeholder='请为该配置取一个名称' require = true>
         <label for='openai_model'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label">模型:</span>
@@ -3490,10 +3600,10 @@ const CompletConfigEditHTML = `
         </div>
         <h4>配置</h4>
         <hr>
-        <label for='note'>
+        <label for='name'>
             <span class="input_label">备注:</span>
         </label>
-        <input type='text' id='note' class='no_default' placeholder='请为该自定义配置取一个备注名' require = true>
+        <input type='text' id='name' class='no_default' placeholder='请为该自定义配置取一个备注名' require = true>
         <div class='CFBetter_setting_list'>
         <label for="complet_isChoose"><span id="loaded_span">启用？</span></label>
             <input type="checkbox" id="complet_isChoose" name="complet_isChoose" require = false>
@@ -3593,33 +3703,40 @@ async function settingPanel() {
             $('#' + targetPageId).addClass('active');
         });
 
+        /**
+         * 创建配置结构
+         * @param {string} type - 该字段的在表单中的类型
+         * @param {string} value - 在配置中的键值
+         * @param {boolean} require - 是否是表单的必填项
+         * @param {string} [check=""] check - 调用的合法性检查
+         */
+        function createStructure(type, value, require, check = "") {
+            return { type, value, require, check };
+        }
+
         // chatgpt配置
         const chatgptStructure = {
-            '#note': 'note',
-            '#openai_model': 'model',
-            '#openai_key': 'key',
-            '#openai_proxy': 'proxy',
-            '#_header': '_header',
-            '#_data': '_data',
-        }
-        const checkable = [
-            '#_header',
-            '#_data',
-        ]
-        let tempConfig = GM_getValue('chatgpt-config'); // 缓存配置信息
-        tempConfig = setupConfigManagement('#chatgpt-config', 'chatgpt_config_', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
+            '#name': createStructure('text', 'name', true),
+            '#openai_model': createStructure('text', 'model', false),
+            '#openai_key': createStructure('text', 'key', true),
+            '#openai_proxy': createStructure('text', 'proxy', false),
+            '#_header': createStructure('text', '_header', false, "keyValuePairs"),
+            '#_data': createStructure('text', '_data', false, "keyValuePairs")
+        };
+        let tempConfig_chatgpt = GM_getValue('chatgpt_config'); // 获取配置信息
+        const configManager_chatgpt = new ConfigManager('#chatgpt_config', 'chatgpt_config_', tempConfig_chatgpt, chatgptStructure, chatgptConfigEditHTML);
+        configManager_chatgpt.registerChoiceChange();
 
         // Complet配置
         const CompletStructure = {
-            '#note': 'note',
-            '#complet_isChoose': 'isChoose',
-            '#complet_genre': 'genre',
-            '#complet_language': 'language',
-            '#complet_jsonUrl': 'jsonUrl',
-        }
-        const Completcheckable = []
-        let tempConfig_Complet = GM_getValue('Complet_config'); // 缓存配置信息
-        tempConfig_Complet = setupConfigManagement('#Complet_config', 'complet_config_', tempConfig_Complet, CompletStructure, CompletConfigEditHTML, Completcheckable);
+            '#name': createStructure('text', 'name', true),
+            '#complet_isChoose': createStructure('checkbox', 'isChoose', true),
+            '#complet_genre': createStructure('text', 'genre', true),
+            '#complet_language': createStructure('text', 'language', true),
+            '#complet_jsonUrl': createStructure('text', 'jsonUrl', true)
+        };
+        let tempConfig_Complet = GM_getValue('Complet_config'); // 获取配置信息
+        const configManager_complet = new ConfigManager('#Complet_config', 'complet_config_', tempConfig_Complet, CompletStructure, CompletConfigEditHTML, false);
 
         // 状态更新
         $("input[name='darkMode'][value='" + darkMode + "']").prop("checked", true);
@@ -3639,12 +3756,7 @@ async function settingPanel() {
         $('#localizationLanguage').val(GM_getValue("localizationLanguage"));
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
-        if (translation == "openai") {
-            $("#openai").show();
-            if (tempConfig && $("#chatgpt_config_config_bar_ul").length) {
-                $("#chatgpt_config_config_bar_ul").find(`input[name='config_item'][value='${tempConfig.choice}']`).prop("checked", true);
-            }
-        };
+        $("#chatgpt_config_config_bar_ul").find(`input[name='config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
@@ -3671,12 +3783,6 @@ async function settingPanel() {
         $("#OJBetter_Bridge_SocketUrl").val(GM_getValue("OJBetter_Bridge_SocketUrl"));
         $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
         $("input[name='compiler']").css("color", "gray");
-
-        // 配置选择情况监听
-        $("input[name='config_item']").change(function () {
-            var selected = $(this).val(); // 获取当前选中的值
-            tempConfig.choice = selected;
-        });
 
         // 关闭
         const $settingMenu = $(".CFBetter_setting_menu");
@@ -3731,8 +3837,8 @@ async function settingPanel() {
             };
             // tempConfigs的数据
             const tempConfigs = {
-                'chatgpt-config': tempConfig,
-                'Complet_config': tempConfig_Complet
+                'chatgpt_config': configManager_chatgpt.getTempConfig(),
+                'Complet_config': configManager_complet.getTempConfig()
             }
 
             // 判断是否改变
@@ -3818,9 +3924,9 @@ async function settingPanel() {
                         commentTranslationChoice = settings.commentTranslationChoice;
                         if (settings.translation === "openai") {
                             var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
-                            if (selectedIndex !== opneaiConfig.choice) {
-                                opneaiConfig = GM_getValue("chatgpt-config");
-                                const configAtIndex = opneaiConfig.configurations[selectedIndex];
+                            if (selectedIndex !== chatgpt_config.choice) {
+                                chatgpt_config = GM_getValue("chatgpt_config");
+                                const configAtIndex = chatgpt_config.configurations[selectedIndex];
                                 openai_model = configAtIndex.model;
                                 openai_key = configAtIndex.key;
                                 openai_proxy = configAtIndex.proxy;
@@ -5386,7 +5492,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                 await translate_caiyun_startup();
                 translatedText = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${opneaiConfig.configurations[opneaiConfig.choice].note}\n\n${!openai_isStream
+                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${chatgpt_config.configurations[chatgpt_config.choice].name}\n\n${!openai_isStream
                     ? "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待" : ""}`,
                     is_oldLatex, is_acmsguru);
                 if (openai_isStream) {
@@ -9062,6 +9168,35 @@ document.addEventListener("DOMContentLoaded", function () {
             GM_setValue("localizationLanguage", "initial");
         }
         GM_deleteValue("bottomZh_CN");
+        location.reload();
+    }
+}
+{
+    let config = GM_getValue("chatgpt-config");
+    if (config !== undefined) {
+        let index = parseInt(config.choice, 10);
+        if (index == -1) config.choice = "";
+        else config.choice = config.configurations[index].note;
+        config.configurations.forEach(function (item) {
+            item.name = item.note;
+            delete item.note;
+        });
+        GM_deleteValue("chatgpt-config");
+        GM_setValue("chatgpt_config", config);
+        location.reload();
+    }
+}
+{
+    let config = GM_getValue("Complet_config");
+    if (config.changed === undefined) {
+        config.changed = true; // 设置一个迁移标志
+        config.configurations.forEach(function (item) {
+            if (item.note !== undefined) {
+                item.name = item.note;
+                delete item.note;
+            }
+        });
+        GM_setValue("Complet_config", config);
         location.reload();
     }
 }
