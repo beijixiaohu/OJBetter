@@ -39,7 +39,7 @@
             "helpText": "<p>Certains titres de Codeforces sont inclus dans le JO LOGU, et certains titres ont des traductions et des explications</p><p>Lorsque l'écran est allumé, si le titre en cours est inclus, le logo LOGU sera affiché dans le coin supérieur droit du titre,</p><p>. En cliquant sur ce logo, vous pourrez accéder à la page LOGU correspondante pour ce titre en un seul clic.</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
+            "label": "Liste de recoloration",
             "helpText": "<p>Pour les classements des jeux utilisant le système Codeforces</p><p>Recolorez les scores en fonction de la fourchette \"Score/Total\"</p><p>Fourchette：1~0.7~0.45~0 Vert foncé→Orange clair→Orange foncé→Rouge</p>"
         }
     },
