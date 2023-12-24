@@ -17,7 +17,6 @@
                 "system": "follow-up system"
             }
         },
-        "localization": "Chinese characterization of the interface",
         "loadingInfo": {
             "label": "Show load alert message",
             "helpText": "<p>When you turn on Show loading info, a loading info prompt will be displayed at the top every time the page loads：\"CodeforcesBetter -- xxx\"</p><p>This is used to see how the script is currently working<strong>If you don't want to see it, you can choose to Off</strong></p><p><u>It is important to note that if you need feedback on any loading issues with the script, please turn this option on before taking a screenshot to make it easier to analyze the issue</u></p>"
@@ -40,7 +39,7 @@
             "helpText": "<p>Some of the Codeforces titles are included on LOGU OJ, some titles have translations and explanations</p><p>When the display is turned on, if the current title is included, the LOGU logo will be displayed in the upper right corner of the title,</p><p>Click on it and you can jump to the corresponding LOGU page for that title with one click.</strong></p>"
         },
         "recolor": {
-            "label": "The list is recolored",
+            "label": "重新着色榜单",
             "helpText": "<p>For the list of races using the Codeforces system</p><p>Recolor the scores according to the range of \"Score/Total\"</p><p>Range：1~0.7~0.45~0 Dark Green→Light Orange→Dark Orange→Red</p>"
         }
     },
