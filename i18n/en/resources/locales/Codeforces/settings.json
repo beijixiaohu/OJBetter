@@ -1,20 +1,20 @@
 {
     "sidebar": {
-        "basic": "fundamental",
+        "basic": "Basic",
         "localization": "localization",
-        "translation": "rendering",
+        "translation": "Translation",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "compatibility"
+        "compatibility": "Compatible"
     },
     "basicSettings": {
         "title": "Basic settings",
         "darkMode": {
-            "name": "dark mode",
+            "name": "Dark Theme",
             "options": {
-                "dark": "darkly",
-                "light": "daytime",
-                "system": "follow-up system"
+                "dark": "Dark",
+                "light": "Light",
+                "system": "System"
             }
         },
         "loadingInfo": {
@@ -25,48 +25,48 @@
             "label": "Display target area range",
             "helpText": "When turned on, the range of its target area is displayed when the mouse is hovered over the MD View/Copy/Translate button."
         },
-        "expandBlocks": "Automatic unfolding of folding blocks",
+        "expandBlocks": "Auto-expand folding blocks",
         "renderOptimization": {
-            "label": "Folded block rendering optimization",
+            "label": "Folding block rendering optimization",
             "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser lags when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
         },
         "paging": {
-            "label": "Comments Distinction Page",
-            "helpText": "The comments are displayed on separate pages, with a specified number of<strong>main floor</strong>per page."
+            "label": "Comment Pagination",
+            "helpText": "Pagination of comments shows the specified number of<strong>main floor</strong> per page."
         },
         "luoguJump": {
-            "label": "Show Jump to Rock Valley",
-            "helpText": "<p>Some of the Codeforces titles are included on LOGU OJ, some titles have translations and explanations</p><p>When the display is turned on, if the current title is included, the LOGU logo will be displayed in the upper right corner of the title,</p><p>Click on it and you can jump to the corresponding LOGU page for that title with one click.</strong></p>"
+            "label": "Show jump to Luogu",
+            "helpText": "<p>Some Codeforces questions are included on Luogu Oj. Some questions have translations and solutions.</p><p>After turning on the display, if the current question is included, the Luogu logo will be displayed in the upper right corner of the question.</p><p>Click to jump with one click. Go to the corresponding page of Luogu for this question.</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
-            "helpText": "<p>For the list of races using the Codeforces system</p><p>Recolor the scores according to the range of \"Score/Total\"</p><p>Range：1~0.7~0.45~0 Dark Green→Light Orange→Dark Orange→Red</p>"
+            "label": "Recolor list",
+            "helpText": "<p>For the competition list using the Codeforces format</p><p>Re-color the gradient according to the range of \"score/total score\"</p><p>Range：1~0.7~0.45~0 Dark green → light orange → dark orange → red</p>"
         }
     },
     "localizationSettings": {
-        "title": "Localization settings",
-        "scriptLanguageLabel": "scripting language",
+        "title": "Localization Settings",
+        "scriptLanguageLabel": "Script Language",
         "websiteLanguageLabel": "Website Language"
     },
     "translationSettings": {
         "title": "Translation settings",
         "options": {
-            "title": "preferences",
+            "title": "Preferences",
             "translationServices": {
-                "deepl": "Translation of DeepL",
-                "iflyrec": "Xunfei Hear Translate",
-                "youdao": "Youtube translation",
-                "google": "Google Translate",
-                "caiyun": "colorful clouds and small translations",
+                "deepl": "DeepL Translation",
+                "iflyrec": "Iflyrec Translation",
+                "youdao": "Youdao translation",
+                "google": "Google Translation",
+                "caiyun": "Caiyun Translation",
                 "openai": {
                     "name": "ChatGPT Translation",
-                    "helpText": "<p><b>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right click to modify and delete the configuration</b></p><p>Please read the script page for details</p>"
+                    "helpText": "<p><b>You need to add and select the configuration information you want to use in the ChatGPT configuration below. You can modify and delete the configuration by right-clicking</b></p><p>Please read the introduction on the script page</p>"
                 }
             }
         },
         "chatgpt": {
             "isStream": {
-                "name": "streaming",
+                "name": "Streaming",
                 "helpText": "<p>Enabling data streaming, typewriter effect</p>"
             }
         },
@@ -75,16 +75,16 @@
             "comment_translation_choice": "Translation of the comments section",
             "translationServices": {
                 "follow": "Follow Preferences",
-                "deepl": "Translation of DeepL",
-                "iflyrec": "Xunfei Hear Translate",
-                "youdao": "Youtube translation",
-                "google": "Google Translate",
-                "caiyun": "colorful clouds and small translations",
+                "deepl": "DeepL Translation",
+                "iflyrec": "Iflyrec Translation",
+                "youdao": "Youdao translation",
+                "google": "Google Translation",
+                "caiyun": "Caiyun Translation",
                 "openai": "ChatGPT Translation"
             }
         },
         "autoTranslation": {
-            "title": "automatic translation",
+            "title": "Automatically translate",
             "enable": "Enable automatic translation",
             "helpText": "<p>For short texts in the<strong>.ttypography, .comments area</strong></p><p>are automatically translated when they enter the visible area of the browser window</p>",
             "shortTextLength": {
@@ -97,22 +97,22 @@
                 "helpText": "<p>When translating automatically, for each short text area in the comments section, independently and randomly select one of the services checked below</p><p>Translate in parallel</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
-                    "iflyrec": "Xunfei (telecommunications company)",
-                    "youdao": "learned and virtuous",
-                    "google": "google",
-                    "caiyun": "rosy clouds"
+                    "iflyrec": "iflyrec",
+                    "youdao": "Youdao",
+                    "google": "Google",
+                    "caiyun": "Caiyun"
                 }
             }
         },
         "advanced": {
-            "name": "high level",
+            "name": "Advanced",
             "mode": {
-                "name": "operating mode",
+                "name": "Operating mode",
                 "helpText": "<p>You can choose how the script works</p><p>○ Normal mode：will translate the whole area at once</p><p>○ Segmented mode：will translate each&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tag in the area in turn</p><p>○ Selected segmented mode：You are free to click on any&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tags on the page to translate them</p><div style='color:#f44336;'><p><u>NOTE：Segmented/selected segmented modes cause the following problems：</u></p><p>- they make it impossible for the translation interface to know the whole text in context and reduce the quality of the translation.</p><p>- There will be<strong>sections that will not be translated/cannot be selected</strong>because they are not&#60;&#112;&#47;&#62;or&#60;&#105;&#47;&#62;elements</p></div>",
                 "options": {
-                    "0": "normal mode",
-                    "1": "segmentation model",
-                    "2": "segmentation model"
+                    "0": "Normal Mode",
+                    "1": "Segment Mode",
+                    "2": "Selection Mode"
                 }
             },
             "memory": {
@@ -150,7 +150,7 @@
     "clistSettings": {
         "title": "Clist Settings",
         "basics": {
-            "name": "fundamental",
+            "name": "Basic",
             "notice": "Note：The credentials required to work on different pages vary, see the labeled descriptions of the corresponding options.",
             "key": {
                 "title": "KEY.",
@@ -189,7 +189,7 @@
             "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
         },
         "preferences": {
-            "title": "preferences",
+            "title": "Preferences",
             "isCodeSubmitConfirm": {
                 "label": "Secondary confirmation of code submission",
                 "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
