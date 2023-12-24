@@ -39,7 +39,7 @@
             "helpText": "<p>Algunos de los títulos de Codeforces están incluidos en LOGU OJ, y algunos títulos tienen traducciones y explicaciones</p><p>Al encender la pantalla, si el título actual está incluido, aparecerá el logotipo de LOGU en la esquina superior derecha del título,</p><p>Al hacer clic en él podrá saltar a la página de LOGU correspondiente a ese título con un solo clic.</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
+            "label": "Lista de cambio de color",
             "helpText": "<p>Para las clasificaciones de las partidas que utilizan el sistema Codeforces</p><p>Recoloree las puntuaciones según el rango de \"Puntuación/Total\"</p><p>Rango：1~0.7~0.45~0 Verde oscuro→Naranja claro→Naranja oscuro→Rojo</p>"
         }
     },
