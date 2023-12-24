@@ -17,7 +17,6 @@
                 "system": "Follow-up-System"
             }
         },
-        "localization": "Chinesische Sprachschnittstelle",
         "loadingInfo": {
             "label": "Anzeige einer Warnmeldung beim Laden",
             "helpText": "<p>Wenn Sie die Option Ladeinformationen anzeigen aktivieren, wird jedes Mal, wenn die Seite geladen wird, oben eine Ladeinformationsabfrage angezeigt：\"CodeforcesBetter -- xxx\"</p><p>Dies dient dazu, zu sehen, wie das Skript derzeit funktioniert<strong>Wenn Sie dies nicht sehen möchten, können Sie die Option Aus</strong></p><p><u>Wenn Sie Feedback zu Ladeproblemen mit dem Skript benötigen, schalten Sie diese Option bitte ein, bevor Sie einen Screenshot machen, damit das Problem analysiert werden kann</u></p>"
@@ -40,7 +39,7 @@
             "helpText": "<p>Einige der Codeforces-Titel sind in LOGU OJ enthalten, und für einige Titel gibt es Übersetzungen und Erklärungen</p><p>. Wenn das Display eingeschaltet ist und der aktuelle Titel enthalten ist, wird das LOGU-Logo in der oberen rechten Ecke des Titels angezeigt,</p><p>. Wenn Sie darauf klicken, können Sie mit einem Klick auf die entsprechende LOGU-Seite für diesen Titel springen.</strong></p>"
         },
         "recolor": {
-            "label": "Die Liste neu färben",
+            "label": "重新着色榜单",
             "helpText": "<p>Für die Rangliste der Spiele, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
         }
     },
