@@ -39,7 +39,7 @@
             "helpText": "<p>Alcuni titoli di Codeforces sono inclusi in LOGU OJ, e alcuni titoli hanno traduzioni e spiegazioni</p><p>Quando il display è acceso, se il titolo corrente è incluso, il logo LOGU sarà visualizzato nell'angolo superiore destro del titolo,</p><p>Facendo clic su di esso potrà saltare alla pagina LOGU corrispondente per quel titolo con un solo clic.</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
+            "label": "Elenco ricolora",
             "helpText": "<p>Per le classifiche delle partite che utilizzano il sistema Codeforces</p><p>Ricolori i punteggi in base all'intervallo \"Punteggio/Totale\"</p><p>Intervallo：1~0,7~0,45~0 Verde scuro→Arancio chiaro→Arancio scuro→Rosso</p>"
         }
     },
