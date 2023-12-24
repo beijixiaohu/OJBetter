@@ -38,6 +38,9 @@
 // @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
 // @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
 // @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
+// @require      https://cdn.staticfile.org/i18next/23.5.1/i18next.min.js
+// @require      https://cdn.staticfile.org/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
+// @require      https://cdn.staticfile.org/jquery-i18next/1.2.1/jquery-i18next.min.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-cn-beijing.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
@@ -64,7 +67,8 @@ var lastReadAnnounceVer = getGMValue("lastReadAnnounceVer", "0");
 var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProblemset, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
-var bottomZh_CN, showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
+var localizationLanguage, scriptL10nLanguage;
+var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
 var openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, opneaiConfig;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
@@ -93,7 +97,8 @@ function init() {
             })
             .get()
             .every(score => /^[0-9]+$/.test(score));
-    bottomZh_CN = getGMValue("bottomZh_CN", true);
+    localizationLanguage = getGMValue("localizationLanguage", "zh");
+    scriptL10nLanguage = getGMValue("scriptL10nLanguage", "zh");
     showLoading = getGMValue("showLoading", true);
     hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
     expandFoldingblocks = getGMValue("expandFoldingblocks", true);
@@ -189,37 +194,13 @@ function init() {
 // 公告
 async function showAnnounce() {
     if (lastReadAnnounceVer < GM_info.script.version) {
-        const title = "已更新至1.72"
+        const title = `🎉已更新至 ${GM_info.script.version}`
         const content = `
 #### 最近更新日志
 ---
-1.72
+1.73
 
-- 修复 ChatGPT 配置面板不显示的问题，感谢 @caoxuanming 的反馈
 
-- 添加一个配置开关 "鼠标滚动锁定" ，默认开启， 感谢 @liuhao6 的建议
----
-1.71
-
-- 更新 clist rating 的API为v4，调整题目页的数据获取方式为通过API获取，感谢 @wrkwrk 的建议
-
-- 添加 ChatGPT 翻译 “流式传输” 选项，默认开启
-
-- 修复 Google 翻译结果为空的问题 感谢 @shicxin 的反馈
-
-- 添加一个配置开关 "代码提交是否二次确认" ，默认开启 感谢 @Rikkual 的建议
-
-- 在完整题目集页中添加小区域的按钮
-
-- 修复完整题目集页右键打印时不显示翻译结果的问题 感谢 @zfs732 的反馈
-
-#### 作者有话说
-
-对于功能故障（比如接口问题），一旦收到反馈，作者会立即进行修复并将更改提交至 [Github仓库](https://github.com/beijixiaohu/OJBetter/commits/main/)
-
-然而，请注意，这些修复**不会**立即以更新的形式发布。因此，如果你发现了一个可能的功能故障，请先前往 Github 查看是否已经修复。
-
-除非遇到严重问题，否则作者倾向于不发布零星的更新，而是将修改积累起来，待到合适的时机一并发布。
 `;
         const ok = await createDialog(title, content, ["我知道了", null], undefined, true); //跳过折叠块确认
         if (ok) {
@@ -294,6 +275,18 @@ function initDB() {
         editorCode: `&url`,
         translateData: `&url`
     });
+}
+
+// 元素本地化
+function elementLocalize($element, retries = 10, interval = 50) {
+    if ($.isFunction($element.localize)) {
+        $element.localize();
+    } else if (retries > 0) {
+        console.log("try again");
+        setTimeout(elementLocalize, interval, $element, retries - 1, interval);
+    } else {
+        console.error('Unable to localize $element.');
+    }
 }
 
 // 切换系统黑暗监听
@@ -862,7 +855,7 @@ button.html2mdButton.CFBetter_setting.open {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 500px;
+    width: 600px;
     min-height: 600px;
     transform: translate(-50%, -50%);
     border-radius: 6px;
@@ -909,14 +902,14 @@ button.html2mdButton.CFBetter_setting.open {
     display: flex;
 }
 .CFBetter_setting_sidebar {
-    width: 110px;
+    flex: 0 0 auto;
+    min-width: 110px;
     padding: 6px 10px 6px 6px;
     margin: 20px 0px;
     border-right: 1px solid #d4d8e9;
 }
 .CFBetter_setting_content {
     flex-grow: 1;
-    width: 360px;
     margin: 20px 0px 0px 20px;
     padding-right: 10px;
     max-height: 580px;
@@ -2272,12 +2265,12 @@ function getExternalJSON(url) {
                     var json = JSON.parse(response.responseText);
                     resolve(json);
                 } else {
-                    console.warn(`网络错误, ${url}无法访问`);
+                    console.warn(`网络错误\n${url}\n无法访问`);
                     resolve({});
                 }
             },
             onerror: function (response) {
-                console.warn(`网络错误, ${url}无法访问`);
+                console.warn(`网络错误\n${url}\n无法访问`);
                 resolve({});
             }
         });
@@ -2420,17 +2413,23 @@ function checkScriptVersion() {
 
 };
 
-// 汉化替换
-async function toZH_CN() {
-    if (!bottomZh_CN) return;
-    // 设置语言为zh
-    var htmlTag = document.getElementsByTagName("html")[0];
-    htmlTag.setAttribute("lang", "zh-CN");
+// 本地化替换
+async function toLocalization() {
+    if (localizationLanguage === "initial") return;
 
-    // 获取汉化数据
+    // 语言对应的资源Url
+    var resourcesUrl = localizationLanguage === "zh" ?
+        "https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/subs/Codeforces-subs.json"
+        : `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
+
+    // 设置网页语言
+    var htmlTag = document.getElementsByTagName("html")[0];
+    htmlTag.setAttribute("lang", localizationLanguage);
+
+    // 获取替换数据
     var subs;
     try {
-        subs = await getExternalJSON("https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/subs/Codeforces-subs.json");
+        subs = await getExternalJSON(resourcesUrl);
     } catch (e) {
         console.error("JSON 解析错误:", e.message);
         const errorPosition = e.message.match(/position (\d+)/);
@@ -2600,6 +2599,30 @@ async function toZH_CN() {
             });
         })();
     }
+};
+
+// i18next初始化
+async function initI18next() {
+    i18next
+        .use(i18nextHttpBackend)
+        .init({
+            lng: scriptL10nLanguage,
+            ns: ['settings'], // 命名空间列表
+            fallbackLng: false,
+            load: 'all',
+            defaultNS: 'settings',
+            debug: false,
+            backend: {
+                loadPath: (lng, ns) => {
+                    if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
+                        return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                    }
+                    return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
+                }
+            }
+        }, function (err, t) {
+            jqueryI18next.init(i18next, $);
+        });
 };
 
 // 配置管理函数
@@ -2840,156 +2863,175 @@ function setupConfigManagement(element, prefix, tempConfig, structure, configHTM
 const CFBetter_setting_sidebar_HTML = `
 <div class="CFBetter_setting_sidebar">
     <ul>
-        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active">基本</a></li>
-        <li><a href="#translation-settings" id="sidebar-translation-settings">翻译</a></li>
-        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings">Clist</a></li>
-        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings">Monaco</a></li>
-        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings">兼容</a></li>
+        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="sidebar.basic"></a></li>
+        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="sidebar.localization"></a></li>
+        <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="sidebar.translation"></a></li>
+        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="sidebar.clist"></a></li>
+        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="sidebar.monaco"></a></li>
+        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings" data-i18n="sidebar.compatibility"></a></li>
     </ul>
 </div>
 `;
 
 const basic_settings_HTML = `
 <div id="basic-settings" class="settings-page active">
-    <h3>基本设置</h3>
+    <h3 data-i18n="basicSettings.title"></h3>
     <hr>
     <div class='CFBetter_setting_list' style="padding: 0px 10px;">
-        <span id="darkMode_span">黑暗模式</span>
+        <span id="darkMode_span" data-i18n="basicSettings.darkMode.name"></span>
         <div class="dark-mode-selection">
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="dark" />
-                <span class="CFBetter_setting_menu_label_text">黑暗</span>
+                <span class="CFBetter_setting_menu_label_text"
+                    data-i18n="basicSettings.darkMode.options.dark"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
-                <span class="CFBetter_setting_menu_label_text">白天</span>
+                <span class="CFBetter_setting_menu_label_text"
+                    data-i18n="basicSettings.darkMode.options.light"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="follow" />
-                <span class="CFBetter_setting_menu_label_text">跟随系统</span>
+                <span class="CFBetter_setting_menu_label_text"
+                    data-i18n="basicSettings.darkMode.options.system"></span>
                 <span class="radio-icon"> </span>
             </label>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="bottomZh_CN">界面汉化</label>
-        <input type="checkbox" id="bottomZh_CN" name="bottomZh_CN">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="showLoading">显示加载提示信息</label>
-    <div class="help_tip">
-        ${helpCircleHTML}
-        <div class="tip_text">
-        <p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“${OJBetterName} —— xxx”</p>
-        <p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p>
-        <p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>
+        <label for="showLoading" data-i18n="basicSettings.loadingInfo.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]basicSettings.loadingInfo.helpText"></div>
         </div>
-    </div>
-    <input type="checkbox" id="showLoading" name="showLoading">
+        <input type="checkbox" id="showLoading" name="showLoading">
     </div>
     <div class='CFBetter_setting_list'>
-    <label for="hoverTargetAreaDisplay">显示目标区域范围</label>
-    <div class="help_tip">
-        ${helpCircleHTML}
-        <div class="tip_text">
-        <p>开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围</p>
+        <label for="hoverTargetAreaDisplay" data-i18n="basicSettings.targetArea.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]basicSettings.targetArea.helpText"></div>
         </div>
-    </div>
-    <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+        <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="expandFoldingblocks">自动展开折叠块</label>
+        <label for="expandFoldingblocks" data-i18n="basicSettings.expandBlocks"></label>
         <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
     </div>
     <div class='CFBetter_setting_list'>
-    <label for="renderPerfOpt">折叠块渲染优化</label>
-    <div class="help_tip">
-        ${helpCircleHTML}
-        <div class="tip_text">
-        <p>为折叠块元素添加 contain 约束</p>
-        <div style="border: 1px solid #795548; padding: 10px;">
-            <p>
-            contain: layout style;
-            </p>
-        </div>
-        <p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>
-        </div>
-    </div>
-    <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-    </div>
-    <div class='CFBetter_setting_list'>
-    <label for="commentPaging">评论区分页</label>
-    <div class="help_tip">
-        ${helpCircleHTML}
-        <div class="tip_text">
-        <p>对评论区分页显示，每页显示指定数量的<strong>主楼</strong></p>
-        </div>
-    </div>
-    <input type="checkbox" id="commentPaging" name="commentPaging">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="showJumpToLuogu">显示跳转到洛谷</label>
+        <label for="renderPerfOpt" data-i18n="basicSettings.renderOptimization.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p>
-            <p>开启显示后，如果当前题目被收录，则会在题目的右上角显示洛谷标志，</p>
-            <p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>
-            </div>
+            <div class="tip_text" data-i18n="[html]basicSettings.renderOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="commentPaging" data-i18n="basicSettings.paging.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]basicSettings.paging.helpText"></div>
+        </div>
+        <input type="checkbox" id="commentPaging" name="commentPaging">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="showJumpToLuogu" data-i18n="basicSettings.luoguJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]basicSettings.luoguJump.helpText"></div>
         </div>
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="standingsRecolor">榜单重新着色</label>
+        <label for="standingsRecolor" data-i18n="basicSettings.recolor.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>对于采用 Codeforces 赛制的比赛榜单</p>
-            <p>按照“得分/总分”所在的范围为分数重新渐变着色</p>
-            <p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]basicSettings.recolor.helpText"></div>
         </div>
         <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
     </div>
 </div>
 `;
 
+const l10n_settings_HTML = `
+<div id="l10n_settings" class="settings-page">
+    <h3 data-i18n="localizationSettings.title"></h3>
+    <hr>
+    <div class='CFBetter_setting_list'>
+        <label for="scriptL10nLanguage" style="display: flex;" data-i18n="localizationSettings.scriptLanguageLabel"></label>
+        <select id="scriptL10nLanguage" name="scriptL10nLanguage">
+            <option value="zh">简体中文</option>
+            <option value="zh-Hant">繁體中文</option>
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="ko">한국어</option>
+            <option value="pt">Português</option>
+            <option value="ja">日本語</option>
+            <option value="es">Español</option>
+            <option value="it">Italiano</option>
+            <option value="hi">हिन्दी</option>
+        </select>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="localizationLanguage" style="display: flex;" data-i18n="localizationSettings.websiteLanguageLabel"></label>
+        <select id="localizationLanguage" name="localizationLanguage">
+            <option value="initial">不改变</option>
+            <option value="zh">简体中文</option>
+            <option value="zh-Hant">繁體中文</option>
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="ko">한국어</option>
+            <option value="pt">Português</option>
+            <option value="ja">日本語</option>
+            <option value="es">Español</option>
+            <option value="it">Italiano</option>
+            <option value="hi">हिन्दी</option>
+        </select>
+    </div>
+</div>
+`;
+
 const translation_settings_HTML = `
 <div id="translation-settings" class="settings-page">
-    <h3>翻译设置</h3>
+    <h3 data-i18n="translationSettings.title"></h3>
     <hr>
-    <h4>首选项</h4>
+    <h4 data-i18n="translationSettings.options.title"></h4>
     <label>
         <input type='radio' name='translation' value='deepl'>
-        <span class='CFBetter_setting_menu_label_text'>deepl翻译</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="translationSettings.options.translationServices.deepl"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='iflyrec'>
-        <span class='CFBetter_setting_menu_label_text'>讯飞听见翻译</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="translationSettings.options.translationServices.iflyrec"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='youdao'>
-        <span class='CFBetter_setting_menu_label_text'>有道翻译</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="translationSettings.options.translationServices.youdao"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='google'>
-        <span class='CFBetter_setting_menu_label_text'>Google翻译</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="translationSettings.options.translationServices.google"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='caiyun'>
-        <span class='CFBetter_setting_menu_label_text'>彩云小译翻译</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="translationSettings.options.translationServices.caiyun"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='openai'>
-        <span class='CFBetter_setting_menu_label_text'>ChatGPT翻译
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="translationSettings.options.translationServices.openai.name">
             <div class="help_tip">
                 ${helpCircleHTML}
-                <div class="tip_text">
-                <p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p>
-                <p>具体请阅读脚本页的介绍</p>
-                </div>
+                <div class="tip_text"
+                    data-i18n="[html]translationSettings.options.translationServices.openai.helpText"></div>
             </div>
         </span>
     </label>
@@ -2999,170 +3041,133 @@ const translation_settings_HTML = `
         <div id="chatgpt-config"></div>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="openai_isStream">流式传输</label>
+        <label for="openai_isStream" data-i18n="translationSettings.chatgpt.isStream.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>启用数据流式传输，打字机效果</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.chatgpt.isStream.helpText"></div>
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
     <hr>
-    <h4>偏好</h4>
+    <h4 data-i18n="translationSettings.preference.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="comment_translation_choice" style="display: flex;">评论区翻译</label>
+        <label for="comment_translation_choice" style="display: flex;"
+            data-i18n="translationSettings.preference.comment_translation_choice"></label>
         <select id="comment_translation_choice" name="comment_translation_choice">
-            <option value="0">跟随首选项</option>
-            <option value="deepl">deepl翻译</option>
-            <option value="iflyrec">讯飞听见翻译</option>
-            <option value="youdao">有道翻译</option>
-            <option value="google">Google翻译</option>
-            <option value="caiyun">彩云小译翻译</option>
-            <option value="openai">ChatGPT翻译</option>
+            <option value="0" data-i18n="translationSettings.preference.translationServices.follow"></option>
+            <option value="deepl" data-i18n="translationSettings.preference.translationServices.deepl"></option>
+            <option value="iflyrec" data-i18n="translationSettings.preference.translationServices.iflyrec"></option>
+            <option value="youdao" data-i18n="translationSettings.preference.translationServices.youdao"></option>
+            <option value="google" data-i18n="translationSettings.preference.translationServices.google"></option>
+            <option value="caiyun" data-i18n="translationSettings.preference.translationServices.caiyun"></option>
+            <option value="openai" data-i18n="translationSettings.preference.translationServices.openai"></option>
         </select>
     </div>
     <hr>
-    <h4>自动翻译</h4>
+    <h4 data-i18n="translationSettings.autoTranslation.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="autoTranslation">自动翻译短文本</label>
+        <label for="autoTranslation" data-i18n="translationSettings.autoTranslation.enable"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p>
-            <p>当其进入浏览器窗口的 可视区域 时自动翻译</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.autoTranslation.helpText"></div>
         </div>
         <input type="checkbox" id="autoTranslation" name="autoTranslation">
     </div>
     <div class='CFBetter_setting_list'>
         <label for='shortTextLength'>
-            <div style="display: flex;align-items: center;">
-                <span>短文本最大字符数</span>
-            </div>
+            <div style="display: flex;align-items: center;"
+                data-i18n="translationSettings.autoTranslation.shortTextLength.name"></div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-                <p>指定判断为短文本的最大字符上限，如果超过最大字符数，则为非短文本</p>
+            <div class="tip_text" data-i18n="[html]translationSettings.autoTranslation.shortTextLength.helpText">
             </div>
         </div>
-        <input type='number' id='shortTextLength' class='no_default' placeholder='请输入' require = true>
-        <span>字符</span>
+        <input type='number' id='shortTextLength' class='no_default' placeholder='请输入' require=true>
+        <span data-i18n="translationSettings.autoTranslation.shortTextLength.end"></span>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="allowMixTrans">评论区快速翻译</label>
+        <label for="allowMixTrans" data-i18n="translationSettings.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p>
-            <p>并行地进行快速翻译</p>
+            <div class="tip_text" data-i18n="[html]translationSettings.autoTranslation.allowMixTrans.helpText">
             </div>
         </div>
         <input type="checkbox" id="allowMixTrans" name="allowMixTrans">
         <div class='CFBetter_checkboxs'>
             <input type="checkbox" id="deepl" name="mixedTranslation" value="deepl">
-            <label for="deepl">DeepL</label>
+            <label for="deepl" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.deepl"></label>
             <input type="checkbox" id="iflyrec" name="mixedTranslation" value="iflyrec">
-            <label for="iflyrec">讯飞</label>
+            <label for="iflyrec" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.iflyrec"></label>
             <input type="checkbox" id="youdao" name="mixedTranslation" value="youdao">
-            <label for="youdao">有道</label>
+            <label for="youdao" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.youdao"></label>
             <input type="checkbox" id="google" name="mixedTranslation" value="google">
-            <label for="google">Google</label>
+            <label for="google" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
-            <label for="caiyun">彩云</label>
+            <label for="caiyun" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
         </div>
     </div>
     <hr>
-    <h4>高级</h4>
+    <h4 data-i18n="translationSettings.advanced.name"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="comment_translation_mode" style="display: flex;">工作模式</label>
+        <label for="comment_translation_mode" style="display: flex;" data-i18n="translationSettings.advanced.mode.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>你可以选择脚本的工作方式</p>
-            <p>○ 普通模式：会一次性翻译整个区域的内容</p>
-            <p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p>
-            <p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p>
-                <div style="color:#f44336;">
-                    <p><u>注意：分段/选段模式会产生如下问题：</u></p>
-                    <p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p>
-                    <p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p>
-                </div>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.advanced.mode.helpText"></div>
         </div>
         <select id="comment_translation_mode" name="comment_translation_mode">
-            <option value="0">普通模式</option>
-            <option value="1">分段模式</option>
-            <option value="2">选段模式</option>
+            <option value="0" data-i18n="translationSettings.advanced.mode.options.0"></option>
+            <option value="1" data-i18n="translationSettings.advanced.mode.options.1"></option>
+            <option value="2" data-i18n="translationSettings.advanced.mode.options.2"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="memoryTranslateHistory">自动恢复历史翻译</label>
+        <label for="memoryTranslateHistory" data-i18n="translationSettings.advanced.memory.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p>
-            <p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.advanced.memory.helpText"></div>
         </div>
         <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="translation_retransAction" style="display: flex;">重新翻译时</label>
+        <label for="translation_retransAction" style="display: flex;" data-i18n="translationSettings.advanced.retrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>选择在重新翻译时是"关闭旧的结果"还是"收起旧的结果"</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.advanced.retrans.helpText"></div>
         </div>
         <select id="translation_retransAction" name="translation_retransAction">
-            <option value=0>关闭旧的结果</option>
-            <option value=1>收起旧的结果</option>
+            <option value=0 data-i18n="translationSettings.advanced.retrans.options.0"></option>
+            <option value=1 data-i18n="translationSettings.advanced.retrans.options.1"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='transWaitTime'>
-            <div style="display: flex;align-items: center;">
-                <span>等待间隔</span>
-            </div>
+            <div style="display: flex;align-items: center;" data-i18n="translationSettings.advanced.transWaitTime.name"></div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-                <p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p>
-                <p>建议 200 + 毫秒</p>
-                <p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.advanced.transWaitTime.helpText"></div>
         </div>
-        <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require = true>
-        <span>毫秒</span>
+        <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require=true>
+        <span data-i18n="translationSettings.advanced.transWaitTime.end"></span>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="translation_replaceSymbol" style="display: flex;">LaTeX替换符</label>
+        <label for="translation_replaceSymbol" style="display: flex;" data-i18n="translationSettings.advanced.replaceSymbol.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p>
-            <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p>
-            <p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>
-            <p>具体你可以前往阅读脚本页的说明</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.advanced.replaceSymbol.helpText"></div>
         </div>
         <select id="translation_replaceSymbol" name="translation_replaceSymbol">
-            <option value=2>使用{}</option>
-            <option value=1>使用【】</option>
-            <option value=3>使用[]</option>
+            <option value=2 data-i18n="translationSettings.advanced.replaceSymbol.options.2"></option>
+            <option value=1 data-i18n="translationSettings.advanced.replaceSymbol.options.1"></option>
+            <option value=3 data-i18n="translationSettings.advanced.replaceSymbol.options.3"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="filterTextWithoutEmphasis">过滤文本中的**号</label>
+        <label for="filterTextWithoutEmphasis" data-i18n="translationSettings.advanced.filterTextWithoutEmphasis.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p>
-            <p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用ChatGPT会忽略该项) </p>
-            </div>
+            <div class="tip_text" data-i18n="[html]translationSettings.advanced.filterTextWithoutEmphasis.helpText"></div>
         </div>
         <input type="checkbox" id="filterTextWithoutEmphasis" name="filterTextWithoutEmphasis">
     </div>
@@ -3171,77 +3176,64 @@ const translation_settings_HTML = `
 
 const clist_rating_settings_HTML = `
 <div id="clist_rating-settings" class="settings-page">
-    <h3>Clist设置</h3>
+    <h3 data-i18n="clistSettings.title"></h3>
     <hr>
-    <h4>基本</h4>
+    <h4 data-i18n="clistSettings.basics.name"></h4>
     <div class='CFBetter_setting_list alert_tip'>
         <div>
-            <p>注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明</p>
+            <p data-i18n="clistSettings.basics.notice"></p>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='clist_Authorization'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">KEY:</span>
+                <span class="input_label" data-i18n="clistSettings.basics.key.title"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-                <p>格式样例：</p>
-                <div style="border: 1px solid #795548; padding: 10px;">
-                    <p>ApiKey XXXXXXXXX</p>
-                </div>
-            </div>
+            <div class="tip_text" data-i18n="[html]clistSettings.basics.key.helpText"></div>
         </div>
-        <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' require = true>
+        <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' required="true"
+            data-i18n="[placeholder]clistSettings.basics.key.keyPlaceholder">
     </div>
     <hr>
-    <h4>显示Rating分</h4>
+    <h4 data-i18n="clistSettings.displayRating.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_contest"><span>比赛问题集页</span></label>
+        <label for="showClistRating_contest"><span data-i18n="clistSettings.displayRating.contest.name"></span></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>数据来源clist.by</p>
-            <p>你需要提供官方的api key</p>
-            <p>或让你的浏览器上的clist.by处于登录状态（即cookie有效）</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]clistSettings.displayRating.contest.helpText"></div>
         </div>
-        <div class="badge">Cookie/API KEY</div>
+        <div class="badge" data-i18n="clistSettings.displayRating.contest.badge"></div>
         <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_problem"><span>题目页</span></label>
+        <label for="showClistRating_problem"><span data-i18n="clistSettings.displayRating.problem.name"></span></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>你需要提供官方的api key</p>
-            <p>或让你的浏览器上的clist.by处于登录状态（即cookie有效）</p>
+            <div class="tip_text" data-i18n="[html]clistSettings.displayRating.problem.helpText">
+                >
             </div>
         </div>
-        <div class="badge">Cookie/API KEY</div>
+        <div class="badge" data-i18n="clistSettings.displayRating.contest.badge"></div>
         <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_problemset"><span>题单页</span></label>
+        <label for="showClistRating_problemset"><span data-i18n="clistSettings.displayRating.problemset.name"></span></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>需要让你的浏览器上的clist.by处于登录状态（即cookie有效）才能正常工作</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]clistSettings.displayRating.problemset.helpText"></div>
         </div>
-        <div class="badge">Cookie</div>
+        <div class="badge" data-i18n="clistSettings.displayRating.problemset.badge"></div>
         <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
     </div>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="RatingHidden"><span>防剧透</span></label>
+        <label for="RatingHidden"><span data-i18n="clistSettings.spoilerProtection.title"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>只有当鼠标移动到Rating分展示区域上时才显示</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]clistSettings.spoilerProtection.helpText"></div>
         </div>
         <input type="checkbox" id="RatingHidden" name="RatingHidden">
     </div>
@@ -3250,124 +3242,112 @@ const clist_rating_settings_HTML = `
 
 const code_editor_settings_HTML = `
 <div id="code_editor-settings" class="settings-page">
-    <h3>Monaco编辑器设置</h3>
+    <h3 data-i18n="codeEditorSettings.title"></h3>
     <hr>
-    <h4>基本</h4>
+    <h4 data-i18n="codeEditorSettings.basics"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="problemPageCodeEditor"><span>题目页添加编辑器</span></label>
+        <label for="problemPageCodeEditor"><span
+                data-i18n="codeEditorSettings.problemPageCodeEditor.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>在题目页下面添加Monaco编辑器，代码会自动保存，提供在线代码运行</p>
-            </div>
+            <div class="tip_text" data-i18n="codeEditorSettings.problemPageCodeEditor.helpText"></div>
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
-    <h4>偏好</h4>
+    <h4 data-i18n="codeEditorSettings.preferences.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="isCodeSubmitConfirm"><span>代码提交二次确认</span></label>
+        <label for="isCodeSubmitConfirm"><span
+                data-i18n="codeEditorSettings.preferences.isCodeSubmitConfirm.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>点击题目页Monaco编辑器的代码提交时会弹窗二次确认，防止误提交</p>
-            </div>
+            <div class="tip_text" data-i18n="codeEditorSettings.preferences.isCodeSubmitConfirm.helpText"></div>
         </div>
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="alwaysConsumeMouseWheel"><span>鼠标滚动锁定</span></label>
+        <label for="alwaysConsumeMouseWheel"><span
+                data-i18n="codeEditorSettings.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>开启后，当鼠标指针在monaco编辑器内部时，鼠标滚动将只会滚动编辑器内的内容</p>
-            </div>
+            <div class="tip_text" data-i18n="codeEditorSettings.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
     </div>
     <hr>
-    <h4>在线代码运行</h4>
+    <h4 data-i18n="codeEditorSettings.onlineCodeExecution.title"></h4>
     <label>
         <input type='radio' name='compiler' value='official'>
-        <span class='CFBetter_setting_menu_label_text'>Codeforces</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="codeEditorSettings.onlineCodeExecution.compilerOptions.codeforces"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='wandbox'>
-        <span class='CFBetter_setting_menu_label_text'>wandbox</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="codeEditorSettings.onlineCodeExecution.compilerOptions.wandbox"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='rextester'>
-        <span class='CFBetter_setting_menu_label_text'>rextester</span>
+        <span class='CFBetter_setting_menu_label_text'
+            data-i18n="codeEditorSettings.onlineCodeExecution.compilerOptions.rextester"></span>
     </label>
     <hr>
-    <h4>LSP设置</h4>
+    <h4 data-i18n="codeEditorSettings.lspSettings.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="useLSP"><span>使用LSP</span></label>
+        <label for="useLSP"><span data-i18n="codeEditorSettings.lspSettings.useLSP.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p>
-            <p>支持C++、Python语言</p>
-            <p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>
-            </div>
+            <div class="tip_text" data-i18n="[html]codeEditorSettings.lspSettings.useLSP.helpText"></div>
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
     </div>
     <div class='CFBetter_setting_list'>
         <label for='OJBetter_Bridge_WorkUri'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">工作路径:</span>
+                <span class="input_label" data-i18n="codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.label"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-                <p>你需要填写 OJBetter_Bridge 所在的路径：</p>
-                <p>使用正斜杠或反斜杠均可</p>
-                <p>默认路径：</p>
-                <div style="border: 1px solid #795548; padding: 10px;">
-                    <p>C:/OJBetter_Bridge</p>
-                </div>
+            <div class="tip_text" data-i18n="[html]codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.helpText">
+                
             </div>
         </div>
-        <input type='text' id='OJBetter_Bridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/' require = true>
+        <input type='text' id='OJBetter_Bridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/'
+            require=true>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='OJBetter_Bridge_SocketUrl'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">Server:</span>
+                <span class="input_label"
+                    data-i18n="codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.label"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-                <p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p>
-                <p>默认的URL: </p>
-                <div style="border: 1px solid #795548; padding: 10px;">
-                    <p>ws://127.0.0.1:2323/</p>
-                </div>
-                <p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>
+            <div class="tip_text" data-i18n="[html]codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.helpText">
+                
             </div>
         </div>
-        <input type='text' id='OJBetter_Bridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写' require = true>
+        <input type='text' id='OJBetter_Bridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写'
+            require=true>
     </div>
     <hr>
-    <h4>静态补全增强</h4>
+    <h4 data-i18n="codeEditorSettings.staticCompletionEnhancement.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="cppCodeTemplateComplete"><span>AcWing CPP 补全模板</span></label>
+        <label for="cppCodeTemplateComplete"><span
+                data-i18n="codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>模板来自<a href="https://www.acwing.com/file_system/file/content/whole/index/content/2145234/" target="_blank">AcWing</a></p>
-            </div>
+            <div class="tip_text" data-i18n="[html]codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.helpText"></div>
         </div>
         <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
     </div>
     <hr>
-    <h5>自定义</h5>
+    <h5 data-i18n="codeEditorSettings.staticCompletionEnhancement.customization"></h5>
     <div class='CFBetter_setting_list alert_warn'>
         <div>
-            <p>注意：过多的静态补全规则会影响性能</p>
+            <p data-i18n="codeEditorSettings.staticCompletionEnhancement.performanceWarning"></p>
         </div>
     </div>
     <div class='CFBetter_setting_menu_config_box' id='Complets'>
@@ -3378,20 +3358,13 @@ const code_editor_settings_HTML = `
 
 const compatibility_settings_HTML = `
 <div id="compatibility-settings" class="settings-page">
-    <h3>兼容设置</h3>
+    <h3 data-i18n="compatibilitySettings.title"></h3>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="loaded"><span id="loaded_span">不等待页面资源加载</span></label>
+        <label for="loaded"><span data-i18n="compatibilitySettings.loaded.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text">
-            <p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p>
-            <p>如果你的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p>
-            <p><u>你首先应该确认是否是网络问题，</u></p>
-            <p>如果不是，那这可能是由于 window.onload 事件在你的浏览器中触发过早（早于DOMContentLoaded），</p>
-            <p>你可以尝试开启该选项来不再等待 window.onload 事件</p>
-            <p><u>注意：如果没有上述问题，请不要开启该选项</u></p>
-            </div>
+            <div class="tip_text" data-i18n="[html]compatibilitySettings.loaded.helpText"></div>
         </div>
         <input type="checkbox" id="loaded" name="loaded">
     </div>
@@ -3401,6 +3374,7 @@ const compatibility_settings_HTML = `
 const CFBetter_setting_content_HTML = `
 <div class="CFBetter_setting_content">
     ${basic_settings_HTML}
+    ${l10n_settings_HTML}
     ${translation_settings_HTML}
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
@@ -3409,12 +3383,13 @@ const CFBetter_setting_content_HTML = `
 `;
 const CFBetterSettingMenu_HTML = `
     <div class='CFBetter_setting_menu' id='CFBetter_setting_menu'>
-    <div class="tool-box">
-        <button class="btn-close">×</button>
-    </div>
-    <div class="CFBetter_setting_container">
-        ${CFBetter_setting_sidebar_HTML}
-        ${CFBetter_setting_content_HTML}
+        <div class="tool-box">
+            <button class="btn-close">×</button>
+        </div>
+        <div class="CFBetter_setting_container">
+            ${CFBetter_setting_sidebar_HTML}
+            ${CFBetter_setting_content_HTML}
+        </div>
     </div>
 `;
 
@@ -3591,6 +3566,8 @@ async function settingPanel() {
         $settingBtns.prop("disabled", true).addClass("open");
         $("body").append(CFBetterSettingMenu_HTML);
 
+        elementLocalize($("body"));
+
         // 窗口初始化
         addDraggable($('#CFBetter_setting_menu'));
 
@@ -3645,7 +3622,6 @@ async function settingPanel() {
         tempConfig_Complet = setupConfigManagement('#Complet_config', 'complet_config_', tempConfig_Complet, CompletStructure, CompletConfigEditHTML, Completcheckable);
 
         // 状态更新
-        $("#bottomZh_CN").prop("checked", GM_getValue("bottomZh_CN") === true);
         $("input[name='darkMode'][value='" + darkMode + "']").prop("checked", true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
@@ -3659,6 +3635,8 @@ async function settingPanel() {
         $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
         $("#showClistRating_problem").prop("checked", GM_getValue("showClistRating_problem") === true);
         $("#RatingHidden").prop("checked", GM_getValue("RatingHidden") === true);
+        $('#scriptL10nLanguage').val(GM_getValue("scriptL10nLanguage"));
+        $('#localizationLanguage').val(GM_getValue("localizationLanguage"));
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
         if (translation == "openai") {
@@ -3705,7 +3683,6 @@ async function settingPanel() {
         $settingMenu.on("click", ".btn-close", async () => {
             // 设置的数据
             const settings = {
-                bottomZh_CN: $("#bottomZh_CN").prop("checked"),
                 darkMode: $("input[name='darkMode']:checked").val(),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
@@ -3715,6 +3692,8 @@ async function settingPanel() {
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 loaded: $("#loaded").prop("checked"),
+                scriptL10nLanguage: $('#scriptL10nLanguage').val(),
+                localizationLanguage: $('#localizationLanguage').val(),
                 translation: $("input[name='translation']:checked").val(),
                 openai_isStream: $("#openai_isStream").prop("checked"),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
@@ -8949,13 +8928,14 @@ document.addEventListener("DOMContentLoaded", function () {
     checkJQuery(50);
     function executeFunctions() {
         init();
+        initI18next();
         showAnnounce();
         alertZh();
         darkModeStyleAdjustment();
         ShowAlertMessage();
         settingPanel();
         checkScriptVersion();
-        toZH_CN();
+        toLocalization();
         var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
             .html(`${OJBetterName} —— 正在等待页面资源加载……`)
             .css({
@@ -9072,8 +9052,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// 配置自动迁移代码（将在10个小版本后移除-1.71）
-if (GM_getValue("darkMode") === true || GM_getValue("darkMode") === false) {
-    GM_setValue("darkMode", "follow");
-    location.reload();
+// 配置自动迁移代码（将在10个小版本后移除-1.83）
+{
+    let bottomZh_CN = GM_getValue("bottomZh_CN");
+    if (bottomZh_CN !== undefined) {
+        if (bottomZh_CN == true) {
+            GM_setValue("localizationLanguage", "zh");
+        } else {
+            GM_setValue("localizationLanguage", "initial");
+        }
+        GM_deleteValue("bottomZh_CN");
+        location.reload();
+    }
 }
