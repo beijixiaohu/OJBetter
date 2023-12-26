@@ -1,0 +1,18 @@
+{
+    "waiteResources": "पृष्ठ संसाधनों के लोड होने की प्रतीक्षा……",
+    "waiteLatex": "LaTeX रेंडरिंग कतार के……पूरा होने की प्रतीक्षा की जा रही है",
+    "linkDB": "डेटाबेस से कनेक्ट करना……",
+    "expandFoldingblocks": "ढहे हुए ब्लॉक का विस्तार……",
+    "commentPaging": "टिप्पणियों को पेज……में अलग करना",
+    "acmsguruRebuild": "acmsguru प्रश्न सतह के लिए div……को पुनः विभाजित करना",
+    "initTranslateButtonFunc": "अनुवाद बटन फ़ंक्शन प्रारंभ करना……",
+    "addConversionButton": "लोड हो रहा है बटन……",
+    "multiChoiceTranslation": "अंश अनुवाद लोड हो रहा है……",
+    "RenderPerfOpt": "संक्षिप्त ब्लॉक रेंडरिंग प्रदर्शन को अनुकूलित करना……",
+    "initTransResultsRecover": "अंतिम अनुवाद परिणाम……पुनर्स्थापित करना",
+    "initTransWhenViewable": "लघु पाठ स्वचालित अनुवाद प्रारंभ करना……",
+    "recolorStandings": "पुनःरंग सूची……",
+    "addProblemPageCodeEditor": "शीर्षक पृष्ठ……पर कोड संपादक जोड़ा जा रहा है",
+    "showRatingByClist": "क्लिस्ट रेटिंग डेटा लोड हो रहा है……",
+    "loadSuccess": "लोडिंग पूरी हो गई"
+}
