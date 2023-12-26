@@ -1,37 +1,37 @@
 {
     "common": {
-        "title": "配置",
+        "title": "विन्यास",
         "basic": {
-            "title": "基本",
+            "title": "बुनियादी",
             "name": {
-                "label": "名称:",
-                "placeholder": "请为该配置取一个名称"
+                "label": "नाम:",
+                "placeholder": "कृपया इस कॉन्फ़िगरेशन को एक नाम दें"
             },
             "model": {
-                "label": "模型:",
-                "tipText": "<p>留空则默认为：gpt-3.5-turbo</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
+                "label": "नमूना:",
+                "tipText": "यदि <p>को खाली छोड़ दिया जाता है, तो यह डिफ़ॉल्ट रूप से：gpt-3.5-टर्बो</p><p>मॉडल सूची के लिए, कृपया<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI आधिकारिक दस्तावेज</a></p><p><strong>देखें। इसके अलावा, यदि आप सेवा प्रदाता द्वारा प्रदान की गई प्रॉक्सी एपीआई का उपयोग कर रहे हैं, तो कृपया पुष्टि करें कि सेवा प्रदाता संबंधित मॉडल</strong>का समर्थन करता है या</p>"
             },
             "key": {
-                "label": "KEY:",
-                "placeholder": "请输入KEY",
-                "tipText": "<p>你需要输入自己的OpenAI key，<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">官网</a></p><p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>"
+                "label": "चाबी:",
+                "placeholder": "कृपया कुंजी दर्ज करें",
+                "tipText": "<p>अपनी स्वयं की OpenAI कुंजी दर्ज करनी होगी,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">वेबसाइट</a></p><p><b>यदि आप सेवा प्रदाता द्वारा प्रदान की गई प्रॉक्सी एपीआई का उपयोग कर रहे हैं, तो आपको सेवा प्रदाता द्वारा प्रदान की गई कुंजी</b></p>भरनी चाहिए"
             },
             "proxy": {
-                "label": "Proxy API:",
-                "tipText": "<p>留空则默认为OpenAI官方API</p><p>你也可以填写指定的API来代理访问OpenAI的API，</p><p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p><p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>"
+                "label": "प्रॉक्सी एपीआई:",
+                "tipText": "यदि <p>को खाली छोड़ दिया जाता है, तो यह ओपनएआई आधिकारिक एपीआई के लिए डिफ़ॉल्ट है।</p><p>आप ओपनएआई के एपीआई तक प्रॉक्सी पहुंच के लिए निर्दिष्ट एपीआई भी भर सकते हैं।</p><p>यदि आप सेवा प्रदाता द्वारा प्रदान की गई प्रॉक्सी एपीआई और कुंजी का उपयोग कर रहे हैं, तो आपको ऐसा करना चाहिए यहां इसके द्वारा दिए गए<strong>पूर्ण विवरण भरें।</strong>एपीआई पता, विवरण के लिए कृपया स्क्रिप्ट विवरण पढ़ें</p><p><strong>चूंकि आपने एक कस्टम एपीआई निर्दिष्ट किया है, टैम्परमॉन्की आपको क्रॉस-डोमेन अनुरोधों के बारे में चेतावनी देगा, और आपको खुद को अधिकृत करने की आवश्यकता है</strong></p>"
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "विकसित",
             "header": {
-                "label": "自定义header",
-                "placeholder": "（选填）你可以在这里填写向请求header中额外添加的键值对",
-                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+                "label": "कस्टम हेडर",
+                "placeholder": "(वैकल्पिक) आप यहां अनुरोध शीर्षलेख में जोड़ने के लिए अतिरिक्त कुंजी-मूल्य जोड़े भर सकते हैं।",
+                "tipText": "<p>प्रारूप उदाहरण：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>नाम1 : 123<br>नाम2 : सीसीसीसी</p></div>"
             },
             "data": {
-                "label": "自定义data",
-                "placeholder": "（选填）你可以在这里填写向请求data中额外添加的键值对",
-                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+                "label": "कस्टम डेटा",
+                "placeholder": "(वैकल्पिक) आप यहां अनुरोध डेटा में जोड़ने के लिए अतिरिक्त कुंजी-मूल्य जोड़े भर सकते हैं।",
+                "tipText": "<p>प्रारूप उदाहरण：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>नाम1 : 123<br>नाम2 : सीसीसीसी</p></div>"
             }
         }
     }
