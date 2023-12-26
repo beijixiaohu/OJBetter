@@ -1,37 +1,37 @@
 {
     "common": {
-        "title": "配置",
+        "title": "configurare",
         "basic": {
             "title": "fondamentale",
             "name": {
-                "label": "名称:",
-                "placeholder": "请为该配置取一个名称"
+                "label": "Nome.",
+                "placeholder": "Assegni un nome a questa configurazione"
             },
             "model": {
-                "label": "模型:",
-                "tipText": "<p>留空则默认为：gpt-3.5-turbo</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
+                "label": "Modelli.",
+                "tipText": "<p>Lasciare vuoto per impostare l'impostazione predefinita su：gpt-3.5-turbo</p><p>Per un elenco di modelli, consulti la documentazione ufficiale di OpenAI<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\"></a></p><p><strong>Inoltre, se sta utilizzando l'API proxy fornita dal fornitore di servizi, verifichi se il fornitore di servizi supporta il modello corrispondente</strong></p>"
             },
             "key": {
-                "label": "KEY:",
-                "placeholder": "请输入KEY",
-                "tipText": "<p>你需要输入自己的OpenAI key，<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">官网</a></p><p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>"
+                "label": "CHIAVE.",
+                "placeholder": "Inserisca la CHIAVE",
+                "tipText": "<p>Deve inserire la sua chiave OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">sito ufficiale</a></p><p><b>Se sta utilizzando l'API proxy fornita dal fornitore di servizi, deve inserire la chiave fornita dal fornitore di servizi</b></p>"
             },
             "proxy": {
-                "label": "Proxy API:",
-                "tipText": "<p>留空则默认为OpenAI官方API</p><p>你也可以填写指定的API来代理访问OpenAI的API，</p><p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p><p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>"
+                "label": "API proxy.",
+                "tipText": "<p>Lasciarlo vuoto per utilizzare di default l'API ufficiale di OpenAI</p><p>Può anche inserire l'API specificata per delegare l'accesso all'API di OpenAI</p><p>Se sta utilizzando un'API proxy e una KEY fornita dal suo fornitore di servizi, deve inserire l'indirizzo<strong>completo dell'API</strong>fornita dal suo fornitore di servizi; legga le istruzioni dello script per maggiori dettagli</p><p><strong>Poiché sta specificando un'API personalizzata, Tampermonkey la avvertirà delle richieste cross-domain. Deve autorizzarle lei stesso</strong></p>"
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "livello alto",
             "header": {
-                "label": "自定义header",
-                "placeholder": "（选填）你可以在这里填写向请求header中额外添加的键值对",
-                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+                "label": "Intestazione personalizzata",
+                "placeholder": "(Facoltativo) Qui può inserire altre coppie chiave-valore da aggiungere all'intestazione della richiesta.",
+                "tipText": "<p>Formato di esempio：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nome1 : 123<br>nome2 : cccc</p></div>"
             },
             "data": {
-                "label": "自定义data",
-                "placeholder": "（选填）你可以在这里填写向请求data中额外添加的键值对",
-                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+                "label": "Dati personalizzati",
+                "placeholder": "(Opzionale) Qui può inserire altre coppie chiave-valore da aggiungere ai dati della richiesta.",
+                "tipText": "<p>Formato di esempio：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nome1 : 123<br>nome2 : cccc</p></div>"
             }
         }
     }
