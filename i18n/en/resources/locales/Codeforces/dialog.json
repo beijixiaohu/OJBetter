@@ -1,41 +1,41 @@
 {
     "saveSetting": {
-        "title": "配置已更改，是否保存？",
+        "title": "The configuration has been changed, do you want to save?",
         "content": "",
         "buttons": [
-            "不保存",
-            "保存"
+            "Do not save",
+            "Save"
         ]
     },
     "announce": {
-        "title": "已更新至",
-        "content": "#### \n\n最近更新日志\n\n---1.73\n\n",
+        "title": "Updated to",
+        "content": "### \n\nRecently Updated Log\n\n---1.73\n\n",
         "buttons": [
-            "我知道了"
+            "I know"
         ]
     },
     "skipFold": {
-        "title": "是否跳过折叠块？",
-        "content": "即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在你需要选择是否跳过这些折叠块：\n\n如果其中有你需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译\n\n要跳过折叠块吗？（建议选择跳过）",
+        "title": "Skip folder?",
+        "content": "The upcoming translation area contains folded blocks. Collapses may be code and do not usually need to be translated. Now you need to choose whether to skip these folded blocks：\n\nif they contain folded blocks you need to translate, then click the translation button in these folded blocks to proceed with the\n\ntranslation blocks? (selection is recommended)",
         "buttons": [
-            "否",
-            "跳过"
+            "No",
+            "Skip"
         ]
     },
     "transTextLimits": {
-        "title": "字符数超限! ",
-        "content": "即将翻译的内容共 **{{realTextLength}}** 字符\n\n这超出了当前翻译服务的 **{{textLength}}** 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”\n\n注意，可能你选择了错误的翻译按钮\n\n由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮\n\n你确定要继续翻译吗？",
+        "title": "The number of characters is out of limit! ",
+        "content": "The content to be translated has a total of **{{realTextLength}}** characters\n\nThis exceeds the **{{textLength}}** character limit of the current translation service, please change the translation service or turn on \"Segmented Translation\" in the Settings panel\n\nNote that you may have selected the wrong translation button\n\nDue to the way it is implemented, there will be multiple translation buttons in the area, so please click on the translation button in the smaller sub area button\n\nAre you sure you want to continue translating?",
         "buttons": [
-            "仍要翻译",
-            "取消"
+            "Still to translate",
+            "Cancel"
         ]
     },
     "submitCode": {
-        "title": "确认提交代码吗",
+        "title": "Confirm submission code?",
         "content": "",
         "buttons": [
-            "取消",
-            "提交"
+            "Cancel",
+            "Commit"
         ]
     }
 }
