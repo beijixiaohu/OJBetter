@@ -1,24 +1,24 @@
 {
     "common": {
-        "title": "自定义补全",
+        "title": "कस्टम पूर्णता",
         "name": {
-            "label": "备注:",
-            "placeholder": "请为该自定义配置取一个备注名"
+            "label": "टिप्पणी:",
+            "placeholder": "कृपया इस कस्टम कॉन्फ़िगरेशन को एक टिप्पणी नाम दें"
         },
         "choose": {
-            "label": "启用？"
+            "label": "सक्षम करना?"
         },
         "genre": {
-            "label": "模板格式",
-            "tipText": "<p>monaco 格式支持 monaco 中 <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> 几乎所有的属性, (注意: 不需要range属性, 脚本会自动计算并添加该属性)</p><p>ace 格式仅支持 ace 中 completers 有限的属性: <code>caption</code>、<code>value</code>, 脚本会自动将其转换为 monaco 格式</p><p>具体你可以前往阅读脚本页的说明</p>"
+            "label": "टेम्पलेट प्रारूप",
+            "tipText": "<p>मोनाको प्रारूप मोनाको में <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">कंप्लीशनआइटम</a> की लगभग सभी विशेषताओं का समर्थन करता है, (ध्यान दें: रेंज विशेषता की आवश्यकता नहीं है, स्क्रिप्ट स्वचालित रूप से गणना करेगी और इस विशेषता को जोड़ेगी)</p><p>ऐस प्रारूप केवल ऐस में पूर्णकर्ताओं की सीमित विशेषताओं का समर्थन करता है: <code>कैप्शन</code>,<code>मान</code>, स्क्रिप्ट स्वचालित रूप से इसे मोनाको प्रारूप</p><p>में परिवर्तित कर देगी। विवरण के लिए, आप स्क्रिप्ट पृष्ठ</p>पर दिए गए निर्देशों को पढ़ सकते हैं।"
         },
         "language": {
-            "label": "适用的语言"
+            "label": "लागू भाषाएँ"
         },
         "jsonurl": {
-            "tipText": "<p>开启 OJBetter_Bridge 后, 其会响应 GET 请求<code>/mycomplet/*</code>, 并返回在<code>mycomplet</code>文件夹中寻找到的同名文件的内容</p><p>因此你只需要在 <code>/mycomplet</code> 文件夹中放置你的 JSON 文件即可在本地访问，</p><p>在配置中你需要填写的 URL 形如: </p><p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>",
-            "alert": "<p>脚本会完全信任你的 JSON 数据而不进行额外的校验和检查, 因此请勿添加来源不明的 JSON URL,</p><p>特殊构造的数据可能会破坏脚本的正常工作, 甚至执行其他恶意代码</p>",
-            "placeholder": "形如http://127.0.0.1:2323/mycomplet/xxx.json"
+            "tipText": "<p>OJBetter_Bridge खोलने के बाद, यह GET अनुरोध<code>/mycomplet/*</code>का जवाब देगा और फ़ाइल की सामग्री को<code>mycomplet</code>फ़ोल्डर में पाए गए समान नाम के साथ वापस कर देगा</p><p>इसलिए आपको केवल अपनी फ़ाइल को <code>/ में रखना होगा mycomplet</code> फ़ोल्डर JSON फ़ाइल को स्थानीय रूप से एक्सेस किया जा सकता है।</p><p>कॉन्फ़िगरेशन में आपको जिस URL को भरने की आवश्यकता है वह फॉर्म में है: </p><p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>अतिरिक्त चेकसम जांच किए बिना स्क्रिप्ट आपके JSON डेटा पर पूरी तरह से भरोसा करेगी, इसलिए कृपया अज्ञात स्रोतों से JSON URL न जोड़ें।</p><p>विशेष रूप से निर्मित डेटा स्क्रिप्ट के सामान्य कामकाज को नष्ट कर सकता है, या यहां तक कि अन्य दुर्भावनापूर्ण कोड को भी निष्पादित कर सकता है</p>",
+            "placeholder": "यह http://127.0.0.1:2323/mycomplet/xxx.json जैसा दिखता है"
         }
     }
 }
