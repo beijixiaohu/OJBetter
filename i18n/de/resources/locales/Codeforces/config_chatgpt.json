@@ -1,0 +1,38 @@
+{
+    "common": {
+        "title": "配置",
+        "basic": {
+            "title": "grundlegend",
+            "name": {
+                "label": "名称:",
+                "placeholder": "请为该配置取一个名称"
+            },
+            "model": {
+                "label": "模型:",
+                "tipText": "<p>留空则默认为：gpt-3.5-turbo</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
+            },
+            "key": {
+                "label": "KEY:",
+                "placeholder": "请输入KEY",
+                "tipText": "<p>你需要输入自己的OpenAI key，<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">官网</a></p><p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>留空则默认为OpenAI官方API</p><p>你也可以填写指定的API来代理访问OpenAI的API，</p><p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p><p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "高级",
+            "header": {
+                "label": "自定义header",
+                "placeholder": "（选填）你可以在这里填写向请求header中额外添加的键值对",
+                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "自定义data",
+                "placeholder": "（选填）你可以在这里填写向请求data中额外添加的键值对",
+                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    }
+}
