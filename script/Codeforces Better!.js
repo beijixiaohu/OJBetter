@@ -41,6 +41,8 @@
 // @require      https://cdn.staticfile.org/i18next/23.5.1/i18next.min.js
 // @require      https://cdn.staticfile.org/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
 // @require      https://cdn.staticfile.org/jquery-i18next/1.2.1/jquery-i18next.min.js
+// @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/js/i18nextChainedBackend.min.js
+// @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/js/i18nextLocalStorageBackend.min.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-cn-beijing.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
@@ -70,7 +72,7 @@ var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProbl
 var localizationLanguage, scriptL10nLanguage;
 var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
-var openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
+var openai_name, openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
@@ -131,31 +133,29 @@ function init() {
         "choice": "",
         "configurations": []
     });
-    if (chatgpt_config.choice !== -1 && chatgpt_config.configurations.length !== 0) {
+    if (chatgpt_config.choice !== "" && chatgpt_config.configurations.length !== 0) {
         const choice = chatgpt_config.choice;
-        if (choice !== "" && choice !== -1) {
-            const configuration = chatgpt_config.configurations.find(obj => obj.name === choice);;
-            if (configuration == undefined) {
-                let existingConfig = GM_getValue('chatgpt_config');
-                existingConfig.choice = "";
-                GM_setValue('chatgpt_config', existingConfig);
-                location.reload();
-            }
-
-            openai_model = configuration.model;
-            openai_key = configuration.key;
-            openai_proxy = configuration.proxy;
-            openai_header = configuration._header ?
-                configuration._header.split("\n").map(header => {
-                    const [key, value] = header.split(":");
-                    return { [key.trim()]: value.trim() };
-                }) : [];
-            openai_data = configuration._data ?
-                configuration._data.split("\n").map(header => {
-                    const [key, value] = header.split(":");
-                    return { [key.trim()]: value.trim() };
-                }) : [];
+        const configuration = chatgpt_config.configurations.find(obj => obj.name === choice);;
+        if (configuration == undefined) {
+            let existingConfig = GM_getValue('chatgpt_config');
+            existingConfig.choice = "";
+            GM_setValue('chatgpt_config', existingConfig);
+            location.reload();
         }
+        openai_name = configuration.name;
+        openai_model = configuration.model;
+        openai_key = configuration.key;
+        openai_proxy = configuration.proxy;
+        openai_header = configuration._header ?
+            configuration._header.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
+        openai_data = configuration._data ?
+            configuration._data.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
     }
     // 编辑器
     if (!is_mSite) CF_csrf_token = Codeforces.getCsrfToken();
@@ -196,15 +196,16 @@ function init() {
 // 公告
 async function showAnnounce() {
     if (lastReadAnnounceVer < GM_info.script.version) {
-        const title = `🎉已更新至 ${GM_info.script.version}`
-        const content = `
-#### 最近更新日志
----
-1.73
-
-
-`;
-        const ok = await createDialog(title, content, ["我知道了", null], undefined, true); //跳过折叠块确认
+        const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${GM_info.script.version}`;
+        const ok = await createDialog(
+            title,
+            i18next.t('announce.content', { ns: 'dialog' }),
+            [
+                null,
+                i18next.t('announce.buttons.0', { ns: 'dialog' })
+            ],
+            undefined, true
+        ); //跳过折叠块确认
         if (ok) {
             GM_setValue('lastReadAnnounceVer', GM_info.script.version);
         }
@@ -260,6 +261,8 @@ const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" v
 const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
 const copyedIcon = `<svg t="1697105956577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="986" width="16" height="16"><path d="M928 612.8V144c0-44.8-35.2-80-80-80H304c-17.6 0-32 14.4-32 32s14.4 32 32 32h544c8 0 16 8 16 16v425.6c-19.2-9.6-41.6-16-64-17.6V272c0-44.8-35.2-80-80-80H176c-44.8 0-80 35.2-80 80v608c0 44.8 35.2 80 80 80h460.8c36.8 27.2 83.2 43.2 132.8 43.2 126.4 0 227.2-100.8 227.2-227.2 0-64-27.2-121.6-68.8-163.2zM176 896c-8 0-16-8-16-16V272c0-8 8-16 16-16h544c8 0 16 8 16 16v280c-108.8 16-193.6 110.4-193.6 224 0 44.8 12.8 84.8 33.6 120H176z m593.6 72c-19.2 0-36.8-3.2-54.4-8-38.4-11.2-72-33.6-96-64-25.6-32-41.6-75.2-41.6-120 0-94.4 67.2-172.8 158.4-188.8 11.2-1.6 22.4-3.2 33.6-3.2 11.2 0 20.8 0 30.4 1.6 22.4 3.2 44.8 11.2 64 22.4 25.6 14.4 48 35.2 64 59.2 20.8 30.4 33.6 68.8 33.6 108.8 0 107.2-84.8 192-192 192z" p-id="987"></path>
 <path d="M608 360H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h320c17.6 0 32-14.4 32-32s-14.4-32-32-32z m0 160H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h320c17.6 0 32-14.4 32-32s-14.4-32-32-32z m-128 158.4H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h192c17.6 0 32-14.4 32-32s-14.4-32-32-32zM731.2 886.4c-6.4 0-11.2-1.6-16-6.4l-73.6-73.6c-9.6-9.6-9.6-22.4 0-32s22.4-9.6 32 0l57.6 57.6 137.6-137.6c9.6-9.6 22.4-9.6 32 0s9.6 22.4 0 32L747.2 880c-4.8 3.2-9.6 6.4-16 6.4z" p-id="988"></path></svg>`;
+const debugIcon = `<svg t="1703561378435" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6845" width="16" height="16"><path d="M940 512H792V412c76.8 0 139-62.2 139-139 0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 34.8-28.2 63-63 63H232c-34.8 0-63-28.2-63-63 0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 76.8 62.2 139 139 139v100H84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h148v96c0 6.5 0.2 13 0.7 19.3C164.1 728.6 116 796.7 116 876c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8 0-44.2 23.9-82.9 59.6-103.7 6 17.2 13.6 33.6 22.7 49 24.3 41.5 59 76.2 100.5 100.5S460.5 960 512 960s99.8-13.9 141.3-38.2c41.5-24.3 76.2-59 100.5-100.5 9.1-15.5 16.7-31.9 22.7-49C812.1 793.1 836 831.8 836 876c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8 0-79.3-48.1-147.4-116.7-176.7 0.4-6.4 0.7-12.8 0.7-19.3v-96h148c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM716 680c0 36.8-9.7 72-27.8 102.9-17.7 30.3-43 55.6-73.3 73.3-20.1 11.8-42 20-64.9 24.3V484c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v396.5c-22.9-4.3-44.8-12.5-64.9-24.3-30.3-17.7-55.6-43-73.3-73.3C317.7 752 308 716.8 308 680V412h408v268z" p-id="6846"></path>
+<path d="M304 280h56c4.4 0 8-3.6 8-8 0-28.3 5.9-53.2 17.1-73.5 10.6-19.4 26-34.8 45.4-45.4C450.9 142 475.7 136 504 136h16c28.3 0 53.2 5.9 73.5 17.1 19.4 10.6 34.8 26 45.4 45.4C650 218.9 656 243.7 656 272c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8 0-40-8.8-76.7-25.9-108.1-17.2-31.5-42.5-56.8-74-74C596.7 72.8 560 64 520 64h-16c-40 0-76.7 8.8-108.1 25.9-31.5 17.2-56.8 42.5-74 74C304.8 195.3 296 232 296 272c0 4.4 3.6 8 8 8z" p-id="6847"></path></svg>`;
 const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
 m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v65.974857h-44.78781v-65.974857h-87.698285v-145.359238h87.698285v-38.351238z m0 83.139047h-44.787809v56.05181h44.787809v-56.05181z m89.307429 0h-44.519619v56.05181h44.519619v-56.05181zM780.190476 170.666667a73.142857 73.142857 0 0 1 73.142857 73.142857v97.523809h-73.142857v-97.523809h-97.523809V170.666667h97.523809z" p-id="6326"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
@@ -279,15 +282,19 @@ function initDB() {
     });
 }
 
-// 元素本地化
+/**
+ * 加载元素本地化语言数据
+ * @param {JQuery} $element jQuery元素
+ * @param {number} [retries=10] 重试次数
+ * @param {number} [interval=50] 重试间隔
+ */
 function elementLocalize($element, retries = 10, interval = 50) {
     if ($.isFunction($element.localize)) {
         $element.localize();
     } else if (retries > 0) {
-        console.log("try again");
         setTimeout(elementLocalize, interval, $element, retries - 1, interval);
     } else {
-        console.error('Unable to localize $element.');
+        console.error(`Unable to localize ${element}`);
     }
 }
 
@@ -664,9 +671,9 @@ span.mdViewContent {
     box-sizing: border-box;
     font-size: 13px;
 }
-.translate-problem-statement.error_translate {
-  color: red;
-  border-color: red;
+.translate-problem-statement-panel.error, .translate-problem-statement.error, .rawDataDiv.error {
+    color: red;
+    border-color: red;
 }
 .translate-problem-statement a, .translate-problem-statement a:link {
     color: #10b981;
@@ -713,6 +720,20 @@ span.mdViewContent {
     border: 1px solid #c5ebdf;
     border-radius: 0.3rem;
     margin: 4px 0px;
+}
+.rawDataDiv {
+    justify-items: start;
+    letter-spacing: 1.8px;
+    color: #059669;
+    background-color: #f9f9fa;
+    border: 1px solid #c5ebdf;
+    border-radius: 0rem 0rem 0.3rem 0.3rem;
+    padding: 5px;
+    margin: -5px 0px 6px 0px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+    overflow: auto;
 }
 .html2md-panel {
     display: flex;
@@ -2289,11 +2310,10 @@ function getExternalJSON(url) {
  * 创建确认对话框
  * @param {string} title 标题
  * @param {string} content 内容
- * @param {string[]} buttons 按钮
- * @param {"cancel"|"continue"} [secondaryButton="cancel"] 指定次要按钮
+ * @param {string[]} buttons 按钮 (取消 确定) 可以为null
  * @param {boolean} renderMarkdown 是否使用markdown渲染文本
  */
-function createDialog(title, content, buttons, secondaryButton = "cancel", renderMarkdown = false) {
+function createDialog(title, content, buttons, renderMarkdown = false) {
     return new Promise(resolve => {
         const styleElement = GM_addStyle(darkenPageStyle2);
         let contentHtml = content;
@@ -2310,19 +2330,13 @@ function createDialog(title, content, buttons, secondaryButton = "cancel", rende
         </div>
         `);
         const buttonbox = $(`<div class="buttons"></div>`);
-        const cancelButton = $(`<button class="cancelButton">${buttons[1]}</button>`);
-        const continueButton = $(`<button class="continueButton">${buttons[0]}</button>`);
-        if (buttons[1] !== null) buttonbox.append(cancelButton);
-        if (buttons[0] !== null) buttonbox.append(continueButton);
+        const cancelButton = $(`<button class="cancelButton">${buttons[0]}</button>`)
+            .addClass("secondary");
+        const continueButton = $(`<button class="continueButton">${buttons[1]}</button>`);
+        if (buttons[0] !== null) buttonbox.append(cancelButton);
+        if (buttons[1] !== null) buttonbox.append(continueButton);
         dialog.append(buttonbox);
         $('body').before(dialog);
-
-        // 设置次要按钮
-        if (secondaryButton === "cancel") {
-            cancelButton.addClass("secondary");
-        } else if (secondaryButton === "continue") {
-            continueButton.addClass("secondary");
-        }
 
         continueButton.click(function () {
             $(styleElement).remove();
@@ -2421,7 +2435,7 @@ function checkScriptVersion() {
 
 };
 
-// 本地化替换
+// 网站本地化替换
 async function toLocalization() {
     if (localizationLanguage === "initial") return;
 
@@ -2609,27 +2623,46 @@ async function toLocalization() {
     }
 };
 
-// i18next初始化
+/**
+ * i18next初始化
+ */
 async function initI18next() {
     i18next
-        .use(i18nextHttpBackend)
+        .use(i18nextChainedBackend)
         .init({
             lng: scriptL10nLanguage,
-            ns: ['settings'], // 命名空间列表
-            fallbackLng: false,
-            load: 'all',
+            ns: ['common', 'settings', 'config_chatgpt', 'config_complet', 'dialog', 'alert'], // 命名空间列表
             defaultNS: 'settings',
+            fallbackLng: 'zh',
+            load: 'currentOnly',
             debug: false,
             backend: {
-                loadPath: (lng, ns) => {
-                    if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
-                        return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                backends: [
+                    i18nextLocalStorageBackend,
+                    i18nextHttpBackend
+                ],
+                backendOptions: [{
+                    prefix: 'i18next_res_',
+                    expirationTime: 7 * 24 * 60 * 60 * 1000,
+                    defaultVersion: 'v1.0',
+                    store: typeof window !== 'undefined' ? window.localStorage : null
+                }, {
+                    /* options for secondary backend */
+                    loadPath: (lng, ns) => {
+                        if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
+                            return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                        }
+                        return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
                     }
-                    return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
-                }
+                }]
             }
-        }, function (err, t) {
-            jqueryI18next.init(i18next, $);
+        }, (err, t) => {
+            if (err) {
+                console.error(err);
+            } else {
+                // console.log("i18next is ready...");
+                jqueryI18next.init(i18next, $);
+            }
         });
 };
 
@@ -2949,6 +2982,7 @@ class ConfigManager {
         let configMenu = $(this.configHTML);
         $("body").append(configMenu);
         addDraggable(configMenu);
+        elementLocalize(configMenu);
         return {
             maskStyle: maskStyle,
             configMenu: configMenu
@@ -3508,88 +3542,66 @@ const chatgptConfigEditHTML = `
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
-        <h4>配置</h4>
-        <h5>基本</h5>
+        <h4 data-i18n="config_chatgpt:common.title"></h4>
+        <h5 data-i18n="config_chatgpt:common.basic.title"></h5>
         <hr>
         <label for='name'>
-            <span class="input_label">名称:</span>
+            <span class="input_label" data-i18n="config_chatgpt:common.basic.name.label"></span>
         </label>
-        <input type='text' id='name' class='no_default' placeholder='请为该配置取一个名称' require = true>
+        <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_chatgpt:common.basic.name.placeholder">
         <label for='openai_model'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">模型:</span>
+                <span class="input_label" data-i18n="[html]config_chatgpt:common.basic.model.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text">
-                    <p>留空则默认为：gpt-3.5-turbo</p>
-                    <p>模型列表请查阅<a target="_blank" href="https://platform.openai.com/docs/models">OpenAI官方文档</a></p>
-                    <p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
-                    </div>
+                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.basic.model.tipText"></div>
                 </div>
             </div>
         </label>
         <input type='text' id='openai_model' placeholder='gpt-3.5-turbo' require = false>
         <label for='openai_key'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">KEY:</span>
+                <span class="input_label" data-i18n="config_chatgpt:common.basic.key.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text">
-                    <p>你需要输入自己的OpenAI key，<a target="_blank" href="https://platform.openai.com/account/usage">官网</a></p>
-                    <p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>
-                    </div>
+                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.basic.key.tipText"></div>
                 </div>
             </div>
         </label>
-        <input type='text' id='openai_key' class='no_default' placeholder='请输入KEY' require = true>
+        <input type='text' id='openai_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_chatgpt:common.basic.key.placeholder">
         <label for='openai_proxy'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">Proxy API:</span>
+                <span class="input_label" data-i18n="config_chatgpt:common.basic.proxy.label">Proxy API:</span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text">
-                        <p>留空则默认为OpenAI官方API</p>
-                        <p>你也可以填写指定的API来代理访问OpenAI的API，</p>
-                        <p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p>
-                        <p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>
-                    </div>
+                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.basic.proxy.tipText"></div>
                 </div>
             </div>
         </label>
         <input type='text' id='openai_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
-        <h5>高级</h5>
+        <h5 data-i18n="config_chatgpt:common.advanced.title"></h5>
         <hr>
         <label for='_header'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">自定义header</span>
+                <span class="input_label" data-i18n="config_chatgpt:common.advanced.header.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text">
-                        <p>格式样例：</p>
-                        <div style="border: 1px solid #795548; padding: 10px;">
-                            <p>name1 : 123<br>name2 : cccc</p>
-                        </div>
-                    </div>
+                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.advanced.header.tipText"></div>
                 </div>
             </div>
         </label>
-        <textarea id="_header" placeholder='（选填）你可以在这里填写向请求header中额外添加的键值对' require = false></textarea>
+        <textarea id="_header" placeholder='' require = false data-i18n="[placeholder]config_chatgpt:common.advanced.header.placeholder"></textarea>
         <label for='_data'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label">自定义data</span>
+                <span class="input_label" data-i18n="config_chatgpt:common.advanced.data.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text">
-                        <p>格式样例：</p>
-                        <div style="border: 1px solid #795548; padding: 10px;">
-                            <p>name1 : 123<br>name2 : cccc</p>
-                        </div>
-                    </div>
+                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.advanced.data.tipText"></div>
                 </div>
             </div>
         </label>
-        <textarea id="_data" placeholder='（选填）你可以在这里填写向请求data中额外添加的键值对' require = false></textarea>
-        <button id='tempConfig_save'>保存</button>
+        <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config_chatgpt:common.advanced.data.placeholder"></textarea>
+        <button id='tempConfig_save' data-i18n="common:save.title"></button>
     </div>
 `;
 
@@ -3598,27 +3610,21 @@ const CompletConfigEditHTML = `
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
-        <h4>配置</h4>
+        <h4 data-i18n="config_complet:common.title"></h4>
         <hr>
         <label for='name'>
-            <span class="input_label">备注:</span>
+            <span class="input_label" data-i18n="config_complet:common.name.label"></span>
         </label>
-        <input type='text' id='name' class='no_default' placeholder='请为该自定义配置取一个备注名' require = true>
+        <input type='text' id='name' class='no_default' placeholder='' require = true  data-i18n="[placeholder]config_complet:common.name.placeholder">
         <div class='CFBetter_setting_list'>
-        <label for="complet_isChoose"><span id="loaded_span">启用？</span></label>
+        <label for="complet_isChoose"><span id="loaded_span" data-i18n="config_complet:common.choose.label"></span></label>
             <input type="checkbox" id="complet_isChoose" name="complet_isChoose" require = false>
         </div>
         <div class='CFBetter_setting_list'>
-            <label for="complet_genre" style="display: flex;">模板格式</label>
+            <label for="complet_genre" style="display: flex;" data-i18n="config_complet:common.genre.label"></label>
             <div class="help_tip">
                 ${helpCircleHTML}
-                <div class="tip_text">
-                <p>monaco 格式支持 monaco 中 
-                <a target="_blank" href="https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html">CompletionItem</a> 
-                几乎所有的属性, (注意: 不需要range属性, 脚本会自动计算并添加该属性)</p>
-                <p>ace 格式仅支持 ace 中 completers 有限的属性: <code>caption</code>、<code>value</code>, 脚本会自动将其转换为 monaco 格式</p>
-                <p>具体你可以前往阅读脚本页的说明</p>
-                </div>
+                <div class="tip_text" data-i18n="[html]config_complet:common.genre.tipText"></div>
             </div>
             <select id="complet_genre" name="complet_genre">
                 <option value="monaco">monaco</option>
@@ -3626,7 +3632,7 @@ const CompletConfigEditHTML = `
             </select>
         </div>
         <div class='CFBetter_setting_list'>
-            <label for="complet_language" style="display: flex;">适用的语言</label>
+            <label for="complet_language" style="display: flex;" data-i18n="config_complet:common.language.label"></label>
             <select id="complet_language" name="complet_language">
                 <option value="cpp">cpp</option>
                 <option value="python">python</option>
@@ -3639,23 +3645,13 @@ const CompletConfigEditHTML = `
                 <span class="input_label">JSON URL:</span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text">
-                    <p>开启 OJBetter_Bridge 后, 其会响应 GET 请求<code>/mycomplet/*</code>, 并返回在<code>mycomplet</code>文件夹中寻找到的同名文件的内容</p>
-                    <p>因此你只需要在 <code>/mycomplet</code> 文件夹中放置你的 JSON 文件即可在本地访问，</p>
-                    <p>在配置中你需要填写的 URL 形如: </p>
-                    <p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>
-                    </div>
+                    <div class="tip_text" data-i18n="[html]config_complet:common.jsonurl.tipText"></div>
                 </div>
             </div>
         </label>
-        <div class='CFBetter_setting_list alert_warn'>
-            <div>
-                <p>脚本会完全信任你的 JSON 数据而不进行额外的校验和检查, 因此请勿添加来源不明的 JSON URL,</p>
-                <p>特殊构造的数据可能会破坏脚本的正常工作, 甚至执行其他恶意代码</p>
-            </div>
-        </div>
-        <input type='text' id='complet_jsonUrl' class='no_default' placeholder='形如http://127.0.0.1:2323/mycomplet/xxx.json' require = true>
-        <button id='tempConfig_save'>保存</button>
+        <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config_complet:common.jsonurl.alert"></div>
+        <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_complet:common.jsonurl.placeholder">
+        <button id='tempConfig_save' data-i18n="common:save.title"></button>
     </div>
 `;
 
@@ -3860,7 +3856,14 @@ async function settingPanel() {
             }
 
             if (hasChange) {
-                const shouldSave = await createDialog("配置已更改，是否保存？", "", ["保存", "不保存"]); // 配置改变保存确认
+                const shouldSave = await createDialog(
+                    i18next.t('saveSetting.title', { ns: 'dialog' }),
+                    i18next.t('saveSetting.content', { ns: 'dialog' }),
+                    [
+                        i18next.t('saveSetting.buttons.0', { ns: 'dialog' }),
+                        i18next.t('saveSetting.buttons.1', { ns: 'dialog' })
+                    ]
+                ); // 配置改变保存确认
                 if (shouldSave) {
                     // 数据校验
                     if (settings.translation === "openai") {
@@ -4579,18 +4582,15 @@ async function process(button, target, element_node, type, is_comment, count, tr
 
     //是否跳过折叠块
     if ($(target).find('.spoiler').length > 0) {
-        let content = `
-            <div style="display:grid; padding:5px 0px; align-items: center;">
-            <p>
-            即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在你需要选择是否跳过这些折叠块，
-            </p>
-            <p>
-            如果其中有你需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译
-            </p>
-            </div>
-            <p>要跳过折叠块吗？（建议选择跳过）</p>
-        `;
-        const shouldSkip = await createDialog("是否跳过折叠块？", content, ["跳过", "否"]); //跳过折叠块确认
+        const shouldSkip = await createDialog(
+            i18next.t('skipFold.title', { ns: 'dialog' }),
+            i18next.t('skipFold.content', { ns: 'dialog' }),
+            [
+                i18next.t('skipFold.buttons.0', { ns: 'dialog' }),
+                i18next.t('skipFold.buttons.1', { ns: 'dialog' })
+            ],
+            true
+        ); //跳过折叠块确认
         if (shouldSkip) {
             $(target).find('.spoiler').remove();
         } else {
@@ -4617,13 +4617,15 @@ async function blockProcessing(button, target, element_node, is_comment, transla
         target.markdown = turndownService.turndown($(target).html());
     }
     var result = await translateProblemStatement(button, target.markdown, element_node, is_comment, translation);
-    if (result.status == "error") {
-        result.translateDiv.classList.add("error_translate");
-        button.setTransButtonState('error', '翻译出错');
-        $(target).remove();
-    } else if (result.status == "skip") {
+    if (result.status == "skip") {
         button.setTransButtonState('error', '字数超限');
         result.translateDiv.close();
+    }else if (result.status == "error" || !result.rawData.done) {
+        result.translateDiv.setError();
+        result.translateDiv.setRawData(result.rawData);
+        result.translateDiv.showDebugButton();
+        button.setTransButtonState('error', '翻译出错');
+        $(target).remove();
     }
     return result;
 }
@@ -4677,7 +4679,9 @@ async function multiChoiceTranslation() {
     });
 }
 
-// 为acmsguru题面重新划分div
+/**
+ * 为acmsguru题面重新划分div
+ */
 function acmsguruReblock() {
     if (commentTranslationMode == '0') {
         // 普通模式下的划分方式
@@ -4844,7 +4848,10 @@ function addConversionButton() {
     });
 };
 
-// 等待LaTeX渲染队列全部完成
+/**
+ * 等待LaTeX渲染队列全部完成
+ * @param {Function} callback 回调函数
+ */
 function waitUntilIdleThenDo(callback) {
     var intervalId = setInterval(function () {
         var queue = MathJax.Hub.queue;
@@ -4922,10 +4929,16 @@ class TranslateDiv {
         }
         this.panelDiv = $('<div>').addClass('translate-problem-statement-panel');
         this.div.append(this.panelDiv);
+
         this.mainDiv = $('<div>').addClass('translate-problem-statement');
         this.span = $('<span>');
         this.mainDiv.append(this.span);
         this.div.append(this.mainDiv);
+        // debug
+        this.rawData = null;
+        this.debugDiv = $('<div>').addClass('rawDataDiv').hide();
+        this.debugDivShow = false;
+        this.div.append(this.debugDiv);
         // 信息
         this.topText = $('<div>').addClass('topText');
         this.panelDiv.append(this.topText);
@@ -4933,6 +4946,8 @@ class TranslateDiv {
         // 右侧
         this.rightDiv = $('<div>').css('display', 'flex');
         this.panelDiv.append(this.rightDiv);
+        this.debugButton = $('<div>').html(debugIcon).addClass('borderlessButton').hide();
+        this.rightDiv.append(this.debugButton);
         this.copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
         this.rightDiv.append(this.copyButton);
         this.upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
@@ -4954,29 +4969,24 @@ class TranslateDiv {
         return this.topText.text();
     }
 
-    updateTranslateDiv(text, is_oldLatex, is_acmsguru) {
-        if (is_oldLatex || is_acmsguru) {
-            // oldlatex
-            text = $.parseHTML(text);
-            this.mainDiv.empty().append($(text));
-        } else {
-            // 渲染MarkDown
-            var md = window.markdownit();
-            if (!text) text = "";
-            var html = md.render(text);
-            this.mainDiv.html(html);
-            // 渲染Latex
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
-        }
-    }
-
-    // 更新不渲染LaTeX
-    updateTranslateDiv_WithoutLaTeX(text) {
+    /**
+     * 更新翻译框内容
+     * @param {string} text 文本内容
+     * @param {boolean} is_escapeHTML 是否转义HTML标签，为true则HTML标签将作为普通文本处理，默认为true
+     * @param {boolean} is_renderLaTeX 是否渲染LaTeX，为true则会渲染LaTeX，默认为true
+     */
+    updateTranslateDiv(text, is_escapeHTML = true, is_renderLaTeX = true,) {
         // 渲染MarkDown
-        var md = window.markdownit();
+        var md = window.markdownit({
+            html: !is_escapeHTML,
+        });
         if (!text) text = "";
         var html = md.render(text);
         this.mainDiv.html(html);
+        // 渲染Latex
+        if (is_renderLaTeX) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+        }
     }
 
     // 关闭元素
@@ -5046,6 +5056,52 @@ class TranslateDiv {
     disableCopyButton() {
         this.copyButton.css({ 'fill': '#ccc' });
         this.copyButton.off("click");
+    }
+
+    // 设置为error状态
+    setError() {
+        this.div.addClass('error');
+        this.panelDiv.addClass('error');
+        this.mainDiv.addClass('error');
+        this.debugDiv.addClass('error');
+    }
+
+    // 设置原始数据
+    setRawData(Object) {
+        this.rawData = Object;
+        this.debugDiv.empty();
+        this.debugDiv.append($("<pre>").text(JSON.stringify(Object, null, 4)));
+    }
+
+    // 显示debug面板
+    showDebugDiv() {
+        this.debugDivShow = true;
+        this.mainDiv.hide();
+        this.debugDiv.show();
+    }
+
+    // 隐藏debug面板
+    hideDebugDiv() {
+        this.debugDivShow = false;
+        this.mainDiv.show();
+        this.debugDiv.hide();
+    }
+
+    // 注册显示debug按钮事件
+    registerDebugButtonEvent() {
+        this.debugButton.on("click", () => {
+            if (this.debugDivShow) {
+                this.hideDebugDiv();
+            } else {
+                this.showDebugDiv();
+            }
+        });
+    }
+
+    // 显示debug按钮
+    showDebugButton() {
+        this.debugButton.show();
+        this.registerDebugButtonEvent();
     }
 }
 
@@ -5218,7 +5274,7 @@ class ElementsTree {
         } else {
             translateDiv.disableCopyButton();
         }
-        translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
+        translateDiv.updateTranslateDiv(translatedText, !(is_oldLatex || is_acmsguru));
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
         if (transButton.length == 0) {
@@ -5265,7 +5321,9 @@ async function initTransResultsRecover() {
     ttTree.recover($(".ttypography"));
 }
 
-// 自动翻译
+/**
+ * 自动翻译
+ */
 async function initTransWhenViewable() {
     $('.ttypography, .comments').find('.translateButton').each((i, e) => {
         // check if element is not normal or is not short text
@@ -5312,6 +5370,9 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         "openai": "ChatGPT"
     };
     let translatedText = "";
+    let rawData = {
+        done: false
+    };
 
     /**
      * LaTeX替换
@@ -5347,7 +5408,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         translatedText = translatedText.replace(/\]\s*\[/g, '] [');
         translatedText = translatedText.replace(/\}\s*\{/g, '} {');
         if (is_oldLatex) {
-            translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 还原为<p/>标签
+            translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
             translatedText = recoverBlock(translatedText, matches, replacements);
         } else if (is_acmsguru) {
             translatedText = recoverBlock(translatedText, matches, replacements);
@@ -5451,74 +5512,77 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     if (translationLimits.hasOwnProperty(realTranlate) && text.length > translationLimits[realTranlate]) {
         let textLength = translationLimits[realTranlate];
         let realTextLength = text.length;
-        let content = `
-        <p>即将翻译的内容共 <strong>${realTextLength}</strong> 字符</p>
-        <p>这超出了当前翻译服务的 <strong>${textLength}</strong> 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”</p>
-
-        <div style="display:flex; padding:5px 0px; align-items: center;">
-        ${helpCircleHTML}
-        <p>
-        注意，可能你选择了错误的翻译按钮<br>
-        由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮
-        </p>
-        </div>
-        <p>你确定要继续翻译吗？</p>
-        `;
-        const shouldContinue = await createDialog("字符数超限! ", content, ["仍要翻译", "取消"], "continue"); // 字数超限确认
-        if (!shouldContinue) {
+        const shouldContinue = await createDialog(
+            i18next.t('transTextLimits.title', { ns: 'dialog' }),
+            i18next.t('transTextLimits.content', { ns: 'dialog', textLength: textLength, realTextLength: realTextLength }),
+            [
+                i18next.t('transTextLimits.buttons.0', { ns: 'dialog' }),
+                i18next.t('transTextLimits.buttons.1', { ns: 'dialog' })
+            ],
+            true
+        ); // 字数超限确认
+        if (shouldContinue) {
             return {
                 translateDiv: translateDiv,
-                status: "skip"
+                status: "skip",
+                rawData: rawData
             };
         }
     }
     // 翻译
     async function translate(translation) {
+        const is_renderLaTeX = !(is_oldLatex || is_acmsguru);
+        let rawData;
         try {
             if (translation == "deepl") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_deepl(text);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                rawData = await translate_deepl(text);
             } else if (translation == "iflyrec") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_iflyrec(text);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                rawData = await translate_iflyrec(text);
             } else if (translation == "youdao") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_youdao_mobile(text);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                rawData = await translate_youdao_mobile(text);
             } else if (translation == "google") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
-                translatedText = await translate_gg(text);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                rawData = await translate_gg(text);
             } else if (translation == "caiyun") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_oldLatex, is_acmsguru);
+                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
                 await translate_caiyun_startup();
-                translatedText = await translate_caiyun(text);
+                rawData = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${chatgpt_config.configurations[chatgpt_config.choice].name}\n\n${!openai_isStream
+                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${openai_name}\n\n${!openai_isStream
                     ? "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待" : ""}`,
-                    is_oldLatex, is_acmsguru);
+                    is_renderLaTeX);
                 if (openai_isStream) {
                     // 流式传输
-                    translatedText = '';
-                    try {
-                        for await (const delta of translate_openai_stream(text)) {
-                            translatedText += delta;
-                            // 翻译结果面板更新
-                            translateDiv.updateTranslateDiv_WithoutLaTeX(translatedText, is_oldLatex, is_acmsguru);
-                        }
-                    } catch (error) {
-                        console.error('Error while translating:', error);
-                    }
+                    rawData = await translate_openai_stream(text, translateDiv);
                 } else {
                     // 普通模式
-                    translatedText = await translate_openai(text);
+                    rawData = await translate_openai(text);
                 }
             }
-            if (/^翻译出错/.test(translatedText)) status = "error";
-        } catch (error) {
+            translatedText = rawData.text;
+            if (!rawData.done) {
+                status = "error";
+            }
+        } catch (e) {
             status = "error";
-            translatedText = error;
+            rawData.message = `**:( 翻译遇到了问题：** 发生了意外的错误\n\n请重试或更换翻译接口`;
+            console.warn(e);
         }
+        return rawData;
     }
-    await translate(realTranlate);
+    rawData = await translate(realTranlate);
+
+    if (status == "error") {
+        translateDiv.updateTranslateDiv(rawData.message);
+        return {
+            status: status,
+            translateDiv: translateDiv,
+            rawData: rawData
+        };
+    }
 
     // 还原latex公式
     translatedText = recoverLatex(translatedText);
@@ -5541,21 +5605,22 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     }
 
     // 翻译结果面板更新
-    translateDiv.updateTranslateDiv(translatedText, is_oldLatex, is_acmsguru);
+    translateDiv.updateTranslateDiv(translatedText, !(is_oldLatex || is_acmsguru));
 
     return {
+        status: status,
         translateDiv: translateDiv,
-        status: status
+        rawData: rawData
     };
 }
 
 //弹窗翻译
 function alertZh() {
-    var _alert = window.alert;
-    window.alert = async function (msg) {
-        _alert(msg + "\n=========翻译=========\n" + await translate_deepl(msg));
-        return true;
-    }
+    // var _alert = window.alert;
+    // window.alert = async function (msg) {
+    //     _alert(msg + "\n=========翻译=========\n" + await translate_deepl(msg));
+    //     return true;
+    // }
 };
 
 // 折叠块展开
@@ -5717,6 +5782,9 @@ function getProblemId(url) {
     return matchResult && matchResult.length >= 3 ? `${matchResult[1]}${matchResult[2]}` : '';
 };
 
+/**
+ * 跳转到洛谷
+ */
 async function CF2luogu() {
     const url = window.location.href;
     const problemId = getProblemId(url);
@@ -8659,8 +8727,14 @@ async function addProblemPageCodeEditor() {
     submitButton.on('click', async function (event) {
         event.preventDefault();
         if (isCodeSubmitConfirm) {
-            let content = ``;
-            const submit = await createDialog("确认提交代码吗", content, ['提交', '否']); //提交确认
+            const submit = await createDialog(
+                i18next.t('submitCode.title', { ns: 'dialog' }),
+                i18next.t('submitCode.content', { ns: 'dialog' }),
+                [
+                    i18next.t('submitCode.buttons.0', { ns: 'dialog' }),
+                    i18next.t('submitCode.buttons.1', { ns: 'dialog' })
+                ]
+            ); //提交确认
             if (submit) {
                 submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
                 $('#CFBetter_SubmitForm').submit();
@@ -8676,163 +8750,151 @@ async function addProblemPageCodeEditor() {
     });
 }
 
-
-// 翻译服务
-//
-// ChatGPT
+/**
+ * ChatGPT
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
 async function translate_openai(raw) {
-    var openai_retext = "";
-    var data;
-    if (is_oldLatex || is_acmsguru) {
-        data = {
-            model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
-            messages: [{
-                role: "user",
-                content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
-            }],
-            temperature: 0.7,
-            ...Object.assign({}, ...openai_data)
-        };
-    } else {
-        data = {
-            model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
-            messages: [{
-                role: "user",
-                content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
-            }],
-            temperature: 0.7,
-            ...Object.assign({}, ...openai_data)
-        };
-    };
-    return new Promise(function (resolve, reject) {
-        GM_xmlhttpRequest({
-            method: 'POST',
-            url: (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions',
-
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + openai_key,
-                ...Object.assign({}, ...openai_header)
-            },
-            data: JSON.stringify(data),
-            responseType: 'json',
-            onload: function (response) {
-                if (!response.response) {
-                    reject(`发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。${findHelpText1} 请注意打码响应报文的敏感部分\n\n响应报文: ${JSON.stringify(response)}`);
-                }
-                else if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
-                    resolve(`翻译出错，请重试 ${findHelpText1} \n\n报错信息: ${JSON.stringify(response.response, null, '\n')}`);
-                } else {
-                    openai_retext = response.response.choices[0].message.content;
-                    resolve(openai_retext);
-                }
-            },
-            onerror: function (response) {
-                reject(`发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作 ${findHelpText1} 请注意打码响应报文的敏感部分\n\n响应报文: ${JSON.stringify(response)}`);
-            },
-        });
-    });
-}
-
-// ChatGPT 流式传输
-async function* translate_openai_stream(raw) {
-    var data;
-    if (is_oldLatex || is_acmsguru) {
-        data = {
-            model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
-            messages: [{
-                role: "user",
-                content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
-            }],
-            temperature: 0.7,
-            stream: true,
-            ...Object.assign({}, ...openai_data)
-        };
-    } else {
-        data = {
-            model: (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
-            messages: [{
-                role: "user",
-                content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw
-            }],
-            temperature: 0.7,
-            stream: true,
-            ...Object.assign({}, ...openai_data)
-        };
-    };
-    const response = await fetch((openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
+    const modelDefault = 'gpt-3.5-turbo';
+    const prompt = (is_oldLatex || is_acmsguru) ?
+        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' :
+        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的LaTeX公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n';
+    const data = {
+        model: openai_model || modelDefault,
+        messages: [{
+            role: "user",
+            content: prompt + raw
+        }],
+        temperature: 0.7,
+        ...Object.assign({}, ...openai_data)
+    }
+    const options = {
+        method: "POST",
+        url: openai_proxy || 'https://api.openai.com/v1/chat/completions',
+        data: JSON.stringify(data),
+        responseType: 'json',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + openai_key,
             ...Object.assign({}, ...openai_header)
-        },
-        body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        }
     }
+    return await BaseTranslate(options,
+        res => res,
+        undefined,
+        response => response.response.choices[0].message.content);
+}
 
-    const reader = response.body.getReader();
+/**
+ * ChatGPT 流式传输
+ * @param {string} raw 原文
+ * @param {TranslateDiv} translateDiv 翻译结果面板
+ * @returns {Promise<Object>} 返回 Promise
+ */
+async function translate_openai_stream(raw, translateDiv) {
+    const result = {
+        done: true,
+        checkPassed: null,
+        response: null,
+        text: "",
+        errors: []
+    };
+
+    for await (const delta of openai_stream(raw)) {
+        result.text += delta;
+        // 翻译结果面板更新
+        translateDiv.updateTranslateDiv(result.text, !(is_oldLatex || is_acmsguru), false);
+    }
+    return result;
+}
+
+/**
+ * 流式传输
+ * @param {string} raw 原文
+ * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
+ */
+async function* openai_stream(raw) {
+    const modelDefault = 'gpt-3.5-turbo';
+    const prompt = (is_oldLatex || is_acmsguru) ?
+        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' :
+        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的LaTeX公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n';
+    const data = {
+        model: openai_model || modelDefault,
+        messages: [{
+            role: "user",
+            content: prompt + raw
+        }],
+        temperature: 0.7,
+        stream: true,
+        ...Object.assign({}, ...openai_data)
+    }
+    const options = {
+        method: "POST",
+        url: openai_proxy || 'https://api.openai.com/v1/chat/completions',
+        data: JSON.stringify(data),
+        responseType: 'stream',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + openai_key,
+            ...Object.assign({}, ...openai_header)
+        }
+    }
+    const response = await GMRequest(options, true);
+    const reader = response.response.getReader();
     const decoder = new TextDecoder();
     let buffer = ''; // 用于累积数据片段的缓冲区
 
-    try {
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true }); // 将新的数据片段追加到缓冲区
-            let lines = buffer.split("\n\n"); // 处理累积的数据
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true }); // 将新的数据片段追加到缓冲区
+        let lines = buffer.split("\n\n"); // 处理累积的数据
 
-            // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
-            for (let i = 0; i < lines.length - 1; i++) {
-                let line = lines[i];
-                line = line.substring(5); // 移除 'data:' 前缀
-                if (line.includes('[DONE]')) {
-                    return; // End
-                }
-                try {
-                    let data = JSON.parse(line);
-                    let delta = data['choices'][0]['delta'];
-                    let content = delta['content'] ? delta['content'] : "";
-                    yield content; // 传递数据给调用者
-                } catch (error) {
-                    console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
-                }
+        // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
+        for (let i = 0; i < lines.length - 1; i++) {
+            let line = lines[i];
+            line = line.substring(5); // 移除 'data:' 前缀
+            if (line.includes('[DONE]')) {
+                return; // End
             }
-
-            // 保留最后一行在缓冲区中
-            buffer = lines.slice(-1);
+            try {
+                let data = JSON.parse(line);
+                let delta = data['choices'][0]['delta'];
+                let content = delta['content'] ? delta['content'] : "";
+                yield content; // 传递数据给调用者
+            } catch (error) {
+                console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
+            }
         }
-    } finally {
-        reader.releaseLock();
+
+        // 保留最后一行在缓冲区中
+        buffer = lines.slice(-1);
     }
+
+    return buffer;
 }
 
-//--谷歌翻译--start
+/**
+ * 谷歌翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
 async function translate_gg(raw) {
-    return new Promise((resolve, reject) => {
-        const url = 'https://translate.google.com/m';
-        const params = `tl=zh-CN&q=${encodeURIComponent(raw)}`;
-
-        GM_xmlhttpRequest({
-            method: 'GET',
-            url: `${url}?${params}`,
-            onload: function (response) {
-                const html = response.responseText;
-                const translatedText = $(html).filter('.result-container').text() || $(html).find('.result-container').text();
-                resolve(translatedText);
-            },
-            onerror: function (response) {
-                reject(`发生了未知的错误，请确认你是否能正常访问Google翻译， ${findHelpText1} 请注意打码报错信息的敏感部分\n\n响应报文: ${JSON.stringify(response)}`);
-            }
-        });
-    });
+    const params = `tl=zh-CN&q=${encodeURIComponent(raw)}`;
+    const options = {
+        method: "GET",
+        url: `https://translate.google.com/m?${params}`,
+    }
+    return await BaseTranslate(options,
+        res => $(res).filter('.result-container').text() || $(res).find('.result-container').text());
 }
-//--谷歌翻译--end
 
-//--有道翻译m--start
+/**
+ * 有道翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
 async function translate_youdao_mobile(raw) {
     const options = {
         method: "POST",
@@ -8846,11 +8908,33 @@ async function translate_youdao_mobile(raw) {
             'Referer': 'http://m.youdao.com/translate',
         }
     }
-    return await BaseTranslate('有道翻译mobile', raw, options, res => /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res)[1])
+    return await BaseTranslate(options,
+        res => {
+            const array = /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res);
+            if (array && array.length > 1) {
+                return array[1];
+            } else {
+                return res;
+            }
+        },
+        res => {
+            const resObj = {
+                status: true,
+                message: 'ok'
+            };
+            if (res.includes('<title>413 Request Entity Too Large</title>')) {
+                resObj.status = false;
+                resObj.message = `413 Request Entity Too Large
+            \n\n请求文本长度超出了有道翻译接口的限制，请更换其他翻译接口`;
+                return resObj;
+            };
+            return resObj;
+        })
 }
-//--有道翻译m--end
 
-//--彩云翻译--start
+/**
+ * 彩云翻译预处理
+ */
 async function translate_caiyun_startup() {
     const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
     sessionStorage.setItem('caiyun_id', browser_id);
@@ -8864,10 +8948,15 @@ async function translate_caiyun_startup() {
         },
         data: JSON.stringify({ browser_id }),
     }
-    const res = await Request(options);
+    const res = await GMRequest(options);
     sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
 }
 
+/**
+ * 彩云翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
 async function translate_caiyun(raw) {
     const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
     const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
@@ -8892,11 +8981,10 @@ async function translate_caiyun(raw) {
             "T-Authorization": sessionStorage.getItem('caiyun_jwt')
         }
     }
-    return await BaseTranslate('彩云小译', raw, options, res => JSON.parse(res).target.map(decoder).join('\n'))
+    return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
 }
-//--彩云翻译--end
 
-//--Deepl翻译--start
+
 function getTimeStamp(iCount) {
     const ts = Date.now();
     if (iCount !== 0) {
@@ -8907,6 +8995,11 @@ function getTimeStamp(iCount) {
     }
 }
 
+/**
+ * DeepL翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
 async function translate_deepl(raw) {
     const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
     const data = {
@@ -8945,12 +9038,28 @@ async function translate_deepl(raw) {
         anonymous: true,
         nocache: true,
     }
-    return await BaseTranslate('Deepl翻译', raw, options, res => JSON.parse(res).result.texts[0].text)
+    return await BaseTranslate(options, res => JSON.parse(res).result.texts[0].text, res => {
+        const resObj = {
+            status: true,
+            message: 'ok'
+        };
+        if (res.includes('"error":{"code":1042912,"message":"Too many requests"}')) {
+            resObj.status = false;
+            resObj.message = `请求过于频繁，请稍后再试
+            \n\n这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，
+            \n\nDeepL对翻译字数和频率是有限制的，
+            \n\n这是暂时的，一段时间后就恢复正常了`;
+            return resObj;
+        };
+        return resObj;
+    });
 }
 
-//--Deepl翻译--end
-
-//--讯飞听见翻译--end
+/**
+ * 讯飞听见翻译
+ * @param {String} text 要翻译的文本
+ * @returns {Promise} 返回 Promise
+ */
 async function translate_iflyrec(text) {
     const options = {
         method: "POST",
@@ -8970,53 +9079,135 @@ async function translate_iflyrec(text) {
         },
         responseType: "json",
     };
-    return await BaseTranslate('讯飞翻译', text, options, res => JSON.parse(res).biz[0].translateResult.replace(/\\n/g, "\n\n"));
+    return await BaseTranslate(options, res => JSON.parse(res).biz[0].translateResult.replace(/\\n/g, "\n\n"));
 }
-//--讯飞听见翻译--end
 
-//--异步请求包装工具--start
-async function PromiseRetryWrap(task, options, ...values) {
-    const { RetryTimes, ErrProcesser } = options || {};
-    let retryTimes = RetryTimes || 5;
-    const usedErrProcesser = ErrProcesser || (err => { throw err });
-    if (!task) return;
-    while (true) {
+/**
+ * promiseRetryWrapper 函数，用于封装需要重试的异步函数
+ * @param {Function} task 需要封装的异步函数
+ * @param {Object} options 配置项
+ * @param {Number} options.maxRetries 重试次数，默认为 5
+ * @param {Function} options.errorHandler 错误处理函数，默认为抛出错误
+ * @param {...any} args task 函数的参数
+ * @returns {Promise} 返回 Promise
+ */
+async function promiseRetryWrapper(task, {
+    maxRetries = 5,
+    errorHandler = (err) => { throw err }
+} = {}, ...args) {
+    let attemptsLeft = maxRetries;
+    while (attemptsLeft--) {
         try {
-            return await task(...values);
+            return await task(...args);
         } catch (err) {
-            if (!--retryTimes) {
-                console.warn(err);
-                return usedErrProcesser(err);
+            if (!attemptsLeft) {
+                return errorHandler(err, maxRetries, attemptsLeft);
             }
         }
     }
 }
 
-async function BaseTranslate(name, raw, options, processer) {
-    let errtext;
+/**
+ * 通用翻译函数
+ * @param {Object} options GM_xmlhttpRequest 的参数
+ * @param {Function} processer 响应再处理函数，它接收响应文本，并应返回处理后的文本。
+ * @param {Function} checkResponse 检查文本是否符合预期的函数，它接收文本，并返回一个Object，包含状态和信息。
+ * @param {Function} getResponseText 重写响应文本获取函数，它接收response，并返回响应文本。 默认为 response.responseText
+ * @returns {Promise} 返回 Promise
+ */
+async function BaseTranslate(options, processer, checkResponse = () => { return { status: true, message: 'ok' } }, getResponseText = (response) => response.responseText) {
+    const result = {
+        done: false,
+        checkPassed: null,
+        response: null,
+        text: null,
+        errors: [],
+        message: null
+    };
+    const helpText = '\n\n请重试或更换翻译接口。\n\n点击右上角工具栏的 DeBug 图标查看更多信息';
     const toDo = async () => {
-        var tmp;
         try {
-            const data = await Request(options);
-            tmp = data.responseText;
-            let result = await processer(tmp);
+            result.response = await GMRequest(options);
+            result.text = getResponseText(result.response);
+        } catch (err) {
+            console.warn(err);
+            result.errors.push({
+                error: {
+                    message: err.message || null,
+                    stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
+                    enumerable: err,
+                }, source: 'GMRequest'
+            });
+            result.message = `**:( 翻译遇到了问题：** 从接口获取数据时发生了错误${helpText}`;
+            throw result;
+        }
+        try {
+            result.text = processer(result.text);
+        } catch (err) {
+            console.warn(err);
+            result.errors.push({
+                error: {
+                    message: err.message,
+                    stack: err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;'),
+                    enumerable: err,
+                }, source: 'Processer'
+            });
+            result.message = `**:( 翻译遇到了问题：** 获取目标数据时发生了错误 \n\n响应数据可能存在错误${helpText}`;
+            throw result;
+        }
+        try {
+            result.checkPassed = checkResponse(result.text);
+            if (result.checkPassed.status) result.done = true;
+            else result.message = result.checkPassed.message;
             return result;
         } catch (err) {
-            errtext = tmp;
-            throw {
-                responseText: tmp,
-                err: err
-            }
+            console.warn(err);
+            result.errors.push({
+                error: {
+                    message: err.message,
+                    stack: err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;'),
+                    enumerable: err,
+                }, source: 'CheckResponse'
+            });
+            result.message = `**:( 翻译遇到了问题：** 检查响应数据时发生了意外的错误${helpText}`;
+            throw result;
         }
-    }
-    return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => `翻译出错，请查看报错信息，并重试或更换翻译接口 ${findHelpText1} 请注意打码报错信息的敏感部分\n\n报错信息: ${errtext} ` })
+    };
+
+    return await promiseRetryWrapper(toDo, {
+        maxRetries: 3,
+        errorHandler: (err, maxRetries, attemptsLeft) => {
+            const detailedError = {
+                maxRetries: maxRetries,
+                attemptsLeft: attemptsLeft,
+                ...err
+            };
+            return detailedError;
+        }
+    });
 }
 
-function Request(options) {
-    return new Promise((reslove, reject) => GM_xmlhttpRequest({ ...options, onload: reslove, onerror: reject }))
+/**
+ * GM_xmlhttpRequest 的 Promise 封装
+ * @param {Object} options GM_xmlhttpRequest 的参数
+ * @param {Boolean} isStream 是否为流式请求
+ * @returns {Promise} 返回 Promise
+ */
+function GMRequest(options, isStream = false) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            ...options,
+            ...(isStream ? {
+                onloadstart: resolve
+            } : {
+                onload: resolve
+            }),
+            onerror: reject,
+            ontimeout: reject,
+            onabort: reject
+        });
+    });
 }
-
-//--异步请求包装工具--end
 
 // 开始
 document.addEventListener("DOMContentLoaded", function () {
@@ -9052,80 +9243,80 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         async function processPage() {
-            if (showLoading) newElement.html(`${OJBetterName} —— 正在等待LaTeX渲染队列全部完成……`);
-            await waitUntilIdleThenDo(async function () {
+            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('waiteLatex', { ns: 'alert' })}`);
+            waitUntilIdleThenDo(async function () {
                 if (showJumpToLuogu && is_problem) CF2luogu();
                 Promise.resolve()
                     .then(async () => {
-                        if (showLoading) newElement.html(`${OJBetterName} —— 正在连接数据库……`);
+                        if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('linkDB', { ns: 'alert' })}`);
                         await delay(100);
                         await initDB();
                     })
                     .then(() => {
-                        if (showLoading && expandFoldingblocks) newElement.html(`${OJBetterName} —— 正在展开折叠块……`);
+                        if (showLoading && expandFoldingblocks) newElement.html(`${OJBetterName} —— ${i18next.t('expandFoldingblocks', { ns: 'alert' })}`);
                         return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
                     })
                     .then(() => {
-                        if (showLoading && commentPaging) newElement.html(`${OJBetterName} —— 正在对评论区分页……`);
+                        if (showLoading && commentPaging) newElement.html(`${OJBetterName} —— ${i18next.t('commentPaging', { ns: 'alert' })}`);
                         return delay(100).then(() => { if (commentPaging) CommentPagination() });
                     })
                     .then(() => {
-                        if (showLoading && is_acmsguru) newElement.html(`${OJBetterName} —— 正在为acmsguru题面重新划分div……`);
+                        if (showLoading && is_acmsguru) newElement.html(`${OJBetterName} —— ${i18next.t('acmsguruRebuild', { ns: 'alert' })}`);
                         return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
                     })
                     .then(() => {
-                        if (showLoading) newElement.html(`${OJBetterName} —— 正在加载按钮相关函数……`);
+                        if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('initTranslateButtonFunc', { ns: 'alert' })}`);
                         return delay(100).then(() => initTranslateButtonFunc());
                     })
                     .then(() => {
-                        if (showLoading) newElement.html(`${OJBetterName} —— 正在加载按钮……`);
+                        if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('addConversionButton', { ns: 'alert' })}`);
                         return delay(100).then(() => addConversionButton());
                     })
                     .then(() => {
-                        if (showLoading && commentTranslationMode == "2") newElement.html(`${OJBetterName} —— 正在加载选段翻译……`);
+                        if (showLoading && commentTranslationMode == "2") newElement.html(`${OJBetterName} —— ${i18next.t('multiChoiceTranslation', { ns: 'alert' })}`);
                         return delay(100).then(() => { if (commentTranslationMode == "2") multiChoiceTranslation() });
                     })
                     .then(async () => {
-                        if (showLoading && renderPerfOpt) newElement.html(`${OJBetterName} —— 正在优化折叠块渲染……`);
+                        if (showLoading && renderPerfOpt) newElement.html(`${OJBetterName} —— ${i18next.t('RenderPerfOpt', { ns: 'alert' })}`);
                         await delay(100);
                         if (renderPerfOpt) await RenderPerfOpt();
                     })
                     .then(async () => {
-                        if (showLoading && is_problem && memoryTranslateHistory) newElement.html(`${OJBetterName} —— 正在恢复上一次的翻译记录……`);
+                        if (showLoading && is_problem && memoryTranslateHistory) newElement.html(`${OJBetterName} —— ${i18next.t('initTransResultsRecover', { ns: 'alert' })}`);
                         return delay(100).then(async () => { if ((is_problem || is_completeProblemset) && memoryTranslateHistory) await initTransResultsRecover() });
                     })
                     .then(async () => {
-                        if (showLoading && autoTranslation) newElement.html(`${OJBetterName} —— 正在初始化短文本自动翻译……`);
+                        if (showLoading && autoTranslation) newElement.html(`${OJBetterName} —— ${i18next.t('initTransWhenViewable', { ns: 'alert' })}`);
                         return delay(100).then(() => { if (autoTranslation) initTransWhenViewable() });
                     })
                     .then(async () => {
-                        if (showLoading && standingsRecolor && is_cfStandings) newElement.html(`${OJBetterName} —— 正在为榜单重新着色……`);
+                        if (showLoading && standingsRecolor && is_cfStandings) newElement.html(`${OJBetterName} —— ${i18next.t('recolorStandings', { ns: 'alert' })}`);
                         await delay(100);
                         if (standingsRecolor && is_cfStandings) await recolorStandings();
                     })
                     .then(async () => {
-                        if (showLoading && is_problem) newElement.html(`${OJBetterName} —— 正在添加代码编辑器……`);
+                        if (showLoading && is_problem) newElement.html(`${OJBetterName} —— ${i18next.t('addProblemPageCodeEditor', { ns: 'alert' })}`);
                         await delay(100);
                         if (is_problem && problemPageCodeEditor) await addProblemPageCodeEditor();
                     })
                     .then(async () => {
                         await delay(100);
                         if (showClistRating_contest && is_contest) {
-                            if (showLoading) newElement.html(`${OJBetterName} —— 正在加载Clist数据……`);
+                            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('showRatingByClist', { ns: 'alert' })}`);
                             await showRatingByClist_contest();
                         }
                         if (showClistRating_problemset && is_problemset) {
-                            if (showLoading) newElement.html(`${OJBetterName} —— 正在加载Clist数据……`);
+                            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('showRatingByClist', { ns: 'alert' })}`);
                             await showRatingByClist_problemset();
                         }
                         if (showClistRating_problem && is_problem) {
-                            if (showLoading) newElement.html(`${OJBetterName} —— 正在加载Clist数据……`);
+                            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('showRatingByClist', { ns: 'alert' })}`);
                             await showRatingByClist_problem();
                         }
                     })
                     .then(() => {
                         if (showLoading) {
-                            newElement.html(`${OJBetterName} —— 加载已完成`);
+                            newElement.html(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`);
                             newElement.removeClass('alert-info').addClass('alert-success');
                             setTimeout(function () {
                                 newElement.remove();
