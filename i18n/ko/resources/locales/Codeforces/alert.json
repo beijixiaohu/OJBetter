@@ -1,0 +1,18 @@
+{
+    "waiteResources": "페이지 리소스가 로드되기를 기다리는 중……",
+    "waiteLatex": "라텍스 렌더링 대기열이 완전히 완료되기를 기다리는 중……",
+    "linkDB": "데이터베이스에 연결……",
+    "expandFoldingblocks": "접이식 블록 펼치기……",
+    "commentPaging": "댓글 섹션 페이지……",
+    "acmsguruRebuild": "acmsguru 설문조사를 위한 부서 재지정 진행 중……",
+    "initTranslateButtonFunc": "번역 버튼 기능 초기화하기……",
+    "addConversionButton": "로딩 버튼……",
+    "multiChoiceTranslation": "선택 항목의 번역 로드 중……",
+    "RenderPerfOpt": "축소된 블록 렌더링 성능 최적화 중……",
+    "initTransResultsRecover": "마지막 번역 결과가 복원 중입니다……",
+    "initTransWhenViewable": "짧은 텍스트 자동 번역 초기화하기……",
+    "recolorStandings": "목록 색상 변경 진행 중……",
+    "addProblemPageCodeEditor": "제목 페이지에 코드 편집기 추가 중……",
+    "showRatingByClist": "클리스트 등급 데이터 로드 중……",
+    "loadSuccess": "로드 완료"
+}
