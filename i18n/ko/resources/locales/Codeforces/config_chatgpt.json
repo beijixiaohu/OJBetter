@@ -1,37 +1,37 @@
 {
     "common": {
-        "title": "配置",
+        "title": "구성",
         "basic": {
             "title": "기본",
             "name": {
-                "label": "名称:",
-                "placeholder": "请为该配置取一个名称"
+                "label": "이름.",
+                "placeholder": "이 구성에 이름을 지정하세요."
             },
             "model": {
-                "label": "模型:",
-                "tipText": "<p>留空则默认为：gpt-3.5-turbo</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
+                "label": "모델.",
+                "tipText": "<p>비워두면 기본값은：gpt-3.5-turbo</p><p>모델 목록은<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI 공식 문서</a></p><p><strong>또한 서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우 서비스 제공업체가 해당 모델을 지원하는지</strong></p>확인하시기 바랍니다."
             },
             "key": {
-                "label": "KEY:",
-                "placeholder": "请输入KEY",
-                "tipText": "<p>你需要输入自己的OpenAI key，<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">官网</a></p><p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>"
+                "label": "KEY.",
+                "placeholder": "KEY를 입력하세요.",
+                "tipText": "<p><a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">공식 웹사이트</a></p><p><b>서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우, 서비스 제공업체에서 제공하는 키</b></p>를 입력해야 합니다."
             },
             "proxy": {
-                "label": "Proxy API:",
-                "tipText": "<p>留空则默认为OpenAI官方API</p><p>你也可以填写指定的API来代理访问OpenAI的API，</p><p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p><p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>"
+                "label": "프록시 API.",
+                "tipText": "<p>비워두면 공식 OpenAI API가 기본값으로 설정됩니다</p><p>지정한 API를 입력하여 OpenAI의 API에 프록시 액세스할 수도 있습니다</p><p>서비스 제공업체에서 제공하는 프록시 API와 KEY를 사용하는 경우<strong>전체 내용을 입력해야 합니다</strong>서비스 제공업체에서 제공하는 API 주소, 자세한 내용은 스크립트 지침을 참조하세요</p><p><strong>사용자 지정 API를 지정하고 있으므로 Tampermonkey에서 도메인 간 요청에 대한 경고를 표시할 것입니다. 직접 승인해야 합니다</strong></p>"
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "높은 수준",
             "header": {
-                "label": "自定义header",
-                "placeholder": "（选填）你可以在这里填写向请求header中额外添加的键值对",
-                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+                "label": "사용자 지정 헤더",
+                "placeholder": "(선택 사항) 여기에서 요청 헤더에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
+                "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "data": {
-                "label": "自定义data",
-                "placeholder": "（选填）你可以在这里填写向请求data中额外添加的键值对",
-                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+                "label": "사용자 지정 데이터",
+                "placeholder": "(선택 사항) 여기에서 요청 데이터에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
+                "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             }
         }
     }
