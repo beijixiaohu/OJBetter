@@ -1,0 +1,18 @@
+{
+    "waiteResources": "Warten auf das Laden von Seitenressourcen……",
+    "waiteLatex": "Warten auf die vollständige Fertigstellung der LaTeX-Warteschlange……",
+    "linkDB": "Verbinden mit der Datenbank……",
+    "expandFoldingblocks": "Entfalten des Faltblocks……",
+    "commentPaging": "Auf der Seite mit den Kommentaren zu sein……",
+    "acmsguruRebuild": "正在为acmsguru题面重新划分div……",
+    "initTranslateButtonFunc": "正在初始化翻译按钮功能……",
+    "addConversionButton": "正在加载按钮……",
+    "multiChoiceTranslation": "正在加载选段翻译……",
+    "RenderPerfOpt": "正在优化折叠块渲染性能……",
+    "initTransResultsRecover": "正在恢复上一次翻译结果……",
+    "initTransWhenViewable": "正在初始化短文本自动翻译……",
+    "recolorStandings": "正在为榜单重新着色……",
+    "addProblemPageCodeEditor": "正在为题面页添加代码编辑器……",
+    "showRatingByClist": "正在加载Clist Rating数据……",
+    "loadSuccess": "加载已完成"
+}
