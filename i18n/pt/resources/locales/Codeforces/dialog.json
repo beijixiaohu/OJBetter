@@ -1,41 +1,41 @@
 {
     "saveSetting": {
-        "title": "配置已更改，是否保存？",
+        "title": "A configuração foi alterada, guardada ou não?",
         "content": "",
         "buttons": [
-            "不保存",
-            "保存"
+            "não salvo",
+            "guardar (um ficheiro, etc.) (informática)"
         ]
     },
     "announce": {
-        "title": "已更新至",
-        "content": "#### \n\n最近更新日志\n\n---1.73\n\n",
+        "title": "Atualizado para",
+        "content": "#### \n\nÚltimo registo atualizado\n\n---1.73\n\n",
         "buttons": [
-            "我知道了"
+            "Eu sei."
         ]
     },
     "skipFold": {
-        "title": "是否跳过折叠块？",
-        "content": "即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在你需要选择是否跳过这些折叠块：\n\n如果其中有你需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译\n\n要跳过折叠块吗？（建议选择跳过）",
+        "title": "Salta o bloco de dobragem?",
+        "content": "A área a traduzir contém blocos dobrados, que podem ser código e normalmente não precisam de ser traduzidos. Agora, tem de escolher se quer ou não saltar estes blocos dobrados：\n\nSe houver blocos dobrados que precise de traduzir, pode traduzi-los mais tarde, clicando nos botões de tradução dentro desses blocos dobrados individualmente\n\nQuer saltar os blocos dobrados? (recomenda-se que salte)",
         "buttons": [
-            "否",
-            "跳过"
+            "entupido",
+            "saltar"
         ]
     },
     "transTextLimits": {
-        "title": "字符数超限! ",
-        "content": "即将翻译的内容共 **{{realTextLength}}** 字符\n\n这超出了当前翻译服务的 **{{textLength}}** 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”\n\n注意，可能你选择了错误的翻译按钮\n\n由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮\n\n你确定要继续翻译吗？",
+        "title": "Contagem de caracteres ultrapassada! ",
+        "content": "O conteúdo a traduzir tem um total de **{{realTextLength}}** caracteres\n\nIsto excede o limite de **{{textLength}}** caracteres do serviço de tradução atual. Por favor, mude de serviço de tradução ou active a \"Tradução segmentada\" no painel de Definições\n\nNote que pode ter selecionado o botão de tradução errado\n\nDevido à forma como é realizado, haverá mais do que um botão de tradução no campo. Por favor, clique no botão Traduzir no subcampo mais pequeno botão\n\nTem a certeza de que quer continuar a traduzir?",
         "buttons": [
-            "仍要翻译",
-            "取消"
+            "Ainda precisa de traduzir",
+            "cancelamentos"
         ]
     },
     "submitCode": {
-        "title": "确认提交代码吗",
+        "title": "Confirmação da submissão do código?",
         "content": "",
         "buttons": [
-            "取消",
-            "提交"
+            "cancelamentos",
+            "apresentar (um relatório, etc.)"
         ]
     }
 }
