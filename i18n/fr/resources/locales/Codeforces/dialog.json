@@ -1,0 +1,41 @@
+{
+    "saveSetting": {
+        "title": "Configuration modifiée, sauvegardée ou non ?",
+        "content": "",
+        "buttons": [
+            "non sauvé",
+            "enregistrer (un fichier, etc.) (informatique)"
+        ]
+    },
+    "announce": {
+        "title": "Mise à jour",
+        "content": "#### \n\nDernière mise à jour du journal\n\n---1.73\n\n",
+        "buttons": [
+            "Je sais."
+        ]
+    },
+    "skipFold": {
+        "title": "Saute-t-il le bloc de pliage ?",
+        "content": "La zone à traduire contient des blocs pliés, qui peuvent être des codes et n'ont généralement pas besoin d'être traduits. Vous devez maintenant choisir d'ignorer ou non ces blocs pliés：\n\nSi des blocs pliés doivent être traduits, vous pouvez les traduire plus tard en cliquant sur les boutons de traduction dans ces blocs pliés individuellement\n\nVous voulez ignorer les blocs pliés ? (il est recommandé de les sauter)",
+        "buttons": [
+            "bouché",
+            "passer outre"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Dépassement du nombre de caractères ! ",
+        "content": "Le contenu à traduire a un total de **{{realTextLength}}** caractères\n\nCela dépasse la limite de **{{textLength}}** caractères du service de traduction actuel, veuillez changer de service de traduction ou activer la \"Traduction segmentée\" dans le panneau Paramètres\n\nNotez que vous avez peut-être sélectionné le mauvais bouton de traduction\n\nEn raison de la façon dont il est réalisé, il y aura plus d'un bouton de traduction dans le champ, veuillez cliquer sur le bouton Traduire dans le sous-champ le plus petit. bouton\n\nÊtes-vous sûr de vouloir continuer la traduction ?",
+        "buttons": [
+            "Il reste à traduire",
+            "annulations"
+        ]
+    },
+    "submitCode": {
+        "title": "Confirmation de la soumission du code ?",
+        "content": "",
+        "buttons": [
+            "annulations",
+            "soumettre (un rapport, etc.)"
+        ]
+    }
+}

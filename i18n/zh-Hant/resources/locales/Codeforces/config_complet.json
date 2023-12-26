@@ -1,0 +1,24 @@
+{
+    "common": {
+        "title": "自訂補全",
+        "name": {
+            "label": "備註:",
+            "placeholder": "請為該自訂配置取一個備註名"
+        },
+        "choose": {
+            "label": "啟用？"
+        },
+        "genre": {
+            "label": "範本格式",
+            "tipText": "<p>monaco 格式支援monaco 中 <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> 幾乎所有的屬性, (注意: 不需要range屬性, 腳本會自動計算並添加該屬性)</p><p>ace 格式僅支援ace 中completers 有限的屬性: <code>caption</code>、<code>value</code>, 腳本會自動將其轉換為monaco 格式</p><p>具體你可以前往閱讀腳本頁的說明</p>"
+        },
+        "language": {
+            "label": "適用的語言"
+        },
+        "jsonurl": {
+            "tipText": "<p>開啟OJBetter_Bridge 後, 其會回應GET 請求<code>/mycomplet/*</code>, 並返回在<code>mycomplet</code>資料夾中尋找到的同名文件的內容</p><p>因此你只需要在 <code>/mycomplet</code> 資料夾中放置你的JSON 檔案即可在本地訪問，</p><p>在配置中你需要填寫的URL 形如: </p><p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>腳本會完全信任你的JSON 資料而不進行額外的校驗和檢查, 因此請勿添加來源不明的JSON URL,</p><p>特殊構造的資料可能會破壞腳本的正常工作, 甚至執行其他惡意程式碼</p>",
+            "placeholder": "型如http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "waiteResources": "ページのリソースが……を待機しています。",
+    "waiteLatex": "LaTeX 描画キューが全て……",
+    "linkDB": "データベース……に接続中",
+    "expandFoldingblocks": "ブロックを展開中……",
+    "commentPaging": "レビューのページ……に分割中",
+    "acmsguruRebuild": "次のdiv…… で再定義中",
+    "initTranslateButtonFunc": "翻訳ボタンの……を初期化しています",
+    "addConversionButton": "……を立ち上げています",
+    "multiChoiceTranslation": "選択セグメントの…… を読み込む",
+    "RenderPerfOpt": "折りたたみブロックのレンダリング性能の最適化……",
+    "initTransResultsRecover": "最後の翻訳の結果……",
+    "initTransWhenViewable": "短い文章の自動翻訳の初期化……",
+    "recolorStandings": "再色の……",
+    "addProblemPageCodeEditor": "タイトルページに追加されるコードエディター……",
+    "showRatingByClist": "listRatingデータ…… をロード中",
+    "loadSuccess": "ロード完了"
+}

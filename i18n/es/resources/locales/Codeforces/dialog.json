@@ -1,0 +1,41 @@
+{
+    "saveSetting": {
+        "title": "¿Ha cambiado la configuración, se ha guardado o no?",
+        "content": "",
+        "buttons": [
+            "sin salvación",
+            "guardar (un archivo, etc.) (informática)"
+        ]
+    },
+    "announce": {
+        "title": "Actualizado a",
+        "content": "#### \n\nÚltimo registro actualizado\n\n---1.73\n\n",
+        "buttons": [
+            "Lo sé."
+        ]
+    },
+    "skipFold": {
+        "title": "¿Se salta el bloque plegable?",
+        "content": "El área a traducir contiene bloques plegados, que pueden ser código y que normalmente no necesitan ser traducidos, ahora necesita elegir si quiere omitir o no estos bloques plegados：\n\nSi hay algún bloque plegado que necesite traducir, puede traducirlo más tarde haciendo clic en los botones traducir dentro de estos bloques plegados individualmente\n\n¿Quiere omitir los bloques plegados? (se recomienda saltárselos)",
+        "buttons": [
+            "obstruido",
+            "omitir"
+        ]
+    },
+    "transTextLimits": {
+        "title": "¡Recuento de caracteres superado! ",
+        "content": "El contenido a traducir tiene un total de **{{realTextLength}}** caracteres\n\nEsto excede el límite de **{{textLength}}** caracteres del servicio de traducción actual, por favor cambie el servicio de traducción o active la \"Traducción Segmentada\" en el panel de Ajustes\n\nTenga en cuenta que puede haber seleccionado el botón de traducción equivocado\n\nDebido a la forma en que está realizado, habrá más de un botón de traducción en el campo, por favor haga clic en el botón Traducir en el subcampo más pequeño botón\n\n¿Está seguro de que desea continuar traduciendo?",
+        "buttons": [
+            "Aún tiene que traducir",
+            "cancelaciones"
+        ]
+    },
+    "submitCode": {
+        "title": "¿Confirmación de la presentación del código?",
+        "content": "",
+        "buttons": [
+            "cancelaciones",
+            "presentar (un informe, etc.)"
+        ]
+    }
+}

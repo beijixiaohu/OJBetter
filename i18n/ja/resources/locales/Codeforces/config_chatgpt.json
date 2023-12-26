@@ -1,0 +1,38 @@
+{
+    "common": {
+        "title": "設定",
+        "basic": {
+            "title": "基本的",
+            "name": {
+                "label": "名前:",
+                "placeholder": "この構成のための名前を入力してください"
+            },
+            "model": {
+                "label": "モデル:",
+                "tipText": "<p>デフォルトは空白のまま：gpt-3.5-turbo</p><p>モデル一覧は<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI公式ドキュメント</a></p><p><strong>なお、サービスプロバイダが提供するプロキシAPIを利用する場合は、サービスプロバイダが対応モデルをサポートしているかどうかをご確認ください</strong></p>"
+            },
+            "key": {
+                "label": "KEY:",
+                "placeholder": "KEYを入力してください。",
+                "tipText": "<p>自らのOpenAI key、<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">入力</a></p><p><b>、サービス業者によって提供されるプロキシのAPIを使用している場合は、サービス提供されているキー</b></p> を入力してください"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>空白のままにしておくと、デフォルトでOpenAIの公式APIになります</p><p>指定したAPIを記入して、OpenAIのAPIへのプロキシアクセスを行うこともできます</p><p>サービスプロバイダから提供されたプロキシAPIとKEYを使用している場合は、サービスプロバイダから提供された<strong>完全な</strong>APIアドレスを記入してください。詳細はスクリプトの説明をお読みください</p><p><strong>カスタムAPIを指定しているため、Tampermonkeyはクロスドメインリクエストについて警告します。自分で認証する必要があります</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "高度な設定",
+            "header": {
+                "label": "header のカスタマイズ",
+                "placeholder": "(オプション) ここではheaderへ追加キーを追加することができます",
+                "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "カスタム data",
+                "placeholder": "（オプション）これらはリクエストデータに追加値を入力することで追加できます.",
+                "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    }
+}

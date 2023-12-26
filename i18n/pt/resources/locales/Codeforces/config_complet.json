@@ -1,0 +1,24 @@
+{
+    "common": {
+        "title": "Conclusão personalizada",
+        "name": {
+            "label": "Observações.",
+            "placeholder": "Indique um nome de nota para esta configuração personalizada"
+        },
+        "choose": {
+            "label": "Ativar?"
+        },
+        "genre": {
+            "label": "Formato do modelo",
+            "tipText": "<p>O formato monaco suporta quase todos os atributos do <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> em monaco, (nota: o atributo range não é necessário, o script calcula-o e adiciona-o automaticamente)</p><p>O formato ace suporta apenas um número limitado de atributos dos complementos em ace: <code>caption</code>,<code>value</code>, que são automaticamente convertidos pelo script para o formato monaco</p><p>specifics. Pode ler as instruções na página do script</p>"
+        },
+        "language": {
+            "label": "Línguas aplicáveis"
+        },
+        "jsonurl": {
+            "tipText": "<p>Quando o OJBetter_Bridge está ativado, responde a um pedido GET<code>/mycomplet/*</code>e devolve o conteúdo de um ficheiro com o mesmo nome que se encontra na pasta<code>mycomplet</code></p><p>Assim, só precisa de colocar o seu ficheiro JSON na pasta <code>/mycomplet</code> para aceder ao mesmo localmente,</p><p>Na configuração, tem de preencher o formulário URL: </p><p><code>http:/ / /127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>O script confiará plenamente nos seus dados JSON sem verificações adicionais, por isso não adicione URLs JSON de fontes desconhecidas,</p><p>dados especialmente construídos podem perturbar o funcionamento normal do script ou mesmo executar outro código malicioso</p>",
+            "placeholder": "Com a forma de http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}

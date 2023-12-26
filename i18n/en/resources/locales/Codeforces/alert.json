@@ -1,0 +1,18 @@
+{
+    "waiteResources": "Waiting for page resources to load……",
+    "waiteLatex": "Waiting for the LaTeX rendering queue to complete……",
+    "linkDB": "Connecting to database……",
+    "expandFoldingblocks": "Expanding folding block……",
+    "commentPaging": "Separating comments from……",
+    "acmsguruRebuild": "Reconfiguring div…… for acmsguru",
+    "initTranslateButtonFunc": "Initializing translation button function……",
+    "addConversionButton": "Loading button……",
+    "multiChoiceTranslation": "Loading selection translation……",
+    "RenderPerfOpt": "Optimizing folding block rendering performance……",
+    "initTransResultsRecover": "Restoring last translation……",
+    "initTransWhenViewable": "Initializing short text automatic translation of……",
+    "recolorStandings": "Resorting…… for the list",
+    "addProblemPageCodeEditor": "Adding code editor…… for the problem page",
+    "showRatingByClist": "Loading Clist Ratingdata……",
+    "loadSuccess": "Loading completed"
+}

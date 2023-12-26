@@ -1,0 +1,41 @@
+{
+    "saveSetting": {
+        "title": "La configurazione è stata modificata, salvata o no?",
+        "content": "",
+        "buttons": [
+            "non salvato",
+            "salvare (un file, ecc.) (informatica)"
+        ]
+    },
+    "announce": {
+        "title": "Aggiornato a",
+        "content": "#### \n\nUltimo registro aggiornato\n\n---1.73\n\n",
+        "buttons": [
+            "Lo so."
+        ]
+    },
+    "skipFold": {
+        "title": "Salta il blocco pieghevole?",
+        "content": "L'area da tradurre contiene blocchi ripiegati, che possono essere codici e di solito non devono essere tradotti; ora deve scegliere se saltare o meno questi blocchi ripiegati：\n\nSe ci sono blocchi ripiegati che deve tradurre, può tradurli in seguito cliccando sui pulsanti di traduzione all'interno di questi blocchi ripiegati individualmente\n\nVuole saltare i blocchi ripiegati? (saltare è consigliato)",
+        "buttons": [
+            "intasato",
+            "saltare"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Il conteggio dei personaggi è stato superato! ",
+        "content": "Il contenuto da tradurre ha un totale di **{{realTextLength}}** caratteri\n\nQuesto supera il **{{textLength}}** limite di caratteri del servizio di traduzione attuale, la preghiamo di cambiare il servizio di traduzione o di attivare la \"Traduzione segmentata\" nel pannello Impostazioni\n\nSi noti che potrebbe aver selezionato il pulsante di traduzione sbagliato\n\nA causa del modo in cui è realizzato, ci sarà più di un pulsante di traduzione nel campo, la preghiamo di cliccare sul pulsante Traduci nel sottocampo più piccolo\n\nÈ sicuro di voler continuare la traduzione?",
+        "buttons": [
+            "Deve ancora tradurre",
+            "cancellazioni"
+        ]
+    },
+    "submitCode": {
+        "title": "Conferma dell'invio del codice?",
+        "content": "",
+        "buttons": [
+            "cancellazioni",
+            "presentare (un rapporto, ecc.)"
+        ]
+    }
+}

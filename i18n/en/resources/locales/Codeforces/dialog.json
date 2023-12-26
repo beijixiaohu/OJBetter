@@ -1,0 +1,41 @@
+{
+    "saveSetting": {
+        "title": "The configuration has been changed, do you want to save?",
+        "content": "",
+        "buttons": [
+            "Do not save",
+            "Save"
+        ]
+    },
+    "announce": {
+        "title": "Updated to",
+        "content": "### \n\nRecently Updated Log\n\n---1.73\n\n",
+        "buttons": [
+            "I know"
+        ]
+    },
+    "skipFold": {
+        "title": "Skip folder?",
+        "content": "The upcoming translation area contains folded blocks. Collapses may be code and do not usually need to be translated. Now you need to choose whether to skip these folded blocks：\n\nif they contain folded blocks you need to translate, then click the translation button in these folded blocks to proceed with the\n\ntranslation blocks? (selection is recommended)",
+        "buttons": [
+            "No",
+            "Skip"
+        ]
+    },
+    "transTextLimits": {
+        "title": "The number of characters is out of limit! ",
+        "content": "The content to be translated has a total of **{{realTextLength}}** characters\n\nThis exceeds the **{{textLength}}** character limit of the current translation service, please change the translation service or turn on \"Segmented Translation\" in the Settings panel\n\nNote that you may have selected the wrong translation button\n\nDue to the way it is implemented, there will be multiple translation buttons in the area, so please click on the translation button in the smaller sub area button\n\nAre you sure you want to continue translating?",
+        "buttons": [
+            "Still to translate",
+            "Cancel"
+        ]
+    },
+    "submitCode": {
+        "title": "Confirm submission code?",
+        "content": "",
+        "buttons": [
+            "Cancel",
+            "Commit"
+        ]
+    }
+}

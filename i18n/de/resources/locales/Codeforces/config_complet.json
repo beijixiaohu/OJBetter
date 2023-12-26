@@ -1,0 +1,24 @@
+{
+    "common": {
+        "title": "Benutzerdefinierte Vervollständigung",
+        "name": {
+            "label": "Bemerkungen.",
+            "placeholder": "Bitte geben Sie einen Notiznamen für diese benutzerdefinierte Konfiguration ein"
+        },
+        "choose": {
+            "label": "Aktivieren?"
+        },
+        "genre": {
+            "label": "Format der Vorlage",
+            "tipText": "<p>Das monaco-Format unterstützt fast alle Attribute des <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> in monaco, (Hinweis: das range-Attribut wird nicht benötigt, das Skript berechnet es automatisch und fügt es hinzu)</p><p>Das ace-Format unterstützt nur eine begrenzte Anzahl von Attributen der Completters in ace: <code>caption</code>,<code>value</code>, die vom Skript automatisch in das monaco-Format</p><p>specifics konvertiert werden. Sie können die Anweisungen auf der Skriptseite</p>lesen."
+        },
+        "language": {
+            "label": "Anwendbare Sprachen"
+        },
+        "jsonurl": {
+            "tipText": "<p>Wenn OJBetter_Bridge eingeschaltet ist, antwortet sie auf eine GET-Anfrage<code>/mycomplet/*</code>und gibt den Inhalt einer Datei mit demselben Namen zurück, die sich im Ordner<code>mycomplet</code></p><p>befindet. Sie müssen Ihre JSON-Datei also nur im Ordner <code>/mycomplet</code> ablegen, um lokal darauf zuzugreifen,</p><p>In der Konfiguration müssen Sie das URL-Formular ausfüllen: </p><p><code>http:/ / / /127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>Das Skript wird Ihren JSON-Daten ohne zusätzliche Prüfungen und Verifizierungen voll und ganz vertrauen. Fügen Sie daher keine JSON-URLs aus unbekannten Quellen hinzu.</p><p>speziell konstruierte Daten können den normalen Betrieb des Skripts stören oder sogar anderen bösartigen Code ausführen</p>",
+            "placeholder": "Geformt wie http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "saveSetting": {
+        "title": "A configuração foi alterada, guardada ou não?",
+        "content": "",
+        "buttons": [
+            "não salvo",
+            "guardar (um ficheiro, etc.) (informática)"
+        ]
+    },
+    "announce": {
+        "title": "Atualizado para",
+        "content": "#### \n\nÚltimo registo atualizado\n\n---1.73\n\n",
+        "buttons": [
+            "Eu sei."
+        ]
+    },
+    "skipFold": {
+        "title": "Salta o bloco de dobragem?",
+        "content": "A área a traduzir contém blocos dobrados, que podem ser código e normalmente não precisam de ser traduzidos. Agora, tem de escolher se quer ou não saltar estes blocos dobrados：\n\nSe houver blocos dobrados que precise de traduzir, pode traduzi-los mais tarde, clicando nos botões de tradução dentro desses blocos dobrados individualmente\n\nQuer saltar os blocos dobrados? (recomenda-se que salte)",
+        "buttons": [
+            "entupido",
+            "saltar"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Contagem de caracteres ultrapassada! ",
+        "content": "O conteúdo a traduzir tem um total de **{{realTextLength}}** caracteres\n\nIsto excede o limite de **{{textLength}}** caracteres do serviço de tradução atual. Por favor, mude de serviço de tradução ou active a \"Tradução segmentada\" no painel de Definições\n\nNote que pode ter selecionado o botão de tradução errado\n\nDevido à forma como é realizado, haverá mais do que um botão de tradução no campo. Por favor, clique no botão Traduzir no subcampo mais pequeno botão\n\nTem a certeza de que quer continuar a traduzir?",
+        "buttons": [
+            "Ainda precisa de traduzir",
+            "cancelamentos"
+        ]
+    },
+    "submitCode": {
+        "title": "Confirmação da submissão do código?",
+        "content": "",
+        "buttons": [
+            "cancelamentos",
+            "apresentar (um relatório, etc.)"
+        ]
+    }
+}

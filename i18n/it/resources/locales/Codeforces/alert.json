@@ -1,0 +1,18 @@
+{
+    "waiteResources": "Attesa per il caricamento delle risorse della pagina……",
+    "waiteLatex": "In attesa che la coda di rendering LaTeX sia completamente completata……",
+    "linkDB": "Connessione al database……",
+    "expandFoldingblocks": "Dispiegare il blocco pieghevole……",
+    "commentPaging": "Essere nella pagina della sezione commenti……",
+    "acmsguruRebuild": "Il questionario di redistricting div per acmsguru è in corso……",
+    "initTranslateButtonFunc": "Inizializzazione della funzione del pulsante di traduzione……",
+    "addConversionButton": "Pulsante di caricamento……",
+    "multiChoiceTranslation": "Caricamento delle traduzioni delle selezioni……",
+    "RenderPerfOpt": "Le prestazioni di rendering dei blocchi collassati sono state ottimizzate……",
+    "initTransResultsRecover": "L'ultimo risultato della traduzione viene ripristinato……",
+    "initTransWhenViewable": "Inizializzazione della traduzione automatica di testi brevi……",
+    "recolorStandings": "Ricolorazione dell'elenco in corso……",
+    "addProblemPageCodeEditor": "L'editor di codice viene aggiunto alla pagina del titolo……",
+    "showRatingByClist": "Caricamento dei dati di valutazione Clist……",
+    "loadSuccess": "Caricamento completato"
+}

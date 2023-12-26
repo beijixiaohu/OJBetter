@@ -1,0 +1,41 @@
+{
+    "saveSetting": {
+        "title": "Konfiguration geändert, gespeichert oder nicht?",
+        "content": "",
+        "buttons": [
+            "nicht gerettet",
+            "(eine Datei etc.) speichern (Informatik)"
+        ]
+    },
+    "announce": {
+        "title": "Aktualisiert auf",
+        "content": "#### \n\nZuletzt aktualisiertes Protokoll\n\n---1.73\n\n",
+        "buttons": [
+            "Ich weiß."
+        ]
+    },
+    "skipFold": {
+        "title": "Wird der Faltblock übersprungen?",
+        "content": "Der zu übersetzende Bereich enthält gefaltete Blöcke, bei denen es sich um Code handeln kann und die in der Regel nicht übersetzt werden müssen. Jetzt müssen Sie entscheiden, ob Sie diese gefalteten Blöcke überspringen möchten oder nicht：\n\nWenn es gefaltete Blöcke gibt, die Sie übersetzen müssen, können Sie sie später übersetzen, indem Sie auf die Schaltflächen zum Übersetzen innerhalb dieser gefalteten Blöcke klicken\n\nMöchten Sie die gefalteten Blöcke überspringen? (Überspringen wird empfohlen)",
+        "buttons": [
+            "Verstopft",
+            "Überspringen"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Zeichenanzahl überschritten! ",
+        "content": "Der zu übersetzende Inhalt hat insgesamt **{{realTextLength}}** Zeichen\n\nDies überschreitet die **{{textLength}}** Zeichengrenze des aktuellen Übersetzungsdienstes, bitte wechseln Sie den Übersetzungsdienst oder aktivieren Sie \"Segmentierte Übersetzung\" im Einstellungsbereich\n\nBeachten Sie, dass Sie möglicherweise die falsche Übersetzungsschaltfläche ausgewählt haben\n\nAufgrund der Art der Realisierung gibt es mehr als eine Übersetzungsschaltfläche im Feld, bitte klicken Sie auf die Schaltfläche Übersetzen im kleineren Unterfeld\n\nSind Sie sicher, dass Sie mit der Übersetzung fortfahren möchten?",
+        "buttons": [
+            "Muss noch übersetzt werden",
+            "Stornierungen"
+        ]
+    },
+    "submitCode": {
+        "title": "Bestätigung der Übermittlung des Codes?",
+        "content": "",
+        "buttons": [
+            "Stornierungen",
+            "einreichen (einen Bericht usw.)"
+        ]
+    }
+}

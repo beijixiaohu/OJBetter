@@ -1,0 +1,18 @@
+{
+    "waiteResources": "Warten auf das Laden von Seitenressourcen……",
+    "waiteLatex": "Warten auf die vollständige Fertigstellung der LaTeX-Warteschlange……",
+    "linkDB": "Verbinden mit der Datenbank……",
+    "expandFoldingblocks": "Entfalten des Faltblocks……",
+    "commentPaging": "Auf der Seite mit den Kommentaren zu sein……",
+    "acmsguruRebuild": "Redistricting div für acmsguru Fragebogen in Arbeit……",
+    "initTranslateButtonFunc": "Initialisierung der Funktion der Übersetzungstaste……",
+    "addConversionButton": "Schaltfläche Laden……",
+    "multiChoiceTranslation": "Laden von Übersetzungen von Auswahlen……",
+    "RenderPerfOpt": "Die Rendering-Leistung bei zusammengeklappten Blöcken wird optimiert……",
+    "initTransResultsRecover": "Das letzte Übersetzungsergebnis wird wiederhergestellt……",
+    "initTransWhenViewable": "Initialisierung der automatischen Übersetzung von kurzen Texten……",
+    "recolorStandings": "Neueinfärbung der Liste in Bearbeitung……",
+    "addProblemPageCodeEditor": "Code-Editor wird zur Titelseite hinzugefügt……",
+    "showRatingByClist": "Laden von Clist Rating Daten……",
+    "loadSuccess": "Laden abgeschlossen"
+}
