@@ -1,0 +1,18 @@
+{
+    "waiteResources": "À espera que os recursos da página sejam carregados……",
+    "waiteLatex": "Está a aguardar que a fila de renderização do LaTeX seja totalmente concluída……",
+    "linkDB": "Ligação à base de dados……",
+    "expandFoldingblocks": "Desdobramento do bloco dobrável……",
+    "commentPaging": "Estar na página da secção de comentários……",
+    "acmsguruRebuild": "Redistricting div para o questionário acmsguru em curso……",
+    "initTranslateButtonFunc": "Inicialização da função do botão de tradução……",
+    "addConversionButton": "Botão de carregamento……",
+    "multiChoiceTranslation": "Carregamento de traduções de selecções……",
+    "RenderPerfOpt": "Desempenho de renderização de blocos recolhidos a ser optimizado……",
+    "initTransResultsRecover": "O último resultado da tradução está a ser restaurado……",
+    "initTransWhenViewable": "Inicialização da tradução automática de textos curtos……",
+    "recolorStandings": "Recolha de cor da lista em curso……",
+    "addProblemPageCodeEditor": "O editor de código está a ser adicionado à página de título……",
+    "showRatingByClist": "Carregando os dados do Clist Rating……",
+    "loadSuccess": "Carregamento concluído"
+}
