@@ -1,24 +1,24 @@
 {
     "common": {
-        "title": "自定义补全",
+        "title": "사용자 지정 완료",
         "name": {
-            "label": "备注:",
-            "placeholder": "请为该自定义配置取一个备注名"
+            "label": "비고.",
+            "placeholder": "이 사용자 지정 구성의 메모 이름을 입력하세요."
         },
         "choose": {
-            "label": "启用？"
+            "label": "활성화?"
         },
         "genre": {
-            "label": "模板格式",
-            "tipText": "<p>monaco 格式支持 monaco 中 <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> 几乎所有的属性, (注意: 不需要range属性, 脚本会自动计算并添加该属性)</p><p>ace 格式仅支持 ace 中 completers 有限的属性: <code>caption</code>、<code>value</code>, 脚本会自动将其转换为 monaco 格式</p><p>具体你可以前往阅读脚本页的说明</p>"
+            "label": "템플릿 형식",
+            "tipText": "<p>모나코 형식은 모나코에서 <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> 의 거의 모든 속성을 지원합니다(참고: 범위 속성은 필요하지 않으며 스크립트에서 자동으로 계산하여 추가합니다)</p><p>에이스 형식은 에이스에서 완성자의 제한된 수의 속성만 지원합니다: <code>캡션</code>,<code>값</code>, 스크립트에서 자동으로 모나코 형식</p><p>세부 사항으로 변환됩니다. 스크립트 페이지</p>에서 지침을 읽을 수 있습니다."
         },
         "language": {
-            "label": "适用的语言"
+            "label": "적용 가능한 언어"
         },
         "jsonurl": {
-            "tipText": "<p>开启 OJBetter_Bridge 后, 其会响应 GET 请求<code>/mycomplet/*</code>, 并返回在<code>mycomplet</code>文件夹中寻找到的同名文件的内容</p><p>因此你只需要在 <code>/mycomplet</code> 文件夹中放置你的 JSON 文件即可在本地访问，</p><p>在配置中你需要填写的 URL 形如: </p><p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>",
-            "alert": "<p>脚本会完全信任你的 JSON 数据而不进行额外的校验和检查, 因此请勿添加来源不明的 JSON URL,</p><p>特殊构造的数据可能会破坏脚本的正常工作, 甚至执行其他恶意代码</p>",
-            "placeholder": "形如http://127.0.0.1:2323/mycomplet/xxx.json"
+            "tipText": "<p>OJBetter_Bridge가 켜져 있으면<code>/mycomplet/*</code>GET 요청에 응답하고<code>mycomplet</code>폴더에 있는 동일한 이름의 파일 내용을 반환합니다</p><p>따라서 로컬에서 액세스하려면 <code>/mycomplet</code> 폴더에 JSON 파일만 넣으면 됩니다</p><p>구성에서 URL 모양을 입력해야 합니다: </p><p><code>http:/ /. /127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>스크립트는 추가 확인 및 검증 없이 JSON 데이터를 완전히 신뢰하므로 알 수 없는 출처의 JSON URL을 추가하지 마세요(</p><p>특수하게 구성된 데이터는 스크립트의 정상적인 작동을 방해하거나 다른 악성 코드(</p>)를 실행할 수도 있습니다).",
+            "placeholder": "http://127.0.0.1:2323/mycomplet/xxx.json"
         }
     }
 }
