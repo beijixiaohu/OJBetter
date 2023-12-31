@@ -1,5 +1,4 @@
 {
-    "save": {
-        "title": "(eine Datei etc.) speichern (Informatik)"
-    }
+    "save": "保存",
+    "close": "关闭"
 }
