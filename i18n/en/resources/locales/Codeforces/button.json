@@ -1,0 +1,29 @@
+{
+    "trans": {
+        "normal": "Translation",
+        "segment": "Segment Translations",
+        "select": "Translations selected",
+        "translating": "Translating",
+        "wait": "Waiting for translation",
+        "translated": "Translated",
+        "error": "Translation error",
+        "reTranslate": "Re-translate",
+        "tooLong": "Word Out Of Tolerance"
+    },
+    "md": {
+        "normal": "MarkDownview",
+        "reduction": "Restore"
+    },
+    "copy": {
+        "normal": "Copy",
+        "copied": "Copied"
+    },
+    "state": {
+        "wait": "… waiting",
+        "waitMathJax": "Waiting for MathJax",
+        "loading": "Loading…",
+        "404": "not found",
+        "error": "Something went wrong",
+        "netError": "Network Error"
+    }
+}
