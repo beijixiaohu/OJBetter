@@ -53,14 +53,14 @@
         "options": {
             "title": "Einstellungen",
             "services": {
-                "deepl": "DeepL翻译",
-                "iflyrec": "讯飞听见翻译",
-                "youdao": "有道翻译",
-                "google": "谷歌翻译",
-                "caiyun": "彩云小译",
+                "deepl": "Übersetzung von DeepL",
+                "iflyrec": "Xunfei Hear Übersetzen",
+                "youdao": "Youtube Übersetzung",
+                "google": "Google Übersetzen",
+                "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
                 "openai": {
-                    "name": "ChatGPT翻译",
-                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
+                    "name": "ChatGPT Übersetzung",
+                    "helpText": "<p><b>Sie müssen die Konfigurationsinformationen, die Sie in der ChatGPT-Konfiguration unten verwenden möchten, hinzufügen und auswählen. Klicken Sie mit der rechten Maustaste, um die Konfiguration zu ändern und zu löschen</b></p><p>Bitte lesen Sie die Skriptseite für Details</p>"
                 }
             }
         },
@@ -74,13 +74,13 @@
             "title": "Einstellungen",
             "comment_translation_choice": "Übersetzung des Kommentarbereichs",
             "services": {
-                "follow": "跟随首选项",
-                "deepl": "DeepL翻译",
-                "iflyrec": "讯飞听见翻译",
-                "youdao": "有道翻译",
-                "google": "谷歌翻译",
-                "caiyun": "彩云小译",
-                "openai": "ChatGPT翻译"
+                "follow": "Präferenzen folgen",
+                "deepl": "Übersetzung von DeepL",
+                "iflyrec": "Xunfei Hear Übersetzen",
+                "youdao": "Youtube Übersetzung",
+                "google": "Google Übersetzen",
+                "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
+                "openai": "ChatGPT Übersetzung"
             }
         },
         "autoTranslation": {

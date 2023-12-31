@@ -160,12 +160,12 @@
                 "Language:": "언어.",
                 "Participant": "참가자",
                 "Choose file:": "파일을 선택합니다.",
-                "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "这个题目的数据包未在我们升级评测服务器后由出题人或Codeforces管理团队更新。为了调整时间限制的约束，一个解答的执行时间将被乘以2。例如，如果你的解答在评测服务器上运行了400毫秒，那么将显示并使用800毫秒的值来确定结果。",
-                "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虚拟比赛是一种参加过去比赛的方式，尽可能接近实时参赛。目前只支持ICPC模式的虚拟赛事。",
-                "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已经看过这些题目，虚拟赛事就不适合你——应该在题库中解决这些题目。",
-                "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "如果你只是想解决比赛中的某个问题，虚拟赛事也不适合你——应该在题库中解决这个问题。",
-                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "在虚拟比赛期间，切勿使用别人的代码，阅读教程或与他人交流。",
-                "You can clone this contest to a mashup.": "您可以将此比赛克隆到混搭比赛中。"
+                "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "이 주제에 대한 패킷은 평가 서버를 업그레이드한 이후 문제 작성자나 코드포스 운영팀에서 업데이트하지 않았습니다. 시간 제한 제약을 조정하기 위해 답안 실행 시간에 2를 곱합니다. 예를 들어, 평가 서버에서 답안이 400밀리초 동안 실행된 경우 800밀리초의 값이 표시되고 결과를 결정하는 데 사용됩니다.",
+                "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "가상 토너먼트는 지난 토너먼트에 최대한 실시간 참여에 가깝게 참여할 수 있는 방법입니다. 현재는 ICPC 모드의 가상 토너먼트만 지원됩니다.",
+                "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "이미 이러한 주제를 살펴본 적이 있다면 가상 토너먼트가 적합하지 않으므로 문제은행에서 문제를 풀어야 합니다.",
+                "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "토너먼트에서 문제만 풀고 싶다면 가상 토너먼트는 적합하지 않으며, 문제은행에서 문제를 풀어야 합니다.",
+                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "가상 대회 중에는 다른 사람의 코드를 사용하거나 튜토리얼을 읽거나 다른 사람과 소통해서는 안 됩니다.",
+                "You can clone this contest to a mashup.": "이 콘테스트를 매시업 콘테스트로 복제할 수 있습니다."
             }
         },
         ".icon-eye-close.icon-large": {
@@ -809,12 +809,12 @@
         },
         "standings": {
             "class": [
-                "#pageContent > div:nth-child(7) > div"
+                "#페이지 콘텐츠 > div:n번째 자식(7) > div"
             ],
-            "description": "榜单页右上角的小提示",
+            "description": "목록 페이지의 오른쪽 상단에 있는 팁",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对解决方案进行攻击。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "셀을 두 번 클릭(또는 Ctrl 키를 누른 채 클릭)하여 커밋 기록을 보거나 솔루션을 공격할 수 있습니다."
             }
         },
         "demo": {

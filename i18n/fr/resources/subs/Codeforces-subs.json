@@ -160,12 +160,12 @@
                 "Language:": "Langues.",
                 "Participant": "candidats",
                 "Choose file:": "Sélectionnez un fichier.",
-                "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "这个题目的数据包未在我们升级评测服务器后由出题人或Codeforces管理团队更新。为了调整时间限制的约束，一个解答的执行时间将被乘以2。例如，如果你的解答在评测服务器上运行了400毫秒，那么将显示并使用800毫秒的值来确定结果。",
-                "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虚拟比赛是一种参加过去比赛的方式，尽可能接近实时参赛。目前只支持ICPC模式的虚拟赛事。",
-                "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已经看过这些题目，虚拟赛事就不适合你——应该在题库中解决这些题目。",
-                "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "如果你只是想解决比赛中的某个问题，虚拟赛事也不适合你——应该在题库中解决这个问题。",
-                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "在虚拟比赛期间，切勿使用别人的代码，阅读教程或与他人交流。",
-                "You can clone this contest to a mashup.": "您可以将此比赛克隆到混搭比赛中。"
+                "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "Le paquet de ce sujet n'a pas été mis à jour par l'auteur de la question ou l'équipe d'administration de Codeforces depuis que nous avons mis à jour le serveur d'évaluation. Pour tenir compte des contraintes de temps, le temps d'exécution d'une réponse sera multiplié par 2. Par exemple, si votre réponse a duré 400 millisecondes sur le serveur d'évaluation, une valeur de 800 millisecondes sera affichée et utilisée pour déterminer le résultat.",
+                "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "Les tournois virtuels sont un moyen de participer à des tournois passés en se rapprochant le plus possible d'une participation en temps réel. Actuellement, seuls les tournois virtuels en mode ICPC sont pris en charge.",
+                "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "Si vous avez déjà abordé ces sujets, les tournois virtuels ne sont pas faits pour vous - ils doivent être résolus dans la banque de questions.",
+                "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "Si vous souhaitez simplement résoudre un problème dans un tournoi, les tournois virtuels ne sont pas non plus faits pour vous - le problème doit être résolu dans la banque de questions.",
+                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "N'utilisez pas le code d'autres personnes, ne lisez pas de tutoriels et ne communiquez pas avec d'autres personnes pendant le concours virtuel.",
+                "You can clone this contest to a mashup.": "Vous pouvez transformer ce concours en un concours de mashup."
             }
         },
         ".icon-eye-close.icon-large": {
@@ -811,10 +811,10 @@
             "class": [
                 "#pageContent > div:nth-child(7) > div"
             ],
-            "description": "榜单页右上角的小提示",
+            "description": "Conseil dans le coin supérieur droit de la page d'annonces",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对解决方案进行攻击。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Vous pouvez double-cliquer sur une cellule (ou maintenir la touche Ctrl enfoncée et cliquer) pour afficher l'historique des livraisons ou attaquer la solution."
             }
         },
         "demo": {
