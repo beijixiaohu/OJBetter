@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "कस्टम परीक्षण डेटा (स्वचालित रूप से सहेजा गया)",
+        "onlyCustom": "केवल कस्टम डेटा का परीक्षण करें",
+        "DontShowDiff": "मतभेद मत दिखाओ",
+        "add": "नया"
+    },
+    "runTestButton": "नमूना जाँच",
+    "submitButton": "जमा करना",
+    "fontSizeInput": "फ़ॉन्ट आकार",
+    "fullscreenButton": "पूर्ण स्क्रीन",
+    "exitFullscreenButton": "पूर्ण स्क्रीन से बाहर निकलें",
+    "fixToBottomButton": "नीचे तक स्थिर",
+    "fixToRightButton": "दाईं ओर पिन करें",
+    "cancelFixButton": "अनपिन",
+    "lsp": {
+        "connect": "एलएसपी कनेक्शन बनाएं……",
+        "waitingAnswer": "आरंभीकरण रसीद की प्रतीक्षा में……",
+        "connected": "एलएसपी जुड़ा हुआ है"
+    }
+}
