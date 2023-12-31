@@ -52,15 +52,15 @@
         "title": "翻訳設定",
         "options": {
             "title": "プリファレンス",
-            "translationServices": {
-                "deepl": "DeepLの翻訳",
-                "iflyrec": "宣飛翻訳を聞く",
-                "youdao": "Youtube翻訳",
-                "google": "グーグル翻訳",
-                "caiyun": "カラフルな雲と小さな翻訳",
+            "services": {
+                "deepl": "DeepL翻訳",
+                "iflyrec": "ライブメンバーの翻訳を知らせます",
+                "youdao": "翻訳者",
+                "google": "Google 翻訳",
+                "caiyun": "雲のコンパイル",
                 "openai": {
                     "name": "ChatGPT翻訳",
-                    "helpText": "<p><b>下記のChatGPTコンフィギュレーションで使用したいコンフィギュレーション情報を追加・選択し、右クリックでコンフィギュレーションを修正・削除してください</b></p><p>詳細はスクリプトページをお読みください</p>"
+                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
                 }
             }
         },
@@ -73,13 +73,13 @@
         "preference": {
             "title": "プリファレンス",
             "comment_translation_choice": "コメント欄の翻訳",
-            "translationServices": {
-                "follow": "プリファレンスに従う",
-                "deepl": "DeepLの翻訳",
-                "iflyrec": "宣飛翻訳を聞く",
-                "youdao": "Youtube翻訳",
-                "google": "グーグル翻訳",
-                "caiyun": "カラフルな雲と小さな翻訳",
+            "services": {
+                "follow": "設定に従う",
+                "deepl": "DeepL翻訳",
+                "iflyrec": "ライブメンバーの翻訳を知らせます",
+                "youdao": "翻訳者",
+                "google": "Google 翻訳",
+                "caiyun": "雲のコンパイル",
                 "openai": "ChatGPT翻訳"
             }
         },
