@@ -1,0 +1,23 @@
+{
+    "transingTip": {
+        "basic": "In Gebrauch {{translationService}} Übersetzung in Arbeit……Bitte warten Sie.",
+        "openai": "ChatGPT-Übersetzung in Arbeit……Bitte warten\n\nKonfiguration der Anwendung： {{openai_name}}\n\n",
+        "openai_isStream": "Das Streaming ist derzeit nicht aktiviert, Sie müssen also lange warten, bis Sie die Ergebnisse sehen können. Bitte haben Sie etwas Geduld!"
+    },
+    "error": {
+        "basic": "\n\nBitte versuchen Sie es erneut oder ändern Sie die Übersetzungsschnittstelle.\n\nKlicken Sie auf das DeBug-Symbol in der oberen rechten Symbolleiste für weitere Informationen",
+        "unexpected": "**:( Es gab ein Problem mit der Übersetzung：** Ein unerwarteter Fehler ist aufgetreten\n\nBitte versuchen Sie es erneut oder ändern Sie die Übersetzungsschnittstelle.",
+        "youdao413": "413 Request Entity Too Large\n\nDie Länge des Anfragetextes hat die Grenzen der Übersetzungsschnittstelle überschritten, bitte wechseln Sie zu einer anderen Übersetzungsschnittstelle.",
+        "deepl429": "Die Anfragen sind zu häufig, bitte versuchen Sie es später noch einmal\n\nDies liegt in der Regel daran, dass Sie in einem kurzen Zeitraum zu oft übersetzt haben oder mehr als 5000 Zeichen auf einmal übersetzt haben.\n\nDeepL Es gibt Grenzen für die Anzahl der Wörter und die Häufigkeit der Übersetzung.\n\nDies ist vorübergehend und wird sich nach einer gewissen Zeit wieder normalisieren.",
+        "GMRequest": "**:( Es gab ein Problem mit der Übersetzung：** Beim Abrufen von Daten aus der Schnittstelle ist ein Fehler aufgetreten.",
+        "processer": "**:( Es gab ein Problem mit der Übersetzung：** Beim Abrufen der Zieldaten ist ein Fehler aufgetreten \n\nMöglicherweise liegt ein Fehler in den Antwortdaten vor.",
+        "checkResponse": "**:( Es ist ein Problem mit der Übersetzung aufgetreten：** Bei der Überprüfung der Antwortdaten ist ein unerwarteter Fehler aufgetreten."
+    },
+    "chatgpt_prompt": {
+        "common": "Bitte übersetzen Sie den folgenden Text auf{{transTargetLang}}, dies ist Teil einer Beschreibung einer Programmierwettbewerb-Frage, achten Sie auf die Übersetzung der Terminologie, achten Sie darauf, die LaTeX-Formeln darin unübersetzt zu lassen, Sie müssen nur auf den übersetzten Inhalt antworten, antworten Sie nicht auf etwas anderes：\n\n",
+        "notLaTeX": "Bitte übersetzen Sie den folgenden Text auf{{transTargetLang}}, der Teil der Beschreibung einer Frage zu einem Programmierwettbewerb ist. Achten Sie auf die Übersetzung der Terminologie, und achten Sie darauf, dass die [ ], die HTML-Tags selbst und der darin enthaltene Inhalt unübersetzt und unverändert bleiben. Sie brauchen nur auf den übersetzten Inhalt zu antworten, und antworten Sie nicht auf irgendetwas anderes：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " Rendering"
+    }
+}
