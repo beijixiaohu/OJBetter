@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "사용자 지정 테스트 데이터(자동 저장)",
+        "onlyCustom": "사용자 지정 데이터만 테스트",
+        "DontShowDiff": "표시되지 않은 불일치",
+        "add": "새로 구축"
+    },
+    "runTestButton": "샘플 테스트",
+    "submitButton": "제출(보고서 등)",
+    "fontSizeInput": "글꼴 크기",
+    "fullscreenButton": "전체 화면",
+    "exitFullscreenButton": "전체 화면 종료",
+    "fixToBottomButton": "하단에 고정",
+    "fixToRightButton": "오른쪽으로 고정",
+    "cancelFixButton": "고정 취소",
+    "lsp": {
+        "connect": "LSP 연결 만들기……",
+        "waitingAnswer": "초기화 확인을 기다리는 중……",
+        "connected": "LSP 연결"
+    }
+}
