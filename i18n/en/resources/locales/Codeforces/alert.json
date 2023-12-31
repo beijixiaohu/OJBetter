@@ -17,8 +17,8 @@
     "loadSuccess": "Loading completed",
     "warning": {
         "is_oldLatex": "Note：There are LaTeX formulas on the current page that do not save the original LaTeX code (this is usually an old topic), which makes it impossible for the script to restore them back to LaTeX, so some of the functionality of the current page is not available.<br>In addition, the translation function on the current page is implemented in a special way, so it may be misaligned.",
-        "is_acmsguru": "Note：The current page is an acmsguru title (which is a very old title) and some of the features are not applicable.<br>In addition, the translation function on the current page is implemented in a special way, so it may be misplaced.",
-        "trans_segment": "NOTE! This is currently a segment translation mode, which has a negative effect,<p>to switch to normal mode</p> unless you now need to translate over long pages of blogs or topics.",
+        "is_acmsguru": "Note：The current page is an acmsguru question (this is a very old question), and some functions are not applicable.<br>In addition, the translation function of the current page adopts a special implementation method, so typography misalignment may occur.",
+        "trans_segment": "Notice! It is currently in segmented translation mode, which will cause negative effects.<p>Unless you need to translate a very long blog or question now, please go to the settings to switch to normal mode</p>",
         "trans_select": "NOTE! You will only translate selected sections within the target area and click on the paragraphs to select (Aorange box)<br><p>if you don't need to translate a blog or title for too long, it is recommended that you switch to normal mode</p>",
         "is_submitPage": "You have enabled the \"Issue Page Add Editor\" option to submit quickly below the question page"
     },
