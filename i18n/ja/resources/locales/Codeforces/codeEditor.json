@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "カスタムテストデータ（自動保存）",
+        "onlyCustom": "カスタムデータのみをテスト",
+        "DontShowDiff": "違いを非表示",
+        "add": "新規"
+    },
+    "runTestButton": "サンプル テスト",
+    "submitButton": "送信",
+    "fontSizeInput": "フォントサイズ",
+    "fullscreenButton": "フルスクリーン",
+    "exitFullscreenButton": "全画面表示を終了",
+    "fixToBottomButton": "下部に配置",
+    "fixToRightButton": "右側を固定します。",
+    "cancelFixButton": "ピン留めを解除",
+    "lsp": {
+        "connect": "LSPコネクションの作成……",
+        "waitingAnswer": "アスタリスク…… の初期化を待っています",
+        "connected": "接続済みLSP:"
+    }
+}
