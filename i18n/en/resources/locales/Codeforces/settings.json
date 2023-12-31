@@ -52,7 +52,7 @@
         "title": "Translation settings",
         "options": {
             "title": "Preferences",
-            "translationServices": {
+            "services": {
                 "deepl": "DeepL Translation",
                 "iflyrec": "Iflyrec Translation",
                 "youdao": "Youdao translation",
@@ -73,7 +73,7 @@
         "preference": {
             "title": "Preferences",
             "comment_translation_choice": "Translate comments section",
-            "translationServices": {
+            "services": {
                 "follow": "Follow Preferences",
                 "deepl": "DeepL Translation",
                 "iflyrec": "Iflyrec Translation",
