@@ -159,7 +159,13 @@
                 "Verdict": "判題狀態",
                 "Language:": "語言:",
                 "Participant": "參賽者",
-                "Choose file:": "選擇檔案:"
+                "Choose file:": "選擇檔案:",
+                "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "这个题目的数据包未在我们升级评测服务器后由出题人或Codeforces管理团队更新。为了调整时间限制的约束，一个解答的执行时间将被乘以2。例如，如果你的解答在评测服务器上运行了400毫秒，那么将显示并使用800毫秒的值来确定结果。",
+                "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虚拟比赛是一种参加过去比赛的方式，尽可能接近实时参赛。目前只支持ICPC模式的虚拟赛事。",
+                "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已经看过这些题目，虚拟赛事就不适合你——应该在题库中解决这些题目。",
+                "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "如果你只是想解决比赛中的某个问题，虚拟赛事也不适合你——应该在题库中解决这个问题。",
+                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "在虚拟比赛期间，切勿使用别人的代码，阅读教程或与他人交流。",
+                "You can clone this contest to a mashup.": "您可以将此比赛克隆到混搭比赛中。"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -799,6 +805,16 @@
             "isStrict": false,
             "rules": {
                 "Add announcement": "新增公告"
+            }
+        },
+        "standings": {
+            "class": [
+                "#pageContent > div:nth-child(7) > div"
+            ],
+            "description": "榜单页右上角的小提示",
+            "isStrict": false,
+            "rules": {
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对解决方案进行攻击。"
             }
         },
         "demo": {
