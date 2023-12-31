@@ -1,0 +1,29 @@
+{
+    "trans": {
+        "normal": "renderizado",
+        "segment": "Traducción segmentaria",
+        "select": "Seleccionado para la traducción",
+        "translating": "en traducción",
+        "wait": "A la espera de la traducción",
+        "translated": "traducido",
+        "error": "error en la traducción",
+        "reTranslate": "retraducción",
+        "tooLong": "superar el límite de palabras"
+    },
+    "md": {
+        "normal": "Vista MarkDown",
+        "reduction": "restaurar al estado original"
+    },
+    "copy": {
+        "normal": "haga una copia de",
+        "copied": "Reproducido"
+    },
+    "state": {
+        "wait": "Esperando…",
+        "waitMathJax": "A la espera de MathJax",
+        "loading": "Cargando…",
+        "404": "no encontrado",
+        "error": "Algo salió mal.",
+        "netError": "error de red"
+    }
+}

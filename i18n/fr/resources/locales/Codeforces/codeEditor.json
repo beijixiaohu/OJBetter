@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "Données d'essai personnalisées (sauvegarde automatique)",
+        "onlyCustom": "Tester uniquement les données personnalisées",
+        "DontShowDiff": "Divergences non indiquées",
+        "add": "nouvellement construit"
+    },
+    "runTestButton": "échantillon de test",
+    "submitButton": "soumettre (un rapport, etc.)",
+    "fontSizeInput": "taille de la police",
+    "fullscreenButton": "plein écran",
+    "exitFullscreenButton": "Quitter le plein écran",
+    "fixToBottomButton": "Fixé au fond",
+    "fixToRightButton": "Fixé sur le côté droit",
+    "cancelFixButton": "Annulation de la fixation",
+    "lsp": {
+        "connect": "Création d'une connexion LSP……",
+        "waitingAnswer": "Attente de l'accusé de réception de l'initialisation……",
+        "connected": "LSP connecté"
+    }
+}

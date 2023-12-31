@@ -1,0 +1,29 @@
+{
+    "trans": {
+        "normal": "렌더링",
+        "segment": "세그먼트별 번역",
+        "select": "번역을 위해 선택됨",
+        "translating": "번역 중",
+        "wait": "번역 대기 중",
+        "translated": "번역됨",
+        "error": "번역 오류",
+        "reTranslate": "재번역",
+        "tooLong": "단어 수 제한 초과"
+    },
+    "md": {
+        "normal": "마크다운 보기",
+        "reduction": "원래 상태로 복원"
+    },
+    "copy": {
+        "normal": "사본 만들기",
+        "copied": "복제"
+    },
+    "state": {
+        "wait": "대기 중…",
+        "waitMathJax": "MathJax 대기 중",
+        "loading": "로드 중…",
+        "404": "찾을 수 없음",
+        "error": "뭔가 잘못되었습니다.",
+        "netError": "네트워크 오류"
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "transingTip": {
+        "basic": "En cours d'utilisation {{translationService}} Traduction en cours……Veuillez patienter.",
+        "openai": "Traduction de ChatGPT en cours……Veuillez patienter\n\nConfiguration de l'application： {{openai_name}}\n\n",
+        "openai_isStream": "Le streaming n'est pas activé pour le moment, vous devrez attendre longtemps avant de voir les résultats, soyez patient !"
+    },
+    "error": {
+        "basic": "\n\nVeuillez réessayer ou changer d'interface de traduction.\n\nCliquez sur l'icône DeBug dans la barre d'outils en haut à droite pour plus d'informations.",
+        "unexpected": "** :( Il y a eu un problème avec la traduction：** Une erreur inattendue s'est produite\n\nVeuillez réessayer ou changer d'interface de traduction.",
+        "youdao413": "413 Request Entity Too Large\n\nLa longueur du texte de la demande a dépassé les limites de l'interface de traduction, veuillez passer à une autre interface de traduction.",
+        "deepl429": "Les demandes sont trop fréquentes, veuillez réessayer plus tard\n\nCeci est généralement dû au fait que vous avez traduit trop souvent dans un court laps de temps, ou que vous avez traduit plus de 5000 caractères de texte à la fois.\n\nDeepL Le nombre de mots et la fréquence de traduction sont limités.\n\nCeci est temporaire, et reviendra à la normale après un certain temps.",
+        "GMRequest": "** :( Il y a eu un problème avec la traduction：** Une erreur s'est produite lors de la récupération des données de l'interface.",
+        "processer": "** :( Il y a eu un problème avec la traduction：** Il y a eu une erreur dans l'obtention des données cibles \n\nIl se peut qu'il y ait une erreur dans les données de la réponse.",
+        "checkResponse": "** :( Un problème a été rencontré avec la traduction：** Une erreur inattendue s'est produite lors de la vérification des données de la réponse."
+    },
+    "chatgpt_prompt": {
+        "common": "Veuillez traduire le texte suivant à{{transTargetLang}}, il s'agit d'une partie de la description d'une question de concours de programmation, faites attention à la traduction de la terminologie, veillez à ce que les formules LaTeX ne soient pas traduites, vous ne devez répondre qu'au contenu traduit, ne répondez à rien d'autre：\n\n",
+        "notLaTeX": "Veuillez traduire le texte suivant à{{transTargetLang}}, qui fait partie de la description d'une question de concours de programmation, faites attention à la traduction des termes, veillez à ce que les [ ], les balises HTML elles-mêmes et le contenu ne soient pas traduits et restent inchangés, vous ne devez répondre qu'au contenu traduit, ne répondez pas à quoi que ce soit d'autre：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " l'équarrissage"
+    }
+}

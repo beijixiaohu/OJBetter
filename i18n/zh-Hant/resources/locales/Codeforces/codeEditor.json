@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "自訂測試資料(自動儲存)",
+        "onlyCustom": "只測試自訂數據",
+        "DontShowDiff": "不顯示差異",
+        "add": "新建"
+    },
+    "runTestButton": "範例測試",
+    "submitButton": "提交",
+    "fontSizeInput": "字體大小",
+    "fullscreenButton": "全螢幕",
+    "exitFullscreenButton": "退出全螢幕",
+    "fixToBottomButton": "固定到底部",
+    "fixToRightButton": "固定到右側",
+    "cancelFixButton": "取消固定",
+    "lsp": {
+        "connect": "建立LSP連線……",
+        "waitingAnswer": "等待初始化回執……",
+        "connected": "LSP已連接"
+    }
+}

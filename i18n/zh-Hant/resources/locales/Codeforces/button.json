@@ -1,0 +1,29 @@
+{
+    "trans": {
+        "normal": "翻譯",
+        "segment": "分段翻譯",
+        "select": "翻譯選取",
+        "translating": "翻譯中",
+        "wait": "等待翻譯",
+        "translated": "已翻譯",
+        "error": "翻譯出錯",
+        "reTranslate": "重新翻譯",
+        "tooLong": "字數超限"
+    },
+    "md": {
+        "normal": "MarkDown視圖",
+        "reduction": "還原"
+    },
+    "copy": {
+        "normal": "複製",
+        "copied": "已複製"
+    },
+    "state": {
+        "wait": "等待中…",
+        "waitMathJax": "等待MathJax",
+        "loading": "載入中…",
+        "404": "未找到",
+        "error": "出錯了",
+        "netError": "網路錯誤"
+    }
+}

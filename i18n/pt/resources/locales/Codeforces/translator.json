@@ -1,0 +1,23 @@
+{
+    "transingTip": {
+        "basic": "Em utilização {{translationService}} Tradução em curso……Aguarde.",
+        "openai": "Tradução ChatGPT em curso……Aguarde por favor\n\nConfiguração da aplicação： {{openai_name}}\n\n",
+        "openai_isStream": "A transmissão em fluxo contínuo não está atualmente activada, pelo que terá de esperar muito tempo para ver os resultados, por favor seja paciente!"
+    },
+    "error": {
+        "basic": "\n\nTente novamente ou altere a interface de tradução.\n\nClique no ícone DeBug na barra de ferramentas superior direita para obter mais informações",
+        "unexpected": "**:( Houve um problema com a tradução：** Ocorreu um erro inesperado\n\nTente novamente ou mude a interface de tradução.",
+        "youdao413": "413 Entidade do pedido demasiado grande\n\nO comprimento do texto do pedido excedeu as limitações da interface de tradução, por favor mude para outra interface de tradução.",
+        "deepl429": "Os pedidos são demasiado frequentes, por favor tente novamente mais tarde\n\nIsto deve-se normalmente ao facto de ter traduzido demasiadas vezes num curto período de tempo, ou de ter traduzido mais de 5000 caracteres de texto de uma só vez.\n\nDeepL Há limites para o número de palavras e para a frequência da tradução.\n\nIsto é temporário e voltará ao normal após um período de tempo.",
+        "GMRequest": "**:( Houve um problema com a tradução：** Ocorreu um erro ao obter dados da interface.",
+        "processer": "**:( Houve um problema com a tradução：** Ocorreu um erro ao obter os dados de destino \n\nPode haver um erro nos dados de resposta.",
+        "checkResponse": "**:( Foi encontrado um problema com a tradução：** Ocorreu um erro inesperado ao verificar os dados de resposta."
+    },
+    "chatgpt_prompt": {
+        "common": "Por favor, traduza o seguinte texto para{{transTargetLang}}, que faz parte da descrição de uma pergunta de um concurso de programação. Preste atenção à tradução da terminologia, tenha o cuidado de manter as fórmulas LaTeX não traduzidas. Só precisa de responder ao conteúdo traduzido, não responda a mais nada：\n\n",
+        "notLaTeX": "Por favor, traduza o seguinte texto para{{transTargetLang}}, que faz parte da descrição de uma pergunta de um concurso de programação, preste atenção à tradução dos termos, tenha o cuidado de manter o [ ], as próprias etiquetas HTML e o conteúdo não traduzido e inalterado, só precisa de responder ao conteúdo traduzido, não responda a mais nada：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " renderização"
+    }
+}
