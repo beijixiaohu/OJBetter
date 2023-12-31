@@ -74,7 +74,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Settings": "set up",
+                "Settings": "Settings",
                 "Blog": "blog (loanword)",
                 "Teams": "cadre",
                 "Submissions": "submit (a report etc)",
