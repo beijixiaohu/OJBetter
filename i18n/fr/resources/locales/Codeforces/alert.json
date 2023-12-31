@@ -16,17 +16,17 @@
     "showRatingByClist": "Chargement des données d'évaluation de Clist……",
     "loadSuccess": "Chargement terminé",
     "warning": {
-        "is_oldLatex": "注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。<br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。",
-        "is_acmsguru": "注意：当前页面为 acmsguru 题目（这是一道非常古老的题目），部分功能不适用。<br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。",
-        "trans_segment": "注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>",
-        "trans_select": "注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框）<br><p>如果你现在不需要翻译超长篇的博客或者题目，建议你请前往设置切换为普通模式</p>",
-        "is_submitPage": "你已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦"
+        "is_oldLatex": "Note：Certaines formules LaTeX de la page actuelle ne sauvegardent pas le code LaTeX original (il s'agit généralement d'un ancien sujet), ce qui empêche le script de les rétablir en LaTeX, de sorte que certaines fonctionnalités de la page actuelle ne sont pas disponibles.<br>En outre, la fonction de traduction de la page actuelle est implémentée d'une manière spéciale, de sorte qu'elle peut être mal placée.",
+        "is_acmsguru": "Note：La page actuelle est un titre acmsguru (qui est un titre très ancien) et certaines des fonctionnalités ne sont pas disponibles.<br>En outre, la fonction de traduction sur la page actuelle est mise en œuvre d'une manière spéciale, de sorte qu'elle peut être mal placée.",
+        "trans_segment": "Attention ! Actuellement en mode de traduction segmentée, ce qui peut avoir des effets négatifs<p>À moins que vous n'ayez besoin de traduire des blogs ou des sujets très longs maintenant, allez dans Paramètres et passez en mode normal</p>",
+        "trans_select": "Attention ! Actuellement, en mode de traduction par segment sélectionné, seule la partie sélectionnée de la zone cible sera traduite, cliquez sur le paragraphe pour le sélectionner (boîte orange)<br><p>Si vous n'avez pas besoin de traduire des blogs ou des sujets très longs pour le moment, nous vous suggérons d'aller dans les paramètres pour passer en mode normal</p>.",
+        "is_submitPage": "Vous avez activé l'option \"Ajouter un éditeur à la page de titre\", ce qui vous permet de soumettre rapidement votre question au bas de la page."
     },
     "error": {
         "clist": {
-            "404": "当前访问Clist.by网络拥堵，请求已中断，请稍后再重试",
-            "cookie": "当前浏览器的Clist.by登录Cookie可能已失效，请打开<a target='_blank' href='https://clist.by/'>Clist.by</a>重新登录<br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，<br>脚本不会获取你在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明",
-            "other": "当前访问Clist.by时发生未知错误，请求已中断，请稍后再重试"
+            "404": "L'accès à Clist.by est actuellement saturé, la requête a été interrompue, veuillez réessayer plus tard !",
+            "cookie": "Le cookie de connexion de votre navigateur Clist.by peut ne plus fonctionner, veuillez ouvrir<a target='_blank' href='https://clist.by/'>Clist.by</a>pour vous reconnecter<br>Description：L'implémentation par le script de l'affichage du score de Clist Rating repose sur les informations du cookie de l'utilisateur connecté à Clist.by,<br>Le script n'obtiendra pas vos informations de cookie spécifiques sur le site Clist.by, veuillez lire les instructions de la page du script. Pour plus de détails, veuillez lire les instructions de la page du script.",
+            "other": "Une erreur inconnue s'est produite lors de l'accès à Clist.by, la requête a été interrompue, veuillez réessayer plus tard !"
         }
     }
 }
