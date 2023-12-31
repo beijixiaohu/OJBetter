@@ -16,15 +16,15 @@
     "showRatingByClist": "Loading Clist Ratingdata……",
     "loadSuccess": "Loading completed",
     "warning": {
-        "is_oldLatex": "注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。<br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。",
-        "is_acmsguru": "注意：当前页面为 acmsguru 题目（这是一道非常古老的题目），部分功能不适用。<br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。",
-        "trans_segment": "注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>",
-        "trans_select": "注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框）<br><p>如果你现在不需要翻译超长篇的博客或者题目，建议你请前往设置切换为普通模式</p>",
+        "is_oldLatex": "Note：There are LaTeX formulas on the current page that do not save the original LaTeX code (this is usually an old topic), which makes it impossible for the script to restore them back to LaTeX, so some of the functionality of the current page is not available.<br>In addition, the translation function on the current page is implemented in a special way, so it may be misaligned.",
+        "is_acmsguru": "Note：The current page is an acmsguru title (which is a very old title) and some of the features are not applicable.<br>In addition, the translation function on the current page is implemented in a special way, so it may be misplaced.",
+        "trans_segment": "NOTE! This is currently a segment translation mode, which has a negative effect,<p>to switch to normal mode</p> unless you now need to translate over long pages of blogs or topics.",
+        "trans_select": "NOTE! You will only translate selected sections within the target area and click on the paragraphs to select (Aorange box)<br><p>if you don't need to translate a blog or title for too long, it is recommended that you switch to normal mode</p>",
         "is_submitPage": "You have enabled the \"Issue Page Add Editor\" option to submit quickly below the question page"
     },
     "error": {
         "clist": {
-            "404": "当前访问Clist.by网络拥堵，请求已中断，请稍后再重试",
+            "404": "Current Clist.by network congestion, request interrupted, please try again later",
             "cookie": "The current browser's Clist.by login to Cookie may have expired, please open<a target='_blank' href='https://clist.by/'>Clist.by</a>re-login to<br>with a Clist Ratingscore describing：scripts, showing implementation of the log-in user cookie information that depends on Clist.by,<br>script will not get specific cookie information on your Clist.by site, please read the script page instructions.",
             "other": "An unknown error occurred while accessing Clist.by, request interrupted, please try again later"
         }
