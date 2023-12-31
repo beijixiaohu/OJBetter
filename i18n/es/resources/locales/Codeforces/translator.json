@@ -1,6 +1,14 @@
 {
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "Xunfei Oiga",
+        "youdao": "adherirse a los principios de la verdad y lo correcto",
+        "google": "google",
+        "caiyun": "lit. nubes de colores y pequeñas traducciones",
+        "openai": "ChatGPT"
+    },
     "transingTip": {
-        "basic": "En uso {{translationService}} Traducción en curso……Por favor, espere.",
+        "basic": "En uso {{server}} Traducción en curso……Por favor, espere.",
         "openai": "Traducción de ChatGPT en curso……Por favor, espere\n\nConfiguración de la aplicación： {{openai_name}}\n\n",
         "openai_isStream": "El streaming no está habilitado actualmente, tendrá que esperar mucho tiempo para ver los resultados, ¡tenga paciencia!"
     },
