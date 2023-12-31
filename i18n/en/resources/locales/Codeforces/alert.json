@@ -1,31 +1,31 @@
 {
     "waiteResources": "Waiting for page resources to load……",
-    "waiteLatex": "Waiting for the LaTeX rendering queue to complete……",
+    "waiteLatex": "Waiting for LaTeX rendering queue to complete……",
     "linkDB": "Connecting to database……",
     "expandFoldingblocks": "Expanding folding block……",
-    "commentPaging": "Separating comments from……",
-    "acmsguruRebuild": "Reconfiguring div…… for acmsguru",
+    "commentPaging": "Pagination in progress for the comments section...",
+    "acmsguruRebuild": "Redistributing div blocks for acmsguru problem descriptions...",
     "initTranslateButtonFunc": "Initializing translation button function……",
-    "addConversionButton": "Loading button……",
+    "addConversionButton": "Loading buttons……",
     "multiChoiceTranslation": "Loading selection translation……",
     "RenderPerfOpt": "Optimizing folding block rendering performance……",
     "initTransResultsRecover": "Restoring last translation……",
-    "initTransWhenViewable": "Initializing short text automatic translation of……",
-    "recolorStandings": "Resorting…… for the list",
-    "addProblemPageCodeEditor": "Adding code editor…… for the problem page",
-    "showRatingByClist": "Loading Clist Ratingdata……",
+    "initTransWhenViewable": "Initializing automatic translation of short texts……",
+    "recolorStandings": "Recoloring list……",
+    "addProblemPageCodeEditor": "Adding code editor for the problem page……",
+    "showRatingByClist": "Loading Clist Rating data……",
     "loadSuccess": "Loading completed",
     "warning": {
         "is_oldLatex": "Note：There are LaTeX formulas on the current page that do not save the original LaTeX code (this is usually an old topic), which makes it impossible for the script to restore them back to LaTeX, so some of the functionality of the current page is not available.<br>In addition, the translation function on the current page is implemented in a special way, so it may be misaligned.",
         "is_acmsguru": "Note：The current page is an acmsguru question (this is a very old question), and some functions are not applicable.<br>In addition, the translation function of the current page adopts a special implementation method, so typography misalignment may occur.",
         "trans_segment": "Notice! It is currently in segmented translation mode, which will cause negative effects.<p>Unless you need to translate a very long blog or question now, please go to the settings to switch to normal mode</p>",
-        "trans_select": "NOTE! You will only translate selected sections within the target area and click on the paragraphs to select (Aorange box)<br><p>if you don't need to translate a blog or title for too long, it is recommended that you switch to normal mode</p>",
-        "is_submitPage": "You have enabled the \"Issue Page Add Editor\" option to submit quickly below the question page"
+        "trans_select": "Notice! Currently in the selected translation mode, only the selected part in the target area will be translated. Click the paragraph to select it (orange box)<br><p>If you do not need to translate very long blogs or questions now, it is recommended that you go to the settings and switch to the normal mode</p>",
+        "is_submitPage": "You have turned on the \"Add Editor to Question Page\" option, and you can quickly submit it at the bottom of the question page."
     },
     "error": {
         "clist": {
-            "404": "Current Clist.by network congestion, request interrupted, please try again later",
-            "cookie": "The current browser's Clist.by login to Cookie may have expired, please open<a target='_blank' href='https://clist.by/'>Clist.by</a>re-login to<br>with a Clist Ratingscore describing：scripts, showing implementation of the log-in user cookie information that depends on Clist.by,<br>script will not get specific cookie information on your Clist.by site, please read the script page instructions.",
+            "404": "Currently accessing Clist.by is congested, the request has been interrupted, please try again later!",
+            "cookie": "The Clist.by login cookie of the current browser may have expired, please open<a target='_blank' href='https://clist.by/'>Clist.by</a>Log in again<br>Description：The Clist Rating sub-display implementation of the script relies on the login user cookie information of Clist.by,<br>The script will not obtain your login information For specific cookie information on the Clist.by site, please read the instructions on the script page.",
             "other": "An unknown error occurred while accessing Clist.by, request interrupted, please try again later"
         }
     }
