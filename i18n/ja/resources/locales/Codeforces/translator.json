@@ -1,6 +1,14 @@
 {
+    "servers": {
+        "deepl": "ディープエル",
+        "iflyrec": "ライブ表示",
+        "youdao": "真理と正義の原則を守る",
+        "google": "グーグル",
+        "caiyun": "雲のコンパイル",
+        "openai": "ChatGPT"
+    },
     "transingTip": {
-        "basic": "{{translationService}} 翻訳中……しばらくお待ちください",
+        "basic": "{{server}} 翻訳中……しばらくお待ちください",
         "openai": "ChatGPTの翻訳中……ちょっと待つ\n\n彼女の設定： {{openai_name}}\n\n",
         "openai_isStream": "ストリーミングは現在使用中ではありません。結果を確認するためには少々お待ちください。"
     },
