@@ -71,7 +71,7 @@ var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProblemset, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var localizationLanguage, scriptL10nLanguage;
 var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
-var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
+var transTargetLang = '中文', ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
 var openai_name, openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
@@ -81,7 +81,10 @@ var compilerSelection, editorFontSize, onlineCompilerChoice, isCodeSubmitConfirm
 var CF_csrf_token;
 var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl;
 var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
-function init() {
+/**
+ * 初始化全局变量
+ */
+async function initVar() {
     const { hostname, href } = window.location;
     is_mSite = /^m[0-9]/.test(hostname);
     is_oldLatex = $('.tex-span').length;
@@ -193,7 +196,9 @@ function init() {
     }
 }
 
-// 公告
+/**
+ * 公告
+ */
 async function showAnnounce() {
     if (lastReadAnnounceVer < GM_info.script.version) {
         const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${GM_info.script.version}`;
@@ -212,41 +217,29 @@ async function showAnnounce() {
     }
 };
 
-// 显示警告消息
-function ShowAlertMessage() {
+/**
+ * 显示警告消息
+ */
+function showWarnMessage() {
     if (is_oldLatex) {
-        let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
-            .html(`${OJBetterName} —— 注意：当前页面存在未保存原 LaTeX 代码的 LaTeX 公式（这通常是一道古老的题目），这导致脚本无法将其还原回 LaTeX，因此当前页面部分功能不适用。
-                <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
-            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
+        const loadingMessage = new LoadingMessage();
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
     }
     if (is_acmsguru) {
-        let newElement = $("<div></div>").addClass("alert alert-warning ojbetter-alert")
-            .html(`${OJBetterName} —— 注意：当前页面为 acmsguru 题目（这是一道非常古老的题目），部分功能不适用。
-                <br>此外当前页面的翻译功能采用了特别的实现方式，因此可能会出现排版错位的情况。`)
-            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
+        const loadingMessage = new LoadingMessage();
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
     }
     if (commentTranslationMode == "1") {
-        let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-            .html(`${OJBetterName} —— 注意！当前为分段翻译模式，这会造成负面效果，<p>除非你现在需要翻译超长篇的博客或者题目，否则请前往设置切换为普通模式</p>`)
-            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
+        const loadingMessage = new LoadingMessage();
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
     }
     if (commentTranslationMode == "2") {
-        let newElement = $("<div></div>").addClass("alert alert-error CFBetter_alert")
-            .html(`${OJBetterName} —— 注意！当前为选段翻译模式，只会翻译目标区域内已选中的部分，点击段落以选中（橙色框）<br>
-            <p>如果你现在不需要翻译超长篇的博客或者题目，建议你请前往设置切换为普通模式</p>`)
-            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
+        const loadingMessage = new LoadingMessage();
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
     }
     if (is_submitPage && problemPageCodeEditor) {
-        let newElement = $("<div></div>").addClass("alert alert-warning CFBetter_alert")
-            .html(`${OJBetterName} —— 你已开启 “题目页添加编辑器” 选项，在问题页下方即可快速提交哦<br>
-            <p>${findHelpText2}</p>`)
-            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
+        const loadingMessage = new LoadingMessage();
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
     }
 }
 
@@ -271,15 +264,21 @@ const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" versio
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 200; }`;
 const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
 
-// 连接数据库
 var CFBetterDB;
-function initDB() {
+/**
+ * 连接数据库
+ */
+async function initDB() {
     CFBetterDB = new Dexie('CFBetterDB');
-    CFBetterDB.version(2).stores({
-        samplesData: `&url`,
-        editorCode: `&url`,
-        translateData: `&url`
+    CFBetterDB.version(3).stores({
+        samplesData: '&url',
+        editorCode: '&url',
+        translateData: '&url',
+        localizeSubsData: '&lang'
     });
+
+    // 等待数据库打开
+    await CFBetterDB.open();
 }
 
 /**
@@ -734,6 +733,55 @@ span.mdViewContent {
     box-sizing: border-box;
     font-size: 13px;
     overflow: auto;
+}
+/*题目页链接栏样式*/
+#problemToolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    overflow: auto;
+    height: 100%;
+}
+.toolbarLink {
+    display: flex;
+    align-items: center;
+    padding: 1px 5px;
+    margin: 0px 5px;
+    color: #B0BEC5;
+    font-size: 13px;
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    /* transition: background-color 0.1s; */
+    box-sizing: border-box;
+}
+.toolbarLink:last-child {
+    margin-right: 0;
+}
+.toolbarLink:hover {
+    color: #479ef6;
+    border-color: #409eff;
+    background-color: #f1f8ff;
+    z-index: 100;
+}
+.toolbarLink.disabled {
+    color: #BDBDBD;
+    pointer-events: none;
+    filter: grayscale(100%);
+    opacity: 0.7;
+}
+.toolbarLink.disabled:hover {
+    border: 1px solid #dcdfe6;
+}
+a.toolbarLink, a.toolbarLink:link{
+    color: #aaa;
+}
+.toolbarLink img {
+    display: inline-block;
+    vertical-align: text-bottom;
+    height: 16px;
+    margin: 0px 2px;
 }
 .html2md-panel {
     display: flex;
@@ -1762,11 +1810,12 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background-color: #ffebcd;
 }
 /* RatingByClist */
-.ratingBadges, html[data-theme=dark] button.ratingBadges{
+.ratingBadge, html[data-theme=dark] button.ratingBadge{
+    display: block;
     font-weight: 700;
     margin-top: 5px;
     border-radius: 4px;
-    color: #ffffff00;
+    color: #B0BEC5;
     border: 1px solid #cccccc66;
 }
 /* 多选翻译 */
@@ -1796,6 +1845,20 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     margin: 0 0 1em!important;
 }
 /* 整个代码提交表单 */
+/* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
+#CFBetter_SubmitForm.input-output-copier {
+    float: initial;
+    color: initial;
+    cursor: initial;
+    border: none;
+    padding: 0px;
+    margin: 0px;
+    line-height: initial;
+    text-transform: none;
+}
+#CFBetter_SubmitForm.input-output-copier:hover {
+    background-color: #ffffff00;
+}
 #CFBetter_SubmitForm input[type="number"] {
     width: 40px;
     color: #009688;
@@ -2197,8 +2260,15 @@ input#CompilerArgsInput[disabled] {
 }
 `);
 
-// 工具
-// 获取cookie
+// ------------------------------
+// 一些工具函数
+// ------------------------------
+
+/**
+ * 获取cookie
+ * @param {string} name cookie名称
+ * @returns {string} cookie值
+ */
 function getCookie(name) {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
@@ -2212,14 +2282,22 @@ function getCookie(name) {
     return "";
 }
 
-// 随机数生成
+/**
+ * 随机数生成
+ * @param {number} numDigits 位数
+ * @returns {number}
+ */
 function getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// 防抖函数
+/**
+ * 防抖函数
+ * @param {Function} callback 回调函数
+ * @returns {Function}
+ */
 function debounce(callback) {
     let timer;
     let immediateExecuted = false;
@@ -2231,7 +2309,20 @@ function debounce(callback) {
     };
 }
 
-// 为元素添加鼠标拖动
+/**
+ * 延迟函数 
+ * @param {number} ms 延迟时间（毫秒） 
+ * @returns {Promise<void>}
+ */
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 为元素添加鼠标拖动
+ * @param {JQuery<HTMLElement>} element 要添加拖动的元素
+ * @returns {void}
+ */
 function addDraggable(element) {
     let isDragging = false;
     let x, y, l, t, nl, nt;
@@ -2289,18 +2380,28 @@ function getExternalJSON(url) {
         GM_xmlhttpRequest({
             method: "GET",
             url: url,
+            timeout: 10000, // 超时时间 10秒
             onload: function (response) {
                 if (response.status === 200) {
-                    var json = JSON.parse(response.responseText);
-                    resolve(json);
+                    try {
+                        var json = JSON.parse(response.responseText);
+                        resolve(json);
+                    } catch (e) {
+                        console.error(`JSON解析错误: ${e.message}`);
+                        reject(new Error(`JSON解析错误: ${e.message}`));
+                    }
                 } else {
-                    console.warn(`网络错误\n${url}\n无法访问`);
-                    resolve({});
+                    console.warn(`请求失败，状态码: ${response.status}`);
+                    reject(new Error(`请求失败，状态码: ${response.status}`));
                 }
             },
             onerror: function (response) {
-                console.warn(`网络错误\n${url}\n无法访问`);
-                resolve({});
+                console.error(`网络错误: ${url} 无法访问`);
+                reject(new Error(`网络错误: ${url} 无法访问`));
+            },
+            ontimeout: function () {
+                console.error(`请求超时: ${url}`);
+                reject(new Error(`请求超时: ${url}`));
             }
         });
     });
@@ -2432,37 +2533,138 @@ function checkScriptVersion() {
             }
         }
     });
-
 };
 
-// 网站本地化替换
-async function toLocalization() {
-    if (localizationLanguage === "initial") return;
+/**
+ * 提示信息类
+ */
+class LoadingMessage {
+    constructor() {
+        this._statusElement = null;
+        this._isDisplayed = false;
+        this.init();
+    }
 
-    // 语言对应的资源Url
-    var resourcesUrl = localizationLanguage === "zh" ?
-        "https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/subs/Codeforces-subs.json"
-        : `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
+    /**
+     * 初始化加载提示信息
+     */
+    init() {
+        this._statusElement = this.createStatusElement();
+        this.insertStatusElement();
+    }
+
+    /**
+     * 创建提示信息元素
+     */
+    createStatusElement() {
+        const statusElement = $("<div></div>").addClass("alert CFBetter_alert")
+            .css({
+                "margin": "1em",
+                "text-align": "center",
+                "position": "relative"
+            }).hide();
+        return statusElement;
+    }
+
+    /**
+     * 插入提示信息
+     * @returns {void}
+     */
+    insertStatusElement() {
+        (is_mSite ? $("header") : $(".menu-box:first").next()).after(this._statusElement);
+    }
+
+    /**
+     * 显示提示信息
+     */
+    showStatus() {
+        this._statusElement.show();
+        this._isDisplayed = true;
+    }
+
+    /**
+     * 隐藏提示信息
+     */
+    hideStatus() {
+        this._statusElement.fadeOut(500);
+        this._isDisplayed = false;
+    }
+
+    /**
+     * 移除提示信息
+     */
+    removeStatus() {
+        this._statusElement.remove();
+        this._isDisplayed = false;
+    }
+
+    /**
+     * 更新提示信息
+     * @param {string} text 提示信息文本
+     * @param {string} type 提示信息类型，可选值：info, success, warning, danger
+     * @param {number} timeout 提示信息显示的持续时间（毫秒）, 默认为无限长
+     */
+    updateStatus(text, type = 'info', timeout = Infinity, isMarkdown = false) {
+        if (isMarkdown) {
+            var md = window.markdownit({
+                html: !is_escapeHTML,
+            });
+            text = md.render(text);
+        }
+        this._statusElement.html(text).removeClass("alert-info alert-success alert-warning alert-danger").addClass(`alert-${type}`);
+        if (!this._isDisplayed) {
+            this.showStatus();
+        }
+        if (timeout !== Infinity) {
+            setTimeout(() => {
+                this.hideStatus();
+            }, timeout);
+        }
+    }
+}
+
+/**
+ * 获取网站本地化的数据
+ * @param {*} localizationLanguage 本地化语言
+ * @returns {Promise<Object>} 本地化数据
+ */
+async function getLocalizeWebsiteJson(localizationLanguage) {
+    let data = await CFBetterDB.localizeSubsData.get(localizationLanguage);
+    let url = localizationLanguage === "zh" ?
+        "https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/subs/Codeforces-subs.json" :
+        `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
+    if (data) data = data.data;
+    if (!data) {
+        // 如果本地没有数据，从远端获取并保存
+        data = await getExternalJSON(url);
+        await CFBetterDB.localizeSubsData.put({ lang: localizationLanguage, data: data });
+    } else {
+        // 如果本地有数据，先返回旧数据，然后在后台更新
+        (async () => {
+            try {
+                const newData = await getExternalJSON(url);
+                await CFBetterDB.localizeSubsData.put({ lang: localizationLanguage, data: newData });
+            } catch (error) {
+                console.error('Failed to update localization data:', error);
+            }
+        })();
+    }
+    return data;
+}
+
+/**
+ * 网站本地化替换
+ * @returns 
+ */
+async function localizeWebsite() {
+    if (localizationLanguage === "initial") return;
 
     // 设置网页语言
     var htmlTag = document.getElementsByTagName("html")[0];
     htmlTag.setAttribute("lang", localizationLanguage);
 
-    // 获取替换数据
-    var subs;
-    try {
-        subs = await getExternalJSON(resourcesUrl);
-    } catch (e) {
-        console.error("JSON 解析错误:", e.message);
-        const errorPosition = e.message.match(/position (\d+)/);
-        if (errorPosition) {
-            const positionIndex = parseInt(errorPosition[1], 10);
-            const resourceText = subs;
-            const start = Math.max(0, positionIndex - 20);
-            const end = Math.min(resourceText.length, positionIndex + 20);
-            console.error("错误附近的内容: '" + resourceText.slice(start, end) + "'");
-        }
-    }
+    // 获取网站本地化的数据
+    var subs = await getLocalizeWebsiteJson(localizationLanguage);
 
     /**
      * 文本节点遍历替换
@@ -2487,7 +2689,6 @@ async function toLocalization() {
             }
         });
     }
-
 
     /**
      * value替换
@@ -2554,6 +2755,14 @@ async function toLocalization() {
             }
         });
     });
+
+    // 测试
+    {
+        // var translations = {
+        //     
+        // };
+        // traverseTextNodes($('xxx'), translations);
+    };
 
     /**
      * 应用value替换
@@ -2627,44 +2836,167 @@ async function toLocalization() {
  * i18next初始化
  */
 async function initI18next() {
-    i18next
-        .use(i18nextChainedBackend)
-        .init({
-            lng: scriptL10nLanguage,
-            ns: ['common', 'settings', 'config_chatgpt', 'config_complet', 'dialog', 'alert'], // 命名空间列表
-            defaultNS: 'settings',
-            fallbackLng: 'zh',
-            load: 'currentOnly',
-            debug: false,
-            backend: {
-                backends: [
-                    i18nextLocalStorageBackend,
-                    i18nextHttpBackend
-                ],
-                backendOptions: [{
-                    prefix: 'i18next_res_',
-                    expirationTime: 7 * 24 * 60 * 60 * 1000,
-                    defaultVersion: 'v1.0',
-                    store: typeof window !== 'undefined' ? window.localStorage : null
-                }, {
-                    /* options for secondary backend */
-                    loadPath: (lng, ns) => {
-                        if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
-                            return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+    return new Promise((resolve, reject) => {
+        i18next
+            .use(i18nextChainedBackend)
+            .init({
+                lng: scriptL10nLanguage,
+                ns: ['common', 'settings', 'config_chatgpt', 'config_complet', 'dialog', 'alert', 'translator', 'button', 'codeEditor'], // 命名空间列表
+                defaultNS: 'settings',
+                fallbackLng: 'zh',
+                load: 'currentOnly',
+                debug: false,
+                backend: {
+                    backends: [
+                        i18nextLocalStorageBackend,
+                        i18nextHttpBackend
+                    ],
+                    backendOptions: [{
+                        prefix: 'i18next_res_',
+                        expirationTime: 7 * 24 * 60 * 60 * 1000,
+                        defaultVersion: 'v1.05',
+                        store: typeof window !== 'undefined' ? window.localStorage : null
+                    }, {
+                        /* options for secondary backend */
+                        loadPath: (lng, ns) => {
+                            if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
+                                return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                            }
+                            return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
                         }
-                        return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
-                    }
-                }]
-            }
-        }, (err, t) => {
-            if (err) {
-                console.error(err);
-            } else {
-                // console.log("i18next is ready...");
-                jqueryI18next.init(i18next, $);
-            }
-        });
+                    }]
+                }
+            }, (err, t) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    jqueryI18next.init(i18next, $);
+                    resolve(t);
+                }
+            });
+    });
 };
+
+/**
+ * 抽象命令类
+ */
+class Command {
+    execute() { }
+    undo() { }
+}
+
+/**
+ * 命令调用者
+ */
+class CommandInvoker {
+    constructor() {
+        this.history = [];
+    }
+
+    /**
+     * 执行命令
+     * @param {Command} command 命令对象
+     */
+    execute(command) {
+        this.history.push(command);
+        command.execute();
+    }
+
+    /**
+     * 撤销命令
+     */
+    undo() {
+        const command = this.history.pop();
+        if (command) {
+            command.undo();
+        }
+    }
+}
+
+/**
+ * 接收者
+ */
+class DOMContainer {
+    /**
+     * @param {JQueryObject} element 容器对象
+     */
+    constructor(element) {
+        this.containerElement = element;
+    }
+
+    /**
+     * 添加元素
+     * @param {JQueryObject} element 元素对象
+     * @returns {JQueryObject} 添加的元素对象
+     */
+    add(element) {
+        this.containerElement.append(element);
+        return this.containerElement.children().last();
+    }
+
+    /**
+     * 删除元素
+     * @param {JQueryObject} element 元素对象
+     */
+    remove(element) {
+        $(element).remove();
+    }
+}
+
+/**
+ * 具体命令类：添加元素
+ */
+class AddElementCommand extends Command {
+    /**
+     * @param {DOMContainer} receiver 接收者
+     * @param {JQueryObject} element 元素对象
+     */
+    constructor(receiver, element) {
+        super();
+        this.receiver = receiver;
+        this.element = element;
+        this.addedElement = null;
+    }
+
+    execute() {
+        this.addedElement = this.receiver.add(this.element);
+    }
+
+    undo() {
+        if (this.addedElement) {
+            this.receiver.remove(this.addedElement);
+        }
+    }
+}
+
+/**
+ * 具体命令类：删除元素
+ */
+class RemoveElementCommand extends Command {
+    /**
+     * @param {DOMContainer} receiver 接收者
+     * @param {JQueryObject} element 元素对象
+     */
+    constructor(receiver, element) {
+        super();
+        this.receiver = receiver;
+        this.element = element;
+        this.parent = $(element).parent();
+        this.nextSibling = $(element).next();
+    }
+
+    execute() {
+        this.receiver.remove(this.element);
+    }
+
+    undo() {
+        if (this.nextSibling.length > 0) {
+            $(this.element).insertBefore(this.nextSibling);
+        } else {
+            this.parent.append(this.element);
+        }
+    }
+}
 
 /**
  * 验证器
@@ -3011,92 +3343,92 @@ class ConfigManager {
 const CFBetter_setting_sidebar_HTML = `
 <div class="CFBetter_setting_sidebar">
     <ul>
-        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="sidebar.basic"></a></li>
-        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="sidebar.localization"></a></li>
-        <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="sidebar.translation"></a></li>
-        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="sidebar.clist"></a></li>
-        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="sidebar.monaco"></a></li>
-        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings" data-i18n="sidebar.compatibility"></a></li>
+        <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="settings:sidebar.basic"></a></li>
+        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="settings:sidebar.localization"></a></li>
+        <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="settings:sidebar.translation"></a></li>
+        <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
+        <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
+        <li><a href="#compatibility-settings" id="sidebar-compatibility-settings" data-i18n="settings:sidebar.compatibility"></a></li>
     </ul>
 </div>
 `;
 
 const basic_settings_HTML = `
 <div id="basic-settings" class="settings-page active">
-    <h3 data-i18n="basicSettings.title"></h3>
+    <h3 data-i18n="settings:basicSettings.title"></h3>
     <hr>
     <div class='CFBetter_setting_list' style="padding: 0px 10px;">
-        <span id="darkMode_span" data-i18n="basicSettings.darkMode.name"></span>
+        <span id="darkMode_span" data-i18n="settings:basicSettings.darkMode.name"></span>
         <div class="dark-mode-selection">
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="dark" />
                 <span class="CFBetter_setting_menu_label_text"
-                    data-i18n="basicSettings.darkMode.options.dark"></span>
+                    data-i18n="settings:basicSettings.darkMode.options.dark"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
                 <span class="CFBetter_setting_menu_label_text"
-                    data-i18n="basicSettings.darkMode.options.light"></span>
+                    data-i18n="settings:basicSettings.darkMode.options.light"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="follow" />
                 <span class="CFBetter_setting_menu_label_text"
-                    data-i18n="basicSettings.darkMode.options.system"></span>
+                    data-i18n="settings:basicSettings.darkMode.options.system"></span>
                 <span class="radio-icon"> </span>
             </label>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showLoading" data-i18n="basicSettings.loadingInfo.label"></label>
+        <label for="showLoading" data-i18n="settings:basicSettings.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]basicSettings.loadingInfo.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basicSettings.loadingInfo.helpText"></div>
         </div>
         <input type="checkbox" id="showLoading" name="showLoading">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="hoverTargetAreaDisplay" data-i18n="basicSettings.targetArea.label"></label>
+        <label for="hoverTargetAreaDisplay" data-i18n="settings:basicSettings.targetArea.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]basicSettings.targetArea.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basicSettings.targetArea.helpText"></div>
         </div>
         <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="expandFoldingblocks" data-i18n="basicSettings.expandBlocks"></label>
+        <label for="expandFoldingblocks" data-i18n="settings:basicSettings.expandBlocks"></label>
         <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="renderPerfOpt" data-i18n="basicSettings.renderOptimization.label"></label>
+        <label for="renderPerfOpt" data-i18n="settings:basicSettings.renderOptimization.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]basicSettings.renderOptimization.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basicSettings.renderOptimization.helpText"></div>
         </div>
         <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="commentPaging" data-i18n="basicSettings.paging.label"></label>
+        <label for="commentPaging" data-i18n="settings:basicSettings.paging.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]basicSettings.paging.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basicSettings.paging.helpText"></div>
         </div>
         <input type="checkbox" id="commentPaging" name="commentPaging">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showJumpToLuogu" data-i18n="basicSettings.luoguJump.label"></label>
+        <label for="showJumpToLuogu" data-i18n="settings:basicSettings.luoguJump.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]basicSettings.luoguJump.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basicSettings.luoguJump.helpText"></div>
         </div>
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="standingsRecolor" data-i18n="basicSettings.recolor.label"></label>
+        <label for="standingsRecolor" data-i18n="settings:basicSettings.recolor.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]basicSettings.recolor.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basicSettings.recolor.helpText"></div>
         </div>
         <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
     </div>
@@ -3105,10 +3437,10 @@ const basic_settings_HTML = `
 
 const l10n_settings_HTML = `
 <div id="l10n_settings" class="settings-page">
-    <h3 data-i18n="localizationSettings.title"></h3>
+    <h3 data-i18n="settings:localizationSettings.title"></h3>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="scriptL10nLanguage" style="display: flex;" data-i18n="localizationSettings.scriptLanguageLabel"></label>
+        <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localizationSettings.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
             <option value="zh">简体中文</option>
             <option value="zh-Hant">繁體中文</option>
@@ -3124,7 +3456,7 @@ const l10n_settings_HTML = `
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="localizationLanguage" style="display: flex;" data-i18n="localizationSettings.websiteLanguageLabel"></label>
+        <label for="localizationLanguage" style="display: flex;" data-i18n="settings:localizationSettings.websiteLanguageLabel"></label>
         <select id="localizationLanguage" name="localizationLanguage">
             <option value="initial">不改变</option>
             <option value="zh">简体中文</option>
@@ -3144,42 +3476,42 @@ const l10n_settings_HTML = `
 
 const translation_settings_HTML = `
 <div id="translation-settings" class="settings-page">
-    <h3 data-i18n="translationSettings.title"></h3>
+    <h3 data-i18n="settings:translationSettings.title"></h3>
     <hr>
-    <h4 data-i18n="translationSettings.options.title"></h4>
+    <h4 data-i18n="settings:translationSettings.options.title"></h4>
     <label>
         <input type='radio' name='translation' value='deepl'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="translationSettings.options.translationServices.deepl"></span>
+            data-i18n="settings:translationSettings.options.services.deepl"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='iflyrec'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="translationSettings.options.translationServices.iflyrec"></span>
+            data-i18n="settings:translationSettings.options.services.iflyrec"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='youdao'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="translationSettings.options.translationServices.youdao"></span>
+            data-i18n="settings:translationSettings.options.services.youdao"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='google'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="translationSettings.options.translationServices.google"></span>
+            data-i18n="settings:translationSettings.options.services.google"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='caiyun'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="translationSettings.options.translationServices.caiyun"></span>
+            data-i18n="settings:translationSettings.options.services.caiyun"></span>
     </label>
     <label>
         <input type='radio' name='translation' value='openai'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="translationSettings.options.translationServices.openai.name">
+            data-i18n="settings:translationSettings.options.services.openai.name">
             <div class="help_tip">
                 ${helpCircleHTML}
                 <div class="tip_text"
-                    data-i18n="[html]translationSettings.options.translationServices.openai.helpText"></div>
+                    data-i18n="[html]settings:translationSettings.options.services.openai.helpText"></div>
             </div>
         </span>
     </label>
@@ -3187,133 +3519,133 @@ const translation_settings_HTML = `
     <h4>ChatGPT</h4>
     <div id="chatgpt_config" class="config"></div>
     <div class='CFBetter_setting_list'>
-        <label for="openai_isStream" data-i18n="translationSettings.chatgpt.isStream.name"></label>
+        <label for="openai_isStream" data-i18n="settings:translationSettings.chatgpt.isStream.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.chatgpt.isStream.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.chatgpt.isStream.helpText"></div>
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
     <hr>
-    <h4 data-i18n="translationSettings.preference.title"></h4>
+    <h4 data-i18n="settings:translationSettings.preference.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="comment_translation_choice" style="display: flex;"
-            data-i18n="translationSettings.preference.comment_translation_choice"></label>
+            data-i18n="settings:translationSettings.preference.comment_translation_choice"></label>
         <select id="comment_translation_choice" name="comment_translation_choice">
-            <option value="0" data-i18n="translationSettings.preference.translationServices.follow"></option>
-            <option value="deepl" data-i18n="translationSettings.preference.translationServices.deepl"></option>
-            <option value="iflyrec" data-i18n="translationSettings.preference.translationServices.iflyrec"></option>
-            <option value="youdao" data-i18n="translationSettings.preference.translationServices.youdao"></option>
-            <option value="google" data-i18n="translationSettings.preference.translationServices.google"></option>
-            <option value="caiyun" data-i18n="translationSettings.preference.translationServices.caiyun"></option>
-            <option value="openai" data-i18n="translationSettings.preference.translationServices.openai"></option>
+            <option value="0" data-i18n="settings:translationSettings.preference.services.follow"></option>
+            <option value="deepl" data-i18n="settings:translationSettings.preference.services.deepl"></option>
+            <option value="iflyrec" data-i18n="settings:translationSettings.preference.services.iflyrec"></option>
+            <option value="youdao" data-i18n="settings:translationSettings.preference.services.youdao"></option>
+            <option value="google" data-i18n="settings:translationSettings.preference.services.google"></option>
+            <option value="caiyun" data-i18n="settings:translationSettings.preference.services.caiyun"></option>
+            <option value="openai" data-i18n="settings:translationSettings.preference.services.openai"></option>
         </select>
     </div>
     <hr>
-    <h4 data-i18n="translationSettings.autoTranslation.title"></h4>
+    <h4 data-i18n="settings:translationSettings.autoTranslation.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="autoTranslation" data-i18n="translationSettings.autoTranslation.enable"></label>
+        <label for="autoTranslation" data-i18n="settings:translationSettings.autoTranslation.enable"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.autoTranslation.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.autoTranslation.helpText"></div>
         </div>
         <input type="checkbox" id="autoTranslation" name="autoTranslation">
     </div>
     <div class='CFBetter_setting_list'>
         <label for='shortTextLength'>
             <div style="display: flex;align-items: center;"
-                data-i18n="translationSettings.autoTranslation.shortTextLength.name"></div>
+                data-i18n="settings:translationSettings.autoTranslation.shortTextLength.name"></div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.autoTranslation.shortTextLength.helpText">
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.autoTranslation.shortTextLength.helpText">
             </div>
         </div>
         <input type='number' id='shortTextLength' class='no_default' placeholder='请输入' require=true>
-        <span data-i18n="translationSettings.autoTranslation.shortTextLength.end"></span>
+        <span data-i18n="settings:translationSettings.autoTranslation.shortTextLength.end"></span>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="allowMixTrans" data-i18n="translationSettings.autoTranslation.allowMixTrans.name"></label>
+        <label for="allowMixTrans" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.autoTranslation.allowMixTrans.helpText">
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.autoTranslation.allowMixTrans.helpText">
             </div>
         </div>
         <input type="checkbox" id="allowMixTrans" name="allowMixTrans">
         <div class='CFBetter_checkboxs'>
             <input type="checkbox" id="deepl" name="mixedTranslation" value="deepl">
-            <label for="deepl" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.deepl"></label>
+            <label for="deepl" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.deepl"></label>
             <input type="checkbox" id="iflyrec" name="mixedTranslation" value="iflyrec">
-            <label for="iflyrec" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.iflyrec"></label>
+            <label for="iflyrec" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.iflyrec"></label>
             <input type="checkbox" id="youdao" name="mixedTranslation" value="youdao">
-            <label for="youdao" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.youdao"></label>
+            <label for="youdao" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.youdao"></label>
             <input type="checkbox" id="google" name="mixedTranslation" value="google">
-            <label for="google" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
+            <label for="google" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
-            <label for="caiyun" data-i18n="translationSettings.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <label for="caiyun" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
         </div>
     </div>
     <hr>
-    <h4 data-i18n="translationSettings.advanced.name"></h4>
+    <h4 data-i18n="settings:translationSettings.advanced.name"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="comment_translation_mode" style="display: flex;" data-i18n="translationSettings.advanced.mode.name"></label>
+        <label for="comment_translation_mode" style="display: flex;" data-i18n="settings:translationSettings.advanced.mode.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.advanced.mode.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.mode.helpText"></div>
         </div>
         <select id="comment_translation_mode" name="comment_translation_mode">
-            <option value="0" data-i18n="translationSettings.advanced.mode.options.0"></option>
-            <option value="1" data-i18n="translationSettings.advanced.mode.options.1"></option>
-            <option value="2" data-i18n="translationSettings.advanced.mode.options.2"></option>
+            <option value="0" data-i18n="settings:translationSettings.advanced.mode.options.0"></option>
+            <option value="1" data-i18n="settings:translationSettings.advanced.mode.options.1"></option>
+            <option value="2" data-i18n="settings:translationSettings.advanced.mode.options.2"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="memoryTranslateHistory" data-i18n="translationSettings.advanced.memory.name"></label>
+        <label for="memoryTranslateHistory" data-i18n="settings:translationSettings.advanced.memory.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.advanced.memory.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.memory.helpText"></div>
         </div>
         <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="translation_retransAction" style="display: flex;" data-i18n="translationSettings.advanced.retrans.name"></label>
+        <label for="translation_retransAction" style="display: flex;" data-i18n="settings:translationSettings.advanced.retrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.advanced.retrans.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.retrans.helpText"></div>
         </div>
         <select id="translation_retransAction" name="translation_retransAction">
-            <option value=0 data-i18n="translationSettings.advanced.retrans.options.0"></option>
-            <option value=1 data-i18n="translationSettings.advanced.retrans.options.1"></option>
+            <option value=0 data-i18n="settings:translationSettings.advanced.retrans.options.0"></option>
+            <option value=1 data-i18n="settings:translationSettings.advanced.retrans.options.1"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='transWaitTime'>
-            <div style="display: flex;align-items: center;" data-i18n="translationSettings.advanced.transWaitTime.name"></div>
+            <div style="display: flex;align-items: center;" data-i18n="settings:translationSettings.advanced.transWaitTime.name"></div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.advanced.transWaitTime.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.transWaitTime.helpText"></div>
         </div>
         <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require=true>
-        <span data-i18n="translationSettings.advanced.transWaitTime.end"></span>
+        <span data-i18n="settings:translationSettings.advanced.transWaitTime.end"></span>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="translation_replaceSymbol" style="display: flex;" data-i18n="translationSettings.advanced.replaceSymbol.name"></label>
+        <label for="translation_replaceSymbol" style="display: flex;" data-i18n="settings:translationSettings.advanced.replaceSymbol.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.advanced.replaceSymbol.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.replaceSymbol.helpText"></div>
         </div>
         <select id="translation_replaceSymbol" name="translation_replaceSymbol">
-            <option value=2 data-i18n="translationSettings.advanced.replaceSymbol.options.2"></option>
-            <option value=1 data-i18n="translationSettings.advanced.replaceSymbol.options.1"></option>
-            <option value=3 data-i18n="translationSettings.advanced.replaceSymbol.options.3"></option>
+            <option value=2 data-i18n="settings:translationSettings.advanced.replaceSymbol.options.2"></option>
+            <option value=1 data-i18n="settings:translationSettings.advanced.replaceSymbol.options.1"></option>
+            <option value=3 data-i18n="settings:translationSettings.advanced.replaceSymbol.options.3"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="filterTextWithoutEmphasis" data-i18n="translationSettings.advanced.filterTextWithoutEmphasis.name"></label>
+        <label for="filterTextWithoutEmphasis" data-i18n="settings:translationSettings.advanced.filterTextWithoutEmphasis.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]translationSettings.advanced.filterTextWithoutEmphasis.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.filterTextWithoutEmphasis.helpText"></div>
         </div>
         <input type="checkbox" id="filterTextWithoutEmphasis" name="filterTextWithoutEmphasis">
     </div>
@@ -3322,64 +3654,64 @@ const translation_settings_HTML = `
 
 const clist_rating_settings_HTML = `
 <div id="clist_rating-settings" class="settings-page">
-    <h3 data-i18n="clistSettings.title"></h3>
+    <h3 data-i18n="settings:clistSettings.title"></h3>
     <hr>
-    <h4 data-i18n="clistSettings.basics.name"></h4>
+    <h4 data-i18n="settings:clistSettings.basics.name"></h4>
     <div class='CFBetter_setting_list alert_tip'>
         <div>
-            <p data-i18n="clistSettings.basics.notice"></p>
+            <p data-i18n="settings:clistSettings.basics.notice"></p>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='clist_Authorization'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="clistSettings.basics.key.title"></span>
+                <span class="input_label" data-i18n="settings:clistSettings.basics.key.title"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]clistSettings.basics.key.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:clistSettings.basics.key.helpText"></div>
         </div>
         <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' required="true"
-            data-i18n="[placeholder]clistSettings.basics.key.keyPlaceholder">
+            data-i18n="[placeholder]settings:clistSettings.basics.key.keyPlaceholder">
     </div>
     <hr>
-    <h4 data-i18n="clistSettings.displayRating.title"></h4>
+    <h4 data-i18n="settings:clistSettings.displayRating.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_contest"><span data-i18n="clistSettings.displayRating.contest.name"></span></label>
+        <label for="showClistRating_contest"><span data-i18n="settings:clistSettings.displayRating.contest.name"></span></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]clistSettings.displayRating.contest.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:clistSettings.displayRating.contest.helpText"></div>
         </div>
-        <div class="badge" data-i18n="clistSettings.displayRating.contest.badge"></div>
+        <div class="badge" data-i18n="settings:clistSettings.displayRating.contest.badge"></div>
         <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_problem"><span data-i18n="clistSettings.displayRating.problem.name"></span></label>
+        <label for="showClistRating_problem"><span data-i18n="settings:clistSettings.displayRating.problem.name"></span></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]clistSettings.displayRating.problem.helpText">
+            <div class="tip_text" data-i18n="[html]settings:clistSettings.displayRating.problem.helpText">
                 >
             </div>
         </div>
-        <div class="badge" data-i18n="clistSettings.displayRating.contest.badge"></div>
+        <div class="badge" data-i18n="settings:clistSettings.displayRating.contest.badge"></div>
         <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_problemset"><span data-i18n="clistSettings.displayRating.problemset.name"></span></label>
+        <label for="showClistRating_problemset"><span data-i18n="settings:clistSettings.displayRating.problemset.name"></span></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]clistSettings.displayRating.problemset.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:clistSettings.displayRating.problemset.helpText"></div>
         </div>
-        <div class="badge" data-i18n="clistSettings.displayRating.problemset.badge"></div>
+        <div class="badge" data-i18n="settings:clistSettings.displayRating.problemset.badge"></div>
         <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
     </div>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="RatingHidden"><span data-i18n="clistSettings.spoilerProtection.title"></span></label>
+        <label for="RatingHidden"><span data-i18n="settings:clistSettings.spoilerProtection.title"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]clistSettings.spoilerProtection.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:clistSettings.spoilerProtection.helpText"></div>
         </div>
         <input type="checkbox" id="RatingHidden" name="RatingHidden">
     </div>
@@ -3388,74 +3720,74 @@ const clist_rating_settings_HTML = `
 
 const code_editor_settings_HTML = `
 <div id="code_editor-settings" class="settings-page">
-    <h3 data-i18n="codeEditorSettings.title"></h3>
+    <h3 data-i18n="settings:codeEditorSettings.title"></h3>
     <hr>
-    <h4 data-i18n="codeEditorSettings.basics"></h4>
+    <h4 data-i18n="settings:codeEditorSettings.basics"></h4>
     <div class='CFBetter_setting_list'>
         <label for="problemPageCodeEditor"><span
-                data-i18n="codeEditorSettings.problemPageCodeEditor.label"></span></label>
+                data-i18n="settings:codeEditorSettings.problemPageCodeEditor.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="codeEditorSettings.problemPageCodeEditor.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditorSettings.problemPageCodeEditor.helpText"></div>
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
-    <h4 data-i18n="codeEditorSettings.preferences.title"></h4>
+    <h4 data-i18n="settings:codeEditorSettings.preferences.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="isCodeSubmitConfirm"><span
-                data-i18n="codeEditorSettings.preferences.isCodeSubmitConfirm.label"></span></label>
+                data-i18n="settings:codeEditorSettings.preferences.isCodeSubmitConfirm.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="codeEditorSettings.preferences.isCodeSubmitConfirm.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditorSettings.preferences.isCodeSubmitConfirm.helpText"></div>
         </div>
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
-                data-i18n="codeEditorSettings.preferences.alwaysConsumeMouseWheel.label"></span></label>
+                data-i18n="settings:codeEditorSettings.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="codeEditorSettings.preferences.alwaysConsumeMouseWheel.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditorSettings.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
     </div>
     <hr>
-    <h4 data-i18n="codeEditorSettings.onlineCodeExecution.title"></h4>
+    <h4 data-i18n="settings:codeEditorSettings.onlineCodeExecution.title"></h4>
     <label>
         <input type='radio' name='compiler' value='official'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="codeEditorSettings.onlineCodeExecution.compilerOptions.codeforces"></span>
+            data-i18n="settings:codeEditorSettings.onlineCodeExecution.compilerOptions.codeforces"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='wandbox'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="codeEditorSettings.onlineCodeExecution.compilerOptions.wandbox"></span>
+            data-i18n="settings:codeEditorSettings.onlineCodeExecution.compilerOptions.wandbox"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='rextester'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="codeEditorSettings.onlineCodeExecution.compilerOptions.rextester"></span>
+            data-i18n="settings:codeEditorSettings.onlineCodeExecution.compilerOptions.rextester"></span>
     </label>
     <hr>
-    <h4 data-i18n="codeEditorSettings.lspSettings.title"></h4>
+    <h4 data-i18n="settings:codeEditorSettings.lspSettings.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="useLSP"><span data-i18n="codeEditorSettings.lspSettings.useLSP.label"></span></label>
+        <label for="useLSP"><span data-i18n="settings:codeEditorSettings.lspSettings.useLSP.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]codeEditorSettings.lspSettings.useLSP.helpText"></div>
+            <div class="tip_text" data-i18n="settings:[html]codeEditorSettings.lspSettings.useLSP.helpText"></div>
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
     </div>
     <div class='CFBetter_setting_list'>
         <label for='OJBetter_Bridge_WorkUri'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.label"></span>
+                <span class="input_label" data-i18n="settings:codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.label"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.helpText">
+            <div class="tip_text" data-i18n="settings:[html]codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.helpText">
                 
             </div>
         </div>
@@ -3466,12 +3798,12 @@ const code_editor_settings_HTML = `
         <label for='OJBetter_Bridge_SocketUrl'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label"
-                    data-i18n="codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.label"></span>
+                    data-i18n="settings:codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.label"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.helpText">
+            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.helpText">
                 
             </div>
         </div>
@@ -3479,21 +3811,21 @@ const code_editor_settings_HTML = `
             require=true>
     </div>
     <hr>
-    <h4 data-i18n="codeEditorSettings.staticCompletionEnhancement.title"></h4>
+    <h4 data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="cppCodeTemplateComplete"><span
-                data-i18n="codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.label"></span></label>
+                data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.helpText"></div>
         </div>
         <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
     </div>
     <hr>
-    <h5 data-i18n="codeEditorSettings.staticCompletionEnhancement.customization"></h5>
+    <h5 data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.customization"></h5>
     <div class='CFBetter_setting_list alert_warn'>
         <div>
-            <p data-i18n="codeEditorSettings.staticCompletionEnhancement.performanceWarning"></p>
+            <p data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.performanceWarning"></p>
         </div>
     </div>
     <div id="Complet_config" class="config"></div>
@@ -3502,13 +3834,13 @@ const code_editor_settings_HTML = `
 
 const compatibility_settings_HTML = `
 <div id="compatibility-settings" class="settings-page">
-    <h3 data-i18n="compatibilitySettings.title"></h3>
+    <h3 data-i18n="settings:compatibilitySettings.title"></h3>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="loaded"><span data-i18n="compatibilitySettings.loaded.label"></span></label>
+        <label for="loaded"><span data-i18n="settings:compatibilitySettings.loaded.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]compatibilitySettings.loaded.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:compatibilitySettings.loaded.helpText"></div>
         </div>
         <input type="checkbox" id="loaded" name="loaded">
     </div>
@@ -3601,7 +3933,7 @@ const chatgptConfigEditHTML = `
             </div>
         </label>
         <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config_chatgpt:common.advanced.data.placeholder"></textarea>
-        <button id='tempConfig_save' data-i18n="common:save.title"></button>
+        <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
 `;
 
@@ -3651,11 +3983,13 @@ const CompletConfigEditHTML = `
         </label>
         <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config_complet:common.jsonurl.alert"></div>
         <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_complet:common.jsonurl.placeholder">
-        <button id='tempConfig_save' data-i18n="common:save.title"></button>
+        <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
 `;
 
-// 设置按钮面板
+/**
+ * 加载设置按钮面板
+ */
 async function settingPanel() {
     // 添加右上角设置按钮
     function insertCFBetterSettingButton(location, method) {
@@ -4127,8 +4461,10 @@ class TaskQueue {
     }
 }
 
-// 加载按钮相关函数
-async function initTranslateButtonFunc() {
+/**
+ * 加载按钮相关函数
+ */
+async function initButtonFunc() {
     // 鼠标悬浮时为目标元素区域添加一个覆盖层
     $.fn.addHoverOverlay = function (target) {
         let position = $(target).css('position');
@@ -4169,27 +4505,27 @@ async function initTranslateButtonFunc() {
     $.fn.setTransButtonState = function (state, text = null) {
         if (state === 'normal') {
             this
-                .text(text ? text : '翻译')
+                .text(text ? text : i18next.t('trans.normal', { ns: 'button' }))
                 .prop('disabled', false)
                 .css('cursor', 'pointer')
                 .removeClass('translating translated error');
         } else if (state === 'translating') {
             this
-                .text(text ? text : '翻译中')
+                .text(text ? text : i18next.t('trans.translating', { ns: 'button' }))
                 .prop('disabled', true)
                 .css('cursor', 'not-allowed')
                 .removeClass('translated error')
                 .addClass('translating');
         } else if (state === 'translated') {
             this
-                .text(text ? text : '已翻译')
+                .text(text ? text : i18next.t('trans.translated', { ns: 'button' }))
                 .prop('disabled', false)
                 .css('cursor', 'pointer')
                 .removeClass('translating error')
                 .addClass('translated');
         } else if (state === 'error') {
             this
-                .text(text ? text : '翻译出错')
+                .text(text ? text : i18next.t('trans.error', { ns: 'button' }))
                 .prop('disabled', false)
                 .css('cursor', 'pointer')
                 .removeClass('translating translated')
@@ -4266,13 +4602,13 @@ async function initTranslateButtonFunc() {
 // 题目markdown转换/翻译面板
 function addButtonPanel(element, suffix, type, is_simple = false) {
     let text;
-    if (commentTranslationMode == "1") text = "分段翻译";
-    else if (commentTranslationMode == "2") text = "翻译选中";
-    else text = "翻译";
+    if (commentTranslationMode == "1") text = i18next.t('trans.segment', { ns: 'button' });
+    else if (commentTranslationMode == "2") text = i18next.t('trans.select', { ns: 'button' });
+    else text = i18next.t('trans.normal', { ns: 'button' });
 
     let panel = $(`<div class='html2md-panel input-output-copier'></div>`);
-    let viewButton = $(`<button class='html2mdButton' id='html2md-view${suffix}'>MarkDown视图</button>`);
-    let copyButton = $(`<button class='html2mdButton' id='html2md-cb${suffix}'>Copy</button>`);
+    let viewButton = $(`<button class='html2mdButton' id='html2md-view${suffix}'>${i18next.t('md.normal', { ns: 'button' })}</button>`);
+    let copyButton = $(`<button class='html2mdButton' id='html2md-cb${suffix}'>${i18next.t('copy.normal', { ns: 'button' })}</button>`);
     let translateButton = $(`<button class='html2mdButton translateButton' id='translateButton${suffix}'>${text}</button>`);
     if (!is_simple) panel.append(viewButton);
     if (!is_simple) panel.append(copyButton);
@@ -4300,10 +4636,18 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
  * @param {string} type 类型
  * @returns {void}
  */
-function addButtonWithHTML2MD(button, element, suffix, type) {
+async function addButtonWithHTML2MD(button, element, suffix, type) {
+    button.prop("disabled", true);
+
     if (is_oldLatex || is_acmsguru) {
-        button.prop("disabled", true);
+        return;
+    } else {
+        button.text(i18next.t('state.waitMathJax', { ns: 'button' }));
+        await waitForMathJaxIdle();
+        button.prop("disabled", false);
+        button.text(i18next.t('md.normal', { ns: 'button' }));
     }
+
     button.click(debounce(function () {
         var target = $(element).get(0);
 
@@ -4327,9 +4671,9 @@ function addButtonWithHTML2MD(button, element, suffix, type) {
         function setViewmd(value) {
             $(element).attr("viewmd", value);
             if (value) {
-                button.addClass("mdViewed").text("原始内容");
+                button.addClass("mdViewed").text(i18next.t('md.reduction', { ns: 'button' }));
             } else {
-                button.removeClass("mdViewed").text("MarkDown视图");
+                button.removeClass("mdViewed").text(i18next.t('md.normal', { ns: 'button' }));
             }
         }
 
@@ -4358,9 +4702,15 @@ function addButtonWithHTML2MD(button, element, suffix, type) {
  * @param {string} suffix 后缀
  * @param {string} type 类型
  */
-function addButtonWithCopy(button, element, suffix, type) {
+async function addButtonWithCopy(button, element, suffix, type) {
+    button.prop("disabled", true);
+
+    // 等待MathJax队列完成
     if (is_oldLatex || is_acmsguru) {
-        button.prop("disabled", true);
+        return;
+    } else {
+        await waitForMathJaxIdle();
+        button.prop("disabled", false);
     }
 
     button.click(debounce(function () {
@@ -4370,11 +4720,11 @@ function addButtonWithCopy(button, element, suffix, type) {
 
         GM_setClipboard(markdown);
 
-        $(this).addClass("copied").text("Copied");
+        $(this).addClass("copied").text(i18next.t('copy.copied', { ns: 'button' }));
 
         // 更新复制按钮文本
         setTimeout(() => {
-            $(this).removeClass("copied").text("Copy");
+            $(this).removeClass("copied").text(i18next.t('copy.normal', { ns: 'button' }));
         }, 2000);
     }));
 
@@ -4392,6 +4742,11 @@ function addButtonWithCopy(button, element, suffix, type) {
  * @param {boolean} is_comment 是否是评论
  */
 async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
+    // 等待MathJax队列完成
+    button.prop("disabled", true);
+    await waitForMathJaxIdle();
+    button.prop("disabled", false);
+
     // 标记目标文本是短字符文本
     {
         let length = $(element).getMarkdown().length;
@@ -4425,13 +4780,13 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
 
         // 翻译
-        button.setTransButtonState('translating', '等待翻译中');
+        button.setTransButtonState('translating', i18next.t('trans.wait', { ns: 'button' }));
         taskQueue.addTask(translation, () => transTask(button, element, type, is_comment), translation == 'openai');
     }));
 
     // 添加可指定翻译服务的方法调用
     button.data("translatedItBy", function (translation) {
-        button.setTransButtonState('translating', '等待翻译中');
+        button.setTransButtonState('translating', i18next.t('trans.wait', { ns: 'button' }));
         taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
     });
 
@@ -4441,7 +4796,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         let state = button.getTransButtonState();
         if (state !== "normal" && state !== "translating") {
             prevState = state;
-            button.setTransButtonState('normal', '重新翻译');
+            button.setTransButtonState('normal', i18next.t('trans.reTranslate', { ns: 'button' }));
         }
     }, () => {
         if (prevState && button.getTransButtonState() === "normal") {
@@ -4469,12 +4824,12 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         var menu = $('<div class="CFBetter_contextmenu"></div>');
         var translations = [
-            { value: 'deepl', name: 'deepl翻译' },
-            { value: 'iflyrec', name: '讯飞听见翻译' },
-            { value: 'youdao', name: '有道翻译' },
-            { value: 'google', name: 'Google翻译' },
-            { value: 'caiyun', name: '彩云小译翻译' },
-            { value: 'openai', name: 'ChatGPT翻译' }
+            { value: 'deepl', name: i18next.t('translationSettings.options.services.deepl', { ns: 'settings' }) },
+            { value: 'iflyrec', name: i18next.t('translationSettings.options.services.iflyrec', { ns: 'settings' }) },
+            { value: 'youdao', name: i18next.t('translationSettings.options.services.youdao', { ns: 'settings' }) },
+            { value: 'google', name: i18next.t('translationSettings.options.services.google', { ns: 'settings' }) },
+            { value: 'caiyun', name: i18next.t('translationSettings.options.services.caiyun', { ns: 'settings' }) },
+            { value: 'openai', name: i18next.t('translationSettings.options.services.openai.name', { ns: 'settings' }) }
         ];
         if (is_comment) {
             var label = $('<label><input type="radio" name="translation" value="0"><span class="CFBetter_contextmenu_label_text">跟随首选项</span></label>');
@@ -4618,19 +4973,21 @@ async function blockProcessing(button, target, element_node, is_comment, transla
     }
     var result = await translateProblemStatement(button, target.markdown, element_node, is_comment, translation);
     if (result.status == "skip") {
-        button.setTransButtonState('error', '字数超限');
+        button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
         result.translateDiv.close();
-    }else if (result.status == "error" || !result.rawData.done) {
+    } else if (result.status == "error" || !result.rawData.done) {
         result.translateDiv.setError();
         result.translateDiv.setRawData(result.rawData);
         result.translateDiv.showDebugButton();
-        button.setTransButtonState('error', '翻译出错');
+        button.setTransButtonState('error', i18next.t('trans.error', { ns: 'button' }));
         $(target).remove();
     }
     return result;
 }
 
-// 选段翻译支持
+/**
+ * 选段翻译支持
+ */
 async function multiChoiceTranslation() {
     GM_addStyle(`
         .topic .content .ttypography {
@@ -4682,7 +5039,7 @@ async function multiChoiceTranslation() {
 /**
  * 为acmsguru题面重新划分div
  */
-function acmsguruReblock() {
+async function acmsguruReblock() {
     if (commentTranslationMode == '0') {
         // 普通模式下的划分方式
         var html = $('.ttypography').children().html();
@@ -4712,9 +5069,9 @@ function acmsguruReblock() {
 }
 
 /**
- * 添加按钮
+ * 添加MD/复制/翻译按钮
  */
-function addConversionButton() {
+async function addConversionButton() {
     // 题目页添加按钮
     if (is_problem) {
         let exContentsPageClasses = ["sample-tests"];
@@ -4850,16 +5207,18 @@ function addConversionButton() {
 
 /**
  * 等待LaTeX渲染队列全部完成
- * @param {Function} callback 回调函数
+ * @returns {Promise} 完成渲染
  */
-function waitUntilIdleThenDo(callback) {
-    var intervalId = setInterval(function () {
-        var queue = MathJax.Hub.queue;
-        if (queue.pending === 0 && queue.running === 0) {
-            clearInterval(intervalId);
-            callback();
-        }
-    }, 100);
+function waitForMathJaxIdle() {
+    return new Promise((resolve, reject) => {
+        var intervalId = setInterval(() => {
+            var queue = MathJax.Hub.queue;
+            if (queue.pending === 0 && queue.running === 0) {
+                clearInterval(intervalId);
+                resolve();
+            }
+        }, 100);
+    });
 }
 
 // 块替换
@@ -5042,7 +5401,7 @@ class TranslateDiv {
             this.copyButton.css({ 'fill': '#8bc34a' });
             // 更新TopText
             let topText = this.getTopText();
-            this.topText.text("已复制");
+            this.topText.text(i18next.t('copy.copied', { ns: 'button' }));
             // 复制提示
             setTimeout(() => {
                 this.topText.text(topText);
@@ -5311,7 +5670,10 @@ async function getTransDBData() {
     }
 }
 
-// 初始化恢复翻译结果
+/**
+ * 翻译结果恢复功能初始化
+ * @returns 
+ */
 async function initTransResultsRecover() {
     ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
     let result = await getTransDBData();
@@ -5325,6 +5687,7 @@ async function initTransResultsRecover() {
  * 自动翻译
  */
 async function initTransWhenViewable() {
+    await waitForMathJaxIdle();
     $('.ttypography, .comments').find('.translateButton').each((i, e) => {
         // check if element is not normal or is not short text
         if ($(e).getTransButtonState() !== 'normal' || !$(e).IsShortText() || $(e).getNotAutoTranslate()) {
@@ -5487,7 +5850,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     }
 
     // 信息
-    translateDiv.setTopText(translationService[realTranlate] + ' 翻译');
+    translateDiv.setTopText(translationService[realTranlate] + i18next.t('translateDiv.topTextSuffix', { ns: 'translator' }));
 
     // 注册按钮
     translateDiv.registerUpButtonEvent();
@@ -5535,24 +5898,24 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         let rawData;
         try {
             if (translation == "deepl") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
                 rawData = await translate_deepl(text);
             } else if (translation == "iflyrec") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
                 rawData = await translate_iflyrec(text);
             } else if (translation == "youdao") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
                 rawData = await translate_youdao_mobile(text);
             } else if (translation == "google") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
                 rawData = await translate_gg(text);
             } else if (translation == "caiyun") {
-                translateDiv.updateTranslateDiv(`正在使用 ${translationService[translation]} 翻译中……请稍等`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
                 await translate_caiyun_startup();
                 rawData = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： ${openai_name}\n\n${!openai_isStream
-                    ? "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待" : ""}`,
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: openai_name })}${!openai_isStream
+                    ? i18next.t('transingTip.openai_isStream', { ns: 'translator' }) : ""}`,
                     is_renderLaTeX);
                 if (openai_isStream) {
                     // 流式传输
@@ -5568,7 +5931,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             }
         } catch (e) {
             status = "error";
-            rawData.message = `**:( 翻译遇到了问题：** 发生了意外的错误\n\n请重试或更换翻译接口`;
+            rawData.message = i18next.t('error.unexpected', { ns: 'translator' });
             console.warn(e);
         }
         return rawData;
@@ -5623,13 +5986,17 @@ function alertZh() {
     // }
 };
 
-// 折叠块展开
+/**
+ * 折叠块展开
+ */
 function ExpandFoldingblocks() {
     $('.spoiler').addClass('spoiler-open');
     $('.spoiler-content').attr('style', '');
 };
 
-// 折叠块渲染优化
+/**
+ * 折叠块渲染优化
+ */
 function RenderPerfOpt() {
     GM_addStyle(`
         .spoiler-content {
@@ -5638,7 +6005,9 @@ function RenderPerfOpt() {
     `);
 }
 
-// 分页
+/**
+ * 评论区分页
+ */
 function CommentPagination() {
     GM_addStyle(`
         .comments > .comment {
@@ -5773,7 +6142,121 @@ function CommentPagination() {
     });
 }
 
-// 跳转洛谷
+/**
+ * 题目页相关链接栏
+ */
+class ProblemPageLinkbar {
+    constructor() {
+        this.containerElement = this.createToolbar();
+        this.commandInvoker = new CommandInvoker();
+    }
+
+    /**
+     * 创建工具栏
+     */
+    createToolbar() {
+        const toolbarElement = $("<div>").attr("id", "problemToolbar").insertBefore($(".problemindexholder"));
+        return new DOMContainer(toolbarElement);
+    }
+
+    /**
+     * 添加按钮
+     * @param {string} url 按钮链接
+     * @param {string} text 按钮文字
+     * @param {JQueryObject} icon 按钮图标
+     * @param {string} iconHeight 图标高度
+     * @returns {object} 按钮对象
+     */
+    addLinkButton(url, text, icon = $('<div>'), iconHeight = "22px") {
+        const linkElement = $("<a>")
+            .attr("href", url)
+            .attr("target", "_blank")
+            .addClass("toolbarLink");
+
+        linkElement.append(icon);
+        icon.css("height", iconHeight);
+
+        const textSpan = $("<span>").html(text);
+        linkElement.append(textSpan);
+
+        this.commandInvoker.execute(new AddElementCommand(this.containerElement, linkElement));
+        return {
+            element: linkElement,
+            text: textSpan,
+            icon: icon
+        };
+    }
+
+    /**
+     * 更新链接
+     * @param {object} button 按钮对象
+     * @param {string} url 按钮链接
+     */
+    updateUrl(button, url) {
+        button.element.attr("href", url);
+    }
+
+    /**
+     * 更新文字
+     * @param {object} button 按钮对象
+     * @param {string} text 按钮文字
+     */
+    updateText(button, text) {
+        button.text.html(text);
+    }
+
+    /**
+     * 设置文字为粗体
+     * @param {object} button 按钮对象
+     */
+    setBold(button) {
+        button.text.css("font-weight", "bold");
+    }
+
+    /**
+     * 更新图标
+     * @param {object} button 按钮对象
+     * @param {JQueryObject} icon 按钮图标
+     * @param {string} iconHeight 图标高度
+     */
+    updateIcon(button, icon, iconHeight = "16px") {
+        button.icon.remove();
+        button.text.prepend(icon);
+        icon.css("height", iconHeight);
+        button.icon = icon;
+    }
+
+    /**
+     * 添加类
+     * @param {object} button 按钮对象
+     * @param {string} className 类名
+     */
+    addClass(button, className) {
+        button.element.addClass(className);
+    }
+
+    /**
+     * 禁用链接按钮
+     * @param {object} button 按钮对象
+     */
+    disableButton(button) {
+        button.element.addClass("disabled");
+    }
+
+    /**
+     * 启用链接按钮
+     * @param {object} button 按钮对象
+     */
+    enableButton(button) {
+        button.element.removeClass("disabled");
+    }
+}
+
+/**
+ * 获取题目的id
+ * @param {String} url 题目的链接 
+ * @returns 题目的id，形如2000A
+ */
 function getProblemId(url) {
     const regex = url.includes('/contest/')
         ? /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/
@@ -5785,9 +6268,11 @@ function getProblemId(url) {
 /**
  * 跳转到洛谷
  */
-async function CF2luogu() {
+async function CF2luogu(problemToolbar) {
     const url = window.location.href;
     const problemId = getProblemId(url);
+    const luoguButton = problemToolbar.addLinkButton("https://www.luogu.com.cn/", i18next.t('state.loading', { ns: 'button' }),
+        $("<img>").attr("src", "https://cdn.luogu.com.cn/fe/logo.png"));
     const checkLinkExistence = (url) => {
         return new Promise((resolve, reject) => {
             GM.xmlHttpRequest({
@@ -5808,25 +6293,14 @@ async function CF2luogu() {
         });
     };
 
-    let panelElement;
-    if ($('#CF2luoguPanel').length > 0) {
-        panelElement = $('#CF2luoguPanel');
-    } else {
-        panelElement = $("<div>")
-            .addClass("html2md-panel")
-            .attr("id", "CF2luoguPanel")
-            .insertBefore('.problemindexholder');
-    }
-
     const LuoguUrl = `https://www.luogu.com.cn/problem/CF${problemId}`;
     const result = await checkLinkExistence(LuoguUrl);
     if (problemId && result) {
-        const problemLink = $("<a>")
-            .attr("id", "problemLink")
-            .attr("href", LuoguUrl)
-            .attr("target", "_blank")
-            .html(`<button style="height: 25px;" class="html2mdButton"><img style="width:45px; margin-right:2px;" src="https://cdn.luogu.com.cn/fe/logo.png"></button>`);
-        panelElement.append(problemLink);
+        problemToolbar.updateText(luoguButton, "");
+        problemToolbar.updateUrl(luoguButton, LuoguUrl);
+    } else {
+        problemToolbar.updateText(luoguButton, i18next.t('state.404', { ns: 'button' }));
+        problemToolbar.disableButton(luoguButton);
     }
 }
 
@@ -5857,63 +6331,76 @@ const cssMap = {
     "rating_by_clist_color8": "#ff3333",
     "rating_by_clist_color9": "#aa0000"
 };
-// cookie有效性检查
-async function checkCookie(isContest = false) {
-    let ok = false, congested = false;
-    await new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: "https://clist.by:443/api/v3/contest/?limit=1&resource_id=1",
-            onload: function (response) {
-                if (response.status === 200) ok = true;
-                resolve();
-            },
-            onerror: function (response) {
-                console.warn("访问clist.by出现错误，请稍后再试");
-                congested = true;
-                resolve();
+
+/**
+ * clist 访问有效性检查
+ * @param {boolean} onlyCookie 是否只检查Cookie
+ * @returns {Promise<boolean>} 是否有效
+ */
+async function validateClistConnection(onlyCookie = false) {
+    const clistApiUrl = "https://clist.by:443/api/v4/contest/?limit=1&resource_id=1";
+    const requestOptions = {
+        method: "GET",
+        url: clistApiUrl,
+    };
+
+    // 尝试发送请求
+    async function tryRequest(options) {
+        try {
+            const response = await GMRequest(options);
+            if (response.status === 200) {
+                return { ok: true };
+            } else if (response.status === 401) {
+                throw new Error('unauthorized');
+            } else if (response.status === 404) {
+                throw new Error('not_found');
+            } else {
+                throw new Error('other_error');
             }
-        });
-    });
-    if (isContest && !ok && !congested) {
-        await new Promise((resolve, reject) => {
-            GM_xmlhttpRequest({
-                method: "GET",
-                url: "https://clist.by:443/api/v3/contest/?limit=1&resource_id=1",
-                headers: {
-                    "Authorization": clist_Authorization
-                },
-                onload: function (response) {
-                    if (response.status === 200) ok = true;
-                    resolve();
-                },
-                onerror: function (response) {
-                    console.warn("访问clist.by出现错误，请稍后再试");
-                    resolve();
-                }
-            });
-        });
+        } catch (error) {
+            console.warn("访问clist.by出现错误，请稍后再试");
+            return { ok: false, error: error.message };
+        }
     }
-    if (!ok) {
-        var state = congested ? `当前访问Clist.by网络拥堵，请求已中断，请稍后再重试` :
-            `当前浏览器的Clist.by登录Cookie可能已失效，请打开<a target="_blank" href="https://clist.by/">Clist.by</a>重新登录
-         <br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，
-         <br>脚本不会获取你在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明`;
-        var newElement = $("<div></div>")
-            .addClass("alert alert-error ojbetter-alert").html(`${OJBetterName} —— ${state}`)
-            .css({ "margin": "1em", "text-align": "center", "position": "relative" });
-        $(".menu-box:first").next().after(newElement);
+
+    // 尝试携带Key发送请求
+    let result = await tryRequest(requestOptions);
+    if (!onlyCookie && !result.ok) {
+        requestOptions.headers = { "Authorization": clist_Authorization };
+        result = await tryRequest(requestOptions);
     }
-    return ok;
+
+    // 根据结果显示错误信息
+    if (!result.ok) {
+        let errorType = result.error;
+        const loadingMessage = new LoadingMessage();
+        let state;
+        if (errorType === 'not_found') {
+            state = i18next.t('error.clist.404', { ns: 'alert' });
+        } else if (errorType === 'unauthorized') {
+            state = i18next.t('error.clist.cookie', { ns: 'alert' });
+        } else {
+            state = i18next.t('error.clist.other', { ns: 'alert' });
+        }
+        loadingMessage.updateStatus(`${OJBetterName} —— ${state}`, 'error');
+    }
+    return result.ok;
 }
-// 创建Rating相关css
-function creatRatingCss(hasborder = true) {
+
+/**
+ * 创建Rating相关css
+ * @param hasBorder 是否有边框
+ */
+function creatRatingCss(hasBorder = true) {
+    const defaultBorderColor = '#dcdfe6';
     let dynamicCss = "";
-    let hiddenCss = RatingHidden ? ":hover" : "";
+    let hoverSelector = RatingHidden ? ":hover" : "";
     for (let cssClass in cssMap) {
-        dynamicCss += "." + cssClass + hiddenCss + " {\n";
-        let border = hasborder ? `    border: 1px solid ${cssMap[cssClass]};\n` : `    border: 1px solid #dcdfe6;\n`;
-        dynamicCss += `    color: ${cssMap[cssClass]};\n${border}}\n`;
+        dynamicCss += `a.${cssClass}${hoverSelector} {\n`;
+        let borderColor = hasBorder ? cssMap[cssClass] : defaultBorderColor;
+        dynamicCss += `    color: ${cssMap[cssClass]};\n`;
+        dynamicCss += `    border: 1px solid ${borderColor};\n`;
+        dynamicCss += `}\n`;
     }
     GM_addStyle(dynamicCss);
 }
@@ -6000,29 +6487,25 @@ async function getRatingFromApi_problem(problem, problem_url) {
 }
 
 async function getRatingFromApi_contest(event) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${event}`,
-            headers: {
-                "Authorization": clist_Authorization
-            },
-            onload: function (response) {
-                if (!response) reject('发生了未知错误！');
-                let data = JSON.parse(response.responseText);
-                let objects = data.objects;
-                let problemsMap = new Map();
-                if (objects.length > 0) {
-                    var problems = objects[0].problems;
-                    for (var i = 0; i < problems.length; i++) {
-                        var problem = problems[i];
-                        problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
-                    }
-                    resolve(problemsMap);
-                }
-            }
-        });
-    });
+    const options = {
+        method: "GET",
+        url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${event}`,
+        headers: {
+            "Authorization": clist_Authorization
+        }
+    }
+    let response = await GMRequest(options);
+    let data = JSON.parse(response.responseText);
+    let objects = data.objects;
+    let problemsMap = new Map();
+    if (objects.length > 0) {
+        var problems = objects[0].problems;
+        for (var i = 0; i < problems.length; i++) {
+            var problem = problems[i];
+            problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
+        }
+    }
+    return problemsMap;
 }
 
 function getClassNameByRating(rating) {
@@ -6041,70 +6524,25 @@ function getClassNameByRating(rating) {
     return className;
 }
 
-// contest页显示Rating
-async function showRatingByClist_contest() {
-    if (!await checkCookie(true)) return;
-    creatRatingCss();
-
-    let event = encodeURIComponent($('#sidebar').children().first().find('.rtable th').first().text());
-    let problemsMap = await getRatingFromApi_contest(event);
-
-    $('.datatable .id.left').each(function () {
-        let href = 'https://codeforces.com' + $(this).find('a').attr('href');
-        if (problemsMap.has(href)) {
-            let rating = problemsMap.get(href);
-            let className = getClassNameByRating(rating);
-
-            $(this).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${rating}</span></div>`);
-        }
-    });
-}
-// problemset页显示Rating
-async function showRatingByClist_problemset() {
-    if (!await checkCookie()) return;
-    creatRatingCss();
-
-    const $problems = $('.problems');
-    const $trs = $problems.find('tbody tr:gt(0)');
-
-    for (let i = 0; i < $trs.length; i += 3) {
-        const promises = [];
-        const endIndex = Math.min(i + 3, $trs.length);
-
-        for (let j = i; j < endIndex; j++) {
-            const $tds = $($trs[j]).find('td');
-            let problem = $($tds[1]).find('a:first').text();
-            let problem_url = $($tds[1]).find('a').attr('href');
-            problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
-
-            promises.push(getRating(problem, problem_url).catch(error => console.warn(error)));
-        }
-
-        const results = await Promise.all(promises);
-
-        for (let j = i; j < endIndex; j++) {
-            const result = results[j - i];
-            if (result == undefined) continue;
-
-            let className = getClassNameByRating(result.rating);
-
-            const $tds = $($trs[j]).find('td');
-            $($tds[0]).find('a').after(`<div class="ratingBadges ${className}"><span class="rating">${result.rating}</span></div>`);
-        }
-
-        // 延时100毫秒
-        // await new Promise(resolve => setTimeout(resolve, 100));
-    }
-}
-
-// problem页显示Rating
-async function showRatingByClist_problem() {
-    if (!await checkCookie()) return;
-    creatRatingCss(false);
-
+/**
+ * problem页显示Rating
+ * @returns {Promise<void>}
+ */
+async function showRatingByClist_problem(problemToolbar) {
     // 题目名
     let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
     if (is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
+
+    // 创建Rating按钮元素
+    creatRatingCss(false);
+    const clistButton = problemToolbar.addLinkButton(`https://clist.by/problems/?search=${problem}&resource=1`, i18next.t('state.wait', { ns: 'button' }),
+        $("<img>").attr("src", "https://clist.by/static/img/logo-48.png"), "15px");
+
+    // 检测clist连接
+    if (!await validateClistConnection()) {
+        problemToolbar.updateText(clistButton, i18next.t('state.netError', { ns: 'button' }));
+        return;
+    }
 
     // 题目链接
     let problem_url = window.location.href;
@@ -6119,30 +6557,127 @@ async function showRatingByClist_problem() {
     // let contest = $('#sidebar').children().first().find('.rtable th').first().text();
 
     // rating
+    problemToolbar.updateText(clistButton, i18next.t('state.loading', { ns: 'button' }));
     let rating = await getRatingFromApi_problem(problem, problem_url);
-    let className = getClassNameByRating(rating);
-
-    const RatingHtml = $(`<a id="problemLink" href="https://clist.by/problems/?search=${problem}&resource=1" target="_blank">
-        <button style="height: 25px;" class="html2mdButton ratingBadges ${className}">
-        ${clistIcon}<span style="padding: 1px 0px 0px 5px;">${rating}</span></button>
-        </a>`);
-    if ($('#CF2luoguPanel').length > 0) {
-        $('#CF2luoguPanel').append(RatingHtml);
+    if (rating) {
+        let className = getClassNameByRating(rating);
+        problemToolbar.updateText(clistButton, rating);
+        problemToolbar.setBold(clistButton);
+        problemToolbar.addClass(clistButton, className);
     } else {
-        const panelElement = $("<div>")
-            .addClass("html2md-panel")
-            .attr("id", "CF2luoguPanel");
-        if (is_mSite) {
-            panelElement.insertBefore('.problem-statement');
-        } else {
-            panelElement.insertBefore('.problemindexholder');
-        }
-        panelElement.append(RatingHtml);
+        problemToolbar.updateText(clistButton, i18next.t('state.404', { ns: 'button' }));
+        problemToolbar.disableButton(clistButton);
     }
 }
 
-// cf赛制榜单重新着色
-function recolorStandings() {
+/**
+ * contest页显示Rating
+ * @returns {Promise<void>}
+ */
+async function showRatingByClist_contest() {
+    // 创建Rating显示框
+    creatRatingCss();
+    let ratingBadges = {};
+    $('.datatable .id.left').each(function () {
+        let href = 'https://codeforces.com' + $(this).find('a').attr('href');
+        let badge = $(`<a class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
+        $(this).find('a').after(badge);
+        ratingBadges[href] = badge;
+    });
+
+    // 检测clist连接
+    if (!await validateClistConnection(true)) {
+        for (let href in ratingBadges) {
+            ratingBadges[href].text('error').addClass('ratingBadge_error');
+        }
+        return;
+    }
+
+    // 显示loading
+    for (let href in ratingBadges) {
+        ratingBadges[href].text(i18next.t('state.loading', { ns: 'button' })).addClass('ratingBadge_loading');
+    }
+
+    // 获取Rating
+    let event = encodeURIComponent($('#sidebar').children().first().find('.rtable th').first().text());
+    let problemsMap = await getRatingFromApi_contest(event);
+
+    // 填充数据
+    for (let href in ratingBadges) {
+        if (problemsMap.has(href)) {
+            let rating = problemsMap.get(href);
+            let className = getClassNameByRating(rating);
+            ratingBadges[href].text(rating).addClass(className);
+        } else {
+            ratingBadges[href].text(i18next.t('state.404', { ns: 'button' })).addClass('ratingBadge_no');
+        }
+    }
+}
+
+/**
+ * problemset页显示Rating
+ * @returns {Promise<void>}
+ */
+async function showRatingByClist_problemset() {
+    creatRatingCss();
+    let ratingBadges = [];
+    const $problems = $('.problems');
+    const $trs = $problems.find('tbody tr:gt(0)');
+
+    // 先创建Rating显示框，并将关系存进数组ratingBadges
+    for (let i = 0; i < $trs.length; i++) {
+        const $tds = $($trs[i]).find('td');
+        let problem = $($tds[0]).text();
+        let problem_url = $($tds[0]).find('a').attr('href');
+        problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
+
+        const ratingBadge = $(`<a class="ratingBadge"></a>`);
+        const rating = $(`<span class="rating">${i18next.t('state.wait', { ns: 'button' })}</span>`);
+        ratingBadge.append(rating);
+        $($tds[0]).find('a').after(ratingBadge);
+        ratingBadges.push({ ratingBadge, rating, problem, problem_url });
+    }
+
+    // 检测clist连接
+    if (!await validateClistConnection()) {
+        for (let i = 0; i < rating.length; i++) {
+            ratingBadges[i].rating.text(i18next.t('state.netError', { ns: 'button' }));
+        }
+        return;
+    }
+
+    // 每次只获取3个rating
+    for (let i = 0; i < ratingBadges.length; i += 3) {
+        const promises = [];
+        const endIndex = Math.min(i + 3, ratingBadges.length);
+
+        for (let j = i; j < endIndex; j++) {
+            const ratingBadge = ratingBadges[j];
+            // 显示请求中
+            ratingBadge.rating.text(i18next.t('state.loading', { ns: 'button' }));
+            promises.push(getRating(ratingBadge.problem, ratingBadge.problem_url).catch(error => console.warn(error)));
+        }
+
+        const results = await Promise.all(promises);
+
+        for (let j = i; j < endIndex; j++) {
+            const result = results[j - i];
+            const ratingBadge = ratingBadges[j];
+            if (result) {
+                let className = getClassNameByRating(result.rating);
+                ratingBadge.ratingBadge.addClass(className);
+                ratingBadge.rating.text(result.rating);
+            } else {
+                ratingBadge.rating.text(i18next.t('state.404', { ns: 'button' }));
+            }
+        }
+    }
+}
+
+/**
+ * cf赛制榜单重新着色
+ */
+async function recolorStandings() {
     function getColorValue(value) {
         value = Math.max(0, Math.min(1, value));
 
@@ -6240,10 +6775,10 @@ async function getCode(url) {
     }
 }
 
-// 创建表单
-async function CreateCodeDevForm(submitUrl, cloneHTML) {
+// 创建代码编辑调试表单元素
+async function createCodeEditorForm(submitUrl, cloneHTML) {
     // 表单
-    var formDiv = $('<form method="post" id="CFBetter_SubmitForm"></form>');
+    var formDiv = $('<form method="post" id="CFBetter_SubmitForm" class="input-output-copier"></form>');
     $('.ttypography').after(formDiv);
     formDiv.attr('action', submitUrl + "?csrf_token=" + CF_csrf_token);
 
@@ -6286,16 +6821,21 @@ async function CreateCodeDevForm(submitUrl, cloneHTML) {
     // 自定义调试
     var customTestDiv = $(`
         <details id="customTestBlock">
-            <summary >自定义测试数据(自动保存)</summary>
+            <summary >${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
             <div id="customTests" style="min-height: 30px;"></div>
             <div id="control" style="display:flex;">
                 <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="onlyCustomTest"}><label for="onlyCustomTest">只测试自定义数据</label>
+                    <input type="checkbox" id="onlyCustomTest"}><label for="onlyCustomTest">
+                    ${i18next.t('customTestBlock.onlyCustom', { ns: 'codeEditor' })}
+                    </label>
                 </div>
                 <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="DontShowDiff"}><label for="DontShowDiff">不显示差异对比</label>
+                    <input type="checkbox" id="DontShowDiff"}>
+                    <label for="DontShowDiff">
+                        ${i18next.t('customTestBlock.DontShowDiff', { ns: 'codeEditor' })}
+                    </label>
                 </div>
-                <button type="button" id="addCustomTest">新建</button>
+                <button type="button" id="addCustomTest">${i18next.t('customTestBlock.add', { ns: 'codeEditor' })}</button>
             </div>
         </details>
     `)
@@ -6305,9 +6845,9 @@ async function CreateCodeDevForm(submitUrl, cloneHTML) {
     var submitDiv = $('<div id="CFBetter_submitDiv"></div>');
     var CompilerSetting = $('<div id="CompilerSetting"><input type="text" id="CompilerArgsInput"></div>');
     submitDiv.append(CompilerSetting);
-    var runButton = $('<button class="CFBetter_SubmitButton" id="RunTestButton">样例测试</button>');
+    var runButton = $(`<button class="CFBetter_SubmitButton" id="RunTestButton">${i18next.t('runTestButton', { ns: 'codeEditor' })}</button>`);
     submitDiv.append(runButton);
-    var submitButton = $('<input class="CFBetter_SubmitButton" id="SubmitButton" type="submit" value="提交">');
+    var submitButton = $(`<input class="CFBetter_SubmitButton" id="SubmitButton" type="submit" value="${i18next.t('submitButton', { ns: 'codeEditor' })}" >`);
     submitDiv.append(submitButton);
     formDiv.append(submitDiv);
 
@@ -6584,7 +7124,8 @@ async function createMonacoEditor(language, form, support) {
         editor.updateOptions({ fontSize: parseInt(editorFontSize) });
 
         // 调整字体大小
-        var changeSize = $(`<div><label for="fontSizeInput">字体大小：</label><input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
+        var changeSize = $(`<div><label for="fontSizeInput">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</label>
+        <input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
         form.topRightDiv.append(changeSize);
         changeSize.find('input#fontSizeInput').on('input', function () {
             var size = $(this).val();
@@ -6596,7 +7137,7 @@ async function createMonacoEditor(language, form, support) {
         var fullscreenButton = $('<button>', {
             'type': 'button',
             'class': 'html2mdButton',
-            'text': '全屏'
+            'text': i18next.t('fullscreenButton', { ns: 'codeEditor' })
         });
         form.topRightDiv.append(fullscreenButton);
         fullscreenButton.on('click', enterFullscreen);
@@ -6605,7 +7146,7 @@ async function createMonacoEditor(language, form, support) {
         var fixToBottomButton = $('<button>', {
             'type': 'button',
             'class': 'html2mdButton',
-            'text': '固定到底部'
+            'text': i18next.t('fixToBottomButton', { ns: 'codeEditor' })
         });
         form.topRightDiv.append(fixToBottomButton);
         fixToBottomButton.on('click', fixToBottom);
@@ -6614,7 +7155,7 @@ async function createMonacoEditor(language, form, support) {
         var fixToRightButton = $('<button>', {
             'type': 'button',
             'class': 'html2mdButton',
-            'text': '固定到右侧'
+            'text': i18next.t('fixToRightButton', { ns: 'codeEditor' })
         });
         form.topRightDiv.append(fixToRightButton);
         fixToRightButton.on('click', fixToRight);
@@ -6653,10 +7194,12 @@ async function createMonacoEditor(language, form, support) {
             if (isFixed) return; // 如果已经固定则不执行
             var editor = $('#CFBetter_editor');
             editor.addClass('fullscreen');
+
+            // 退出按钮
             var exitButton = $('<button>', {
                 'id': 'exitButton',
                 'class': 'html2mdButton',
-                'text': '退出全屏'
+                'text': i18next.t('exitFullscreenButton', { ns: 'codeEditor' })
             }).addClass('exit_button').on('click', exitFullscreen);
             $('body').append(exitButton);
             disableButtons();
@@ -6685,10 +7228,12 @@ async function createMonacoEditor(language, form, support) {
                 'style': 'height: ' + (halfHeight + 30) + 'px;'
             });
             $('body').append(blankSpace);
+
+            // 取消固定按钮
             var cancelButton = $('<button>', {
                 'id': 'cancelButton',
                 'class': 'html2mdButton',
-                'text': '取消固定'
+                'text': i18next.t('cancelFixButton', { ns: 'codeEditor' })
             }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
             $('body').append(cancelButton);
             disableButtons();
@@ -6748,7 +7293,7 @@ async function createMonacoEditor(language, form, support) {
             var cancelButton = $('<button>', {
                 'id': 'cancelButton',
                 'class': 'html2mdButton',
-                'text': '取消固定'
+                'text': i18next.t('cancelFixButton', { ns: 'codeEditor' })
             }).addClass('exit_button bottom').on('click', cancelFixingToRight);
             $('body').append(cancelButton);
             disableButtons();
@@ -6850,14 +7395,15 @@ async function createMonacoEditor(language, form, support) {
     let styleElement;
     var lspStateDiv = $('<div>', {
         'id': 'lspStateDiv',
-        'text': '创建LSP连接……'
+        'text': i18next.t('lsp.connect', { ns: 'codeEditor' })
     }).addClass('await').on('click', () => {
         styleElement = GM_addStyle(darkenPageStyle);
         LSPLog.show();
     });
     form.topRightDiv.prepend(lspStateDiv);
 
-    var LSPLog = $('<div id="LSPLog" style="display: none;"><button class="html2mdButton">关闭</button><div id="LSPLogList" style="overflow: auto;"></div><div>');
+    var LSPLog = $(`<div id="LSPLog" style="display: none;"><button class="html2mdButton">${i18next.t('close', { ns: 'common' })}</button>
+        <div id="LSPLogList" style="overflow: auto;"></div><div>`);
     $('body').append(LSPLog);
     var LSPLogList = $('<ul></ul>');
     $('#LSPLogList').append(LSPLogList);
@@ -6909,14 +7455,14 @@ async function createMonacoEditor(language, form, support) {
     var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
     languageSocket.onopen = () => {
         languageSocketState = true;
-        lspStateDiv.text('等待初始化回执……');
+        lspStateDiv.text(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
         pushLSPLogMessage("info", "languageSocket 连接已建立");
     };
     languageSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.id === 0 && message.result) {
             // 初始化完成
-            lspStateDiv.removeClass().addClass('success').text('LSP已连接');
+            lspStateDiv.removeClass().addClass('success').text(i18next.t('lsp.connected', { ns: 'codeEditor' }));
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
             CFBetter_monaco.openDocRequest(); // 打开文档
@@ -8687,28 +9233,41 @@ async function runCode(event, sourceDiv, submitDiv) {
     loadingImage.remove();
 }
 
-
+/**
+ * 添加题目页代码编辑器
+ * @returns 
+ */
 async function addProblemPageCodeEditor() {
     if (typeof ace === 'undefined') {
         console.log("%c无法加载编辑器必要的数据，可能当前未登录/未报名/非题目页/比赛结束冻结期间/该比赛禁止结束后练习", "border:1px solid #000;padding:10px;");
-        return; // 未登录，不存在ace库
+        return; // 因为Codeforces设定的是未登录时不能访问提交页，也不会加载ace库
     }
 
+    // 获取提交页链接
     const href = window.location.href;
-    let submitUrl = /\/problemset\//.test(href) ?
-        hostAddress + '/problemset/submit' :
-        /\/gym\//.test(href) ?
-            hostAddress + '/gym/' + ((href) => {
-                const regex = /\/gym\/(?<num>[0-9a-zA-Z]*?)\/problem\//;
-                const match = href.match(regex);
-                return match && match.groups.num;
-            })(href) + '/submit' :
-            href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit")
-        ;
+    let submitUrl;
+    if (/\/problemset\//.test(href)) {
+        // problemset
+        submitUrl = hostAddress + '/problemset/submit';
+    } else if (/\/gym\//.test(href)) {
+        // gym 题目
+        submitUrl = hostAddress + '/gym/' + ((href) => {
+            const regex = /\/gym\/(?<num>[0-9a-zA-Z]*?)\/problem\//;
+            const match = href.match(regex);
+            return match && match.groups.num;
+        })(href) + '/submit';
+    } else if (is_acmsguru) {
+        // acmsguru 题目
+        submitUrl = href.replace(/\/problemsets[A-Za-z0-9\/#]*/, "/problemsets/acmsguru/submit");
+    } else {
+        submitUrl = href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit");
+    }
+
+    // 获取提交页HTML
     let cloneHTML = await getSubmitHTML(submitUrl);
 
     // 创建
-    let form = await CreateCodeDevForm(submitUrl, cloneHTML);
+    let form = await createCodeEditorForm(submitUrl, cloneHTML);
     let selectLang = form.selectLang;
     let submitButton = form.submitButton;
     let runButton = form.runButton;
@@ -8758,8 +9317,8 @@ async function addProblemPageCodeEditor() {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const prompt = (is_oldLatex || is_acmsguru) ?
-        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' :
-        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的LaTeX公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n';
+        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: transTargetLang }) :
+        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: transTargetLang });
     const data = {
         model: openai_model || modelDefault,
         messages: [{
@@ -8817,8 +9376,8 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const prompt = (is_oldLatex || is_acmsguru) ?
-        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n' :
-        '请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的LaTeX公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n';
+        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: transTargetLang }) :
+        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: transTargetLang });
     const data = {
         model: openai_model || modelDefault,
         messages: [{
@@ -8924,8 +9483,7 @@ async function translate_youdao_mobile(raw) {
             };
             if (res.includes('<title>413 Request Entity Too Large</title>')) {
                 resObj.status = false;
-                resObj.message = `413 Request Entity Too Large
-            \n\n请求文本长度超出了有道翻译接口的限制，请更换其他翻译接口`;
+                resObj.message = i18next.t('error.youdao413', { ns: 'translator' }); // Request Entity Too Large 提示
                 return resObj;
             };
             return resObj;
@@ -8983,7 +9541,6 @@ async function translate_caiyun(raw) {
     }
     return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
 }
-
 
 function getTimeStamp(iCount) {
     const ts = Date.now();
@@ -9045,10 +9602,7 @@ async function translate_deepl(raw) {
         };
         if (res.includes('"error":{"code":1042912,"message":"Too many requests"}')) {
             resObj.status = false;
-            resObj.message = `请求过于频繁，请稍后再试
-            \n\n这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，
-            \n\nDeepL对翻译字数和频率是有限制的，
-            \n\n这是暂时的，一段时间后就恢复正常了`;
+            resObj.message = i18next.t('error.deepl429', { ns: 'translator' }); // Too many requests 提示
             return resObj;
         };
         return resObj;
@@ -9124,7 +9678,7 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
         errors: [],
         message: null
     };
-    const helpText = '\n\n请重试或更换翻译接口。\n\n点击右上角工具栏的 DeBug 图标查看更多信息';
+    const helpText = i18next.t('error.basic', { ns: 'translator' }); // 基本帮助提示信息
     const toDo = async () => {
         try {
             result.response = await GMRequest(options);
@@ -9138,7 +9692,7 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
                     enumerable: err,
                 }, source: 'GMRequest'
             });
-            result.message = `**:( 翻译遇到了问题：** 从接口获取数据时发生了错误${helpText}`;
+            result.message = `${i18next.t('error.GMRequest', { ns: 'translator' })}${helpText}`;
             throw result;
         }
         try {
@@ -9152,7 +9706,7 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
                     enumerable: err,
                 }, source: 'Processer'
             });
-            result.message = `**:( 翻译遇到了问题：** 获取目标数据时发生了错误 \n\n响应数据可能存在错误${helpText}`;
+            result.message = `${i18next.t('error.processer', { ns: 'translator' })}${helpText}`;
             throw result;
         }
         try {
@@ -9169,7 +9723,7 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
                     enumerable: err,
                 }, source: 'CheckResponse'
             });
-            result.message = `**:( 翻译遇到了问题：** 检查响应数据时发生了意外的错误${helpText}`;
+            result.message = `${i18next.t('error.checkResponse', { ns: 'translator' })}${helpText}`;
             throw result;
         }
     };
@@ -9209,147 +9763,125 @@ function GMRequest(options, isStream = false) {
     });
 }
 
-// 开始
-document.addEventListener("DOMContentLoaded", function () {
-    function checkJQuery(retryDelay) {
-        if (typeof jQuery === 'undefined') {
-            console.warn("JQuery未加载，" + retryDelay + "毫秒后重试");
-            setTimeout(function () {
-                var newRetryDelay = Math.min(retryDelay * 2, 2000);
-                checkJQuery(newRetryDelay);
-            }, retryDelay);
-        } else {
-            executeFunctions();
-        }
+/**
+ * 确认 jQuery 已加载
+ * @param {number} retryDelay 重试延迟（毫秒）
+ * @returns {Promise<void>}
+ */
+async function ensureJQueryIsLoaded(retryDelay = 50) {
+    while (typeof jQuery === 'undefined') {
+        console.warn(`JQuery is not loaded. Retry after ${retryDelay} ms.`);
+        await delay(retryDelay);
+        retryDelay = Math.min(retryDelay * 2, 2000);
     }
-    checkJQuery(50);
-    function executeFunctions() {
-        init();
-        initI18next();
-        showAnnounce();
-        alertZh();
-        darkModeStyleAdjustment();
-        ShowAlertMessage();
-        settingPanel();
-        checkScriptVersion();
-        toLocalization();
-        var newElement = $("<div></div>").addClass("alert alert-info CFBetter_alert")
-            .html(`${OJBetterName} —— 正在等待页面资源加载……`)
-            .css({
-                "margin": "1em",
-                "text-align": "center",
-                "font-weight": "600",
-                "position": "relative"
-            });
+}
 
-        async function processPage() {
-            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('waiteLatex', { ns: 'alert' })}`);
-            waitUntilIdleThenDo(async function () {
-                if (showJumpToLuogu && is_problem) CF2luogu();
-                Promise.resolve()
-                    .then(async () => {
-                        if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('linkDB', { ns: 'alert' })}`);
-                        await delay(100);
-                        await initDB();
-                    })
-                    .then(() => {
-                        if (showLoading && expandFoldingblocks) newElement.html(`${OJBetterName} —— ${i18next.t('expandFoldingblocks', { ns: 'alert' })}`);
-                        return delay(100).then(() => { if (expandFoldingblocks) ExpandFoldingblocks() });
-                    })
-                    .then(() => {
-                        if (showLoading && commentPaging) newElement.html(`${OJBetterName} —— ${i18next.t('commentPaging', { ns: 'alert' })}`);
-                        return delay(100).then(() => { if (commentPaging) CommentPagination() });
-                    })
-                    .then(() => {
-                        if (showLoading && is_acmsguru) newElement.html(`${OJBetterName} —— ${i18next.t('acmsguruRebuild', { ns: 'alert' })}`);
-                        return delay(100).then(() => { if (is_acmsguru) acmsguruReblock() });
-                    })
-                    .then(() => {
-                        if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('initTranslateButtonFunc', { ns: 'alert' })}`);
-                        return delay(100).then(() => initTranslateButtonFunc());
-                    })
-                    .then(() => {
-                        if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('addConversionButton', { ns: 'alert' })}`);
-                        return delay(100).then(() => addConversionButton());
-                    })
-                    .then(() => {
-                        if (showLoading && commentTranslationMode == "2") newElement.html(`${OJBetterName} —— ${i18next.t('multiChoiceTranslation', { ns: 'alert' })}`);
-                        return delay(100).then(() => { if (commentTranslationMode == "2") multiChoiceTranslation() });
-                    })
-                    .then(async () => {
-                        if (showLoading && renderPerfOpt) newElement.html(`${OJBetterName} —— ${i18next.t('RenderPerfOpt', { ns: 'alert' })}`);
-                        await delay(100);
-                        if (renderPerfOpt) await RenderPerfOpt();
-                    })
-                    .then(async () => {
-                        if (showLoading && is_problem && memoryTranslateHistory) newElement.html(`${OJBetterName} —— ${i18next.t('initTransResultsRecover', { ns: 'alert' })}`);
-                        return delay(100).then(async () => { if ((is_problem || is_completeProblemset) && memoryTranslateHistory) await initTransResultsRecover() });
-                    })
-                    .then(async () => {
-                        if (showLoading && autoTranslation) newElement.html(`${OJBetterName} —— ${i18next.t('initTransWhenViewable', { ns: 'alert' })}`);
-                        return delay(100).then(() => { if (autoTranslation) initTransWhenViewable() });
-                    })
-                    .then(async () => {
-                        if (showLoading && standingsRecolor && is_cfStandings) newElement.html(`${OJBetterName} —— ${i18next.t('recolorStandings', { ns: 'alert' })}`);
-                        await delay(100);
-                        if (standingsRecolor && is_cfStandings) await recolorStandings();
-                    })
-                    .then(async () => {
-                        if (showLoading && is_problem) newElement.html(`${OJBetterName} —— ${i18next.t('addProblemPageCodeEditor', { ns: 'alert' })}`);
-                        await delay(100);
-                        if (is_problem && problemPageCodeEditor) await addProblemPageCodeEditor();
-                    })
-                    .then(async () => {
-                        await delay(100);
-                        if (showClistRating_contest && is_contest) {
-                            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('showRatingByClist', { ns: 'alert' })}`);
-                            await showRatingByClist_contest();
-                        }
-                        if (showClistRating_problemset && is_problemset) {
-                            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('showRatingByClist', { ns: 'alert' })}`);
-                            await showRatingByClist_problemset();
-                        }
-                        if (showClistRating_problem && is_problem) {
-                            if (showLoading) newElement.html(`${OJBetterName} —— ${i18next.t('showRatingByClist', { ns: 'alert' })}`);
-                            await showRatingByClist_problem();
-                        }
-                    })
-                    .then(() => {
-                        if (showLoading) {
-                            newElement.html(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`);
-                            newElement.removeClass('alert-info').addClass('alert-success');
-                            setTimeout(function () {
-                                newElement.remove();
-                            }, 3000);
-                        }
-                    })
-                    .catch((error) => {
-                        console.warn(error);
-                    });
-            });
-        }
+/**
+ * 加载必须的函数
+ * @returns {Promise<LoadingMessage>} 加载提示信息
+ */
+async function loadRequiredFunctions() {
+    await initVar();// 初始化全局变量
+    return Promise.all([
+        initDB(), // 连接数据库
+        initI18next(), // i18next初始化
+        initButtonFunc(), // 加载按钮相关函数
+        checkScriptVersion(), // 更新检查
+        ...(is_acmsguru ? [acmsguruReblock()] : []) // 为acmsguru题面重新划分div
+    ]);
+}
 
-        function delay(ms) {
-            return new Promise((resolve) => setTimeout(resolve, ms));
-        }
+/**
+ * DOM加载后即可执行
+ */
+function onDOMReady() {
+    showAnnounce(); // 显示公告
+    showWarnMessage(); // 显示警告消息
+    settingPanel(); // 加载设置按钮面板
+    localizeWebsite(); // 网站本地化替换
+    if (expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
+    if (renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
+    if (is_problem) {
+        const problemPageLinkbar = new ProblemPageLinkbar(); // 创建题目页相关链接栏
+        if (showJumpToLuogu) CF2luogu(problemPageLinkbar); // 跳转到洛谷按钮
+        if (showClistRating_problem) showRatingByClist_problem(problemPageLinkbar); // problem页显示Rating
+    }
+    if (is_contest) {
+        if (showClistRating_contest) showRatingByClist_contest(); // contest页显示Rating
+    }
+    if (is_problemset) {
+        if (showClistRating_problemset) showRatingByClist_problemset(); // problemset页显示Rating
+    }
+}
 
-        if (showLoading) {
-            if (is_mSite) $("header").after(newElement);
-            else $(".menu-box:first").next().after(newElement);
-        }
+/**
+ * 需要在页面资源完全加载后执行的函数
+ */
+function onResourcesReady(loadingMessage) {
+    initializeInParallel(loadingMessage);
+    initializeSequentially(loadingMessage);
+}
 
-        if (loaded) {
-            processPage();
-        } else {
-            // 页面完全加载完成后执行
-            window.onload = function () {
-                processPage();
-            };
-        }
+/**
+ * 可以异步并行的函数
+ */
+function initializeInParallel(loadingMessage) {
+    addConversionButton(); // 添加MD/复制/翻译按钮
+    darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
+    if (commentPaging) CommentPagination(); // 评论区分页
+}
+
+/**
+ * 必须按序执行的函数
+ */
+async function initializeSequentially(loadingMessage) {
+    if (commentTranslationMode == "2") {
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('multiChoiceTranslation', { ns: 'alert' })}`);
+        await multiChoiceTranslation(); // 选段翻译支持
+    }
+    if ((is_problem || is_completeProblemset) && memoryTranslateHistory) {
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('initTransResultsRecover', { ns: 'alert' })}`);
+        await initTransResultsRecover(); // 翻译结果恢复功能初始化
+    }
+    if (autoTranslation) {
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('initTransWhenViewable', { ns: 'alert' })}`);
+        await initTransWhenViewable(); // 自动翻译
+    }
+    if (standingsRecolor && is_cfStandings) {
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('recolorStandings', { ns: 'alert' })}`);
+        await recolorStandings(); // cf赛制榜单重新着色
+    }
+    if (is_problem && problemPageCodeEditor) {
+        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('addProblemPageCodeEditor', { ns: 'alert' })}`);
+        await addProblemPageCodeEditor(); // 添加题目页代码编辑器
+    }
+    if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+}
+
+/**
+ * 脚本开始加载
+ */
+document.addEventListener("DOMContentLoaded", async () => {
+    await ensureJQueryIsLoaded(); // 等待jQuery加载
+
+    const loadingMessage = new LoadingMessage();
+
+    if (showLoading) { loadingMessage.updateStatus(`${OJBetterName} —— 正在加载必须函数`); }
+    await loadRequiredFunctions(); // 加载必须的函数
+
+    onDOMReady(); // DOM加载后即可执行的函数
+    if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— 正在等待页面资源加载……`);
+    if (loaded) {
+        onResourcesReady(loadingMessage); // 需要在页面资源完全加载后执行的函数
+    } else {
+        window.onload = () => onResourcesReady(loadingMessage);
     }
 });
 
+// ------------------------------
 // 配置自动迁移代码（将在10个小版本后移除-1.83）
+// ------------------------------
+
 {
     let bottomZh_CN = GM_getValue("bottomZh_CN");
     if (bottomZh_CN !== undefined) {

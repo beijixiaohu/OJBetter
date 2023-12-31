@@ -52,7 +52,7 @@
         "title": "翻译设置",
         "options": {
             "title": "首选项",
-            "translationServices": {
+            "services": {
                 "deepl": "DeepL翻译",
                 "iflyrec": "讯飞听见翻译",
                 "youdao": "有道翻译",
@@ -73,7 +73,7 @@
         "preference": {
             "title": "偏好",
             "comment_translation_choice": "评论区翻译",
-            "translationServices": {
+            "services": {
                 "follow": "跟随首选项",
                 "deepl": "DeepL翻译",
                 "iflyrec": "讯飞听见翻译",
