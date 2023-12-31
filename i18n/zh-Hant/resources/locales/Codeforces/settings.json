@@ -52,15 +52,15 @@
         "title": "翻譯設定",
         "options": {
             "title": "首選項",
-            "translationServices": {
-                "deepl": "DeepL翻譯",
-                "iflyrec": "訊飛聽見翻譯",
-                "youdao": "有道翻譯",
-                "google": "Google翻譯",
-                "caiyun": "彩雲小譯",
+            "services": {
+                "deepl": "DeepL翻译",
+                "iflyrec": "讯飞听见翻译",
+                "youdao": "有道翻译",
+                "google": "谷歌翻译",
+                "caiyun": "彩云小译",
                 "openai": {
-                    "name": "ChatGPT翻譯",
-                    "helpText": "<p><b>需要在下方ChatGPT配置中添加並選定你想使用的配置信息，右鍵可以修改和刪除配置</b></p><p>具體請閱讀腳本頁的介紹</p>"
+                    "name": "ChatGPT翻译",
+                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
                 }
             }
         },
@@ -73,14 +73,14 @@
         "preference": {
             "title": "偏好",
             "comment_translation_choice": "評論區翻譯",
-            "translationServices": {
-                "follow": "跟隨首選項",
-                "deepl": "DeepL翻譯",
-                "iflyrec": "訊飛聽見翻譯",
-                "youdao": "有道翻譯",
-                "google": "Google翻譯",
-                "caiyun": "彩雲小譯",
-                "openai": "ChatGPT翻譯"
+            "services": {
+                "follow": "跟随首选项",
+                "deepl": "DeepL翻译",
+                "iflyrec": "讯飞听见翻译",
+                "youdao": "有道翻译",
+                "google": "谷歌翻译",
+                "caiyun": "彩云小译",
+                "openai": "ChatGPT翻译"
             }
         },
         "autoTranslation": {
