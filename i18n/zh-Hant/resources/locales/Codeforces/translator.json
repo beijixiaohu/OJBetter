@@ -1,6 +1,14 @@
 {
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "訊飛聽見",
+        "youdao": "有道",
+        "google": "Google",
+        "caiyun": "彩雲小譯",
+        "openai": "ChatGPT"
+    },
     "transingTip": {
-        "basic": "正在使用 {{translationService}} 翻譯中……請稍等",
+        "basic": "正在使用 {{server}} 翻譯中……請稍等",
         "openai": "正在使用ChatGPT 翻譯中……請稍等\n\n應用的設定： {{openai_name}}\n\n",
         "openai_isStream": "目前未開啟串流傳輸，你需要等待很長時間才能看到結果，請耐心等待"
     },
