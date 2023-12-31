@@ -1,6 +1,14 @@
 {
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "Xunfei sente",
+        "youdao": "Il buon governo prevale.",
+        "google": "google",
+        "caiyun": "illuminati. nuvole colorate e piccole traduzioni",
+        "openai": "ChatGPT"
+    },
     "transingTip": {
-        "basic": "In uso {{translationService}} Traduzione in corso……Attendere prego.",
+        "basic": "In uso {{server}} Traduzione in corso……Attendere prego.",
         "openai": "Traduzione ChatGPT in corso……Attendere\n\nConfigurazione dell'applicazione： {{openai_name}}\n\n",
         "openai_isStream": "Lo streaming non è attualmente abilitato, dovrà attendere a lungo per vedere i risultati, la preghiamo di essere paziente!"
     },
