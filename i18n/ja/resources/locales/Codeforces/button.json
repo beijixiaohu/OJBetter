@@ -1,0 +1,29 @@
+{
+    "trans": {
+        "normal": "翻訳",
+        "segment": "マルチ翻訳",
+        "select": "選択範囲を翻訳",
+        "translating": "翻訳中",
+        "wait": "翻訳待ち",
+        "translated": "翻訳済み",
+        "error": "翻訳エラー",
+        "reTranslate": "再翻訳",
+        "tooLong": "語数制限を超え"
+    },
+    "md": {
+        "normal": "MarkDownで開く",
+        "reduction": "復元"
+    },
+    "copy": {
+        "normal": "コピー",
+        "copied": "コピーしました"
+    },
+    "state": {
+        "wait": "待機…",
+        "waitMathJax": "MathJax 待機中...",
+        "loading": "読み込み…",
+        "404": "見つかりません",
+        "error": "問題が発生しました",
+        "netError": "ネットワークエラー"
+    }
+}
