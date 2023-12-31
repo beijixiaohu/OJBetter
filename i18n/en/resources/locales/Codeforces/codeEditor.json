@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "Custom test data (auto-saving)",
+        "onlyCustom": "Only test custom data",
+        "DontShowDiff": "Do not show differences",
+        "add": "Create New"
+    },
+    "runTestButton": "Example Test",
+    "submitButton": "Commit",
+    "fontSizeInput": "Font size",
+    "fullscreenButton": "Fullscreen",
+    "exitFullscreenButton": "Exit fullscreen",
+    "fixToBottomButton": "Pin to bottom",
+    "fixToRightButton": "Pin to right",
+    "cancelFixButton": "Unpin",
+    "lsp": {
+        "connect": "Create LSP connection……",
+        "waitingAnswer": "Waiting for initialization back to……",
+        "connected": "LSP connected"
+    }
+}
