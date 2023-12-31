@@ -21,6 +21,7 @@
 // @connect      wandbox.org
 // @connect      staticfile.org
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
+// @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -31,7 +32,7 @@
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
-// @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/codeforces.png
+// @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
 // @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
 // @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
@@ -43,7 +44,7 @@
 // @require      https://cdn.staticfile.org/jquery-i18next/1.2.1/jquery-i18next.min.js
 // @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/js/i18nextChainedBackend.min.js
 // @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/js/i18nextLocalStorageBackend.min.js
-// @resource     acwing_cpp_code_completer https://aowuucdn.oss-cn-beijing.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
+// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
 // @license      GPL3
@@ -367,14 +368,14 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
-        html[data-theme=dark] .user-admin, html[data-theme=dark] button.html2mdButton:hover,
+        html[data-theme=dark] .user-admin, html[data-theme=dark] button.ojb_btn:hover,
         html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest,
         html[data-theme=dark] #customTestBlock{
             color: #9099a3 !important;
         }
         /* 文字颜色3 */
-        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] #program-source-text-copy{
+        html[data-theme=dark] button.ojb_btn, html[data-theme=dark] #program-source-text-copy{
             color: #6385a6;
         }
         html[data-theme=dark] input{
@@ -412,7 +413,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
         html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
         html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
-        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.html2mdButton:hover,
+        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.ojb_btn:hover,
         html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
         html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
@@ -423,10 +424,11 @@ function handleColorSchemeChange(event) {
          html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs,
         html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
             background-color: #22272e !important;
+            background-image: none;
         }
         /* 背景层次2 */
         html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
-        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
+        html[data-theme=dark] button.ojb_btn, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
         html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
@@ -449,7 +451,7 @@ function handleColorSchemeChange(event) {
         }
         /* 实线边框颜色-圆角 */
         html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
-        html[data-theme=dark] button.html2mdButton, html[data-theme=dark] .sidebar-menu ul li,
+        html[data-theme=dark] button.ojb_btn, html[data-theme=dark] .sidebar-menu ul li,
         html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
         html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
@@ -468,7 +470,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
         html[data-theme=dark] #addCustomTest, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
-        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs{
+        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs, html[data-theme=dark] .toolbarLink{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -496,12 +498,14 @@ function handleColorSchemeChange(event) {
             background-color: #2d333b !important;
             color: #03A9F4 !important;
         }
-        /* 无边框 */
-        html[data-theme=dark] .html2md-panel.input-output-copier, html[data-theme=dark] .translateDiv.input-output-copier {
+        /* input-output-copier特殊处理 */
+        html[data-theme=dark] .html2md-panel.input-output-copier,
+        html[data-theme=dark] .translateDiv.input-output-copier,
+        html[data-theme=dark] #CFBetter_SubmitForm.input-output-copier{
             border: none !important;
         }
-        /* 无背景 */
-        html[data-theme=dark] .html2md-panel.input-output-copier:hover{
+        html[data-theme=dark] .html2md-panel.input-output-copier:hover, 
+        html[data-theme=dark] #CFBetter_SubmitForm.input-output-copier:hover{
             background-color: #ffffff00 !important;
         }
         /* focus-visible */
@@ -750,16 +754,15 @@ span.mdViewContent {
     color: #B0BEC5;
     font-size: 13px;
     text-decoration: none;
-    background-color: #ffffff;
     border: 1px solid #dcdfe6;
     border-radius: 4px;
-    /* transition: background-color 0.1s; */
+    transition: background-color 0.1s;
     box-sizing: border-box;
 }
 .toolbarLink:last-child {
     margin-right: 0;
 }
-.toolbarLink:hover {
+.toolbarLink:hover, .toolbarLink:link:hover {
     color: #479ef6;
     border-color: #409eff;
     background-color: #f1f8ff;
@@ -791,7 +794,7 @@ a.toolbarLink, a.toolbarLink:link{
 .html2md-panel a {
     text-decoration: none;
 }
-.html2mdButton {
+.ojb_btn {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -805,29 +808,29 @@ a.toolbarLink, a.toolbarLink:link{
     margin: 5px !important;
     border: 1px solid #dcdfe6;
 }
-.html2mdButton[disabled] {
+.ojb_btn[disabled] {
     cursor: not-allowed !important;
     background-color: rgb(255, 255, 255) !important;
     color: rgb(168, 171, 178) !important;
     border: 1px solid rgb(228, 231, 237) !important;
 }
-.html2mdButton:hover {
+.ojb_btn:hover {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
     z-index: 100;
 }
-button.html2mdButton.copied {
+.ojb_btn.success {
     background-color: #f0f9eb;
     color: #67c23e;
     border: 1px solid #b3e19d;
 }
-button.html2mdButton.mdViewed {
+.ojb_btn.warning {
     background-color: #fdf6ec;
     color: #e6a23c;
     border: 1px solid #f3d19e;
 }
-button.html2mdButton.error {
+.ojb_btn.error {
     background-color: #fef0f0;
     color: #f56c6c;
     border: 1px solid #fab6b6;
@@ -836,11 +839,6 @@ button.translated {
     background-color: #f0f9eb;
     color: #67c23e;
     border: 1px solid #b3e19d;
-}
-button.html2mdButton.reTranslation {
-    background-color: #f4f4f5;
-    color: #909399;
-    border: 1px solid #c8c9cc;
 }
 .topText {
     display: flex;
@@ -905,7 +903,7 @@ header .enter-or-register-box, header .languages {
     position: absolute;
     right: 170px;
 }
-button.html2mdButton.CFBetter_setting {
+button.ojb_btn.CFBetter_setting {
     float: right;
     height: 30px;
     background: #60a5fa;
@@ -914,7 +912,7 @@ button.html2mdButton.CFBetter_setting {
     border: 1px solid #60a5fa;
 }
 
-button.html2mdButton.CFBetter_setting.open {
+button.ojb_btn.CFBetter_setting.open {
     background-color: #e6e6e6;
     color: #727378;
     cursor: not-allowed;
@@ -1864,6 +1862,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     color: #009688;
     appearance: none;
     padding: 5px 10px;
+    margin-left: 5px;
     border-radius: 6px;
     border-style: solid;
     border: 1px solid #ced4da;
@@ -1878,9 +1877,9 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     justify-content: space-between;
 }
 #CFBetter_SubmitForm .topDiv .topRightDiv {
-    display:flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
 }
 /* 顶部区域 */
 #CFBetter_SubmitForm .topDiv button{
@@ -1888,12 +1887,11 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     padding: 5px 10px;
     font-size: 14px;
 }
-#CFBetter_SubmitForm .topDiv div#lspStateDiv{
-    cursor: pointer;
-    margin: 0px 5px;
-    padding: 4px 8px;
-    border: 1px solid;
-    border-radius: 4px;
+#CFBetter_SubmitForm .topRightDiv {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0px;
+    align-items: center;
 }
 #CFBetter_SubmitForm .topDiv div#lspStateDiv.await{
     border-color: #BBDEFB;
@@ -1901,7 +1899,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background-color: #E3F2FD;
 }
 #CFBetter_SubmitForm .topDiv div#lspStateDiv.success{
-    border-color: #C8E6C9;
+    border: 1px solid #C8E6C9;
     color: #4CAF50;
     background-color: #E8F5E9;
 }
@@ -2196,7 +2194,7 @@ input#CompilerArgsInput[disabled] {
 #CFBetter_editor.right-side {
     height: 98vh;
 }
-.html2mdButton.exit_button {
+.ojb_btn.exit_button {
     position: fixed;
     top: 10px;
     right: 10px;
@@ -2205,7 +2203,7 @@ input#CompilerArgsInput[disabled] {
     padding: 5px 10px;
     font-size: 14px;
 }
-.html2mdButton.exit_button.bottom {
+.ojb_btn.exit_button.bottom {
     top: 95%;
 }
 #CFBetter_statusBar{
@@ -2218,11 +2216,11 @@ input#CompilerArgsInput[disabled] {
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
-    button.html2mdButton{
+    button.ojb_btn{
         height: 2em;
         font-size: 1.2em;
     }
-    button.html2mdButton.CFBetter_setting{
+    button.ojb_btn.CFBetter_setting{
         height: 2.5em;
         font-size: 1em;
     }
@@ -2375,36 +2373,16 @@ function addDraggable(element) {
  * @param {string} url JSON Url
  * @returns {Promise<Object>} JSON Object
  */
-function getExternalJSON(url) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: url,
-            timeout: 10000, // 超时时间 10秒
-            onload: function (response) {
-                if (response.status === 200) {
-                    try {
-                        var json = JSON.parse(response.responseText);
-                        resolve(json);
-                    } catch (e) {
-                        console.error(`JSON解析错误: ${e.message}`);
-                        reject(new Error(`JSON解析错误: ${e.message}`));
-                    }
-                } else {
-                    console.warn(`请求失败，状态码: ${response.status}`);
-                    reject(new Error(`请求失败，状态码: ${response.status}`));
-                }
-            },
-            onerror: function (response) {
-                console.error(`网络错误: ${url} 无法访问`);
-                reject(new Error(`网络错误: ${url} 无法访问`));
-            },
-            ontimeout: function () {
-                console.error(`请求超时: ${url}`);
-                reject(new Error(`请求超时: ${url}`));
-            }
-        });
+async function getExternalJSON(url) {
+    const response = await GMRequest({
+        method: "GET",
+        url: url
     });
+    try {
+        return JSON.parse(response.responseText);
+    } catch (e) {
+        throw new Error(`JSON parse error\n${e}`);
+    }
 }
 
 /**
@@ -2517,7 +2495,7 @@ function checkScriptVersion() {
                                     <p>由于 Greasyfork 平台的原因，当新版本刚发布时，点击 Greasyfork 上的更新按钮<u>可能</u>会出现<u>实际更新/安装的却是上一个版本</u>的情况</p>
                                     <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可</p>
                                     <p>你也可以<u>点击下方按钮，在本次浏览器会话期间将不再提示更新</u></p>
-                                    <button id='skip_update' class='html2mdButton'>暂不更新</button>
+                                    <button id='skip_update' class='ojb_btn'>暂不更新</button>
                                 </div>
                             </div>
                             <button id='updating'><a target="_blank" href="${scriptData.url}">更新</a></button>
@@ -2631,8 +2609,8 @@ class LoadingMessage {
 async function getLocalizeWebsiteJson(localizationLanguage) {
     let data = await CFBetterDB.localizeSubsData.get(localizationLanguage);
     let url = localizationLanguage === "zh" ?
-        "https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/subs/Codeforces-subs.json" :
-        `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
+        "https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/Codeforces-subs.json" :
+        `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
     if (data) data = data.data;
     if (!data) {
         // 如果本地没有数据，从远端获取并保存
@@ -2854,15 +2832,15 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.05',
+                        defaultVersion: 'v1.07',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
                         loadPath: (lng, ns) => {
                             if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
-                                return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                                return `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
                             }
-                            return `https://aowuucdn.oss-cn-beijing.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
+                            return `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
                         }
                     }]
                 }
@@ -3209,7 +3187,7 @@ class ConfigManager {
 
         // 添加添加按钮
         let addButton = $(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
-            <span>+ 添加</span>
+            <span>+ ${i18next.t('add', { ns: 'common' })}</span>
         </li>`);
         this.config_add_button = addButton;
         list.append(addButton);
@@ -3993,7 +3971,8 @@ const CompletConfigEditHTML = `
 async function settingPanel() {
     // 添加右上角设置按钮
     function insertCFBetterSettingButton(location, method) {
-        $(location)[method]("<button class='html2mdButton CFBetter_setting'>CodeforcesBetter设置</button>");
+        $(location)[method](`<button class='ojb_btn CFBetter_setting'>
+        Codeforces Better ${i18next.t('settings', { ns: 'common' })}</button>`);
     }
 
     insertCFBetterSettingButton(".lang-chooser", "before");
@@ -4607,9 +4586,9 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     else text = i18next.t('trans.normal', { ns: 'button' });
 
     let panel = $(`<div class='html2md-panel input-output-copier'></div>`);
-    let viewButton = $(`<button class='html2mdButton' id='html2md-view${suffix}'>${i18next.t('md.normal', { ns: 'button' })}</button>`);
-    let copyButton = $(`<button class='html2mdButton' id='html2md-cb${suffix}'>${i18next.t('copy.normal', { ns: 'button' })}</button>`);
-    let translateButton = $(`<button class='html2mdButton translateButton' id='translateButton${suffix}'>${text}</button>`);
+    let viewButton = $(`<button class='ojb_btn' id='html2md-view${suffix}'>${i18next.t('md.normal', { ns: 'button' })}</button>`);
+    let copyButton = $(`<button class='ojb_btn' id='html2md-cb${suffix}'>${i18next.t('copy.normal', { ns: 'button' })}</button>`);
+    let translateButton = $(`<button class='ojb_btn translateButton' id='translateButton${suffix}'>${text}</button>`);
     if (!is_simple) panel.append(viewButton);
     if (!is_simple) panel.append(copyButton);
     if ($(element).css("display") !== "none" && !$(element).hasClass('ojbetter-alert')) panel.append(translateButton);
@@ -4671,9 +4650,9 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         function setViewmd(value) {
             $(element).attr("viewmd", value);
             if (value) {
-                button.addClass("mdViewed").text(i18next.t('md.reduction', { ns: 'button' }));
+                button.addClass("warning").text(i18next.t('md.reduction', { ns: 'button' }));
             } else {
-                button.removeClass("mdViewed").text(i18next.t('md.normal', { ns: 'button' }));
+                button.removeClass("warning").text(i18next.t('md.normal', { ns: 'button' }));
             }
         }
 
@@ -4720,11 +4699,11 @@ async function addButtonWithCopy(button, element, suffix, type) {
 
         GM_setClipboard(markdown);
 
-        $(this).addClass("copied").text(i18next.t('copy.copied', { ns: 'button' }));
+        $(this).addClass("success").text(i18next.t('copy.copied', { ns: 'button' }));
 
         // 更新复制按钮文本
         setTimeout(() => {
-            $(this).removeClass("copied").text(i18next.t('copy.normal', { ns: 'button' }));
+            $(this).removeClass("success").text(i18next.t('copy.normal', { ns: 'button' }));
         }, 2000);
     }));
 
@@ -5724,14 +5703,6 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     let id = getRandomNumber(8);
     let matches = [];
     let replacements = {};
-    let translationService = {
-        "deepl": "DeepL",
-        "iflyrec": "讯飞听见",
-        "youdao": "有道",
-        "google": "Google",
-        "caiyun": "彩云小译",
-        "openai": "ChatGPT"
-    };
     let translatedText = "";
     let rawData = {
         done: false
@@ -5850,7 +5821,8 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     }
 
     // 信息
-    translateDiv.setTopText(translationService[realTranlate] + i18next.t('translateDiv.topTextSuffix', { ns: 'translator' }));
+    translateDiv.setTopText(i18next.t('servers.' + realTranlate, { ns: 'translator' }) +
+        i18next.t('translateDiv.topTextSuffix', { ns: 'translator' }));
 
     // 注册按钮
     translateDiv.registerUpButtonEvent();
@@ -5895,22 +5867,23 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     // 翻译
     async function translate(translation) {
         const is_renderLaTeX = !(is_oldLatex || is_acmsguru);
+        const servername = i18next.t('server.' + realTranlate, { ns: 'translator' });
         let rawData;
         try {
             if (translation == "deepl") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_deepl(text);
             } else if (translation == "iflyrec") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_iflyrec(text);
             } else if (translation == "youdao") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_youdao_mobile(text);
             } else if (translation == "google") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_gg(text);
             } else if (translation == "caiyun") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', translationService: translationService[translation] })}`, is_renderLaTeX);
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 await translate_caiyun_startup();
                 rawData = await translate_caiyun(text);
             } else if (translation == "openai") {
@@ -6029,7 +6002,7 @@ function CommentPagination() {
     `);
     $('.comments').after(`
             <div id="pagBar" style="display: flex; align-items: center; justify-content: center; color: #606266;">
-                <label for="items-per-page">每页展示主楼数：</label>
+                <label for="items-per-page">${i18next.t('perpage', { ns: 'comments' })}</label>
                 <select id="items-per-page" style="margin-right: 15px;">
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -6038,10 +6011,10 @@ function CommentPagination() {
                 <div class="paging" style="margin-right: 15px;">
                     <span id="current-page">1</span> / <span id="total-pages"></span>
                 </div>
-                <input type="text" id="jump-input" placeholder="跳转到页码">
-                <button type="button" id="jump-btn" class="html2mdButton">跳转</button>
-                <button id="prev-page-btn" class="html2mdButton">上一页</button>
-                <button id="next-page-btn" class="html2mdButton">下一页</button>
+                <input type="text" id="jump-input" placeholder="${i18next.t('jumpTo', { ns: 'comments' })}">
+                <button type="button" id="jump-btn" class="ojb_btn">${i18next.t('jump', { ns: 'comments' })}</button>
+                <button id="prev-page-btn" class="ojb_btn">${i18next.t('prev', { ns: 'comments' })}</button>
+                <button id="next-page-btn" class="ojb_btn">${i18next.t('next', { ns: 'comments' })}</button>
             </div>
         `);
 
@@ -6342,6 +6315,7 @@ async function validateClistConnection(onlyCookie = false) {
     const requestOptions = {
         method: "GET",
         url: clistApiUrl,
+        timeout: 5000,
     };
 
     // 尝试发送请求
@@ -6396,7 +6370,7 @@ function creatRatingCss(hasBorder = true) {
     let dynamicCss = "";
     let hoverSelector = RatingHidden ? ":hover" : "";
     for (let cssClass in cssMap) {
-        dynamicCss += `a.${cssClass}${hoverSelector} {\n`;
+        dynamicCss += `a.${cssClass}${hoverSelector}, a.${cssClass}${hoverSelector}:link {\n`;
         let borderColor = hasBorder ? cssMap[cssClass] : defaultBorderColor;
         dynamicCss += `    color: ${cssMap[cssClass]};\n`;
         dynamicCss += `    border: 1px solid ${borderColor};\n`;
@@ -6799,7 +6773,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
         let matchResult = problemCode.match(/([A-Z0-9]+)/);
         problemCode = matchResult[0];
     } else if (is_problemset_problem) {
-        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)$/);
+        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)(?!=[A-Z0-9])/);
         problemCode = match[1] + match[2];
         selectProblem.attr('name', 'submittedProblemCode');
     } else {
@@ -7136,7 +7110,7 @@ async function createMonacoEditor(language, form, support) {
         // 全屏按钮
         var fullscreenButton = $('<button>', {
             'type': 'button',
-            'class': 'html2mdButton',
+            'class': 'ojb_btn',
             'text': i18next.t('fullscreenButton', { ns: 'codeEditor' })
         });
         form.topRightDiv.append(fullscreenButton);
@@ -7145,7 +7119,7 @@ async function createMonacoEditor(language, form, support) {
         // 固定到底部按钮
         var fixToBottomButton = $('<button>', {
             'type': 'button',
-            'class': 'html2mdButton',
+            'class': 'ojb_btn',
             'text': i18next.t('fixToBottomButton', { ns: 'codeEditor' })
         });
         form.topRightDiv.append(fixToBottomButton);
@@ -7154,7 +7128,7 @@ async function createMonacoEditor(language, form, support) {
         // 固定到右侧按钮
         var fixToRightButton = $('<button>', {
             'type': 'button',
-            'class': 'html2mdButton',
+            'class': 'ojb_btn',
             'text': i18next.t('fixToRightButton', { ns: 'codeEditor' })
         });
         form.topRightDiv.append(fixToRightButton);
@@ -7198,7 +7172,7 @@ async function createMonacoEditor(language, form, support) {
             // 退出按钮
             var exitButton = $('<button>', {
                 'id': 'exitButton',
-                'class': 'html2mdButton',
+                'class': 'ojb_btn',
                 'text': i18next.t('exitFullscreenButton', { ns: 'codeEditor' })
             }).addClass('exit_button').on('click', exitFullscreen);
             $('body').append(exitButton);
@@ -7232,7 +7206,7 @@ async function createMonacoEditor(language, form, support) {
             // 取消固定按钮
             var cancelButton = $('<button>', {
                 'id': 'cancelButton',
-                'class': 'html2mdButton',
+                'class': 'ojb_btn',
                 'text': i18next.t('cancelFixButton', { ns: 'codeEditor' })
             }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
             $('body').append(cancelButton);
@@ -7292,7 +7266,7 @@ async function createMonacoEditor(language, form, support) {
 
             var cancelButton = $('<button>', {
                 'id': 'cancelButton',
-                'class': 'html2mdButton',
+                'class': 'ojb_btn',
                 'text': i18next.t('cancelFixButton', { ns: 'codeEditor' })
             }).addClass('exit_button bottom').on('click', cancelFixingToRight);
             $('body').append(cancelButton);
@@ -7396,13 +7370,13 @@ async function createMonacoEditor(language, form, support) {
     var lspStateDiv = $('<div>', {
         'id': 'lspStateDiv',
         'text': i18next.t('lsp.connect', { ns: 'codeEditor' })
-    }).addClass('await').on('click', () => {
+    }).addClass('ojb_btn await').on('click', () => {
         styleElement = GM_addStyle(darkenPageStyle);
         LSPLog.show();
     });
     form.topRightDiv.prepend(lspStateDiv);
 
-    var LSPLog = $(`<div id="LSPLog" style="display: none;"><button class="html2mdButton">${i18next.t('close', { ns: 'common' })}</button>
+    var LSPLog = $(`<div id="LSPLog" style="display: none;"><button class="ojb_btn">${i18next.t('close', { ns: 'common' })}</button>
         <div id="LSPLogList" style="overflow: auto;"></div><div>`);
     $('body').append(LSPLog);
     var LSPLogList = $('<ul></ul>');
@@ -7462,7 +7436,7 @@ async function createMonacoEditor(language, form, support) {
         const message = JSON.parse(event.data);
         if (message.id === 0 && message.result) {
             // 初始化完成
-            lspStateDiv.removeClass().addClass('success').text(i18next.t('lsp.connected', { ns: 'codeEditor' }));
+            lspStateDiv.removeClass('await').addClass('success').text(i18next.t('lsp.connected', { ns: 'codeEditor' }));
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
             CFBetter_monaco.openDocRequest(); // 打开文档
