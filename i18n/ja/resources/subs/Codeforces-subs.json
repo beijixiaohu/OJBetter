@@ -159,7 +159,13 @@
                 "Verdict": "裁定状況",
                 "Language:": "言語。",
                 "Participant": "出場者",
-                "Choose file:": "ファイルを選択する。"
+                "Choose file:": "ファイルを選択する。",
+                "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "タイトルデータパケットはアップグレード後にテストサーバーを追加した後に、出題またはCodeforcess チームによって更新されていません。時間制限の制約を決定するため，回答の執行時間は 2 乗れます。例えば、問題を測る時に、問題を測るには400ms，800ミリ秒後に実行し，解かれます。",
+                "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "バーチャルゲームは、リアルタイムで参加できる古いゲームの一形態のプレイに勝っております。現在、仮想ゲームの場合は ICPC のみサポートされています。",
+                "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "あなたはこれらの問題を見たことがあるなら、仮想マシンでは問題に対処しないといけません—問題ありません。",
+                "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "レースで何が問題なのか知りたい場合は、ヴァーチャルでは問題ありません - 問題プールで解決すべきです。",
+                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "バーチャルゲームでは、他の人のコード、ブックを読むことを他の人に知らせないでください。",
+                "You can clone this contest to a mashup.": "この試合をマッシュアップ試合に複製できます。"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -799,6 +805,16 @@
             "isStrict": false,
             "rules": {
                 "Add announcement": "お知らせを追加"
+            }
+        },
+        "standings": {
+            "class": [
+                "#pageContent > div:nth-child(7) > div"
+            ],
+            "description": "チェックリストの右上のヒント",
+            "isStrict": false,
+            "rules": {
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "一度セルをダブルクリックするか、Ctrlを押したままクリックして提出するか、組み合わせで攻撃することができます。"
             }
         },
         "demo": {
