@@ -1,0 +1,21 @@
+{
+    "customTestBlock": {
+        "title": "Dados de teste personalizados (gravação automática)",
+        "onlyCustom": "Teste apenas dados personalizados",
+        "DontShowDiff": "Discrepâncias não apresentadas",
+        "add": "recém-construído"
+    },
+    "runTestButton": "teste de amostra",
+    "submitButton": "apresentar (um relatório, etc.)",
+    "fontSizeInput": "tamanho da letra",
+    "fullscreenButton": "ecrã inteiro",
+    "exitFullscreenButton": "Sair do ecrã inteiro",
+    "fixToBottomButton": "Fixado na parte inferior",
+    "fixToRightButton": "Fixado no lado direito",
+    "cancelFixButton": "Anulação da fixação",
+    "lsp": {
+        "connect": "Criar uma ligação LSP……",
+        "waitingAnswer": "A aguardar confirmação de inicialização……",
+        "connected": "LSP ligado"
+    }
+}
