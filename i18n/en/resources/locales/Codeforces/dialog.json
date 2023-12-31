@@ -1,6 +1,6 @@
 {
     "saveSetting": {
-        "title": "The configuration has been changed, do you want to save?",
+        "title": "Configuration changed, saved or not?",
         "content": "",
         "buttons": [
             "Do not save",

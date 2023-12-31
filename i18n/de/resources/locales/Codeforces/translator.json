@@ -1,6 +1,14 @@
 {
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "Xunfei hören",
+        "youdao": "an den Prinzipien von Wahrheit und Recht festhalten",
+        "google": "Google",
+        "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
+        "openai": "ChatGPT"
+    },
     "transingTip": {
-        "basic": "In Gebrauch {{translationService}} Übersetzung in Arbeit……Bitte warten Sie.",
+        "basic": "In Gebrauch {{server}} Übersetzung in Arbeit……Bitte warten Sie.",
         "openai": "ChatGPT-Übersetzung in Arbeit……Bitte warten\n\nKonfiguration der Anwendung： {{openai_name}}\n\n",
         "openai_isStream": "Das Streaming ist derzeit nicht aktiviert, Sie müssen also lange warten, bis Sie die Ergebnisse sehen können. Bitte haben Sie etwas Geduld!"
     },

@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -146,9 +146,9 @@
                 "Contest history": "मैच का इतिहास"
             }
         },
-        ".roundbox.sidebox.borderTopRound ": {
+        ".roundbox.sidebox.borderTopRound": {
             "class": [
-                ".roundbox.sidebox.borderTopRound "
+                ".राउंडबॉक्स.साइडबॉक्स.बॉर्डरटॉपराउंड"
             ],
             "description": "",
             "isStrict": false,

@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -146,9 +146,9 @@
                 "Contest history": "比賽歷史"
             }
         },
-        ".roundbox.sidebox.borderTopRound ": {
+        ".roundbox.sidebox.borderTopRound": {
             "class": [
-                ".roundbox.sidebox.borderTopRound "
+                ".roundbox.sidebox.borderTopRound"
             ],
             "description": "",
             "isStrict": false,

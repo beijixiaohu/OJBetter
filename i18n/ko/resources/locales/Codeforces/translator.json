@@ -1,6 +1,14 @@
 {
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "쉰페이 듣기",
+        "youdao": "진실과 옳음의 원칙을 준수합니다.",
+        "google": "구글",
+        "caiyun": "조명. 다채로운 구름과 작은 번역",
+        "openai": "ChatGPT"
+    },
     "transingTip": {
-        "basic": "사용 중 {{translationService}} 번역 진행 중……잠시만 기다려 주세요.",
+        "basic": "사용 중 {{server}} 번역 진행 중……잠시만 기다려 주세요.",
         "openai": "ChatGPT 번역 진행 중……잠시만 기다려 주세요\n\n애플리케이션 구성 중： {{openai_name}}\n\n",
         "openai_isStream": "현재 스트리밍이 활성화되어 있지 않으므로 결과를 보려면 오래 기다려야 하니 조금만 기다려주세요!"
     },
