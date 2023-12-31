@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -146,20 +146,20 @@
                 "Contest history": "Competition History"
             }
         },
-        ".roundbox.sidebox.borderTopRound ": {
+        ".roundbox.sidebox.borderTopRound": {
             "class": [
-                ".roundbox.sidebox.borderTopRound "
+                ".roundbox.sidebox.borderTopRound"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "Register now": "Enroll Now",
-                "No tag edit access": "No tag editing privileges",
+                "Register now": "Sign Up Now",
+                "No tag edit access": "No tag edit permission",
                 "Problem([\\s]*)$": "concern",
-                "Verdict": "status of adjudication",
-                "Language:": "Languages.",
-                "Participant": "contestants",
-                "Choose file:": "Select file.",
+                "Verdict": "Case Status",
+                "Language:": "Language:",
+                "Participant": "Players",
+                "Choose file:": "Select file:",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "This puzzle packet is not updated by the issuer or Codeforce management team after we upgrade the rating server. In order to adjust the constraints of the time limit, an answer execution time will be multiplied by 2. For example, if your answers run 400 milliseconds on the rating server, a value of 800 milliseconds will be displayed and used to determine the results.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "A virtual match is a way to take part in past competitions, as close as possible to real-time competition. Only virtual competitions in ICPC mode are currently supported.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "If you have already seen these topics, virtual competitions are not good for you – they should be addressed in the puzzle pool.",
