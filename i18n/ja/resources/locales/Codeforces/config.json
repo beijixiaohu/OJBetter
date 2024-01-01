@@ -1,0 +1,60 @@
+{
+    "chatgpt": {
+        "title": "設定",
+        "basic": {
+            "title": "基本的",
+            "name": {
+                "label": "名前",
+                "placeholder": "この構成のための名前を入力してください"
+            },
+            "model": {
+                "label": "モデル:",
+                "tipText": "<p>デフォルトは空白のまま：gpt-3.5-turbo</p><p>モデル一覧は<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI公式ドキュメント</a></p><p><strong>なお、サービスプロバイダが提供するプロキシAPIを利用する場合は、サービスプロバイダが対応モデルをサポートしているかどうかをご確認ください</strong></p>"
+            },
+            "key": {
+                "label": "キー",
+                "placeholder": "KEYを入力してください。",
+                "tipText": "<p>自らのOpenAI key、<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">入力</a></p><p><b>、サービス業者によって提供されるプロキシのAPIを使用している場合は、サービス提供されているキー</b></p> を入力してください"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>空白のままにしておくと、デフォルトでOpenAIの公式APIになります</p><p>指定したAPIを記入して、OpenAIのAPIへのプロキシアクセスを行うこともできます</p><p>サービスプロバイダから提供されたプロキシAPIとKEYを使用している場合は、サービスプロバイダから提供された<strong>完全な</strong>APIアドレスを記入してください。詳細はスクリプトの説明をお読みください</p><p><strong>カスタムAPIを指定しているため、Tampermonkeyはクロスドメインリクエストについて警告します。自分で認証する必要があります</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "ハイレベル",
+            "header": {
+                "label": "header のカスタマイズ",
+                "placeholder": "(オプション) ここではheaderへ追加キーを追加することができます",
+                "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "カスタム data",
+                "placeholder": "（オプション）これらはリクエストデータに追加値を入力することで追加できます.",
+                "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
+    "complet": {
+        "title": "カスタム補完",
+        "name": {
+            "label": "備考欄：",
+            "placeholder": "このカスタム設定については メモの名前を入力してください"
+        },
+        "choose": {
+            "label": "有効にする"
+        },
+        "genre": {
+            "label": "テンプレートフォーマット",
+            "tipText": "<p>monaco フォーマットは、monaco の <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> のほとんどすべての属性をサポートしています。（注意： range 属性は必要ありません、スクリプトが自動的に計算して追加します）</p><p>ace フォーマットは、ace の CompletionItem の限られた属性のみをサポートしています： <code>caption</code>,<code>value</code>、これらはスクリプトによって自動的に monaco フォーマット</p><p>の仕様に変換されます。スクリプトのページ</p>に説明があります。"
+        },
+        "language": {
+            "label": "適用可能な言語"
+        },
+        "jsonurl": {
+            "tipText": "<p>OJBetter_Bridgeがオンになると、GETリクエストに応答します<code>/mycomplet/*</code>, そして、<code>mycomplet</code>フォルダで見つかった同じ名前のファイルの内容を返します</p><p>そのため、ローカルでアクセスするには、 <code>/mycomplet</code> フォルダにJSONファイルを配置するだけです</p><p>設定では、URLの形を記入する必要があります: </p><p><code>http:/ //127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>スクリプトは、追加のチェックや検証を行うことなく、JSONデータを完全に信頼します。そのため、未知のソースからのJSON URLを追加しないでください。</p><p>特別に構築されたデータは、スクリプトの正常な動作を破壊したり、他の悪意のあるコードを実行したりする可能性があります。</p>",
+            "placeholder": "特徴はhttp://127.0.0.1:23/mycomplet/xxx.json"
+        }
+    }
+}
