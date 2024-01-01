@@ -2832,7 +2832,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.07',
+                        defaultVersion: 'v1.08',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -3852,65 +3852,65 @@ const chatgptConfigEditHTML = `
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
-        <h4 data-i18n="config_chatgpt:common.title"></h4>
-        <h5 data-i18n="config_chatgpt:common.basic.title"></h5>
+        <h4 data-i18n="config:chatgpt.title"></h4>
+        <h5 data-i18n="config:chatgpt.basic.title"></h5>
         <hr>
         <label for='name'>
-            <span class="input_label" data-i18n="config_chatgpt:common.basic.name.label"></span>
+            <span class="input_label" data-i18n="config:chatgpt.basic.name.label"></span>
         </label>
-        <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_chatgpt:common.basic.name.placeholder">
+        <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.name.placeholder">
         <label for='openai_model'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="[html]config_chatgpt:common.basic.model.label"></span>
+                <span class="input_label" data-i18n="[html]config:chatgpt.basic.model.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.basic.model.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]config:chatgpt.basic.model.tipText"></div>
                 </div>
             </div>
         </label>
         <input type='text' id='openai_model' placeholder='gpt-3.5-turbo' require = false>
         <label for='openai_key'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config_chatgpt:common.basic.key.label"></span>
+                <span class="input_label" data-i18n="config:chatgpt.basic.key.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.basic.key.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]config:chatgpt.basic.key.tipText"></div>
                 </div>
             </div>
         </label>
-        <input type='text' id='openai_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_chatgpt:common.basic.key.placeholder">
+        <input type='text' id='openai_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.key.placeholder">
         <label for='openai_proxy'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config_chatgpt:common.basic.proxy.label">Proxy API:</span>
+                <span class="input_label" data-i18n="config:chatgpt.basic.proxy.label">Proxy API:</span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.basic.proxy.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]config:chatgpt.basic.proxy.tipText"></div>
                 </div>
             </div>
         </label>
         <input type='text' id='openai_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
-        <h5 data-i18n="config_chatgpt:common.advanced.title"></h5>
+        <h5 data-i18n="config:chatgpt.advanced.title"></h5>
         <hr>
         <label for='_header'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config_chatgpt:common.advanced.header.label"></span>
+                <span class="input_label" data-i18n="config:chatgpt.advanced.header.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.advanced.header.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]config:chatgpt.advanced.header.tipText"></div>
                 </div>
             </div>
         </label>
-        <textarea id="_header" placeholder='' require = false data-i18n="[placeholder]config_chatgpt:common.advanced.header.placeholder"></textarea>
+        <textarea id="_header" placeholder='' require = false data-i18n="[placeholder]config:chatgpt.advanced.header.placeholder"></textarea>
         <label for='_data'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config_chatgpt:common.advanced.data.label"></span>
+                <span class="input_label" data-i18n="config:chatgpt.advanced.data.label"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config_chatgpt:common.advanced.data.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]config:chatgpt.advanced.data.tipText"></div>
                 </div>
             </div>
         </label>
-        <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config_chatgpt:common.advanced.data.placeholder"></textarea>
+        <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config:chatgpt.advanced.data.placeholder"></textarea>
         <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
 `;
@@ -3920,21 +3920,21 @@ const CompletConfigEditHTML = `
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
-        <h4 data-i18n="config_complet:common.title"></h4>
+        <h4 data-i18n="config:complet.title"></h4>
         <hr>
         <label for='name'>
-            <span class="input_label" data-i18n="config_complet:common.name.label"></span>
+            <span class="input_label" data-i18n="config:complet.name.label"></span>
         </label>
-        <input type='text' id='name' class='no_default' placeholder='' require = true  data-i18n="[placeholder]config_complet:common.name.placeholder">
+        <input type='text' id='name' class='no_default' placeholder='' require = true  data-i18n="[placeholder]config:complet.name.placeholder">
         <div class='CFBetter_setting_list'>
-        <label for="complet_isChoose"><span id="loaded_span" data-i18n="config_complet:common.choose.label"></span></label>
+        <label for="complet_isChoose"><span id="loaded_span" data-i18n="config:complet.choose.label"></span></label>
             <input type="checkbox" id="complet_isChoose" name="complet_isChoose" require = false>
         </div>
         <div class='CFBetter_setting_list'>
-            <label for="complet_genre" style="display: flex;" data-i18n="config_complet:common.genre.label"></label>
+            <label for="complet_genre" style="display: flex;" data-i18n="config:complet.genre.label"></label>
             <div class="help_tip">
                 ${helpCircleHTML}
-                <div class="tip_text" data-i18n="[html]config_complet:common.genre.tipText"></div>
+                <div class="tip_text" data-i18n="[html]config:complet.genre.tipText"></div>
             </div>
             <select id="complet_genre" name="complet_genre">
                 <option value="monaco">monaco</option>
@@ -3942,7 +3942,7 @@ const CompletConfigEditHTML = `
             </select>
         </div>
         <div class='CFBetter_setting_list'>
-            <label for="complet_language" style="display: flex;" data-i18n="config_complet:common.language.label"></label>
+            <label for="complet_language" style="display: flex;" data-i18n="config:complet.language.label"></label>
             <select id="complet_language" name="complet_language">
                 <option value="cpp">cpp</option>
                 <option value="python">python</option>
@@ -3955,12 +3955,12 @@ const CompletConfigEditHTML = `
                 <span class="input_label">JSON URL:</span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config_complet:common.jsonurl.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]config:complet.jsonurl.tipText"></div>
                 </div>
             </div>
         </label>
-        <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config_complet:common.jsonurl.alert"></div>
-        <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config_complet:common.jsonurl.placeholder">
+        <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config:complet.jsonurl.alert"></div>
+        <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:complet.jsonurl.placeholder">
         <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
 `;
@@ -9844,7 +9844,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadRequiredFunctions(); // 加载必须的函数
 
     onDOMReady(); // DOM加载后即可执行的函数
-    if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— 正在等待页面资源加载……`);
+    if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
     if (loaded) {
         onResourcesReady(loadingMessage); // 需要在页面资源完全加载后执行的函数
     } else {
