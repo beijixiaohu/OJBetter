@@ -1,5 +1,5 @@
 {
-    "waiteResources": "Warten auf das Laden von Seitenressourcen……",
+    "onload": "Warten auf das Laden von Seitenressourcen……",
     "waiteLatex": "Warten auf die vollständige Fertigstellung der LaTeX-Warteschlange……",
     "linkDB": "Verbinden mit der Datenbank……",
     "expandFoldingblocks": "Entfalten des Faltblocks……",

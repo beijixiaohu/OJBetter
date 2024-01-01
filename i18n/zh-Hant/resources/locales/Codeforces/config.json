@@ -1,0 +1,60 @@
+{
+    "chatgpt": {
+        "title": "配置",
+        "basic": {
+            "title": "基本",
+            "name": {
+                "label": "名稱:",
+                "placeholder": "請為該配置取一個名稱"
+            },
+            "model": {
+                "label": "模型:",
+                "tipText": "<p>留空則預設為：gpt-3.5-turbo</p><p>模型清單請查閱<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文件</a></p><p><strong>此外，如果你使用的是服務商提供的代理API，請確認服務商是否支援對應模型</strong></p>"
+            },
+            "key": {
+                "label": "KEY:",
+                "placeholder": "請輸入KEY",
+                "tipText": "<p>你需要輸入自己的OpenAI key，<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">官網</a></p><p><b>如果你使用的是服務商提供的代理API，則應該填寫服務商提供的Key</b></p>"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>留空則預設為OpenAI官方API</p><p>你也可以填寫指定的API來代理訪問OpenAI的API，</p><p>如果你使用的是服務商提供的代理API和KEY，則這裡應該填寫其提供的<strong>完整</strong>API位址，詳請閱讀腳本說明</p><p><strong>由於你指定了自訂的API，Tampermonkey會對你的跨域請求進行警告，你需要自行授權</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "進階",
+            "header": {
+                "label": "自訂header",
+                "placeholder": "（選填）你可以在這裡填入向請求header額外加入的鍵值對",
+                "tipText": "<p>格式範例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "自訂data",
+                "placeholder": "（選填）你可以在這裡填寫向請求data中額外加入的鍵值對",
+                "tipText": "<p>格式範例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
+    "complet": {
+        "title": "自訂補全",
+        "name": {
+            "label": "備註:",
+            "placeholder": "請為該自訂配置取一個備註名"
+        },
+        "choose": {
+            "label": "啟用？"
+        },
+        "genre": {
+            "label": "範本格式",
+            "tipText": "<p>monaco 格式支援monaco 中 <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> 幾乎所有的屬性, (注意: 不需要range屬性, 腳本會自動計算並添加該屬性)</p><p>ace 格式僅支援ace 中completers 有限的屬性: <code>caption</code>、<code>value</code>, 腳本會自動將其轉換為monaco 格式</p><p>具體你可以前往閱讀腳本頁的說明</p>"
+        },
+        "language": {
+            "label": "適用的語言"
+        },
+        "jsonurl": {
+            "tipText": "<p>開啟OJBetter_Bridge 後, 其會回應GET 請求<code>/mycomplet/*</code>, 並返回在<code>mycomplet</code>資料夾中尋找到的同名文件的內容</p><p>因此你只需要在 <code>/mycomplet</code> 資料夾中放置你的JSON 檔案即可在本地訪問，</p><p>在配置中你需要填寫的URL 形如: </p><p><code>http://127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>腳本會完全信任你的JSON 資料而不進行額外的校驗和檢查, 因此請勿添加來源不明的JSON URL,</p><p>特殊構造的資料可能會破壞腳本的正常工作, 甚至執行其他惡意程式碼</p>",
+            "placeholder": "型如http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}

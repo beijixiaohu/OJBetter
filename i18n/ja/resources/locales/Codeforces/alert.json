@@ -1,5 +1,5 @@
 {
-    "waiteResources": "ページのリソースが……を待機しています。",
+    "onload": "ページのリソースが……を待機しています。",
     "waiteLatex": "LaTeX 描画キューが全て……",
     "linkDB": "データベース……に接続中",
     "expandFoldingblocks": "ブロックを展開中……",

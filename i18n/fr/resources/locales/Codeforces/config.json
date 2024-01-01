@@ -1,0 +1,60 @@
+{
+    "chatgpt": {
+        "title": "configurer",
+        "basic": {
+            "title": "fondamental",
+            "name": {
+                "label": "Nom.",
+                "placeholder": "Veuillez donner un nom à cette configuration"
+            },
+            "model": {
+                "label": "Modèles.",
+                "tipText": "<p>Laissez le champ vide pour utiliser par défaut：gpt-3.5-turbo</p><p>Pour une liste de modèles, veuillez consulter<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentation officielle d'OpenAI</a></p><p><strong>En outre, si vous utilisez l'API proxy fournie par le fournisseur de services, veuillez vérifier si le fournisseur de services prend en charge le modèle correspondant</strong></p>"
+            },
+            "key": {
+                "label": "CLÉ.",
+                "placeholder": "Veuillez saisir la CLÉ",
+                "tipText": "<p>Vous devez saisir votre propre clé OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">site officiel</a></p><p><b>Si vous utilisez l'API proxy fournie par le fournisseur de services, vous devez saisir la clé fournie par le fournisseur de services</b></p>."
+            },
+            "proxy": {
+                "label": "Proxy API.",
+                "tipText": "<p>Laissez le champ vide pour utiliser par défaut l'API officielle d'OpenAI</p><p>Vous pouvez également renseigner l'API spécifiée pour accéder par proxy à l'API d'OpenAI</p><p>Si vous utilisez une API proxy et une clé fournie par votre fournisseur de services, vous devez renseigner l'adresse<strong>complète</strong>API fournie par votre fournisseur de services, lisez les instructions du script pour plus de détails</p><p><strong>Puisque vous spécifiez une API personnalisée, Tampermonkey vous avertira des requêtes inter-domaines. Vous devez l'autoriser vous-même</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "niveau élevé",
+            "header": {
+                "label": "En-tête personnalisé",
+                "placeholder": "(Facultatif) Vous pouvez indiquer ici des paires clé-valeur supplémentaires à ajouter à l'en-tête de la requête.",
+                "tipText": "<p>Exemple de format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nom1 : 123<br>nom2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Données personnalisées",
+                "placeholder": "(Facultatif) Vous pouvez indiquer ici des paires clé-valeur supplémentaires à ajouter aux données de la demande.",
+                "tipText": "<p>Exemple de format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nom1 : 123<br>nom2 : cccc</p></div>"
+            }
+        }
+    },
+    "complet": {
+        "title": "Achèvement personnalisé",
+        "name": {
+            "label": "Remarques.",
+            "placeholder": "Veuillez donner un nom de note pour cette configuration personnalisée"
+        },
+        "choose": {
+            "label": "Activer ?"
+        },
+        "genre": {
+            "label": "Format du modèle",
+            "tipText": "<p>Le format monaco prend en charge presque tous les attributs du <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> en monaco, (note : l'attribut range n'est pas nécessaire, le script le calcule et l'ajoute automatiquement)</p><p>Le format ace ne prend en charge qu'un nombre limité d'attributs des compléteurs en ace : <code>caption</code>,<code>value</code>, qui sont automatiquement convertis par le script au format monaco</p><p>specifics. Vous pouvez lire les instructions sur la page du script</p>"
+        },
+        "language": {
+            "label": "Langues applicables"
+        },
+        "jsonurl": {
+            "tipText": "<p>Lorsque OJBetter_Bridge est activé, il répond à une requête GET<code>/mycomplet/*</code>, et renvoie le contenu du fichier portant le même nom qui se trouve dans le dossier<code>mycomplet</code></p><p>Il vous suffit donc de placer votre fichier JSON dans le dossier <code>/mycomplet</code> pour y accéder localement,</p><p>Dans la configuration, vous devez remplir la forme de l'URL : </p><p><code>http:/ / / / //mycomplet/xxx json  /127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>Le script fera entièrement confiance à vos données JSON sans contrôles et vérifications supplémentaires, n'ajoutez donc pas d'URL JSON provenant de sources inconnues,</p><p>Les données spécialement construites peuvent perturber le fonctionnement normal du script ou même exécuter d'autres codes malveillants</p>",
+            "placeholder": "En forme de http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}

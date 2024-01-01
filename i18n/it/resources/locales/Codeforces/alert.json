@@ -1,5 +1,5 @@
 {
-    "waiteResources": "Attesa per il caricamento delle risorse della pagina……",
+    "onload": "Attesa per il caricamento delle risorse della pagina……",
     "waiteLatex": "In attesa che la coda di rendering LaTeX sia completamente completata……",
     "linkDB": "Connessione al database……",
     "expandFoldingblocks": "Dispiegare il blocco pieghevole……",
