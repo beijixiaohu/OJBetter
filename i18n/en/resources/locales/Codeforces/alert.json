@@ -1,5 +1,5 @@
 {
-    "waiteResources": "Waiting for page resources to load……",
+    "onload": "Waiting for page resources to load……",
     "waiteLatex": "Waiting for LaTeX rendering queue to complete……",
     "linkDB": "Connecting to database……",
     "expandFoldingblocks": "Expanding folding block……",
