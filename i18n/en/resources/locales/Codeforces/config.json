@@ -1,0 +1,60 @@
+{
+    "chatgpt": {
+        "title": "Configuration",
+        "basic": {
+            "title": "fundamental",
+            "name": {
+                "label": "Name.",
+                "placeholder": "Please enter a name for this configuration"
+            },
+            "model": {
+                "label": "Model:",
+                "tipText": "<p>Leave empty for：gpt-3.5-turbo</p><p>Model list check<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI Official Document</a></p><p><strong>Also, if you are using Proxy API, please confirm that the service provider supports Model</strong></p>"
+            },
+            "key": {
+                "label": "KEY.",
+                "placeholder": "Please enter KEY",
+                "tipText": "<p>You need to enter your own OpenAI key,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">Web</a></p><p><b>If you are using the Proxy API, you should fill in the Service Provider's Key</b></p>"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>Leave blank for the official OpenAI API</p><p>You can also fill in the specified API to proxize access to the OpenAI API,</p><p>If you are using the Proxy API and KEY, then you should fill in the<strong>full</strong>API addresses provided here, read the script note</p><p><strong>because you specify a custom API, Tampermonkey will warn of your cross-domain requests, you need to authorize yourself</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "Advanced",
+            "header": {
+                "label": "Custom header",
+                "placeholder": "(optional) You can fill in additional key pairs to request head",
+                "tipText": "<p>Example：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Custom data",
+                "placeholder": "(optional) You can fill in additional key pairs to request data",
+                "tipText": "<p>Example：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
+    "complet": {
+        "title": "Custom Completion",
+        "name": {
+            "label": "Remarks:",
+            "placeholder": "Please enter a note name for this custom configuration"
+        },
+        "choose": {
+            "label": "Enable?"
+        },
+        "genre": {
+            "label": "Template format",
+            "tipText": "<p>monaco format supports almost all properties in monaco with <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> (Note: Range properties are not required, Script will calculate and add this attribute automatically)</p><p>Space format supports only limited attributes in space: <code>caption</code>,<code>value</code>, Script will automatically convert it to monaco format</p><p>specify that you can go to the note</p> to read the script page"
+        },
+        "language": {
+            "label": "Applicable languages"
+        },
+        "jsonurl": {
+            "tipText": "<p>On OJBetter_Bridge it will respond to GET request<code>/mycomplete/*</code>and return to the content of<code>mycomplet</code>file with the same name found in the folder</p><p>so you simply need to place your JSON file in <code>/mycomplet</code> folder for local access,</p><p>The URL you need to fill in in the configuration: </p><p><code>http://127. .0.1:23233/mycomplete/xx.json</code></p>",
+            "alert": "The <p>script will trust your JSON data completely without additional checksum checks, so do not add data from unknown JSON URLs,</p><p>special architecture may break the normal work of the script and even perform other malicious code</p>",
+            "placeholder": "Example http:///127.0.0.1:232323/mycomplete/xxx.json"
+        }
+    }
+}
