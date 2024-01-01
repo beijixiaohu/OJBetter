@@ -1,5 +1,5 @@
 {
-    "waiteResources": "Attente du chargement des ressources de la page……",
+    "onload": "Attente du chargement des ressources de la page……",
     "waiteLatex": "Attendre que la file d'attente de rendu LaTeX soit entièrement complétée……",
     "linkDB": "Connexion à la base de données……",
     "expandFoldingblocks": "Déplier le bloc de pliage……",
