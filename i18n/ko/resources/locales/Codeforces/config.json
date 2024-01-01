@@ -1,0 +1,60 @@
+{
+    "chatgpt": {
+        "title": "구성",
+        "basic": {
+            "title": "기본",
+            "name": {
+                "label": "이름.",
+                "placeholder": "이 구성에 이름을 지정하세요."
+            },
+            "model": {
+                "label": "모델.",
+                "tipText": "<p>비워두면 기본값은：gpt-3.5-turbo</p><p>모델 목록은<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI 공식 문서</a></p><p><strong>또한 서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우 서비스 제공업체가 해당 모델을 지원하는지</strong></p>확인하시기 바랍니다."
+            },
+            "key": {
+                "label": "KEY.",
+                "placeholder": "KEY를 입력하세요.",
+                "tipText": "<p><a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">공식 웹사이트</a></p><p><b>서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우, 서비스 제공업체에서 제공하는 키</b></p>를 입력해야 합니다."
+            },
+            "proxy": {
+                "label": "프록시 API.",
+                "tipText": "<p>비워두면 공식 OpenAI API가 기본값으로 설정됩니다</p><p>지정한 API를 입력하여 OpenAI의 API에 프록시 액세스할 수도 있습니다</p><p>서비스 제공업체에서 제공하는 프록시 API와 KEY를 사용하는 경우<strong>전체 내용을 입력해야 합니다</strong>서비스 제공업체에서 제공하는 API 주소, 자세한 내용은 스크립트 지침을 참조하세요</p><p><strong>사용자 지정 API를 지정하고 있으므로 Tampermonkey에서 도메인 간 요청에 대한 경고를 표시할 것입니다. 직접 승인해야 합니다</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "높은 수준",
+            "header": {
+                "label": "사용자 지정 헤더",
+                "placeholder": "(선택 사항) 여기에서 요청 헤더에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
+                "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "사용자 지정 데이터",
+                "placeholder": "(선택 사항) 여기에서 요청 데이터에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
+                "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
+    "complet": {
+        "title": "사용자 지정 완료",
+        "name": {
+            "label": "비고.",
+            "placeholder": "이 사용자 지정 구성의 메모 이름을 입력하세요."
+        },
+        "choose": {
+            "label": "활성화?"
+        },
+        "genre": {
+            "label": "템플릿 형식",
+            "tipText": "<p>모나코 형식은 모나코에서 <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> 의 거의 모든 속성을 지원합니다(참고: 범위 속성은 필요하지 않으며 스크립트에서 자동으로 계산하여 추가합니다)</p><p>에이스 형식은 에이스에서 완성자의 제한된 수의 속성만 지원합니다: <code>캡션</code>,<code>값</code>, 스크립트에서 자동으로 모나코 형식</p><p>세부 사항으로 변환됩니다. 스크립트 페이지</p>에서 지침을 읽을 수 있습니다."
+        },
+        "language": {
+            "label": "적용 가능한 언어"
+        },
+        "jsonurl": {
+            "tipText": "<p>OJBetter_Bridge가 켜져 있으면<code>/mycomplet/*</code>GET 요청에 응답하고<code>mycomplet</code>폴더에 있는 동일한 이름의 파일 내용을 반환합니다</p><p>따라서 로컬에서 액세스하려면 <code>/mycomplet</code> 폴더에 JSON 파일만 넣으면 됩니다</p><p>구성에서 URL 모양을 입력해야 합니다: </p><p><code>http:/ /. /127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>스크립트는 추가 확인 및 검증 없이 JSON 데이터를 완전히 신뢰하므로 알 수 없는 출처의 JSON URL을 추가하지 마세요(</p><p>특수하게 구성된 데이터는 스크립트의 정상적인 작동을 방해하거나 다른 악성 코드(</p>)를 실행할 수도 있습니다).",
+            "placeholder": "http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}
