@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "localizzazione",
         "scriptLanguageLabel": "linguaggio di scripting",
-        "websiteLanguageLabel": "Lingua del sito web"
+        "websiteLanguageLabel": "Lingua del sito web",
+        "notice": {
+            "1": "<strong>Contribuire a migliorare la qualità delle traduzioni</strong><p>L'autore dello script conosce solo il cinese semplificato e l'inglese, per tutte le altre lingue lo script e la localizzazione linguistica del sito sono realizzati tramite traduzione automatica (Deepl & Google) e il flusso di traduzione è ospitato da crowddin.</p><p>Se desidera contribuire a migliorare la qualità delle traduzioni localizzate per una determinata lingua,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>clicchi qui</a>per andare lì e contribuire a migliorarla.</p><p>Grazie per il suo contributo!</p>",
+            "2": "<strong>Contribuire a migliorare la localizzazione linguistica del sito web</strong><p>Se ritiene che la localizzazione sia necessaria in qualche punto del suo sito web e che le sostituzioni della localizzazione non causino gravi problemi di prestazioni, è benvenuto a migliorare le regole di localizzazione.</p><p>Per aggiungere una nuova regola, deve aggiungere la versione in cinese semplificato del fork：e modificare la sostituzione localizzata del file di regole<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>, quindi avviare una richiesta di pull.</p><p>Dopo che l'invio è stato unito, crowdin completerà automaticamente la traduzione per le altre lingue, e lei potrà andare su crowdin in seguito per migliorare la qualità delle traduzioni anche per le altre lingue.</p>"
+        }
     },
     "translationSettings": {
         "title": "Impostazioni di traduzione",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "preferenze",
+            "target": {
+                "title": "lingua di destinazione",
+                "helpText": "Nota：I servizi di traduzione disponibili differiscono per le diverse lingue di destinazione, legga la pagina dello script per i dettagli."
+            },
             "comment_translation_choice": "Traduzione della sezione commenti",
             "services": {
                 "follow": "Seguire le preferenze",
@@ -151,7 +159,7 @@
         "title": "Impostazioni Clist",
         "basics": {
             "name": "fondamentale",
-            "notice": "Nota：Le credenziali necessarie per lavorare sulle diverse pagine variano, veda le descrizioni etichettate delle opzioni corrispondenti.",
+            "notice": "<p>Nota：L'accesso ai dati di Clist richiede credenziali di accesso valide; ha due opzioni：</p><p>Compilare la chiave API ufficiale<a href='https://clist.by/' target='_blank'>clist.by<a/>di seguito,</p><p>oppure mantenere il sito web clist.by nel suo browser loggato (cioè il cookie è valido)</p>",
             "key": {
                 "title": "CHIAVE.",
                 "helpText": "<p>Formato di esempio：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "pagina del titolo",
-                "helpText": "<p><p>Dovrà fornire la chiave api ufficiale</p><p>o lasciare clist.by sul suo browser collegato (cioè il cookie è valido)</p",
+                "helpText": "<p>Fonte di dati clist.by</p><p>È necessario fornire la chiave API ufficiale</p><p>o mantenere clist.by loggato nel browser (cioè il cookie è valido)</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
                 "name": "pagina del titolo",
-                "helpText": "<p>È necessario che clist.by mantenga il login (cioè il cookie attivo) sul suo browser perché questo funzioni</p>",
-                "badge": "Cookie"
+                "helpText": "<p>Fonte di dati clist.by</p><p>È necessario fornire la chiave API ufficiale</p><p>o mantenere clist.by loggato nel browser (cioè il cookie è valido)</p>",
+                "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {
