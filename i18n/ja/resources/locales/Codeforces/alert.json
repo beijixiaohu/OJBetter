@@ -1,5 +1,6 @@
 {
     "onload": "ページのリソースが……を待機しています。",
+    "loadFunc": "スクリプト機能…… をロード中",
     "waiteLatex": "LaTeX 描画キューが全て……",
     "linkDB": "データベース……に接続中",
     "expandFoldingblocks": "ブロックを展開中……",
