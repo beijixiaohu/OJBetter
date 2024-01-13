@@ -2,5 +2,13 @@
     "save": "Save",
     "close": "Close",
     "settings": "Settings",
-    "add": "Add"
+    "add": "Add",
+    "delete": "Delete",
+    "edit": "compiler",
+    "cancel": "Cancel",
+    "apply": "appliance",
+    "yes": "be",
+    "no": "clogged",
+    "ok": "OK",
+    "targetArea": "Target area"
 }
