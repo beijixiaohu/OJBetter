@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "localización",
         "scriptLanguageLabel": "lenguaje de programación",
-        "websiteLanguageLabel": "Idioma del sitio web"
+        "websiteLanguageLabel": "Idioma del sitio web",
+        "notice": {
+            "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor del guión sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas el guión y la localización lingüística del sitio se realiza mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si desea ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>haga clic aquí</a>para ir allí y ayudar a mejorarlo.</p><p>¡Gracias por su contribución!</p>",
+            "2": "<strong>Ayude a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en alguna parte de su sitio web y que las sustituciones localizadas de la misma no causarán graves problemas de rendimiento, le invitamos a ir a Mejorar las reglas de localización.</p><p>Para añadir una nueva regla, tiene que añadir la versión en chino simplificado del fork：y modificar la sustitución localizada del archivo de reglas<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>, después inicie un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más tarde para mejorar también la calidad de las traducciones para los demás idiomas.</p>"
+        }
     },
     "translationSettings": {
         "title": "Ajustes de traducción",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "preferencias",
+            "target": {
+                "title": "lengua meta",
+                "helpText": "Nota：Los servicios de traducción disponibles difieren para los distintos idiomas de destino, por favor lea la página del script para más detalles."
+            },
             "comment_translation_choice": "Traducción de la sección de comentarios",
             "services": {
                 "follow": "Siga las preferencias",
@@ -151,7 +159,7 @@
         "title": "Ajustes Clist",
         "basics": {
             "name": "fundamental",
-            "notice": "Nota：Las credenciales necesarias para trabajar en las distintas páginas varían, consulte las descripciones etiquetadas de las opciones correspondientes.",
+            "notice": "<p>Nota：El acceso a los datos de Clist requiere unas credenciales de inicio de sesión válidas, tiene dos opciones：</p><p>Rellene la<a href='https://clist.by/' target='_blank'>clist.by<a/>clave API oficial que aparece a continuación,</p><p>o mantenga la página web clist.by en su navegador con la sesión iniciada (es decir, la cookie es válida)</p>",
             "key": {
                 "title": "CLAVE.",
                 "helpText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "portada",
-                "helpText": "<p><p>Tendrá que proporcionar la clave api oficial</p><p>o dejar clist.by en su navegador conectado (es decir, la cookie es válida)</p",
+                "helpText": "<p>Fuente de datos clist.by</p><p>Debe proporcionar la clave oficial de la API</p><p>o mantener la sesión iniciada en clist.by en su navegador (es decir, la cookie es válida)</p>",
                 "badge": "Cookie/API CLAVE"
             },
             "problemset": {
                 "name": "portada",
-                "helpText": "<p>Necesita mantener clist.by conectado (es decir, la cookie activa) en su navegador para que esto funcione</p>",
-                "badge": "Galleta"
+                "helpText": "<p>Fuente de datos clist.by</p><p>Debe proporcionar la clave oficial de la API</p><p>o mantener la sesión iniciada en clist.by en su navegador (es decir, la cookie es válida)</p>",
+                "badge": "Cookie/API CLAVE"
             }
         },
         "spoilerProtection": {
