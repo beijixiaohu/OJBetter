@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "本地化设置",
         "scriptLanguageLabel": "脚本语言",
-        "websiteLanguageLabel": "网站语言"
+        "websiteLanguageLabel": "网站语言",
+        "notice":{
+            "1":"<strong>帮助改进翻译质量</strong><p>脚本的作者只熟悉简体中文和英文，对于其他语言，脚本以及网站语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>点击这里</a>，即可前往协助改进。</p><p>感谢你的贡献！</p>",
+            "2":"<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎你前往完善本地化规则。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork并修改本地化替换的<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 规则文件 </a>，然后发起拉取请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+        }
     },
     "translationSettings": {
         "title": "翻译设置",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "偏好",
+            "target": {
+                "title": "目标语言",
+                "helpText": "注意：对于不同的目标语言，可用的翻译服务有所不同，具体请阅读脚本页的介绍"
+            },
             "comment_translation_choice": "评论区翻译",
             "services": {
                 "follow": "跟随首选项",
@@ -151,7 +159,7 @@
         "title": "Clist 设置",
         "basics": {
             "name": "基本",
-            "notice": "注意：在不同页面工作所需要的凭证有所不同，具体请看对应选项的标注说明。",
+            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'>clist.by<a/>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
             "key": {
                 "title": "KEY:",
                 "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "题目页",
-                "helpText": "<p><p>你需要提供官方的api key</p><p>或让你的浏览器上的clist.by处于登录状态（即cookie有效）</p",
+                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
                 "name": "题单页",
-                "helpText": "<p>需要让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）才能正常工作</p>",
-                "badge": "Cookie"
+                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {

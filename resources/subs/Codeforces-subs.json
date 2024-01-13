@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -60,7 +60,7 @@
                 "Gym": "训练营",
                 "Problemset": "题单",
                 "Groups": "团体",
-                "Rating": "Rating(评级)排行榜",
+                "Rating": "积分榜",
                 "Edu": "培训",
                 "Calendar": "日历",
                 "ICPC Challenge": "ICPC挑战赛",

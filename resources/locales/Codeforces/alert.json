@@ -1,5 +1,6 @@
 {
     "onload": "正在等待页面资源加载……",
+    "loadFunc": "正在加载脚本功能……",
     "waiteLatex": "正在等待 LaTeX 渲染队列全部完成……",
     "linkDB": "正在连接数据库……",
     "expandFoldingblocks": "正在展开折叠块……",

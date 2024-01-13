@@ -53,8 +53,6 @@
 // @compatible	 Edge
 // @incompatible safari
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
-// @downloadURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
-// @updateURL https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
 // ==/UserScript==
 
 // 状态与初始化
@@ -71,8 +69,9 @@ var darkMode = getGMValue("darkMode", "follow");
 var hostAddress = location.origin;
 var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProblemset, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
 var localizationLanguage, scriptL10nLanguage;
-var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt, translation, commentTranslationChoice;
-var transTargetLang = '中文', ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
+var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt;
+var translation, transTargetLang, commentTranslationChoice;
+var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
 var openai_name, openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
@@ -113,6 +112,7 @@ async function initVar() {
     showJumpToLuogu = getGMValue("showJumpToLuogu", true);
     standingsRecolor = getGMValue("standingsRecolor", true);
     loaded = getGMValue("loaded", false);
+    transTargetLang = getGMValue("transTargetLang", "zh");
     translation = getGMValue("translation", "deepl");
     commentTranslationMode = getGMValue("commentTranslationMode", "0");
     commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
@@ -183,17 +183,19 @@ async function initVar() {
     monacoEditor_position = getGMValue("monacoEditor_position", "initial");
     OJBetter_Bridge_WorkUri = getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
     OJBetter_Bridge_SocketUrl = getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
-    let monacoLoader = document.createElement("script");
-    monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
-    document.head.prepend(monacoLoader);
-    monacoLoader.onload = () => {
-        require.config({
-            paths: { vs: "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs" },
-            "vs/nls": { availableLanguages: { "*": "zh-cn" } },
-        });
-        require(["vs/editor/editor.main"], () => {
-            monacoLoaderOnload = true;
-        });
+    if (problemPageCodeEditor) {
+        let monacoLoader = document.createElement("script");
+        monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
+        document.head.prepend(monacoLoader);
+        monacoLoader.onload = () => {
+            require.config({
+                paths: { vs: "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs" },
+                "vs/nls": { availableLanguages: { "*": "zh-cn" } },
+            });
+            require(["vs/editor/editor.main"], () => {
+                monacoLoaderOnload = true;
+            });
+        }
     }
 }
 
@@ -264,7 +266,15 @@ const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" versio
 <path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 200; }`;
 const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
-
+// 翻译支持
+const translationSupport = {
+    'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
+    'iflyrec': { 'zh': '1' },
+    'youdao': { 'zh': 'AUTO' },
+    'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
+    'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
+    'openai': { 'zh': '中文', 'zh-Hant': '繁體中文', 'de': 'Deutsch', 'fr': 'Français', 'ko': '한국어', 'pt': 'Português', 'ja': '日本語', 'es': 'Español', 'it': 'Italiano', 'hi': 'हिन्दी' }
+}
 var CFBetterDB;
 /**
  * 连接数据库
@@ -586,8 +596,8 @@ function handleColorSchemeChange(event) {
             color: gray !important;
         }
         /* 样例hover样式 */
-        html[data-theme=dark] .test-example-line-odd:hover, html[data-theme=dark] .test-example-line-odd.darkhighlight {
-          background-color: #455a64;
+        html[data-theme=dark] .problem-statement .darkhighlight {
+          background-color: #455a64 !important;
         }
     `);
 })()
@@ -597,6 +607,7 @@ function handleColorSchemeChange(event) {
  */
 function darkModeStyleAdjustment() {
     $(".test-example-line").off("mouseenter mouseleave"); // 移除上面原本的事件
+    // 为奇数行添加悬停效果
     $('.test-example-line-odd').hover(
         function () {
             $(this).addClass('darkhighlight');
@@ -607,6 +618,20 @@ function darkModeStyleAdjustment() {
             $(this).removeClass('darkhighlight');
             $(this).prevUntil(':not(.test-example-line-odd)').removeClass('darkhighlight');
             $(this).nextUntil(':not(.test-example-line-odd)').removeClass('darkhighlight');
+        }
+    );
+
+    // 为偶数行添加悬停效果
+    $('.test-example-line-even').hover(
+        function () {
+            $(this).addClass('darkhighlight');
+            $(this).prevUntil(':not(.test-example-line-even)').addClass('darkhighlight');
+            $(this).nextUntil(':not(.test-example-line-even)').addClass('darkhighlight');
+        },
+        function () {
+            $(this).removeClass('darkhighlight');
+            $(this).prevUntil(':not(.test-example-line-even)').removeClass('darkhighlight');
+            $(this).nextUntil(':not(.test-example-line-even)').removeClass('darkhighlight');
         }
     );
 }
@@ -622,29 +647,6 @@ html {
 span.mdViewContent {
     white-space: pre-wrap;
 }
-/*翻译区域提示*/
-.overlay::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(135deg, #97e7cacc, #97e7cacc 30px, #e9fbf1cc 0px, #e9fbf1cc 55px);
-    z-index: 100;
-}
-
-.overlay::after {
-    content: '目标区域';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #00695C;
-    font-size: 16px;
-    font-weight: bold;
-    z-index: 100;
-}
 /*翻译div*/
 /* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
 .translateDiv.input-output-copier {
@@ -658,7 +660,7 @@ span.mdViewContent {
     line-height: initial;
     text-transform: none;
 }
-.translateDiv {
+html:not([data-theme='dark']) .translateDiv {
     box-shadow: 0px 0px 0.5px 0.5px #defdf378;
 }
 .translate-problem-statement {
@@ -960,6 +962,10 @@ button.ojb_btn.CFBetter_setting.open {
     margin-left: 5px;
     margin-right: auto;
 }
+
+.CFBetter_setting_menu .required {
+    box-shadow: inset 0px 0px 1px 1px red;
+}
 /* 页面切换 */
 .settings-page {
     display: none;
@@ -1035,6 +1041,9 @@ button.ojb_btn.CFBetter_setting.open {
 }
 .CFBetter_setting_menu select:focus-visible {
     outline: none;
+}
+.CFBetter_setting_menu select option:disabled {
+    color: #EEEEEE;
 }
 /* 数值输入框 */
 .CFBetter_setting_menu input[type="number"] {
@@ -1250,6 +1259,9 @@ button.ojb_btn.CFBetter_setting.open {
     top: 0px;
     left: 3.5px;
 }
+.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:disabled+label {
+    color: #BDBDBD;
+}
 
 /*设置面板-radio*/
 .CFBetter_setting_menu label {
@@ -1283,6 +1295,12 @@ input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
     border: 1px solid green;
     color: green;
     text-shadow: 0px 0px 0.5px green;
+}
+
+input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
+    background: #fafafa00;
+    border: 1px solid #e0e0e07a;
+    color: #e0e0e0;
 }
 
 .CFBetter_setting_menu label input[type="radio"], .CFBetter_contextmenu label input[type="radio"]{
@@ -2263,6 +2281,53 @@ input#CompilerArgsInput[disabled] {
 // ------------------------------
 
 /**
+ * 用于封装需要重试的异步函数
+ * @param {Function} task 需要封装的异步函数
+ * @param {Object} options 配置项
+ * @param {Number} options.maxRetries 重试次数，默认为 5
+ * @param {Function} options.errorHandler 错误处理函数，默认为抛出错误
+ * @param {...any} args task 函数的参数
+ * @returns {Promise} 返回 Promise
+ */
+async function promiseRetryWrapper(task, {
+    maxRetries = 5,
+    errorHandler = (err) => { throw err }
+} = {}, ...args) {
+    let attemptsLeft = maxRetries;
+    while (attemptsLeft--) {
+        try {
+            return await task(...args);
+        } catch (err) {
+            if (!attemptsLeft) {
+                return errorHandler(err, maxRetries, attemptsLeft);
+            }
+        }
+    }
+}
+
+/**
+ * GM_xmlhttpRequest 的 Promise 封装
+ * @param {Object} options GM_xmlhttpRequest 的参数
+ * @param {Boolean} isStream 是否为流式请求
+ * @returns {Promise} 返回 Promise
+ */
+function GMRequest(options, isStream = false) {
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            ...options,
+            ...(isStream ? {
+                onloadstart: resolve
+            } : {
+                onload: resolve
+            }),
+            onerror: reject,
+            ontimeout: reject,
+            onabort: reject
+        });
+    });
+}
+
+/**
  * 获取cookie
  * @param {string} name cookie名称
  * @returns {string} cookie值
@@ -2819,9 +2884,9 @@ async function initI18next() {
             .use(i18nextChainedBackend)
             .init({
                 lng: scriptL10nLanguage,
-                ns: ['common', 'settings', 'config_chatgpt', 'config_complet', 'dialog', 'alert', 'translator', 'button', 'codeEditor'], // 命名空间列表
+                ns: ['common', 'settings', 'config', 'dialog', 'alert', 'translator', 'button', 'codeEditor', 'comments'], // 命名空间列表
                 defaultNS: 'settings',
-                fallbackLng: 'zh',
+                fallbackLng: ['zh', transTargetLang],
                 load: 'currentOnly',
                 debug: false,
                 backend: {
@@ -2832,7 +2897,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.08',
+                        defaultVersion: 'v1.13',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -3449,6 +3514,12 @@ const l10n_settings_HTML = `
             <option value="hi">हिन्दी</option>
         </select>
     </div>
+    <div class='CFBetter_setting_list alert_tip'>
+        <div data-i18n="[html]settings:localizationSettings.notice.1"></div>
+    </div>
+    <div class='CFBetter_setting_list alert_tip'>
+        <div data-i18n="[html]settings:localizationSettings.notice.2"></div>
+    </div>
 </div>
 `;
 
@@ -3457,42 +3528,63 @@ const translation_settings_HTML = `
     <h3 data-i18n="settings:translationSettings.title"></h3>
     <hr>
     <h4 data-i18n="settings:translationSettings.options.title"></h4>
-    <label>
-        <input type='radio' name='translation' value='deepl'>
-        <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:translationSettings.options.services.deepl"></span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='iflyrec'>
-        <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:translationSettings.options.services.iflyrec"></span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='youdao'>
-        <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:translationSettings.options.services.youdao"></span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='google'>
-        <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:translationSettings.options.services.google"></span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='caiyun'>
-        <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:translationSettings.options.services.caiyun"></span>
-    </label>
-    <label>
-        <input type='radio' name='translation' value='openai'>
-        <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:translationSettings.options.services.openai.name">
-            <div class="help_tip">
-                ${helpCircleHTML}
-                <div class="tip_text"
-                    data-i18n="[html]settings:translationSettings.options.services.openai.helpText"></div>
-            </div>
-        </span>
-    </label>
+    <div class='CFBetter_setting_list'>
+        <label for="transTargetLang" style="display: flex;" data-i18n="settings:translationSettings.preference.target.title"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.preference.target.helpText"></div>
+        </div>
+        <select id="transTargetLang" name="transTargetLang">
+            <option value="zh">简体中文</option>
+            <option value="zh-Hant">繁體中文</option>
+            <option value="de">Deutsch</option>
+            <option value="fr">Français</option>
+            <option value="ko">한국어</option>
+            <option value="pt">Português</option>
+            <option value="ja">日本語</option>
+            <option value="es">Español</option>
+            <option value="it">Italiano</option>
+            <option value="hi">हिन्दी</option>
+        </select>
+    </div>
+    <div id="translationServices">
+        <label>
+            <input type='radio' name='translation' value='deepl'>
+            <span class='CFBetter_setting_menu_label_text'
+                data-i18n="settings:translationSettings.options.services.deepl"></span>
+        </label>
+        <label>
+            <input type='radio' name='translation' value='iflyrec'>
+            <span class='CFBetter_setting_menu_label_text'
+                data-i18n="settings:translationSettings.options.services.iflyrec"></span>
+        </label>
+        <label>
+            <input type='radio' name='translation' value='youdao'>
+            <span class='CFBetter_setting_menu_label_text'
+                data-i18n="settings:translationSettings.options.services.youdao"></span>
+        </label>
+        <label>
+            <input type='radio' name='translation' value='google'>
+            <span class='CFBetter_setting_menu_label_text'
+                data-i18n="settings:translationSettings.options.services.google"></span>
+        </label>
+        <label>
+            <input type='radio' name='translation' value='caiyun'>
+            <span class='CFBetter_setting_menu_label_text'
+                data-i18n="settings:translationSettings.options.services.caiyun"></span>
+        </label>
+        <label>
+            <input type='radio' name='translation' value='openai'>
+            <span class='CFBetter_setting_menu_label_text'
+                data-i18n="settings:translationSettings.options.services.openai.name">
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text"
+                        data-i18n="[html]settings:translationSettings.options.services.openai.helpText"></div>
+                </div>
+            </span>
+        </label>
+    </div>
     <hr>
     <h4>ChatGPT</h4>
     <div id="chatgpt_config" class="config"></div>
@@ -3657,31 +3749,14 @@ const clist_rating_settings_HTML = `
     <h4 data-i18n="settings:clistSettings.displayRating.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="showClistRating_contest"><span data-i18n="settings:clistSettings.displayRating.contest.name"></span></label>
-        <div class="help_tip" style="margin-right: initial;">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:clistSettings.displayRating.contest.helpText"></div>
-        </div>
-        <div class="badge" data-i18n="settings:clistSettings.displayRating.contest.badge"></div>
         <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="showClistRating_problem"><span data-i18n="settings:clistSettings.displayRating.problem.name"></span></label>
-        <div class="help_tip" style="margin-right: initial;">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:clistSettings.displayRating.problem.helpText">
-                >
-            </div>
-        </div>
-        <div class="badge" data-i18n="settings:clistSettings.displayRating.contest.badge"></div>
         <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="showClistRating_problemset"><span data-i18n="settings:clistSettings.displayRating.problemset.name"></span></label>
-        <div class="help_tip" style="margin-right: initial;">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:clistSettings.displayRating.problemset.helpText"></div>
-        </div>
-        <div class="badge" data-i18n="settings:clistSettings.displayRating.problemset.badge"></div>
         <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
     </div>
     <hr>
@@ -3753,7 +3828,7 @@ const code_editor_settings_HTML = `
         <label for="useLSP"><span data-i18n="settings:codeEditorSettings.lspSettings.useLSP.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="settings:[html]codeEditorSettings.lspSettings.useLSP.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.lspSettings.useLSP.helpText"></div>
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
     </div>
@@ -3765,7 +3840,7 @@ const code_editor_settings_HTML = `
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="settings:[html]codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.helpText">
+            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.helpText">
                 
             </div>
         </div>
@@ -3835,6 +3910,8 @@ const CFBetter_setting_content_HTML = `
     ${compatibility_settings_HTML}
 </div>
 `;
+
+// 设置界面HTML
 const CFBetterSettingMenu_HTML = `
     <div class='CFBetter_setting_menu' id='CFBetter_setting_menu'>
         <div class="tool-box">
@@ -3968,7 +4045,7 @@ const CompletConfigEditHTML = `
 /**
  * 加载设置按钮面板
  */
-async function settingPanel() {
+async function initSettingsPanel() {
     // 添加右上角设置按钮
     function insertCFBetterSettingButton(location, method) {
         $(location)[method](`<button class='ojb_btn CFBetter_setting'>
@@ -4006,11 +4083,71 @@ async function settingPanel() {
         $('.CFBetter_setting_sidebar a').click(function (event) {
             event.preventDefault();
             $('.CFBetter_setting_sidebar a').removeClass('active');
-            $(this).addClass('active');
             $('.settings-page').removeClass('active');
+            $(this).addClass('active');
             const targetPageId = $(this).attr('href').substring(1);
             $('#' + targetPageId).addClass('active');
         });
+
+        /**
+         * 更新单选按钮组的可用状态
+         * @param {string} selector 单选按钮组的选择器
+         * @param {string} targetLanguage 目标语言
+         * @param {Object} translationSupport 翻译支持的语言对应表
+         */
+        const updateRadioButtonsAvailability = (selector, targetLanguage) => {
+            Object.entries(translationSupport).forEach(([service, languages]) => {
+                const radioButton = $(selector).find(`input[value="${service}"]`);
+                const isEnabled = languages[targetLanguage];
+                $(radioButton).prop('disabled', !isEnabled);
+                if (!isEnabled) {
+                    $(radioButton).prop('checked', false);
+                }
+            });
+        };
+
+        /**
+         * 检查下拉框选中项是否有效，若无效则清空
+         * @param {string} selector 下拉框的选择器
+         */
+        const validateSelectOption = (selector) => {
+            const selectedValue = $(selector).val();
+            if (!selectedValue) {
+                $(selector).val('');
+            }
+        };
+
+        /**
+         * 更新下拉框的可用状态
+         * @param {string} selector 下拉框的选择器
+         * @param {string} targetLanguage 目标语言
+         * @param {Object} translationSupport 翻译支持的语言对应表
+         */
+        const updateSelectOptionsAvailability = (selector, targetLanguage) => {
+            $(selector).children('option').each(function () {
+                const optionValue = $(this).val();
+                const isEnabled = translationSupport[optionValue] ? translationSupport[optionValue][targetLanguage] : true;
+                $(this).prop('disabled', !isEnabled);
+            });
+            validateSelectOption(selector);
+        };
+
+        /**
+         * 更新复选框的可用状态
+         * @param {string} selector 复选框的选择器
+         * @param {string} targetLanguage 目标语言
+         * @param {Object} translationSupport 翻译支持的语言对应表
+         */
+        const updateCheckboxesAvailability = (selector, targetLanguage) => {
+            $(selector).children('input').each(function () {
+                const checkboxValue = $(this).val();
+                const isEnabled = translationSupport[checkboxValue][targetLanguage];
+                $(this).prop('disabled', !isEnabled);
+                if (!isEnabled) {
+                    $(this).prop('checked', false);
+                }
+            });
+        };
 
         /**
          * 创建配置结构
@@ -4076,6 +4213,16 @@ async function settingPanel() {
                 $(this).prop('checked', true);
             }
         });
+        // 翻译目标语言下拉框
+        $('#transTargetLang').change(function () {
+            var selectedLang = $(this).val();
+            updateRadioButtonsAvailability('#translationServices', selectedLang);
+            updateSelectOptionsAvailability('#comment_translation_choice', selectedLang);
+            updateCheckboxesAvailability('.CFBetter_checkboxs', selectedLang);
+        });
+        $('#transTargetLang').val(GM_getValue("transTargetLang"));
+        $('#transTargetLang').change();
+        // 
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
@@ -4109,6 +4256,7 @@ async function settingPanel() {
                 loaded: $("#loaded").prop("checked"),
                 scriptL10nLanguage: $('#scriptL10nLanguage').val(),
                 localizationLanguage: $('#localizationLanguage').val(),
+                transTargetLang: $('#transTargetLang').val(),
                 translation: $("input[name='translation']:checked").val(),
                 openai_isStream: $("#openai_isStream").prop("checked"),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
@@ -4180,16 +4328,34 @@ async function settingPanel() {
                 if (shouldSave) {
                     // 数据校验
                     if (settings.translation === "openai") {
-                        var selectedIndex = $('input[name="config_item"]:checked').closest('li').index();
-                        if (selectedIndex === -1) {
-                            $('#chatgpt_config_configControlTip').text('请选择一项配置！');
+                        let selectedIndex = $('input[name="config_item"]:checked').length > 0;
+                        if (!selectedIndex) {
                             $('.CFBetter_setting_sidebar a').removeClass('active');
-                            $('#sidebar-translation-settings').addClass('active');
                             $('.settings-page').removeClass('active');
+                            $('#sidebar-translation-settings').addClass('active');
                             $('#translation-settings').addClass('active');
+
+                            $('#chatgpt_config').addClass('required');
                             return;
+                        } else {
+                            $('#chatgpt_config').removeClass('required');
                         }
                     }
+                    {
+                        let selectedIndex = $('input[name="translation"]:checked').length > 0;
+                        if (!selectedIndex) {
+                            $('.CFBetter_setting_sidebar a').removeClass('active');
+                            $('.settings-page').removeClass('active');
+                            $('#sidebar-translation-settings').addClass('active');
+                            $('#translation-settings').addClass('active');
+
+                            $('#translationServices').addClass('required');
+                            return;
+                        } else {
+                            $('#translationServices').removeClass('required');
+                        }
+                    }
+                    // mark
 
                     // 保存数据
                     let refreshPage = false; // 是否需要刷新页面
@@ -4810,14 +4976,22 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
             { value: 'caiyun', name: i18next.t('translationSettings.options.services.caiyun', { ns: 'settings' }) },
             { value: 'openai', name: i18next.t('translationSettings.options.services.openai.name', { ns: 'settings' }) }
         ];
+
+        // Function to check if the service supports the target language
+        function supportsTargetLanguage(service, targetLang) {
+            return translationSupport[service] && translationSupport[service][targetLang] !== undefined;
+        }
+
         if (is_comment) {
             var label = $('<label><input type="radio" name="translation" value="0"><span class="CFBetter_contextmenu_label_text">跟随首选项</span></label>');
             menu.append(label);
         }
         translations.forEach(function (translation) {
-            var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
-            <span class="CFBetter_contextmenu_label_text">${translation.name}</span></label>`);
-            menu.append(label);
+            if (supportsTargetLanguage(translation.value, transTargetLang)) {
+                var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
+                <span class="CFBetter_contextmenu_label_text">${translation.name}</span></label>`);
+                menu.append(label);
+            }
         });
 
         // 初始化
@@ -5048,6 +5222,36 @@ async function acmsguruReblock() {
 }
 
 /**
+ * 加载鼠标悬浮覆盖层css
+ */
+function addtargetAreaCss() {
+    GM_addStyle(`
+        .overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(135deg, #97e7cacc, #97e7cacc 30px, #e9fbf1cc 0px, #e9fbf1cc 55px);
+            z-index: 100;
+        }
+        
+        .overlay::after {
+            content: '${i18next.t('targetArea', { ns: 'common' })}';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00695C;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 100;
+        }
+    `);
+}
+
+/**
  * 添加MD/复制/翻译按钮
  */
 async function addConversionButton() {
@@ -5172,8 +5376,8 @@ async function addConversionButton() {
     // 添加按钮到弹窗alert部分
     $(".alert:not(.CFBetter_alert)").each(function () {
         let id = "_alert_" + getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "this_level", true);
-        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+        let panel = addButtonPanel(this, id, "child_level", true);
+        addButtonWithTranslation(panel.translateButton, this, id, "child_level");
     });
 
     // 添加按钮到talk-text部分
@@ -5667,34 +5871,42 @@ async function initTransResultsRecover() {
  */
 async function initTransWhenViewable() {
     await waitForMathJaxIdle();
-    $('.ttypography, .comments').find('.translateButton').each((i, e) => {
-        // check if element is not normal or is not short text
-        if ($(e).getTransButtonState() !== 'normal' || !$(e).IsShortText() || $(e).getNotAutoTranslate()) {
-            return;
-        }
-        // use Intersection Observer API to check if element is in view
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    let button = $(entry.target);
-                    // define transitions
-                    let transitions = mixedTranslation;
-                    // random transition
-                    let trans_ = transitions[Math.floor(Math.random() * transitions.length)];
+
+    const elements = $('.ttypography, .comments').find('.translateButton');
+    const observers = [];
+
+    // Use a single Intersection Observer for all elements
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const button = $(entry.target);
+                const state = button.getTransButtonState();
+                const isShortText = button.IsShortText();
+                const notAutoTranslate = button.getNotAutoTranslate();
+                // Check if the button meets the criteria
+                if (state === 'normal' && isShortText && !notAutoTranslate) {
                     let trans = translation;
-                    // check if is comment, use random transition
-                    if (allowMixTrans && button.IsCommentButton()) {
-                        trans = trans_;
+
+                    if (allowMixTrans && button.IsCommentButton() && mixedTranslation.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * mixedTranslation.length);
+                        trans = mixedTranslation[randomIndex];
                     }
                     button.data("translatedItBy")(trans);
-                    // stop observing element
-                    observer.unobserve(entry.target);
                 }
-            });
+
+                // Stop observing the element
+                obs.unobserve(entry.target);
+            }
         });
-        // start observing
+    });
+
+    // Observe each element
+    elements.each((i, e) => {
         observer.observe(e);
-    })
+    });
+
+    // Store the observer in case you need to disconnect it later
+    observers.push(observer);
 }
 
 // 翻译主方法
@@ -5867,7 +6079,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     // 翻译
     async function translate(translation) {
         const is_renderLaTeX = !(is_oldLatex || is_acmsguru);
-        const servername = i18next.t('server.' + realTranlate, { ns: 'translator' });
+        const servername = i18next.t('servers.' + realTranlate, { ns: 'translator' });
         let rawData;
         try {
             if (translation == "deepl") {
@@ -6332,7 +6544,7 @@ async function validateClistConnection(onlyCookie = false) {
                 throw new Error('other_error');
             }
         } catch (error) {
-            console.warn("访问clist.by出现错误，请稍后再试");
+            console.warn(`访问clist.by出错: ${error.message}`);
             return { ok: false, error: error.message };
         }
     }
@@ -6560,7 +6772,7 @@ async function showRatingByClist_contest() {
     });
 
     // 检测clist连接
-    if (!await validateClistConnection(true)) {
+    if (!await validateClistConnection()) {
         for (let href in ratingBadges) {
             ratingBadges[href].text('error').addClass('ratingBadge_error');
         }
@@ -7245,6 +7457,12 @@ async function createMonacoEditor(language, form, support) {
                 }
                 .content-with-sidebar {
                     margin-right: 0px !important;
+                }
+                .menu-list li {
+                    margin-right: 0.5em;
+                }
+                .menu-list li a {
+                    font-size: 1.4rem;
                 }
             `);
 
@@ -9284,15 +9502,229 @@ async function addProblemPageCodeEditor() {
 }
 
 /**
+ * 获取翻译服务目标语言的对应代码
+ * @param {string} serverName 服务名称
+ * @returns {string} 目标语言，如果没有对应代码则返回中文
+ */
+function getTargetLanguage(serverName) {
+    let targetLanguage = translationSupport[serverName][transTargetLang];
+    if (targetLanguage) return targetLanguage;
+    else return translationSupport[serverName]['zh'];
+}
+
+/**
+ * DeepL翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
+async function translate_deepl(raw) {
+    const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
+    const data = {
+        jsonrpc: '2.0',
+        method: 'LMT_handle_texts',
+        id,
+        params: {
+            splitting: 'newlines',
+            lang: {
+                source_lang_user_selected: 'auto',
+                target_lang: getTargetLanguage('deepl'),
+            },
+            texts: [{
+                text: raw,
+                requestAlternatives: 3
+            }],
+            timestamp: getTimeStamp(raw.split('i').length - 1)
+        }
+    }
+    let postData = JSON.stringify(data);
+    if ((id + 5) % 29 === 0 || (id + 3) % 13 === 0) {
+        postData = postData.replace('"method":"', '"method" : "');
+    } else {
+        postData = postData.replace('"method":"', '"method": "');
+    }
+    const options = {
+        method: 'POST',
+        url: 'https://www2.deepl.com/jsonrpc',
+        data: postData,
+        headers: {
+            'Content-Type': 'application/json',
+            'Host': 'www2.deepl.com',
+            'Origin': 'https://www.deepl.com',
+            'Referer': 'https://www.deepl.com/',
+        },
+        anonymous: true,
+        nocache: true,
+    }
+    return await BaseTranslate(options, res => JSON.parse(res).result.texts[0].text, res => {
+        const resObj = {
+            status: true,
+            message: 'ok'
+        };
+        if (res.includes('"error":{"code":1042912,"message":"Too many requests"}')) {
+            resObj.status = false;
+            resObj.message = i18next.t('error.deepl429', { ns: 'translator' }); // Too many requests 提示
+            return resObj;
+        };
+        return resObj;
+    });
+}
+
+function getTimeStamp(iCount) {
+    const ts = Date.now();
+    if (iCount !== 0) {
+        iCount = iCount + 1;
+        return ts - (ts % iCount) + iCount;
+    } else {
+        return ts;
+    }
+}
+
+/**
+ * 讯飞听见翻译
+ * @param {String} text 要翻译的文本
+ * @returns {Promise} 返回 Promise
+ */
+async function translate_iflyrec(text) {
+    const options = {
+        method: "POST",
+        url: 'https://www.iflyrec.com/TranslationService/v1/textTranslation',
+        data: JSON.stringify({
+            "from": "2",
+            "to": getTargetLanguage('iflyrec'),
+            "contents": [{
+                "text": text,
+                "frontBlankLine": 0
+            }]
+        }),
+        anonymous: true,
+        headers: {
+            'Content-Type': 'application/json',
+            'Origin': 'https://www.iflyrec.com',
+        },
+        responseType: "json",
+    };
+    return await BaseTranslate(options, res => JSON.parse(res).biz[0].translateResult.replace(/\\n/g, "\n\n"));
+}
+
+/**
+ * 有道翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
+async function translate_youdao_mobile(raw) {
+    const options = {
+        method: "POST",
+        url: 'http://m.youdao.com/translate',
+        data: "inputtext=" + encodeURIComponent(raw) + "&type=" + getTargetLanguage('youdao'),
+        anonymous: true,
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            'Host': 'm.youdao.com',
+            'Origin': 'http://m.youdao.com',
+            'Referer': 'http://m.youdao.com/translate',
+        }
+    }
+    return await BaseTranslate(options,
+        res => {
+            const array = /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res);
+            if (array && array.length > 1) {
+                return array[1];
+            } else {
+                return res;
+            }
+        },
+        res => {
+            const resObj = {
+                status: true,
+                message: 'ok'
+            };
+            if (res.includes('<title>413 Request Entity Too Large</title>')) {
+                resObj.status = false;
+                resObj.message = i18next.t('error.youdao413', { ns: 'translator' }); // Request Entity Too Large 提示
+                return resObj;
+            };
+            return resObj;
+        })
+}
+
+/**
+ * 谷歌翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
+async function translate_gg(raw) {
+    const params = `tl=${getTargetLanguage('google')}&q=${encodeURIComponent(raw)}`;
+    const options = {
+        method: "GET",
+        url: `https://translate.google.com/m?${params}`,
+    }
+    return await BaseTranslate(options,
+        res => $(res).filter('.result-container').text() || $(res).find('.result-container').text());
+}
+
+/**
+ * 彩云翻译预处理
+ */
+async function translate_caiyun_startup() {
+    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
+    sessionStorage.setItem('caiyun_id', browser_id);
+    const options = {
+        method: "POST",
+        url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
+        headers: {
+            "Content-Type": "application/json",
+            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "Origin": "https://fanyi.caiyunapp.com",
+        },
+        data: JSON.stringify({ browser_id }),
+    }
+    const res = await GMRequest(options);
+    sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
+}
+
+/**
+ * 彩云翻译
+ * @param {string} raw 原文
+ * @returns {Promise<Object>} 译文
+ */
+async function translate_caiyun(raw) {
+    const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+    const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
+    // 解码
+    const decodeUnicode = str => {
+        const decoder = new TextDecoder();
+        const data = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+        return decoder.decode(data);
+    };
+    const decoder = line => decodeUnicode([...line].map(i => dic[i] || i).join(""));
+    const options = {
+        method: "POST",
+        url: 'https://api.interpreter.caiyunai.com/v1/translator',
+        data: JSON.stringify({
+            "source": raw.split('\n'),
+            "trans_type": getTargetLanguage('caiyun'),
+            "detect": true,
+            "browser_id": sessionStorage.getItem('caiyun_id')
+        }),
+        headers: {
+            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "T-Authorization": sessionStorage.getItem('caiyun_jwt')
+        }
+    }
+    return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
+}
+
+/**
  * ChatGPT
  * @param {string} raw 原文
  * @returns {Promise<Object>} 译文
  */
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
+    const lang = getTargetLanguage('openai');
     const prompt = (is_oldLatex || is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: transTargetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: transTargetLang });
+        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: transTargetLang }) :
+        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: transTargetLang });
     const data = {
         model: openai_model || modelDefault,
         messages: [{
@@ -9349,9 +9781,10 @@ async function translate_openai_stream(raw, translateDiv) {
  */
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
+    const lang = getTargetLanguage('openai');
     const prompt = (is_oldLatex || is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: transTargetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: transTargetLang });
+        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: transTargetLang }) :
+        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: transTargetLang });
     const data = {
         model: openai_model || modelDefault,
         messages: [{
@@ -9406,233 +9839,6 @@ async function* openai_stream(raw) {
     }
 
     return buffer;
-}
-
-/**
- * 谷歌翻译
- * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
- */
-async function translate_gg(raw) {
-    const params = `tl=zh-CN&q=${encodeURIComponent(raw)}`;
-    const options = {
-        method: "GET",
-        url: `https://translate.google.com/m?${params}`,
-    }
-    return await BaseTranslate(options,
-        res => $(res).filter('.result-container').text() || $(res).find('.result-container').text());
-}
-
-/**
- * 有道翻译
- * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
- */
-async function translate_youdao_mobile(raw) {
-    const options = {
-        method: "POST",
-        url: 'http://m.youdao.com/translate',
-        data: "inputtext=" + encodeURIComponent(raw) + "&type=AUTO",
-        anonymous: true,
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            'Host': 'm.youdao.com',
-            'Origin': 'http://m.youdao.com',
-            'Referer': 'http://m.youdao.com/translate',
-        }
-    }
-    return await BaseTranslate(options,
-        res => {
-            const array = /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res);
-            if (array && array.length > 1) {
-                return array[1];
-            } else {
-                return res;
-            }
-        },
-        res => {
-            const resObj = {
-                status: true,
-                message: 'ok'
-            };
-            if (res.includes('<title>413 Request Entity Too Large</title>')) {
-                resObj.status = false;
-                resObj.message = i18next.t('error.youdao413', { ns: 'translator' }); // Request Entity Too Large 提示
-                return resObj;
-            };
-            return resObj;
-        })
-}
-
-/**
- * 彩云翻译预处理
- */
-async function translate_caiyun_startup() {
-    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
-    sessionStorage.setItem('caiyun_id', browser_id);
-    const options = {
-        method: "POST",
-        url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
-        headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
-            "Origin": "https://fanyi.caiyunapp.com",
-        },
-        data: JSON.stringify({ browser_id }),
-    }
-    const res = await GMRequest(options);
-    sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
-}
-
-/**
- * 彩云翻译
- * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
- */
-async function translate_caiyun(raw) {
-    const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
-    const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
-    // 解码
-    const decodeUnicode = str => {
-        const decoder = new TextDecoder();
-        const data = Uint8Array.from(atob(str), c => c.charCodeAt(0));
-        return decoder.decode(data);
-    };
-    const decoder = line => decodeUnicode([...line].map(i => dic[i] || i).join(""));
-    const options = {
-        method: "POST",
-        url: 'https://api.interpreter.caiyunai.com/v1/translator',
-        data: JSON.stringify({
-            "source": raw.split('\n'),
-            "trans_type": "auto2zh",
-            "detect": true,
-            "browser_id": sessionStorage.getItem('caiyun_id')
-        }),
-        headers: {
-            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
-            "T-Authorization": sessionStorage.getItem('caiyun_jwt')
-        }
-    }
-    return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
-}
-
-function getTimeStamp(iCount) {
-    const ts = Date.now();
-    if (iCount !== 0) {
-        iCount = iCount + 1;
-        return ts - (ts % iCount) + iCount;
-    } else {
-        return ts;
-    }
-}
-
-/**
- * DeepL翻译
- * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
- */
-async function translate_deepl(raw) {
-    const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
-    const data = {
-        jsonrpc: '2.0',
-        method: 'LMT_handle_texts',
-        id,
-        params: {
-            splitting: 'newlines',
-            lang: {
-                source_lang_user_selected: 'auto',
-                target_lang: 'ZH',
-            },
-            texts: [{
-                text: raw,
-                requestAlternatives: 3
-            }],
-            timestamp: getTimeStamp(raw.split('i').length - 1)
-        }
-    }
-    let postData = JSON.stringify(data);
-    if ((id + 5) % 29 === 0 || (id + 3) % 13 === 0) {
-        postData = postData.replace('"method":"', '"method" : "');
-    } else {
-        postData = postData.replace('"method":"', '"method": "');
-    }
-    const options = {
-        method: 'POST',
-        url: 'https://www2.deepl.com/jsonrpc',
-        data: postData,
-        headers: {
-            'Content-Type': 'application/json',
-            'Host': 'www2.deepl.com',
-            'Origin': 'https://www.deepl.com',
-            'Referer': 'https://www.deepl.com/',
-        },
-        anonymous: true,
-        nocache: true,
-    }
-    return await BaseTranslate(options, res => JSON.parse(res).result.texts[0].text, res => {
-        const resObj = {
-            status: true,
-            message: 'ok'
-        };
-        if (res.includes('"error":{"code":1042912,"message":"Too many requests"}')) {
-            resObj.status = false;
-            resObj.message = i18next.t('error.deepl429', { ns: 'translator' }); // Too many requests 提示
-            return resObj;
-        };
-        return resObj;
-    });
-}
-
-/**
- * 讯飞听见翻译
- * @param {String} text 要翻译的文本
- * @returns {Promise} 返回 Promise
- */
-async function translate_iflyrec(text) {
-    const options = {
-        method: "POST",
-        url: 'https://www.iflyrec.com/TranslationService/v1/textTranslation',
-        data: JSON.stringify({
-            "from": "2",
-            "to": "1",
-            "contents": [{
-                "text": text,
-                "frontBlankLine": 0
-            }]
-        }),
-        anonymous: true,
-        headers: {
-            'Content-Type': 'application/json',
-            'Origin': 'https://www.iflyrec.com',
-        },
-        responseType: "json",
-    };
-    return await BaseTranslate(options, res => JSON.parse(res).biz[0].translateResult.replace(/\\n/g, "\n\n"));
-}
-
-/**
- * promiseRetryWrapper 函数，用于封装需要重试的异步函数
- * @param {Function} task 需要封装的异步函数
- * @param {Object} options 配置项
- * @param {Number} options.maxRetries 重试次数，默认为 5
- * @param {Function} options.errorHandler 错误处理函数，默认为抛出错误
- * @param {...any} args task 函数的参数
- * @returns {Promise} 返回 Promise
- */
-async function promiseRetryWrapper(task, {
-    maxRetries = 5,
-    errorHandler = (err) => { throw err }
-} = {}, ...args) {
-    let attemptsLeft = maxRetries;
-    while (attemptsLeft--) {
-        try {
-            return await task(...args);
-        } catch (err) {
-            if (!attemptsLeft) {
-                return errorHandler(err, maxRetries, attemptsLeft);
-            }
-        }
-    }
 }
 
 /**
@@ -9716,28 +9922,6 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
 }
 
 /**
- * GM_xmlhttpRequest 的 Promise 封装
- * @param {Object} options GM_xmlhttpRequest 的参数
- * @param {Boolean} isStream 是否为流式请求
- * @returns {Promise} 返回 Promise
- */
-function GMRequest(options, isStream = false) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            ...options,
-            ...(isStream ? {
-                onloadstart: resolve
-            } : {
-                onload: resolve
-            }),
-            onerror: reject,
-            ontimeout: reject,
-            onabort: reject
-        });
-    });
-}
-
-/**
  * 确认 jQuery 已加载
  * @param {number} retryDelay 重试延迟（毫秒）
  * @returns {Promise<void>}
@@ -9756,7 +9940,7 @@ async function ensureJQueryIsLoaded(retryDelay = 50) {
  */
 async function loadRequiredFunctions() {
     await initVar();// 初始化全局变量
-    return Promise.all([
+    return Promise.allSettled([
         initDB(), // 连接数据库
         initI18next(), // i18next初始化
         initButtonFunc(), // 加载按钮相关函数
@@ -9768,11 +9952,12 @@ async function loadRequiredFunctions() {
 /**
  * DOM加载后即可执行
  */
-function onDOMReady() {
+function initOnDOMReady() {
     showAnnounce(); // 显示公告
     showWarnMessage(); // 显示警告消息
-    settingPanel(); // 加载设置按钮面板
+    initSettingsPanel(); // 加载设置按钮面板
     localizeWebsite(); // 网站本地化替换
+    addtargetAreaCss(); // 加载鼠标悬浮覆盖层css
     if (expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
     if (renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
     if (is_problem) {
@@ -9786,12 +9971,16 @@ function onDOMReady() {
     if (is_problemset) {
         if (showClistRating_problemset) showRatingByClist_problemset(); // problemset页显示Rating
     }
+    if (is_problem && problemPageCodeEditor) {
+        addProblemPageCodeEditor(); // 添加题目页代码编辑器
+    }
 }
 
 /**
  * 需要在页面资源完全加载后执行的函数
  */
 function onResourcesReady(loadingMessage) {
+    loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadFunc', { ns: 'alert' })}`);
     initializeInParallel(loadingMessage);
     initializeSequentially(loadingMessage);
 }
@@ -9800,34 +9989,24 @@ function onResourcesReady(loadingMessage) {
  * 可以异步并行的函数
  */
 function initializeInParallel(loadingMessage) {
-    addConversionButton(); // 添加MD/复制/翻译按钮
-    darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
+    if (darkMode == "dark") darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
     if (commentPaging) CommentPagination(); // 评论区分页
+    if (commentTranslationMode == "2") multiChoiceTranslation(); // 选段翻译支持
 }
 
 /**
  * 必须按序执行的函数
  */
 async function initializeSequentially(loadingMessage) {
-    if (commentTranslationMode == "2") {
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('multiChoiceTranslation', { ns: 'alert' })}`);
-        await multiChoiceTranslation(); // 选段翻译支持
-    }
+    await addConversionButton(); // 添加MD/复制/翻译按钮
     if ((is_problem || is_completeProblemset) && memoryTranslateHistory) {
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('initTransResultsRecover', { ns: 'alert' })}`);
         await initTransResultsRecover(); // 翻译结果恢复功能初始化
     }
     if (autoTranslation) {
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('initTransWhenViewable', { ns: 'alert' })}`);
         await initTransWhenViewable(); // 自动翻译
     }
     if (standingsRecolor && is_cfStandings) {
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('recolorStandings', { ns: 'alert' })}`);
         await recolorStandings(); // cf赛制榜单重新着色
-    }
-    if (is_problem && problemPageCodeEditor) {
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('addProblemPageCodeEditor', { ns: 'alert' })}`);
-        await addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
     if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
 }
@@ -9837,18 +10016,16 @@ async function initializeSequentially(loadingMessage) {
  */
 document.addEventListener("DOMContentLoaded", async () => {
     await ensureJQueryIsLoaded(); // 等待jQuery加载
-
     const loadingMessage = new LoadingMessage();
-
-    if (showLoading) { loadingMessage.updateStatus(`${OJBetterName} —— 正在加载必须函数`); }
     await loadRequiredFunctions(); // 加载必须的函数
-
-    onDOMReady(); // DOM加载后即可执行的函数
+    initOnDOMReady(); // DOM加载后即可执行的函数
     if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
-    if (loaded) {
-        onResourcesReady(loadingMessage); // 需要在页面资源完全加载后执行的函数
+
+    // 检查页面资源是否已经完全加载
+    if (document.readyState === 'complete') {
+        onResourcesReady(loadingMessage);
     } else {
-        window.onload = () => onResourcesReady(loadingMessage);
+        window.addEventListener('load', () => onResourcesReady(loadingMessage));
     }
 });
 

@@ -2,5 +2,13 @@
     "save": "保存",
     "close": "关闭",
     "settings": "设置",
-    "add": "添加"
+    "add": "添加",
+    "delete": "删除",
+    "edit": "编辑",
+    "cancel": "取消",
+    "apply": "应用",
+    "yes": "是",
+    "no": "否",
+    "ok": "确定",
+    "targetArea": "目标区域"
 }
