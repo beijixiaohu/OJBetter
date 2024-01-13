@@ -2,5 +2,13 @@
     "save": "(파일 등) 저장(컴퓨팅)",
     "close": "응고",
     "settings": "설정",
-    "add": "증가"
+    "add": "증가",
+    "delete": "제거",
+    "edit": "컴파일러",
+    "cancel": "취소",
+    "apply": "어플라이언스",
+    "yes": "be",
+    "no": "막힘",
+    "ok": "정의",
+    "targetArea": "대상 지역"
 }
