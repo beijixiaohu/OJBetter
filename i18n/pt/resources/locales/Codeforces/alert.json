@@ -1,5 +1,6 @@
 {
     "onload": "À espera que os recursos da página sejam carregados……",
+    "loadFunc": "Carregamento de funções de script……",
     "waiteLatex": "Está a aguardar que a fila de renderização do LaTeX seja totalmente concluída……",
     "linkDB": "Ligação à base de dados……",
     "expandFoldingblocks": "Desdobramento do bloco dobrável……",
