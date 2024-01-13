@@ -48,8 +48,8 @@
         "scriptLanguageLabel": "Script Language",
         "websiteLanguageLabel": "Website Language",
         "notice": {
-            "1": "<strong>Help improve translation quality</strong><p>Scripts are familiar only with simple Chinese and English, for other languages, scripts and website localization are performed by machine translations (Deepl&Google), and translation workflow is hosted by crowdin.</p><p>If you are happy to help improve the quality of localized translations,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>click</a>here to help improve it.</p><p>Thank you for your contribution!</p>",
-            "2": "<strong>Help Refine Website Language Localization</strong><p>If you believe that localization is necessary somewhere on your website, and that localization substitutions for it will not cause serious performance problems, you are welcome to go to Refine Localization Rules.</p><p>To add a new rule, you need to add the Simplified Chinese version of the：fork and modify the localized replacement of the<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> rule file </a>, then initiate a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can go to crowdin later to improve the quality of the translation for the other languages as well.</p>"
+            "1": "<strong>Help improve translation quality</strong><p>The author of the script is only familiar with Simplified Chinese and English. For other languages, scripts and website language localization are completed by machine translation (Deepl & Google), and the translation workflow is hosted by crowdin.</p><p>If you are willing to help improve the localization translation quality of a certain language,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>click here</a>to help improve it.</p><p>you for your contribution!</p>",
+            "2": "<strong>Help improve website language localization</strong><p>If you think it is necessary to localize somewhere on the website, and localizing it will not cause serious performance problems, you are welcome to improve the localization rules.</p><p>If you want to add a new rule, you need to first add its Simplified Chinese version：fork and modify the localized replacement<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> rule file </a>, and then initiate a pull request.</p><p>After the submission is merged, crowdin will automatically complete other Language translation, and you can also go to crowdin later to improve the translation quality in other languages.</p>"
         }
     },
     "translationSettings": {
@@ -78,7 +78,7 @@
             "title": "Preferences",
             "target": {
                 "title": "Target language",
-                "helpText": "Note that：has different translation services available for different target languages, please read the introduction of the script page"
+                "helpText": "Note：For different target languages, the available translation services are different. Please read the introduction on the script page for details."
             },
             "comment_translation_choice": "Translate comments section",
             "services": {
@@ -159,7 +159,7 @@
         "title": "Clist Settings",
         "basics": {
             "name": "Basic",
-            "notice": "<p>Note that：requires a valid login voucher to access Clist data. You have two options：</p><p>below fill in<a href='https://clist.by/' target='_blank'>clist.by<a/>official API key,</p><p>or a clist.by website in login (i.e. Cookie valid)</p>",
+            "notice": "<p>Note：Access to Clist data requires valid login credentials, you have two options：</p><p>Fill in<a href='https://clist.by/' target='_blank'>below clist.by<a/>the official API key,</p><p>or keep the clist.by website in your browser logged in (i.e. cookie is valid)</p>",
             "key": {
                 "title": "KEY.",
                 "helpText": "<p>Sample format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
