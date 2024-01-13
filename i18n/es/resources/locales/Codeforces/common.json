@@ -2,5 +2,13 @@
     "save": "guardar (un archivo, etc.) (informática)",
     "close": "cloture",
     "settings": "establecer",
-    "add": "aumentar"
+    "add": "aumentar",
+    "delete": "eliminando",
+    "edit": "compilador",
+    "cancel": "cancelaciones",
+    "apply": "aparato",
+    "yes": "sea",
+    "no": "obstruido",
+    "ok": "defina",
+    "targetArea": "zona objetivo"
 }
