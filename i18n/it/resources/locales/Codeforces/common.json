@@ -3,12 +3,12 @@
     "close": "coagulazione",
     "settings": "impostare",
     "add": "aumento",
-    "delete": "删除",
+    "delete": "rimozione",
     "edit": "compilatore",
     "cancel": "cancellazioni",
     "apply": "apparecchio",
     "yes": "essere",
     "no": "intasato",
-    "ok": "确定",
-    "targetArea": "目标区域"
+    "ok": "definire",
+    "targetArea": "area target"
 }
