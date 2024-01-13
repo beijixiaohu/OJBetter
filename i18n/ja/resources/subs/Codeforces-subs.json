@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -60,7 +60,7 @@
                 "Gym": "トレーニングキャンプ",
                 "Problemset": "アンケート",
                 "Groups": "組織",
-                "Rating": "格付けランキング",
+                "Rating": "ランキング",
                 "Edu": "耕す",
                 "Calendar": "カレンダー",
                 "ICPC Challenge": "ICPCの挑戦",
