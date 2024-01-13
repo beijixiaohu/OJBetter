@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "Lokalisierung",
         "scriptLanguageLabel": "Skriptsprache",
-        "websiteLanguageLabel": "Website Sprache"
+        "websiteLanguageLabel": "Website Sprache",
+        "notice": {
+            "1": "<strong>Helfen Sie mit, die Qualität der Übersetzungen zu verbessern</strong><p>Der Autor des Skripts ist nur mit vereinfachtem Chinesisch und Englisch vertraut, für alle anderen Sprachen wird das Skript und die Sprachlokalisierung der Website durch maschinelle Übersetzung (Deepl & Google) erledigt und der Übersetzungsworkflow wird von crowddin gehostet.</p><p>Wenn Sie helfen möchten, die Qualität der lokalisierten Übersetzungen für eine bestimmte Sprache zu verbessern,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>klicken Sie hier</a>, um dorthin zu gelangen und zu helfen.</p><p>Vielen Dank für Ihren Beitrag!</p>",
+            "2": "<strong>Helfen Sie mit, die Sprachlokalisierung von Websites zu verbessern</strong><p>Wenn Sie der Meinung sind, dass die Lokalisierung irgendwo auf Ihrer Website notwendig ist und dass die Ersetzung durch die Lokalisierung keine ernsthaften Leistungsprobleme verursacht, können Sie sich gerne an Improve Localisation Rules wenden.</p><p>Um eine neue Regel hinzuzufügen, müssen Sie die vereinfachte chinesische Version des Forks：hinzufügen und die lokalisierte Ersetzung der Regeldatei<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ändern </a>und dann eine Pull-Anfrage initiieren.</p><p>Nachdem die Einreichung zusammengeführt wurde, wird crowdin automatisch die Übersetzung für die anderen Sprachen vervollständigen und Sie können später zu crowdin gehen, um die Qualität der Übersetzungen auch für die anderen Sprachen zu verbessern.</p>"
+        }
     },
     "translationSettings": {
         "title": "Einstellungen für die Übersetzung",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "Einstellungen",
+            "target": {
+                "title": "Zielsprache",
+                "helpText": "Hinweis：Die verfügbaren Übersetzungsdienste unterscheiden sich für verschiedene Zielsprachen, bitte lesen Sie die Skriptseite für weitere Details."
+            },
             "comment_translation_choice": "Übersetzung des Kommentarbereichs",
             "services": {
                 "follow": "Präferenzen folgen",
@@ -151,7 +159,7 @@
         "title": "Clist Einstellungen",
         "basics": {
             "name": "grundlegend",
-            "notice": "Hinweis：Die Anmeldedaten, die für die verschiedenen Seiten erforderlich sind, variieren, siehe die beschrifteten Beschreibungen der entsprechenden Optionen.",
+            "notice": "<p>Hinweis：Für den Zugriff auf Clist-Daten sind gültige Anmeldedaten erforderlich. Sie haben zwei Möglichkeiten:：</p><p>Geben Sie den offiziellen API-Schlüssel<a href='https://clist.by/' target='_blank'>clist.by<a/>unten ein,</p><p>oder lassen Sie die clist.by-Website in Ihrem Browser eingeloggt (d.h. das Cookie ist gültig)</p>",
             "key": {
                 "title": "SCHLÜSSEL.",
                 "helpText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "Titelseite",
-                "helpText": "<p><p>Sie müssen den offiziellen Api-Schlüssel</p><p>angeben oder clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist gültig)</p",
+                "helpText": "<p>Datenquelle clist.by</p><p>Sie müssen den offiziellen API-Schlüssel</p><p>angeben oder clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist gültig)</p>",
                 "badge": "Cookie/API-Schlüssel"
             },
             "problemset": {
                 "name": "Titelseite",
-                "helpText": "<p>Damit dies funktioniert, müssen Sie clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist aktiv)</p>",
-                "badge": "Keks"
+                "helpText": "<p>Datenquelle clist.by</p><p>Sie müssen den offiziellen API-Schlüssel</p><p>angeben oder clist.by in Ihrem Browser angemeldet lassen (d.h. das Cookie ist gültig)</p>",
+                "badge": "Cookie/API-Schlüssel"
             }
         },
         "spoilerProtection": {
