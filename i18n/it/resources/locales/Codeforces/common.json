@@ -2,5 +2,13 @@
     "save": "salvare (un file, ecc.) (informatica)",
     "close": "coagulazione",
     "settings": "impostare",
-    "add": "aumento"
+    "add": "aumento",
+    "delete": "删除",
+    "edit": "compilatore",
+    "cancel": "cancellazioni",
+    "apply": "apparecchio",
+    "yes": "essere",
+    "no": "intasato",
+    "ok": "确定",
+    "targetArea": "目标区域"
 }
