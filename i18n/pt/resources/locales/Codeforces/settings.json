@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "localização",
         "scriptLanguageLabel": "linguagem de script",
-        "websiteLanguageLabel": "Língua do sítio Web"
+        "websiteLanguageLabel": "Língua do sítio Web",
+        "notice": {
+            "1": "<strong>Ajude a melhorar a qualidade das traduções</strong><p>O autor do guião só está familiarizado com o chinês simplificado e o inglês; para todas as outras línguas, o guião e a localização linguística do sítio são feitos por tradução automática (Deepl e Google) e o fluxo de trabalho de tradução é alojado pelo crowddin.</p><p>Se quiser ajudar a melhorar a qualidade das traduções localizadas para uma determinada língua,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>clique aqui</a>para ir até lá e ajudar a melhorá-la.</p><p>Obrigado pela sua contribuição!</p>",
+            "2": "<strong>Ajude a melhorar a localização da língua do sítio Web</strong><p>Se acredita que a localização é necessária algures no seu sítio Web e que as substituições da localização não causarão problemas graves de desempenho, é bem-vindo a melhorar as regras de localização.</p><p>Para adicionar uma nova regra, tem de adicionar a versão em chinês simplificado do fork：e modificar a substituição localizada do ficheiro de regras<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>e, em seguida, iniciar um pull request.</p><p>Depois de a submissão ter sido fundida, o crowdin completará automaticamente a tradução para as outras línguas, e pode ir ao crowdin mais tarde para melhorar a qualidade das traduções para as outras línguas também.</p>"
+        }
     },
     "translationSettings": {
         "title": "Definições de tradução",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "preferências",
+            "target": {
+                "title": "língua-alvo",
+                "helpText": "Nota：Os serviços de tradução disponíveis diferem para diferentes línguas de destino, leia a página do guião para obter mais informações."
+            },
             "comment_translation_choice": "Tradução da secção de comentários",
             "services": {
                 "follow": "Siga as preferências",
@@ -151,7 +159,7 @@
         "title": "Definições da lista",
         "basics": {
             "name": "fundamental",
-            "notice": "Nota：As credenciais necessárias para trabalhar em diferentes páginas variam, consulte as descrições rotuladas das opções correspondentes.",
+            "notice": "<p>Nota：O acesso aos dados Clist requer credenciais de início de sessão válidas, tem duas opções：</p><p>Preencha a chave API oficial<a href='https://clist.by/' target='_blank'>clist.by<a/>abaixo,</p><p>ou mantenha o sítio Web clist.by no seu browser com sessão iniciada (ou seja, o cookie é válido)</p>",
             "key": {
                 "title": "CHAVE.",
                 "helpText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "página de rosto",
-                "helpText": "<p><p>Terá de fornecer a chave de API oficial</p><p>ou deixar clist.by no seu browser com sessão iniciada (ou seja, o cookie é válido)</p",
+                "helpText": "<p>Fonte de dados clist.by</p><p>Tem de fornecer a chave API oficial</p><p>ou manter o clist.by ligado no seu browser (ou seja, o cookie é válido)</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
                 "name": "página de rosto",
-                "helpText": "<p>Tem de manter o clist.by ligado (ou seja, o cookie ativo) no seu browser para que isto funcione</p>",
-                "badge": "Biscoito"
+                "helpText": "<p>Fonte de dados clist.by</p><p>Tem de fornecer a chave API oficial</p><p>ou manter o clist.by ligado no seu browser (ou seja, o cookie é válido)</p>",
+                "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {

@@ -2,5 +2,13 @@
     "save": "儲存",
     "close": "關閉",
     "settings": "設定",
-    "add": "添加"
+    "add": "添加",
+    "delete": "刪除",
+    "edit": "編輯",
+    "cancel": "取消",
+    "apply": "應用",
+    "yes": "是",
+    "no": "否",
+    "ok": "確定",
+    "targetArea": "目標區域"
 }

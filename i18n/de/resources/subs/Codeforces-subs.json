@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -60,7 +60,7 @@
                 "Gym": "Trainingslager",
                 "Problemset": "Fragebogen",
                 "Groups": "Organisationen",
-                "Rating": "Rating-Ranglisten",
+                "Rating": "Ergebnistabelle (in Prüfungen oder Sportliga)",
                 "Edu": "kultivieren",
                 "Calendar": "Kalender",
                 "ICPC Challenge": "ICPC Herausforderung",

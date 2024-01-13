@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "ローカリゼーション",
         "scriptLanguageLabel": "スクリプト言語",
-        "websiteLanguageLabel": "ウェブサイト言語"
+        "websiteLanguageLabel": "ウェブサイト言語",
+        "notice": {
+            "1": "<strong>翻訳の品質向上にご協力ください</strong><p>スクリプトの作者は簡体字中国語と英語のみ精通しています。その他の言語については、スクリプトとサイトの言語ローカライズは機械翻訳（Deepl & Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズ翻訳の品質向上にご協力いただける場合は、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>こちらをクリックしてください。</a>。</p><p>ご協力ありがとうございました！</p>",
+            "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、ローカライゼーションによる置き換えが深刻なパフォーマンス問題を引き起こさないとお考えであれば、ローカライゼーションルールの改善にぜひご協力ください。</p><p>新しいルールを追加するには、：フォークの簡体字中国語版を追加し、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ルールファイル </a>のローカライズされた置換を修正し、プルリクエストを開始する必要があります。</p><p>投稿がマージされた後、crowdin が自動的に他の言語の翻訳を完了するので、後で crowdin に行って他の言語の翻訳の品質も向上させることができます。</p>"
+        }
     },
     "translationSettings": {
         "title": "翻訳設定",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "プリファレンス",
+            "target": {
+                "title": "翻訳先の言語",
+                "helpText": "：はいろいろな言語で翻訳サービスと違い、スクリプトページのイントロテキストを読んでください。"
+            },
             "comment_translation_choice": "コメント欄の翻訳",
             "services": {
                 "follow": "設定に従う",
@@ -151,7 +159,7 @@
         "title": "クライスト・セッティング",
         "basics": {
             "name": "基本的",
-            "notice": "注：各ページで作業するために必要な認証情報は異なりますので、対応するオプションのラベル付き説明を参照してください。",
+            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'>clist.by<a/>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
             "key": {
                 "title": "キー",
                 "helpText": "<p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "タイトルページ",
-                "helpText": "<p><p>公式のapiキー（</p><p>）を提供するか、ブラウザのclist.byをログインしたまま（つまりクッキーが有効な状態）にしておく必要があります</p",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
                 "badge": "クッキー/APIキー"
             },
             "problemset": {
                 "name": "タイトルページ",
-                "helpText": "<p>これを機能させるには、ブラウザでclist.byにログインしておく（つまりクッキーを有効にしておく）必要がある</p>",
-                "badge": "クッキー"
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
             }
         },
         "spoilerProtection": {

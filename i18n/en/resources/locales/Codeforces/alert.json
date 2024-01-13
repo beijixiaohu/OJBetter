@@ -1,5 +1,6 @@
 {
     "onload": "Waiting for page resources to load……",
+    "loadFunc": "Loading script feature……",
     "waiteLatex": "Waiting for LaTeX rendering queue to complete……",
     "linkDB": "Connecting to database……",
     "expandFoldingblocks": "Expanding folding block……",

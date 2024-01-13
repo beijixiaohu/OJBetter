@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.2",
     "commonReplacements": {
         ".datatable": {
             "class": [
@@ -60,7 +60,7 @@
                 "Gym": "प्रशिक्षण शिविर",
                 "Problemset": "प्रश्न पत्र",
                 "Groups": "समूह",
-                "Rating": "रेटिंग रैंकिंग सूची",
+                "Rating": "रैंकिंग",
                 "Edu": "प्रशिक्षण",
                 "Calendar": "पंचांग",
                 "ICPC Challenge": "आईसीपीसी चुनौती",

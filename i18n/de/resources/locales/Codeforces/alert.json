@@ -1,5 +1,6 @@
 {
     "onload": "Warten auf das Laden von Seitenressourcen……",
+    "loadFunc": "Laden von Skriptfunktionen……",
     "waiteLatex": "Warten auf die vollständige Fertigstellung der LaTeX-Warteschlange……",
     "linkDB": "Verbinden mit der Datenbank……",
     "expandFoldingblocks": "Entfalten des Faltblocks……",
