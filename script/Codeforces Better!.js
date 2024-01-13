@@ -747,6 +747,7 @@ html:not([data-theme='dark']) .translateDiv {
     justify-content: flex-end;
     overflow: auto;
     height: 100%;
+    margin: 0.5em;
 }
 .toolbarLink {
     display: flex;
@@ -2210,7 +2211,7 @@ input#CompilerArgsInput[disabled] {
     z-index: 100;
 }
 #CFBetter_editor.right-side {
-    height: 98vh;
+    flex: 1;
 }
 .ojb_btn.exit_button {
     position: fixed;
@@ -2222,15 +2223,17 @@ input#CompilerArgsInput[disabled] {
     font-size: 14px;
 }
 .ojb_btn.exit_button.bottom {
-    top: 95%;
+    bottom: 22px;
+    top: initial;
 }
 #CFBetter_statusBar{
-    height: 100%;
+    height: 22px;
     font-size: 12px;
     color: #757575;
     border: 1px solid #d3d3d3;
     background-color: #f8f8f8;
     padding: 3px;
+    box-sizing: border-box;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -2897,7 +2900,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.13',
+                        defaultVersion: 'v1.16',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -3729,7 +3732,7 @@ const clist_rating_settings_HTML = `
     <h4 data-i18n="settings:clistSettings.basics.name"></h4>
     <div class='CFBetter_setting_list alert_tip'>
         <div>
-            <p data-i18n="settings:clistSettings.basics.notice"></p>
+            <p data-i18n="[html]settings:clistSettings.basics.notice"></p>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
@@ -7449,6 +7452,7 @@ async function createMonacoEditor(language, form, support) {
                     min-width: 50vw;
                     max-width: 50vw;
                     max-height: 100vh;
+                    overflow-x: hidden;
                     overflow-y: auto;
                     padding: 0px;
                 }
@@ -7470,7 +7474,7 @@ async function createMonacoEditor(language, form, support) {
             $('#body').wrap('<div id="right-side-wrapper" style="display:flex; max-width: 100vw; overflow: hidden;"></div>');
             var blankSpace = $('<div>', {
                 'id': 'blank-space',
-                'style': 'float: right; width: 50vw;'
+                'style': 'height: 100vh; width: 50vw; flex: 1; display: flex; flex-direction: column;'
             });
             $('#right-side-wrapper').append(blankSpace);
 
