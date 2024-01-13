@@ -46,7 +46,11 @@
     "localizationSettings": {
         "title": "Localization Settings",
         "scriptLanguageLabel": "Script Language",
-        "websiteLanguageLabel": "Website Language"
+        "websiteLanguageLabel": "Website Language",
+        "notice": {
+            "1": "<strong>Help improve translation quality</strong><p>Scripts are familiar only with simple Chinese and English, for other languages, scripts and website localization are performed by machine translations (Deepl&Google), and translation workflow is hosted by crowdin.</p><p>If you are happy to help improve the quality of localized translations,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>click</a>here to help improve it.</p><p>Thank you for your contribution!</p>",
+            "2": "<strong>Help Refine Website Language Localization</strong><p>If you believe that localization is necessary somewhere on your website, and that localization substitutions for it will not cause serious performance problems, you are welcome to go to Refine Localization Rules.</p><p>To add a new rule, you need to add the Simplified Chinese version of the：fork and modify the localized replacement of the<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> rule file </a>, then initiate a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can go to crowdin later to improve the quality of the translation for the other languages as well.</p>"
+        }
     },
     "translationSettings": {
         "title": "Translation settings",
@@ -72,6 +76,10 @@
         },
         "preference": {
             "title": "Preferences",
+            "target": {
+                "title": "Target language",
+                "helpText": "Note that：has different translation services available for different target languages, please read the introduction of the script page"
+            },
             "comment_translation_choice": "Translate comments section",
             "services": {
                 "follow": "Follow Preferences",
@@ -151,7 +159,7 @@
         "title": "Clist Settings",
         "basics": {
             "name": "Basic",
-            "notice": "Note：The credentials required to work on different pages vary, see the labeled descriptions of the corresponding options.",
+            "notice": "<p>Note that：requires a valid login voucher to access Clist data. You have two options：</p><p>below fill in<a href='https://clist.by/' target='_blank'>clist.by<a/>official API key,</p><p>or a clist.by website in login (i.e. Cookie valid)</p>",
             "key": {
                 "title": "KEY.",
                 "helpText": "<p>Sample format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -167,13 +175,13 @@
             },
             "problem": {
                 "name": "Title Page",
-                "helpText": "<p><p>You'll need to provide the official api key</p><p>or leave clist.by on your browser logged in (i.e. cookie is valid)</p",
+                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
                 "name": "Problemset Page",
-                "helpText": "<p>Need to keep clist.by logged in (i.e. cookie active) on your browser for this to work</p>",
-                "badge": "Cookie"
+                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
+                "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {
