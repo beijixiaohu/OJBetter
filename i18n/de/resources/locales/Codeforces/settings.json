@@ -159,7 +159,7 @@
         "title": "Clist Einstellungen",
         "basics": {
             "name": "grundlegend",
-            "notice": "<p>Hinweis：Für den Zugriff auf Clist-Daten sind gültige Anmeldedaten erforderlich. Sie haben zwei Möglichkeiten:：</p><p>Geben Sie den offiziellen API-Schlüssel<a href='https://clist.by/' target='_blank'>clist.by<a/>unten ein,</p><p>oder lassen Sie die clist.by-Website in Ihrem Browser eingeloggt (d.h. das Cookie ist gültig)</p>",
+            "notice": "<p>Hinweis：Für den Zugriff auf Clist-Daten sind gültige Anmeldedaten erforderlich. Sie haben zwei Möglichkeiten:：</p><p>Geben Sie den offiziellen API-Schlüssel<a href='https://clist.by/' target='_blank'> clist.by <a/>unten ein,</p><p>oder lassen Sie die clist.by-Website in Ihrem Browser eingeloggt (d.h. das Cookie ist gültig)</p>",
             "key": {
                 "title": "SCHLÜSSEL.",
                 "helpText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
