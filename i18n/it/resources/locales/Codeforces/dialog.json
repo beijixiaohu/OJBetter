@@ -39,11 +39,11 @@
         ]
     },
     "isLikelyCodeSnippet": {
-        "title": "是否继续翻译？",
-        "content": "即将翻译的内容似乎为**代码片段**，翻译它可能是无意义的，你确定继续吗？",
+        "title": "La traduzione continuerà?",
+        "content": "La traduzione in arrivo sembra essere un **codice snippet** e tradurlo potrebbe essere inutile, è sicuro di continuare?",
         "buttons": [
-            "intasato",
-            "essere"
+            "essere",
+            "intasato"
         ]
     }
 }
