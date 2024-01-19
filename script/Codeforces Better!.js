@@ -3098,7 +3098,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.16',
+                        defaultVersion: 'v1.17',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -4945,14 +4945,16 @@ async function initButtonFunc() {
      * @returns {string} MarkDown
      */
     $.fn.getMarkdown = function () {
-        if (this.attr("markdown")) {
-            return this.attr("markdown");
-        } else {
-            let markdown = turndownService.turndown(this.html());
-            this.attr("markdown", markdown);
-            return markdown;
+        const markdown = this.data('markdown');
+        if (markdown === undefined) {
+            const htmlContent = this.html();
+            const newMarkdown = turndownService.turndown(htmlContent);
+            this.data('markdown', newMarkdown);
+            return newMarkdown;
         }
+        return markdown;
     }
+
 
     // 设置翻译按钮状态
     $.fn.setTransButtonState = function (state, text = null) {
