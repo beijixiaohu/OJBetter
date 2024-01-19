@@ -638,6 +638,30 @@ function darkModeStyleAdjustment() {
 
 // 样式
 GM_addStyle(`
+/*动画*/
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+/*iconfont图标*/
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+@font-face {
+    font-family: 'iconfont';
+    /* Project id 4284341 */
+    src: url('//at.alicdn.com/t/c/font_4284341_g9o0zhmcunp.woff2?t=1705585436619') format('woff2'),
+        url('//at.alicdn.com/t/c/font_4284341_g9o0zhmcunp.ttf?t=1705585436619') format('truetype');
+}
 html {
     scroll-behavior: smooth;
 }
@@ -838,11 +862,183 @@ a.toolbarLink, a.toolbarLink:link{
     color: #f56c6c;
     border: 1px solid #fab6b6;
 }
-button.translated {
-    background-color: #f0f9eb;
-    color: #67c23e;
-    border: 1px solid #b3e19d;
+.ojb_btn.enabled {
+    background-color: #fafbff;
+    color: #42A5F5;
+    border: 1px solid #90CAF9;
 }
+/*按钮图标和popover*/
+.ojb_btn_popover {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    outline: none;
+    appearance: none;
+
+    &:hover {
+        & span {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    & i:before {
+        position: absolute;
+        text-shadow: 0px 0px 4px #ffffff;
+    }
+
+    & span {
+        cursor: initial;
+        position: absolute;
+        left: 50%;
+        opacity: 0;
+        visibility: hidden;
+        padding: 4px 8px;
+        background-color: rgb(33 33 33 / 80%);
+        color: #ffffffe6;
+        font-size: 12px;
+        border-radius: 6px;
+        line-height: 1.6;
+        text-align: left;
+        white-space: nowrap;
+        transition: all .15s ease-in-out;
+        z-index: 999;
+
+        &:hover {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    &.top {
+
+        &:hover {
+            & span {
+                transform: translate(-50%, 0);
+            }
+        }
+
+        & span {
+            bottom: 100%;
+            transform: translate(-50%, -20%);
+            margin-bottom: 4px;
+
+            &:hover {
+                transform: translate(-50%, -20%);
+            }
+        }
+    }
+
+    &.bottom {
+        &:hover {
+            & span {
+                transform: translate(-50%, 105%);
+            }
+        }
+
+        & span {
+            bottom: -2%;
+            transform: translate(-50%, 100%);
+            margin-top: 4px;
+
+            &:hover {
+                transform: translate(-50%, 50%);
+            }
+        }
+    }
+
+    &.loading {
+        i {
+            color: rgb(33 33 33 / 10%);
+
+            &:before {
+                content: "\\e640";
+                color: rgb(168, 171, 178);
+                animation: rotate 2s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
+            }
+        }
+    }
+
+    &.running {
+        i {
+            color: rgb(33 33 33 / 10%);
+
+            &:before {
+                content: "\\e600";
+                color: rgb(168, 171, 178);
+                animation: rotate 1s linear infinite;
+            }
+        }
+    }
+
+    &.warning {
+        i {
+            color: rgb(230 162 61 / 80%);
+
+            &:before {
+                content: "\\e68b";
+                font-size: 15px;
+                left: 10px;
+                bottom: 0%;
+                color: #ff9800;
+            }
+        }
+    }
+
+    &.error {
+        i {
+            color: rgb(245 108 108 / 80%);
+
+            &:before {
+                content: "\\e651";
+                font-size: 15px;
+                left: 10px;
+                bottom: 0%;
+                color: #F44336;
+            }
+        }
+    }
+
+    &.success {
+        i {
+            color: rgb(103 194 62 / 90%);
+
+            &:before {
+                content: "\\e61e";
+                font-size: 15px;
+                left: 10px;
+                bottom: 0%;
+                color: #67c23e;
+            }
+        }
+    }
+
+    &.enabled {
+        i {
+            color: rgb(33 150 243 / 60%);
+
+            &:before {
+                content: "\\e6f4";
+                font-size: 15px;
+                left: 10px;
+                bottom: 0%;
+                color: #2196F3;
+            }
+        }
+    }
+
+    &.redo {
+        i {
+            color: rgb(33 33 33 / 10%);
+
+            &:before {
+                content: "\\e831";
+                color: #616161;
+            }
+        }
+    }
+}
+/*end*/
 .topText {
     display: flex;
     margin-left: 5px;
@@ -1830,7 +2026,9 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .ratingBadge, html[data-theme=dark] button.ratingBadge{
     display: block;
     font-weight: 700;
+    font-size: 11px;
     margin-top: 5px;
+    padding: 2px;
     border-radius: 4px;
     color: #B0BEC5;
     border: 1px solid #cccccc66;
@@ -3253,7 +3451,7 @@ class ConfigManager {
             list.append(this.createListItemElement(item['name']));
         });
 
-        // 添加添加按钮
+        // 添加按钮
         let addButton = $(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
             <span>+ ${i18next.t('add', { ns: 'common' })}</span>
         </li>`);
@@ -4610,6 +4808,62 @@ class TaskQueue {
 }
 
 /**
+ * 检测文本是否可能为代码片段
+ * @param {string} text 待检测的文本
+ * @returns {boolean} 是否可能为代码片段
+ */
+function isLikelyCodeSnippet(text) {
+    // 移除LaTeX公式部分
+    const cleanedText = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
+
+    // 代码的关键字
+    const keywords = [
+        'int', 'float', 'return', 'if', 'else', 'while', 'for', 'switch', 'case', 'break', 'continue',
+        'class', 'public', 'private', 'protected', 'void', 'static', 'const', 'enum', 'struct',
+        'char', 'double', 'long', 'include', 'def', 'import', 'from', 'as', 'elif', 'try', 'except',
+        'raise', 'with', 'lambda', 'print'
+    ];
+    // 代码的特殊字符
+    const codeChars = [';', '{', '}', '(', ')', '[', ']', '<', '>', '=', '+', '-', '*', '/',
+        '&', '|', '#', ':', '\'\'\'', '\"\"\"', '->'];
+    // 普通文本的标点符号
+    const textChars = ['.', ',', '?', '!', ':', '"', "'"];
+
+    // 关键字的数量
+    const keywordCount = keywords.reduce((count, keyword) => {
+        const regex = new RegExp("\\b" + keyword + "\\b", 'gi');
+        return count + (cleanedText.match(regex) || []).length;
+    }, 0);
+
+    // 特殊字符的数量
+    const codeCharCount = codeChars.reduce((count, char) => {
+        const regex = new RegExp("\\" + char, 'g');
+        return count + (cleanedText.match(regex) || []).length;
+    }, 0);
+
+    // 普通文本字符的数量
+    const textCharCount = textChars.reduce((count, char) => {
+        const regex = new RegExp("\\" + char, 'g');
+        return count + (cleanedText.match(regex) || []).length;
+    }, 0);
+
+    // 检查Python的缩进特征
+    const hasPythonIndentation = cleanedText.includes('\n    ') || cleanedText.includes('\n\t');
+
+    // 如果代码关键字数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
+    if ((keywordCount > 2 && codeCharCount > textCharCount) || hasPythonIndentation) {
+        return true;
+    }
+
+    // 如果特殊代码字符数量显著高于普通文本标点符号数量，则可能是代码
+    if (codeCharCount > textCharCount * 2) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * 加载按钮相关函数
  */
 async function initButtonFunc() {
@@ -4636,6 +4890,57 @@ async function initButtonFunc() {
     }
 
     /**
+     * 为按钮设置图标
+     * @param {string} icon 图标
+     * @returns {JQuery<HTMLElement>} 按钮
+     */
+    $.fn.setButtonIcon = function (icon) {
+        let i = this.find("i");
+        if (i.length != 0 && i.hasClass("iconfont")) {
+            i.html(icon);
+        } else {
+            i = $(`<i>${icon}</i>`);
+            this.prepend(i);
+        }
+        return this;
+    }
+
+    /** 
+     * 设置按钮为加载等待状态
+     */
+    $.fn.setButtonLoading = function () {
+        this.addClass("loading");
+        this.prop("disabled", true);
+        return this;
+    }
+
+    /**
+     * 解除按钮的加载等待状态
+     */
+    $.fn.setButtonLoaded = function () {
+        this.removeClass("loading");
+        this.prop("disabled", false);
+        return this;
+    }
+
+    /**
+     * 为按钮设置popover提示文本
+     * @param {string} text 文本
+     * @returns {JQuery<HTMLElement>} 按钮
+     */
+    $.fn.setButtonPopover = function (text) {
+        // find if has popover_content class element
+        let popover_content = this.find(".popover_content");
+        if (popover_content.length != 0) {
+            popover_content.text(text);
+        } else {
+            popover_content = $(`<span class="popover_content">${text}</span>`);
+            this.append(popover_content);
+        }
+        return this;
+    }
+
+    /**
      * 获取MarkDown
      * @returns {string} MarkDown
      */
@@ -4651,48 +4956,44 @@ async function initButtonFunc() {
 
     // 设置翻译按钮状态
     $.fn.setTransButtonState = function (state, text = null) {
-        if (state === 'normal') {
-            this
-                .text(text ? text : i18next.t('trans.normal', { ns: 'button' }))
-                .prop('disabled', false)
-                .css('cursor', 'pointer')
-                .removeClass('translating translated error');
-        } else if (state === 'translating') {
-            this
-                .text(text ? text : i18next.t('trans.translating', { ns: 'button' }))
-                .prop('disabled', true)
-                .css('cursor', 'not-allowed')
-                .removeClass('translated error')
-                .addClass('translating');
-        } else if (state === 'translated') {
-            this
-                .text(text ? text : i18next.t('trans.translated', { ns: 'button' }))
-                .prop('disabled', false)
-                .css('cursor', 'pointer')
-                .removeClass('translating error')
-                .addClass('translated');
-        } else if (state === 'error') {
-            this
-                .text(text ? text : i18next.t('trans.error', { ns: 'button' }))
-                .prop('disabled', false)
-                .css('cursor', 'pointer')
-                .removeClass('translating translated')
-                .addClass('error');
+        // 设置状态数据属性
+        this.data('transButtonState', state);
+
+        // 根据状态设置图标、文本、禁用状态和鼠标样式
+        const cursorStyle = (state === 'translating' || state === 'loading') ? 'not-allowed' : 'pointer';
+        const disabled = state === 'translating' || state === 'loading';
+        const popoverText = text ? text : i18next.t(`trans.${state}`, { ns: 'button' });
+
+        // 更新按钮样式和属性
+        this.setButtonPopover(popoverText)
+            .prop('disabled', disabled)
+            .css('cursor', cursorStyle)
+            .removeClass('running success error loading redo'); // 移除所有可能的状态类
+
+        // 根据当前状态添加相应的类
+        switch (state) {
+            case 'translating':
+                this.addClass('running');
+                break;
+            case 'translated':
+                this.addClass('success');
+                break;
+            case 'error':
+                this.addClass('error');
+                break;
+            case 'loading':
+                this.addClass('loading');
+                break;
+            case 'reTranslate':
+                this.addClass('redo');
+                break;
         }
-    }
+    };
 
     // 获取翻译按钮状态
     $.fn.getTransButtonState = function () {
-        if (this.hasClass('translating')) {
-            return 'translating';
-        } else if (this.hasClass('translated')) {
-            return 'translated';
-        } else if (this.hasClass('error')) {
-            return 'error';
-        } else {
-            return 'normal';
-        }
-    }
+        return this.data('transButtonState') || 'normal';
+    };
 
     // 存翻译结果
     $.fn.pushResultToTransButton = function (result) {
@@ -4705,16 +5006,6 @@ async function initButtonFunc() {
     // 获取翻译结果
     $.fn.getResultFromTransButton = function () {
         return this.data('resultStack');
-    }
-
-    // 标记是否为短文本
-    $.fn.setIsShortText = function () {
-        this.data('isShortText', true);
-    }
-
-    // 获取是否为短文本
-    $.fn.IsShortText = function () {
-        return this.data('isShortText');
     }
 
     // 标记为不自动翻译
@@ -4747,7 +5038,7 @@ async function initButtonFunc() {
     }
 }
 
-// 题目markdown转换/翻译面板
+// 题目markdown转换/复制/翻译面板
 function addButtonPanel(element, suffix, type, is_simple = false) {
     let text;
     if (commentTranslationMode == "1") text = i18next.t('trans.segment', { ns: 'button' });
@@ -4755,9 +5046,22 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     else text = i18next.t('trans.normal', { ns: 'button' });
 
     let panel = $(`<div class='html2md-panel input-output-copier'></div>`);
-    let viewButton = $(`<button class='ojb_btn' id='html2md-view${suffix}'>${i18next.t('md.normal', { ns: 'button' })}</button>`);
-    let copyButton = $(`<button class='ojb_btn' id='html2md-cb${suffix}'>${i18next.t('copy.normal', { ns: 'button' })}</button>`);
-    let translateButton = $(`<button class='ojb_btn translateButton' id='translateButton${suffix}'>${text}</button>`);
+    // mark
+    let viewButton = $(`
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
+            <i class="iconfont">&#xe7e5;</i>
+            <span class="popover_content">${i18next.t('md.normal', { ns: 'button' })}</span>
+        </button>`);
+    let copyButton = $(`
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
+            <i class="iconfont">&#xe608;</i>
+            <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
+        </button>`);
+    let translateButton = $(`
+        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
+            <i class="iconfont">&#xe6be;</i>
+            <span class="popover_content">${text}</span>
+        </button>`);
     if (!is_simple) panel.append(viewButton);
     if (!is_simple) panel.append(copyButton);
     if ($(element).css("display") !== "none" && !$(element).hasClass('ojbetter-alert')) panel.append(translateButton);
@@ -4785,15 +5089,36 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
  * @returns {void}
  */
 async function addButtonWithHTML2MD(button, element, suffix, type) {
-    button.prop("disabled", true);
+    /**
+     * 改变按钮状态
+     * @param {string} state 状态
+     */
+    function changeButtonState(state) {
+        if (state == "loading") {
+            button.setButtonLoading();
+            button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
+        } else if (state == "loaded") {
+            button.setButtonLoaded();
+            button.setButtonPopover(i18next.t('md.normal', { ns: 'button' }));
+        } else if (state == "normal") {
+            button.removeClass("enabled");
+            button.setButtonPopover(i18next.t('md.normal', { ns: 'button' }));
+        } else if (state == "mdView") {
+            button.addClass("enabled");
+            button.setButtonPopover(i18next.t('md.reduction', { ns: 'button' }));
+        } else if (state == "disabled") {
+            button.prop("disabled", true);
+            button.setButtonPopover(i18next.t('md.disabled', { ns: 'button' }));
+        }
+    }
 
     if (is_oldLatex || is_acmsguru) {
+        changeButtonState("disabled");
         return;
     } else {
-        button.text(i18next.t('state.waitMathJax', { ns: 'button' }));
+        changeButtonState("loading");
         await waitForMathJaxIdle();
-        button.prop("disabled", false);
-        button.text(i18next.t('md.normal', { ns: 'button' }));
+        changeButtonState("loaded");
     }
 
     button.click(debounce(function () {
@@ -4819,9 +5144,9 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         function setViewmd(value) {
             $(element).attr("viewmd", value);
             if (value) {
-                button.addClass("warning").text(i18next.t('md.reduction', { ns: 'button' }));
+                changeButtonState("mdView");
             } else {
-                button.removeClass("warning").text(i18next.t('md.normal', { ns: 'button' }));
+                changeButtonState("normal");
             }
         }
 
@@ -4851,14 +5176,35 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
  * @param {string} type 类型
  */
 async function addButtonWithCopy(button, element, suffix, type) {
-    button.prop("disabled", true);
+    /**
+     * 改变按钮状态
+     * @param {string} state 状态
+     */
+    function changeButtonState(state) {
+        if (state == "loading") {
+            button.setButtonLoading();
+            button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
+        } else if (state == "loaded") {
+            button.setButtonLoaded();
+            button.setButtonPopover(i18next.t('copy.normal', { ns: 'button' }));
+        } else if (state == "normal") {
+            button.setButtonPopover(i18next.t('copy.normal', { ns: 'button' }));
+        } else if (state == "copied") {
+            button.setButtonPopover(i18next.t('copy.copied', { ns: 'button' }));
+        } else if (state == "disabled") {
+            button.prop("disabled", true);
+            button.setButtonPopover(i18next.t('copy.disabled', { ns: 'button' }));
+        }
+    }
 
     // 等待MathJax队列完成
     if (is_oldLatex || is_acmsguru) {
+        changeButtonState("disabled");
         return;
     } else {
+        changeButtonState("loading");
         await waitForMathJaxIdle();
-        button.prop("disabled", false);
+        changeButtonState("loaded");
     }
 
     button.click(debounce(function () {
@@ -4868,11 +5214,14 @@ async function addButtonWithCopy(button, element, suffix, type) {
 
         GM_setClipboard(markdown);
 
-        $(this).addClass("success").text(i18next.t('copy.copied', { ns: 'button' }));
+        $(this).addClass("success");
+        changeButtonState("copied");
+
 
         // 更新复制按钮文本
         setTimeout(() => {
-            $(this).removeClass("success").text(i18next.t('copy.normal', { ns: 'button' }));
+            $(this).removeClass("success");
+            changeButtonState("normal")
         }, 2000);
     }));
 
@@ -4891,15 +5240,16 @@ async function addButtonWithCopy(button, element, suffix, type) {
  */
 async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
     // 等待MathJax队列完成
-    button.prop("disabled", true);
+    button.setButtonLoading();
     await waitForMathJaxIdle();
-    button.prop("disabled", false);
+    button.setButtonLoaded();
 
     // 标记目标文本是短字符文本
     {
-        let length = $(element).getMarkdown().length;
-        if (length < shortTextLength) {
-            button.setIsShortText();
+        let text = $(element).getMarkdown();
+        let length = text.length;
+        if (length > shortTextLength || isLikelyCodeSnippet(text)) {
+            button.setNotAutoTranslate();
         }
         // button.after(`<span>${length}</span>`); // 显示字符数
     }
@@ -4941,13 +5291,13 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     // 重新翻译提示
     let prevState;
     button.hover(() => {
-        let state = button.getTransButtonState();
-        if (state !== "normal" && state !== "translating") {
-            prevState = state;
-            button.setTransButtonState('normal', i18next.t('trans.reTranslate', { ns: 'button' }));
+        prevState = button.getTransButtonState();
+        if (prevState !== "normal" && prevState !== "translating") {
+            button.setTransButtonState('reTranslate');
         }
     }, () => {
-        if (prevState && button.getTransButtonState() === "normal") {
+        const currentState = button.getTransButtonState();
+        if (prevState !== "normal" && ["normal", "reTranslate"].includes(currentState)) {
             button.setTransButtonState(prevState);
             prevState = null;
         }
@@ -5236,7 +5586,7 @@ function addtargetAreaCss() {
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(135deg, #97e7cacc, #97e7cacc 30px, #e9fbf1cc 0px, #e9fbf1cc 55px);
+            background: repeating-linear-gradient(135deg, rgb(77 208 225 / 30%), rgb(77 208 225 / 30%) 30px, rgb(77 208 225 / 10%) 0px, rgb(77 208 225 / 10%) 55px);
             z-index: 100;
         }
         
@@ -5884,10 +6234,9 @@ async function initTransWhenViewable() {
             if (entry.isIntersecting) {
                 const button = $(entry.target);
                 const state = button.getTransButtonState();
-                const isShortText = button.IsShortText();
                 const notAutoTranslate = button.getNotAutoTranslate();
                 // Check if the button meets the criteria
-                if (state === 'normal' && isShortText && !notAutoTranslate) {
+                if (state === 'normal' && !notAutoTranslate) {
                     let trans = translation;
 
                     if (allowMixTrans && button.IsCommentButton() && mixedTranslation.length > 0) {
@@ -6043,6 +6392,26 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     translateDiv.registerUpButtonEvent();
     translateDiv.registerCloseButtonEvent();
 
+    // 翻译内容是否可能为代码片段
+    if (isLikelyCodeSnippet(text)) {
+        const shouldContinue = await createDialog(
+            i18next.t('isLikelyCodeSnippet.title', { ns: 'dialog' }),
+            i18next.t('isLikelyCodeSnippet.content', { ns: 'dialog' }),
+            [
+                i18next.t('isLikelyCodeSnippet.buttons.0', { ns: 'dialog' }),
+                i18next.t('isLikelyCodeSnippet.buttons.1', { ns: 'dialog' })
+            ],
+            true
+        );
+        if (shouldContinue) {
+            return {
+                translateDiv: translateDiv,
+                status: "skip",
+                rawData: rawData
+            };
+        }
+    }
+
     // 替换latex公式
     text = replaceLatex(text);
 
@@ -6079,6 +6448,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             };
         }
     }
+
     // 翻译
     async function translate(translation) {
         const is_renderLaTeX = !(is_oldLatex || is_acmsguru);
@@ -7325,27 +7695,24 @@ async function createMonacoEditor(language, form, support) {
         // 全屏按钮
         var fullscreenButton = $('<button>', {
             'type': 'button',
-            'class': 'ojb_btn',
-            'text': i18next.t('fullscreenButton', { ns: 'codeEditor' })
-        });
+            'class': 'ojb_btn iconfont ojb_btn_popover top',
+        }).html(`&#xe606;<span class="popover_content">${i18next.t('fullscreenButton', { ns: 'codeEditor' })}</span>`);
         form.topRightDiv.append(fullscreenButton);
         fullscreenButton.on('click', enterFullscreen);
 
         // 固定到底部按钮
         var fixToBottomButton = $('<button>', {
             'type': 'button',
-            'class': 'ojb_btn',
-            'text': i18next.t('fixToBottomButton', { ns: 'codeEditor' })
-        });
+            'class': 'ojb_btn iconfont ojb_btn_popover top',
+        }).html(`&#xe607;<span class="popover_content">${i18next.t('fixToBottomButton', { ns: 'codeEditor' })}</span>`);
         form.topRightDiv.append(fixToBottomButton);
         fixToBottomButton.on('click', fixToBottom);
 
         // 固定到右侧按钮
         var fixToRightButton = $('<button>', {
             'type': 'button',
-            'class': 'ojb_btn',
-            'text': i18next.t('fixToRightButton', { ns: 'codeEditor' })
-        });
+            'class': 'ojb_btn iconfont ojb_btn_popover top',
+        }).html(`&#xe605;<span class="popover_content">${i18next.t('fixToRightButton', { ns: 'codeEditor' })}</span>`);
         form.topRightDiv.append(fixToRightButton);
         fixToRightButton.on('click', fixToRight);
 
@@ -7454,7 +7821,8 @@ async function createMonacoEditor(language, form, support) {
                     max-height: 100vh;
                     overflow-x: hidden;
                     overflow-y: auto;
-                    padding: 0px;
+                    padding: 1rem;
+                    box-sizing: border-box;
                 }
                 body {
                     margin: 0px;

@@ -1,29 +1,31 @@
 {
-    "trans":{
-        "normal":"翻译",
-        "segment":"分段翻译",
-        "select":"翻译选中",
-        "translating":"翻译中",
-        "wait":"等待翻译",
-        "translated":"已翻译",
-        "error":"翻译出错",
-        "reTranslate":"重新翻译",
-        "tooLong":"字数超限"
+    "trans": {
+        "normal": "翻译",
+        "segment": "分段翻译",
+        "select": "翻译选中",
+        "translating": "翻译中",
+        "wait": "等待翻译",
+        "translated": "重新翻译",
+        "error": "翻译出错",
+        "reTranslate": "重新翻译",
+        "tooLong": "字数超限"
     },
-    "md":{
-        "normal":"MarkDown视图",
-        "reduction":"还原"
+    "md": {
+        "normal": "MarkDown视图",
+        "reduction": "还原",
+        "disabled": "不支持查看MarkDown视图"
     },
-    "copy":{
-        "normal":"复制",
-        "copied":"已复制"
+    "copy": {
+        "normal": "复制",
+        "copied": "已复制",
+        "disabled": "不支持复制"
     },
-    "state":{
-        "wait":"等待中…",
-        "waitMathJax":"等待MathJax",
-        "loading":"加载中…",
-        "404":"未找到",
-        "error":"出错了",
+    "state": {
+        "wait": "等待中…",
+        "waitMathJax": "等待MathJax",
+        "loading": "加载中…",
+        "404": "未找到",
+        "error": "出错了",
         "netError": "网络错误"
     }
 }

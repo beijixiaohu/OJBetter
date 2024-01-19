@@ -159,7 +159,7 @@
         "title": "Clist 设置",
         "basics": {
             "name": "基本",
-            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'>clist.by<a/>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
+            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'> clist.by <a/>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
             "key": {
                 "title": "KEY:",
                 "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
