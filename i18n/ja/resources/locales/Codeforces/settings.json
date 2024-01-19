@@ -159,7 +159,7 @@
         "title": "クライスト・セッティング",
         "basics": {
             "name": "基本的",
-            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'>clist.by<a/>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
+            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'> clist.by <a/>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
             "key": {
                 "title": "キー",
                 "helpText": "<p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXXXX</p></div>",
