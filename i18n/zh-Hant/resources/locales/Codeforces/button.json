@@ -5,18 +5,20 @@
         "select": "翻譯選取",
         "translating": "翻譯中",
         "wait": "等待翻譯",
-        "translated": "已翻譯",
+        "translated": "重新翻譯",
         "error": "翻譯出錯",
         "reTranslate": "重新翻譯",
         "tooLong": "字數超限"
     },
     "md": {
         "normal": "MarkDown視圖",
-        "reduction": "還原"
+        "reduction": "還原",
+        "disabled": "不支援查看MarkDown視圖"
     },
     "copy": {
         "normal": "複製",
-        "copied": "已複製"
+        "copied": "已複製",
+        "disabled": "不支援複製"
     },
     "state": {
         "wait": "等待中…",

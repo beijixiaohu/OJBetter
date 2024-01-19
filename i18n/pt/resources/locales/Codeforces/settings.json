@@ -159,7 +159,7 @@
         "title": "Definições da lista",
         "basics": {
             "name": "fundamental",
-            "notice": "<p>Nota：O acesso aos dados Clist requer credenciais de início de sessão válidas, tem duas opções：</p><p>Preencha a chave API oficial<a href='https://clist.by/' target='_blank'>clist.by<a/>abaixo,</p><p>ou mantenha o sítio Web clist.by no seu browser com sessão iniciada (ou seja, o cookie é válido)</p>",
+            "notice": "<p>Nota：O acesso aos dados Clist requer credenciais de início de sessão válidas, tem duas opções：</p><p>Preencha a chave API oficial<a href='https://clist.by/' target='_blank'> clist.by <a/>abaixo,</p><p>ou mantenha o sítio Web clist.by no seu browser com sessão iniciada (ou seja, o cookie é válido)</p>",
             "key": {
                 "title": "CHAVE.",
                 "helpText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",

@@ -5,18 +5,20 @@
         "select": "번역을 위해 선택됨",
         "translating": "번역 중",
         "wait": "번역 대기 중",
-        "translated": "번역됨",
+        "translated": "재번역",
         "error": "번역 오류",
         "reTranslate": "재번역",
         "tooLong": "단어 수 제한 초과"
     },
     "md": {
         "normal": "마크다운 보기",
-        "reduction": "원래 상태로 복원"
+        "reduction": "원래 상태로 복원",
+        "disabled": "마크다운 보기는 지원되지 않습니다."
     },
     "copy": {
         "normal": "사본 만들기",
-        "copied": "복제"
+        "copied": "복제",
+        "disabled": "복사는 지원되지 않습니다."
     },
     "state": {
         "wait": "대기 중…",

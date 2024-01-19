@@ -5,18 +5,20 @@
         "select": "Selecionado para tradução",
         "translating": "na tradução",
         "wait": "À espera da tradução",
-        "translated": "traduzido",
+        "translated": "retradução",
         "error": "erro de tradução",
         "reTranslate": "retradução",
         "tooLong": "exceder o limite de palavras"
     },
     "md": {
         "normal": "Visualização MarkDown",
-        "reduction": "repor o estado original"
+        "reduction": "repor o estado original",
+        "disabled": "A visualização da vista MarkDown não é suportada"
     },
     "copy": {
         "normal": "faça uma cópia de",
-        "copied": "Reproduzido"
+        "copied": "Reproduzido",
+        "disabled": "A cópia não é suportada"
     },
     "state": {
         "wait": "Em espera…",
