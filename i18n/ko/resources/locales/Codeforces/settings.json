@@ -159,7 +159,7 @@
         "title": "클리스트 설정",
         "basics": {
             "name": "기본",
-            "notice": "<p>참고：Clist 데이터에 액세스하려면 유효한 로그인 자격 증명이 필요하며, 두 가지 옵션이 있습니다.：</p><p><a href='https://clist.by/' target='_blank'>clist.by<a/>공식 API 키를 아래에 입력하거나,</p><p>또는 브라우저에서 clist.by 웹사이트에 로그인한 상태로 유지(예: 쿠키가 유효함)</p>.",
+            "notice": "<p>참고：Clist 데이터에 액세스하려면 유효한 로그인 자격 증명이 필요하며, 두 가지 옵션이 있습니다.：</p><p><a href='https://clist.by/' target='_blank'> clist.by <a/>공식 API 키를 아래에 입력하거나,</p><p>또는 브라우저에서 clist.by 웹사이트에 로그인한 상태로 유지(예: 쿠키가 유효함)</p>.",
             "key": {
                 "title": "KEY.",
                 "helpText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
