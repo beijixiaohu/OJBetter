@@ -159,7 +159,7 @@
         "title": "Réglages de la liste",
         "basics": {
             "name": "fondamental",
-            "notice": "<p>Note：L'accès aux données de Clist nécessite des identifiants de connexion valides, vous avez deux options：</p><p>Remplissez le<a href='https://clist.by/' target='_blank'>clist.by<a/>clé API officielle ci-dessous,</p><p>ou gardez le site clist.by dans votre navigateur connecté (c.-à-d. que le cookie est valide)</p>",
+            "notice": "<p>Note：L'accès aux données de Clist nécessite des identifiants de connexion valides, vous avez deux options：</p><p>Remplissez le<a href='https://clist.by/' target='_blank'> clist.by <a/>clé API officielle ci-dessous,</p><p>ou gardez le site clist.by dans votre navigateur connecté (c.-à-d. que le cookie est valide)</p>",
             "key": {
                 "title": "CLÉ.",
                 "helpText": "<p>Exemple de format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
