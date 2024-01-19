@@ -159,7 +159,7 @@
         "title": "Ajustes Clist",
         "basics": {
             "name": "fundamental",
-            "notice": "<p>Nota：El acceso a los datos de Clist requiere unas credenciales de inicio de sesión válidas, tiene dos opciones：</p><p>Rellene la<a href='https://clist.by/' target='_blank'>clist.by<a/>clave API oficial que aparece a continuación,</p><p>o mantenga la página web clist.by en su navegador con la sesión iniciada (es decir, la cookie es válida)</p>",
+            "notice": "<p>Nota：El acceso a los datos de Clist requiere unas credenciales de inicio de sesión válidas, tiene dos opciones：</p><p>Rellene la<a href='https://clist.by/' target='_blank'> clist.by <a/>clave API oficial que aparece a continuación,</p><p>o mantenga la página web clist.by en su navegador con la sesión iniciada (es decir, la cookie es válida)</p>",
             "key": {
                 "title": "CLAVE.",
                 "helpText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
