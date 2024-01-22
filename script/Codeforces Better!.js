@@ -429,8 +429,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
         html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
         html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
-        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
-        html[data-theme=dark] #LSPLog,
+        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
          html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs,
         html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
             background-color: #22272e !important;
@@ -478,9 +477,9 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button,
         html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #CFBetter_editor, html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
-        html[data-theme=dark] #addCustomTest, html[data-theme=dark] #CFBetter_SubmitForm .topDiv div#lspStateDiv,
+        html[data-theme=dark] #addCustomTest, 
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
-        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs, html[data-theme=dark] .toolbarLink{
+        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -639,6 +638,10 @@ function darkModeStyleAdjustment() {
 // 样式
 GM_addStyle(`
 /*动画*/
+@keyframes shake {
+    0% { transform: translateX(-5px); }
+    100% { transform: translateX(5px); }
+}
 @keyframes rotate {
     from {
         transform: rotate(0deg);
@@ -646,6 +649,15 @@ GM_addStyle(`
 
     to {
         transform: rotate(360deg);
+    }
+}
+@keyframes rippleout {
+    0% {
+        box-shadow: 0 0 0 0 rgba(96, 98, 102, 0.2);
+    }
+
+    100% {
+        box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
     }
 }
 /*iconfont图标*/
@@ -657,10 +669,9 @@ GM_addStyle(`
     -moz-osx-font-smoothing: grayscale;
 }
 @font-face {
-    font-family: 'iconfont';
-    /* Project id 4284341 */
-    src: url('//at.alicdn.com/t/c/font_4284341_g9o0zhmcunp.woff2?t=1705585436619') format('woff2'),
-        url('//at.alicdn.com/t/c/font_4284341_g9o0zhmcunp.ttf?t=1705585436619') format('truetype');
+  font-family: 'iconfont';  /* Project id 4284341 */
+  src: url('//at.alicdn.com/t/c/font_4284341_w3t9icp4vg.woff2?t=1705728788396') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4284341_w3t9icp4vg.ttf?t=1705728788396') format('truetype');
 }
 html {
     scroll-behavior: smooth;
@@ -671,9 +682,11 @@ html {
 span.mdViewContent {
     white-space: pre-wrap;
 }
-/*翻译div*/
 /* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
-.translateDiv.input-output-copier {
+.translateDiv,
+.html2md-panel,
+#CFBetter_SubmitForm {
+  &.input-output-copier {
     font-size: initial;
     float: initial;
     color: initial;
@@ -683,7 +696,12 @@ span.mdViewContent {
     margin: 0px;
     line-height: initial;
     text-transform: none;
+    &:hover {
+      background-color: #ffffff00;
+    }
+  }
 }
+/*翻译div*/
 html:not([data-theme='dark']) .translateDiv {
     box-shadow: 0px 0px 0.5px 0.5px #defdf378;
 }
@@ -773,46 +791,7 @@ html:not([data-theme='dark']) .translateDiv {
     height: 100%;
     margin: 0.5em;
 }
-.toolbarLink {
-    display: flex;
-    align-items: center;
-    padding: 1px 5px;
-    margin: 0px 5px;
-    color: #B0BEC5;
-    font-size: 13px;
-    text-decoration: none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    transition: background-color 0.1s;
-    box-sizing: border-box;
-}
-.toolbarLink:last-child {
-    margin-right: 0;
-}
-.toolbarLink:hover, .toolbarLink:link:hover {
-    color: #479ef6;
-    border-color: #409eff;
-    background-color: #f1f8ff;
-    z-index: 100;
-}
-.toolbarLink.disabled {
-    color: #BDBDBD;
-    pointer-events: none;
-    filter: grayscale(100%);
-    opacity: 0.7;
-}
-.toolbarLink.disabled:hover {
-    border: 1px solid #dcdfe6;
-}
-a.toolbarLink, a.toolbarLink:link{
-    color: #aaa;
-}
-.toolbarLink img {
-    display: inline-block;
-    vertical-align: text-bottom;
-    height: 16px;
-    margin: 0px 2px;
-}
+/*html2md面板*/
 .html2md-panel {
     display: flex;
     justify-content: flex-end;
@@ -821,9 +800,14 @@ a.toolbarLink, a.toolbarLink:link{
 .html2md-panel a {
     text-decoration: none;
 }
+.html2md-panel > button {
+    margin: 5px;
+}
+/*通用按钮*/
 .ojb_btn {
     display: flex;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     background-color: #ffffff;
     color: #606266;
@@ -832,7 +816,7 @@ a.toolbarLink, a.toolbarLink:link{
     font-size: 13px;
     border-radius: 0.3rem;
     padding: 1px 5px;
-    margin: 5px !important;
+    margin: 0px 5px;
     border: 1px solid #dcdfe6;
 }
 .ojb_btn[disabled] {
@@ -849,8 +833,8 @@ a.toolbarLink, a.toolbarLink:link{
 }
 .ojb_btn.success {
     background-color: #f0f9eb;
-    color: #67c23e;
-    border: 1px solid #b3e19d;
+    color: #4CAF50;
+    border: 1px solid #C8E6C9;
 }
 .ojb_btn.warning {
     background-color: #fdf6ec;
@@ -866,6 +850,15 @@ a.toolbarLink, a.toolbarLink:link{
     background-color: #fafbff;
     color: #42A5F5;
     border: 1px solid #90CAF9;
+}
+.ojb_btn.active {
+    animation: rippleout 0.5s ease-in-out;
+}
+a.ojb_btn {
+    text-decoration: none;
+}
+a.ojb_btn span {
+    margin-left: 2px;
 }
 /*按钮图标和popover*/
 .ojb_btn_popover {
@@ -1038,21 +1031,22 @@ a.toolbarLink, a.toolbarLink:link{
         }
     }
 }
-/*end*/
-.topText {
+
+/*translateDiv样式*/
+.translateDiv .topText {
     display: flex;
     margin-left: 5px;
     color: #9e9e9e;
     font-size: 13px;
     align-items: center;
 }
-.borderlessButton{
+.translateDiv .borderlessButton{
     display: flex;
     align-items: center;
     margin: 2.5px 7px;
     fill: #9E9E9E;
 }
-.borderlessButton:hover{
+.translateDiv .borderlessButton:hover{
     cursor: pointer;
     fill: #059669;
 }
@@ -1082,27 +1076,12 @@ a.toolbarLink, a.toolbarLink:link{
 .problem-statement p:last-child {
     margin-bottom: 0px !important;
 }
-/*特殊处理, 加上input-output-copier类, 让convertStatementToText方法忽略该元素*/
-.html2md-panel.input-output-copier {
-    font-size: initial;
-    float: initial;
-    color: initial;
-    cursor: initial;
-    border: none;
-    padding: 0px;
-    margin: 0px;
-    line-height: initial;
-    text-transform: none;
-}
-.html2md-panel.input-output-copier:hover {
-    background-color: #ffffff00;
-}
 /*设置面板*/
 header .enter-or-register-box, header .languages {
     position: absolute;
     right: 170px;
 }
-button.ojb_btn.CFBetter_setting {
+.ojb_btn.CFBetter_setting {
     float: right;
     height: 30px;
     background: #60a5fa;
@@ -1111,7 +1090,7 @@ button.ojb_btn.CFBetter_setting {
     border: 1px solid #60a5fa;
 }
 
-button.ojb_btn.CFBetter_setting.open {
+.ojb_btn.CFBetter_setting.open {
     background-color: #e6e6e6;
     color: #727378;
     cursor: not-allowed;
@@ -1787,7 +1766,7 @@ div#update_panel #updating a {
 #skip_menu .help-icon {
     color: #f44336;
 }
-/* 配置管理 */
+/* 配置管理面板 */
 .embed-responsive {
     height: max-content;
     padding-bottom: 0px;
@@ -2059,18 +2038,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .CFBetter_acmsguru {
     margin: 0 0 1em!important;
 }
-/* 整个代码提交表单 */
-/* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
-#CFBetter_SubmitForm.input-output-copier {
-    float: initial;
-    color: initial;
-    cursor: initial;
-    border: none;
-    padding: 0px;
-    margin: 0px;
-    line-height: initial;
-    text-transform: none;
-}
+/* 代码提交表单 */
 #CFBetter_SubmitForm.input-output-copier:hover {
     background-color: #ffffff00;
 }
@@ -2078,15 +2046,13 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     width: 40px;
     color: #009688;
     appearance: none;
-    padding: 5px 10px;
-    margin-left: 5px;
     border-radius: 6px;
     border-style: solid;
-    border: 1px solid #ced4da;
+    border: none;
+    background-color: #ffffff00;
 }
 #CFBetter_SubmitForm :focus-visible {
     outline: none;
-    border: 1px solid #9E9E9E !important;
 }
 #CFBetter_SubmitForm .topDiv {
     display:flex;
@@ -2109,21 +2075,6 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     flex-wrap: wrap;
     gap: 0px;
     align-items: center;
-}
-#CFBetter_SubmitForm .topDiv div#lspStateDiv.await{
-    border-color: #BBDEFB;
-    color: #2196F3;
-    background-color: #E3F2FD;
-}
-#CFBetter_SubmitForm .topDiv div#lspStateDiv.success{
-    border: 1px solid #C8E6C9;
-    color: #4CAF50;
-    background-color: #E8F5E9;
-}
-#CFBetter_SubmitForm .topDiv div#lspStateDiv.error{
-    border-color: #FFCDD2;
-    color: #F44336;
-    background-color: #FFEBEE;
 }
 /* LSP连接Log */
 #LSPLog{
@@ -2156,7 +2107,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 #LSPLog details{
     padding: 2px;
 }
-/* 代码编辑 */
+/* 代码编辑器 */
 #CFBetter_editor{
     box-sizing: border-box;
     height: 600px;
@@ -2167,25 +2118,15 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 }
 #CFBetter_submitDiv{
     display: flex;
-    justify-content: space-between;
     padding-top: 15px;
-}
-.CFBetter_SubmitButton {
-    cursor: pointer;
-    font-size: 15px;
     height: 35px;
-    width: 100px;
-    margin-left: 10px;
+}
+#CFBetter_submitDiv >* {
     border-radius: 6px;
-    border: 1px solid #3c9a5f;
 }
-#RunTestButton {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
-}
-#RunTestButton:hover {
-    background-color: #f5f5f5;
+#CFBetter_submitDiv > button {
+    height: 100%;
+    width: 35px;
 }
 #SubmitButton {
     color: #fff;
@@ -2199,10 +2140,6 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background-color: red;
     animation: shake 0.07s infinite alternate;
 }
-@keyframes shake {
-    0% { transform: translateX(-5px); }
-    100% { transform: translateX(5px); }
-}
 #programTypeId{
     padding: 5px 10px;
     border-radius: 6px;
@@ -2215,19 +2152,10 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     padding: 6px 0px 0px 5px;
     height: 22px;
 }
-#CompilerSetting{
-    width: 70%;
-}
-#CompilerSetting select, #CompilerSetting textarea{
-    padding: 4px 10px;
-    border-radius: 6px;
-    border-style: solid;
-    border: 1px solid #ced4da;
-    color: #212529;
-}
 #CompilerArgsInput{
+    flex-grow: 1;
     width: 100%;
-    height: 35px;
+    height: 100%;
     margin-bottom: 10px;
     padding: 5px 10px;
     border-radius: 6px;
@@ -2235,8 +2163,19 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     border: 1px solid #ccc;
     box-shadow: inset 0px 1px 1px rgba(0,0,0,.075);
 }
-input#CompilerArgsInput[disabled] {
+#CompilerArgsInput[disabled] {
     cursor: not-allowed;
+}
+#CompilerSetting{
+    margin-top: 10px;
+    display: none;
+}
+#CompilerSetting select, #CompilerSetting textarea{
+    padding: 4px 10px;
+    border-radius: 6px;
+    border-style: solid;
+    border: 1px solid #ced4da;
+    color: #212529;
 }
 #CompilerBox{
     display: grid;
@@ -2246,27 +2185,6 @@ input#CompilerArgsInput[disabled] {
 }
 #CompilerBox > * {  
     margin: 5px;
-}
-
-/* 调试结果 */
-#statePanel{
-    padding: 10px;
-    margin-top: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-.RunState_title:not(:first-child){
-    margin-top: 20px;
-}
-.RunState_title{
-    font-size: 16px;
-    margin-bottom: 8px;
-}
-.RunState_title.error{
-    color: red;
-}
-.RunState_title.ok{
-    color: #449d44;
 }
 /* 自定义样例 */
 #customTestBlock {
@@ -2341,35 +2259,72 @@ input#CompilerArgsInput[disabled] {
 #addCustomTest:hover {
     background-color: #f5f5f5;
 }
+/* 调试结果 */
+#statePanel{
+    display: none;
+    padding: 5px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.test-case {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.test-case:not(:first-child){
+    margin-top: 5px;
+}
+.test-case > * {
+    margin: 5px 0px;
+}
+.test-case > :first-child {
+    margin-top: 0px;
+}
+.test-case > :last-child {
+    margin-bottom: 0px;
+}
+.test-case-title, .test-case-status {
+    font-size: 16px;
+    display: inline;
+}
+.test-case-status{
+    margin-left: 5px;
+}
+.test-case-status.error{
+    color: red;
+}
+.test-case-status.success{
+    color: #449d44;
+}
+.test-case-judge {
+    font-size: 13px;
+}
 /* 差异对比 */
-.outputDiff {
+.output_diff {
     color: #5d4037;
     margin: 5px 0px;
     display: grid;
     border: 1px solid #bcaaa4;
     font-size: 13px;
     font-family: Consolas, "Lucida Console", "Andale Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+    overflow: auto;
 }
-
-.outputDiff .added {
+.output_diff .added {
     background-color: #c8f7c5;
     user-select: none;
 }
-
-.outputDiff .removed {
+.output_diff .removed {
     background-color: #f7c5c5;
 }
-
-.DiffLine {
+.output_diff .diffLine {
     display: flex;
 
 }
-
-.outputDiff .DiffLine:nth-child(odd) {
+.output_diff .diffLine:nth-child(odd) {
     background-color: #f5f5f5;
 }
-
-.LineNo {
+.lineNo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2379,12 +2334,17 @@ input#CompilerArgsInput[disabled] {
     border-right: 1px solid;
     user-select: none;
 }
-
-.LineContent {
+.lineContent {
     display: grid;
     width: 100%;
 }
-
+.output_no_diff {
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+.diff_note{
+    font-size: 10px;
+}
 /*monaco编辑器*/
 .monaco-hover hr {
     margin: 4px -8px 4px !important;
@@ -2482,16 +2442,27 @@ input#CompilerArgsInput[disabled] {
 // ------------------------------
 
 /**
+ * 延迟函数 
+ * @param {number} ms 延迟时间（毫秒） 
+ * @returns {Promise<void>}
+ */
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
  * 用于封装需要重试的异步函数
  * @param {Function} task 需要封装的异步函数
  * @param {Object} options 配置项
  * @param {Number} options.maxRetries 重试次数，默认为 5
+ * @param {Number} options.retryInterval 重试时间间隔，默认为 0 毫秒
  * @param {Function} options.errorHandler 错误处理函数，默认为抛出错误
  * @param {...any} args task 函数的参数
  * @returns {Promise} 返回 Promise
  */
 async function promiseRetryWrapper(task, {
     maxRetries = 5,
+    retryInterval = 0,
     errorHandler = (err) => { throw err }
 } = {}, ...args) {
     let attemptsLeft = maxRetries;
@@ -2499,10 +2470,26 @@ async function promiseRetryWrapper(task, {
         try {
             return await task(...args);
         } catch (err) {
-            if (!attemptsLeft) {
+            if (attemptsLeft <= 0) {
                 return errorHandler(err, maxRetries, attemptsLeft);
             }
+            if (retryInterval > 0) {
+                await delay(retryInterval);
+            }
         }
+    }
+}
+
+/**
+ * 自定义错误类，以区分不同的错误类型
+ */
+class GMError extends Error {
+    constructor(type, message, originalError) {
+        super(message);
+        this.name = 'GMError';
+        this.type = type;
+        this.stack = originalError.stack;
+        Object.assign(this, originalError);
     }
 }
 
@@ -2521,9 +2508,9 @@ function GMRequest(options, isStream = false) {
             } : {
                 onload: resolve
             }),
-            onerror: reject,
-            ontimeout: reject,
-            onabort: reject
+            onerror: (error) => reject(new GMError('error', 'An error occurred during the request.', error)),
+            ontimeout: (error) => reject(new GMError('timeout', 'The request timed out.', error)),
+            onabort: (error) => reject(new GMError('abort', 'The request was aborted.', error)),
         });
     });
 }
@@ -2571,15 +2558,6 @@ function debounce(callback) {
         if (!immediateExecuted) { callback.call(this); immediateExecuted = true; }
         timer = setTimeout(() => { immediateExecuted = false; }, delay);
     };
-}
-
-/**
- * 延迟函数 
- * @param {number} ms 延迟时间（毫秒） 
- * @returns {Promise<void>}
- */
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
@@ -4824,7 +4802,7 @@ function isLikelyCodeSnippet(text) {
         'raise', 'with', 'lambda', 'print'
     ];
     // 代码的特殊字符
-    const codeChars = [';', '{', '}', '(', ')', '[', ']', '<', '>', '=', '+', '-', '*', '/',
+    const codeChars = [';', '{', '}', '[', ']', '<', '>', '=', '+', '-', '/',
         '&', '|', '#', ':', '\'\'\'', '\"\"\"', '->'];
     // 普通文本的标点符号
     const textChars = ['.', ',', '?', '!', ':', '"', "'"];
@@ -4955,46 +4933,29 @@ async function initButtonFunc() {
         return markdown;
     }
 
+    // 设置按钮状态
+    $.fn.setButtonState = function (state, popoverText = null, disabled = false) {
+        this.data('buttonState', state)
+            .prop('disabled', disabled)
+            .css('cursor', disabled ? 'not-allowed' : 'pointer')
+            .removeClass('running success enabled error loading redo')
+            .setButtonPopover(popoverText);
+
+        if (state !== 'initial') this.addClass(state);
+        return this;
+    };
+
+    // 获取按钮状态
+    $.fn.getButtonState = function () {
+        return this.data('buttonState') || 'normal';
+    };
 
     // 设置翻译按钮状态
     $.fn.setTransButtonState = function (state, text = null) {
-        // 设置状态数据属性
-        this.data('transButtonState', state);
-
-        // 根据状态设置图标、文本、禁用状态和鼠标样式
-        const cursorStyle = (state === 'translating' || state === 'loading') ? 'not-allowed' : 'pointer';
-        const disabled = state === 'translating' || state === 'loading';
-        const popoverText = text ? text : i18next.t(`trans.${state}`, { ns: 'button' });
-
-        // 更新按钮样式和属性
-        this.setButtonPopover(popoverText)
-            .prop('disabled', disabled)
-            .css('cursor', cursorStyle)
-            .removeClass('running success error loading redo'); // 移除所有可能的状态类
-
-        // 根据当前状态添加相应的类
-        switch (state) {
-            case 'translating':
-                this.addClass('running');
-                break;
-            case 'translated':
-                this.addClass('success');
-                break;
-            case 'error':
-                this.addClass('error');
-                break;
-            case 'loading':
-                this.addClass('loading');
-                break;
-            case 'reTranslate':
-                this.addClass('redo');
-                break;
-        }
-    };
-
-    // 获取翻译按钮状态
-    $.fn.getTransButtonState = function () {
-        return this.data('transButtonState') || 'normal';
+        const popoverText = text || i18next.t(`trans.${state}`, { ns: 'button' });
+        const disabled = state === 'running' || state === 'loading';
+        this.setButtonState(state, popoverText, disabled);
+        return this;
     };
 
     // 存翻译结果
@@ -5038,6 +4999,11 @@ async function initButtonFunc() {
         }
         return isCommentButton;
     }
+
+    // 按钮点击效果
+    $(document).on('mousedown', '.ojb_btn', function () {
+        $(this).addClass('active').on('animationend', () => $(this).removeClass('active'));
+    });
 }
 
 // 题目markdown转换/复制/翻译面板
@@ -5241,6 +5207,12 @@ async function addButtonWithCopy(button, element, suffix, type) {
  * @param {boolean} is_comment 是否是评论
  */
 async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
+    // 添加可指定翻译服务的方法调用
+    button.data("translatedItBy", function (translation) {
+        button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
+        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
+    });
+
     // 等待MathJax队列完成
     button.setButtonLoading();
     await waitForMathJaxIdle();
@@ -5280,26 +5252,20 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
 
         // 翻译
-        button.setTransButtonState('translating', i18next.t('trans.wait', { ns: 'button' }));
+        button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
         taskQueue.addTask(translation, () => transTask(button, element, type, is_comment), translation == 'openai');
     }));
-
-    // 添加可指定翻译服务的方法调用
-    button.data("translatedItBy", function (translation) {
-        button.setTransButtonState('translating', i18next.t('trans.wait', { ns: 'button' }));
-        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
-    });
 
     // 重新翻译提示
     let prevState;
     button.hover(() => {
-        prevState = button.getTransButtonState();
-        if (prevState !== "normal" && prevState !== "translating") {
-            button.setTransButtonState('reTranslate');
+        prevState = button.getButtonState();
+        if (prevState !== "normal" && prevState !== "running") {
+            button.setTransButtonState('redo');
         }
     }, () => {
-        const currentState = button.getTransButtonState();
-        if (prevState !== "normal" && ["normal", "reTranslate"].includes(currentState)) {
+        const currentState = button.getButtonState();
+        if (prevState !== "normal" && ["normal", "redo"].includes(currentState)) {
             button.setTransButtonState(prevState);
             prevState = null;
         }
@@ -5424,7 +5390,7 @@ async function transTask(button, element, type, is_comment, translation) {
 
     // 翻译完成
     if (!count.errerNum && !count.skipNum) {
-        button.setTransButtonState('translated');
+        button.setTransButtonState('success');
     }
 }
 
@@ -5463,7 +5429,7 @@ async function process(button, target, element_node, type, is_comment, count, tr
 
     // 等待结果
     let result;
-    button.setTransButtonState('translating');
+    button.setTransButtonState('running');
     result = await blockProcessing(button, target, element_node, is_comment, translation);
     button.pushResultToTransButton(result);
 
@@ -6182,7 +6148,7 @@ class ElementsTree {
             translateDiv: translateDiv,
             status: 0
         });
-        transButton.setTransButtonState('translated');
+        transButton.setTransButtonState('success');
     }
 }
 
@@ -6235,7 +6201,7 @@ async function initTransWhenViewable() {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 const button = $(entry.target);
-                const state = button.getTransButtonState();
+                const state = button.getButtonState();
                 const notAutoTranslate = button.getNotAutoTranslate();
                 // Check if the button meets the criteria
                 if (state === 'normal' && !notAutoTranslate) {
@@ -6731,7 +6697,7 @@ class ProblemPageLinkbar {
         const linkElement = $("<a>")
             .attr("href", url)
             .attr("target", "_blank")
-            .addClass("toolbarLink");
+            .addClass("ojb_btn");
 
         linkElement.append(icon);
         icon.css("height", iconHeight);
@@ -7403,16 +7369,34 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     formDiv.append(customTestDiv);
 
     // 调试/提交
-    var submitDiv = $('<div id="CFBetter_submitDiv"></div>');
-    var CompilerSetting = $('<div id="CompilerSetting"><input type="text" id="CompilerArgsInput"></div>');
-    submitDiv.append(CompilerSetting);
-    var runButton = $(`<button class="CFBetter_SubmitButton" id="RunTestButton">${i18next.t('runTestButton', { ns: 'codeEditor' })}</button>`);
+    let submitDiv = $('<div id="CFBetter_submitDiv"></div>');
+    let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
+    submitDiv.append(CompilerArgsInput);
+    let runButton = $(`
+        <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
+            <i class="iconfont">&#xe6c1;</i>
+            <span class="popover_content">${i18next.t('runTestButton.initial', { ns: 'codeEditor' })}</span>
+        </button>
+    `);
     submitDiv.append(runButton);
-    var submitButton = $(`<input class="CFBetter_SubmitButton" id="SubmitButton" type="submit" value="${i18next.t('submitButton', { ns: 'codeEditor' })}" >`);
+    let submitButton = $(`
+        <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
+            <i class="iconfont">&#xe633;</i>
+            <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
+        </button>
+    `);
     submitDiv.append(submitButton);
     formDiv.append(submitDiv);
+    let CompilerSetting = $(`
+        <div id="CompilerSetting"></div>
+    `);
+    formDiv.append(CompilerSetting);
+    let statePanel = $(`
+        <div id="statePanel"></div>
+    `);
+    formDiv.append(statePanel);
 
-    var from = {
+    let from = {
         formDiv: formDiv,
         selectLang: selectLang,
         topRightDiv: topRightDiv,
@@ -7420,7 +7404,9 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
         editorDiv: editorDiv,
         runButton: runButton,
         submitButton: submitButton,
-        submitDiv: submitDiv
+        submitDiv: submitDiv,
+        CompilerSetting: CompilerSetting,
+        statePanel: statePanel
     };
     return from;
 }
@@ -7685,8 +7671,11 @@ async function createMonacoEditor(language, form, support) {
         editor.updateOptions({ fontSize: parseInt(editorFontSize) });
 
         // 调整字体大小
-        var changeSize = $(`<div><label for="fontSizeInput">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</label>
-        <input type="number" id="fontSizeInput" value="${editorFontSize}"></div>`)
+        var changeSize = $(`
+        <div class="ojb_btn ojb_btn_popover top">
+            <input type="number" id="fontSizeInput" value="${editorFontSize}">
+            <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
+        </div>`)
         form.topRightDiv.append(changeSize);
         changeSize.find('input#fontSizeInput').on('input', function () {
             var size = $(this).val();
@@ -7695,26 +7684,32 @@ async function createMonacoEditor(language, form, support) {
         });
 
         // 全屏按钮
-        var fullscreenButton = $('<button>', {
-            'type': 'button',
-            'class': 'ojb_btn iconfont ojb_btn_popover top',
-        }).html(`&#xe606;<span class="popover_content">${i18next.t('fullscreenButton', { ns: 'codeEditor' })}</span>`);
+        let fullscreenButton = $(`
+        <button type="button" class="ojb_btn ojb_btn_popover top">
+            <i class="iconfont">&#xe606;</i>
+            <span class="popover_content">${i18next.t('fullscreenButton', { ns: 'codeEditor' })}</span>
+        </button>
+        `);
         form.topRightDiv.append(fullscreenButton);
         fullscreenButton.on('click', enterFullscreen);
 
         // 固定到底部按钮
-        var fixToBottomButton = $('<button>', {
-            'type': 'button',
-            'class': 'ojb_btn iconfont ojb_btn_popover top',
-        }).html(`&#xe607;<span class="popover_content">${i18next.t('fixToBottomButton', { ns: 'codeEditor' })}</span>`);
+        let fixToBottomButton = $(`
+        <button type="button" class="ojb_btn ojb_btn_popover top">
+            <i class="iconfont">&#xe607;</i>
+            <span class="popover_content">${i18next.t('fixToBottomButton', { ns: 'codeEditor' })}</span>
+        </button>
+        `);
         form.topRightDiv.append(fixToBottomButton);
         fixToBottomButton.on('click', fixToBottom);
 
         // 固定到右侧按钮
-        var fixToRightButton = $('<button>', {
-            'type': 'button',
-            'class': 'ojb_btn iconfont ojb_btn_popover top',
-        }).html(`&#xe605;<span class="popover_content">${i18next.t('fixToRightButton', { ns: 'codeEditor' })}</span>`);
+        let fixToRightButton = $(`
+        <button type="button" class="ojb_btn ojb_btn_popover top">
+            <i class="iconfont">&#xe605;</i>
+            <span class="popover_content">${i18next.t('fixToRightButton', { ns: 'codeEditor' })}</span>
+        </button>
+        `);
         form.topRightDiv.append(fixToRightButton);
         fixToRightButton.on('click', fixToRight);
 
@@ -7959,10 +7954,12 @@ async function createMonacoEditor(language, form, support) {
      * LSP连接状态指示
      */
     let styleElement;
-    var lspStateDiv = $('<div>', {
-        'id': 'lspStateDiv',
-        'text': i18next.t('lsp.connect', { ns: 'codeEditor' })
-    }).addClass('ojb_btn await').on('click', () => {
+    let lspStateDiv = $(`
+    <div id="lspStateDiv" class="ojb_btn ojb_btn_popover top loading">
+        <i class="iconfont">&#xe658;</i>
+        <span class="popover_content">${i18next.t('lsp.connect', { ns: 'codeEditor' })}</span>
+    </div>
+    `).on('click', () => {
         styleElement = GM_addStyle(darkenPageStyle);
         LSPLog.show();
     });
@@ -8021,14 +8018,14 @@ async function createMonacoEditor(language, form, support) {
     var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
     languageSocket.onopen = () => {
         languageSocketState = true;
-        lspStateDiv.text(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
+        lspStateDiv.setButtonPopover(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
         pushLSPLogMessage("info", "languageSocket 连接已建立");
     };
     languageSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.id === 0 && message.result) {
             // 初始化完成
-            lspStateDiv.removeClass('await').addClass('success').text(i18next.t('lsp.connected', { ns: 'codeEditor' }));
+            lspStateDiv.setButtonState('success', i18next.t('lsp.connected', { ns: 'codeEditor' }));
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
             CFBetter_monaco.openDocRequest(); // 打开文档
@@ -8059,7 +8056,7 @@ async function createMonacoEditor(language, form, support) {
     };
     languageSocket.onclose = (event) => {
         languageSocketState = false;
-        lspStateDiv.removeClass().addClass('error').text('LSP连接已断开');
+        lspStateDiv.setButtonState('error', i18next.t('lsp.error', { ns: 'codeEditor' }));
         pushLSPLogMessage("warn", "languageSocket 连接已关闭");
     };
 
@@ -9173,7 +9170,7 @@ function changeMonacoLanguage(form) {
 }
 
 // 收集样例数据
-function collectTestData() {
+function getTestData() {
     var testData = {};
 
     // 从pre中获取文本信息
@@ -9334,10 +9331,10 @@ function officialCompilerArgsChange(nowSelect) {
     officialLanguage = nowSelect;
     $('#CompilerArgsInput').prop("disabled", true);
 }
-
+// TODO
 // codeforces编译器通信
 async function officialCompiler(code, input) {
-    var data = new FormData();
+    const data = new FormData();
     data.append('csrf_token', CF_csrf_token);
     data.append('source', code);
     data.append('tabSize', '4');
@@ -9348,96 +9345,82 @@ async function officialCompiler(code, input) {
     data.append('action', 'submitSourceCode');
     data.append('programTypeId', officialLanguage);
     data.append('sourceCode', code);
-    var result = {
+
+    const requestOptions = {
+        method: 'POST',
+        url: `${hostAddress}/data/customtest`,
+        data: data,
+        headers: {
+            'X-Csrf-Token': CF_csrf_token
+        }
+    };
+
+    const result = {
         Errors: '',
         Result: '',
         Stats: ''
     };
 
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: 'POST',
-            url: hostAddress + '/data/customtest',
-            data: data,
-            headers: {
-                'X-Csrf-Token': CF_csrf_token
-            },
-            onload: function (responseDetails) {
-                if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `提交代码到 codeforces 服务器时发生了错误，请重试 ${findHelpText1}`;
-                    resolve(result);
-                } else {
-                    try {
-                        const response = JSON.parse(responseDetails.response);
-                        resolve(response.customTestSubmitId);
-                    } catch (error) {
-                        result.Errors = `解析响应数据 customTestSubmitId 时发生了错误，请重试 ${findHelpText1}`;
-                        resolve(result);
-                    }
-                }
-            },
-            onerror: function () {
-                result.Errors = '请求 customTestSubmitId 时网络错误';
-                resolve(result);
-            }
-        });
-    }).then(customTestSubmitId => {
-        if (result.Errors !== '') return result; // 产生了错误，直接返回
-        return new Promise((resolve, reject) => {
-            let retryCount = 0;
-            var newdata = new FormData();
-            newdata.append('csrf_token', CF_csrf_token);
-            newdata.append('action', 'getVerdict');
-            newdata.append('customTestSubmitId', customTestSubmitId);
-            function makeRequest() {
-                GM_xmlhttpRequest({
-                    method: 'POST',
-                    url: hostAddress + '/data/customtest',
-                    data: newdata,
-                    headers: {
-                        'X-Csrf-Token': CF_csrf_token
-                    },
-                    onload: function (responseDetails) {
-                        if (responseDetails.status !== 200 || !responseDetails.response) {
-                            result.Errors = `请求运行结果时发生了错误，请重试 ${findHelpText1}`;
-                            resolve(result);
-                        } else {
-                            try {
-                                const response = JSON.parse(responseDetails.response);
-                                if (!response.stat && retryCount < 10) {
-                                    retryCount++;
-                                    setTimeout(makeRequest, 1000);
-                                } else if (retryCount >= 15) {
-                                    result.Errors = `结果获取已超时，请重试 ${findHelpText1}`;
-                                    resolve(result);
-                                } else {
-                                    const result = {
-                                        Errors: response.verdict == "OK" ? null : response.verdict + '<br>' + response.output,
-                                        Result: response.output.replace(/\r\n/g, "\n"),
-                                        Stats: `Status: ${response.stat}`
-                                    };
-                                    resolve(result);
-                                }
-                            } catch (error) {
-                                result.Errors = '请求运行结果时响应数据解析错误';
-                                resolve(result);
-                            }
-                        }
-                    },
-                    onerror: function () {
-                        result.Errors = '请求运行结果时网络错误';
-                        resolve(result);
-                    }
-                });
-            }
+    try {
+        const submitResponse = await GMRequest(requestOptions);
+        if (submitResponse.status !== 200 || !submitResponse.response) {
+            result.Errors = `提交代码到 codeforces 服务器时发生了错误，请重试 ${findHelpText1}`;
+            return result;
+        }
 
-            makeRequest();
-        });
-    });
+        const submitResult = JSON.parse(submitResponse.response);
+        const customTestSubmitId = submitResult.customTestSubmitId;
+
+        const verdictResponse = await promiseRetryWrapper(
+            getOfficialCompilerVerdict,
+            {
+                maxRetries: 10,
+                retryInterval: 500
+            },
+            customTestSubmitId
+        );
+        return verdictResponse;
+    } catch (error) {
+        result.Errors = error.message;
+        return result;
+    }
+}
+
+// 获取codeforces编译器的执行结果
+async function getOfficialCompilerVerdict(customTestSubmitId) {
+    const newdata = new FormData();
+    newdata.append('csrf_token', CF_csrf_token);
+    newdata.append('action', 'getVerdict');
+    newdata.append('customTestSubmitId', customTestSubmitId);
+
+    const requestOptions = {
+        method: 'POST',
+        url: `${hostAddress}/data/customtest`,
+        data: newdata,
+        headers: {
+            'X-Csrf-Token': CF_csrf_token
+        }
+    };
+
+    const responseDetails = await GMRequest(requestOptions);
+    if (responseDetails.status !== 200 || !responseDetails.response) {
+        throw new Error(`请求运行结果时发生了错误，请重试 ${findHelpText1}`);
+    }
+
+    const response = JSON.parse(responseDetails.response);
+    if (!response.stat) {
+        throw new Error('Verdict not ready, retrying...');
+    }
+
+    return {
+        Errors: response.verdict === "OK" ? null : response.verdict + '<br>' + response.output,
+        Result: response.output.replace(/\r\n/g, "\n"),
+        Stats: `Status: ${response.stat}`
+    };
 }
 
 // rextester编译器参数列表
-let rextesterLanguage = "", rextesterCompilerArgs = "";
+let rextesterLanguage = "";
 function rextesterCompilerArgsChange(nowSelect) {
     let LanguageChoiceList = {
         "4": "9", "6": "8", "7": "5", "9": "1", "13": "13", "19": "42", "20": "21", "28": "30", "31": "24", "32": "20",
@@ -9458,7 +9441,7 @@ function rextesterCompilerArgsChange(nowSelect) {
         $('#RunTestButton').prop("disabled", true);
     }
     if (rextesterLanguage in CompilerArgsList) {
-        rextesterCompilerArgs = CompilerArgsList[rextesterLanguage];
+        const rextesterCompilerArgs = CompilerArgsList[rextesterLanguage];
         $('#CompilerArgsInput').val(rextesterCompilerArgs);
     } else {
         $('#CompilerArgsInput').val("");
@@ -9467,50 +9450,47 @@ function rextesterCompilerArgsChange(nowSelect) {
 
 // rextester编译器通信
 async function rextesterCompiler(code, input) {
-    var data = new FormData();
+    try {
+        const result = await promiseRetryWrapper(rextesterCompilerRequest, {
+            maxRetries: 5,
+            retryInterval: 500,
+            errorHandler: (err) => ({ Errors: err.message, Result: '', Stats: '' })
+        }, code, input);
+        return result;
+    } catch (error) {
+        return { Errors: error.message, Result: '', Stats: '' };
+    }
+}
+
+// rextester编译器请求方法
+async function rextesterCompilerRequest(code, input) {
+    const data = new FormData();
     data.append('LanguageChoiceWrapper', rextesterLanguage);
     data.append('EditorChoiceWrapper', '1');
     data.append('LayoutChoiceWrapper', '1');
     data.append('Program', code);
-    data.append('CompilerArgs', rextesterCompilerArgs);
+    data.append('CompilerArgs', $('#CompilerArgsInput').val());
     data.append('Input', input);
     data.append('ShowWarnings', 'false');
     data.append('IsInEditMode', 'false');
     data.append('IsLive', 'false');
-    var result = {
-        Errors: '',
-        Result: '',
-        Stats: ''
-    };
 
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: 'POST',
-            url: 'https://rextester.com/rundotnet/Run',
-            data: data,
-            onload: function (responseDetails) {
-                if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `发生了未知的错误，请重试 ${findHelpText1}`;
-                    resolve(result);
-                } else {
-                    try {
-                        const response = JSON.parse(responseDetails.response);
-                        result.Errors = response.Errors;
-                        result.Result = response.Result;
-                        result.Stats = response.Stats;
-                        resolve(result);
-                    } catch (error) {
-                        result.Errors = '响应数据解析错误';
-                        resolve(result);
-                    }
-                }
-            },
-            onerror: function () {
-                result.Errors = '网络错误';
-                resolve(result);
-            }
-        });
+    const responseDetails = await GMRequest({
+        method: 'POST',
+        url: 'https://rextester.com/rundotnet/Run',
+        data: data
     });
+
+    if (responseDetails.status !== 200 || !responseDetails.response) {
+        throw new Error(`发生了未知的错误，请重试 ${findHelpText1}`);
+    }
+
+    const response = JSON.parse(responseDetails.response);
+    return {
+        Errors: response.Errors || '',
+        Result: response.Result || '',
+        Stats: response.Stats || ''
+    };
 }
 
 // wandbox编译器参数列表
@@ -9531,8 +9511,9 @@ function wandboxCompilerArgsChange(nowSelect) {
         const Languagefiltered = wandboxlist.filter(obj => obj.language === LanguageChoiceList[nowSelect]);
 
         // 创建编译器下拉框
-        var CompilerChange = $('<select id="CompilerChange" style="width: 100%;"></select>');
-        $('#CompilerSetting').append(CompilerChange);
+        let CompilerChange = $('<select id="CompilerChange" style="width: 100%;"></select>');
+
+        $('#CompilerSetting').show().append(CompilerChange);
         for (let i = 0; i < Languagefiltered.length; i++) {
             let Compiler = Languagefiltered[i];
             let op = $("<option></option>")
@@ -9559,7 +9540,7 @@ function wandboxCompilerArgsChange(nowSelect) {
 
         // 编译器切换监听
         CompilerChange.change(function () {
-            let selectedName = $('#CompilerChange').val();
+            let selectedName = CompilerChange.val();
             let Compiler = Languagefiltered.find(
                 (obj) => obj.name === selectedName
             );
@@ -9631,7 +9612,21 @@ function wandboxCompilerArgsChange(nowSelect) {
 
 // wandbox编译器通信
 async function wandboxCompiler(code, input) {
-    var data = {
+    try {
+        const result = await promiseRetryWrapper(wandboxCompilerRequest, {
+            maxRetries: 5,
+            retryInterval: 500,
+            errorHandler: (err) => ({ Errors: err.message, Result: '', Stats: '' })
+        }, code, input);
+        return result;
+    } catch (error) {
+        return { Errors: error.message, Result: '', Stats: '' };
+    }
+}
+
+// wandbox编译器请求方法
+async function wandboxCompilerRequest(code, input) {
+    const data = {
         code: code,
         codes: [],
         compiler: $('#CompilerChange').val().replace($('#compiler_option_raw').val(), '').replace($('#runtime_option_raw').val(), ''),
@@ -9641,41 +9636,27 @@ async function wandboxCompiler(code, input) {
         description: '',
         stdin: input,
         title: ''
-    }
-    var result = {
-        Errors: '',
-        Result: '',
-        Stats: ''
     };
 
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: 'POST',
-            url: 'https://wandbox.org/api/compile.json',
-            data: JSON.stringify(data),
-            onload: function (responseDetails) {
-                if (responseDetails.status !== 200 || !responseDetails.response) {
-                    result.Errors = `发生了未知的错误，请重试 ${findHelpText1}`;
-                    resolve(result);
-                } else {
-                    try {
-                        const response = JSON.parse(responseDetails.response);
-                        result.Errors = response.compiler_error == "" ? response.signal : response.compiler_error;
-                        result.Result = response.program_output;
-                        result.Stats = response.status == "0" ? "Finish" : "Error";
-                        resolve(result);
-                    } catch (error) {
-                        result.Errors = '响应数据解析错误';
-                        resolve(result);
-                    }
-                }
-            },
-            onerror: function () {
-                result.Errors = '网络错误';
-                resolve(result);
-            }
-        });
+    const responseDetails = await GMRequest({
+        method: 'POST',
+        url: 'https://wandbox.org/api/compile.json',
+        data: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     });
+
+    if (responseDetails.status !== 200 || !responseDetails.response) {
+        throw new Error(`发生了未知的错误，请重试 ${findHelpText1}`);
+    }
+
+    const response = JSON.parse(responseDetails.response);
+    return {
+        Errors: response.compiler_error === "" ? response.signal : response.compiler_error,
+        Result: response.program_output || '',
+        Stats: response.status === "0" ? "Finish" : "Error"
+    };
 }
 
 // 更改编译器参数
@@ -9688,7 +9669,7 @@ function changeCompilerArgs(nowSelect) {
         wandboxCompilerArgsChange(nowSelect);
     }
 }
-
+// TODO
 // 在线编译器通信
 async function onlineCompilerConnect(code, input) {
     if (onlineCompilerChoice == "official") {
@@ -9710,11 +9691,11 @@ function codeDiff(expectedText, actualText) {
     for (var i = 0; i < expectedLines.length; i++) {
         var expectedLine = expectedLines[i];
         var actualLine = actualLines[i];
-        var LineDiv = $(`<div class="DiffLine"><span class="LineNo">${i + 1}</span></div>`);
+        var LineDiv = $(`<div class="diffLine"><span class="lineNo">${i + 1}</span></div>`);
         if (actualLine == undefined) {
             LineDiv.append(`<span class="added">${expectedLine}</span>`);
         } else {
-            let div = $('<div class="LineContent">');
+            let div = $('<div class="lineContent">');
             if (expectedLine === actualLine) {
                 div.append(`<span style="padding-left:3px;">${actualLine}</span>`);
             } else {
@@ -9734,69 +9715,141 @@ function codeDiff(expectedText, actualText) {
     return output.html();
 }
 
-// 样例测试函数
-async function runCode(event, sourceDiv, submitDiv) {
-    event.preventDefault();
-    const loadingImage = $('<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">');
-    $('#RunTestButton').after(loadingImage);
-    $('#statePanel').remove(); // 移除旧结果
+// 内容类型常量
+const TestCaseContentType = {
+    TERMINAL: 'terminal',
+    DIFF: 'diff',
+    NO_DIFF: 'no_diff',
+    SUCCESS: 'success'
+};
 
-    // 评测结果面板
-    var statePanel = $(`<div id="statePanel">`);
-    submitDiv.after(statePanel);
+// 样例测试状态类
+class TestCaseStatus {
+    constructor(item, prefix) {
+        this.testCase = $(`<div class="test-case"></div>`);
+        this.item = item;
+        this.prefix = prefix;
+        this.titleElement = $(`<div class="test-case-title">${this.prefix} ${this.item}</div>`);
+        this.statusElement = $(`<div class="test-case-status"></div>`);
+        this.contentElement = $(`<div class="test-case-content"></div>`);
+        this.judgeElement = $(`<div class="test-case-judge"></div>`);
+        this.testCase.append(this.titleElement, this.statusElement, this.contentElement, this.judgeElement);
+        $('#statePanel').append(this.testCase);
+        this.setStatus('Queued', 'queued');
+    }
 
-    // 更新状态
-    rextesterCompilerArgs = $('#CompilerArgsInput').val();
+    setTitle(title) {
+        this.titleElement.text(title);
+    }
 
-    // 获取数据
-    const testData = collectTestData();
-    const customtestData = await getCustomTestData();
+    setStatus(text, status) {
+        this.statusElement.text(text).removeClass('queued running success error').addClass(status);
+    }
 
-    // 测试
-    const handleResult = (prefix, data, item, result) => {
-        if (result.Errors) {
-            statePanel.append($(`<div class="RunState_title error">${prefix}${item} Compilation error or Time limit</div>`));
-            // 渲染终端转义序列
-            GM_addStyle(GM_getResourceText("xtermcss"));
-            let terminalContainer = $(`<div id="terminal-container" style="overflow: auto;margin-bottom: 5px;"></div>`);
-            statePanel.append(terminalContainer);
-            const term = new Terminal({
-                rows: 10,
-                cols: 150
-            });
-            term.setOption('theme', {
-                background: '#2d2e2c',
-            });
-            term.setOption('convertEol', true); // 将\n转换为\r\n
-            term.write(result.Errors);
-            term.open(terminalContainer.get(0));
-        } else if (result.Result.trim() === data.output.trim()) {
-            statePanel.append($(`<div class="RunState_title ok">${prefix}${item} Accepted</div>`));
-        } else {
-            statePanel.append($(`<div class="RunState_title error">${prefix}${item} Wrong Answer</div>`));
-            if ($('#DontShowDiff').prop('checked')) statePanel.append($(`<div class="outputDiff" style="white-space: break-spaces;">${result.Result.trim()}</div>`));
-            else statePanel.append($(`<p>差异对比：</p><div class="outputDiff">${codeDiff(data.output.trim(), result.Result.trim())}</div>
-            <p style="color: grey; font-size: 12px;">说明：如果该题有多个可能的答案，你的答案也可能并不是错误的</p>`));
+    setContent(content, type) {
+        let contentElement;
+        switch (type) {
+            case TestCaseContentType.TERMINAL:
+                contentElement = $(`<div id="terminal-container" style="overflow: auto;margin-bottom: 5px;"></div>`);
+                const term = new Terminal({ rows: 10, cols: 150 });
+                term.setOption('theme', { background: '#2d2e2c' });
+                term.setOption('convertEol', true); // 将\n转换为\r\n
+                term.write(result.Errors);
+                term.open(contentElement.get(0));
+                break;
+            case TestCaseContentType.DIFF:
+                contentElement = $(`<div class="output_diff">${content}</div>`);
+                break;
+            case TestCaseContentType.NO_DIFF:
+                contentElement = $(`<pre class="output_no_diff">${content}</pre>`);
+                break;
+            case TestCaseContentType.SUCCESS:
+                this.contentElement.hide();
+                return;
         }
-        statePanel.append($(`<div style="color:${result.Errors ? 'red' : ''};">状态： ${result.Stats}</div>`));
-    };
+        if(type == TestCaseContentType.DIFF || type == TestCaseContentType.NO_DIFF){
+            const diffNote = $(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
+            this.testCase.append(diffNote);
+        }
+        this.contentElement.append(contentElement);
+    }
 
-    // 遍历数据并测试
-    for (const [item, data] of Object.entries(customtestData)) {
-        await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
-        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
-        handleResult('自定义样例', data, item, result);
+    setJudge(judge) {
+        this.judgeElement.text(judge);
+    }
+}
+
+// 样例测试函数
+async function runCode(event, runButton, sourceDiv, submitDiv) {
+    event.preventDefault();
+    const statePanel = $('#statePanel').show().empty();
+    const testData = getTestData();
+    const customTestData = await getCustomTestData();
+    const totalTests = Object.keys(customTestData).length + Object.keys(testData).length;
+
+    let passedTests = 0;
+    let failedTests = 0;
+    let hasError = false;
+
+    // 定义一个对象队列，包括创建的样例块实例和对应的样例数据
+    const queue = [];
+
+    // 先生成各个样例的块，并显示排队中，将创建的各个对象存到队列中，以便后面更新
+    for (const [item, data] of Object.entries(customTestData)) {
+        const testCase = new TestCaseStatus(item, i18next.t('resultBlock.title.custom', { ns: 'codeEditor' }));
+        queue.push({ testCase, data });
     }
 
     if (!$('#onlyCustomTest').prop('checked')) {
         for (const [item, data] of Object.entries(testData)) {
-            await new Promise(resolve => setTimeout(resolve, 500)); // 延迟500毫秒
-            const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
-            handleResult('题目样例', data, item, result);
+            const testCase = new TestCaseStatus(item, i18next.t('resultBlock.title.sample', { ns: 'codeEditor' }));
+            queue.push({ testCase, data });
         }
     }
 
-    loadingImage.remove();
+    // 测试函数
+    const runTest = async (testCase, data, index) => {
+        runButton.setButtonState('running', `${index}/${totalTests}`);
+
+        testCase.setStatus('Running', 'running');
+        const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
+
+        if (result.Errors) {
+            testCase.setStatus('Compilation error or Time limit', 'error');
+            testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
+            hasError = true;
+        } else if (result.Result.trim() === data.output.trim()) {
+            testCase.setStatus('Accepted', 'success');
+            testCase.setContent('The output is correct.', TestCaseContentType.SUCCESS);
+            passedTests++;
+        } else {
+            testCase.setStatus('Wrong Answer', 'error');
+            const diffContent = $('#DontShowDiff').prop('checked') ? result.Result.trim() : codeDiff(data.output.trim(), result.Result.trim());
+            const contentType = $('#DontShowDiff').prop('checked') ? TestCaseContentType.NO_DIFF : TestCaseContentType.DIFF;
+            testCase.setContent(diffContent, contentType);
+            failedTests++;
+        }
+
+        const judgeStats = `${i18next.t('resultBlock.state', { ns: 'codeEditor' })}${result.Stats}`;
+        testCase.setJudge(judgeStats);
+
+        await delay(500); // 等待500毫秒
+    };
+
+    // 对队列中的对象进行测试并出队
+    for (let i = 0; i < queue.length; i++) {
+        const { testCase, data } = queue[i];
+        await runTest(testCase, data, i + 1);
+    }
+
+    // 测试完成后更新按钮状态
+    if (hasError) {
+        runButton.setButtonState('error', i18next.t('runTestButton.error', { ns: 'codeEditor' }));
+    } else if (failedTests > 0) {
+        runButton.setButtonState('error', `${passedTests}/${totalTests} ` + i18next.t('runTestButton.partial', { ns: 'codeEditor' }));
+    } else {
+        runButton.setButtonState('success', i18next.t('runTestButton.success', { ns: 'codeEditor' }));
+    }
 }
 
 /**
@@ -9846,7 +9899,7 @@ async function addProblemPageCodeEditor() {
     selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
 
     // 样例测试
-    runButton.on('click', (event) => runCode(event, form.sourceDiv, form.submitDiv));
+    runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv));
 
     // 提交
     submitButton.on('click', async function (event) {

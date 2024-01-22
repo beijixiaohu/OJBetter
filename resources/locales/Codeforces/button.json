@@ -3,12 +3,13 @@
         "normal": "翻译",
         "segment": "分段翻译",
         "select": "翻译选中",
-        "translating": "翻译中",
+        "running": "翻译中",
         "wait": "等待翻译",
-        "translated": "重新翻译",
+        "success": "重新翻译",
         "error": "翻译出错",
-        "reTranslate": "重新翻译",
-        "tooLong": "字数超限"
+        "redo": "重新翻译",
+        "tooLong": "字数超限",
+        "waitMathJax": "等待MathJax"
     },
     "md": {
         "normal": "MarkDown视图",

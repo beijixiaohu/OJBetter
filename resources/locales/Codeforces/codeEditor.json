@@ -5,7 +5,22 @@
         "DontShowDiff": "不显示差异",
         "add": "新建"
     },
-    "runTestButton": "样例测试",
+    "runTestButton": {
+        "initial": "样例测试",
+        "running": "测试中",
+        "success": "全部通过",
+        "error": "未通过",
+        "partial": "部分通过"
+    },
+    "resultBlock": {
+        "diff": "差异对比：",
+        "diffNote": "说明：如果该题有多个可能的答案，你的答案也可能并不是错误的",
+        "state": "状态：",
+        "title": {
+            "custom": "自定义样例",
+            "sample": "题目样例"
+        }
+    },
     "submitButton": "提交",
     "fontSizeInput": "字体大小",
     "fullscreenButton": "全屏",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "创建LSP连接……",
         "waitingAnswer": "等待初始化回执……",
-        "connected": "LSP已连接"
+        "connected": "LSP已连接",
+        "error": "LSP连接已断开"
     }
 }
