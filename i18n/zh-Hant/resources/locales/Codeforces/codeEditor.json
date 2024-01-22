@@ -5,7 +5,22 @@
         "DontShowDiff": "不顯示差異",
         "add": "新建"
     },
-    "runTestButton": "範例測試",
+    "runTestButton": {
+        "initial": "範例測試",
+        "running": "測試中",
+        "success": "全部透過",
+        "error": "未通過",
+        "partial": "部分透過"
+    },
+    "resultBlock": {
+        "diff": "差異對比：",
+        "diffNote": "說明：如果該題有多個可能的答案，你的答案也可能不是錯的",
+        "state": "狀態：",
+        "title": {
+            "custom": "自訂範例",
+            "sample": "題目範例"
+        }
+    },
     "submitButton": "提交",
     "fontSizeInput": "字體大小",
     "fullscreenButton": "全螢幕",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "建立LSP連線……",
         "waitingAnswer": "等待初始化回執……",
-        "connected": "LSP已連接"
+        "connected": "LSP已連接",
+        "error": "LSP連線已斷開"
     }
 }
