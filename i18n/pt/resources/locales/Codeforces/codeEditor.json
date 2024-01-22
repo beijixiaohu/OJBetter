@@ -5,7 +5,22 @@
         "DontShowDiff": "Discrepâncias não apresentadas",
         "add": "recém-construído"
     },
-    "runTestButton": "teste de amostra",
+    "runTestButton": {
+        "initial": "teste de amostra",
+        "running": "em teste",
+        "success": "Todos aprovados",
+        "error": "infrutífero",
+        "partial": "Parcialmente adoptada"
+    },
+    "resultBlock": {
+        "diff": "Comparação das diferenças：",
+        "diffNote": "Explicação：Se houver mais do que uma resposta possível para a pergunta, a sua resposta pode não estar incorrecta.",
+        "state": "Estado：",
+        "title": {
+            "custom": "Amostras personalizadas",
+            "sample": "Título da amostra"
+        }
+    },
     "submitButton": "apresentar (um relatório, etc.)",
     "fontSizeInput": "tamanho da letra",
     "fullscreenButton": "ecrã inteiro",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "Criar uma ligação LSP……",
         "waitingAnswer": "A aguardar confirmação de inicialização……",
-        "connected": "LSP ligado"
+        "connected": "LSP ligado",
+        "error": "Ligação LSP desligada"
     }
 }
