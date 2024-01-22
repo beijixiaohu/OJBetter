@@ -5,7 +5,22 @@
         "DontShowDiff": "違いを非表示",
         "add": "新規"
     },
-    "runTestButton": "サンプル テスト",
+    "runTestButton": {
+        "initial": "サンプルテスト",
+        "running": "テスト中",
+        "success": "すべて合格",
+        "error": "うまくいかない",
+        "partial": "一部採用"
+    },
+    "resultBlock": {
+        "diff": "相違点の比較：",
+        "diffNote": "Explanation：質問に複数の答えがある場合、あなたの答えは間違っていないかもしれません。",
+        "state": "ステータス：",
+        "title": {
+            "custom": "カスタムサンプル",
+            "sample": "サンプル・タイトル"
+        }
+    },
     "submitButton": "送信",
     "fontSizeInput": "フォントサイズ",
     "fullscreenButton": "フルスクリーン",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "LSPコネクションの作成……",
         "waitingAnswer": "アスタリスク…… の初期化を待っています",
-        "connected": "接続済みLSP:"
+        "connected": "接続済みLSP:",
+        "error": "LSPコネクションの切断"
     }
 }

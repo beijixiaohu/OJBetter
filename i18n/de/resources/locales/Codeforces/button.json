@@ -3,12 +3,13 @@
         "normal": "Rendering",
         "segment": "Segmentale Übersetzung",
         "select": "Ausgewählt für die Übersetzung",
-        "translating": "in Übersetzung",
+        "running": "in Übersetzung",
         "wait": "Warten auf die Übersetzung",
-        "translated": "Rückübersetzung",
+        "success": "Rückübersetzung",
         "error": "Fehler in der Übersetzung",
-        "reTranslate": "Rückübersetzung",
-        "tooLong": "das Wortlimit überschreiten"
+        "redo": "Rückübersetzung",
+        "tooLong": "das Wortlimit überschreiten",
+        "waitMathJax": "Warten auf MathJax"
     },
     "md": {
         "normal": "MarkDown-Ansicht",

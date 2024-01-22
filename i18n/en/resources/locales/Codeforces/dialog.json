@@ -42,8 +42,8 @@
         "title": "Does it continue to be translated?",
         "content": "The upcoming translation appears to be **code snippet** and translating it may be pointless, are you sure to continue?",
         "buttons": [
-            "clogged",
-            "be"
+            "be",
+            "clogged"
         ]
     }
 }

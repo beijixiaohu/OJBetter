@@ -3,12 +3,13 @@
         "normal": "l'équarrissage",
         "segment": "Traduction segmentaire",
         "select": "Sélectionnés pour la traduction",
-        "translating": "en traduction",
+        "running": "en traduction",
         "wait": "En attente de traduction",
-        "translated": "retraduction",
+        "success": "retraduction",
         "error": "erreur de traduction",
-        "reTranslate": "retraduction",
-        "tooLong": "dépasser la limite de mots"
+        "redo": "retraduction",
+        "tooLong": "dépasser la limite de mots",
+        "waitMathJax": "En attendant MathJax"
     },
     "md": {
         "normal": "Vue MarkDown",

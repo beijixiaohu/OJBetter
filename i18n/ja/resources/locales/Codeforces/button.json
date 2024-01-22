@@ -3,12 +3,13 @@
         "normal": "翻訳",
         "segment": "マルチ翻訳",
         "select": "選択範囲を翻訳",
-        "translating": "翻訳中",
+        "running": "翻訳中",
         "wait": "翻訳待ち",
-        "translated": "再翻訳",
+        "success": "改訳",
         "error": "翻訳エラー",
-        "reTranslate": "再翻訳",
-        "tooLong": "語数制限を超え"
+        "redo": "改訳",
+        "tooLong": "語数制限を超え",
+        "waitMathJax": "MathJax 待機中..."
     },
     "md": {
         "normal": "MarkDownで開く",

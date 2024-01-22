@@ -42,8 +42,8 @@
         "title": "A tradução vai continuar?",
         "content": "A próxima tradução parece ser um **código snippet** e traduzi-lo pode ser inútil, tem a certeza de continuar?",
         "buttons": [
-            "entupido",
-            "ser"
+            "ser",
+            "entupido"
         ]
     }
 }
