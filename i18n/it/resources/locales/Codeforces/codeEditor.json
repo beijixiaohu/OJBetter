@@ -5,7 +5,22 @@
         "DontShowDiff": "Discrepanze non mostrate",
         "add": "di nuova costruzione"
     },
-    "runTestButton": "test campione",
+    "runTestButton": {
+        "initial": "test campione",
+        "running": "in fase di test",
+        "success": "Tutti approvati",
+        "error": "non riuscito",
+        "partial": "Parzialmente adottato"
+    },
+    "resultBlock": {
+        "diff": "Confronto delle differenze：",
+        "diffNote": "Spiegazione：Se c'è più di una risposta possibile alla domanda, la sua risposta potrebbe non essere errata.",
+        "state": "Stato：",
+        "title": {
+            "custom": "Campioni personalizzati",
+            "sample": "Titolo del campione"
+        }
+    },
     "submitButton": "presentare (un rapporto, ecc.)",
     "fontSizeInput": "dimensione del carattere",
     "fullscreenButton": "schermo intero",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "Creare una connessione LSP……",
         "waitingAnswer": "Attesa per la conferma dell'inizializzazione……",
-        "connected": "LSP collegato"
+        "connected": "LSP collegato",
+        "error": "Connessione LSP scollegata"
     }
 }
