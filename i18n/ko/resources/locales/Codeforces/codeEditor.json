@@ -5,7 +5,22 @@
         "DontShowDiff": "표시되지 않은 불일치",
         "add": "새로 구축"
     },
-    "runTestButton": "샘플 테스트",
+    "runTestButton": {
+        "initial": "샘플 테스트",
+        "running": "테스트 중",
+        "success": "모두 통과",
+        "error": "실패",
+        "partial": "부분적으로 채택됨"
+    },
+    "resultBlock": {
+        "diff": "차이점 비교：",
+        "diffNote": "설명：질문에 가능한 답이 두 개 이상 있는 경우 정답이 아닐 수 있습니다.",
+        "state": "상태：",
+        "title": {
+            "custom": "사용자 지정 샘플",
+            "sample": "샘플 제목"
+        }
+    },
     "submitButton": "제출(보고서 등)",
     "fontSizeInput": "글꼴 크기",
     "fullscreenButton": "전체 화면",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "LSP 연결 만들기……",
         "waitingAnswer": "초기화 확인을 기다리는 중……",
-        "connected": "LSP 연결"
+        "connected": "LSP 연결",
+        "error": "LSP 연결이 끊어짐"
     }
 }
