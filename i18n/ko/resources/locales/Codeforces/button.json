@@ -3,12 +3,13 @@
         "normal": "렌더링",
         "segment": "세그먼트별 번역",
         "select": "번역을 위해 선택됨",
-        "translating": "번역 중",
+        "running": "번역 중",
         "wait": "번역 대기 중",
-        "translated": "재번역",
+        "success": "재번역",
         "error": "번역 오류",
-        "reTranslate": "재번역",
-        "tooLong": "단어 수 제한 초과"
+        "redo": "재번역",
+        "tooLong": "단어 수 제한 초과",
+        "waitMathJax": "MathJax 대기 중"
     },
     "md": {
         "normal": "마크다운 보기",
