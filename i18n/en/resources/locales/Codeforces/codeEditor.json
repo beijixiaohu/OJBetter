@@ -5,7 +5,22 @@
         "DontShowDiff": "Do not show differences",
         "add": "Create New"
     },
-    "runTestButton": "Example Test",
+    "runTestButton": {
+        "initial": "sample test",
+        "running": "under test",
+        "success": "All passed",
+        "error": "unsuccessful",
+        "partial": "Passed in part"
+    },
+    "resultBlock": {
+        "diff": "Comparison of Differences：",
+        "diffNote": "Explanation：If there is more than one possible answer to the question, your answer may not be incorrect.",
+        "state": "Status：",
+        "title": {
+            "custom": "Customized Samples",
+            "sample": "Sample Title"
+        }
+    },
     "submitButton": "Commit",
     "fontSizeInput": "Font size",
     "fullscreenButton": "Fullscreen",
@@ -16,6 +31,7 @@
     "lsp": {
         "connect": "Create LSP connection……",
         "waitingAnswer": "Waiting for initialization back to……",
-        "connected": "LSP connected"
+        "connected": "LSP connected",
+        "error": "LSP connection disconnected"
     }
 }
