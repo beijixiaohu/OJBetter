@@ -3,12 +3,13 @@
         "normal": "Translation",
         "segment": "Segment Translations",
         "select": "Translations selected",
-        "translating": "Translating",
+        "running": "in translation",
         "wait": "Waiting for translation",
-        "translated": "Re-translate",
+        "success": "retranslation",
         "error": "Translation error",
-        "reTranslate": "Re-translate",
-        "tooLong": "Word Out Of Tolerance"
+        "redo": "retranslation",
+        "tooLong": "Word Out Of Tolerance",
+        "waitMathJax": "Waiting for MathJax"
     },
     "md": {
         "normal": "MarkDownview",
