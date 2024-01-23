@@ -2313,9 +2313,11 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .output_diff .added {
     background-color: #c8f7c5;
     user-select: none;
+    padding-left: 3px;
 }
 .output_diff .removed {
     background-color: #f7c5c5;
+    padding-left: 3px;
 }
 .output_diff .diffLine {
     display: flex;
@@ -2338,11 +2340,14 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     display: grid;
     width: 100%;
 }
+.lineContent>span {
+    height: 16px;
+}
 .output_no_diff {
     padding: 5px;
     border: 1px solid #ddd;
 }
-.diff_note{
+.diff_note {
     font-size: 10px;
 }
 /*monaco编辑器*/
@@ -2436,6 +2441,13 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     }
 }
 `);
+
+/**
+ * 添加一些依赖库的样式
+ */
+function addDependencyStyles(){
+    GM_addStyle(GM_getResourceText("xtermcss"));
+}
 
 // ------------------------------
 // 一些工具函数
@@ -3076,7 +3088,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.17',
+                        defaultVersion: 'v1.18',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -9684,35 +9696,68 @@ async function onlineCompilerConnect(code, input) {
 // 差异对比
 function codeDiff(expectedText, actualText) {
     // 将文本按行拆分
-    var expectedLines = expectedText.split('\n');
-    var actualLines = actualText.split('\n');
+    const expectedLines = expectedText ? expectedText.split('\n') : [];
+    const actualLines = actualText ? actualText.split('\n') : [];
 
-    var output = $('<div>');
-    for (var i = 0; i < expectedLines.length; i++) {
-        var expectedLine = expectedLines[i];
-        var actualLine = actualLines[i];
-        var LineDiv = $(`<div class="diffLine"><span class="lineNo">${i + 1}</span></div>`);
-        if (actualLine == undefined) {
-            LineDiv.append(`<span class="added">${expectedLine}</span>`);
+    const output = document.createElement('div');
+
+    const createLineElement = (lineNo, contentElement) => {
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'diffLine';
+
+        const lineNoDiv = document.createElement('div');
+        lineNoDiv.className = 'lineNo';
+        lineNoDiv.textContent = lineNo;
+
+        lineDiv.appendChild(lineNoDiv);
+        lineDiv.appendChild(contentElement);
+
+        return lineDiv;
+    };
+
+    const createContentElement = (isEquals = true, expected = null, removed = null) => {
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'lineContent';
+
+        if (isEquals) {
+            contentDiv.textContent = expected;
         } else {
-            let div = $('<div class="lineContent">');
-            if (expectedLine === actualLine) {
-                div.append(`<span style="padding-left:3px;">${actualLine}</span>`);
-            } else {
-                div.append(`<span class="removed" style="padding-left:3px;">${actualLine}</span>`);
-                div.append(`<span class="added" style="padding-left:3px;">${expectedLine}</span>`);
+            if (removed != null) {
+                const removedSpan = document.createElement('span');
+                removedSpan.className = 'removed';
+                removedSpan.textContent = removed;
+                contentDiv.appendChild(removedSpan);
             }
-            LineDiv.append(div);
+            if (expected != null) {
+                const addedSpan = document.createElement('span');
+                addedSpan.className = 'added';
+                addedSpan.textContent = expected;
+                contentDiv.appendChild(addedSpan);
+            }
         }
-        output.append(LineDiv);
-    }
+
+        return contentDiv;
+    };
+
+    let index = 1;
+
+    expectedLines.forEach((expectedLine, i) => {
+        const actualLine = actualLines[i];
+        if (actualLine === undefined) {
+            output.appendChild(createLineElement(index++, createContentElement(false, expectedLine)));
+        } else if (expectedLine === actualLine) {
+            output.appendChild(createLineElement(index++, createContentElement(true, expectedLine)));
+        } else {
+            output.appendChild(createLineElement(index++, createContentElement(false, expectedLine, actualLine)));
+        }
+    });
 
     // 处理多余的 actualLines
-    for (var j = expectedLines.length; j < actualLines.length; j++) {
-        output.append(`<span class="removed" style="padding-left:3px;">${actualLines[j]}</span>`);
+    for (let i = expectedLines.length; i < actualLines.length; i++) {
+        output.appendChild(createLineElement(index++, createContentElement(false, null, actualLines[i])));
     }
 
-    return output.html();
+    return output.innerHTML;
 }
 
 // 内容类型常量
@@ -9747,31 +9792,56 @@ class TestCaseStatus {
     }
 
     setContent(content, type) {
-        let contentElement;
-        switch (type) {
-            case TestCaseContentType.TERMINAL:
-                contentElement = $(`<div id="terminal-container" style="overflow: auto;margin-bottom: 5px;"></div>`);
-                const term = new Terminal({ rows: 10, cols: 150 });
-                term.setOption('theme', { background: '#2d2e2c' });
-                term.setOption('convertEol', true); // 将\n转换为\r\n
-                term.write(result.Errors);
-                term.open(contentElement.get(0));
-                break;
-            case TestCaseContentType.DIFF:
-                contentElement = $(`<div class="output_diff">${content}</div>`);
-                break;
-            case TestCaseContentType.NO_DIFF:
-                contentElement = $(`<pre class="output_no_diff">${content}</pre>`);
-                break;
-            case TestCaseContentType.SUCCESS:
-                this.contentElement.hide();
-                return;
+        // 如果内容类型为SUCCESS，隐藏内容元素并提前返回
+        if (type === TestCaseContentType.SUCCESS) {
+            this.contentElement.hide();
+            return;
         }
-        if(type == TestCaseContentType.DIFF || type == TestCaseContentType.NO_DIFF){
+    
+        // 根据内容类型创建内容元素
+        const createContentElementByType = (content, type) => {
+            let contentElement;
+            switch (type) {
+                case TestCaseContentType.TERMINAL:
+                    // 为TERMINAL类型创建一个新的终端容器
+                    contentElement = $(`<div class="terminal-container" style="overflow: auto;"></div>`);
+                    break;
+                case TestCaseContentType.DIFF:
+                case TestCaseContentType.NO_DIFF:
+                    // 为DIFF和NO_DIFF类型创建相应的内容元素，并添加差异说明
+                    const className = type === TestCaseContentType.DIFF ? "output_diff" : "output_no_diff";
+                    contentElement = $(`<pre class="${className}">${content}</pre>`);
+                    appendDiffNote();
+                    break;
+                default:
+                    throw new Error("不支持的内容类型");
+            }
+            return contentElement;
+        };
+    
+        // 初始化终端
+        const initializeTerminal = (content, contentElement) => {
+            const term = new Terminal({ rows: 10, cols: 150 });
+            term.setOption('theme', { background: '#2d2e2c' });
+            term.setOption('convertEol', true); // 将换行符\n转换为\r\n
+            term.write(content);
+            term.open(contentElement.get(0));
+        };
+    
+        // 添加差异说明
+        const appendDiffNote = () => {
             const diffNote = $(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
             this.testCase.append(diffNote);
-        }
+        };
+    
+        // 创建并追加内容元素
+        const contentElement = createContentElementByType(content, type);
         this.contentElement.append(contentElement);
+    
+        // 如果内容类型为TERMINAL，初始化并打开终端
+        if (type === TestCaseContentType.TERMINAL) {
+            initializeTerminal(content, contentElement);
+        }
     }
 
     setJudge(judge) {
@@ -9836,7 +9906,7 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
         await delay(500); // 等待500毫秒
     };
 
-    // 对队列中的对象进行测试并出队
+    // 对队列中的对象进行测试
     for (let i = 0; i < queue.length; i++) {
         const { testCase, data } = queue[i];
         await runTest(testCase, data, i + 1);
@@ -10385,6 +10455,7 @@ function initOnDOMReady() {
     initSettingsPanel(); // 加载设置按钮面板
     localizeWebsite(); // 网站本地化替换
     addtargetAreaCss(); // 加载鼠标悬浮覆盖层css
+    addDependencyStyles(); // 添加一些依赖库的样式
     if (expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
     if (renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
     if (is_problem) {
