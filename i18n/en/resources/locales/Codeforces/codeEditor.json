@@ -9,7 +9,7 @@
         "initial": "sample test",
         "running": "under test",
         "success": "All passed",
-        "error": "unsuccessful",
+        "error": "Failed all",
         "partial": "Passed in part"
     },
     "resultBlock": {
