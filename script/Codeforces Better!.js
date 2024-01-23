@@ -683,24 +683,26 @@ span.mdViewContent {
     white-space: pre-wrap;
 }
 /* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
-.translateDiv,
-.html2md-panel,
-#CFBetter_SubmitForm {
-  &.input-output-copier {
-    font-size: initial;
-    float: initial;
-    color: initial;
-    cursor: initial;
-    border: none;
-    padding: 0px;
-    margin: 0px;
-    line-height: initial;
-    text-transform: none;
-    &:hover {
-      background-color: #ffffff00;
-    }
-  }
+.translateDiv.input-output-copier,
+.html2md-panel.input-output-copier,
+#CFBetter_SubmitForm.input-output-copier {
+  font-size: initial;
+  float: initial;
+  color: initial;
+  cursor: initial;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  line-height: initial;
+  text-transform: none;
 }
+
+.translateDiv.input-output-copier:hover,
+.html2md-panel.input-output-copier:hover,
+#CFBetter_SubmitForm.input-output-copier:hover {
+  background-color: #ffffff00;
+}
+
 /*翻译div*/
 html:not([data-theme='dark']) .translateDiv {
     box-shadow: 0px 0px 0.5px 0.5px #defdf378;
@@ -867,171 +869,121 @@ a.ojb_btn span {
     position: relative;
     outline: none;
     appearance: none;
-
-    &:hover {
-        & span {
-            opacity: 1;
-            visibility: visible;
-        }
-    }
-
-    & i:before {
-        position: absolute;
-        text-shadow: 0px 0px 4px #ffffff;
-    }
-
-    & span {
-        cursor: initial;
-        position: absolute;
-        left: 50%;
-        opacity: 0;
-        visibility: hidden;
-        padding: 4px 8px;
-        background-color: rgb(33 33 33 / 80%);
-        color: #ffffffe6;
-        font-size: 12px;
-        border-radius: 6px;
-        line-height: 1.6;
-        text-align: left;
-        white-space: nowrap;
-        transition: all .15s ease-in-out;
-        z-index: 999;
-
-        &:hover {
-            opacity: 0;
-            visibility: hidden;
-        }
-    }
-
-    &.top {
-
-        &:hover {
-            & span {
-                transform: translate(-50%, 0);
-            }
-        }
-
-        & span {
-            bottom: 100%;
-            transform: translate(-50%, -20%);
-            margin-bottom: 4px;
-
-            &:hover {
-                transform: translate(-50%, -20%);
-            }
-        }
-    }
-
-    &.bottom {
-        &:hover {
-            & span {
-                transform: translate(-50%, 105%);
-            }
-        }
-
-        & span {
-            bottom: -2%;
-            transform: translate(-50%, 100%);
-            margin-top: 4px;
-
-            &:hover {
-                transform: translate(-50%, 50%);
-            }
-        }
-    }
-
-    &.loading {
-        i {
-            color: rgb(33 33 33 / 10%);
-
-            &:before {
-                content: "\\e640";
-                color: rgb(168, 171, 178);
-                animation: rotate 2s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
-            }
-        }
-    }
-
-    &.running {
-        i {
-            color: rgb(33 33 33 / 10%);
-
-            &:before {
-                content: "\\e600";
-                color: rgb(168, 171, 178);
-                animation: rotate 1s linear infinite;
-            }
-        }
-    }
-
-    &.warning {
-        i {
-            color: rgb(230 162 61 / 80%);
-
-            &:before {
-                content: "\\e68b";
-                font-size: 15px;
-                left: 10px;
-                bottom: 0%;
-                color: #ff9800;
-            }
-        }
-    }
-
-    &.error {
-        i {
-            color: rgb(245 108 108 / 80%);
-
-            &:before {
-                content: "\\e651";
-                font-size: 15px;
-                left: 10px;
-                bottom: 0%;
-                color: #F44336;
-            }
-        }
-    }
-
-    &.success {
-        i {
-            color: rgb(103 194 62 / 90%);
-
-            &:before {
-                content: "\\e61e";
-                font-size: 15px;
-                left: 10px;
-                bottom: 0%;
-                color: #67c23e;
-            }
-        }
-    }
-
-    &.enabled {
-        i {
-            color: rgb(33 150 243 / 60%);
-
-            &:before {
-                content: "\\e6f4";
-                font-size: 15px;
-                left: 10px;
-                bottom: 0%;
-                color: #2196F3;
-            }
-        }
-    }
-
-    &.redo {
-        i {
-            color: rgb(33 33 33 / 10%);
-
-            &:before {
-                content: "\\e831";
-                color: #616161;
-            }
-        }
-    }
 }
-
+.ojb_btn_popover:hover span {
+    opacity: 1;
+    visibility: visible;
+}
+.ojb_btn_popover i:before {
+    position: absolute;
+    text-shadow: 0px 0px 4px #ffffff;
+}
+.ojb_btn_popover span {
+    cursor: initial;
+    position: absolute;
+    left: 50%;
+    opacity: 0;
+    visibility: hidden;
+    padding: 4px 8px;
+    background-color: rgba(33, 33, 33, 0.8);
+    color: rgba(255, 255, 255, 0.9019607843);
+    font-size: 12px;
+    border-radius: 6px;
+    line-height: 1.6;
+    text-align: left;
+    white-space: nowrap;
+    transition: all 0.15s ease-in-out;
+    z-index: 999;
+}
+.ojb_btn_popover span:hover {
+    opacity: 0;
+    visibility: hidden;
+}
+.ojb_btn_popover.top:hover span {
+    transform: translate(-50%, 0);
+}
+.ojb_btn_popover.top span {
+    bottom: 100%;
+    transform: translate(-50%, -20%);
+    margin-bottom: 4px;
+}
+.ojb_btn_popover.top span:hover {
+    transform: translate(-50%, -20%);
+}
+.ojb_btn_popover.bottom:hover span {
+    transform: translate(-50%, 105%);
+}
+.ojb_btn_popover.bottom span {
+    bottom: -2%;
+    transform: translate(-50%, 100%);
+    margin-top: 4px;
+}
+.ojb_btn_popover.bottom span:hover {
+    transform: translate(-50%, 50%);
+}
+.ojb_btn_popover.loading i {
+    color: rgba(33, 33, 33, 0.1);
+}
+.ojb_btn_popover.loading i:before {
+    content: "\\e640";
+    color: rgb(168, 171, 178);
+    animation: rotate 2s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
+}
+.ojb_btn_popover.running i {
+    color: rgba(33, 33, 33, 0.1);
+}
+.ojb_btn_popover.running i:before {
+    content: "\\e600";
+    color: rgb(168, 171, 178);
+    animation: rotate 1s linear infinite;
+}
+.ojb_btn_popover.warning i {
+    color: rgba(230, 162, 61, 0.8);
+}
+.ojb_btn_popover.warning i:before {
+    content: "\\e68b";
+    font-size: 15px;
+    left: 10px;
+    bottom: 0%;
+    color: #ff9800;
+}
+.ojb_btn_popover.error i {
+    color: rgba(245, 108, 108, 0.8);
+}
+.ojb_btn_popover.error i:before {
+    content: "\\e651";
+    font-size: 15px;
+    left: 10px;
+    bottom: 0%;
+    color: #F44336;
+}
+.ojb_btn_popover.success i {
+    color: rgba(103, 194, 62, 0.9);
+}
+.ojb_btn_popover.success i:before {
+    content: "\\e61e";
+    font-size: 15px;
+    left: 10px;
+    bottom: 0%;
+    color: #67c23e;
+}
+.ojb_btn_popover.enabled i {
+    color: rgba(33, 150, 243, 0.6);
+}
+.ojb_btn_popover.enabled i:before {
+    content: "\\e6f4";
+    font-size: 15px;
+    left: 10px;
+    bottom: 0%;
+    color: #2196F3;
+}
+.ojb_btn_popover.redo i {
+    color: rgba(33, 33, 33, 0.1);
+}
+.ojb_btn_popover.redo i:before {
+    content: "\\e831";
+    color: #616161;
+}
 /*translateDiv样式*/
 .translateDiv .topText {
     display: flex;
@@ -2126,7 +2078,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 }
 #CFBetter_submitDiv > button {
     height: 100%;
-    width: 35px;
+    aspect-ratio: 1 / 1;
 }
 #SubmitButton {
     color: #fff;
@@ -2167,6 +2119,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     cursor: not-allowed;
 }
 #CompilerSetting{
+    font-size: 14px;
     margin-top: 10px;
     display: none;
 }
@@ -2189,6 +2142,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 /* 自定义样例 */
 #customTestBlock {
     margin-top: 10px;
+    font-size: 14px;
     color: #616161;
     border: 1px solid #d3d3d3;
     box-sizing: border-box;
@@ -2445,7 +2399,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 /**
  * 添加一些依赖库的样式
  */
-function addDependencyStyles(){
+function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
 }
 
@@ -4950,11 +4904,27 @@ async function initButtonFunc() {
         this.data('buttonState', state)
             .prop('disabled', disabled)
             .css('cursor', disabled ? 'not-allowed' : 'pointer')
-            .removeClass('running success enabled error loading redo')
-            .setButtonPopover(popoverText);
+            .removeClass('running success enabled error loading redo');
+        if (popoverText) this.setButtonPopover(popoverText);
 
         if (state !== 'initial') this.addClass(state);
         return this;
+    };
+
+    // 为按钮添加鼠标悬浮重试
+    $.fn.setHoverRedo = function () {
+        this.hover(() => {
+            prevState = this.getButtonState();
+            if (prevState !== "normal" && prevState !== "running") {
+                this.setButtonState('redo');
+            }
+        }, () => {
+            const currentState = this.getButtonState();
+            if (prevState !== "normal" && ["normal", "redo"].includes(currentState)) {
+                this.setButtonState(prevState);
+                prevState = null;
+            }
+        });
     };
 
     // 获取按钮状态
@@ -9797,7 +9767,7 @@ class TestCaseStatus {
             this.contentElement.hide();
             return;
         }
-    
+
         // 根据内容类型创建内容元素
         const createContentElementByType = (content, type) => {
             let contentElement;
@@ -9818,7 +9788,7 @@ class TestCaseStatus {
             }
             return contentElement;
         };
-    
+
         // 初始化终端
         const initializeTerminal = (content, contentElement) => {
             const term = new Terminal({ rows: 10, cols: 150 });
@@ -9827,17 +9797,17 @@ class TestCaseStatus {
             term.write(content);
             term.open(contentElement.get(0));
         };
-    
+
         // 添加差异说明
         const appendDiffNote = () => {
             const diffNote = $(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
             this.testCase.append(diffNote);
         };
-    
+
         // 创建并追加内容元素
         const contentElement = createContentElementByType(content, type);
         this.contentElement.append(contentElement);
-    
+
         // 如果内容类型为TERMINAL，初始化并打开终端
         if (type === TestCaseContentType.TERMINAL) {
             initializeTerminal(content, contentElement);
@@ -9969,7 +9939,8 @@ async function addProblemPageCodeEditor() {
     selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
 
     // 样例测试
-    runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv));
+    runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv))
+        .setHoverRedo();
 
     // 提交
     submitButton.on('click', async function (event) {
