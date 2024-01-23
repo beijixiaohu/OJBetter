@@ -9,7 +9,7 @@
         "initial": "샘플 테스트",
         "running": "테스트 중",
         "success": "모두 통과",
-        "error": "실패",
+        "error": "모두 실패",
         "partial": "부분적으로 채택됨"
     },
     "resultBlock": {
