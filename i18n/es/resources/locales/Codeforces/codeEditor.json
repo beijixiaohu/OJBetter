@@ -9,7 +9,7 @@
         "initial": "prueba de muestra",
         "running": "a prueba",
         "success": "Todos aprobados",
-        "error": "sin éxito",
+        "error": "Falló todo",
         "partial": "Adoptado parcialmente"
     },
     "resultBlock": {
