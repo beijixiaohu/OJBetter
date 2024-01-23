@@ -9,7 +9,7 @@
         "initial": "échantillon de test",
         "running": "en cours de test",
         "success": "Tous adoptés",
-        "error": "infructueux",
+        "error": "Tous échoués",
         "partial": "Partiellement adoptée"
     },
     "resultBlock": {

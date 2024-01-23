@@ -9,7 +9,7 @@
         "initial": "test campione",
         "running": "in fase di test",
         "success": "Tutti approvati",
-        "error": "non riuscito",
+        "error": "Falliti tutti",
         "partial": "Parzialmente adottato"
     },
     "resultBlock": {

@@ -9,7 +9,7 @@
         "initial": "teste de amostra",
         "running": "em teste",
         "success": "Todos aprovados",
-        "error": "infrutífero",
+        "error": "Falhou tudo",
         "partial": "Parcialmente adoptada"
     },
     "resultBlock": {

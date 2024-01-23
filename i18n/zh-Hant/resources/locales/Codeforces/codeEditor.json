@@ -9,7 +9,7 @@
         "initial": "範例測試",
         "running": "測試中",
         "success": "全部透過",
-        "error": "未通過",
+        "error": "全部未通過",
         "partial": "部分透過"
     },
     "resultBlock": {

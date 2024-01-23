@@ -9,7 +9,7 @@
         "initial": "サンプルテスト",
         "running": "テスト中",
         "success": "すべて合格",
-        "error": "うまくいかない",
+        "error": "すべて不合格",
         "partial": "一部採用"
     },
     "resultBlock": {
