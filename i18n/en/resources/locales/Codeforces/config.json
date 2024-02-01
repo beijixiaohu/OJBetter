@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "Configuration",
+        "genre": {
+            "label": "API Type",
+            "tipText": "<strong>Description:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL Membership</a> is divided into Individual Membership and API Membership, you need to be API Member,</p><p>where API Membership is divided into Free Plan (api-free) and Pro Plan (api-pro), they have different request address, please don't choose the wrong one.</p><p>You need to fill in the key. If you need to use the proxy address to access it, fill in the Proxy API.</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> is an unofficial API project which is accessed by simulating the IOS side, so it doesn't support all the parameters of the official API, and you can deploy it by yourself or use the public API. Fill in the Proxy API field with the address of your service.</p><p>If you don't fill in the field, the public interface will be used by default：https://api.deeplx.org/translate</p><p>If you don't enable token authentication, then the Key field can be left empty.</p>"
+        },
+        "basic": {
+            "title": "fundamental",
+            "name": {
+                "label": "Name.",
+                "placeholder": "Please enter a name for this configuration"
+            },
+            "key": {
+                "label": "KEY.",
+                "placeholder": "Please enter KEY",
+                "tipText": "<p>You need to enter your own DeepL key,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">official website</a></p>"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>You can fill in the specified API to proxy access to the API at DeepL</p><strong>Since you specified a custom API, Tampermonkey will warn you about cross-domain requests, and you'll need to authorize it yourself</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "Advanced",
+            "header": {
+                "label": "Custom header",
+                "placeholder": "(optional) You can fill in additional key pairs to request head",
+                "tipText": "<p>Example：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Custom data",
+                "placeholder": "(optional) You can fill in additional key pairs to request data",
+                "tipText": "<p>Example：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "Configuration",
         "basic": {
