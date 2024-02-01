@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "configurar",
+        "genre": {
+            "label": "Tipo de API",
+            "tipText": "<strong>Descrição:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL Adesão</a> está dividida em Adesão Individual e Adesão API, precisa de ser Membro API,</p><p>onde a Adesão API está dividida em Plano Gratuito (api-free) e Plano Pro (api-pro), têm endereços de pedido diferentes, por favor não escolha o errado.</p><p>Tem de preencher a chave. Se precisar de utilizar o endereço proxy para aceder, preencha a API Proxy.</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> é um projeto de API não oficial que é acedido através da simulação do lado IOS, pelo que não suporta todos os parâmetros da API oficial, e pode implementá-lo por si ou utilizar a API pública. Preencha o campo API Proxy com o endereço do seu serviço.</p><p>Se não o preencher, a interface pública é utilizada por predefinição：https://api.deeplx.org/translate</p><p>Se não ativar a autenticação por token, o campo Key pode ser deixado em branco.</p>"
+        },
+        "basic": {
+            "title": "fundamental",
+            "name": {
+                "label": "O seu nome.",
+                "placeholder": "Dê um nome a esta configuração"
+            },
+            "key": {
+                "label": "CHAVE.",
+                "placeholder": "Por favor, introduza a CHAVE",
+                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+            },
+            "proxy": {
+                "label": "API de proxy.",
+                "tipText": "<p>Pode preencher a API especificada para aceder à API através de proxy em DeepL</p><strong>Uma vez que especificou uma API personalizada, Tampermonkey irá avisá-lo sobre os pedidos entre domínios e terá de autorizá-los você mesmo</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "nível elevado",
+            "header": {
+                "label": "Cabeçalho personalizado",
+                "placeholder": "(Opcional) Pode preencher pares de valores chave adicionais para adicionar ao cabeçalho do pedido aqui.",
+                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Dados personalizados",
+                "placeholder": "(Opcional) Pode preencher aqui pares de valores chave adicionais para adicionar aos dados do pedido.",
+                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "configurar",
         "basic": {
