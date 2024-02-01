@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "konfigurieren",
+        "genre": {
+            "label": "API-Typ",
+            "tipText": "<strong>Beschreibung:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL Die Mitgliedschaft</a> ist unterteilt in Einzelmitgliedschaft und API-Mitgliedschaft, Sie müssen API-Mitglied sein,</p><p>wobei die API-Mitgliedschaft in Free Plan (api-free) und Pro Plan (api-pro) unterteilt ist, sie haben unterschiedliche Anfrageadressen, bitte wählen Sie nicht die falsche.</p><p>Sie müssen den Schlüssel eingeben. Wenn Sie die Proxy-Adresse für den Zugriff verwenden müssen, füllen Sie das Feld Proxy-API aus.</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> ist ein inoffizielles API-Projekt, auf das durch Simulation der IOS-Seite zugegriffen wird, daher unterstützt es nicht alle Parameter der offiziellen API, und Sie können es selbst einsetzen oder die öffentliche API verwenden. Füllen Sie das Feld Proxy-API mit der Adresse Ihres Dienstes aus.</p><p>Wenn Sie es nicht ausfüllen, wird standardmäßig die öffentliche Schnittstelle verwendet：https://api.deeplx.org/translate</p><p>Wenn Sie die Token-Authentifizierung nicht aktivieren, können Sie das Feld Schlüssel leer lassen.</p>"
+        },
+        "basic": {
+            "title": "grundlegend",
+            "name": {
+                "label": "Name.",
+                "placeholder": "Bitte geben Sie dieser Konfiguration einen Namen"
+            },
+            "key": {
+                "label": "SCHLÜSSEL.",
+                "placeholder": "Bitte geben Sie den KEY ein",
+                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+            },
+            "proxy": {
+                "label": "Proxy-API.",
+                "tipText": "<p>Sie können die angegebene API eingeben, um den Zugriff auf die API unter DeepL</p><strong>zu ermöglichen. Da Sie eine benutzerdefinierte API angegeben haben, wird Tampermonkey Sie vor domänenübergreifenden Anfragen warnen und Sie müssen diese selbst autorisieren</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "hohes Niveau",
+            "header": {
+                "label": "Benutzerdefinierte Kopfzeile",
+                "placeholder": "(Optional) Hier können Sie zusätzliche Schlüssel-Wert-Paare eingeben, die der Kopfzeile der Anfrage hinzugefügt werden sollen.",
+                "tipText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Benutzerdefinierte Daten",
+                "placeholder": "(Optional) Hier können Sie weitere Schlüssel-Wert-Paare eingeben, die den Anfragedaten hinzugefügt werden sollen.",
+                "tipText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "konfigurieren",
         "basic": {
