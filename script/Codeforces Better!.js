@@ -5242,8 +5242,7 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
         </button>`);
     if (!is_simple) panel.append(viewButton);
     if (!is_simple) panel.append(copyButton);
-    if ($(element).css("display") !== "none" && !$(element).hasClass('ojbetter-alert')) panel.append(translateButton);
-
+    panel.append(translateButton);
     if (type === "this_level") {
         $(element).before(panel);
     } else if (type === "child_level") {
