@@ -7,6 +7,13 @@
         "monaco": "モナコ",
         "compatibility": "互換性"
     },
+    "common": {
+        "configManageTitle": "構成管理",
+        "missing": {
+            "radio": "現在の設定では、コンフィギュレーションを追加してチェックする必要がある。",
+            "input": "現在の設定では必須フィールドが必要"
+        }
+    },
     "basicSettings": {
         "title": "基本設定",
         "darkMode": {
@@ -48,7 +55,7 @@
         "scriptLanguageLabel": "スクリプト言語",
         "websiteLanguageLabel": "ウェブサイト言語",
         "notice": {
-            "1": "<strong>翻訳の品質向上にご協力ください</strong><p>スクリプトの作者は簡体字中国語と英語のみ精通しています。その他の言語については、スクリプトとサイトの言語ローカライズは機械翻訳（Deepl & Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズ翻訳の品質向上にご協力いただける場合は、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>こちらをクリックしてください。</a>。</p><p>ご協力ありがとうございました！</p>",
+            "1": "<strong>翻訳品質の向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。その他の言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl & Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズ翻訳の品質向上にご協力いただける場合は、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>こちらをクリックしてください。</a>。</p><p>ご協力ありがとうございました！</p>",
             "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、ローカライゼーションによる置き換えが深刻なパフォーマンス問題を引き起こさないとお考えであれば、ローカライゼーションルールの改善にぜひご協力ください。</p><p>新しいルールを追加するには、：フォークの簡体字中国語版を追加し、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ルールファイル </a>のローカライズされた置換を修正し、プルリクエストを開始する必要があります。</p><p>投稿がマージされた後、crowdin が自動的に他の言語の翻訳を完了するので、後で crowdin に行って他の言語の翻訳の品質も向上させることができます。</p>"
         }
     },
@@ -66,6 +73,24 @@
                     "name": "ChatGPT翻訳",
                     "helpText": "<p><b>下記のChatGPTコンフィギュレーションで使用したいコンフィギュレーション情報を追加・選択し、右クリックでコンフィギュレーションを修正・削除してください</b></p><p>詳細はスクリプトページをお読みください</p>"
                 }
+            }
+        },
+        "deepl": {
+            "mode": {
+                "title": "パラダイム",
+                "select": {
+                    "free": "フリーウェア",
+                    "api": "API"
+                },
+                "helpText": "DeepLサービスのモードを選択し、デフォルトは無料モードですが、APIを提供する必要はありませんが、公式のより多くの周波数の制限によって。 APIモードでは、設定を追加する必要があり、公式のAPIを選択することができます：API無料、API Proだけでなく、非公式のdeeplx"
+            },
+            "enableEmphasisProtection": {
+                "title": "プロテクション** No.",
+                "helpText": "<strong>このオプションは、公式 API が API モードで使用されている場合にのみ機能します。</strong><p>DeepL は、MarkDown <strong>**</strong> </p><p>の強調を正しく処理できないことがあります。このため、翻訳結果で折り返しの内容が欠落することがあります。</p><p></p>このオプションを有効にすると、テキスト内の強調表示 <strong>**</strong> が HTML タグ<code>\\<strong\\\\></code>に置き換えられ、強調表示とそのコンテンツが DeepL によって破棄されないように、翻訳要求ヘッダに<code>tag_handling: html</code>が自動的に追加されます。"
+            },
+            "enableLinkProtection": {
+                "title": "リンクの保護",
+                "helpText": "<strong>このオプションは、公式 API が API モードで使用されている場合にのみ機能します。</strong><p>DeepL は、MarkDown でリンクを正しく処理できないことがあります。</p><p>このオプションをオンにすると、テキスト内のリンク記号 <strong>[]()</strong> が HTML タグ<code>\\<a\\\\></code>に置き換えられ、DeepL がリンクとそのコンテンツを破壊しないように、翻訳リクエストのヘッダに<code>tag_handling: html</code>が自動的に追加されます。コンテンツ</p>"
             }
         },
         "chatgpt": {
