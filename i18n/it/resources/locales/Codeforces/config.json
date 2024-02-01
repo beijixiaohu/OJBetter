@@ -14,7 +14,7 @@
             "key": {
                 "label": "CHIAVE.",
                 "placeholder": "Inserisca la CHIAVE",
-                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+                "tipText": "<p>È necessario inserire la propria chiave DeepL,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">sito ufficiale</a></p>"
             },
             "proxy": {
                 "label": "API proxy.",
