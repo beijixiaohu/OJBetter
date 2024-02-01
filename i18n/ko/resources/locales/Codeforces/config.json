@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "구성",
+        "genre": {
+            "label": "API 유형",
+            "tipText": "<strong></p><p>설명:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL 멤버십</a> 은 개인 멤버십과 API 멤버십으로 나뉘며, API 멤버십은 무료 플랜(api-free)과 프로 플랜(api-pro)으로 나뉘며, 요청 주소가 다르므로 잘못된 주소를 선택하지 마시기 바랍니다.</p><p></p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> 는 IOS 측에서 시뮬레이션을 통해 접속하는 비공식 API 프로젝트이므로 공식 API의 모든 파라미터를 지원하지 않으며, 직접 배포하거나 공개 API를 사용할 수 있습니다. 프록시 주소를 사용하여 접속해야 하는 경우 프록시 API 필드에 서비스 주소를 입력합니다.</p><p>입력하지 않으면 기본적으로 공개 인터페이스가 사용됩니다：https://api.deeplx.org/translate</p><p>토큰 인증을 활성화하지 않으면 키 필드를 비워 둘 수 있습니다.</p>"
+        },
+        "basic": {
+            "title": "기본",
+            "name": {
+                "label": "이름.",
+                "placeholder": "이 구성에 이름을 지정하세요."
+            },
+            "key": {
+                "label": "KEY.",
+                "placeholder": "KEY를 입력하세요.",
+                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+            },
+            "proxy": {
+                "label": "프록시 API.",
+                "tipText": "<p>DeepL</p><strong>사용자 지정 API를 입력하면 도메인 간 요청에 대한 경고가 표시되므로 직접 승인해야 합니다.</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "높은 수준",
+            "header": {
+                "label": "사용자 지정 헤더",
+                "placeholder": "(선택 사항) 여기에서 요청 헤더에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
+                "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "사용자 지정 데이터",
+                "placeholder": "(선택 사항) 여기에서 요청 데이터에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
+                "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "구성",
         "basic": {
