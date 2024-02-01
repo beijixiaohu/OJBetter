@@ -8,6 +8,9 @@
 // @match        *://*.codeforc.es/*
 // @run-at       document-start
 // @connect      www2.deepl.com
+// @connect      api-free.deepl.com
+// @connect      api.deepl.com
+// @connect      api.deeplx.org
 // @connect      www.iflyrec.com
 // @connect      m.youdao.com
 // @connect      api.interpreter.caiyunai.com
@@ -72,6 +75,7 @@ var localizationLanguage, scriptL10nLanguage;
 var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt;
 var translation, transTargetLang, commentTranslationChoice;
 var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
+var deepl_type, deepl_name, deepl_apiGenre, deepl_key, deepl_proxy, deepl_header, deepl_data, enableEmphasisProtection, enableLinkProtection;
 var openai_name, openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
@@ -131,6 +135,38 @@ async function initVar() {
     showClistRating_problemset = getGMValue("showClistRating_problemset", false);
     RatingHidden = getGMValue("RatingHidden", false);
     clist_Authorization = getGMValue("clist_Authorization", "");
+    //deepl
+    deepl_type = getGMValue("deepl_type", "free");
+    deepl_config = getGMValue("deepl_config", {
+        "choice": "",
+        "configurations": []
+    });
+    enableEmphasisProtection = getGMValue("enableEmphasisProtection", true);
+    enableLinkProtection = getGMValue("enableLinkProtection", true);
+    if (deepl_config.choice !== "" && deepl_config.configurations.length !== 0) {
+        const choice = deepl_config.choice;
+        const configuration = deepl_config.configurations.find(obj => obj.name === choice);;
+        if (configuration == undefined) {
+            let existingConfig = GM_getValue('deepl_config');
+            existingConfig.choice = "";
+            GM_setValue('deepl_config', existingConfig);
+            location.reload();
+        }
+        deepl_name = configuration.name;
+        deepl_apiGenre = configuration.apiGenre;
+        deepl_key = configuration.key;
+        deepl_proxy = configuration.proxy;
+        deepl_header = configuration._header ?
+            configuration._header.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
+        deepl_data = configuration._data ?
+            configuration._data.split("\n").map(header => {
+                const [key, value] = header.split(":");
+                return { [key.trim()]: value.trim() };
+            }) : [];
+    }
     //openai
     openai_isStream = getGMValue("openai_isStream", true);
     chatgpt_config = getGMValue("chatgpt_config", {
@@ -660,6 +696,38 @@ GM_addStyle(`
         box-shadow: 0 0 0 6px rgba(0, 0, 0, 0);
     }
 }
+@keyframes bounce-in {
+	20%,40%,60%,80%,from,to {
+		animation-timing-function: cubic-bezier(.215,.61,.355,1);
+	}
+
+	0% {
+		opacity: 0;
+		transform: scale3d(.995,.995,.995);
+	}
+
+	20% {
+        opacity: 1;
+		transform: scale3d(1.005,1.005,1.005);
+	}
+
+	40% {
+		transform: scale3d(.998,.998,.998);
+	}
+
+	60% {
+		transform: scale3d(1.002,1.002,1.002);
+	}
+
+	80% {
+		transform: scale3d(.995,.995,.995);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale3d(1,1,1);
+	}
+}
 /*iconfont图标*/
 .iconfont {
     font-family: "iconfont" !important;
@@ -859,6 +927,9 @@ html:not([data-theme='dark']) .translateDiv {
 a.ojb_btn {
     text-decoration: none;
 }
+a.ojb_btn:link {
+    color: #606266;
+}
 a.ojb_btn span {
     margin-left: 2px;
 }
@@ -1002,6 +1073,9 @@ a.ojb_btn span {
     cursor: pointer;
     fill: #059669;
 }
+.translateDiv.bounce-in {
+    animation: bounce-in 1s forwards;
+}
 .translate-problem-statement table {
     border: 1px #ccc solid !important;
     margin: 1.5em 0 !important;
@@ -1024,6 +1098,7 @@ a.ojb_btn span {
 }
 .translate-problem-statement p {
     line-height: 20px !important;
+    word-wrap: break-word;
 }
 .problem-statement p:last-child {
     margin-bottom: 0px !important;
@@ -1091,7 +1166,7 @@ header .enter-or-register-box, header .languages {
     margin-right: auto;
 }
 
-.CFBetter_setting_menu .required {
+.CFBetter_setting_menu .missing {
     box-shadow: inset 0px 0px 1px 1px red;
 }
 /* 页面切换 */
@@ -1754,9 +1829,9 @@ li.tempConfig_add_button:hover {
     width: 100%;
     padding-bottom: 2px;
     border: 1px solid #c5cae9;
-    border-radius: 8px;
     background-color: #f0f8ff;
     box-sizing: border-box;
+    border-radius: 0px 0px 8px 8px;
 }
 .config_bar_list input[type="radio"] {
     appearance: none;
@@ -2403,6 +2478,31 @@ function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
 }
 
+/**
+ * 添加包含i18n内容的样式
+ */
+function addI18nStyles() {
+    GM_addStyle(`
+    .config::before {
+        content: "${i18next.t('common.configManageTitle', { ns: 'settings' })}";
+        display: block;
+        height: 20px;
+        background-color: #f0f8ff;
+        border: 1px solid #c5cae9;
+        border-bottom: 0px;
+        line-height: 20px;
+        padding: 2px 10px;
+        border-radius: 8px 8px 0px 0px;
+    }
+    .config.missing::before {
+        content: "${i18next.t('common.missing.radio', { ns: 'settings' })}";
+        background-color: #fef0f0;
+        color: #f56c6c;
+        border: 1px solid #fab6b6;
+    }
+    `);
+}
+
 // ------------------------------
 // 一些工具函数
 // ------------------------------
@@ -2414,6 +2514,25 @@ function addDependencyStyles() {
  */
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 深度比较两个对象或数组是否完全相等。
+ * @param {any} a - 第一个比较对象。
+ * @param {any} b - 第二个比较对象。
+ * @returns {boolean} - 如果两个对象或数组深度相等，则返回true，否则返回false。
+ */
+function deepEquals(a, b) {
+    if (a === b) return true;
+    if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) return false;
+    const keysA = Object.keys(a);
+    const keysB = Object.keys(b);
+    if (keysA.length !== keysB.length) return false;
+    for (let key of keysA) {
+        if (!b.hasOwnProperty(key)) return false;
+        if (!deepEquals(a[key], b[key])) return false;
+    }
+    return true;
 }
 
 /**
@@ -3042,7 +3161,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.18',
+                        defaultVersion: 'v1.20',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -3339,7 +3458,7 @@ class ConfigManager {
     createListItemElement(text) {
         const id = getRandomNumber(4);
         const li = $("<li></li>");
-        const radio = $("<input type='radio' name='config_item'></input>")
+        const radio = $(`<input type='radio' name='${this.prefix}config_item'></input>`)
             .attr("value", text)
             .attr("id", id)
             .attr("prev_id", this.lastItemId)
@@ -3731,6 +3850,38 @@ const translation_settings_HTML = `
         </label>
     </div>
     <hr>
+    <h4>DeepL</h4>
+    <div class='CFBetter_setting_list'>
+        <label for="deepl_type" style="display: flex;" data-i18n="settings:translationSettings.deepl.mode.title"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.deepl.mode.helpText"></div>
+        </div>
+        <select id="deepl_type" name="deepl_type">
+            <option value="free" data-i18n="settings:translationSettings.deepl.mode.select.free"></option>
+            <option value="api" data-i18n="settings:translationSettings.deepl.mode.select.api"></option>
+        </select>
+    </div>
+    <div id="deepl_config" class="config"></div>
+    <div class='CFBetter_setting_list'>
+        <label for="enableEmphasisProtection" data-i18n="settings:translationSettings.deepl.enableEmphasisProtection.title"></label>
+        <div class="help_tip" style="margin-right: initial;">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.deepl.enableEmphasisProtection.helpText"></div>
+        </div>
+        <div class="badge">Official API Only</div>
+        <input type="checkbox" id="enableEmphasisProtection" name="enableEmphasisProtection">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="enableLinkProtection" data-i18n="settings:translationSettings.deepl.enableLinkProtection.title"></label>
+        <div class="help_tip" style="margin-right: initial;">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translationSettings.deepl.enableLinkProtection.helpText"></div>
+        </div>
+        <div class="badge">Official API Only</div>
+        <input type="checkbox" id="enableLinkProtection" name="enableLinkProtection">
+    </div>
+    <hr>
     <h4>ChatGPT</h4>
     <div id="chatgpt_config" class="config"></div>
     <div class='CFBetter_setting_list'>
@@ -4069,6 +4220,77 @@ const CFBetterSettingMenu_HTML = `
     </div>
 `;
 
+// TODO
+const deeplConfigEditHTML = `
+    <div class='CFBetter_setting_menu' id='config_edit_menu'>
+        <div class="tool-box">
+            <button class="btn-close">×</button>
+        </div>
+        <h4 data-i18n="config:deepl.title"></h4>
+        <h5 data-i18n="config:deepl.basic.title"></h5>
+        <hr>
+        <label for='name'>
+            <span class="input_label" data-i18n="config:deepl.basic.name.label"></span>
+        </label>
+        <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.name.placeholder">
+        <div class='CFBetter_setting_list'>
+            <label for="deepl_apiGenre" style="display: flex;" data-i18n="config:deepl.genre.label"></label>
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text" data-i18n="[html]config:deepl.genre.tipText"></div>
+            </div>
+            <select id="deepl_apiGenre" name="deepl_apiGenre">
+                <option value="api-free">api-free</option>
+                <option value="api-pro">api-pro</option>
+                <option value="deeplx">deeplx</option>
+            </select>
+        </div>
+        <label for='deepl_key'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:deepl.basic.key.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:deepl.basic.key.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='deepl_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.key.placeholder">
+        <label for='deepl_proxy'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:deepl.basic.proxy.label">Proxy API:</span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:deepl.basic.proxy.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='deepl_proxy' placeholder='' require = false>
+        <h5 data-i18n="config:deepl.advanced.title"></h5>
+        <hr>
+        <label for='_header'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:deepl.advanced.header.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:deepl.advanced.header.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="_header" placeholder='' require = false data-i18n="[placeholder]config:deepl.advanced.header.placeholder"></textarea>
+        <label for='_data'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:deepl.advanced.data.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:deepl.advanced.data.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config:deepl.advanced.data.placeholder"></textarea>
+        <button id='tempConfig_save' data-i18n="common:save"></button>
+    </div>
+`;
+
 const chatgptConfigEditHTML = `
     <div class='CFBetter_setting_menu' id='config_edit_menu'>
         <div class="tool-box">
@@ -4305,6 +4527,19 @@ async function initSettingsPanel() {
             return { type, value, require, check };
         }
 
+        // deepl配置
+        const deeplStructure = {
+            '#name': createStructure('text', 'name', true),
+            '#deepl_apiGenre': createStructure('text', 'apiGenre', true),
+            '#deepl_key': createStructure('text', 'key', false),
+            '#deepl_proxy': createStructure('text', 'proxy', false),
+            '#_header': createStructure('text', '_header', false, "keyValuePairs"),
+            '#_data': createStructure('text', '_data', false, "keyValuePairs")
+        };
+        let tempConfig_deepl = GM_getValue('deepl_config'); // 获取配置信息
+        const configManager_deepl = new ConfigManager('#deepl_config', 'deepl_config_', tempConfig_deepl, deeplStructure, deeplConfigEditHTML);
+        configManager_deepl.registerChoiceChange();
+
         // chatgpt配置
         const chatgptStructure = {
             '#name': createStructure('text', 'name', true),
@@ -4347,7 +4582,11 @@ async function initSettingsPanel() {
         $('#localizationLanguage').val(GM_getValue("localizationLanguage"));
         $("input[name='translation'][value='" + translation + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
-        $("#chatgpt_config_config_bar_ul").find(`input[name='config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
+        $('#deepl_type').val(GM_getValue("deepl_type"));
+        $("#deepl_config_config_bar_ul").find(`input[name='deepl_config_config_item'][value='${tempConfig_deepl.choice}']`).prop("checked", true);
+        $('#enableEmphasisProtection').prop("checked", GM_getValue("enableEmphasisProtection") === true);
+        $('#enableLinkProtection').prop("checked", GM_getValue("enableLinkProtection") === true);
+        $("#chatgpt_config_config_bar_ul").find(`input[name='chatgpt_config_config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
@@ -4403,6 +4642,9 @@ async function initSettingsPanel() {
                 localizationLanguage: $('#localizationLanguage').val(),
                 transTargetLang: $('#transTargetLang').val(),
                 translation: $("input[name='translation']:checked").val(),
+                deepl_type: $('#deepl_type').val(),
+                enableEmphasisProtection: $("#enableEmphasisProtection").prop("checked"),
+                enableLinkProtection: $("#enableLinkProtection").prop("checked"),
                 openai_isStream: $("#openai_isStream").prop("checked"),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
@@ -4439,29 +4681,24 @@ async function initSettingsPanel() {
             };
             // tempConfigs的数据
             const tempConfigs = {
+                'deepl_config': configManager_deepl.getTempConfig(),
                 'chatgpt_config': configManager_chatgpt.getTempConfig(),
                 'Complet_config': configManager_complet.getTempConfig()
             }
 
             // 判断是否改变
-            let hasChange = false;
-            for (const [key, value] of Object.entries(settings)) {
-                if (!hasChange) {
-                    const storedValue = GM_getValue(key);
-
-                    if (Array.isArray(value) && Array.isArray(storedValue)) {
-                        hasChange = JSON.stringify(value) !== JSON.stringify(storedValue);
-                    } else {
-                        hasChange = value !== storedValue;
-                    }
+            let changes = {};
+            const combinedConfigs = Object.assign({}, settings, tempConfigs); // 合并settings和tempConfigs对象
+            for (const [key, value] of Object.entries(combinedConfigs)) {
+                const storedValue = GM_getValue(key);
+                if (!deepEquals(value, storedValue)) {
+                    changes[key] = { oldValue: storedValue, newValue: value };
                 }
             }
 
-            for (const [key, value] of Object.entries(tempConfigs)) {
-                if (!hasChange && (JSON.stringify(GM_getValue(key)) != JSON.stringify(value))) hasChange = true;
-            }
-
-            if (hasChange) {
+            // 如果changes对象不为空，则有变化
+            if (Object.keys(changes).length > 0) {
+                console.log("Changes detected:", changes);
                 const shouldSave = await createDialog(
                     i18next.t('saveSetting.title', { ns: 'dialog' }),
                     i18next.t('saveSetting.content', { ns: 'dialog' }),
@@ -4472,18 +4709,33 @@ async function initSettingsPanel() {
                 ); // 配置改变保存确认
                 if (shouldSave) {
                     // 数据校验
-                    if (settings.translation === "openai") {
-                        let selectedIndex = $('input[name="config_item"]:checked').length > 0;
+                    // TODO
+                    if (settings.deepl_type !== 'free') {
+                        let selectedIndex = $('input[name="deepl_config_config_item"]:checked').length > 0;
                         if (!selectedIndex) {
-                            $('.CFBetter_setting_sidebar a').removeClass('active');
+                            $('.deepl_config a').removeClass('active');
                             $('.settings-page').removeClass('active');
                             $('#sidebar-translation-settings').addClass('active');
                             $('#translation-settings').addClass('active');
 
-                            $('#chatgpt_config').addClass('required');
+                            $('#deepl_config').addClass('missing');
                             return;
                         } else {
-                            $('#chatgpt_config').removeClass('required');
+                            $('#deepl_config').removeClass('missing');
+                        }
+                    }
+                    if (settings.translation === "openai") {
+                        let selectedIndex = $('input[name="chatgpt_config_config_item"]:checked').length > 0;
+                        if (!selectedIndex) {
+                            $('.chatgpt_config a').removeClass('active');
+                            $('.settings-page').removeClass('active');
+                            $('#sidebar-translation-settings').addClass('active');
+                            $('#translation-settings').addClass('active');
+
+                            $('#chatgpt_config').addClass('missing');
+                            return;
+                        } else {
+                            $('#chatgpt_config').removeClass('missing');
                         }
                     }
                     {
@@ -4494,19 +4746,17 @@ async function initSettingsPanel() {
                             $('#sidebar-translation-settings').addClass('active');
                             $('#translation-settings').addClass('active');
 
-                            $('#translationServices').addClass('required');
+                            $('#translationServices').addClass('missing');
                             return;
                         } else {
-                            $('#translationServices').removeClass('required');
+                            $('#translationServices').removeClass('missing');
                         }
                     }
-                    // mark
 
                     // 保存数据
                     let refreshPage = false; // 是否需要刷新页面
                     for (const [key, value] of Object.entries(settings)) {
-                        if (!refreshPage && !(key == 'translation' || key == 'darkMode' ||
-                            key == 'replaceSymbol' || key == 'commentTranslationChoice')) {
+                        if (!refreshPage && !(key == 'translation' || key == 'darkMode' || key == 'commentTranslationChoice')) {
                             if (GM_getValue(key) != value) refreshPage = true;
                         }
                         GM_setValue(key, value);
@@ -4547,28 +4797,7 @@ async function initSettingsPanel() {
                         }
                         // 更新配置信息
                         translation = settings.translation;
-                        replaceSymbol = settings.replaceSymbol;
                         commentTranslationChoice = settings.commentTranslationChoice;
-                        if (settings.translation === "openai") {
-                            var selectedIndex = $('#config_bar_ul li input[type="radio"]:checked').closest('li').index();
-                            if (selectedIndex !== chatgpt_config.choice) {
-                                chatgpt_config = GM_getValue("chatgpt_config");
-                                const configAtIndex = chatgpt_config.configurations[selectedIndex];
-                                openai_model = configAtIndex.model;
-                                openai_key = configAtIndex.key;
-                                openai_proxy = configAtIndex.proxy;
-                                openai_header = configAtIndex._header ?
-                                    configAtIndex._header.split("\n").map(header => {
-                                        const [key, value] = header.split(":");
-                                        return { [key.trim()]: value.trim() };
-                                    }) : [];
-                                openai_data = configAtIndex._data ?
-                                    configAtIndex._data.split("\n").map(header => {
-                                        const [key, value] = header.split(":");
-                                        return { [key.trim()]: value.trim() };
-                                    }) : [];
-                            }
-                        }
                     }
                 }
             }
@@ -4768,7 +4997,7 @@ function isLikelyCodeSnippet(text) {
         'raise', 'with', 'lambda', 'print'
     ];
     // 代码的特殊字符
-    const codeChars = [';', '{', '}', '[', ']', '<', '>', '=', '+', '-', '/',
+    const codeChars = [';', '{', '}', '<', '>', '=', '+', '-', '/',
         '&', '|', '#', ':', '\'\'\'', '\"\"\"', '->'];
     // 普通文本的标点符号
     const textChars = ['.', ',', '?', '!', ':', '"', "'"];
@@ -4996,7 +5225,6 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     else text = i18next.t('trans.normal', { ns: 'button' });
 
     let panel = $(`<div class='html2md-panel input-output-copier'></div>`);
-    // mark
     let viewButton = $(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
             <i class="iconfont">&#xe7e5;</i>
@@ -5768,7 +5996,7 @@ function recoverBlock(translatedText, matches, replacements) {
 class TranslateDiv {
     constructor(id) {
         this.id = id;
-        this.div = $('<div>').attr('id', id).addClass('translateDiv');
+        this.div = $('<div>').attr('id', id).addClass('translateDiv bounce-in');
         if (!is_completeProblemset) {
             this.div.addClass('input-output-copier');
         }
@@ -6407,7 +6635,24 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         try {
             if (translation == "deepl") {
                 translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
-                rawData = await translate_deepl(text);
+                if (deepl_type == 'free') {
+                    rawData = await translate_deepl(text);
+                } else if (deepl_type == 'api') {
+                    // TODO
+                    if (deepl_apiGenre == 'deeplx') {
+                        rawData = await translate_deeplx(text);
+                    } else {
+                        if (enableEmphasisProtection) text = convertBoldMarkdownToHTML(text);
+                        if (enableLinkProtection) text = convertLinksMarkdownToHTML(text);
+                        if (deepl_apiGenre == 'api-free') {
+                            rawData = await translate_deepl_api_free(text);
+                        } else if (deepl_apiGenre == 'api-pro') {
+                            rawData = await translate_deepl_api_pro(text);
+                        }
+                        if (enableEmphasisProtection) rawData.text = convertBoldHTMLToMarkdown(rawData.text);
+                        if (enableLinkProtection) rawData.text = convertLinksHTMLToMarkdown(rawData.text);
+                    }
+                }
             } else if (translation == "iflyrec") {
                 translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_iflyrec(text);
@@ -9981,9 +10226,45 @@ function getTargetLanguage(serverName) {
 }
 
 /**
+ * 将文本中Markdown格式的加粗**转换成HTML格式。
+ * @param {string} text 文本
+ * @returns {string} 替换后的字符串
+ */
+function convertBoldMarkdownToHTML(text) {
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+}
+
+/**
+* 将文本中Markdown格式的链接文本转换成HTML格式。
+* @param {string} text 文本
+* @returns {string} 替换后的字符串
+*/
+function convertLinksMarkdownToHTML(text) {
+    return text.replace(/(?<!!)\[(.*?)\]\(([^"]*?)("(.*?)")*\)/g, '<a href="$2" title="$4">$1</a>');
+}
+
+/**
+ * 将HTML格式的加粗文本转换回Markdown格式。
+ * @param {string} text 文本
+ * @returns {string} 替换后的字符串
+ */
+function convertBoldHTMLToMarkdown(text) {
+    return text.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
+}
+
+/**
+ * 将HTML格式的链接文本转换回Markdown格式。
+ * @param {string} html - 包含HTML链接标签<a>的字符串。
+ * @returns {string} 转换后的字符串，其中HTML链接标签被替换为Markdown的链接语法。
+ */
+function convertLinksHTMLToMarkdown(html) {
+    return html.replace(/<a href="([^"]*)"( title="([^"]*)")*>([^<]+)<\/a>/g, '[$4]($1 "$3")');
+}
+
+/**
  * DeepL翻译
  * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_deepl(raw) {
     const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
@@ -10037,6 +10318,97 @@ async function translate_deepl(raw) {
     });
 }
 
+/**
+ * 使用 DeepL Free API 进行翻译
+ * @param {string} raw 原文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
+ */
+async function translate_deepl_api_free(raw) {
+    const data = JSON.stringify({
+        text: [raw],
+        target_lang: getTargetLanguage('deepl'),
+        split_sentences: '1',
+        ...(enableEmphasisProtection || enableLinkProtection ? { tag_handling: 'html' } : {}),
+        ...Object.assign({}, ...deepl_data)
+    });
+
+    const options = {
+        method: "POST",
+        url: deepl_proxy || "https://api-free.deepl.com/v2/translate",
+        headers: {
+            "Authorization": `DeepL-Auth-Key ${deepl_key}`,
+            "Content-Type": "application/json",
+            ...Object.assign({}, ...deepl_header)
+        },
+        data: data,
+        onload: response => response.responseText,
+        onerror: error => console.error(error)
+    };
+
+    return await BaseTranslate(options, res => JSON.parse(res).translations[0].text);
+}
+
+/**
+ * 使用 DeepL Pro API 进行翻译
+ * @param {string} raw 原文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
+ */
+async function translate_deepl_api_pro(raw) {
+    const data = JSON.stringify({
+        text: [raw],
+        target_lang: getTargetLanguage('deepl'),
+        split_sentences: '1',
+        ...(enableEmphasisProtection || enableLinkProtection ? { tag_handling: 'html' } : {}),
+        ...Object.assign({}, ...deepl_data)
+    });
+
+    const options = {
+        method: "POST",
+        url: deepl_proxy || "https://api.deepl.com/v2/translate",
+        headers: {
+            "Authorization": `DeepL-Auth-Key ${deepl_key}`,
+            "Content-Type": "application/json",
+            ...Object.assign({}, ...deepl_header)
+        },
+        data: data,
+        onload: response => response.responseText,
+        onerror: error => console.error(error)
+    };
+
+    return await BaseTranslate(options, res => JSON.parse(res).translations[0].text);
+}
+
+/**
+ * 使用 DeepLX 进行翻译
+ * @param {String} text 原文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
+ */
+async function translate_deeplx(text) {
+    const options = {
+        method: "POST",
+        url: deepl_proxy || 'https://api.deeplx.org/translate',
+        data: JSON.stringify({
+            "text": text,
+            "source_lang": "EN",
+            "target_lang": getTargetLanguage('deepl'),
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            ...(deepl_key ? { Authorization: `Bearer ${deepl_key}` } : {})
+        },
+        responseType: "json",
+    };
+
+    return await BaseTranslate(options, res => {
+        const parsedResponse = JSON.parse(res);
+        if (parsedResponse.code === 200 && parsedResponse.data) {
+            return parsedResponse.data;
+        } else {
+            throw new Error('Translation failed or invalid response format.');
+        }
+    });
+}
+
 function getTimeStamp(iCount) {
     const ts = Date.now();
     if (iCount !== 0) {
@@ -10050,7 +10422,7 @@ function getTimeStamp(iCount) {
 /**
  * 讯飞听见翻译
  * @param {String} text 要翻译的文本
- * @returns {Promise} 返回 Promise
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_iflyrec(text) {
     const options = {
@@ -10077,7 +10449,7 @@ async function translate_iflyrec(text) {
 /**
  * 有道翻译
  * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_youdao_mobile(raw) {
     const options = {
@@ -10118,7 +10490,7 @@ async function translate_youdao_mobile(raw) {
 /**
  * 谷歌翻译
  * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_gg(raw) {
     const params = `tl=${getTargetLanguage('google')}&q=${encodeURIComponent(raw)}`;
@@ -10153,7 +10525,7 @@ async function translate_caiyun_startup() {
 /**
  * 彩云翻译
  * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_caiyun(raw) {
     const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
@@ -10185,7 +10557,7 @@ async function translate_caiyun(raw) {
 /**
  * ChatGPT
  * @param {string} raw 原文
- * @returns {Promise<Object>} 译文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
@@ -10223,7 +10595,7 @@ async function translate_openai(raw) {
  * ChatGPT 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
- * @returns {Promise<Object>} 返回 Promise
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translate_openai_stream(raw, translateDiv) {
     const result = {
@@ -10310,12 +10682,34 @@ async function* openai_stream(raw) {
 }
 
 /**
+ * @typedef {Object} CheckResponseResult
+ * @property {boolean} status 检查是否通过
+ * @property {string} message 检查失败时的消息
+ */
+
+/**
+ * @typedef {Object} ErrorResponse
+ * @property {Object} error 错误详情
+ * @property {string} source 错误来源
+ */
+
+/**
+ * @typedef {Object} TranslateResult
+ * @property {boolean} done 操作是否完成
+ * @property {CheckResponseResult|null} checkPassed 检查是否通过的结果
+ * @property {Object|null} response 响应对象
+ * @property {string|null} text 处理后的文本
+ * @property {ErrorResponse[]} errors 错误列表
+ * @property {string|null} message 可能的消息
+ */
+
+/**
  * 通用翻译函数
  * @param {Object} options GM_xmlhttpRequest 的参数
  * @param {Function} processer 响应再处理函数，它接收响应文本，并应返回处理后的文本。
- * @param {Function} checkResponse 检查文本是否符合预期的函数，它接收文本，并返回一个Object，包含状态和信息。
+ * @param {Function} checkResponse 检查文本是否符合预期的函数，它接收文本，并返回一个Object，包含状态和信息。默认为返回 { status: true, message: 'ok' }
  * @param {Function} getResponseText 重写响应文本获取函数，它接收response，并返回响应文本。 默认为 response.responseText
- * @returns {Promise} 返回 Promise
+ * @returns {Promise<TranslateResult>} 返回 Promise，其解析值为翻译结果对象
  */
 async function BaseTranslate(options, processer, checkResponse = () => { return { status: true, message: 'ok' } }, getResponseText = (response) => response.responseText) {
     const result = {
@@ -10427,6 +10821,7 @@ function initOnDOMReady() {
     localizeWebsite(); // 网站本地化替换
     addtargetAreaCss(); // 加载鼠标悬浮覆盖层css
     addDependencyStyles(); // 添加一些依赖库的样式
+    addI18nStyles(); // 添加包含i18n内容的样式
     if (expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
     if (renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
     if (is_problem) {

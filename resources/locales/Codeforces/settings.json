@@ -7,6 +7,13 @@
         "monaco": "Monaco",
         "compatibility": "兼容"
     },
+    "common":{
+        "configManageTitle":"配置管理",
+        "missing":{
+            "radio":"当前设置要求必须添加并选中一项配置",
+            "input":"当前设置要求必须填写内容"
+        }
+    },
     "basicSettings": {
         "title": "基本设置",
         "darkMode": {
@@ -48,7 +55,7 @@
         "scriptLanguageLabel": "脚本语言",
         "websiteLanguageLabel": "网站语言",
         "notice":{
-            "1":"<strong>帮助改进翻译质量</strong><p>脚本的作者只熟悉简体中文和英文，对于其他语言，脚本以及网站语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>点击这里</a>，即可前往协助改进。</p><p>感谢你的贡献！</p>",
+            "1":"<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>点击这里</a>，即可前往协助改进。</p><p>感谢你的贡献！</p>",
             "2":"<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎你前往完善本地化规则。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork并修改本地化替换的<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 规则文件 </a>，然后发起拉取请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
         }
     },
@@ -66,6 +73,24 @@
                     "name": "ChatGPT翻译",
                     "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
                 }
+            }
+        },
+        "deepl":{
+            "mode":{
+                "title":"模式",
+                "select":{
+                    "free":"免费",
+                    "api":"API"
+                },
+                "helpText":"选择DeepL服务的模式，默认为免费模式，不需要提供API，但是受到官方较多的频率限制。API模式下，需要添加配置，可以选择官方API：API free、API Pro，以及非官方的deeplx"
+            },
+            "enableEmphasisProtection":{
+                "title":"保护**号",
+                "helpText":"<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签<code>\\\\<strong\\\\></code>，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+            },
+            "enableLinkProtection":{
+                "title":"保护链接",
+                "helpText":"<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签<code>\\\\<a\\\\></code>，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {

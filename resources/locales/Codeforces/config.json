@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "配置",
+        "genre": {
+            "label": "API类型",
+            "tipText": "<strong>说明:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL 会员</a> 分为个人会员和API会员，需要为API会员，</p><p>其中API会员分为免费计划(api-free)和Pro计划(api-pro)，它们的请求地址不同，请不要选错。</p><p>你需要填写key。如果你需要使用代理地址访问，则填写Proxy API。</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> 是一个非官方API项目，其通过模拟IOS端来进行访问，因此其不支持官方API的所有参数，可以自行部署或使用公开的API。在Proxy API字段填写你的服务地址。</p><p>如果不填写，则默认使用公共接口：https://api.deeplx.org/translate</p><p>如果你没有启用token验证，那么Key字段可以留空。</p>"
+        },
+        "basic": {
+            "title": "基本",
+            "name": {
+                "label": "名称:",
+                "placeholder": "请为该配置取一个名称"
+            },
+            "key": {
+                "label": "KEY:",
+                "placeholder": "请输入KEY",
+                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>可以填写指定的API来代理访问DeepL的API，</p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "高级",
+            "header": {
+                "label": "自定义header",
+                "placeholder": "（选填）你可以在这里填写向请求header中额外添加的键值对",
+                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "自定义data",
+                "placeholder": "（选填）你可以在这里填写向请求data中额外添加的键值对",
+                "tipText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "配置",
         "basic": {
