@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "configurer",
+        "genre": {
+            "label": "Type d'API",
+            "tipText": "<strong>Description :</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL Membership</a> est divisé en Individual Membership et API Membership, vous devez être API Member,</p><p>où API Membership est divisé en Free Plan (api-free) et Pro Plan (api-pro), ils ont des adresses de demande différentes, veuillez ne pas choisir la mauvaise.</p><p>Vous devez indiquer la clé. Si vous devez utiliser l'adresse proxy pour y accéder, remplissez le champ Proxy API.</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> est un projet API non officiel auquel on accède en simulant le côté IOS, il ne prend donc pas en charge tous les paramètres de l'API officielle, et vous pouvez le déployer vous-même ou utiliser l'API publique. Remplissez le champ Proxy API avec l'adresse de votre service.</p><p>Si vous ne le remplissez pas, l'interface publique est utilisée par défaut：https://api.deeplx.org/translate</p><p>Si vous n'activez pas l'authentification par jeton, vous pouvez laisser le champ Key vide.</p>"
+        },
+        "basic": {
+            "title": "fondamental",
+            "name": {
+                "label": "Nom.",
+                "placeholder": "Veuillez donner un nom à cette configuration"
+            },
+            "key": {
+                "label": "CLÉ.",
+                "placeholder": "Veuillez saisir la CLÉ",
+                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+            },
+            "proxy": {
+                "label": "Proxy API.",
+                "tipText": "<p>Vous pouvez renseigner l'API spécifiée pour obtenir un accès proxy à l'API à l'adresse DeepL</p><strong>Comme vous avez spécifié une API personnalisée, Tampermonkey vous avertira des requêtes inter-domaines et vous devrez l'autoriser vous-même</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "niveau élevé",
+            "header": {
+                "label": "En-tête personnalisé",
+                "placeholder": "(Facultatif) Vous pouvez indiquer ici des paires clé-valeur supplémentaires à ajouter à l'en-tête de la requête.",
+                "tipText": "<p>Exemple de format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nom1 : 123<br>nom2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Données personnalisées",
+                "placeholder": "(Facultatif) Vous pouvez indiquer ici des paires clé-valeur supplémentaires à ajouter aux données de la demande.",
+                "tipText": "<p>Exemple de format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nom1 : 123<br>nom2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "configurer",
         "basic": {

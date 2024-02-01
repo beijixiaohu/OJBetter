@@ -7,6 +7,13 @@
         "monaco": "Monaco",
         "compatibility": "compatibilità"
     },
+    "common": {
+        "configManageTitle": "gestione della configurazione",
+        "missing": {
+            "radio": "La configurazione attuale richiede l'aggiunta e il controllo di una configurazione.",
+            "input": "Le impostazioni attuali richiedono campi obbligatori"
+        }
+    },
     "basicSettings": {
         "title": "Impostazioni di base",
         "darkMode": {
@@ -48,7 +55,7 @@
         "scriptLanguageLabel": "linguaggio di scripting",
         "websiteLanguageLabel": "Lingua del sito web",
         "notice": {
-            "1": "<strong>Contribuire a migliorare la qualità delle traduzioni</strong><p>L'autore dello script conosce solo il cinese semplificato e l'inglese, per tutte le altre lingue lo script e la localizzazione linguistica del sito sono realizzati tramite traduzione automatica (Deepl & Google) e il flusso di traduzione è ospitato da crowddin.</p><p>Se desidera contribuire a migliorare la qualità delle traduzioni localizzate per una determinata lingua,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>clicchi qui</a>per andare lì e contribuire a migliorarla.</p><p>Grazie per il suo contributo!</p>",
+            "1": "<strong>Contribuisca a migliorare la qualità delle traduzioni</strong><p>L'autore conosce solo il cinese semplificato e l'inglese, per tutte le altre lingue, gli script e la localizzazione linguistica del sito web sono effettuati dalla traduzione automatica (Deepl & Google) e il flusso di traduzione è ospitato da crowddin.</p><p>Se desidera contribuire a migliorare la qualità delle traduzioni localizzate per una determinata lingua,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>clicchi qui</a>per andare lì e contribuire a migliorarla.</p><p>Grazie per il suo contributo!</p>",
             "2": "<strong>Contribuire a migliorare la localizzazione linguistica del sito web</strong><p>Se ritiene che la localizzazione sia necessaria in qualche punto del suo sito web e che le sostituzioni della localizzazione non causino gravi problemi di prestazioni, è benvenuto a migliorare le regole di localizzazione.</p><p>Per aggiungere una nuova regola, deve aggiungere la versione in cinese semplificato del fork：e modificare la sostituzione localizzata del file di regole<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>, quindi avviare una richiesta di pull.</p><p>Dopo che l'invio è stato unito, crowdin completerà automaticamente la traduzione per le altre lingue, e lei potrà andare su crowdin in seguito per migliorare la qualità delle traduzioni anche per le altre lingue.</p>"
         }
     },
@@ -66,6 +73,24 @@
                     "name": "Traduzione ChatGPT",
                     "helpText": "<p><b>Deve aggiungere e selezionare le informazioni di configurazione che desidera utilizzare nella Configurazione ChatGPT qui sotto, fare clic con il tasto destro del mouse per modificare ed eliminare la configurazione</b></p><p>Per maggiori dettagli, legga la pagina dello script</p>"
                 }
+            }
+        },
+        "deepl": {
+            "mode": {
+                "title": "paradigma",
+                "select": {
+                    "free": "freeware",
+                    "api": "API"
+                },
+                "helpText": "Selezionare la modalità del servizio DeepL, l'impostazione predefinita è la modalità gratuita, non è necessario fornire l'API, ma le restrizioni ufficiali prevedono una maggiore frequenza. Modalità API, è necessario aggiungere la configurazione, può scegliere l'API ufficiale：API free, API Pro, così come deeplx non ufficiale."
+            },
+            "enableEmphasisProtection": {
+                "title": "Protezione** No.",
+                "helpText": "<strong>Questa opzione funziona solo se l'API ufficiale viene utilizzata in modalità API</strong><p>DeepL può gestire in modo errato l'enfasi in MarkDown <strong>**</strong> </p><p>Questo può far sì che il risultato della traduzione manchi del suo contenuto avvolto.</p><p>Quando questa opzione è attivata, sostituirà l'enfasi <strong>**</strong> nel testo con i tag HTML<code>\\\\<strong\\\\></code>e aggiungerà automaticamente<code>tag_handling: html</code>all'intestazione della richiesta di traduzione, in modo che DeepL non distrugga l'enfasi e il suo contenuto</p>"
+            },
+            "enableLinkProtection": {
+                "title": "Proteggere i link",
+                "helpText": "<strong>Questa opzione funziona solo se l'API ufficiale viene utilizzata in modalità API</strong><p>DeepL può gestire in modo errato i collegamenti in MarkDown.</p><p>Quando questa opzione è attivata, sostituisce i simboli di collegamento nel testo <strong>[]()</strong> con i tag HTML<code>\\\\<a\\\\></code>e aggiunge automaticamente<code>tag_handling: html</code>nell'intestazione della richiesta di traduzione, in modo che DeepL non interrompa il collegamento e il suo contenuto. contenuto</p>"
             }
         },
         "chatgpt": {
