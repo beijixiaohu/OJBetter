@@ -1,4 +1,40 @@
 {
+    "deepl": {
+        "title": "設定",
+        "genre": {
+            "label": "APIタイプ",
+            "tipText": "<strong>説明:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepLメンバーシップ</a> は個人メンバーシップとAPIメンバーシップに分かれており、APIメンバーになる必要があります。</p><p>ここでAPIメンバーシップはフリープラン(api-free)とプロプラン(api-pro)に分かれており、それぞれリクエストアドレスが異なりますので、間違ったものを選択しないようにしてください。</p><p></p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> は、IOS側をシミュレートしてアクセスする非公式APIプロジェクトなので、公式APIの全パラメータをサポートしておらず、自分でデプロイするか、公開APIを利用することになります。 Proxy API欄には、利用するサービスのアドレスを記入してください。</p><p>記入しない場合は、デフォルトでパブリック・インターフェースが使用されます：https://api.deeplx.org/translate</p><p>トークン認証を有効にしない場合は、Keyフィールドは空欄のままでかまいません。</p>"
+        },
+        "basic": {
+            "title": "基本的",
+            "name": {
+                "label": "名前",
+                "placeholder": "この構成のための名前を入力してください"
+            },
+            "key": {
+                "label": "キー",
+                "placeholder": "KEYを入力してください。",
+                "tipText": "<p>你需要输入自己的DeepL key，<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">官网</a></p>"
+            },
+            "proxy": {
+                "label": "Proxy API:",
+                "tipText": "<p>DeepLでAPIへのアクセスをプロキシするために、指定されたAPIを記入することができます</p><strong>カスタムAPIを指定しているため、Tampermonkeyはクロスドメインリクエストについて警告し、自分で認証する必要があります</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "ハイレベル",
+            "header": {
+                "label": "header のカスタマイズ",
+                "placeholder": "(オプション) ここではheaderへ追加キーを追加することができます",
+                "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "カスタム data",
+                "placeholder": "（オプション）これらはリクエストデータに追加値を入力することで追加できます.",
+                "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        }
+    },
     "chatgpt": {
         "title": "設定",
         "basic": {
