@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "ウェブサイト言語",
         "notice": {
             "1": "<strong>翻訳品質の向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。その他の言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl & Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズ翻訳の品質向上にご協力いただける場合は、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>こちらをクリックしてください。</a>。</p><p>ご協力ありがとうございました！</p>",
-            "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、ローカライゼーションによる置き換えが深刻なパフォーマンス問題を引き起こさないとお考えであれば、ローカライゼーションルールの改善にぜひご協力ください。</p><p>新しいルールを追加するには、：フォークの簡体字中国語版を追加し、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ルールファイル </a>のローカライズされた置換を修正し、プルリクエストを開始する必要があります。</p><p>投稿がマージされた後、crowdin が自動的に他の言語の翻訳を完了するので、後で crowdin に行って他の言語の翻訳の品質も向上させることができます。</p>"
+            "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトの一部をローカライズする必要があり、ローカルで置き換えてもパフォーマンスに深刻な問題が生じないとお考えでしたら、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ローカライゼーションルール </a>の改善を歓迎します。</p><p>新しいルールを追加したい場合は、その簡体字中国語版を追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを起動します。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。また、後でcrowdinにアクセスして他の言語の翻訳の品質を向上させることもできます。</p>"
         }
     },
     "translationSettings": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "マウスのスクロールロック",
                 "helpText": "オンにすると、マウス・ポインタがモナコ・エディタ内にあるとき、マウス・スクロールはエディタ内のコンテンツのみをスクロールします。"
+            },
+            "submitButtonPosition": {
+                "label": "送信ボタンの位置",
+                "helpText": "<p>コード・テストの場所と送信ボタンを選択する</p>",
+                "options": {
+                    "bottom": "ボトムス",
+                    "top": "欄干"
+                }
             }
         },
         "onlineCodeExecution": {
