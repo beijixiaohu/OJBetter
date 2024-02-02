@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "웹사이트 언어",
         "notice": {
             "1": "<strong>번역 품질 개선에 도움을 주세요</strong><p>작성자는 중국어 간체와 영어에만 익숙하며, 다른 모든 언어의 경우 웹사이트의 스크립트 및 언어 현지화는 기계 번역(Deep & Google)으로 수행되며 번역 워크플로는 크라우드인에서 호스팅합니다.</p><p>특정 언어의 현지화 번역 품질을 개선하는 데 도움을 주고 싶으시면<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'></a>으로 이동하여 개선에 참여해 주세요.</p><p>여러분의 기여에 감사드립니다!</p>",
-            "2": "<strong>웹사이트 언어 현지화 개선 도움말</strong><p>웹사이트의 어딘가에 현지화가 필요하고 현지화를 대체해도 성능에 심각한 문제가 발생하지 않는다고 생각되면 현지화 규칙 개선으로 이동하세요.</p><p>새 규칙을 추가하려면：포크의 중국어 간체 버전을 추가하고<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 규칙 파일 </a>의 현지화된 대체물을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p>제출이 병합되면 크라우드인에서 자동으로 다른 언어에 대한 번역을 완료하며, 나중에 크라우드인으로 이동하여 다른 언어의 번역 품질도 개선할 수 있습니다.</p>"
+            "2": "<strong>웹사이트 언어 현지화 개선 지원</strong><p>웹사이트의 일부를 현지화할 필요가 있고 현지에서 교체해도 성능에 심각한 문제가 발생하지 않는다고 생각되면<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 현지화 규칙 </a>을 개선할 수 있습니다.</p><p>새 규칙을 추가하려면 중국어 간체 버전：포크를 추가하고 규칙 파일을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p>제출물이 병합되면 크라우드인에서 자동으로 다른 언어에 대한 번역을 완료하며, 나중에 크라우드인으로 이동하여 다른 언어에 대한 번역 품질을 개선할 수도 있습니다.</p>"
         }
     },
     "translationSettings": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "마우스 스크롤 잠금",
                 "helpText": "이 기능을 켜면 마우스 포인터가 모나코 편집기 내부에 있을 때 마우스 스크롤은 편집기의 콘텐츠만 스크롤합니다."
+            },
+            "submitButtonPosition": {
+                "label": "제출 버튼 위치",
+                "helpText": "<p>코드 테스트 위치 선택 및 제출 버튼</p>",
+                "options": {
+                    "bottom": "bottoms",
+                    "top": "난간"
+                }
             }
         },
         "onlineCodeExecution": {
