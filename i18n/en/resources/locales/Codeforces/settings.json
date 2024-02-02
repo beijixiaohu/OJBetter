@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Website Language",
         "notice": {
             "1": "<strong>Help improve the quality of translations</strong><p>The author is only familiar with Simplified Chinese and English, for all other languages, scripts and language localization of the website are done by machine translation (Deepl & Google) and the translation workflow is hosted by crowddin.</p><p>If you'd like to help improve the quality of localized translations for a particular language,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>click here</a>to go there and help improve it.</p><p>Thank you for your contribution!</p>",
-            "2": "<strong>Help improve website language localization</strong><p>If you think it is necessary to localize somewhere on the website, and localizing it will not cause serious performance problems, you are welcome to improve the localization rules.</p><p>If you want to add a new rule, you need to first add its Simplified Chinese version：fork and modify the localized replacement<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> rule file </a>, and then initiate a pull request.</p><p>After the submission is merged, crowdin will automatically complete other Language translation, and you can also go to crowdin later to improve the translation quality in other languages.</p>"
+            "2": "<strong>Help Improve Website Language Localization</strong><p>If you think there is a need to localize some part of your website and localization substitution won't cause serious performance problems, you are welcome to improve the<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> localization rule </a>.</p><p>If you want to add a new rule, you need to add its Simplified Chinese version：fork and modify the rule file, and then launch a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can also go to crowdin later to improve the quality of the translation for the other languages.</p>"
         }
     },
     "translationSettings": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",
                 "helpText": "When turned on, when the mouse pointer is inside the monaco editor, mouse scrolling will only scroll the content inside the editor"
+            },
+            "submitButtonPosition": {
+                "label": "Submit Button Location",
+                "helpText": "<p>Choose the location of the code test and submit buttons</p>",
+                "options": {
+                    "bottom": "bottoms",
+                    "top": "parapet"
+                }
             }
         },
         "onlineCodeExecution": {
