@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Língua do sítio Web",
         "notice": {
             "1": "<strong>Ajude a melhorar a qualidade das traduções</strong><p>O autor só está familiarizado com o chinês simplificado e o inglês. Para todas as outras línguas, os guiões e a localização linguística do sítio Web são feitos por tradução automática (Deepl e Google) e o fluxo de trabalho de tradução é alojado pelo crowddin.</p><p>Se quiser ajudar a melhorar a qualidade das traduções localizadas para uma determinada língua,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>clique aqui</a>para ir lá e ajudar a melhorá-la.</p><p>Obrigado pela sua contribuição!</p>",
-            "2": "<strong>Ajude a melhorar a localização da língua do sítio Web</strong><p>Se acredita que a localização é necessária algures no seu sítio Web e que as substituições da localização não causarão problemas graves de desempenho, é bem-vindo a melhorar as regras de localização.</p><p>Para adicionar uma nova regra, tem de adicionar a versão em chinês simplificado do fork：e modificar a substituição localizada do ficheiro de regras<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>e, em seguida, iniciar um pull request.</p><p>Depois de a submissão ter sido fundida, o crowdin completará automaticamente a tradução para as outras línguas, e pode ir ao crowdin mais tarde para melhorar a qualidade das traduções para as outras línguas também.</p>"
+            "2": "<strong>Ajude a melhorar a localização do idioma do sítio Web</strong><p>Se acha que é necessário localizar uma parte do seu sítio Web e que substituí-la localmente não causará problemas graves de desempenho, pode melhorar a regra de localização<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>.</p><p>Se pretender adicionar uma nova regra, tem de adicionar a sua versão em chinês simplificado：, bifurcar e modificar o ficheiro da regra e, em seguida, lançar um pedido pull.</p><p>Após a fusão da submissão, o crowdin completará automaticamente a tradução para as outras línguas e também pode ir ao crowdin mais tarde para melhorar a qualidade da tradução para as outras línguas.</p>"
         }
     },
     "translationSettings": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueio de deslocação do rato",
                 "helpText": "Quando ativado, quando o ponteiro do rato está dentro do editor monaco, o deslocamento do rato só se desloca pelo conteúdo do editor"
+            },
+            "submitButtonPosition": {
+                "label": "Localização do botão Enviar",
+                "helpText": "<p>Escolha a localização dos botões de teste do código e de envio</p>",
+                "options": {
+                    "bottom": "fundos",
+                    "top": "parapeito"
+                }
             }
         },
         "onlineCodeExecution": {
