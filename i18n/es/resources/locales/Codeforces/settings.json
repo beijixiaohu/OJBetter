@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Idioma del sitio web",
         "notice": {
             "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si desea ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>haga clic aquí</a>para ir allí y ayudar a mejorarlo.</p><p>¡Gracias por su contribución!</p>",
-            "2": "<strong>Ayude a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en alguna parte de su sitio web y que las sustituciones localizadas de la misma no causarán graves problemas de rendimiento, le invitamos a ir a Mejorar las reglas de localización.</p><p>Para añadir una nueva regla, tiene que añadir la versión en chino simplificado del fork：y modificar la sustitución localizada del archivo de reglas<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>, después inicie un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más tarde para mejorar también la calidad de las traducciones para los demás idiomas.</p>"
+            "2": "<strong>Ayude a mejorar la localización del idioma del sitio web</strong><p>Si cree que es necesario localizar una parte de su sitio web y sustituirla localmente no causará graves problemas de rendimiento, le invitamos a mejorar la regla de localización<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>.</p><p>Si desea añadir una nueva regla, deberá añadir su versión en chino simplificado：bifurcar y modificar el archivo de la regla y, a continuación, lanzar un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y también podrá acudir a crowdin más adelante para mejorar la calidad de la traducción para los demás idiomas.</p>"
         }
     },
     "translationSettings": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueo de desplazamiento del ratón",
                 "helpText": "Cuando está activado, cuando el puntero del ratón está dentro del editor de monaco, el desplazamiento del ratón sólo se desplazará por el contenido del editor"
+            },
+            "submitButtonPosition": {
+                "label": "Ubicación del botón Enviar",
+                "helpText": "<p>Elija la ubicación de la prueba de código y los botones de envío</p>",
+                "options": {
+                    "bottom": "fondos",
+                    "top": "parapeto"
+                }
             }
         },
         "onlineCodeExecution": {
