@@ -80,10 +80,12 @@ var openai_name, openai_model, openai_key, openai_proxy, openai_header, openai_d
 var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
 var commentPaging, showJumpToLuogu, loaded;
 var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
-var standingsRecolor, problemPageCodeEditor, cppCodeTemplateComplete, CompletConfig;
-var compilerSelection, editorFontSize, onlineCompilerChoice, isCodeSubmitConfirm, alwaysConsumeMouseWheel;
+var standingsRecolor;
+var problemPageCodeEditor, isCodeSubmitConfirm, alwaysConsumeMouseWheel, submitButtonPosition;
+var useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl, onlineCompilerChoice, cppCodeTemplateComplete, CompletConfig;
+var compilerSelection, editorFontSize;
 var CF_csrf_token;
-var monacoLoaderOnload = false, monacoSocket = [], editor, useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl;
+var monacoLoaderOnload = false, monacoSocket = [], editor;
 var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
 /**
  * 初始化全局变量
@@ -207,6 +209,7 @@ async function initVar() {
     onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
     isCodeSubmitConfirm = getGMValue("isCodeSubmitConfirm", true);
     alwaysConsumeMouseWheel = getGMValue("alwaysConsumeMouseWheel", true);
+    submitButtonPosition = getGMValue("submitButtonPosition", "bottom");
     //自定义补全
     CompletConfig = getGMValue("Complet_config", {
         "choice": -1,
@@ -511,7 +514,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
         html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button,
-        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #CFBetter_editor, html[data-theme=dark] #CFBetter_statusBar,
+        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #CFBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
         html[data-theme=dark] #addCustomTest, 
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
@@ -738,8 +741,8 @@ GM_addStyle(`
 }
 @font-face {
   font-family: 'iconfont';  /* Project id 4284341 */
-  src: url('//at.alicdn.com/t/c/font_4284341_w3t9icp4vg.woff2?t=1705728788396') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4284341_w3t9icp4vg.ttf?t=1705728788396') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_4284341_2b66d3so6k.woff2?t=1706868301104') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4284341_2b66d3so6k.ttf?t=1706868301104') format('truetype');
 }
 html {
     scroll-behavior: smooth;
@@ -891,9 +894,9 @@ html:not([data-theme='dark']) .translateDiv {
 }
 .ojb_btn[disabled] {
     cursor: not-allowed !important;
-    background-color: rgb(255, 255, 255) !important;
     color: rgb(168, 171, 178) !important;
     border: 1px solid rgb(228, 231, 237) !important;
+    background-color: rgb(255, 255, 255) !important;
 }
 .ojb_btn:hover {
     color: #409eff;
@@ -901,25 +904,35 @@ html:not([data-theme='dark']) .translateDiv {
     background-color: #f1f8ff;
     z-index: 100;
 }
-.ojb_btn.success {
-    background-color: #f0f9eb;
+.ojb_btn.primary {
+    color: #ffffff;
+    border: 1px solid #409eff;
+    background-color: #409eff;
+}
+.ojb_btn.primary:hover {
+    color: #ffffff;
+    border: 1px solid #79bbff;
+    background-color: #79bbff;
+}
+.ojb_btn.success {  
     color: #4CAF50;
     border: 1px solid #C8E6C9;
+    background-color: #f0f9eb;
 }
 .ojb_btn.warning {
-    background-color: #fdf6ec;
     color: #e6a23c;
     border: 1px solid #f3d19e;
+    background-color: #fdf6ec;
 }
 .ojb_btn.error {
-    background-color: #fef0f0;
     color: #f56c6c;
     border: 1px solid #fab6b6;
+    background-color: #fef0f0;
 }
 .ojb_btn.enabled {
-    background-color: #fafbff;
     color: #42A5F5;
     border: 1px solid #90CAF9;
+    background-color: #fafbff;
 }
 .ojb_btn.active {
     animation: rippleout 0.5s ease-in-out;
@@ -2135,14 +2148,62 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     padding: 2px;
 }
 /* 代码编辑器 */
-#CFBetter_editor{
+#OJBetter_editor{
     box-sizing: border-box;
     height: 600px;
     border: 1px solid #d3d3d3;
-    width: 100% !important;
-    display: block;
+    width: 100%;
     resize: vertical;
+    display: flex;
+    flex-direction: column;
 }
+#OJBetter_editor.fullscreen{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+}
+#OJBetter_editor.bottom{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    z-index: 100;
+}
+.ojb_btn.exit_button_bottom {
+    position: fixed;
+    bottom: 30px;
+    right: 15px;
+    z-index: 100;
+    height: 28px;
+}
+/* monaco */
+#OJBetter_monaco {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+}
+#OJBetter_monaco .highlight {
+    border: 1px solid #ffffff00;
+    background-color: #ffffff00!important
+}
+.monaco-hover hr {
+    margin: 4px -8px 4px !important;
+}
+/* 状态底栏 */
+#CFBetter_statusBar{
+    height: 22px;
+    font-size: 12px;
+    color: #757575;
+    border: 1px solid #d3d3d3;
+    background-color: #f8f8f8;
+    padding: 3px;
+    box-sizing: border-box;
+}
+/* 提交 */
 #CFBetter_submitDiv{
     display: flex;
     padding-top: 15px;
@@ -2379,53 +2440,9 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .diff_note {
     font-size: 10px;
 }
-/*monaco编辑器*/
-.monaco-hover hr {
-    margin: 4px -8px 4px !important;
-}
-#CFBetter_editor .highlight {
-    border: 1px solid #ffffff00;
-    background-color: #ffffff00!important
-}
-#CFBetter_editor.fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 100;
-}
-#CFBetter_editor.fixed {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    height: 50vh;
-    z-index: 100;
-}
-#CFBetter_editor.right-side {
-    flex: 1;
-}
-.ojb_btn.exit_button {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    z-index: 100;
-    height: 28px;
-    padding: 5px 10px;
-    font-size: 14px;
-}
-.ojb_btn.exit_button.bottom {
-    bottom: 22px;
-    top: initial;
-}
-#CFBetter_statusBar{
-    height: 22px;
-    font-size: 12px;
-    color: #757575;
-    border: 1px solid #d3d3d3;
-    background-color: #f8f8f8;
-    padding: 3px;
-    box-sizing: border-box;
+/* 覆盖网站原本的样式 */
+#footer > div:nth-child(7) {
+    left: 0px !important;
 }
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -4101,6 +4118,18 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
     </div>
+    <div class='CFBetter_setting_list'>
+        <label for="submitButtonPosition"><span
+                data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.helpText"></div>
+        </div>
+        <select id="submitButtonPosition" name="submitButtonPosition">
+            <option value="bottom" data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.options.bottom"></option>
+            <option value="top" data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.options.top"></option>
+        </select>
+    </div>
     <hr>
     <h4 data-i18n="settings:codeEditorSettings.onlineCodeExecution.title"></h4>
     <label>
@@ -4617,6 +4646,7 @@ async function initSettingsPanel() {
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
+        $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
         $("#OJBetter_Bridge_WorkUri").val(GM_getValue("OJBetter_Bridge_WorkUri"));
@@ -4673,6 +4703,7 @@ async function initSettingsPanel() {
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
+                submitButtonPosition: $('#submitButtonPosition').val(),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
                 OJBetter_Bridge_WorkUri: $('#OJBetter_Bridge_WorkUri').val().replace(/\\/g, '/').replace(/\/$/, ''),
@@ -7531,21 +7562,21 @@ async function getCode(url) {
 // 创建代码编辑调试表单元素
 async function createCodeEditorForm(submitUrl, cloneHTML) {
     // 表单
-    var formDiv = $('<form method="post" id="CFBetter_SubmitForm" class="input-output-copier"></form>');
+    let formDiv = $('<form method="post" id="CFBetter_SubmitForm" class="input-output-copier"></form>');
     $('.ttypography').after(formDiv);
     formDiv.attr('action', submitUrl + "?csrf_token=" + CF_csrf_token);
 
     // 顶部区域
-    var topDiv = $(`<div class="topDiv"></div>`);
+    let topDiv = $(`<div class="topDiv"></div>`);
     let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 语言选择
     selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
     topDiv.append(selectLang);
-    var topRightDiv = $(`<div class="topRightDiv"></div>`);
+    let topRightDiv = $(`<div class="topRightDiv"></div>`);
     topDiv.append(topRightDiv);
     formDiv.append(topDiv);
 
     // 问题选择/编号
-    var selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
+    let selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
     let problemCode;
     if (is_acmsguru) {
         problemCode = $('h4').eq(0).text();
@@ -7564,15 +7595,19 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     formDiv.append(selectProblem);
 
     // 隐藏的代码记录
-    var sourceDiv = $('<textarea id="sourceCodeTextarea" name="source" style="display: none;"></textarea>');
+    let sourceDiv = $('<textarea id="sourceCodeTextarea" name="source" style="display: none;"></textarea>');
     formDiv.append(sourceDiv);
 
     // 代码编辑器
-    var editorDiv = $('<div id="CFBetter_editor"></div>');
+    let editorDiv = $('<div id="OJBetter_editor"></div>');
     formDiv.append(editorDiv);
 
+    // monaco
+    let monaco = $('<div id="OJBetter_monaco"></div>');
+    editorDiv.append(monaco);
+
     // 自定义调试
-    var customTestDiv = $(`
+    let customTestDiv = $(`
         <details id="customTestBlock">
             <summary >${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
             <div id="customTests" style="min-height: 30px;"></div>
@@ -7598,20 +7633,25 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     let submitDiv = $('<div id="CFBetter_submitDiv"></div>');
     let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
     submitDiv.append(CompilerArgsInput);
+
     let runButton = $(`
         <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe6c1;</i>
             <span class="popover_content">${i18next.t('runTestButton.initial', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    submitDiv.append(runButton);
     let submitButton = $(`
         <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
             <i class="iconfont">&#xe633;</i>
             <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    submitDiv.append(submitButton);
+    if (submitButtonPosition == "bottom") {
+        // 添加测试/提交按钮到底部
+        submitDiv.append(runButton);
+        submitDiv.append(submitButton);
+    }
+
     formDiv.append(submitDiv);
     let CompilerSetting = $(`
         <div id="CompilerSetting"></div>
@@ -7628,6 +7668,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
         topRightDiv: topRightDiv,
         sourceDiv: sourceDiv,
         editorDiv: editorDiv,
+        monaco: monaco,
         runButton: runButton,
         submitButton: submitButton,
         submitDiv: submitDiv,
@@ -7862,7 +7903,7 @@ async function createMonacoEditor(language, form, support) {
      */
     uri = monaco.Uri.file(uri);
     model = monaco.editor.createModel('', language, uri);
-    editor = monaco.editor.create(document.getElementById("CFBetter_editor"), {
+    editor = monaco.editor.create(document.getElementById("OJBetter_monaco"), {
         model: model,
         rootUri: rootUri,
         fontSize: 15,
@@ -7897,7 +7938,7 @@ async function createMonacoEditor(language, form, support) {
         editor.updateOptions({ fontSize: parseInt(editorFontSize) });
 
         // 调整字体大小
-        var changeSize = $(`
+        let changeSize = $(`
         <div class="ojb_btn ojb_btn_popover top">
             <input type="number" id="fontSizeInput" value="${editorFontSize}">
             <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
@@ -7939,6 +7980,12 @@ async function createMonacoEditor(language, form, support) {
         form.topRightDiv.append(fixToRightButton);
         fixToRightButton.on('click', fixToRight);
 
+        // 添加测试/提交按钮到顶部
+        if (submitButtonPosition == "top") {
+            form.topRightDiv.append(form.runButton);
+            form.topRightDiv.append(form.submitButton);
+        }
+
         // 选择记忆
         if (!monacoEditor_position_init) {
             monacoEditor_position_init = true; // 标记是否已经初始化过
@@ -7965,79 +8012,73 @@ async function createMonacoEditor(language, form, support) {
             fixToRightButton.prop("disabled", false);
         }
 
-        // 是否固定状态
-        var isFixed = false;
-
         // 进入全屏
         function enterFullscreen() {
-            if (isFixed) return; // 如果已经固定则不执行
-            var editor = $('#CFBetter_editor');
+            let editor = $('#OJBetter_editor');
             editor.addClass('fullscreen');
 
-            // 退出按钮
-            var exitButton = $('<button>', {
-                'id': 'exitButton',
-                'class': 'ojb_btn',
-                'text': i18next.t('exitFullscreenButton', { ns: 'codeEditor' })
-            }).addClass('exit_button').on('click', exitFullscreen);
-            $('body').append(exitButton);
+            // 取消按钮
+            let cancelButton = $(`
+                <button type="button" class="ojb_btn ojb_btn_popover top primary exit_button_bottom">
+                    <i class="iconfont">&#xe60b;</i>
+                    <span class="popover_content">${i18next.t('exitFullscreenButton', { ns: 'codeEditor' })}</span>
+                </button>
+            `).on('click', () => exitFullscreen(cancelButton));
+            $('body').append(cancelButton);
+
             disableButtons();
             GM_setValue("monacoEditor_position", "full");
         }
 
         // 退出全屏
-        function exitFullscreen() {
-            var editor = $('#CFBetter_editor');
+        const exitFullscreen = (cancelButton) => {
+            let editor = $('#OJBetter_editor');
             editor.removeClass('fullscreen');
-            $('#exitButton').remove();
+            cancelButton.remove();
             enableButtons();
             GM_setValue("monacoEditor_position", "initial");
-        }
+        };
 
         // 固定到底部
         function fixToBottom() {
-            if (isFixed) return; // 如果已经固定则不执行
-            var editor = $('#CFBetter_editor');
-            editor.addClass('fixed');
+            let editor = $('#OJBetter_editor');
+            editor.addClass('bottom');
 
-            // 创建空白框来防止遮挡下面的内容
-            var halfHeight = $(window).height() * 0.5;
-            var blankSpace = $('<div>', {
-                'id': 'blank-space',
+            let halfHeight = $(window).height() * 0.5;
+            let blankSpace = $('<div>', {
+                'class': 'blank-space',
                 'style': 'height: ' + (halfHeight + 30) + 'px;'
             });
             $('body').append(blankSpace);
 
-            // 取消固定按钮
-            var cancelButton = $('<button>', {
-                'id': 'cancelButton',
-                'class': 'ojb_btn',
-                'text': i18next.t('cancelFixButton', { ns: 'codeEditor' })
-            }).addClass('exit_button bottom').on('click', cancelFixingToBottom);
+            let cancelButton = $(`
+                <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
+                    <i class="iconfont">&#xe625;</i>
+                    <span class="popover_content">${i18next.t('cancelFixButton', { ns: 'codeEditor' })}</span>
+                </button>
+            `).on('click', () => cancelFixingToBottom(cancelButton, blankSpace));
             $('body').append(cancelButton);
+
             disableButtons();
             GM_setValue("monacoEditor_position", "bottom");
         }
 
         // 取消固定到底部
-        function cancelFixingToBottom() {
-            var editor = $('#CFBetter_editor');
-            editor.removeClass('fixed');
-            // 移除空白框和取消按钮
-            $('#blank-space').remove();
-            $('#cancelButton').remove();
+        const cancelFixingToBottom = (cancelButton, blankSpace) => {
+            let editor = $('#OJBetter_editor');
+            editor.removeClass('bottom');
+            cancelButton.remove();
+            blankSpace.remove();
             enableButtons();
             GM_setValue("monacoEditor_position", "initial");
-        }
+        };
 
         // 固定到右侧边栏
-        var sidebarStyle;
         function fixToRight() {
-            if (isFixed) return; // 如果已经固定则不执行
-            $('#sidebar').hide();
+            const sidebar = $('#sidebar').hide();
 
             // 添加样式
-            sidebarStyle = GM_addStyle(`
+            const styleElement = GM_addStyle(`
                 #body {
                     min-width: 50vw;
                     max-width: 50vw;
@@ -8059,30 +8100,27 @@ async function createMonacoEditor(language, form, support) {
                 .menu-list li a {
                     font-size: 1.4rem;
                 }
+                #OJBetter_editor{
+                    height: 100vh;
+                    width: 50vw;
+                }
             `);
 
             // 包装一层div
             $('#body').wrap('<div id="right-side-wrapper" style="display:flex; max-width: 100vw; overflow: hidden;"></div>');
-            var blankSpace = $('<div>', {
-                'id': 'blank-space',
-                'style': 'height: 100vh; width: 50vw; flex: 1; display: flex; flex-direction: column;'
-            });
-            $('#right-side-wrapper').append(blankSpace);
+            const blankSpace = $('<div>').appendTo('#right-side-wrapper');
 
-            var editor = $('#CFBetter_editor');
+            // 移动编辑器
+            const editor = $('#OJBetter_editor').prependTo(blankSpace).addClass('right-side');
 
-            // 移到右侧
-            editor.prependTo('#blank-space');
+            // 取消按钮
+            const cancelButton = $(`
+                <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
+                    <i class="iconfont">&#xe625;</i>
+                    <span class="popover_content">${i18next.t('cancelFixButton', { ns: 'codeEditor' })}</span>
+                </button>
+            `).on('click', () => cancelFixingToRight(sidebar, styleElement, editor, cancelButton)).appendTo('body');
 
-            editor.after($('#CFBetter_statusBar'));
-            editor.addClass('right-side');
-
-            var cancelButton = $('<button>', {
-                'id': 'cancelButton',
-                'class': 'ojb_btn',
-                'text': i18next.t('cancelFixButton', { ns: 'codeEditor' })
-            }).addClass('exit_button bottom').on('click', cancelFixingToRight);
-            $('body').append(cancelButton);
             disableButtons();
             GM_setValue("monacoEditor_position", "right");
 
@@ -8095,25 +8133,15 @@ async function createMonacoEditor(language, form, support) {
             darkModeStyleAdjustment();
         }
 
-        // 取消固定到右侧边栏
-        function cancelFixingToRight() {
-            var sidebar = $('#sidebar');
+        const cancelFixingToRight = (sidebar, styleElement, editor, cancelButton) => {
             sidebar.show();
-
             // 移回来
-            var editor = $('#CFBetter_editor');
-            editor.insertAfter('#sourceCodeTextarea');
-            editor.after($('#CFBetter_statusBar'));
-            editor.removeClass('right-side');
+            editor.insertAfter('#sourceCodeTextarea').removeClass('right-side');
 
             // 移除包装
-            $('#blank-space').remove();
-            $('#cancelButton').remove();
             $('#body').unwrap();
-
-            if (sidebarStyle) {
-                $(sidebarStyle).remove();
-            }
+            cancelButton.remove();
+            styleElement.remove(); // 移除添加的样式
 
             enableButtons();
             GM_setValue("monacoEditor_position", "initial");
@@ -8232,7 +8260,7 @@ async function createMonacoEditor(language, form, support) {
      * 添加状态底栏
      */
     var statusBar = $('<div id="CFBetter_statusBar">');
-    form.editorDiv.after(statusBar);
+    form.editorDiv.append(statusBar);
 
     /**
      * languageSocket
