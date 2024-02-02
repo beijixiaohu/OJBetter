@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Website Sprache",
         "notice": {
             "1": "<strong>Helfen Sie mit, die Qualität der Übersetzungen zu verbessern</strong><p>Der Autor ist nur mit vereinfachtem Chinesisch und Englisch vertraut. Für alle anderen Sprachen werden die Skripte und die Sprachlokalisierung der Website durch maschinelle Übersetzung (Deepl & Google) vorgenommen und der Übersetzungsworkflow wird von crowddin gehostet.</p><p>Wenn Sie helfen möchten, die Qualität der lokalisierten Übersetzungen für eine bestimmte Sprache zu verbessern,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>klicken Sie hier</a>, um dorthin zu gelangen und bei der Verbesserung zu helfen.</p><p>Vielen Dank für Ihren Beitrag!</p>",
-            "2": "<strong>Helfen Sie mit, die Sprachlokalisierung von Websites zu verbessern</strong><p>Wenn Sie der Meinung sind, dass die Lokalisierung irgendwo auf Ihrer Website notwendig ist und dass die Ersetzung durch die Lokalisierung keine ernsthaften Leistungsprobleme verursacht, können Sie sich gerne an Improve Localisation Rules wenden.</p><p>Um eine neue Regel hinzuzufügen, müssen Sie die vereinfachte chinesische Version des Forks：hinzufügen und die lokalisierte Ersetzung der Regeldatei<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ändern </a>und dann eine Pull-Anfrage initiieren.</p><p>Nachdem die Einreichung zusammengeführt wurde, wird crowdin automatisch die Übersetzung für die anderen Sprachen vervollständigen und Sie können später zu crowdin gehen, um die Qualität der Übersetzungen auch für die anderen Sprachen zu verbessern.</p>"
+            "2": "<strong>Helfen Sie mit, die Sprachlokalisierung von Websites zu verbessern</strong><p>Wenn Sie der Meinung sind, dass es notwendig ist, einen Teil Ihrer Website zu lokalisieren und die lokale Ersetzung keine ernsthaften Leistungsprobleme verursacht, können Sie gerne die Lokalisierungsregel<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>verbessern.</p><p>Wenn Sie eine neue Regel hinzufügen möchten, müssen Sie deren vereinfachte chinesische Version：fork hinzufügen und die Regeldatei ändern und dann eine Pull-Anfrage starten.</p><p>Nachdem die Einreichung zusammengeführt wurde, vervollständigt crowdin automatisch die Übersetzung für die anderen Sprachen, und Sie können auch später zu crowdin gehen, um die Qualität der Übersetzung für die anderen Sprachen zu verbessern.</p>"
         }
     },
     "translationSettings": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Maus-Scrollsperre",
                 "helpText": "Wenn diese Option aktiviert ist und sich der Mauszeiger innerhalb des Monaco-Editors befindet, wird beim Scrollen mit der Maus nur der Inhalt innerhalb des Editors gescrollt."
+            },
+            "submitButtonPosition": {
+                "label": "Position der Schaltfläche Senden",
+                "helpText": "<p>Wählen Sie den Speicherort für den Code-Test und die Schaltflächen</p>",
+                "options": {
+                    "bottom": "Böden",
+                    "top": "Brüstung"
+                }
             }
         },
         "onlineCodeExecution": {
