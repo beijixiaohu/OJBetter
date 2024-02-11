@@ -14,30 +14,30 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "額度查詢",
+            "alert": "<p>如果你使用的服務支援額度查詢，可以在此設定</p>",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "API位址:",
+                "placeholder": "請輸入API位址",
+                "tipText": "<p>填寫查詢額度的API位址，腳本會自動寄送請求至該位址</p>"
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "請求類型:",
+                "tipText": "<p>選擇查詢額度的請求類型</p>"
             },
             "header": {
                 "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "placeholder": "在這裡填寫向請求header中新增的鍵值對",
                 "tipText": "<p>格式範例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "data": {
                 "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "placeholder": "在這裡填寫向請求data中新增的鍵值對",
                 "tipText": "<p>格式範例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
+                "label": "資料路徑:",
+                "placeholder": "請輸入JSON路徑，使用點分隔符",
                 "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
