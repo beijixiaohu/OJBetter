@@ -16,6 +16,26 @@
         "reduction": "den ursprünglichen Zustand wiederherstellen",
         "disabled": "Die Ansicht \"MarkDown\" wird nicht unterstützt"
     },
+    "rawData": {
+        "normal": "Rohdaten",
+        "disabled": "Die Anzeige von Rohdaten wird nicht unterstützt"
+    },
+    "queryBalance": {
+        "normal": "Saldo-Anfrage",
+        "disabled": "Saldoabfrage wird nicht unterstützt",
+        "loading": "In der Abfrage…",
+        "success": "Balance：",
+        "error": "Anfrage Fehlschlag"
+    },
+    "fold": {
+        "normal": "zusammenbrechen",
+        "unfold": "Eröffnungsfeier",
+        "disabled": "Unterstützt kein Falten"
+    },
+    "close": {
+        "normal": "Gerüchteküche",
+        "disabled": "Schließen wird nicht unterstützt"
+    },
     "copy": {
         "normal": "eine Kopie machen von",
         "copied": "Reproduziert",

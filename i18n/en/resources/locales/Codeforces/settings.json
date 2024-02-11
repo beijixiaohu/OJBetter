@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Website Language",
         "notice": {
             "1": "<strong>Help improve the quality of translations</strong><p>The author is only familiar with Simplified Chinese and English, for all other languages, scripts and language localization of the website are done by machine translation (Deepl & Google) and the translation workflow is hosted by crowddin.</p><p>If you'd like to help improve the quality of localized translations for a particular language,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>click here</a>to go there and help improve it.</p><p>Thank you for your contribution!</p>",
-            "2": "<strong>Help improve website language localization</strong><p>If you think it is necessary to localize somewhere on the website, and localizing it will not cause serious performance problems, you are welcome to improve the localization rules.</p><p>If you want to add a new rule, you need to first add its Simplified Chinese version：fork and modify the localized replacement<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> rule file </a>, and then initiate a pull request.</p><p>After the submission is merged, crowdin will automatically complete other Language translation, and you can also go to crowdin later to improve the translation quality in other languages.</p>"
+            "2": "<strong>Help Improve Website Language Localization</strong><p>If you think there is a need to localize some part of your website and localization substitution won't cause serious performance problems, you are welcome to improve the<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> localization rule </a>.</p><p>If you want to add a new rule, you need to add its Simplified Chinese version：fork and modify the rule file, and then launch a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can also go to crowdin later to improve the quality of the translation for the other languages.</p>"
         }
     },
     "translationSettings": {
@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Protection** No.",
-                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation result to miss its wrapped content.</p><p>Turning on this option will replace the emphasis <strong>**</strong> in the text with HTML tags<code>\\\\<strong\\\\></code>and automatically add<code>tag_handling: html</code>in the header of the translation request so that DeepL does not destroy the emphasis and its content</p>"
+                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation result to miss its wrapped content.</p><p>When this option is turned on, emphasis in text <strong>**</strong> is replaced with HTML tags and<code>tag_handling: html</code>is automatically added to the translation request header so that DeepL doesn't break the emphasis and its content</p>"
             },
             "enableLinkProtection": {
                 "title": "Protecting links",
-                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle links in MarkDown.</p><p>When this option is turned on, it replaces link symbols in the text <strong>[]()</strong> with HTML tags<code>\\\\<a\\\\></code>and automatically adds<code>tag_handling: html</code>in the header of the translation request so that DeepL doesn't break the link and its content</p>"
+                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle links in MarkDown.</p><p>When this option is turned on, it replaces the link symbols in the text <strong>[]()</strong> with HTML tags and automatically adds<code>tag_handling: html</code>to the translation request header to keep DeepL from destroying the links and the content therein</p>"
             }
         },
         "chatgpt": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",
                 "helpText": "When turned on, when the mouse pointer is inside the monaco editor, mouse scrolling will only scroll the content inside the editor"
+            },
+            "submitButtonPosition": {
+                "label": "Submit Button Location",
+                "helpText": "Choose the location of the Code Test and Submit buttons",
+                "options": {
+                    "bottom": "bottoms",
+                    "top": "parapet"
+                }
             }
         },
         "onlineCodeExecution": {

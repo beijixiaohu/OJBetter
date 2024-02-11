@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "ウェブサイト言語",
         "notice": {
             "1": "<strong>翻訳品質の向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。その他の言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl & Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズ翻訳の品質向上にご協力いただける場合は、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>こちらをクリックしてください。</a>。</p><p>ご協力ありがとうございました！</p>",
-            "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、ローカライゼーションによる置き換えが深刻なパフォーマンス問題を引き起こさないとお考えであれば、ローカライゼーションルールの改善にぜひご協力ください。</p><p>新しいルールを追加するには、：フォークの簡体字中国語版を追加し、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ルールファイル </a>のローカライズされた置換を修正し、プルリクエストを開始する必要があります。</p><p>投稿がマージされた後、crowdin が自動的に他の言語の翻訳を完了するので、後で crowdin に行って他の言語の翻訳の品質も向上させることができます。</p>"
+            "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトの一部をローカライズする必要があり、ローカルで置き換えてもパフォーマンスに深刻な問題が生じないとお考えでしたら、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ローカライゼーションルール </a>の改善を歓迎します。</p><p>新しいルールを追加したい場合は、その簡体字中国語版を追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを起動します。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。また、後でcrowdinにアクセスして他の言語の翻訳の品質を向上させることもできます。</p>"
         }
     },
     "translationSettings": {
@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "プロテクション** No.",
-                "helpText": "<strong>このオプションは、公式 API が API モードで使用されている場合にのみ機能します。</strong><p>DeepL は、MarkDown <strong>**</strong> </p><p>の強調を正しく処理できないことがあります。このため、翻訳結果で折り返しの内容が欠落することがあります。</p><p></p>このオプションを有効にすると、テキスト内の強調表示 <strong>**</strong> が HTML タグ<code>\\<strong\\\\></code>に置き換えられ、強調表示とそのコンテンツが DeepL によって破棄されないように、翻訳要求ヘッダに<code>tag_handling: html</code>が自動的に追加されます。"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
             },
             "enableLinkProtection": {
                 "title": "リンクの保護",
-                "helpText": "<strong>このオプションは、公式 API が API モードで使用されている場合にのみ機能します。</strong><p>DeepL は、MarkDown でリンクを正しく処理できないことがあります。</p><p>このオプションをオンにすると、テキスト内のリンク記号 <strong>[]()</strong> が HTML タグ<code>\\<a\\\\></code>に置き換えられ、DeepL がリンクとそのコンテンツを破壊しないように、翻訳リクエストのヘッダに<code>tag_handling: html</code>が自動的に追加されます。コンテンツ</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "マウスのスクロールロック",
                 "helpText": "オンにすると、マウス・ポインタがモナコ・エディタ内にあるとき、マウス・スクロールはエディタ内のコンテンツのみをスクロールします。"
+            },
+            "submitButtonPosition": {
+                "label": "送信ボタンの位置",
+                "helpText": "选择代码测试和提交按钮的位置",
+                "options": {
+                    "bottom": "ボトムス",
+                    "top": "欄干"
+                }
             }
         },
         "onlineCodeExecution": {

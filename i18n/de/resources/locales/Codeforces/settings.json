@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Website Sprache",
         "notice": {
             "1": "<strong>Helfen Sie mit, die Qualität der Übersetzungen zu verbessern</strong><p>Der Autor ist nur mit vereinfachtem Chinesisch und Englisch vertraut. Für alle anderen Sprachen werden die Skripte und die Sprachlokalisierung der Website durch maschinelle Übersetzung (Deepl & Google) vorgenommen und der Übersetzungsworkflow wird von crowddin gehostet.</p><p>Wenn Sie helfen möchten, die Qualität der lokalisierten Übersetzungen für eine bestimmte Sprache zu verbessern,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>klicken Sie hier</a>, um dorthin zu gelangen und bei der Verbesserung zu helfen.</p><p>Vielen Dank für Ihren Beitrag!</p>",
-            "2": "<strong>Helfen Sie mit, die Sprachlokalisierung von Websites zu verbessern</strong><p>Wenn Sie der Meinung sind, dass die Lokalisierung irgendwo auf Ihrer Website notwendig ist und dass die Ersetzung durch die Lokalisierung keine ernsthaften Leistungsprobleme verursacht, können Sie sich gerne an Improve Localisation Rules wenden.</p><p>Um eine neue Regel hinzuzufügen, müssen Sie die vereinfachte chinesische Version des Forks：hinzufügen und die lokalisierte Ersetzung der Regeldatei<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ändern </a>und dann eine Pull-Anfrage initiieren.</p><p>Nachdem die Einreichung zusammengeführt wurde, wird crowdin automatisch die Übersetzung für die anderen Sprachen vervollständigen und Sie können später zu crowdin gehen, um die Qualität der Übersetzungen auch für die anderen Sprachen zu verbessern.</p>"
+            "2": "<strong>Helfen Sie mit, die Sprachlokalisierung von Websites zu verbessern</strong><p>Wenn Sie der Meinung sind, dass es notwendig ist, einen Teil Ihrer Website zu lokalisieren und die lokale Ersetzung keine ernsthaften Leistungsprobleme verursacht, können Sie gerne die Lokalisierungsregel<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>verbessern.</p><p>Wenn Sie eine neue Regel hinzufügen möchten, müssen Sie deren vereinfachte chinesische Version：fork hinzufügen und die Regeldatei ändern und dann eine Pull-Anfrage starten.</p><p>Nachdem die Einreichung zusammengeführt wurde, vervollständigt crowdin automatisch die Übersetzung für die anderen Sprachen, und Sie können auch später zu crowdin gehen, um die Qualität der Übersetzung für die anderen Sprachen zu verbessern.</p>"
         }
     },
     "translationSettings": {
@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Schutz** Nein.",
-                "helpText": "<strong>Diese Option funktioniert nur, wenn die offizielle API im API-Modus verwendet wird</strong><p>DeepL kann die Hervorhebung in MarkDown <strong>**</strong> </p><p>falsch behandeln. Dies kann dazu führen, dass dem Übersetzungsergebnis der umbrochene Inhalt fehlt.</p><p>Wenn diese Option aktiviert ist, wird die Hervorhebung <strong>**</strong> im Text durch HTML-Tags<code>\\\\<strong\\\\></code>ersetzt und automatisch<code>tag_handling: html</code>zum Header der Übersetzungsanfrage hinzugefügt, so dass DeepL die Hervorhebung und ihren Inhalt nicht zerstört</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
             },
             "enableLinkProtection": {
                 "title": "Links schützen",
-                "helpText": "<strong>Diese Option funktioniert nur, wenn die offizielle API im API-Modus verwendet wird</strong><p>DeepL kann Links in MarkDown falsch behandeln.</p><p>Wenn diese Option aktiviert ist, ersetzt sie Link-Symbole im Text <strong>[]()</strong> durch HTML-Tags<code>\\\\<a\\\\></code>und fügt automatisch<code>tag_handling: html</code>in der Kopfzeile der Übersetzungsanfrage hinzu, so dass DeepL den Link und seinen Inhalt nicht zerstört Inhalt</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Maus-Scrollsperre",
                 "helpText": "Wenn diese Option aktiviert ist und sich der Mauszeiger innerhalb des Monaco-Editors befindet, wird beim Scrollen mit der Maus nur der Inhalt innerhalb des Editors gescrollt."
+            },
+            "submitButtonPosition": {
+                "label": "Position der Schaltfläche Senden",
+                "helpText": "选择代码测试和提交按钮的位置",
+                "options": {
+                    "bottom": "Böden",
+                    "top": "Brüstung"
+                }
             }
         },
         "onlineCodeExecution": {

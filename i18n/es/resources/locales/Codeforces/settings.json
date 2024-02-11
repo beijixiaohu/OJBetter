@@ -56,7 +56,7 @@
         "websiteLanguageLabel": "Idioma del sitio web",
         "notice": {
             "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si desea ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>haga clic aquí</a>para ir allí y ayudar a mejorarlo.</p><p>¡Gracias por su contribución!</p>",
-            "2": "<strong>Ayude a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en alguna parte de su sitio web y que las sustituciones localizadas de la misma no causarán graves problemas de rendimiento, le invitamos a ir a Mejorar las reglas de localización.</p><p>Para añadir una nueva regla, tiene que añadir la versión en chino simplificado del fork：y modificar la sustitución localizada del archivo de reglas<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>, después inicie un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más tarde para mejorar también la calidad de las traducciones para los demás idiomas.</p>"
+            "2": "<strong>Ayude a mejorar la localización del idioma del sitio web</strong><p>Si cree que es necesario localizar una parte de su sitio web y sustituirla localmente no causará graves problemas de rendimiento, le invitamos a mejorar la regla de localización<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>.</p><p>Si desea añadir una nueva regla, deberá añadir su versión en chino simplificado：bifurcar y modificar el archivo de la regla y, a continuación, lanzar un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y también podrá acudir a crowdin más adelante para mejorar la calidad de la traducción para los demás idiomas.</p>"
         }
     },
     "translationSettings": {
@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Protección** No.",
-                "helpText": "<strong>Esta opción sólo funciona si se utiliza la API oficial en modo API</strong><p>DeepL puede manejar incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que el resultado de la traducción pierda su contenido envuelto.</p><p>Cuando esta opción esté activada, sustituirá el énfasis <strong>**</strong> en el texto por etiquetas HTML<code>\\<strong\\\\></code>y añadirá automáticamente<code>tag_handling: html</code>a la cabecera de la petición de traducción para que DeepL no destruya el énfasis y su contenido</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
             },
             "enableLinkProtection": {
                 "title": "Proteger los enlaces",
-                "helpText": "<strong>Esta opción sólo funciona si se utiliza la API oficial en modo API</strong><p>DeepL puede manejar incorrectamente los enlaces en MarkDown.</p><p>Cuando esta opción está activada, sustituye los símbolos de enlace en el texto <strong>[]()</strong> por etiquetas HTML<code>\\<a\\\\></code>y añade automáticamente<code>tag_handling: html</code>en la cabecera de la solicitud de traducción para que DeepL no rompa el enlace y su contenido</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {
@@ -230,6 +230,14 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueo de desplazamiento del ratón",
                 "helpText": "Cuando está activado, cuando el puntero del ratón está dentro del editor de monaco, el desplazamiento del ratón sólo se desplazará por el contenido del editor"
+            },
+            "submitButtonPosition": {
+                "label": "Ubicación del botón Enviar",
+                "helpText": "选择代码测试和提交按钮的位置",
+                "options": {
+                    "bottom": "fondos",
+                    "top": "parapeto"
+                }
             }
         },
         "onlineCodeExecution": {

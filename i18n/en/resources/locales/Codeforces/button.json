@@ -16,6 +16,26 @@
         "reduction": "Restore",
         "disabled": "Viewing the MarkDown view is not supported"
     },
+    "rawData": {
+        "normal": "raw data",
+        "disabled": "Viewing raw data is not supported"
+    },
+    "queryBalance": {
+        "normal": "Check Balance",
+        "disabled": "Balance inquiry is not supported",
+        "loading": "In the query…",
+        "success": "Balance：",
+        "error": "Inquiry Failure"
+    },
+    "fold": {
+        "normal": "collapse",
+        "unfold": "commencement",
+        "disabled": "Does not support folding"
+    },
+    "close": {
+        "normal": "Close",
+        "disabled": "No support for closure"
+    },
     "copy": {
         "normal": "Copy",
         "copied": "Copied",

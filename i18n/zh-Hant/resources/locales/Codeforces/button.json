@@ -16,6 +16,26 @@
         "reduction": "還原",
         "disabled": "不支援查看MarkDown視圖"
     },
+    "rawData": {
+        "normal": "原始數據",
+        "disabled": "不支援查看原始數據"
+    },
+    "queryBalance": {
+        "normal": "查詢餘額",
+        "disabled": "不支援查詢餘額",
+        "loading": "查詢中…",
+        "success": "餘額：",
+        "error": "查詢失敗"
+    },
+    "fold": {
+        "normal": "折疊",
+        "unfold": "展開",
+        "disabled": "不支援折疊"
+    },
+    "close": {
+        "normal": "關閉",
+        "disabled": "不支援關閉"
+    },
     "copy": {
         "normal": "複製",
         "copied": "已複製",
