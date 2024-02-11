@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Protección** No.",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "helpText": "<strong>Esta opción sólo funciona si se utiliza la API oficial en modo API</strong><p>DeepL puede manejar incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que el resultado de la traducción pierda su contenido envuelto.</p><p>Cuando esta opción está activada, el énfasis en el texto <strong>**</strong> se sustituye por etiquetas HTML y<code>tag_handling: html</code>se añade automáticamente a la cabecera de la solicitud de traducción para que DeepL no rompa el énfasis y su contenido</p>"
             },
             "enableLinkProtection": {
                 "title": "Proteger los enlaces",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "helpText": "<strong>Esta opción sólo funciona si se utiliza la API oficial en modo API</strong><p>DeepL puede manejar incorrectamente los enlaces en MarkDown,</p><p>Cuando esta opción está activada, sustituye los símbolos de enlace en el texto <strong>[]()</strong> por etiquetas HTML y añade automáticamente<code>tag_handling: html</code>a la cabecera de la solicitud de traducción para evitar que DeepL rompa los enlaces y su contenido</p>"
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "Ubicación del botón Enviar",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "helpText": "Elija la ubicación de los botones de prueba de código y envío",
                 "options": {
                     "bottom": "fondos",
                     "top": "parapeto"
