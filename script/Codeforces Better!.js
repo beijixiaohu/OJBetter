@@ -5162,15 +5162,15 @@ async function initSettingsPanel() {
         OJB_showModal(settingMenu);
         OJB_addDraggable($('#CFBetter_setting_menu')); // 窗口支持拖拽
 
-        // help浮窗位置更新
-        $('document').on('hover', '.help-icon', function (event) {
+        // help帮助悬浮窗位置更新
+        $(document).on('mouseenter', '.help-icon', function (event) {
             var menuOffset = $('.CFBetter_setting_menu:last').offset();
             var mouseX = event.pageX - menuOffset.left;
             var mouseY = event.pageY - menuOffset.top;
 
             $('.tip_text').css({
-                'top': mouseY,
-                'left': mouseX
+                'top': mouseY + 'px',
+                'left': mouseX + 'px'
             });
         });
 
