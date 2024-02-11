@@ -14,31 +14,31 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "Richiesta di limite",
+            "alert": "<p>Se utilizza un servizio che supporta le query di quota, può configurarlo qui</p>.",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "Indirizzo API.",
+                "placeholder": "Inserisca l'indirizzo API",
+                "tipText": "<p>Inserisca l'indirizzo API dell'importo della query e lo script invierà automaticamente una richiesta a tale indirizzo</p>"
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "Tipo di richiesta.",
+                "tipText": "<p>Selezioni il tipo di richiesta per l'importo della query</p>"
             },
             "header": {
-                "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "label": "intestazione",
+                "placeholder": "Inserisca qui le coppie chiave-valore aggiunte all'intestazione della richiesta.",
                 "tipText": "<p>Formato di esempio：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nome1 : 123<br>nome2 : cccc</p></div>"
             },
             "data": {
-                "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "label": "dati",
+                "placeholder": "Inserisca qui le coppie chiave-valore aggiunte ai dati della richiesta.",
                 "tipText": "<p>Formato di esempio：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nome1 : 123<br>nome2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "label": "Percorso dati.",
+                "placeholder": "Inserisca il percorso JSON, utilizzando il separatore di punti.",
+                "tipText": "<p>Compilare il valore del bilancio nell'interfaccia per restituire il percorso nel JSON, lo script otterrà automaticamente il valore sotto il percorso, supportando ogni altra quattro operazioni</p><p>Formato di esempio：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },
