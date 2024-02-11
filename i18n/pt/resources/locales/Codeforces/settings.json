@@ -90,7 +90,7 @@
             },
             "enableLinkProtection": {
                 "title": "Proteger as ligações",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "helpText": "<strong>Esta opção só funciona se a API oficial for utilizada no modo API</strong><p>DeepL pode tratar incorretamente as hiperligações em MarkDown,</p><p>Quando esta opção está activada, substitui os símbolos de hiperligação no texto <strong>[]()</strong> por etiquetas HTML e adiciona automaticamente<code>tag_handling: html</code>ao cabeçalho do pedido de tradução para evitar que DeepL quebre as hiperligações e os seus conteúdos</p>"
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "Localização do botão Enviar",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "helpText": "Escolha a localização dos botões de teste de código e de envio",
                 "options": {
                     "bottom": "fundos",
                     "top": "parapeito"
