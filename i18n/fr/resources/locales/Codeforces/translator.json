@@ -13,7 +13,7 @@
         "openai_isStream": "Le streaming n'est pas activé pour le moment, vous devrez attendre longtemps avant de voir les résultats, soyez patient !"
     },
     "error": {
-        "basic": "\n\nVeuillez réessayer ou changer d'interface de traduction.\n\nCliquez sur l'icône DeBug dans la barre d'outils en haut à droite pour plus d'informations.",
+        "basic": "\n\nVeuillez réessayer ou changer d'interface de traduction.\n\nCliquez sur le bouton Données brutes dans la barre d'outils en haut à droite pour obtenir plus d'informations.",
         "unexpected": "** :( Il y a eu un problème avec la traduction：** Une erreur inattendue s'est produite\n\nVeuillez réessayer ou changer d'interface de traduction.",
         "youdao413": "413 Request Entity Too Large\n\nLa longueur du texte de la demande a dépassé les limites de l'interface de traduction, veuillez passer à une autre interface de traduction.",
         "deepl429": "Les demandes sont trop fréquentes, veuillez réessayer plus tard\n\nCeci est généralement dû au fait que vous avez traduit trop souvent dans un court laps de temps, ou que vous avez traduit plus de 5000 caractères de texte à la fois.\n\nDeepL Le nombre de mots et la fréquence de traduction sont limités.\n\nCeci est temporaire, et reviendra à la normale après un certain temps.",
