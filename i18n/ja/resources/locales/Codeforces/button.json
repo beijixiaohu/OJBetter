@@ -16,6 +16,26 @@
         "reduction": "復元",
         "disabled": "MarkDown ビューの表示には対応していません。"
     },
+    "rawData": {
+        "normal": "生データ",
+        "disabled": "生データの表示はサポートされていません"
+    },
+    "queryBalance": {
+        "normal": "残高照会",
+        "disabled": "残高照会はサポートされていません",
+        "loading": "クエリー…",
+        "success": "バランス：",
+        "error": "問い合わせの失敗"
+    },
+    "fold": {
+        "normal": "崩壊",
+        "unfold": "開始",
+        "disabled": "折りたたみには対応していない"
+    },
+    "close": {
+        "normal": "閉じる",
+        "disabled": "クロージングはサポートされていません"
+    },
     "copy": {
         "normal": "コピー",
         "copied": "コピーしました",
