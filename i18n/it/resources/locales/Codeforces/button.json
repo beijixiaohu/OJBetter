@@ -16,6 +16,26 @@
         "reduction": "ripristinare lo stato originale",
         "disabled": "La visualizzazione della vista MarkDown non è supportata."
     },
+    "rawData": {
+        "normal": "dati grezzi",
+        "disabled": "La visualizzazione dei dati grezzi non è supportata"
+    },
+    "queryBalance": {
+        "normal": "Richiesta di saldo",
+        "disabled": "La richiesta del saldo non è supportata",
+        "loading": "Nella query…",
+        "success": "Saldo：",
+        "error": "Richiesta fallita"
+    },
+    "fold": {
+        "normal": "crollo",
+        "unfold": "inizio",
+        "disabled": "Non supporta la piegatura"
+    },
+    "close": {
+        "normal": "coagulazione",
+        "disabled": "La chiusura non è supportata"
+    },
     "copy": {
         "normal": "fare una copia di",
         "copied": "Riprodotto",
