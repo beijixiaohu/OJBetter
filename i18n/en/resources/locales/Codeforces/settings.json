@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Protection** No.",
-                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation result to miss its wrapped content.</p><p>Turning on this option will replace the emphasis <strong>**</strong> in the text with HTML tags<code>\\\\<strong\\\\></code>and automatically add<code>tag_handling: html</code>in the header of the translation request so that DeepL does not destroy the emphasis and its content</p>"
+                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation result to miss its wrapped content.</p><p>When this option is turned on, emphasis in text <strong>**</strong> is replaced with HTML tags and<code>tag_handling: html</code>is automatically added to the translation request header so that DeepL doesn't break the emphasis and its content</p>"
             },
             "enableLinkProtection": {
                 "title": "Protecting links",
-                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle links in MarkDown.</p><p>When this option is turned on, it replaces link symbols in the text <strong>[]()</strong> with HTML tags<code>\\\\<a\\\\></code>and automatically adds<code>tag_handling: html</code>in the header of the translation request so that DeepL doesn't break the link and its content</p>"
+                "helpText": "<strong>This option only works if the official API is used in API mode</strong><p>DeepL may incorrectly handle links in MarkDown.</p><p>When this option is turned on, it replaces the link symbols in the text <strong>[]()</strong> with HTML tags and automatically adds<code>tag_handling: html</code>to the translation request header to keep DeepL from destroying the links and the content therein</p>"
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "Submit Button Location",
-                "helpText": "<p>Choose the location of the code test and submit buttons</p>",
+                "helpText": "Choose the location of the Code Test and Submit buttons",
                 "options": {
                     "bottom": "bottoms",
                     "top": "parapet"
