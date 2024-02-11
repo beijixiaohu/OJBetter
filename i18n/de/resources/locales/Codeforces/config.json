@@ -14,31 +14,31 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "Limit-Anfrage",
+            "alert": "<p>Wenn Sie einen Dienst verwenden, der Quotenabfragen unterstützt, können Sie ihn hier konfigurieren</p>",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "API-Adresse.",
+                "placeholder": "Bitte geben Sie die API-Adresse ein",
+                "tipText": "<p>Geben Sie die API-Adresse des Abfragebetrags ein und das Skript wird automatisch eine Anfrage an diese Adresse senden</p>"
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "Anfrage Typ.",
+                "tipText": "<p>Wählen Sie die Art der Anfrage für die Abfrage des Betrags</p>"
             },
             "header": {
-                "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "label": "Kopfzeile",
+                "placeholder": "Tragen Sie hier die Schlüssel-Wert-Paare ein, die der Kopfzeile der Anfrage hinzugefügt wurden.",
                 "tipText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "data": {
-                "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "label": "Daten",
+                "placeholder": "Tragen Sie hier die zu den Anfragedaten hinzugefügten Schlüssel-Wert-Paare ein",
                 "tipText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "label": "Datenpfad.",
+                "placeholder": "Bitte geben Sie den JSON-Pfad ein und verwenden Sie dabei das Punkttrennzeichen.",
+                "tipText": "<p>Geben Sie den Balance-Wert in die Schnittstelle ein, um den Pfad im JSON zurückzugeben. Das Skript holt sich automatisch den Wert unter dem Pfad und unterstützt alle anderen vier Operationen</p><p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },
