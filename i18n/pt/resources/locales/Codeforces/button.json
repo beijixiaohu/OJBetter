@@ -16,6 +16,26 @@
         "reduction": "repor o estado original",
         "disabled": "A visualização da vista MarkDown não é suportada"
     },
+    "rawData": {
+        "normal": "dados brutos",
+        "disabled": "A visualização de dados em bruto não é suportada"
+    },
+    "queryBalance": {
+        "normal": "Consulta de saldos",
+        "disabled": "A consulta do saldo não é suportada",
+        "loading": "Na consulta…",
+        "success": "Saldo：",
+        "error": "Falha no inquérito"
+    },
+    "fold": {
+        "normal": "colapso",
+        "unfold": "início",
+        "disabled": "Não suporta dobragem"
+    },
+    "close": {
+        "normal": "coagulação",
+        "disabled": "O fecho não é suportado"
+    },
     "copy": {
         "normal": "faça uma cópia de",
         "copied": "Reproduzido",
