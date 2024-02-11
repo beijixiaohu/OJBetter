@@ -1,4 +1,47 @@
 {
+    "common": {
+        "advanced": {
+            "title": "nível elevado",
+            "header": {
+                "label": "Cabeçalho personalizado",
+                "placeholder": "(Opcional) Pode preencher pares de valores chave adicionais para adicionar ao cabeçalho do pedido aqui.",
+                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Dados personalizados",
+                "placeholder": "(Opcional) Pode preencher aqui pares de valores chave adicionais para adicionar aos dados do pedido.",
+                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            }
+        },
+        "quota": {
+            "title": "额度查询",
+            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "url": {
+                "label": "API地址:",
+                "placeholder": "请输入API地址",
+                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+            },
+            "method": {
+                "label": "请求类型:",
+                "tipText": "<p>选择查询额度的请求类型</p>"
+            },
+            "header": {
+                "label": "header",
+                "placeholder": "在这里填写向请求header中添加的键值对",
+                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "data",
+                "placeholder": "在这里填写向请求data中添加的键值对",
+                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
+            },
+            "surplus": {
+                "label": "数据路径:",
+                "placeholder": "请输入JSON路径，使用点分隔符",
+                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+            }
+        }
+    },
     "deepl": {
         "title": "configurar",
         "genre": {
@@ -19,19 +62,6 @@
             "proxy": {
                 "label": "API de proxy.",
                 "tipText": "<p>Pode preencher a API especificada para aceder à API através de proxy em DeepL</p><strong>Uma vez que especificou uma API personalizada, Tampermonkey irá avisá-lo sobre os pedidos entre domínios e terá de autorizá-los você mesmo</strong></p>"
-            }
-        },
-        "advanced": {
-            "title": "nível elevado",
-            "header": {
-                "label": "Cabeçalho personalizado",
-                "placeholder": "(Opcional) Pode preencher pares de valores chave adicionais para adicionar ao cabeçalho do pedido aqui.",
-                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
-            },
-            "data": {
-                "label": "Dados personalizados",
-                "placeholder": "(Opcional) Pode preencher aqui pares de valores chave adicionais para adicionar aos dados do pedido.",
-                "tipText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             }
         }
     },
