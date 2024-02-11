@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Protection** No.",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "helpText": "<strong>Cette option ne fonctionne que si l'API officielle est utilisée en mode API</strong><p>DeepL peut mal gérer l'accentuation dans MarkDown <strong>**</strong> </p><p>Le résultat de la traduction peut alors manquer son contenu enveloppé.</p><p>Lorsque cette option est activée, l'accentuation dans le texte <strong>**</strong> est remplacée par des balises HTML et<code>tag_handling : html</code>est automatiquement ajouté à l'en-tête de la demande de traduction afin que DeepL ne rompe pas l'accentuation et son contenu</p>"
             },
             "enableLinkProtection": {
                 "title": "Protéger les liens",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "helpText": "<strong>Cette option ne fonctionne que si l'API officielle est utilisée en mode API</strong><p>DeepL peut mal gérer les liens dans MarkDown,</p><p>Lorsque cette option est activée, elle remplace les symboles de lien dans le texte <strong>[]()</strong> par des balises HTML et ajoute automatiquement<code>tag_handling : html</code>à l'en-tête de la demande de traduction pour empêcher DeepL de briser les liens et leur contenu</p>"
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "Emplacement du bouton de soumission",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "helpText": "Choisissez l'emplacement du test de code et des boutons de soumission",
                 "options": {
                     "bottom": "bas",
                     "top": "parapet"
