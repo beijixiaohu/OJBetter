@@ -14,31 +14,31 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "限度額照会",
+            "alert": "<p>クォータ・クエリーをサポートするサービスを使用している場合、</p>。",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "APIアドレス",
+                "placeholder": "APIアドレスを入力してください。",
+                "tipText": "<p>クエリー量のAPIアドレスを記入すると、スクリプトは自動的にそのアドレスにリクエストを送信する</p>"
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "リクエストの種類",
+                "tipText": "<p>問い合わせ金額のリクエストタイプを選択</p>"
             },
             "header": {
-                "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "label": "ヘッダー",
+                "placeholder": "リクエストヘッダに追加されたキーと値のペアをここに記入する。",
                 "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "data": {
-                "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "label": "データ",
+                "placeholder": "リクエストデータに追加されたキーと値のペアをここに記入する。",
                 "tipText": "<p>サンプル：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "label": "データパス。",
+                "placeholder": "ドット区切りでJSONパスを入力してください。",
+                "tipText": "<p>JSONのパスを返すために、インターフェイスのバランスの値を記入し、スクリプトが自動的にパスの下に値を取得し、他の4つの操作をサポートする</p><p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },
