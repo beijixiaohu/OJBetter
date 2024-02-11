@@ -14,31 +14,31 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "Consulta de límites",
+            "alert": "<p>Si utiliza un servicio que admite consultas de cuotas, puede configurarlo aquí</p>.",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "Dirección API.",
+                "placeholder": "Introduzca la dirección API",
+                "tipText": "<p>Rellene la dirección API del importe de la consulta y el script enviará automáticamente una solicitud a esa dirección</p>."
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "Tipo de solicitud.",
+                "tipText": "<p>Seleccione el tipo de solicitud de importe de consulta</p>"
             },
             "header": {
-                "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "label": "encabezado",
+                "placeholder": "Rellene aquí los pares clave-valor añadidos a la cabecera de la solicitud.",
                 "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
             },
             "data": {
-                "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "label": "datos",
+                "placeholder": "Rellene aquí los pares clave-valor añadidos a los datos de la solicitud",
                 "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "label": "Ruta de datos.",
+                "placeholder": "Introduzca la ruta JSON, utilizando el separador de puntos.",
+                "tipText": "<p>Rellene el valor de equilibrio en la interfaz para devolver la ruta en el JSON, la secuencia de comandos obtendrá automáticamente el valor bajo la ruta, el apoyo a cada otras cuatro operaciones</p><p>Formato de muestra：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },
