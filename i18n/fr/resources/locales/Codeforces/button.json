@@ -16,6 +16,26 @@
         "reduction": "rétablir l'état initial",
         "disabled": "L'affichage de la vue MarkDown n'est pas pris en charge"
     },
+    "rawData": {
+        "normal": "données brutes",
+        "disabled": "L'affichage des données brutes n'est pas possible"
+    },
+    "queryBalance": {
+        "normal": "Demande de solde",
+        "disabled": "La demande de solde n'est pas prise en charge",
+        "loading": "Dans la requête…",
+        "success": "Solde：",
+        "error": "Échec de la demande"
+    },
+    "fold": {
+        "normal": "effondrement",
+        "unfold": "commencement",
+        "disabled": "Ne permet pas le pliage"
+    },
+    "close": {
+        "normal": "coagulation",
+        "disabled": "La fermeture n'est pas prise en charge"
+    },
     "copy": {
         "normal": "faire une copie de",
         "copied": "Reproduit",
