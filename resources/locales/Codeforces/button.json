@@ -16,6 +16,26 @@
         "reduction": "还原",
         "disabled": "不支持查看MarkDown视图"
     },
+    "rawData": {
+        "normal": "原始数据",
+        "disabled": "不支持查看原始数据"
+    },
+    "queryBalance": {
+        "normal": "查询余额",
+        "disabled": "不支持查询余额",
+        "loading": "查询中…",
+        "success": "余额：",
+        "error": "查询失败"
+    },
+    "fold": {
+        "normal": "折叠",
+        "unfold": "展开",
+        "disabled": "不支持折叠"
+    },
+    "close": {
+        "normal": "关闭",
+        "disabled": "不支持关闭"
+    },
     "copy": {
         "normal": "复制",
         "copied": "已复制",

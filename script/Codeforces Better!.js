@@ -58,171 +58,590 @@
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
 // ==/UserScript==
 
-// 状态与初始化
-const getGMValue = (key, defaultValue) => {
-    const value = GM_getValue(key);
-    if (value === undefined || value === "") {
-        GM_setValue(key, defaultValue);
+/**
+ * @namespace OJBetter
+ * @desc 主命名空间
+ */
+const OJBetter = {};
+
+/**
+ * @namespace common
+ * @desc 通用设置和属性。
+ * @memberof OJBetter
+ */
+OJBetter.common = {
+    /** @type {string} 网站的主机地址 */
+    hostAddress: location.origin,
+    /** @type {string?} Codeforces的CSRF令牌 */
+    cf_csrf_token: undefined,
+    /** @type {Array?} 任务队列 */
+    taskQueue: undefined
+};
+
+/**
+ * @namespace state
+ * @desc 描述脚本的当前状态。
+ * @memberof OJBetter
+ */
+OJBetter.state = {
+    /** @type {boolean?} 是否跳过页面加载等待 */
+    loaded: undefined,
+    /** @type {string} 最后读取的公告版本 */
+    lastReadAnnounceVer: undefined,
+    /** @type {number} 当前已打开的模态对话框数量*/
+    openDialogCount: 0
+};
+
+/**
+ * @namespace basic
+ * @desc 基本的用户界面设置。
+ * @memberof OJBetter
+ */
+OJBetter.basic = {
+    /** @type {string} 黑暗模式设置 */
+    darkMode: undefined,
+    /** @type {boolean?} 是否显示加载动画 */
+    showLoading: undefined,
+    /** @type {boolean?} 是否显示悬停目标区域 */
+    hoverTargetAreaDisplay: undefined,
+    /** @type {boolean?} 是否展开折叠块 */
+    expandFoldingblocks: undefined,
+    /** @type {boolean?} 是否开启折叠块渲染性能优化 */
+    renderPerfOpt: undefined,
+    /** @type {boolean?} 评论区分页 */
+    commentPaging: undefined,
+    /** @type {boolean?} 显示跳转到Luogu按钮 */
+    showJumpToLuogu: undefined,
+    /** @type {boolean?} 比赛排行榜重新着色 */
+    standingsRecolor: undefined
+};
+
+/**
+ * @namespace typeOfPage
+ * @desc 页面类型判断。
+ * @memberof OJBetter
+ */
+OJBetter.typeOfPage = {
+    /** @type {boolean?} 是否是轻量站 */
+    is_mSite: undefined,
+    /** @type {boolean?} 是否是acmsguru页面 */
+    is_acmsguru: undefined,
+    /** @type {boolean?} 是否是旧版LaTeX页面 */
+    is_oldLatex: undefined,
+    /** @type {boolean?} 是否是比赛页面 */
+    is_contest: undefined,
+    /** @type {boolean?} 是否是问题页面 */
+    is_problem: undefined,
+    /** @type {boolean?} 是否是完整的问题集页面 */
+    is_completeProblemset: undefined,
+    /** @type {boolean?} 是否是问题集中的问题页面 */
+    is_problemset_problem: undefined,
+    /** @type {boolean?} 是否是问题集页面 */
+    is_problemset: undefined,
+    /** @type {boolean?} 是否是Codeforces排名页面 */
+    is_cfStandings: undefined,
+    /** @type {boolean?} 是否是提交页面 */
+    is_submitPage: undefined
+};
+
+/**
+ * @namespace localization
+ * @desc 本地化设置。
+ * @memberof OJBetter
+ */
+OJBetter.localization = {
+    /** @type {string?} 网站语言 */
+    websiteLang: undefined,
+    /** @type {string?} 脚本语言 */
+    scriptLang: undefined
+};
+
+/**
+ * @namespace translation
+ * @desc 翻译设置。
+ * @memberof OJBetter
+ */
+OJBetter.translation = {
+    /** @type {string?} 翻译服务选择 */
+    choice: undefined,
+    /** @type {string?} 目标语言 */
+    targetLang: undefined,
+    comment: {
+        /** @type {string?} 评论翻译服务选择 */
+        choice: undefined,
+        /** @type {string?} 评论翻译模式 */
+        transMode: undefined
+    },
+    auto: {
+        /** @type {boolean?} 自动翻译开关 */
+        enabled: undefined,
+        /** @type {number?} 短文本长度限制 */
+        shortTextLength: undefined,
+        mixTrans: {
+            /** @type {boolean?} 混合翻译开关 */
+            enabled: undefined,
+            /** @type {Array?} 混合翻译服务列表 */
+            servers: undefined
+        }
+    },
+    memory: {
+        /** @type {boolean?} 翻译记忆开关 */
+        enabled: undefined,
+        /** @type {Object?} 翻译记忆树 */
+        ttTree: undefined
+    },
+    /** @type {string?} 重翻译时的行为 */
+    retransAction: undefined,
+    /** @type {number?} 等待时间 */
+    waitTime: undefined,
+    /** @type {boolean?} 替换符 */
+    replaceSymbol: undefined,
+    /** @type {boolean?} 过滤文本中的*号 */
+    filterTextWithoutEmphasis: undefined
+};
+
+/**
+ * @namespace clist
+ * @desc Clist相关设置。
+ * @memberof OJBetter
+ */
+OJBetter.clist = {
+    enabled: {
+        /** @type {boolean?} 比赛页面开关 */
+        contest: undefined,
+        /** @type {boolean?} 问题页面开关 */
+        problem: undefined,
+        /** @type {boolean?} 问题集页面开关 */
+        problemset: undefined
+    },
+    /** @type {boolean?} Rating数据防剧透 */
+    ratingHidden: undefined,
+    /** @type {string?} Clist key */
+    authorization: undefined
+};
+
+/**
+ * @namespace monaco
+ * @desc Monaco编辑器配置。
+ * @memberof OJBetter
+ */
+OJBetter.monaco = {
+    /** @type {boolean?} 在问题页面上启用Monaco编辑器 */
+    enableOnProblemPage: undefined,
+    /** @type {boolean} Monaco编辑器加载完成标志 */
+    loaderOnload: false,
+    lsp: {
+        /** @type {Array?} LSP套接字数组 */
+        socket: [],
+        /** @type {boolean?} 是否启用LSP */
+        enabled: undefined,
+        /** @type {string?} 工作路径 */
+        workUri: undefined,
+        /** @type {string?} 套接字URL */
+        socketUrl: undefined
+    },
+    complet: {
+        /** @type {boolean?} 是否启用C++代码补全模板 */
+        cppCodeTemplate: undefined,
+        /** @type {Object?} 自定义配置 */
+        customConfig: undefined
+    },
+    /** @type {Object?} Monaco编辑器实例 */
+    editor: null,
+    /** @type {string?} 在线编译器选择 */
+    onlineCompilerChoice: undefined,
+    /** @type {string?} 编译器选择 */
+    compilerSelection: undefined,
+    setting: {
+        /** @type {Array?} 语言设置数组 */
+        language: [],
+        /** @type {string?} 位置 */
+        position: undefined,
+        /** @type {boolean} 位置初始化标志 */
+        position_initialized: false,
+        /** @type {number?} 字体大小 */
+        fontsize: undefined,
+        /** @type {boolean?} 鼠标滚动锁定 */
+        alwaysConsumeMouseWheel: undefined,
+        /** @type {boolean?} 提交代码二次确认 */
+        isCodeSubmitDoubleConfirm: undefined,
+        /** @type {string?} 提交按钮位置 */
+        submitButtonPosition: undefined
+    }
+};
+
+/**
+ * @namespace deepl
+ * @desc DeepL翻译服务配置。
+ * @memberof OJBetter
+ */
+OJBetter.deepl = {
+    /** @type {Object?} DeepL配置对象 */
+    configs: undefined,
+    config: {
+        /** @type {string?} 类型 */
+        type: undefined,
+        /** @type {string?} 名称 */
+        name: undefined,
+        /** @type {string?} API类型 */
+        apiGenre: undefined,
+        /** @type {string?} API密钥 */
+        key: undefined,
+        /** @type {string?} 代理 */
+        proxy: undefined,
+        /** @type {Object?} 额外请求头 */
+        header: undefined,
+        /** @type {Object?} 额外请求数据 */
+        data: undefined,
+        quota: {
+            /** @type {string?} 余额URL */
+            url: undefined,
+            /** @type {string?} 余额请求方法 */
+            method: undefined,
+            /** @type {Object?} 余额请求头 */
+            header: undefined,
+            /** @type {Object?} 余额请求数据 */
+            data: undefined,
+            /** @type {number?} 剩余配额 */
+            surplus: undefined
+        }
+    },
+    /** @type {boolean?} 启用重点保护 */
+    enableEmphasisProtection: undefined,
+    /** @type {boolean?} 启用链接保护 */
+    enableLinkProtection: undefined
+};
+
+/**
+ * @namespace chatgpt
+ * @desc ChatGPT服务配置。
+ * @memberof OJBetter
+ */
+OJBetter.chatgpt = {
+    /** @type {Object?} ChatGPT配置对象 */
+    configs: undefined,
+    config: {
+        /** @type {string?} 名称 */
+        name: undefined,
+        /** @type {string?} 模型 */
+        model: undefined,
+        /** @type {string?} API密钥 */
+        key: undefined,
+        /** @type {string?} 代理 */
+        proxy: undefined,
+        /** @type {Object?} 额外请求头 */
+        header: undefined,
+        /** @type {Object?} 额外请求数据 */
+        data: undefined,
+        quota: {
+            /** @type {string?} 余额URL */
+            url: undefined,
+            /** @type {string?} 余额请求方法 */
+            method: undefined,
+            /** @type {Object?} 余额请求头 */
+            header: undefined,
+            /** @type {Object?} 余额请求数据 */
+            data: undefined,
+            /** @type {number?} 剩余配额 */
+            surplus: undefined
+        }
+    },
+    /** @type {boolean?} 是否为流式传输 */
+    isStream: undefined
+};
+
+// ------------------------------
+// 一些工具函数
+// ------------------------------
+
+/**
+ * 将数字或者字符串解析为数字。
+ * @memberof OJBetter.common
+ * @param {string} val 要解析的字符串
+ * @param {boolean} [strict=false] 是否进行严格类型检查
+ * @returns {number} 解析结果
+ * @throws {Error} 如果解析失败，则抛出错误
+ */
+const parseNumber = (val, strict = false) => {
+    const num = Number(val);
+    if (isNaN(num) || (strict && val.toString() !== num.toString())) {
+        throw new Error('Invalid number');
+    }
+    return num;
+};
+
+/**
+ * 将字符串解析为布尔值
+ * @param {string} val - 要解析的字符串
+ * @param {boolean} strict - 是否进行严格类型检查
+ * @returns {boolean} - 解析结果
+ * @throws {Error} - 如果解析失败，则抛出错误
+ */
+const parseBoolean = (val, strict) => {
+    if (strict) {
+        if (val === true || val === false) return val;
+        throw new Error('Invalid boolean');
+    }
+    return val === 'true' ? true : val === 'false' ? false : val;
+};
+
+/**
+ * 将字符串解析为对象
+ * @param {string} val - 要解析的字符串
+ * @returns {Object} - 解析结果
+ * @throws {Error} - 如果解析失败，则抛出错误
+ */
+const parseObject = val => {
+    try {
+        return JSON.parse(val);
+    } catch {
+        throw new Error('Invalid JSON');
+    }
+};
+
+/**
+ * 将字符串解析为键值对数组
+ * @param {string} val - 要解析的字符串
+ * @returns {Object[]} - 解析结果
+ * @throws {Error} - 如果解析失败，则抛出错误
+ */
+const parseLinePairArray = val => {
+    if (typeof val !== 'string' || val.trim() === '') return [];
+    return val.split("\n").filter(line => line.trim() !== '').map(line => {
+        const indexOfFirstColon = line.indexOf(":");
+        if (indexOfFirstColon === -1) throw new Error('Invalid LinePairArray format: ":" is missing');
+        const key = line.substring(0, indexOfFirstColon).trim();
+        const value = line.substring(indexOfFirstColon + 1).trim();
+        return { [key]: value };
+    });
+};
+
+/**
+ * 获取对象中指定路径表达式的值
+ * @param {Object} obj - 要计算的对象
+ * @param {string} pathOrExpression - 要计算的路径表达式
+ * @returns {any} - 计算结果
+ * @example
+ * const obj = {
+ *   "a": {
+ *     "b": 1
+ *   },
+ *   "c": 2
+ * };
+ * evaluatePathOrExpression(obj, "a.b"); // 1
+ * evaluatePathOrExpression(obj, "a.b + c"); // 3
+ * evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
+ */
+function evaluatePathOrExpression(obj, pathOrExpression) {
+    const hasOperator = /[\+\-\*\/]/.test(pathOrExpression);
+    const getPathValue = (obj, path) => {
+        return path.split('.').reduce((acc, part) => {
+            return acc !== undefined && acc !== null && acc.hasOwnProperty(part) ? acc[part] : undefined;
+        }, obj);
+    };
+    const evaluateExpression = (obj, expression) => {
+        const tokens = expression.split(/([\+\-\*\/])/).map(token => token.trim());
+        const values = tokens.map(token => {
+            if (/[\+\-\*\/]/.test(token)) {
+                return token;
+            } else {
+                const value = getPathValue(obj, token);
+                return value !== undefined ? value : 0;
+            }
+        });
+        const evaluatedExpression = values.join(' ');
+        try {
+            return Function(`'use strict'; return (${evaluatedExpression});`)();
+        } catch (e) {
+            console.error('Expression evaluation error:', e);
+            return undefined;
+        }
+    };
+    return hasOperator ? evaluateExpression(obj, pathOrExpression) : getPathValue(obj, pathOrExpression);
+}
+
+/**
+ * 获取 GM 存储的值并根据类型进行处理
+ * @param {string} key - 要检索的值的键。
+ * @param {any} defaultValue - 如果值未找到，则返回的默认值。
+ * @param {Object} [options={}] - 配置选项对象。
+ * @param {string} [options.type='string'] - 期望的值的类型。可选值：'string', 'number', 'boolean', 'object', 'array', 'linePairArray'。
+ * @param {boolean} [options.strict=false] - 用于数字和布尔类型，表示是否进行严格类型检查。
+ * @param {string} [options.pathOrExpression=''] - 用于对象或数组类型，表示路径表达式或获取元素的索引。
+ * @returns {any} - 检索到的值。
+ */
+const getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOrExpression = '' } = {}) => {
+    let value = GM_getValue(key);
+    if (value === undefined || value === null || value === "") {
+        GM_setValue?.(key, defaultValue);
         return defaultValue;
     }
+
+    const parsers = {
+        string: val => val,
+        number: (val) => parseNumber(val, strict),
+        boolean: (val) => parseBoolean(val, strict),
+        object: parseObject,
+        array: parseObject,
+        linePairArray: parseLinePairArray
+    };
+
+    if (!(type in parsers)) {
+        console.error(`Unsupported type: ${type}`);
+        return defaultValue;
+    }
+
+    try {
+        value = parsers[type](value);
+    } catch (e) {
+        console.error('Error:', e.message);
+        return defaultValue;
+    }
+
+    // The pathOrExpression processing is not applicable to linePairArray type
+    if ((type === 'object' || type === 'array') && pathOrExpression) {
+        const evaluated = evaluatePathOrExpression(value, pathOrExpression);
+        if (evaluated === undefined) {
+            console.error('Path or expression evaluation returned undefined');
+            return defaultValue;
+        }
+        value = evaluated;
+    }
+
     return value;
 };
-var lastReadAnnounceVer = getGMValue("lastReadAnnounceVer", "0");
-var darkMode = getGMValue("darkMode", "follow");
-var hostAddress = location.origin;
-var is_mSite, is_acmsguru, is_oldLatex, is_contest, is_problem, is_completeProblemset, is_problemset_problem, is_problemset, is_cfStandings, is_submitPage;
-var localizationLanguage, scriptL10nLanguage;
-var showLoading, hoverTargetAreaDisplay, expandFoldingblocks, renderPerfOpt;
-var translation, transTargetLang, commentTranslationChoice;
-var ttTree, memoryTranslateHistory, autoTranslation, shortTextLength;
-var deepl_type, deepl_name, deepl_apiGenre, deepl_key, deepl_proxy, deepl_header, deepl_data, enableEmphasisProtection, enableLinkProtection;
-var openai_name, openai_model, openai_key, openai_proxy, openai_header, openai_data, openai_isStream, chatgpt_config;
-var commentTranslationMode, retransAction, transWaitTime, taskQueue, allowMixTrans, mixedTranslation, replaceSymbol, filterTextWithoutEmphasis;
-var commentPaging, showJumpToLuogu, loaded;
-var showClistRating_contest, showClistRating_problem, showClistRating_problemset, RatingHidden, clist_Authorization;
-var standingsRecolor;
-var problemPageCodeEditor, isCodeSubmitConfirm, alwaysConsumeMouseWheel, submitButtonPosition;
-var useLSP, OJBetter_Bridge_WorkUri, OJBetter_Bridge_SocketUrl, onlineCompilerChoice, cppCodeTemplateComplete, CompletConfig;
-var compilerSelection, editorFontSize;
-var CF_csrf_token;
-var monacoLoaderOnload = false, monacoSocket = [], editor;
-var monacoEditor_language = [], monacoEditor_position, monacoEditor_position_init = false;
+
 /**
  * 初始化全局变量
  */
 async function initVar() {
     const { hostname, href } = window.location;
-    is_mSite = /^m[0-9]/.test(hostname);
-    is_oldLatex = $('.tex-span').length;
-    is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
-    is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
-    is_problem = href.includes('/problem/');
-    is_completeProblemset = /problems\/?$/.test(href);
-    is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
-    is_problemset = href.includes('/problemset') && !href.includes('/problem/');
-    is_submitPage = href.includes('/submit');
-    is_cfStandings = href.includes('/standings') &&
+    OJBetter.state.lastReadAnnounceVer = getGMValue("lastReadAnnounceVer", "0");
+    OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
+    OJBetter.typeOfPage.is_oldLatex = $('.tex-span').length;
+    OJBetter.typeOfPage.is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
+    OJBetter.typeOfPage.is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
+    OJBetter.typeOfPage.is_problem = href.includes('/problem/');
+    OJBetter.typeOfPage.is_completeProblemset = /problems\/?$/.test(href);
+    OJBetter.typeOfPage.is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
+    OJBetter.typeOfPage.is_problemset = href.includes('/problemset') && !href.includes('/problem/');
+    OJBetter.typeOfPage.is_submitPage = href.includes('/submit');
+    OJBetter.typeOfPage.is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
             .map(function () {
                 return $(this).find('span').text();
             })
             .get()
             .every(score => /^[0-9]+$/.test(score));
-    localizationLanguage = getGMValue("localizationLanguage", "zh");
-    scriptL10nLanguage = getGMValue("scriptL10nLanguage", "zh");
-    showLoading = getGMValue("showLoading", true);
-    hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-    expandFoldingblocks = getGMValue("expandFoldingblocks", true);
-    renderPerfOpt = getGMValue("renderPerfOpt", false);
-    commentPaging = getGMValue("commentPaging", true);
-    showJumpToLuogu = getGMValue("showJumpToLuogu", true);
-    standingsRecolor = getGMValue("standingsRecolor", true);
-    loaded = getGMValue("loaded", false);
-    transTargetLang = getGMValue("transTargetLang", "zh");
-    translation = getGMValue("translation", "deepl");
-    commentTranslationMode = getGMValue("commentTranslationMode", "0");
-    commentTranslationChoice = getGMValue("commentTranslationChoice", "0");
-    memoryTranslateHistory = getGMValue("memoryTranslateHistory", true);
-    autoTranslation = getGMValue("autoTranslation", false);
-    shortTextLength = getGMValue("shortTextLength", "2000");
-    retransAction = getGMValue("retransAction", "0");
-    transWaitTime = getGMValue("transWaitTime", "200");
-    allowMixTrans = getGMValue("allowMixTrans", true);
-    mixedTranslation = getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun']);
-    taskQueue = new TaskQueue();
-    replaceSymbol = getGMValue("replaceSymbol", "2");
-    filterTextWithoutEmphasis = getGMValue("filterTextWithoutEmphasis", false);
-    showClistRating_contest = getGMValue("showClistRating_contest", false);
-    showClistRating_problem = getGMValue("showClistRating_problem", false);
-    showClistRating_problemset = getGMValue("showClistRating_problemset", false);
-    RatingHidden = getGMValue("RatingHidden", false);
-    clist_Authorization = getGMValue("clist_Authorization", "");
+    OJBetter.localization.websiteLang = getGMValue("localizationLanguage", "zh");
+    OJBetter.localization.scriptLang = getGMValue("scriptL10nLanguage", "zh");
+    OJBetter.basic.showLoading = getGMValue("showLoading", true);
+    OJBetter.basic.hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
+    OJBetter.basic.expandFoldingblocks = getGMValue("expandFoldingblocks", true);
+    OJBetter.basic.renderPerfOpt = getGMValue("renderPerfOpt", false);
+    OJBetter.basic.commentPaging = getGMValue("commentPaging", true);
+    OJBetter.basic.showJumpToLuogu = getGMValue("showJumpToLuogu", true);
+    OJBetter.basic.standingsRecolor = getGMValue("standingsRecolor", true);
+    OJBetter.state.loaded = getGMValue("loaded", false);
+    OJBetter.translation.targetLang = getGMValue("transTargetLang", "zh");
+    OJBetter.translation.choice = getGMValue("translation", "deepl");
+    OJBetter.translation.comment.transMode = getGMValue("commentTranslationMode", "0");
+    OJBetter.translation.comment.choice = getGMValue("commentTranslationChoice", "0");
+    OJBetter.translation.memory.enabled = getGMValue("memoryTranslateHistory", true);
+    OJBetter.translation.auto.enabled = getGMValue("autoTranslation", false);
+    OJBetter.translation.auto.shortTextLength = getGMValue("shortTextLength", "2000");
+    OJBetter.translation.retransAction = getGMValue("retransAction", "0");
+    OJBetter.translation.waitTime = getGMValue("transWaitTime", "200");
+    OJBetter.translation.auto.mixTrans.enabled = getGMValue("allowMixTrans", true);
+    OJBetter.translation.auto.mixTrans.servers = getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun']);
+    OJBetter.common.taskQueue = new TaskQueue();
+    OJBetter.translation.replaceSymbol = getGMValue("replaceSymbol", "2");
+    OJBetter.translation.filterTextWithoutEmphasis = getGMValue("filterTextWithoutEmphasis", false);
+    OJBetter.clist.enabled.contest = getGMValue("showClistRating_contest", false);
+    OJBetter.clist.enabled.problem = getGMValue("showClistRating_problem", false);
+    OJBetter.clist.enabled.problemset = getGMValue("showClistRating_problemset", false);
+    OJBetter.clist.ratingHidden = getGMValue("RatingHidden", false);
+    OJBetter.clist.authorization = getGMValue("clist_Authorization", "");
     //deepl
-    deepl_type = getGMValue("deepl_type", "free");
-    deepl_config = getGMValue("deepl_config", {
+    OJBetter.deepl.config.type = getGMValue("deepl_type", "free");
+    OJBetter.deepl.configs = getGMValue("deepl_config", {
         "choice": "",
         "configurations": []
     });
-    enableEmphasisProtection = getGMValue("enableEmphasisProtection", true);
-    enableLinkProtection = getGMValue("enableLinkProtection", true);
-    if (deepl_config.choice !== "" && deepl_config.configurations.length !== 0) {
-        const choice = deepl_config.choice;
-        const configuration = deepl_config.configurations.find(obj => obj.name === choice);;
+    if (OJBetter.deepl.configs.choice !== "" && OJBetter.deepl.configs.configurations.length !== 0) {
+        const choice = OJBetter.deepl.configs.choice;
+        const configuration = OJBetter.deepl.configs.configurations.find(obj => obj.name === choice);;
         if (configuration == undefined) {
             let existingConfig = GM_getValue('deepl_config');
             existingConfig.choice = "";
             GM_setValue('deepl_config', existingConfig);
             location.reload();
         }
-        deepl_name = configuration.name;
-        deepl_apiGenre = configuration.apiGenre;
-        deepl_key = configuration.key;
-        deepl_proxy = configuration.proxy;
-        deepl_header = configuration._header ?
-            configuration._header.split("\n").map(header => {
-                const [key, value] = header.split(":");
-                return { [key.trim()]: value.trim() };
-            }) : [];
-        deepl_data = configuration._data ?
-            configuration._data.split("\n").map(header => {
-                const [key, value] = header.split(":");
-                return { [key.trim()]: value.trim() };
-            }) : [];
+        OJBetter.deepl.config.name = configuration.name;
+        OJBetter.deepl.config.apiGenre = configuration.apiGenre;
+        OJBetter.deepl.config.key = configuration.key;
+        OJBetter.deepl.config.proxy = configuration.proxy;
+        OJBetter.deepl.config.header = parseLinePairArray(configuration._header);
+        OJBetter.deepl.config.data = parseLinePairArray(configuration._data);
+        OJBetter.deepl.config.quota.url = configuration.quota_url;
+        OJBetter.deepl.config.quota.method = configuration.quota_method;
+        OJBetter.deepl.config.quota.header = parseLinePairArray(configuration.quota_header);
+        OJBetter.deepl.config.quota.data = parseLinePairArray(configuration.quota_data);
+        OJBetter.deepl.config.quota.surplus = configuration.quota_surplus;
     }
+    OJBetter.deepl.enableEmphasisProtection = getGMValue("enableEmphasisProtection", true);
+    OJBetter.deepl.enableLinkProtection = getGMValue("enableLinkProtection", true);
     //openai
-    openai_isStream = getGMValue("openai_isStream", true);
-    chatgpt_config = getGMValue("chatgpt_config", {
+    OJBetter.chatgpt.isStream = getGMValue("openai_isStream", true);
+    OJBetter.chatgpt.configs = getGMValue("chatgpt_config", {
         "choice": "",
         "configurations": []
     });
-    if (chatgpt_config.choice !== "" && chatgpt_config.configurations.length !== 0) {
-        const choice = chatgpt_config.choice;
-        const configuration = chatgpt_config.configurations.find(obj => obj.name === choice);;
+    if (OJBetter.chatgpt.configs.choice !== "" && OJBetter.chatgpt.configs.configurations.length !== 0) {
+        const choice = OJBetter.chatgpt.configs.choice;
+        const configuration = OJBetter.chatgpt.configs.configurations.find(obj => obj.name === choice);;
         if (configuration == undefined) {
             let existingConfig = GM_getValue('chatgpt_config');
             existingConfig.choice = "";
             GM_setValue('chatgpt_config', existingConfig);
             location.reload();
         }
-        openai_name = configuration.name;
-        openai_model = configuration.model;
-        openai_key = configuration.key;
-        openai_proxy = configuration.proxy;
-        openai_header = configuration._header ?
-            configuration._header.split("\n").map(header => {
-                const [key, value] = header.split(":");
-                return { [key.trim()]: value.trim() };
-            }) : [];
-        openai_data = configuration._data ?
-            configuration._data.split("\n").map(header => {
-                const [key, value] = header.split(":");
-                return { [key.trim()]: value.trim() };
-            }) : [];
+        OJBetter.chatgpt.config.name = configuration.name;
+        OJBetter.chatgpt.config.model = configuration.model;
+        OJBetter.chatgpt.config.key = configuration.key;
+        OJBetter.chatgpt.config.proxy = configuration.proxy;
+        OJBetter.chatgpt.config.header = parseLinePairArray(configuration._header);
+        OJBetter.chatgpt.config.data = parseLinePairArray(configuration._data);
+        OJBetter.chatgpt.config.quota.url = configuration.quota_url;
+        OJBetter.chatgpt.config.quota.method = configuration.quota_method;
+        OJBetter.chatgpt.config.quota.header = parseLinePairArray(configuration.quota_header);
+        OJBetter.chatgpt.config.quota.data = parseLinePairArray(configuration.quota_data);
+        OJBetter.chatgpt.config.quota.surplus = configuration.quota_surplus;
     }
     // 编辑器
-    if (!is_mSite) CF_csrf_token = Codeforces.getCsrfToken();
-    else CF_csrf_token = "";
-    compilerSelection = getGMValue("compilerSelection", "61");
-    editorFontSize = getGMValue("editorFontSize", "15");
-    problemPageCodeEditor = getGMValue("problemPageCodeEditor", true);
-    cppCodeTemplateComplete = getGMValue("cppCodeTemplateComplete", true);
-    onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
-    isCodeSubmitConfirm = getGMValue("isCodeSubmitConfirm", true);
-    alwaysConsumeMouseWheel = getGMValue("alwaysConsumeMouseWheel", true);
-    submitButtonPosition = getGMValue("submitButtonPosition", "bottom");
+    if (!OJBetter.typeOfPage.is_mSite) OJBetter.common.cf_csrf_token = Codeforces.getCsrfToken();
+    else OJBetter.common.cf_csrf_token = "";
+    OJBetter.monaco.compilerSelection = getGMValue("compilerSelection", "61");
+    OJBetter.monaco.setting.fontsize = getGMValue("editorFontSize", "15");
+    OJBetter.monaco.enableOnProblemPage = getGMValue("problemPageCodeEditor", true);
+    OJBetter.monaco.complet.cppCodeTemplate = getGMValue("cppCodeTemplateComplete", true);
+    OJBetter.monaco.onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
+    OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = getGMValue("isCodeSubmitConfirm", true);
+    OJBetter.monaco.setting.alwaysConsumeMouseWheel = getGMValue("alwaysConsumeMouseWheel", true);
+    OJBetter.monaco.setting.submitButtonPosition = getGMValue("submitButtonPosition", "bottom");
     //自定义补全
-    CompletConfig = getGMValue("Complet_config", {
+    OJBetter.monaco.complet.customConfig = getGMValue("Complet_config", {
         "choice": -1,
         "configurations": []
     });
     /**
     * 加载monaco编辑器资源
     */
-    useLSP = getGMValue("useLSP", false);
-    monacoEditor_position = getGMValue("monacoEditor_position", "initial");
-    OJBetter_Bridge_WorkUri = getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
-    OJBetter_Bridge_SocketUrl = getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
-    if (problemPageCodeEditor) {
+    OJBetter.monaco.lsp.enabled = getGMValue("useLSP", false);
+    OJBetter.monaco.setting.position = getGMValue("monacoEditor_position", "initial");
+    OJBetter.monaco.lsp.workUri = getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
+    OJBetter.monaco.lsp.socketUrl = getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
+    if (OJBetter.monaco.enableOnProblemPage) {
         let monacoLoader = document.createElement("script");
         monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
         document.head.prepend(monacoLoader);
@@ -232,7 +651,7 @@ async function initVar() {
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
             require(["vs/editor/editor.main"], () => {
-                monacoLoaderOnload = true;
+                OJBetter.monaco.loaderOnload = true;
             });
         }
     }
@@ -242,7 +661,7 @@ async function initVar() {
  * 公告
  */
 async function showAnnounce() {
-    if (lastReadAnnounceVer < GM_info.script.version) {
+    if (OJBetter.state.lastReadAnnounceVer < GM_info.script.version) {
         const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${GM_info.script.version}`;
         const ok = await createDialog(
             title,
@@ -263,25 +682,25 @@ async function showAnnounce() {
  * 显示警告消息
  */
 function showWarnMessage() {
-    if (is_oldLatex) {
+    if (OJBetter.typeOfPage.is_oldLatex) {
         const loadingMessage = new LoadingMessage();
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
     }
-    if (is_acmsguru) {
+    if (OJBetter.typeOfPage.is_acmsguru) {
         const loadingMessage = new LoadingMessage();
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
     }
-    if (commentTranslationMode == "1") {
+    if (OJBetter.translation.comment.transMode == "1") {
         const loadingMessage = new LoadingMessage();
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
     }
-    if (commentTranslationMode == "2") {
+    if (OJBetter.translation.comment.transMode == "2") {
         const loadingMessage = new LoadingMessage();
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
     }
-    if (is_submitPage && problemPageCodeEditor) {
+    if (OJBetter.typeOfPage.is_submitPage && OJBetter.monaco.enableOnProblemPage) {
         const loadingMessage = new LoadingMessage();
-        if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
     }
 }
 
@@ -290,21 +709,12 @@ const OJBetterName = 'Codeforces Better!';
 const findHelpText1 = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 寻求帮助\n\n';
 const findHelpText2 = '如遇问题，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 反馈';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
-const unfoldIcon = `<svg t="1695971616104" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2517" width="18" height="18"><path d="M747.451 527.394L512.376 707.028l-235.071-185.71a37.975 37.975 0 0 0-23.927-8.737 38 38 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456c14.013 11.523 34.219 11.523 48.231 0l259.003-199.002a37.974 37.974 0 0 0 5.698-53.552 37.982 37.982 0 0 0-53.552-5.315z m0 0" p-id="2518"></path><path d="M488.071 503.845c14.013 11.522 34.219 11.522 48.231 0l259.003-199.003a37.97 37.97 0 0 0 13.983-25.591 37.985 37.985 0 0 0-8.285-27.959 37.97 37.97 0 0 0-25.591-13.979 37.985 37.985 0 0 0-27.96 8.284L512.376 425.61 277.305 239.899a37.974 37.974 0 0 0-23.927-8.736 37.993 37.993 0 0 0-29.248 13.674 37.984 37.984 0 0 0 4.938 53.552l259.003 205.456z m0 0" p-id="2519"></path></svg>`;
-const putawayIcon = `<svg t="1695971573189" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2266" width="18" height="18"><path d="M276.549 496.606l235.075-179.634 235.071 185.711a37.975 37.975 0 0 0 23.927 8.737 38 38 0 0 0 29.248-13.674 37.986 37.986 0 0 0-4.938-53.552L535.929 238.737c-14.013-11.523-34.219-11.523-48.231 0L228.695 437.739a37.974 37.974 0 0 0-5.698 53.552 37.982 37.982 0 0 0 53.552 5.315z m0 0" p-id="2267"></path><path d="M535.929 520.155c-14.013-11.522-34.219-11.522-48.231 0L228.695 719.158a37.97 37.97 0 0 0-13.983 25.591 37.985 37.985 0 0 0 8.285 27.959 37.97 37.97 0 0 0 25.591 13.979 37.985 37.985 0 0 0 27.96-8.284L511.624 598.39l235.071 185.711a37.974 37.974 0 0 0 23.927 8.736 37.993 37.993 0 0 0 29.248-13.674 37.984 37.984 0 0 0-4.938-53.552L535.929 520.155z m0 0" p-id="2268"></path></svg>`;
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
-const copyIcon = `<svg t="1695970366492" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2499" width="16" height="16"><path d="M720 192h-544A80.096 80.096 0 0 0 96 272v608C96 924.128 131.904 960 176 960h544c44.128 0 80-35.872 80-80v-608C800 227.904 764.128 192 720 192z m16 688c0 8.8-7.2 16-16 16h-544a16 16 0 0 1-16-16v-608a16 16 0 0 1 16-16h544a16 16 0 0 1 16 16v608z" p-id="2500"></path><path d="M848 64h-544a32 32 0 0 0 0 64h544a16 16 0 0 1 16 16v608a32 32 0 1 0 64 0v-608C928 99.904 892.128 64 848 64z" p-id="2501"></path><path d="M608 360H288a32 32 0 0 0 0 64h320a32 32 0 1 0 0-64zM608 520H288a32 32 0 1 0 0 64h320a32 32 0 1 0 0-64zM480 678.656H288a32 32 0 1 0 0 64h192a32 32 0 1 0 0-64z" p-id="2502"></path></svg>`;
-const copyedIcon = `<svg t="1697105956577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="986" width="16" height="16"><path d="M928 612.8V144c0-44.8-35.2-80-80-80H304c-17.6 0-32 14.4-32 32s14.4 32 32 32h544c8 0 16 8 16 16v425.6c-19.2-9.6-41.6-16-64-17.6V272c0-44.8-35.2-80-80-80H176c-44.8 0-80 35.2-80 80v608c0 44.8 35.2 80 80 80h460.8c36.8 27.2 83.2 43.2 132.8 43.2 126.4 0 227.2-100.8 227.2-227.2 0-64-27.2-121.6-68.8-163.2zM176 896c-8 0-16-8-16-16V272c0-8 8-16 16-16h544c8 0 16 8 16 16v280c-108.8 16-193.6 110.4-193.6 224 0 44.8 12.8 84.8 33.6 120H176z m593.6 72c-19.2 0-36.8-3.2-54.4-8-38.4-11.2-72-33.6-96-64-25.6-32-41.6-75.2-41.6-120 0-94.4 67.2-172.8 158.4-188.8 11.2-1.6 22.4-3.2 33.6-3.2 11.2 0 20.8 0 30.4 1.6 22.4 3.2 44.8 11.2 64 22.4 25.6 14.4 48 35.2 64 59.2 20.8 30.4 33.6 68.8 33.6 108.8 0 107.2-84.8 192-192 192z" p-id="987"></path>
-<path d="M608 360H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h320c17.6 0 32-14.4 32-32s-14.4-32-32-32z m0 160H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h320c17.6 0 32-14.4 32-32s-14.4-32-32-32z m-128 158.4H288c-17.6 0-32 14.4-32 32s14.4 32 32 32h192c17.6 0 32-14.4 32-32s-14.4-32-32-32zM731.2 886.4c-6.4 0-11.2-1.6-16-6.4l-73.6-73.6c-9.6-9.6-9.6-22.4 0-32s22.4-9.6 32 0l57.6 57.6 137.6-137.6c9.6-9.6 22.4-9.6 32 0s9.6 22.4 0 32L747.2 880c-4.8 3.2-9.6 6.4-16 6.4z" p-id="988"></path></svg>`;
-const debugIcon = `<svg t="1703561378435" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6845" width="16" height="16"><path d="M940 512H792V412c76.8 0 139-62.2 139-139 0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 34.8-28.2 63-63 63H232c-34.8 0-63-28.2-63-63 0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8 0 76.8 62.2 139 139 139v100H84c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h148v96c0 6.5 0.2 13 0.7 19.3C164.1 728.6 116 796.7 116 876c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8 0-44.2 23.9-82.9 59.6-103.7 6 17.2 13.6 33.6 22.7 49 24.3 41.5 59 76.2 100.5 100.5S460.5 960 512 960s99.8-13.9 141.3-38.2c41.5-24.3 76.2-59 100.5-100.5 9.1-15.5 16.7-31.9 22.7-49C812.1 793.1 836 831.8 836 876c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8 0-79.3-48.1-147.4-116.7-176.7 0.4-6.4 0.7-12.8 0.7-19.3v-96h148c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM716 680c0 36.8-9.7 72-27.8 102.9-17.7 30.3-43 55.6-73.3 73.3-20.1 11.8-42 20-64.9 24.3V484c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v396.5c-22.9-4.3-44.8-12.5-64.9-24.3-30.3-17.7-55.6-43-73.3-73.3C317.7 752 308 716.8 308 680V412h408v268z" p-id="6846"></path>
-<path d="M304 280h56c4.4 0 8-3.6 8-8 0-28.3 5.9-53.2 17.1-73.5 10.6-19.4 26-34.8 45.4-45.4C450.9 142 475.7 136 504 136h16c28.3 0 53.2 5.9 73.5 17.1 19.4 10.6 34.8 26 45.4 45.4C650 218.9 656 243.7 656 272c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8 0-40-8.8-76.7-25.9-108.1-17.2-31.5-42.5-56.8-74-74C596.7 72.8 560 64 520 64h-16c-40 0-76.7 8.8-108.1 25.9-31.5 17.2-56.8 42.5-74 74C304.8 195.3 296 232 296 272c0 4.4 3.6 8 8 8z" p-id="6847"></path></svg>`;
 const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
 m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v65.974857h-44.78781v-65.974857h-87.698285v-145.359238h87.698285v-38.351238z m0 83.139047h-44.787809v56.05181h44.787809v-56.05181z m89.307429 0h-44.519619v56.05181h44.519619v-56.05181zM780.190476 170.666667a73.142857 73.142857 0 0 1 73.142857 73.142857v97.523809h-73.142857v-97.523809h-97.523809V170.666667h97.523809z" p-id="6326"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
-const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 200; }`;
-const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 300; }`;
 // 翻译支持
 const translationSupport = {
     'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
@@ -315,6 +725,7 @@ const translationSupport = {
     'openai': { 'zh': '中文', 'zh-Hant': '繁體中文', 'de': 'Deutsch', 'fr': 'Français', 'ko': '한국어', 'pt': 'Português', 'ja': '日本語', 'es': 'Español', 'it': 'Italiano', 'hi': 'हिन्दी' }
 }
 var CFBetterDB;
+
 /**
  * 连接数据库
  */
@@ -355,11 +766,11 @@ function handleColorSchemeChange(event) {
     if (!event.matches) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
-        if (editor) {
+        if (OJBetter.monaco.editor) {
             monaco.editor.setTheme('vs');
         }
     } else {
-        if (editor) {
+        if (OJBetter.monaco.editor) {
             monaco.editor.setTheme('vs-dark');
         }
     }
@@ -376,9 +787,10 @@ function handleColorSchemeChange(event) {
             setTimeout(setDarkTheme, 100);
         }
     }
-    if (darkMode == "dark") {
+    OJBetter.basic.darkMode = getGMValue("darkMode", "follow")
+    if (OJBetter.basic.darkMode == "dark") {
         setDarkTheme();
-    } else if (darkMode == "follow") {
+    } else if (OJBetter.basic.darkMode == "follow") {
         // 添加事件监听器
         changeEventListeners.push(handleColorSchemeChange);
         mediaQueryList.addEventListener('change', handleColorSchemeChange);
@@ -741,8 +1153,8 @@ GM_addStyle(`
 }
 @font-face {
   font-family: 'iconfont';  /* Project id 4284341 */
-  src: url('//at.alicdn.com/t/c/font_4284341_2b66d3so6k.woff2?t=1706868301104') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4284341_2b66d3so6k.ttf?t=1706868301104') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_4284341_a8harv4inf8.woff2?t=1707293059995') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4284341_a8harv4inf8.ttf?t=1707293059995') format('truetype');
 }
 html {
     scroll-behavior: smooth;
@@ -773,87 +1185,12 @@ span.mdViewContent {
 #CFBetter_SubmitForm.input-output-copier:hover {
   background-color: #ffffff00;
 }
-
-/*翻译div*/
-html:not([data-theme='dark']) .translateDiv {
-    box-shadow: 0px 0px 0.5px 0.5px #defdf378;
+/* dialog */
+dialog {
+    margin: 0px;
 }
-.translate-problem-statement {
-    justify-items: start;
-    letter-spacing: 1.8px;
-    color: #059669;
-    background-color: #f9f9fa;
-    border: 1px solid #c5ebdf;
-    border-radius: 0rem 0rem 0.3rem 0.3rem;
-    padding: 5px;
-    margin: -5px 0px 6px 0px;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 13px;
-}
-.translate-problem-statement-panel.error, .translate-problem-statement.error, .rawDataDiv.error {
-    color: red;
-    border-color: red;
-}
-.translate-problem-statement a, .translate-problem-statement a:link {
-    color: #10b981;
-    font-weight: 600;
-    background: 0 0;
-    text-decoration: none;
-}
-.translate-problem-statement ol, .translate-problem-statement ul {
-    display: grid;
-    margin-inline-start: 0.8em;
-    margin-block-start: 0em;
-    margin: 0.5em 0 0 3em;
-}
-.translate-problem-statement li {
-    display: list-item;
-    height: auto;
-    word-wrap: break-word;
-}
-.translate-problem-statement ol li {
-    list-style-type: auto;
-}
-.translate-problem-statement ul li {
-    list-style-type: disc;
-}
-.translate-problem-statement img {
-    max-width: 100.0%;
-    max-height: 100.0%;
-}
-.ttypography .translate-problem-statement .MathJax {
-    color: #059669!important;
-}
-.translate-problem-statement span.math {
-    margin: 0px 2.5px !important;
-}
-.translate-problem-statement a:hover {
-    background-color: #800;
-    color: #fff;
-    text-decoration: none;
-}
-.translate-problem-statement-panel{
-    display: flex;
-    justify-content: space-between;
-    background-color: #f9f9fa;
-    border: 1px solid #c5ebdf;
-    border-radius: 0.3rem;
-    margin: 4px 0px;
-}
-.rawDataDiv {
-    justify-items: start;
-    letter-spacing: 1.8px;
-    color: #059669;
-    background-color: #f9f9fa;
-    border: 1px solid #c5ebdf;
-    border-radius: 0rem 0rem 0.3rem 0.3rem;
-    padding: 5px;
-    margin: -5px 0px 6px 0px;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 13px;
-    overflow: auto;
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
 }
 /*题目页链接栏样式*/
 #problemToolbar {
@@ -875,6 +1212,10 @@ html:not([data-theme='dark']) .translateDiv {
 }
 .html2md-panel > button {
     margin: 5px;
+}
+.html2md-panel.is_simple {
+    position: absolute;
+    right: 2%;
 }
 /*通用按钮*/
 .ojb_btn {
@@ -902,7 +1243,7 @@ html:not([data-theme='dark']) .translateDiv {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
-    z-index: 100;
+    z-index: 150;
 }
 .ojb_btn.primary {
     color: #ffffff;
@@ -1068,6 +1409,9 @@ a.ojb_btn span {
     content: "\\e831";
     color: #616161;
 }
+.ojb_btn_popover.reverse i {
+    transform: rotate(180deg);
+}
 /*translateDiv样式*/
 .translateDiv .topText {
     display: flex;
@@ -1088,6 +1432,78 @@ a.ojb_btn span {
 }
 .translateDiv.bounce-in {
     animation: bounce-in 1s forwards;
+}
+html:not([data-theme='dark']) .translateDiv {
+    box-shadow: 0px 0px 0.5px 0.5px #defdf378;
+}
+/* // TODO */
+.translate-problem-statement {
+    justify-items: start;
+    letter-spacing: 1.8px;
+    color: #059669;
+    background-color: #f9f9fa;
+    border: 1px solid #c5ebdf;
+    border-radius: 0rem 0rem 0.3rem 0.3rem;
+    padding: 5px;
+    margin: -5px 0px 6px 0px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+.translate-problem-statement-panel .ojb_btn {
+    background: none;
+    border: none;
+    color: #9e9e9e;
+}
+.translate-problem-statement-panel.error, .translate-problem-statement.error {
+    color: red;
+    border-color: red;
+}
+.translate-problem-statement a, .translate-problem-statement a:link {
+    color: #10b981;
+    font-weight: 600;
+    background: 0 0;
+    text-decoration: none;
+}
+.translate-problem-statement ol, .translate-problem-statement ul {
+    display: grid;
+    margin-inline-start: 0.8em;
+    margin-block-start: 0em;
+    margin: 0.5em 0 0 3em;
+}
+.translate-problem-statement li {
+    display: list-item;
+    height: auto;
+    word-wrap: break-word;
+}
+.translate-problem-statement ol li {
+    list-style-type: auto;
+}
+.translate-problem-statement ul li {
+    list-style-type: disc;
+}
+.translate-problem-statement img {
+    max-width: 100.0%;
+    max-height: 100.0%;
+}
+.ttypography .translate-problem-statement .MathJax {
+    color: #059669!important;
+}
+.translate-problem-statement span.math {
+    margin: 0px 2.5px !important;
+}
+.translate-problem-statement a:hover {
+    background-color: #800;
+    color: #fff;
+    text-decoration: none;
+}
+.translate-problem-statement-panel{
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9fa;
+    border: 1px solid #c5ebdf;
+    border-radius: 0.3rem;
+    margin: 4px 0px;
 }
 .translate-problem-statement table {
     border: 1px #ccc solid !important;
@@ -1135,9 +1551,8 @@ header .enter-or-register-box, header .languages {
     color: #727378;
     cursor: not-allowed;
 }
-
+/*// TODO*/
 .CFBetter_setting_menu {
-    z-index: 200;
     box-shadow: 0px 0px 0px 4px #ffffff;
     position: fixed;
     top: 50%;
@@ -1168,6 +1583,13 @@ header .enter-or-register-box, header .languages {
     height: 1px;
     background-color: #ccc;
     margin: 10px 0;
+}
+.CFBetter_setting_menu details {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #c9c6c696;
+    border-radius: 8px;
 }
 .CFBetter_setting_menu .badge {
     border-radius: 4px;
@@ -1401,7 +1823,8 @@ header .enter-or-register-box, header .languages {
     padding: 10px;
     margin: 5px 0px;
     background-color: #ffffff;
-    border-bottom: 1px solid #c9c6c696;
+    border: 1px solid #c9c6c642;
+    border-bottom-color: #c9c6c696;
     border-radius: 8px;
     justify-content: space-between;
 }
@@ -1950,7 +2373,7 @@ label.config_bar_ul_li_text::-webkit-scrollbar-track {
 /* 修改菜单 */
 div#config_bar_menu {
     z-index: 400;
-    position: absolute;
+    position: fixed;
     width: 60px;
     background: #ffffff;
     box-shadow: 1px 1px 4px 0px #0000004d;
@@ -2500,6 +2923,29 @@ function addDependencyStyles() {
  */
 function addI18nStyles() {
     GM_addStyle(`
+    /* 加载鼠标悬浮覆盖层css */
+    .overlay::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(135deg, rgb(77 208 225 / 30%), rgb(77 208 225 / 30%) 30px, rgb(77 208 225 / 10%) 0px, rgb(77 208 225 / 10%) 55px);
+        z-index: 100;
+    }
+    .overlay::after {
+        content: '${i18next.t('targetArea', { ns: 'common' })}';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #00695C;
+        font-size: 16px;
+        font-weight: bold;
+        z-index: 100;
+    }
+
     .config::before {
         content: "${i18next.t('common.configManageTitle', { ns: 'settings' })}";
         display: block;
@@ -2663,17 +3109,17 @@ function debounce(callback) {
 }
 
 /**
- * 为元素添加鼠标拖动
- * @param {JQuery<HTMLElement>} element 要添加拖动的元素
+ * 为元素添加鼠标拖拽支持
+ * @param {JQuery<HTMLElement>} element 要添加拖拽支持的元素
  * @returns {void}
  */
-function addDraggable(element) {
+function OJB_addDraggable(element) {
     let isDragging = false;
     let x, y, l, t, nl, nt;
     let isSpecialMouseDown = false; // 选取某些元素时不拖动
 
     element.on('mousedown', function (e) {
-        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span, select');
+        isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span, select, details, summary');
         if (isSpecialMouseDown) return;
 
         isDragging = true;
@@ -2715,6 +3161,66 @@ function addDraggable(element) {
 }
 
 /**
+ * 切换元素的折叠/展开过渡动画
+ * @param {HTMLElement} element
+ */
+function toggleCollapseExpand(element) {
+    // 设置transitionend事件监听器的函数
+    const setTransitionListener = (listener) => {
+        const listenerName = `transitionEndListener${Date.now()}`;
+        window[listenerName] = listener;
+        element.addEventListener('transitionend', listener);
+        element.setAttribute('data-transition-end-listener', listenerName);
+    };
+
+    // 移除事件监听器的函数
+    const removeTransitionListener = () => {
+        const transitionEndListenerName = element.getAttribute('data-transition-end-listener');
+        if (transitionEndListenerName) {
+            element.removeEventListener('transitionend', window[transitionEndListenerName]);
+            element.removeAttribute('data-transition-end-listener');
+        }
+    };
+
+    const collapsed = element.getAttribute('data-collapsed') === 'true';
+    const sectionHeight = element.scrollHeight;
+
+    // 移除事件监听器
+    removeTransitionListener();
+
+    // 设置初始样式
+    element.style.overflow = 'hidden';
+    element.style.transition = 'height 0.3s ease-out 0s';
+    element.style.height = collapsed ? `0px` : `${sectionHeight}px`;
+    element.style.opacity = collapsed ? '' : '1';
+
+    // 需要立即开始动画
+    requestAnimationFrame(() => {
+        // 设置结束样式
+        element.style.height = collapsed ? `${sectionHeight}px` : `0px`;
+    });
+
+    const transitionEndListener = (event) => {
+        if (event.propertyName === 'height') {
+            if (collapsed) {
+                // 展开后的设置
+                element.style.height = '';
+                element.style.overflow = '';
+            } else {
+                // 折叠后的设置
+                element.style.opacity = '0';
+            }
+            removeTransitionListener();
+        }
+    };
+
+    setTransitionListener(transitionEndListener);
+
+    // 更新data-collapsed属性
+    element.setAttribute('data-collapsed', collapsed ? 'false' : 'true');
+}
+
+/**
  * 获取外部JSON并转换为Object
  * @param {string} url JSON Url
  * @returns {Promise<Object>} JSON Object
@@ -2737,10 +3243,10 @@ async function getExternalJSON(url) {
  * @param {string} content 内容
  * @param {string[]} buttons 按钮 (取消 确定) 可以为null
  * @param {boolean} renderMarkdown 是否使用markdown渲染文本
+ * @returns {Promise<boolean>} 用户点击了确定按钮返回true, 否则返回false
  */
 function createDialog(title, content, buttons, renderMarkdown = false) {
     return new Promise(resolve => {
-        const styleElement = GM_addStyle(darkenPageStyle2);
         let contentHtml = content;
 
         if (renderMarkdown) {
@@ -2748,11 +3254,11 @@ function createDialog(title, content, buttons, renderMarkdown = false) {
             contentHtml = md.render(content);
         }
 
-        let dialog = $(`
-        <div class="CFBetter_modal">
+        const dialog = $(`
+        <dialog class="CFBetter_modal">
             <h2>${title}</h2>
             <div class="content">${contentHtml}</div>
-        </div>
+        </dialog>
         `);
         const buttonbox = $(`<div class="buttons"></div>`);
         const cancelButton = $(`<button class="cancelButton">${buttons[0]}</button>`)
@@ -2763,18 +3269,81 @@ function createDialog(title, content, buttons, renderMarkdown = false) {
         dialog.append(buttonbox);
         $('body').before(dialog);
 
+        OJB_showModal(dialog);
+        OJB_addDraggable(dialog);
+
         continueButton.click(function () {
-            $(styleElement).remove();
-            dialog.remove();
+            OJB_closeAndRemoveModal(dialog);
             resolve(true);
         });
 
         cancelButton.click(function () {
-            $(styleElement).remove();
-            dialog.remove();
+            OJB_closeAndRemoveModal(dialog);
             resolve(false);
         });
     });
+}
+
+/**
+ * 显示模态对话框并阻止页面滚动，同时考虑滚动条宽度变化和原始marginRight
+ * @param {JQuery<HTMLElement>} element
+ */
+function OJB_showModal(element) {
+    const dialog = element.get(0);
+    dialog.showModal();
+    OJBetter.state.openDialogCount++;
+
+    if (OJBetter.state.openDialogCount === 1) {
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        // 获取原始的body marginRight，考虑到可能的非数字值，比如auto
+        const originalMarginRight = window.getComputedStyle(document.body).marginRight;
+        const marginRightValue = parseFloat(originalMarginRight) || 0; // 将非数字值转换为0
+
+        if (scrollbarWidth > 0) {
+            // 保存原始的marginRight，并设置新的值以补偿滚动条宽度
+            document.body.style.setProperty('--original-margin-right', originalMarginRight);
+            document.body.style.marginRight = `${marginRightValue + scrollbarWidth}px`;
+        }
+
+        // 保存原始的overflow样式
+        document.body.setAttribute('data-original-overflow', document.body.style.overflow);
+        document.body.style.overflow = 'hidden';
+    }
+
+    const allowScrollIfNeeded = () => {
+        OJBetter.state.openDialogCount--;
+        if (OJBetter.state.openDialogCount === 0) {
+            // 恢复原始的body marginRight和overflow样式
+            const originalMarginRight = document.body.style.getPropertyValue('--original-margin-right');
+            document.body.style.marginRight = originalMarginRight;
+            document.body.style.removeProperty('--original-margin-right');
+
+            const originalOverflow = document.body.getAttribute('data-original-overflow');
+            document.body.style.overflow = originalOverflow;
+            document.body.removeAttribute('data-original-overflow');
+        }
+    };
+
+    dialog.addEventListener('close', allowScrollIfNeeded);
+}
+
+/**
+ * 关闭并移除模态对话框
+ * @param {JQuery<HTMLElement>} element
+ */
+function OJB_closeAndRemoveModal(element) {
+    const dialog = element.get(0);
+    dialog.close();
+    dialog.remove();
+}
+
+/**
+ * 关闭并移除模态对话框
+ * @param {JQuery<HTMLElement>} element
+ */
+function OJB_closeModal(element) {
+    const dialog = element.get(0);
+    dialog.close();
 }
 
 /**
@@ -2824,9 +3393,8 @@ function checkScriptVersion() {
                 compareVersions(scriptData.version, GM_info.script.version) === 1 &&
                 skipUpdate !== "true"
             ) {
-                const styleElement = GM_addStyle(darkenPageStyle);
-                $("body").append(`
-                    <div id='update_panel'>
+                const element = $(`
+                    <dialog id='update_panel'>
                         <h3>${GM_info.script.name}有新版本！</h3>
                         <hr>
                         <div class='update_panel_menu'>
@@ -2846,13 +3414,15 @@ function checkScriptVersion() {
                             </div>
                             <button id='updating'><a target="_blank" href="${scriptData.url}">更新</a></button>
                         </div>
-                    </div>
+                    </dialog>
                 `);
+                $("body").append(element);
+                OJB_showModal(element);
+                OJB_addDraggable(element);
 
                 $("#skip_update").click(function () {
                     document.cookie = "skipUpdate=true; expires=session; path=/";
-                    styleElement.remove();
-                    $("#update_panel").remove();
+                    OJB_closeAndRemoveModal(element);
                 });
             }
         }
@@ -2895,7 +3465,7 @@ class LoadingMessage {
      * @returns {void}
      */
     insertStatusElement() {
-        (is_mSite ? $("header") : $(".menu-box:first").next()).after(this._statusElement);
+        (OJBetter.typeOfPage.is_mSite ? $("header") : $(".menu-box:first").next()).after(this._statusElement);
     }
 
     /**
@@ -2981,14 +3551,14 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
  * @returns 
  */
 async function localizeWebsite() {
-    if (localizationLanguage === "initial") return;
+    if (OJBetter.localization.websiteLang === "initial") return;
 
     // 设置网页语言
     var htmlTag = document.getElementsByTagName("html")[0];
-    htmlTag.setAttribute("lang", localizationLanguage);
+    htmlTag.setAttribute("lang", OJBetter.localization.websiteLang);
 
     // 获取网站本地化的数据
-    var subs = await getLocalizeWebsiteJson(localizationLanguage);
+    var subs = await getLocalizeWebsiteJson(OJBetter.localization.websiteLang);
 
     /**
      * 文本节点遍历替换
@@ -3136,10 +3706,10 @@ async function localizeWebsite() {
     })();
 
     // 轻量站特殊
-    if (is_mSite) {
+    if (OJBetter.typeOfPage.is_mSite) {
         traverseTextNodes($('nav'), commonReplacements['.second-level-menu']['rules']);
     }
-    if (is_mSite) {
+    if (OJBetter.typeOfPage.is_mSite) {
         (function () {
             var translations = {
                 "Announcements": "公告",
@@ -3164,10 +3734,10 @@ async function initI18next() {
         i18next
             .use(i18nextChainedBackend)
             .init({
-                lng: scriptL10nLanguage,
+                lng: OJBetter.localization.scriptLang,
                 ns: ['common', 'settings', 'config', 'dialog', 'alert', 'translator', 'button', 'codeEditor', 'comments'], // 命名空间列表
                 defaultNS: 'settings',
-                fallbackLng: ['zh', transTargetLang],
+                fallbackLng: ['zh', OJBetter.translation.targetLang],
                 load: 'currentOnly',
                 debug: false,
                 backend: {
@@ -3178,7 +3748,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.20',
+                        defaultVersion: 'v1.23',
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -3352,28 +3922,59 @@ class Validator {
     }
 
     /**
-     * 表单键值对项校验
+     * 表单合法性校验
      */
     static checkKeyValuePairs(structure, config) {
-        let errorKey = [];
+        let errorKeys = [];
         let allFieldsValid = true;
+
         for (const key in structure) {
-            if (structure[key].check === 'keyValuePairs') {
-                const value = config[structure[key].value];
-                if (value && !Validator.keyValuePairs(value)) {
-                    if (!$(key).prev('span.text-error').length) {
-                        $(key).before('<span class="text-error" style="color: red;">格式不符或存在非法字符</span>');
-                    }
-                    allFieldsValid = false;
-                    errorKey.push(key);
-                } else {
-                    $(key).prev('span.text-error').remove();
-                }
+            const { check, value } = structure[key];
+            const fieldValue = config[value];
+
+            // 如果字段没有值或校验类型不匹配，则跳过当前迭代
+            if (!fieldValue) continue;
+
+            let isValid = true;
+            switch (check) {
+                case 'keyValuePairs':
+                    isValid = Validator.keyValuePairs(fieldValue);
+                    break;
+                case 'dotSeparatedPath':
+                    isValid = Validator.validateDotSeparatedPath(fieldValue);
+                    break;
+                default:
+                    // 没有匹配的校验类型
+                    continue;
+            }
+
+            Validator.toggleErrorDisplay(key, isValid);
+            if (!isValid) {
+                allFieldsValid = false;
+                errorKeys.push(key);
             }
         }
+
         return {
             valid: allFieldsValid,
-            errorKey: errorKey
+            errorKeys: errorKeys
+        };
+    }
+
+    /**
+     * 切换错误信息的显示和隐藏
+     * @param {string} key - 字段的键
+     * @param {boolean} isValid - 字段值是否有效
+     */
+    static toggleErrorDisplay(key, isValid) {
+        const errorMessage = '格式不符或存在非法字符';
+        const $errorSpan = $(key).prev('span.text-error');
+        if (!isValid) {
+            if (!$errorSpan.length) {
+                $(key).before(`<span class="text-error" style="color: red;">${errorMessage}</span>`);
+            }
+        } else {
+            $errorSpan.remove();
         }
     }
 
@@ -3384,8 +3985,21 @@ class Validator {
      */
     static keyValuePairs(value) {
         const keyValuePairs = value.split('\n');
-        const regex = /^[a-zA-Z0-9_-]+\s*:\s*[a-zA-Z0-9_-]+$/;
+        // 允许值中包含空格和冒号
+        const regex = /^[a-zA-Z0-9_-]+\s*:\s*.+$/;
         return keyValuePairs.every(pair => regex.test(pair));
+    }
+
+
+    /**
+     * 点分隔符路径格式校验，允许加减运算
+     * @param {string} path
+     * @returns {boolean}
+     */
+    static validateDotSeparatedPath(path) {
+        // 正则表达式允许标识符之间有点号，标识符可以包含加减运算
+        const regex = /^([a-zA-Z0-9_-]+(\s*[\+\-]\s*[a-zA-Z0-9_-]+)*\.)*([a-zA-Z0-9_-]+(\s*[\+\-]\s*[a-zA-Z0-9_-]+)*)$/;
+        return regex.test(path);
     }
 }
 
@@ -3402,6 +4016,8 @@ class ConfigManager {
      * @param {boolean} allowChoice - 是否允许选择列表项
      */
     constructor(element, prefix, tempConfig, structure, configHTML, allowChoice = true) {
+        /** @param 设置面板DIV */
+        this.settingMenuDiv = $('#CFBetter_setting_menu');
         this.element = $(element);
         this.prefix = prefix;
         this.tempConfig = tempConfig;
@@ -3457,7 +4073,7 @@ class ConfigManager {
         this.editItem = editItem;
         this.deleteItem = deleteItem;
         this.menu = menu;
-        $('body').append(menu);
+        this.settingMenuDiv.append(menu);
     }
 
     /**
@@ -3544,7 +4160,7 @@ class ConfigManager {
      * 添加配置项
      */
     onAdd() {
-        const { maskStyle, configMenu } = this.createConfigHTML();
+        const configMenu = this.createConfigHTML();
         const structure = this.structure;
 
         configMenu.on("click", "#tempConfig_save", () => {
@@ -3562,12 +4178,10 @@ class ConfigManager {
             this.createListItemElement(config.name).insertBefore(this.config_add_button);
 
             configMenu.remove();
-            $(maskStyle).remove();
         });
 
         configMenu.on("click", ".btn-close", () => {
             configMenu.remove();
-            $(maskStyle).remove();
         });
     }
 
@@ -3578,7 +4192,7 @@ class ConfigManager {
      * @returns {void}
      */
     onEdit(index, li) {
-        const { maskStyle, configMenu } = this.createConfigHTML();
+        const configMenu = this.createConfigHTML();
         const structure = this.structure;
 
         this.closeContextMenu();
@@ -3607,13 +4221,11 @@ class ConfigManager {
             this.tempConfig.configurations[index] = config;
             li.find('label').text(config.name);
 
-            configMenu.remove();
-            $(maskStyle).remove();
+            OJB_closeAndRemoveModal(configMenu);
         });
 
         configMenu.on("click", ".btn-close", () => {
-            configMenu.remove();
-            $(maskStyle).remove();
+            OJB_closeAndRemoveModal(configMenu);
         });
     }
 
@@ -3631,18 +4243,15 @@ class ConfigManager {
 
     /**
      * 创建配置编辑页面
-     * @returns {object} - {maskStyle, configMenu}
+     * @returns {JQuery<HTMLElement>} 返回配置编辑页面
      */
     createConfigHTML() {
-        const maskStyle = GM_addStyle(darkenPageStyle2);
-        let configMenu = $(this.configHTML);
-        $("body").append(configMenu);
-        addDraggable(configMenu);
+        const configMenu = $(this.configHTML);
+        this.settingMenuDiv.after(configMenu);
+        OJB_showModal(configMenu);
+        OJB_addDraggable(configMenu);
         elementLocalize(configMenu);
-        return {
-            maskStyle: maskStyle,
-            configMenu: configMenu
-        }
+        return configMenu;
     }
 
     /**
@@ -4238,7 +4847,7 @@ const CFBetter_setting_content_HTML = `
 
 // 设置界面HTML
 const CFBetterSettingMenu_HTML = `
-    <div class='CFBetter_setting_menu' id='CFBetter_setting_menu'>
+    <dialog class='CFBetter_setting_menu' id='CFBetter_setting_menu'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
@@ -4246,22 +4855,116 @@ const CFBetterSettingMenu_HTML = `
             ${CFBetter_setting_sidebar_HTML}
             ${CFBetter_setting_content_HTML}
         </div>
-    </div>
+    </dialog>
 `;
 
-// TODO
+const apiCustomConfigHTML = (prefix) => {
+    return `
+    <div class="CFBetter_setting_list">
+        <label for='${prefix}_header'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:common.advanced.header.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:common.advanced.header.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="${prefix}_header" placeholder='' require = false data-i18n="[placeholder]config:common.advanced.header.placeholder"></textarea>
+    </div>
+    <div class="CFBetter_setting_list">
+        <label for='${prefix}_data'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:common.advanced.data.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:common.advanced.data.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="${prefix}_data" placeholder='' require = false data-i18n="[placeholder]config:common.advanced.data.placeholder"></textarea>
+    </div>
+    `;
+};
+
+const apiQuotaConfigHTML = (prefix) => {
+    return `
+    <div class="CFBetter_setting_list">
+        <label for='${prefix}_quota_url'>
+        <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:common.quota.url.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:common.quota.url.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='${prefix}_quota_url' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:common.quota.url.placeholder">
+    </div>
+    <div class="CFBetter_setting_list">
+        <label for="${prefix}_quota_method" style="display: flex;" data-i18n="config:common.quota.method.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]config:common.quota.method.tipText"></div>
+        </div>
+        <select id="${prefix}_quota_method" name="${prefix}_quota_method">
+            <option value="get">GET</option>
+            <option value="post">POST</option>
+        </select>
+    </div>
+    <div class="CFBetter_setting_list">
+        <label for='${prefix}_quota_header'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:common.quota.header.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:common.quota.header.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="${prefix}_quota_header" placeholder='' require = false data-i18n="[placeholder]config:common.quota.header.placeholder"></textarea>
+    </div>
+    <div class="CFBetter_setting_list">
+        <label for='${prefix}_quota_data'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:common.quota.data.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:common.quota.data.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="${prefix}_quota_data" placeholder='' require = false data-i18n="[placeholder]config:common.quota.data.placeholder"></textarea>
+    </div>
+    <div class="CFBetter_setting_list">
+        <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="config:common.quota.surplus.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]config:common.quota.surplus.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='${prefix}_quota_surplus' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:common.quota.surplus.placeholder">
+    </div>
+    `;
+}
+
 const deeplConfigEditHTML = `
-    <div class='CFBetter_setting_menu' id='config_edit_menu'>
+    <dialog class='CFBetter_setting_menu' id='config_edit_menu'>
+    <div class='CFBetter_setting_content'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
         <h4 data-i18n="config:deepl.title"></h4>
         <h5 data-i18n="config:deepl.basic.title"></h5>
         <hr>
-        <label for='name'>
-            <span class="input_label" data-i18n="config:deepl.basic.name.label"></span>
-        </label>
-        <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.name.placeholder">
+        <div class="CFBetter_setting_list">
+            <label for='name'>
+                <span class="input_label" data-i18n="config:deepl.basic.name.label"></span>
+            </label>
+            <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.name.placeholder">
+        </div>
         <div class='CFBetter_setting_list'>
             <label for="deepl_apiGenre" style="display: flex;" data-i18n="config:deepl.genre.label"></label>
             <div class="help_tip">
@@ -4274,133 +4977,125 @@ const deeplConfigEditHTML = `
                 <option value="deeplx">deeplx</option>
             </select>
         </div>
-        <label for='deepl_key'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:deepl.basic.key.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:deepl.basic.key.tipText"></div>
+        <div class="CFBetter_setting_list">
+            <label for='deepl_key'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="config:deepl.basic.key.label"></span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:deepl.basic.key.tipText"></div>
+                    </div>
                 </div>
-            </div>
-        </label>
-        <input type='text' id='deepl_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.key.placeholder">
-        <label for='deepl_proxy'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:deepl.basic.proxy.label">Proxy API:</span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:deepl.basic.proxy.tipText"></div>
+            </label>
+            <input type='text' id='deepl_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.key.placeholder">
+        </div>
+        <div class="CFBetter_setting_list">
+            <label for='deepl_proxy'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="config:deepl.basic.proxy.label">Proxy API:</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:deepl.basic.proxy.tipText"></div>
+                    </div>
                 </div>
-            </div>
-        </label>
-        <input type='text' id='deepl_proxy' placeholder='' require = false>
-        <h5 data-i18n="config:deepl.advanced.title"></h5>
+            </label>
+            <input type='text' id='deepl_proxy' placeholder='' require = false>
+        </div>
         <hr>
-        <label for='_header'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:deepl.advanced.header.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:deepl.advanced.header.tipText"></div>
-                </div>
-            </div>
-        </label>
-        <textarea id="_header" placeholder='' require = false data-i18n="[placeholder]config:deepl.advanced.header.placeholder"></textarea>
-        <label for='_data'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:deepl.advanced.data.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:deepl.advanced.data.tipText"></div>
-                </div>
-            </div>
-        </label>
-        <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config:deepl.advanced.data.placeholder"></textarea>
+        <details>
+            <summary data-i18n="config:common.advanced.title"></summary>
+            ${apiCustomConfigHTML('deepl')}
+        </details>
+        <details>
+            <summary data-i18n="config:common.quota.title"></summary>
+            ${apiQuotaConfigHTML('deepl')}
+        </details>
         <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
+    </dialog>
 `;
 
 const chatgptConfigEditHTML = `
-    <div class='CFBetter_setting_menu' id='config_edit_menu'>
+    <dialog class='CFBetter_setting_menu' id='config_edit_menu'>
+    <div class='CFBetter_setting_content'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
         <h4 data-i18n="config:chatgpt.title"></h4>
         <h5 data-i18n="config:chatgpt.basic.title"></h5>
         <hr>
-        <label for='name'>
-            <span class="input_label" data-i18n="config:chatgpt.basic.name.label"></span>
-        </label>
-        <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.name.placeholder">
-        <label for='openai_model'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="[html]config:chatgpt.basic.model.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:chatgpt.basic.model.tipText"></div>
+        <div class="CFBetter_setting_list">
+            <label for='name'>
+                <span class="input_label" data-i18n="config:chatgpt.basic.name.label"></span>
+            </label>
+            <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.name.placeholder">
+        </div>
+        <div class="CFBetter_setting_list">
+            <label for='chatgpt_model'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="[html]config:chatgpt.basic.model.label"></span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.model.tipText"></div>
+                    </div>
                 </div>
-            </div>
-        </label>
-        <input type='text' id='openai_model' placeholder='gpt-3.5-turbo' require = false>
-        <label for='openai_key'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:chatgpt.basic.key.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:chatgpt.basic.key.tipText"></div>
+            </label>
+            <input type='text' id='chatgpt_model' placeholder='gpt-3.5-turbo' require = false>
+        </div>
+        <div class="CFBetter_setting_list">
+            <label for='chatgpt_key'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="config:chatgpt.basic.key.label"></span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.key.tipText"></div>
+                    </div>
                 </div>
-            </div>
-        </label>
-        <input type='text' id='openai_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.key.placeholder">
-        <label for='openai_proxy'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:chatgpt.basic.proxy.label">Proxy API:</span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:chatgpt.basic.proxy.tipText"></div>
+            </label>
+            <input type='text' id='chatgpt_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.key.placeholder">
+        </div>
+        <div class="CFBetter_setting_list">
+            <label for='chatgpt_proxy'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="config:chatgpt.basic.proxy.label">Proxy API:</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.proxy.tipText"></div>
+                    </div>
                 </div>
-            </div>
-        </label>
-        <input type='text' id='openai_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
-        <h5 data-i18n="config:chatgpt.advanced.title"></h5>
+            </label>
+            <input type='text' id='chatgpt_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
+        </div>
         <hr>
-        <label for='_header'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:chatgpt.advanced.header.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:chatgpt.advanced.header.tipText"></div>
-                </div>
-            </div>
-        </label>
-        <textarea id="_header" placeholder='' require = false data-i18n="[placeholder]config:chatgpt.advanced.header.placeholder"></textarea>
-        <label for='_data'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="config:chatgpt.advanced.data.label"></span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:chatgpt.advanced.data.tipText"></div>
-                </div>
-            </div>
-        </label>
-        <textarea id="_data" placeholder='' require = false data-i18n="[placeholder]config:chatgpt.advanced.data.placeholder"></textarea>
+        <details>
+            <summary data-i18n="config:common.advanced.title"></summary>
+            ${apiCustomConfigHTML('chatgpt')}
+        </details>
+        <details>
+            <summary data-i18n="config:common.quota.title"></summary>
+            ${apiQuotaConfigHTML('chatgpt')}
+        </details>
         <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
+    </dialog>
 `;
 
 const CompletConfigEditHTML = `
-    <div class='CFBetter_setting_menu' id='config_edit_menu'>
+    <dialog class='CFBetter_setting_menu' id='config_edit_menu'>
+    <div class='CFBetter_setting_content'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
         <h4 data-i18n="config:complet.title"></h4>
         <hr>
-        <label for='name'>
-            <span class="input_label" data-i18n="config:complet.name.label"></span>
-        </label>
-        <input type='text' id='name' class='no_default' placeholder='' require = true  data-i18n="[placeholder]config:complet.name.placeholder">
+        <div class="CFBetter_setting_list">
+            <label for='name'>
+                <span class="input_label" data-i18n="config:complet.name.label"></span>
+            </label>
+            <input type='text' id='name' class='no_default' placeholder='' require = true  data-i18n="[placeholder]config:complet.name.placeholder">
+        </div>
         <div class='CFBetter_setting_list'>
-        <label for="complet_isChoose"><span id="loaded_span" data-i18n="config:complet.choose.label"></span></label>
+            <label for="complet_isChoose"><span id="loaded_span" data-i18n="config:complet.choose.label"></span></label>
             <input type="checkbox" id="complet_isChoose" name="complet_isChoose" require = false>
         </div>
         <div class='CFBetter_setting_list'>
@@ -4423,19 +5118,22 @@ const CompletConfigEditHTML = `
                 <option value="c">c</option>
             </select>
         </div>
-        <label for='complet_jsonUrl'>
-            <div style="display: flex;align-items: center;">
-                <span class="input_label">JSON URL:</span>
-                <div class="help_tip">
-                    ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]config:complet.jsonurl.tipText"></div>
+        <div class="CFBetter_setting_list">
+            <label for='complet_jsonUrl'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">JSON URL:</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:complet.jsonurl.tipText"></div>
+                    </div>
                 </div>
-            </div>
-        </label>
-        <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config:complet.jsonurl.alert"></div>
-        <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:complet.jsonurl.placeholder">
+            </label>
+            <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config:complet.jsonurl.alert"></div>
+            <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:complet.jsonurl.placeholder">
+        </div>
         <button id='tempConfig_save' data-i18n="common:save"></button>
     </div>
+    </dialog>
 `;
 
 /**
@@ -4450,22 +5148,23 @@ async function initSettingsPanel() {
 
     insertCFBetterSettingButton(".lang-chooser", "before");
     insertCFBetterSettingButton(".enter-or-register-box", "after");
-    if (is_completeProblemset) insertCFBetterSettingButton(".lang", "before");
+    if (OJBetter.typeOfPage.is_completeProblemset) insertCFBetterSettingButton(".lang", "before");
 
     const $settingBtns = $(".CFBetter_setting");
     $settingBtns.click(() => {
-        const styleElement = GM_addStyle(darkenPageStyle);
         $settingBtns.prop("disabled", true).addClass("open");
-        $("body").append(CFBetterSettingMenu_HTML);
 
-        elementLocalize($("body"));
+        // 设置面板div
+        const settingMenu = $(CFBetterSettingMenu_HTML)
+        $("body").append(settingMenu);
 
-        // 窗口初始化
-        addDraggable($('#CFBetter_setting_menu'));
+        elementLocalize(settingMenu); // 加载i18n
+        OJB_showModal(settingMenu);
+        OJB_addDraggable($('#CFBetter_setting_menu')); // 窗口支持拖拽
 
         // help浮窗位置更新
-        $('.help-icon').hover(function (event) {
-            var menuOffset = $('#CFBetter_setting_menu').offset();
+        $('document').on('hover', '.help-icon', function (event) {
+            var menuOffset = $('.CFBetter_setting_menu:last').offset();
             var mouseX = event.pageX - menuOffset.left;
             var mouseY = event.pageY - menuOffset.top;
 
@@ -4555,15 +5254,20 @@ async function initSettingsPanel() {
         function createStructure(type, value, require, check = "") {
             return { type, value, require, check };
         }
-
+        // TODO 1
         // deepl配置
         const deeplStructure = {
             '#name': createStructure('text', 'name', true),
             '#deepl_apiGenre': createStructure('text', 'apiGenre', true),
             '#deepl_key': createStructure('text', 'key', false),
             '#deepl_proxy': createStructure('text', 'proxy', false),
-            '#_header': createStructure('text', '_header', false, "keyValuePairs"),
-            '#_data': createStructure('text', '_data', false, "keyValuePairs")
+            '#deepl_header': createStructure('text', '_header', false, 'keyValuePairs'),
+            '#deepl_data': createStructure('text', '_data', false, 'keyValuePairs'),
+            '#deepl_quota_url': createStructure('text', 'quota_url', false),
+            '#deepl_quota_method': createStructure('text', 'quota_method', false),
+            '#deepl_quota_header': createStructure('text', 'quota_header', false, 'keyValuePairs'),
+            '#deepl_quota_data': createStructure('text', 'quota_data', false, 'keyValuePairs'),
+            '#deepl_quota_surplus': createStructure('text', 'quota_surplus', false, 'dotSeparatedPath'),
         };
         let tempConfig_deepl = GM_getValue('deepl_config'); // 获取配置信息
         const configManager_deepl = new ConfigManager('#deepl_config', 'deepl_config_', tempConfig_deepl, deeplStructure, deeplConfigEditHTML);
@@ -4572,11 +5276,16 @@ async function initSettingsPanel() {
         // chatgpt配置
         const chatgptStructure = {
             '#name': createStructure('text', 'name', true),
-            '#openai_model': createStructure('text', 'model', false),
-            '#openai_key': createStructure('text', 'key', true),
-            '#openai_proxy': createStructure('text', 'proxy', false),
-            '#_header': createStructure('text', '_header', false, "keyValuePairs"),
-            '#_data': createStructure('text', '_data', false, "keyValuePairs")
+            '#chatgpt_model': createStructure('text', 'model', false),
+            '#chatgpt_key': createStructure('text', 'key', true),
+            '#chatgpt_proxy': createStructure('text', 'proxy', false),
+            '#chatgpt_header': createStructure('text', '_header', false, 'keyValuePairs'),
+            '#chatgpt_data': createStructure('text', '_data', false, 'keyValuePairs'),
+            '#chatgpt_quota_url': createStructure('text', 'quota_url', false),
+            '#chatgpt_quota_header': createStructure('text', 'quota_header', false, 'keyValuePairs'),
+            '#chatgpt_quota_data': createStructure('text', 'quota_data', false, 'keyValuePairs'),
+            '#chatgpt_quota_surplus': createStructure('text', 'quota_surplus', false, 'dotSeparatedPath'),
+            '#chatgpt_quota_method': createStructure('text', 'quota_method', false),
         };
         let tempConfig_chatgpt = GM_getValue('chatgpt_config'); // 获取配置信息
         const configManager_chatgpt = new ConfigManager('#chatgpt_config', 'chatgpt_config_', tempConfig_chatgpt, chatgptStructure, chatgptConfigEditHTML);
@@ -4594,7 +5303,7 @@ async function initSettingsPanel() {
         const configManager_complet = new ConfigManager('#Complet_config', 'complet_config_', tempConfig_Complet, CompletStructure, CompletConfigEditHTML, false);
 
         // 状态更新
-        $("input[name='darkMode'][value='" + darkMode + "']").prop("checked", true);
+        $("input[name='darkMode'][value='" + OJBetter.basic.darkMode + "']").prop("checked", true);
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
@@ -4609,7 +5318,7 @@ async function initSettingsPanel() {
         $("#RatingHidden").prop("checked", GM_getValue("RatingHidden") === true);
         $('#scriptL10nLanguage').val(GM_getValue("scriptL10nLanguage"));
         $('#localizationLanguage').val(GM_getValue("localizationLanguage"));
-        $("input[name='translation'][value='" + translation + "']").prop("checked", true);
+        $("input[name='translation'][value='" + OJBetter.translation.choice + "']").prop("checked", true);
         $("input[name='translation']").css("color", "gray");
         $('#deepl_type').val(GM_getValue("deepl_type"));
         $("#deepl_config_config_bar_ul").find(`input[name='deepl_config_config_item'][value='${tempConfig_deepl.choice}']`).prop("checked", true);
@@ -4622,7 +5331,7 @@ async function initSettingsPanel() {
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
         $('.CFBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
-            if (mixedTranslation.indexOf($(this).val()) > -1) {
+            if (OJBetter.translation.auto.mixTrans.servers.indexOf($(this).val()) > -1) {
                 $(this).prop('checked', true);
             }
         });
@@ -4651,7 +5360,7 @@ async function initSettingsPanel() {
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
         $("#OJBetter_Bridge_WorkUri").val(GM_getValue("OJBetter_Bridge_WorkUri"));
         $("#OJBetter_Bridge_SocketUrl").val(GM_getValue("OJBetter_Bridge_SocketUrl"));
-        $("input[name='compiler'][value='" + onlineCompilerChoice + "']").prop("checked", true);
+        $("input[name='compiler'][value='" + OJBetter.monaco.onlineCompilerChoice + "']").prop("checked", true);
         $("input[name='compiler']").css("color", "gray");
 
         // 关闭
@@ -4800,25 +5509,25 @@ async function initSettingsPanel() {
                     if (refreshPage) location.reload();
                     else {
                         // 切换黑暗模式
-                        if (darkMode != settings.darkMode) {
-                            darkMode = settings.darkMode;
+                        if (OJBetter.basic.darkMode != settings.darkMode) {
+                            OJBetter.basic.darkMode = settings.darkMode;
                             // 移除旧的事件监听器
                             changeEventListeners.forEach(listener => {
                                 mediaQueryList.removeEventListener('change', listener);
                             });
 
-                            if (darkMode == "follow") {
+                            if (OJBetter.basic.darkMode == "follow") {
                                 changeEventListeners.push(handleColorSchemeChange);
                                 mediaQueryList.addEventListener('change', handleColorSchemeChange);
                                 $('html').removeAttr('data-theme');
-                            } else if (darkMode == "dark") {
+                            } else if (OJBetter.basic.darkMode == "dark") {
                                 $('html').attr('data-theme', 'dark');
-                                if (editor) {
+                                if (OJBetter.monaco.editor) {
                                     monaco.editor.setTheme('vs-dark');
                                 }
                             } else {
                                 $('html').attr('data-theme', 'light');
-                                if (editor) {
+                                if (OJBetter.monaco.editor) {
                                     monaco.editor.setTheme('vs');
                                 }
                                 // 移除旧的事件监听器
@@ -4827,15 +5536,13 @@ async function initSettingsPanel() {
                             }
                         }
                         // 更新配置信息
-                        translation = settings.translation;
-                        commentTranslationChoice = settings.commentTranslationChoice;
+                        OJBetter.translation.choice = settings.translation;
+                        OJBetter.translation.comment.choice = settings.commentTranslationChoice;
                     }
                 }
             }
-
-            $settingMenu.remove();
+            OJB_closeAndRemoveModal(settingMenu);
             $settingBtns.prop("disabled", false).removeClass("open");
-            $(styleElement).remove();
         });
     });
 };
@@ -4963,7 +5670,7 @@ class TaskQueue {
         if (type === 'openai') {
             return 0;
         } else {
-            return transWaitTime;
+            return OJBetter.translation.waitTime;
         }
     }
 
@@ -5248,14 +5955,21 @@ async function initButtonFunc() {
     });
 }
 
-// 题目markdown转换/复制/翻译面板
+/**
+ * 添加题目markdown转换/复制/翻译按钮面板
+ * @param {HTMLElement} element 需要添加按钮面板的元素
+ * @param {string} suffix 按钮面板id后缀
+ * @param {string} type 按钮面板添加位置
+ * @param {boolean} is_simple 是否是简单模式
+ * @returns {object} 返回按钮面板元素
+ */
 function addButtonPanel(element, suffix, type, is_simple = false) {
     let text;
-    if (commentTranslationMode == "1") text = i18next.t('trans.segment', { ns: 'button' });
-    else if (commentTranslationMode == "2") text = i18next.t('trans.select', { ns: 'button' });
+    if (OJBetter.translation.comment.transMode == "1") text = i18next.t('trans.segment', { ns: 'button' });
+    else if (OJBetter.translation.comment.transMode == "2") text = i18next.t('trans.select', { ns: 'button' });
     else text = i18next.t('trans.normal', { ns: 'button' });
 
-    let panel = $(`<div class='html2md-panel input-output-copier'></div>`);
+    let panel = $(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
     let viewButton = $(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
             <i class="iconfont">&#xe7e5;</i>
@@ -5320,7 +6034,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }
 
-    if (is_oldLatex || is_acmsguru) {
+    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
         return;
     } else {
@@ -5371,7 +6085,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }));
 
-    if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
+    if (OJBetter.basic.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
         button.addHoverOverlay($(element));
     }
 }
@@ -5406,7 +6120,7 @@ async function addButtonWithCopy(button, element, suffix, type) {
     }
 
     // 等待MathJax队列完成
-    if (is_oldLatex || is_acmsguru) {
+    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
         return;
     } else {
@@ -5433,7 +6147,7 @@ async function addButtonWithCopy(button, element, suffix, type) {
         }, 2000);
     }));
 
-    if (hoverTargetAreaDisplay && !is_oldLatex && !is_acmsguru) {
+    if (OJBetter.basic.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
         button.addHoverOverlay($(element));
     }
 }
@@ -5450,7 +6164,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     // 添加可指定翻译服务的方法调用
     button.data("translatedItBy", function (translation) {
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
+        OJBetter.common.taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
     });
 
     // 等待MathJax队列完成
@@ -5462,7 +6176,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     {
         let text = $(element).getMarkdown();
         let length = text.length;
-        if (length > shortTextLength || isLikelyCodeSnippet(text)) {
+        if (length > OJBetter.translation.auto.shortTextLength || isLikelyCodeSnippet(text)) {
             button.setNotAutoTranslate();
         }
         // button.after(`<span>${length}</span>`); // 显示字符数
@@ -5474,9 +6188,9 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         if (resultStack) {
             let pElements = $(element).find("p.block_selected:not(li p), li.block_selected");
             for (let item of resultStack) {
-                if (retransAction == "0") {
+                if (OJBetter.translation.retransAction == "0") {
                     // 选段翻译不直接移除旧结果
-                    if (commentTranslationMode == "2") {
+                    if (OJBetter.translation.comment.transMode == "2") {
                         // 只移除即将要翻译的段的结果
                         if (pElements.is(item.translateDiv.getDiv().prev())) {
                             item.translateDiv.close();
@@ -5493,7 +6207,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // 翻译
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        taskQueue.addTask(translation, () => transTask(button, element, type, is_comment), translation == 'openai');
+        OJBetter.common.taskQueue.addTask(OJBetter.translation.choice, () => transTask(button, element, type, is_comment), OJBetter.translation.choice == 'openai');
     }));
 
     // 重新翻译提示
@@ -5512,11 +6226,11 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     });
 
     // 目标区域指示
-    if (hoverTargetAreaDisplay) {
+    if (OJBetter.basic.hoverTargetAreaDisplay) {
         button.addHoverOverlay($(element));
     }
 
-    // 右键菜单
+    // 翻译右键切换菜单
     $(document).on('contextmenu', '#translateButton' + suffix, function (e) {
         e.preventDefault();
 
@@ -5548,7 +6262,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
             menu.append(label);
         }
         translations.forEach(function (translation) {
-            if (supportsTargetLanguage(translation.value, transTargetLang)) {
+            if (supportsTargetLanguage(translation.value, OJBetter.translation.targetLang)) {
                 var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
                 <span class="CFBetter_contextmenu_label_text">${translation.name}</span></label>`);
                 menu.append(label);
@@ -5557,9 +6271,9 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // 初始化
         if (is_comment) {
-            menu.find(`input[name="translation"][value="${commentTranslationChoice}"]`).prop('checked', true);
+            menu.find(`input[name="translation"][value="${OJBetter.translation.comment.choice}"]`).prop('checked', true);
         } else {
-            menu.find(`input[name="translation"][value="${translation}"]`).prop('checked', true);
+            menu.find(`input[name="translation"][value="${OJBetter.translation.choice}"]`).prop('checked', true);
         }
         menu.css({
             top: e.pageY + 'px',
@@ -5568,11 +6282,11 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         $(document).one('change', 'input[name="translation"]', function () {
             if (is_comment) {
-                commentTranslationChoice = $('input[name="translation"]:checked').val();
-                GM_setValue("commentTranslationChoice", commentTranslationChoice);
+                OJBetter.translation.comment.choice = $('input[name="translation"]:checked').val();
+                GM_setValue("commentTranslationChoice", OJBetter.translation.comment.choice);
             } else {
-                translation = $('input[name="translation"]:checked').val();
-                GM_setValue("translation", translation);
+                OJBetter.translation.choice = $('input[name="translation"]:checked').val();
+                GM_setValue("translation", OJBetter.translation.choice);
             }
             $('.CFBetter_contextmenu').remove();
         });
@@ -5603,7 +6317,7 @@ async function transTask(button, element, type, is_comment, translation) {
         errerNum: 0,
         skipNum: 0
     };
-    if (commentTranslationMode == "1") {
+    if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
         var pElements = $(element).find("p:not(li p), li, .CFBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
@@ -5611,7 +6325,7 @@ async function transTask(button, element, type, is_comment, translation) {
             element_node = pElements[i];
             await process(button, target, element_node, type, is_comment, count, translation);
         }
-    } else if (commentTranslationMode == "2") {
+    } else if (OJBetter.translation.comment.transMode == "2") {
         // 选段翻译
         var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
@@ -5680,7 +6394,7 @@ async function process(button, target, element_node, type, is_comment, count, tr
 
 // 块处理
 async function blockProcessing(button, target, element_node, is_comment, translation) {
-    if (is_oldLatex || is_acmsguru) {
+    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
@@ -5731,7 +6445,7 @@ async function multiChoiceTranslation() {
                 // 处理旧的结果
                 if ($this.attr('translated')) {
                     let result = $this.data("resultData");
-                    if (retransAction == "0") {
+                    if (OJBetter.translation.retransAction == "0") {
                         result.translateDiv.close();
                     } else {
                         result.translateDiv.foldMainDiv();
@@ -5739,7 +6453,7 @@ async function multiChoiceTranslation() {
                 }
                 // 翻译
                 let target = $this.eq(0).clone();
-                let result = await blockProcessing(translation, target, $this.eq(0), $("#translateButton_selected_" + id), false);
+                let result = await blockProcessing(OJBetter.translation.choice, target, $this.eq(0), $("#translateButton_selected_" + id), false);
                 $this.data("resultData", result);
                 $this.removeClass('block_selected');
                 // 移除对应的按钮 
@@ -5754,7 +6468,7 @@ async function multiChoiceTranslation() {
  * 为acmsguru题面重新划分div
  */
 async function acmsguruReblock() {
-    if (commentTranslationMode == '0') {
+    if (OJBetter.translation.comment.transMode == '0') {
         // 普通模式下的划分方式
         var html = $('.ttypography').children().html();
         var separator = /(<div align="left" style="margin-top: 1\.0em;"><b>.*?<\/b><\/div>)/g;
@@ -5783,41 +6497,11 @@ async function acmsguruReblock() {
 }
 
 /**
- * 加载鼠标悬浮覆盖层css
- */
-function addtargetAreaCss() {
-    GM_addStyle(`
-        .overlay::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(135deg, rgb(77 208 225 / 30%), rgb(77 208 225 / 30%) 30px, rgb(77 208 225 / 10%) 0px, rgb(77 208 225 / 10%) 55px);
-            z-index: 100;
-        }
-        
-        .overlay::after {
-            content: '${i18next.t('targetArea', { ns: 'common' })}';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #00695C;
-            font-size: 16px;
-            font-weight: bold;
-            z-index: 100;
-        }
-    `);
-}
-
-/**
  * 添加MD/复制/翻译按钮
  */
 async function addConversionButton() {
     // 题目页添加按钮
-    if (is_problem) {
+    if (OJBetter.typeOfPage.is_problem) {
         let exContentsPageClasses = ["sample-tests"];
         $('.problem-statement').children('div').each((i, e) => {
             var className = $(e).attr('class');
@@ -5837,7 +6521,7 @@ async function addConversionButton() {
         let is_comment = false;
         if ($(this).parents('.comments').length > 0) is_comment = true;
         // 题目页不添加
-        if (!is_problem || is_acmsguru) {
+        if (!OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_acmsguru) {
             let id = "_ttypography_" + getRandomNumber(8);
             let panel = addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
@@ -5847,7 +6531,7 @@ async function addConversionButton() {
     });
 
     // 完整题目集页特殊处理
-    if (is_completeProblemset) {
+    if (OJBetter.typeOfPage.is_completeProblemset) {
         let exContentsPageClasses = ["sample-tests"];
         $('.problem-statement').each(function () {
             $(this).children('div').each(function (i, e) {
@@ -5888,7 +6572,7 @@ async function addConversionButton() {
             });
         });
     })();
-    if (is_mSite) {
+    if (OJBetter.typeOfPage.is_mSite) {
         $("div[class='_IndexPage_notice']").each(function () {
             let id = "_titled_" + getRandomNumber(8);
             let panel = addButtonPanel(this, id, "this_level", true);
@@ -5902,7 +6586,7 @@ async function addConversionButton() {
         let panel = addButtonPanel(this, id, "this_level", true);
         addButtonWithTranslation(panel.translateButton, this, id, "this_level");
     });
-    if (is_mSite) {
+    if (OJBetter.typeOfPage.is_mSite) {
         $("div._ProblemsPage_announcements table tbody tr:gt(0)").each(function () {
             var $nextDiv = $(this).find("td:first");
             let id = "_question_" + getRandomNumber(8);
@@ -5971,11 +6655,11 @@ function replaceBlock(text, matches, replacements) {
         for (let i = 0; i < matches.length; i++) {
             let match = matches[i];
             let replacement = '';
-            if (replaceSymbol === "1") {
+            if (OJBetter.translation.replaceSymbol === "1") {
                 replacement = `【${i + 1}】`;
-            } else if (replaceSymbol === "2") {
+            } else if (OJBetter.translation.replaceSymbol === "2") {
                 replacement = `{${i + 1}}`;
-            } else if (replaceSymbol === "3") {
+            } else if (OJBetter.translation.replaceSymbol === "3") {
                 replacement = `[${i + 1}]`;
             }
             text = text.replace(match, replacement);
@@ -6022,52 +6706,94 @@ function recoverBlock(translatedText, matches, replacements) {
     return translatedText;
 }
 
-// 翻译框/翻译处理器
+/**
+ * 翻译结果面板
+ */
 class TranslateDiv {
+    /**
+     * 构造函数
+     * @param {string} id 指定翻译框的id
+     */
     constructor(id) {
         this.id = id;
         this.div = $('<div>').attr('id', id).addClass('translateDiv bounce-in');
-        if (!is_completeProblemset) {
+        if (!OJBetter.typeOfPage.is_completeProblemset) {
             this.div.addClass('input-output-copier');
         }
         this.panelDiv = $('<div>').addClass('translate-problem-statement-panel');
         this.div.append(this.panelDiv);
 
+        // 主要信息
         this.mainDiv = $('<div>').addClass('translate-problem-statement');
         this.span = $('<span>');
         this.mainDiv.append(this.span);
         this.div.append(this.mainDiv);
-        // debug
-        this.rawData = null;
-        this.debugDiv = $('<div>').addClass('rawDataDiv').hide();
-        this.debugDivShow = false;
-        this.div.append(this.debugDiv);
-        // 信息
+        this.mainDivState = {
+            current: 'transHTML',
+            transHTML: '',
+            rawDataHTML: ''
+        };
+
+        // 顶栏信息
         this.topText = $('<div>').addClass('topText');
         this.panelDiv.append(this.topText);
 
         // 右侧
         this.rightDiv = $('<div>').css('display', 'flex');
         this.panelDiv.append(this.rightDiv);
-        this.debugButton = $('<div>').html(debugIcon).addClass('borderlessButton').hide();
+        this.debugButton = $(`
+        <button class='ojb_btn ojb_btn_popover top'>
+            <i class="iconfont">&#xe641;</i>
+            <span class="popover_content">${i18next.t('rawData.normal', { ns: 'button' })}</span>
+        </button>`).hide();
         this.rightDiv.append(this.debugButton);
-        this.copyButton = $('<div>').html(copyIcon).addClass('borderlessButton');
+        this.queryBalanceButton = $(`
+        <button class='ojb_btn ojb_btn_popover top'>
+            <i class="iconfont">&#xe6ae;</i>
+            <span class="popover_content">${i18next.t('queryBalance.normal', { ns: 'button' })}</span>
+        </button>`).hide();
+        this.rightDiv.append(this.queryBalanceButton);
+        this.copyButton = $(`
+        <button class='ojb_btn ojb_btn_popover top'>
+            <i class="iconfont">&#xe608;</i>
+            <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
+        </button>`);
         this.rightDiv.append(this.copyButton);
-        this.upButton = $('<div>').html(putawayIcon).addClass('borderlessButton');
+        this.upButton = $(`
+        <button class='ojb_btn ojb_btn_popover top'>
+            <i class="iconfont">&#xe601;</i>
+            <span class="popover_content">${i18next.t('fold.normal', { ns: 'button' })}</span>
+        </button>`);
         this.rightDiv.append(this.upButton);
-        this.closeButton = $('<div>').html(closeIcon).addClass('borderlessButton');
+        this.closeButton = $(`
+        <button class='ojb_btn ojb_btn_popover top'>
+            <i class="iconfont">&#xe614;</i>
+            <span class="popover_content">${i18next.t('close.normal', { ns: 'button' })}</span>
+        </button>`);
         this.rightDiv.append(this.closeButton);
     }
 
+    /**
+     * 获取翻译框
+     * @returns {JQuery<HTMLElement>} 返回翻译框
+     */
     getDiv() {
         return this.div;
     }
 
+    /**
+     * 设置翻译框顶部的文本
+     * @param {string} text 翻译框顶部的文本
+     */
     setTopText(text) {
         this.div.attr("data-topText", text);
         this.topText.text(text);
     }
 
+    /**
+     * 设置翻译框顶部的文本
+     * @returns {string} 返回翻译框顶部的文本
+     */
     getTopText() {
         return this.topText.text();
     }
@@ -6080,11 +6806,11 @@ class TranslateDiv {
      */
     updateTranslateDiv(text, is_escapeHTML = true, is_renderLaTeX = true,) {
         // 渲染MarkDown
-        var md = window.markdownit({
+        let md = window.markdownit({
             html: !is_escapeHTML,
         });
         if (!text) text = "";
-        var html = md.render(text);
+        let html = md.render(text);
         this.mainDiv.html(html);
         // 渲染Latex
         if (is_renderLaTeX) {
@@ -6092,119 +6818,166 @@ class TranslateDiv {
         }
     }
 
-    // 关闭元素
+    /**
+     * 关闭元素
+     */
     close() {
         this.closeButton.click();
     }
 
+    /**
+     * 注册收起按钮事件
+     */
     registerUpButtonEvent() {
         this.upButton.on("click", () => {
-            if (this.upButton.html() === putawayIcon) {
-                this.upButton.html(unfoldIcon);
-                $(this.mainDiv).css({
-                    display: "none",
-                    transition: "height 2s"
-                });
-            } else {
+            // 如果没有reverse类，说明是展开状态
+            if (!this.upButton.hasClass("reverse")) {
                 // 执行收起操作
-                this.upButton.html(putawayIcon);
-                $(this.mainDiv).css({
-                    display: "",
-                    transition: "height 2s"
-                });
+                this.upButton.addClass("reverse");
+                this.upButton.setButtonState('initial', i18next.t('fold.unfold', { ns: 'button' }));
+                toggleCollapseExpand(this.mainDiv.get(0));
+            } else {
+                // 执行展开操作
+                this.upButton.removeClass("reverse");
+                this.upButton.setButtonState('initial', i18next.t('fold.normal', { ns: 'button' }));
+                toggleCollapseExpand(this.mainDiv.get(0));
             }
         });
     }
 
-    // 收起mainDiv
-    foldMainDiv() {
-        this.upButton.html(unfoldIcon);
-        $(this.mainDiv).css({
-            display: "none",
-            transition: "height 2s"
-        });
-    }
-
-    // 注册关闭按钮
+    /**
+     * 注册关闭按钮事件
+     */
     registerCloseButtonEvent() {
         this.closeButton.on("click", () => {
             $(this.div).remove();
             $(this.panelDiv).remove();
-            if (is_problem && memoryTranslateHistory) {
-                ttTree.rmTransResultMap(this.id); // 移除ttTree中的数据
-                ttTree.refreshNode(".ttypography");
-                updateTransDBData(ttTree.getNodeDate(), ttTree.getTransResultMap()); // 更新DB中的数据
+            if (OJBetter.typeOfPage.is_problem && OJBetter.translation.memory.enabled) {
+                OJBetter.translation.memory.ttTree.rmTransResultMap(this.id); // 移除ttTree中的数据
+                OJBetter.translation.memory.ttTree.refreshNode(".ttypography");
+                updateTransDBData(OJBetter.translation.memory.ttTree.getNodeDate(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新DB中的数据
             }
         });
     }
 
+    /**
+     * 注册复制按钮事件
+     * @param {string} text 复制的文本
+     */
     registerCopyButtonEvent(text) {
         this.copyButton.on("click", () => {
             GM_setClipboard(text);
-            this.copyButton.html(copyedIcon);
-            this.copyButton.css({ 'fill': '#8bc34a' });
-            // 更新TopText
-            let topText = this.getTopText();
-            this.topText.text(i18next.t('copy.copied', { ns: 'button' }));
+            this.copyButton.setButtonState('success', i18next.t('copy.copied', { ns: 'button' }));
             // 复制提示
             setTimeout(() => {
-                this.topText.text(topText);
-                this.copyButton.html(copyIcon);
-                this.copyButton.css({ 'fill': '' });
+                this.copyButton.setButtonState('initial', i18next.t('copy.normal', { ns: 'button' }));
             }, 2000);
         });
     }
 
-    // 禁用复制按钮
+    /**
+     * 禁用复制按钮
+     */
     disableCopyButton() {
         this.copyButton.css({ 'fill': '#ccc' });
         this.copyButton.off("click");
     }
 
-    // 设置为error状态
+    /**
+     * 设置面板为error状态
+     */
     setError() {
         this.div.addClass('error');
         this.panelDiv.addClass('error');
         this.mainDiv.addClass('error');
-        this.debugDiv.addClass('error');
     }
 
-    // 设置原始数据
+    /**
+     * 设置原始数据数据
+     * @param {Object} Object 原始数据
+     */
     setRawData(Object) {
-        this.rawData = Object;
-        this.debugDiv.empty();
-        this.debugDiv.append($("<pre>").text(JSON.stringify(Object, null, 4)));
+        this.mainDivState.rawDataHTML = $("<pre>").text(JSON.stringify(Object, null, 4)).get(0);
+        if (this.mainDivState.current === 'rawDataHTML') {
+            this.renderMainDiv();
+        }
     }
 
-    // 显示debug面板
-    showDebugDiv() {
-        this.debugDivShow = true;
-        this.mainDiv.hide();
-        this.debugDiv.show();
+    /**
+     * 切换结果面板与原始数据面板
+     */
+    switchMainDiv() {
+        // 在切换之前，保存当前内容的状态
+        this.mainDivState[this.mainDivState.current] = this.mainDiv.html();
+        // 切换当前状态
+        this.debugButton.setButtonState(this.mainDivState.current === 'transHTML' ? 'enabled' : 'initial');
+        this.mainDivState.current = this.mainDivState.current === 'transHTML' ? 'rawDataHTML' : 'transHTML';
+        // 渲染新的当前状态
+        this.renderMainDiv();
     }
 
-    // 隐藏debug面板
-    hideDebugDiv() {
-        this.debugDivShow = false;
-        this.mainDiv.show();
-        this.debugDiv.hide();
+    // 渲染当前内容到 mainDiv
+    renderMainDiv() {
+        requestAnimationFrame(() => {
+            this.mainDiv.html(this.mainDivState[this.mainDivState.current]);
+        });
     }
 
-    // 注册显示debug按钮事件
+    /**
+     * 注册debug按钮事件
+     */
     registerDebugButtonEvent() {
         this.debugButton.on("click", () => {
-            if (this.debugDivShow) {
-                this.hideDebugDiv();
-            } else {
-                this.showDebugDiv();
+            this.switchMainDiv();
+        });
+    }
+
+    /**
+     * 显示debug按钮
+     */
+    showDebugButton() {
+        this.debugButton.show();
+        this.registerDebugButtonEvent();
+    }
+
+    /**
+     * 注册查询余额按钮事件
+     * @param {function} callback 查询回调函数
+     */
+    registerQueryBalanceButtonEvent(callback) {
+        this.queryBalanceButton.on("click", async () => {
+            this.queryBalanceButton.setButtonState('loading', i18next.t('queryBalance.loading', { ns: 'button' }));
+            try {
+                const balance = await callback();
+                this.queryBalanceButton.setButtonState('success', `${i18next.t('queryBalance.success', { ns: 'button' })} ${balance}`);
+            } catch (error) {
+                this.queryBalanceButton.setButtonState('error', `${i18next.t('queryBalance.error', { ns: 'button' })} ${error.message}`);
             }
         });
     }
 
-    // 显示debug按钮
-    showDebugButton() {
-        this.debugButton.show();
-        this.registerDebugButtonEvent();
+    /**
+     * 显示余额查询按钮
+     * @param {string} server 服务名称
+     */
+    showQueryBalanceButton(server) {
+        if (server == 'deepl') {
+            const quotaConfig = OJBetter.deepl.config.quota;
+            if (quotaConfig.url && quotaConfig.surplus && quotaConfig.header) {
+                this.queryBalanceButton.show();
+                this.registerQueryBalanceButtonEvent(() => {
+                    return queryServerBalance(OJBetter.deepl.config.quota);
+                });
+            }
+        } else if (server == 'openai') {
+            const quotaConfig = OJBetter.chatgpt.config.quota;
+            if (quotaConfig.url && quotaConfig.surplus && quotaConfig.header) {
+                this.queryBalanceButton.show();
+                this.registerQueryBalanceButtonEvent(() => {
+                    return queryServerBalance(OJBetter.chatgpt.config.quota);
+                });
+            }
+        }
     }
 }
 
@@ -6372,12 +7145,12 @@ class ElementsTree {
         translateDiv.setTopText(topText);
         translateDiv.registerUpButtonEvent();
         translateDiv.registerCloseButtonEvent();
-        if (!is_oldLatex && !is_acmsguru) {
+        if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
             translateDiv.registerCopyButtonEvent(translatedText);
         } else {
             translateDiv.disableCopyButton();
         }
-        translateDiv.updateTranslateDiv(translatedText, !(is_oldLatex || is_acmsguru));
+        translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
         if (transButton.length == 0) {
@@ -6419,12 +7192,12 @@ async function getTransDBData() {
  * @returns 
  */
 async function initTransResultsRecover() {
-    ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
+    OJBetter.translation.memory.ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
     let result = await getTransDBData();
     if (!result) return;
-    ttTree.setNodeDate(result.nodeDate);
-    ttTree.setTransResultMap(result.transResultMap);
-    ttTree.recover($(".ttypography"));
+    OJBetter.translation.memory.ttTree.setNodeDate(result.nodeDate);
+    OJBetter.translation.memory.ttTree.setTransResultMap(result.transResultMap);
+    OJBetter.translation.memory.ttTree.recover($(".ttypography"));
 }
 
 /**
@@ -6445,11 +7218,11 @@ async function initTransWhenViewable() {
                 const notAutoTranslate = button.getNotAutoTranslate();
                 // Check if the button meets the criteria
                 if (state === 'normal' && !notAutoTranslate) {
-                    let trans = translation;
+                    let trans = OJBetter.translation.choice;
 
-                    if (allowMixTrans && button.IsCommentButton() && mixedTranslation.length > 0) {
-                        const randomIndex = Math.floor(Math.random() * mixedTranslation.length);
-                        trans = mixedTranslation[randomIndex];
+                    if (OJBetter.translation.auto.mixTrans.enabled && button.IsCommentButton() && OJBetter.translation.auto.mixTrans.servers.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * OJBetter.translation.auto.mixTrans.servers.length);
+                        trans = OJBetter.translation.auto.mixTrans.servers[randomIndex];
                     }
                     button.data("translatedItBy")(trans);
                 }
@@ -6486,12 +7259,12 @@ async function translateProblemStatement(button, text, element_node, is_comment,
      * @returns {string}
      */
     function replaceLatex(text) {
-        if (is_oldLatex) {
+        if (OJBetter.typeOfPage.is_oldLatex) {
             let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
             matches = matches.concat(text.match(regex));
             text = replaceBlock(text, matches, replacements);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
-        } else if (is_acmsguru) {
+        } else if (OJBetter.typeOfPage.is_acmsguru) {
             let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
             matches = matches.concat(text.match(regex));
             text = replaceBlock(text, matches, replacements);
@@ -6513,10 +7286,10 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         translatedText = translatedText.replace(/】\s*【/g, '】 【');
         translatedText = translatedText.replace(/\]\s*\[/g, '] [');
         translatedText = translatedText.replace(/\}\s*\{/g, '} {');
-        if (is_oldLatex) {
+        if (OJBetter.typeOfPage.is_oldLatex) {
             translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
             translatedText = recoverBlock(translatedText, matches, replacements);
-        } else if (is_acmsguru) {
+        } else if (OJBetter.typeOfPage.is_acmsguru) {
             translatedText = recoverBlock(translatedText, matches, replacements);
         } else if (realTranlate != "openai") {
             translatedText = recoverBlock(translatedText, matches, replacements);
@@ -6531,7 +7304,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
      */
     function formatText(translatedText) {
         // 转义LaTex中的特殊符号
-        if (!is_oldLatex && !is_acmsguru) {
+        if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
             const escapeRules = [
                 { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
                 { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
@@ -6588,8 +7361,8 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     if (translation_) {
         realTranlate = translation_;
     } else {
-        if (is_comment && commentTranslationChoice != "0") realTranlate = commentTranslationChoice;
-        else realTranlate = translation;
+        if (is_comment && OJBetter.translation.comment.choice != "0") realTranlate = OJBetter.translation.comment.choice;
+        else realTranlate = OJBetter.translation.choice;
     }
 
     // 信息
@@ -6599,6 +7372,9 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     // 注册按钮
     translateDiv.registerUpButtonEvent();
     translateDiv.registerCloseButtonEvent();
+    if (OJBetter.translation.choice == 'openai' || OJBetter.translation.choice == 'deepl') {
+        translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 额度查询
+    }
 
     // 翻译内容是否可能为代码片段
     if (isLikelyCodeSnippet(text)) {
@@ -6624,7 +7400,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     text = replaceLatex(text);
 
     // 过滤**号
-    if (filterTextWithoutEmphasis && GM_getValue("translation") !== "openai") {
+    if (OJBetter.translation.filterTextWithoutEmphasis && GM_getValue("translation") !== "openai") { // TODO
         text = text.replace(/\*\*/g, "");
     }
 
@@ -6659,28 +7435,27 @@ async function translateProblemStatement(button, text, element_node, is_comment,
 
     // 翻译
     async function translate(translation) {
-        const is_renderLaTeX = !(is_oldLatex || is_acmsguru);
+        const is_renderLaTeX = !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru);
         const servername = i18next.t('servers.' + realTranlate, { ns: 'translator' });
-        let rawData;
+        let rawData = {};
         try {
             if (translation == "deepl") {
                 translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
-                if (deepl_type == 'free') {
+                if (OJBetter.deepl.config.type == 'free') {
                     rawData = await translate_deepl(text);
-                } else if (deepl_type == 'api') {
-                    // TODO
-                    if (deepl_apiGenre == 'deeplx') {
+                } else if (OJBetter.deepl.config.type == 'api') {
+                    if (OJBetter.deepl.config.apiGenre == 'deeplx') {
                         rawData = await translate_deeplx(text);
                     } else {
-                        if (enableEmphasisProtection) text = convertBoldMarkdownToHTML(text);
-                        if (enableLinkProtection) text = convertLinksMarkdownToHTML(text);
-                        if (deepl_apiGenre == 'api-free') {
+                        if (OJBetter.deepl.enableEmphasisProtection) text = convertBoldMarkdownToHTML(text);
+                        if (OJBetter.deepl.enableLinkProtection) text = convertLinksMarkdownToHTML(text);
+                        if (OJBetter.deepl.config.apiGenre == 'api-free') {
                             rawData = await translate_deepl_api_free(text);
-                        } else if (deepl_apiGenre == 'api-pro') {
+                        } else if (OJBetter.deepl.config.apiGenre == 'api-pro') {
                             rawData = await translate_deepl_api_pro(text);
                         }
-                        if (enableEmphasisProtection) rawData.text = convertBoldHTMLToMarkdown(rawData.text);
-                        if (enableLinkProtection) rawData.text = convertLinksHTMLToMarkdown(rawData.text);
+                        if (OJBetter.deepl.enableEmphasisProtection) rawData.text = convertBoldHTMLToMarkdown(rawData.text);
+                        if (OJBetter.deepl.enableLinkProtection) rawData.text = convertLinksHTMLToMarkdown(rawData.text);
                     }
                 }
             } else if (translation == "iflyrec") {
@@ -6697,10 +7472,10 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                 await translate_caiyun_startup();
                 rawData = await translate_caiyun(text);
             } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: openai_name })}${!openai_isStream
+                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
                     ? i18next.t('transingTip.openai_isStream', { ns: 'translator' }) : ""}`,
                     is_renderLaTeX);
-                if (openai_isStream) {
+                if (OJBetter.chatgpt.isStream) {
                     // 流式传输
                     rawData = await translate_openai_stream(text, translateDiv);
                 } else {
@@ -6734,7 +7509,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     translatedText = recoverLatex(translatedText);
 
     // 注册结果复制按钮
-    if (!is_oldLatex && !is_acmsguru) {
+    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
         translateDiv.registerCopyButtonEvent(translatedText);
     } else {
         translateDiv.disableCopyButton();
@@ -6744,14 +7519,14 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     translatedText = formatText(translatedText);
 
     // 保存翻译结果
-    if ((is_problem || is_completeProblemset) && memoryTranslateHistory) {
-        ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
-        ttTree.addTransResultMap(id, translatedText);
-        updateTransDBData(ttTree.getNodeDate(), ttTree.getTransResultMap()); // 更新翻译结果到transDB
+    if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
+        OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
+        OJBetter.translation.memory.ttTree.addTransResultMap(id, translatedText);
+        updateTransDBData(OJBetter.translation.memory.ttTree.getNodeDate(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新翻译结果到transDB
     }
 
     // 翻译结果面板更新
-    translateDiv.updateTranslateDiv(translatedText, !(is_oldLatex || is_acmsguru));
+    translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
 
     return {
         status: status,
@@ -6944,17 +7719,19 @@ class ProblemPageLinkbar {
 
     /**
      * 添加按钮
+     * @param {string} id 按钮id
      * @param {string} url 按钮链接
      * @param {string} text 按钮文字
      * @param {JQueryObject} icon 按钮图标
      * @param {string} iconHeight 图标高度
      * @returns {object} 按钮对象
      */
-    addLinkButton(url, text, icon = $('<div>'), iconHeight = "22px") {
+    addLinkButton(id, url, text, icon = $('<div>'), iconHeight = "22px") {
         const linkElement = $("<a>")
             .attr("href", url)
             .attr("target", "_blank")
-            .addClass("ojb_btn");
+            .addClass("ojb_btn")
+            .attr("id", id);
 
         linkElement.append(icon);
         icon.css("height", iconHeight);
@@ -7050,12 +7827,17 @@ function getProblemId(url) {
 
 /**
  * 跳转到洛谷
+ * @param {ProblemPageLinkbar} problemToolbar 
  */
 async function CF2luogu(problemToolbar) {
     const url = window.location.href;
     const problemId = getProblemId(url);
-    const luoguButton = problemToolbar.addLinkButton("https://www.luogu.com.cn/", i18next.t('state.loading', { ns: 'button' }),
-        $("<img>").attr("src", "https://cdn.luogu.com.cn/fe/logo.png"));
+    const luoguButton = problemToolbar.addLinkButton(
+        "luoguButton",
+        "https://www.luogu.com.cn/",
+        i18next.t('state.loading', { ns: 'button' }),
+        $("<img>").attr("src", "https://cdn.luogu.com.cn/fe/logo.png")
+    );
     const checkLinkExistence = (url) => {
         return new Promise((resolve, reject) => {
             GM.xmlHttpRequest({
@@ -7150,7 +7932,7 @@ async function validateClistConnection(onlyCookie = false) {
     // 尝试携带Key发送请求
     let result = await tryRequest(requestOptions);
     if (!onlyCookie && !result.ok) {
-        requestOptions.headers = { "Authorization": clist_Authorization };
+        requestOptions.headers = { "Authorization": OJBetter.clist.authorization };
         result = await tryRequest(requestOptions);
     }
 
@@ -7173,22 +7955,34 @@ async function validateClistConnection(onlyCookie = false) {
 
 /**
  * 创建Rating相关css
- * @param hasBorder 是否有边框
+ * @param {boolean} [hasBorder=true] 是否有边框
  */
 function creatRatingCss(hasBorder = true) {
     const defaultBorderColor = '#dcdfe6';
     let dynamicCss = "";
-    let hoverSelector = RatingHidden ? ":hover" : "";
+    let hoverSelector = OJBetter.clist.ratingHidden ? ":hover" : "";
     for (let cssClass in cssMap) {
         dynamicCss += `a.${cssClass}${hoverSelector}, a.${cssClass}${hoverSelector}:link {\n`;
         let borderColor = hasBorder ? cssMap[cssClass] : defaultBorderColor;
-        dynamicCss += `    color: ${cssMap[cssClass]};\n`;
-        dynamicCss += `    border: 1px solid ${borderColor};\n`;
+        dynamicCss += `    color: ${cssMap[cssClass]} ${OJBetter.clist.ratingHidden ? "!important" : ""};\n`;
+        dynamicCss += `    border: 1px solid ${borderColor} ${OJBetter.clist.ratingHidden ? "!important" : ""};\n`;
         dynamicCss += `}\n`;
     }
     GM_addStyle(dynamicCss);
+    GM_addStyle(`
+        #clistButton {
+            color: #ffffff00;
+        }
+    `);
 }
-// 模拟请求获取
+
+/**
+ * 模拟clist网页访问获取rating
+ * @param {string} problem 题目名称
+ * @param {string} problem_url 题目链接
+ * @param {string} contest 比赛名称
+ * @returns {Promise<{rating: number, problem: string}>} 题目难度
+ */
 async function getRating(problem, problem_url, contest = null) {
     problem = problem.replace(/\([\s\S]*?\)/g, '').replace(/^\s+|\s+$/g, '');
     return new Promise((resolve, reject) => {
@@ -7245,13 +8039,19 @@ async function getRating(problem, problem_url, contest = null) {
     });
 }
 
+/**
+ * 从clist API获取题目的rating
+ * @param {string} problem 题目名
+ * @param {string} problem_url 题目链接
+ * @returns {Promise<number>} 题目rating
+ */
 async function getRatingFromApi_problem(problem, problem_url) {
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
             method: "GET",
             url: `https://clist.by:443/api/v4/problem/?name=${problem}&resource__regex=codeforces.com`,
             headers: {
-                "Authorization": clist_Authorization
+                "Authorization": OJBetter.clist.authorization
             },
             onload: function (response) {
                 if (!response) reject('发生了未知错误！');
@@ -7270,12 +8070,17 @@ async function getRatingFromApi_problem(problem, problem_url) {
     });
 }
 
+/**
+ * 从clist API获取比赛的题目rating
+ * @param {string} event 比赛名
+ * @returns {Promise<Map<string, number>>} 题目rating
+ */
 async function getRatingFromApi_contest(event) {
     const options = {
         method: "GET",
         url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${event}`,
         headers: {
-            "Authorization": clist_Authorization
+            "Authorization": OJBetter.clist.authorization
         }
     }
     let response = await GMRequest(options);
@@ -7292,6 +8097,11 @@ async function getRatingFromApi_contest(event) {
     return problemsMap;
 }
 
+/**
+ * 根据rating获取对应的颜色class名
+ * @param {number} rating 题目rating
+ * @returns {string} 颜色class名
+ */
 function getClassNameByRating(rating) {
     let className = "rating_by_clist_color9";
     if (Number.isNaN(rating)) {
@@ -7310,17 +8120,24 @@ function getClassNameByRating(rating) {
 
 /**
  * problem页显示Rating
+ * @param {ProblemPageLinkbar} problemToolbar 
  * @returns {Promise<void>}
  */
 async function showRatingByClist_problem(problemToolbar) {
     // 题目名
     let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
-    if (is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
+    if (OJBetter.typeOfPage.is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
 
     // 创建Rating按钮元素
     creatRatingCss(false);
-    const clistButton = problemToolbar.addLinkButton(`https://clist.by/problems/?search=${problem}&resource=1`, i18next.t('state.wait', { ns: 'button' }),
-        $("<img>").attr("src", "https://clist.by/static/img/logo-48.png"), "15px");
+    // TODO
+    const clistButton = problemToolbar.addLinkButton(
+        'clistButton',
+        `https://clist.by/problems/?search=${problem}&resource=1`,
+        i18next.t('state.wait', { ns: 'button' }),
+        $("<img>").attr("src", "https://clist.by/static/img/logo-48.png"),
+        "15px"
+    );
 
     // 检测clist连接
     if (!await validateClistConnection()) {
@@ -7335,7 +8152,7 @@ async function showRatingByClist_problem(problemToolbar) {
     } else {
         problem_url = problem_url.replace(/\/problemset\/problem\/(\d+)\/(\w+)/, '/contest/$1/problem/$2');
     }
-    if (is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com'); // 轻量站
+    if (OJBetter.typeOfPage.is_mSite) problem_url = problem_url.replace(/\/\/(\w+).codeforces.com/, '//codeforces.com'); // 轻量站
 
     // 比赛名
     // let contest = $('#sidebar').children().first().find('.rtable th').first().text();
@@ -7364,7 +8181,7 @@ async function showRatingByClist_contest() {
     let ratingBadges = {};
     $('.datatable .id.left').each(function () {
         let href = 'https://codeforces.com' + $(this).find('a').attr('href');
-        let badge = $(`<a class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
+        let badge = $(`<a id="clistButton" class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
         $(this).find('a').after(badge);
         ratingBadges[href] = badge;
     });
@@ -7415,7 +8232,7 @@ async function showRatingByClist_problemset() {
         let problem_url = $($tds[0]).find('a').attr('href');
         problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
 
-        const ratingBadge = $(`<a class="ratingBadge"></a>`);
+        const ratingBadge = $(`<a id="clistButton" class="ratingBadge"></a>`);
         const rating = $(`<span class="rating">${i18next.t('state.wait', { ns: 'button' })}</span>`);
         ratingBadge.append(rating);
         $($tds[0]).find('a').after(ratingBadge);
@@ -7564,7 +8381,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     // 表单
     let formDiv = $('<form method="post" id="CFBetter_SubmitForm" class="input-output-copier"></form>');
     $('.ttypography').after(formDiv);
-    formDiv.attr('action', submitUrl + "?csrf_token=" + CF_csrf_token);
+    formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.cf_csrf_token);
 
     // 顶部区域
     let topDiv = $(`<div class="topDiv"></div>`);
@@ -7578,11 +8395,11 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     // 问题选择/编号
     let selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
     let problemCode;
-    if (is_acmsguru) {
+    if (OJBetter.typeOfPage.is_acmsguru) {
         problemCode = $('h4').eq(0).text();
         let matchResult = problemCode.match(/([A-Z0-9]+)/);
         problemCode = matchResult[0];
-    } else if (is_problemset_problem) {
+    } else if (OJBetter.typeOfPage.is_problemset_problem) {
         let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)(?!=[A-Z0-9])/);
         problemCode = match[1] + match[2];
         selectProblem.attr('name', 'submittedProblemCode');
@@ -7646,7 +8463,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
             <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    if (submitButtonPosition == "bottom") {
+    if (OJBetter.monaco.setting.submitButtonPosition == "bottom") {
         // 添加测试/提交按钮到底部
         submitDiv.append(runButton);
         submitDiv.append(submitButton);
@@ -7729,7 +8546,7 @@ async function createMonacoEditor(language, form, support) {
     async function waitForMonacoLoaderOnload() {
         return new Promise((resolve) => {
             const checkInitialized = () => {
-                if (monacoLoaderOnload) {
+                if (OJBetter.monaco.loaderOnload) {
                     resolve();
                 } else {
                     setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
@@ -7738,14 +8555,14 @@ async function createMonacoEditor(language, form, support) {
             checkInitialized();
         });
     }
-    if (!monacoLoaderOnload) await waitForMonacoLoaderOnload();
+    if (!OJBetter.monaco.loaderOnload) await waitForMonacoLoaderOnload();
 
     /**
      * 通用参数
      */
     var id = 0; // 协议中的id标识
     var workspace = language + "_workspace";
-    var rootUri = OJBetter_Bridge_WorkUri + "/" + workspace;
+    var rootUri = OJBetter.monaco.lsp.workUri + "/" + workspace;
     // 文件名
     var InstanceID = getRandomNumber(8).toString();
     var filename = language == "java" ? "hello/src/" + InstanceID : InstanceID;
@@ -7903,12 +8720,12 @@ async function createMonacoEditor(language, form, support) {
      */
     uri = monaco.Uri.file(uri);
     model = monaco.editor.createModel('', language, uri);
-    editor = monaco.editor.create(document.getElementById("OJBetter_monaco"), {
+    OJBetter.monaco.editor = monaco.editor.create(document.getElementById("OJBetter_monaco"), {
         model: model,
         rootUri: rootUri,
         fontSize: 15,
         tabSize: 4,
-        theme: darkMode == "dark" ? "vs-dark" : "vs",
+        theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
         bracketPairColorization: {
             enabled: true,
             independentColorPoolPerBracketType: true,
@@ -7923,7 +8740,7 @@ async function createMonacoEditor(language, form, support) {
         scrollbar: {
             verticalScrollbarSize: 10,
             horizontalScrollbarSize: 10,
-            alwaysConsumeMouseWheel: alwaysConsumeMouseWheel
+            alwaysConsumeMouseWheel: OJBetter.monaco.setting.alwaysConsumeMouseWheel
         },
         suggest: {
             selectionMode: 'never' // 代码建议不自动选择
@@ -7935,18 +8752,18 @@ async function createMonacoEditor(language, form, support) {
      */
     (CFBetter_monaco.addShortCuts = async () => {
         // 从配置信息更新字体大小
-        editor.updateOptions({ fontSize: parseInt(editorFontSize) });
+        OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
         // 调整字体大小
         let changeSize = $(`
         <div class="ojb_btn ojb_btn_popover top">
-            <input type="number" id="fontSizeInput" value="${editorFontSize}">
+            <input type="number" id="fontSizeInput" value="${OJBetter.monaco.setting.fontsize}">
             <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
         </div>`)
         form.topRightDiv.append(changeSize);
         changeSize.find('input#fontSizeInput').on('input', function () {
             var size = $(this).val();
-            editor.updateOptions({ fontSize: parseInt(size) });
+            OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(size) });
             GM_setValue('editorFontSize', size);
         });
 
@@ -7981,19 +8798,19 @@ async function createMonacoEditor(language, form, support) {
         fixToRightButton.on('click', fixToRight);
 
         // 添加测试/提交按钮到顶部
-        if (submitButtonPosition == "top") {
+        if (OJBetter.monaco.setting.submitButtonPosition == "top") {
             form.topRightDiv.append(form.runButton);
             form.topRightDiv.append(form.submitButton);
         }
 
         // 选择记忆
-        if (!monacoEditor_position_init) {
-            monacoEditor_position_init = true; // 标记是否已经初始化过
-            if (monacoEditor_position == "full") {
+        if (!OJBetter.monaco.setting.position_initialized) {
+            OJBetter.monaco.setting.position_initialized = true; // 标记是否已经初始化过
+            if (OJBetter.monaco.setting.position == "full") {
                 fullscreenButton.click();
-            } else if (monacoEditor_position == "bottom") {
+            } else if (OJBetter.monaco.setting.position == "bottom") {
                 fixToBottomButton.click();
-            } else if (monacoEditor_position == "right") {
+            } else if (OJBetter.monaco.setting.position == "right") {
                 fixToRightButton.click();
             }
         }
@@ -8152,12 +8969,12 @@ async function createMonacoEditor(language, form, support) {
         nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
         const code = await getCode(nowUrl);
         if (code) {
-            editor.setValue(code); // 恢复代码
+            OJBetter.monaco.editor.setValue(code); // 恢复代码
             $('#sourceCodeTextarea').val(code);
         }
-        editor.onDidChangeModelContent(async () => {
+        OJBetter.monaco.editor.onDidChangeModelContent(async () => {
             // 将monaco editor的内容同步到sourceCodeTextarea
-            const code = editor.getValue();
+            const code = OJBetter.monaco.editor.getValue();
             $('#sourceCodeTextarea').val(code);
             await saveCode(nowUrl, code);
         });
@@ -8185,16 +9002,16 @@ async function createMonacoEditor(language, form, support) {
         }
 
         // 注册acwing cpp 模板
-        if (language == "cpp" && cppCodeTemplateComplete) {
+        if (language == "cpp" && OJBetter.monaco.complet.cppCodeTemplate) {
             var acwing_cpp_code_completer = JSON.parse(GM_getResourceText("acwing_cpp_code_completer"));
             registMyCompletionItemProvider('cpp', 'ace', acwing_cpp_code_completer);
         }
 
         // 注册自定义的补全
-        let complet_length = CompletConfig.configurations.length;
+        let complet_length = OJBetter.monaco.complet.customConfig.configurations.length;
         if (complet_length > 0) {
             for (let i = 0; i < complet_length; i++) {
-                let item = CompletConfig.configurations[i];
+                let item = OJBetter.monaco.complet.customConfig.configurations[i];
                 if (item.isChoose && item.language == language) {
                     registMyCompletionItemProvider(item.language, item.genre, await getExternalJSON(item.jsonUrl));
                 }
@@ -8202,19 +9019,19 @@ async function createMonacoEditor(language, form, support) {
         }
     })();
 
-    if (!support || !useLSP) { return; } // 如果不支持lsp，则到此为止
+    if (!support || !OJBetter.monaco.lsp.enabled) { return; } // 如果不支持lsp，则到此为止
 
     /**
      * LSP连接状态指示
      */
-    let styleElement;
     let lspStateDiv = $(`
     <div id="lspStateDiv" class="ojb_btn ojb_btn_popover top loading">
         <i class="iconfont">&#xe658;</i>
         <span class="popover_content">${i18next.t('lsp.connect', { ns: 'codeEditor' })}</span>
     </div>
     `).on('click', () => {
-        styleElement = GM_addStyle(darkenPageStyle);
+        OJB_showModal(lspStateDiv);
+        OJB_addDraggable(lspStateDiv);
         LSPLog.show();
     });
     form.topRightDiv.prepend(lspStateDiv);
@@ -8226,8 +9043,7 @@ async function createMonacoEditor(language, form, support) {
     $('#LSPLogList').append(LSPLogList);
     var closeButton = LSPLog.find('button');
     closeButton.on('click', function () {
-        LSPLog.hide();
-        $(styleElement).remove();
+        OJB_closeModal(lspStateDiv);
     });
 
     /**
@@ -8265,9 +9081,9 @@ async function createMonacoEditor(language, form, support) {
     /**
      * languageSocket
      */
-    var url = OJBetter_Bridge_SocketUrl;
+    var url = OJBetter.monaco.lsp.socketUrl;
     var languageSocket = new WebSocket(url + language);
-    monacoSocket.push(languageSocket);
+    OJBetter.monaco.lsp.socket.push(languageSocket);
     var languageSocketState = false;
     var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
     languageSocket.onopen = () => {
@@ -8283,8 +9099,8 @@ async function createMonacoEditor(language, form, support) {
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
             CFBetter_monaco.openDocRequest(); // 打开文档
-            if (!monacoEditor_language.includes(language)) {
-                monacoEditor_language.push(language);
+            if (!OJBetter.monaco.setting.language.includes(language)) {
+                OJBetter.monaco.setting.language.push(language);
                 CFBetter_monaco.RegistrationAfterInit(); // 注册语言及功能
             } else {
                 location.reload(); // 这里有问题，先贴个补丁
@@ -8371,7 +9187,7 @@ async function createMonacoEditor(language, form, support) {
      */
     var fileWebSocket = new WebSocket(url + "file");
     var fileWebSocketState = false;
-    monacoSocket.push(fileWebSocket);
+    OJBetter.monaco.lsp.socket.push(fileWebSocket);
     fileWebSocket.onopen = () => {
         fileWebSocketState = true;
         pushLSPLogMessage("info", "fileWebSocket 连接已建立");
@@ -8619,9 +9435,9 @@ async function createMonacoEditor(language, form, support) {
                 workspaceFolders: [
                     {
                         uri:
-                            "file:///" + OJBetter_Bridge_WorkUri + workspace,
+                            "file:///" + OJBetter.monaco.lsp.workUri + workspace,
                         name:
-                            "file:///" + OJBetter_Bridge_WorkUri + workspace,
+                            "file:///" + OJBetter.monaco.lsp.workUri + workspace,
                     },
                 ],
             },
@@ -9396,12 +10212,12 @@ function changeMonacoLanguage(form) {
     GM_setValue('compilerSelection', nowSelect);
     // 销毁旧的编辑器
     try {
-        if (editor) editor.dispose();
+        if (OJBetter.monaco.editor) OJBetter.monaco.editor.dispose();
     } catch (error) {
         console.warn("销毁旧的编辑器时遇到了错误，这大概不会影响你的正常使用", error)
     }
     // 关闭旧的socket
-    monacoSocket.forEach(socket => {
+    OJBetter.monaco.lsp.socket.forEach(socket => {
         socket.close();
     });
     // 移除相关元素
@@ -9585,11 +10401,11 @@ function officialCompilerArgsChange(nowSelect) {
     officialLanguage = nowSelect;
     $('#CompilerArgsInput').prop("disabled", true);
 }
-// TODO
+
 // codeforces编译器通信
 async function officialCompiler(code, input) {
     const data = new FormData();
-    data.append('csrf_token', CF_csrf_token);
+    data.append('csrf_token', OJBetter.common.cf_csrf_token);
     data.append('source', code);
     data.append('tabSize', '4');
     data.append('programTypeId', officialLanguage);
@@ -9602,10 +10418,10 @@ async function officialCompiler(code, input) {
 
     const requestOptions = {
         method: 'POST',
-        url: `${hostAddress}/data/customtest`,
+        url: `${OJBetter.common.hostAddress}/data/customtest`,
         data: data,
         headers: {
-            'X-Csrf-Token': CF_csrf_token
+            'X-Csrf-Token': OJBetter.common.cf_csrf_token
         }
     };
 
@@ -9643,16 +10459,16 @@ async function officialCompiler(code, input) {
 // 获取codeforces编译器的执行结果
 async function getOfficialCompilerVerdict(customTestSubmitId) {
     const newdata = new FormData();
-    newdata.append('csrf_token', CF_csrf_token);
+    newdata.append('csrf_token', OJBetter.common.cf_csrf_token);
     newdata.append('action', 'getVerdict');
     newdata.append('customTestSubmitId', customTestSubmitId);
 
     const requestOptions = {
         method: 'POST',
-        url: `${hostAddress}/data/customtest`,
+        url: `${OJBetter.common.hostAddress}/data/customtest`,
         data: newdata,
         headers: {
-            'X-Csrf-Token': CF_csrf_token
+            'X-Csrf-Token': OJBetter.common.cf_csrf_token
         }
     };
 
@@ -9915,22 +10731,22 @@ async function wandboxCompilerRequest(code, input) {
 
 // 更改编译器参数
 function changeCompilerArgs(nowSelect) {
-    if (onlineCompilerChoice == "official") {
+    if (OJBetter.monaco.onlineCompilerChoice == "official") {
         officialCompilerArgsChange(nowSelect);
-    } else if (onlineCompilerChoice == "rextester") {
+    } else if (OJBetter.monaco.onlineCompilerChoice == "rextester") {
         rextesterCompilerArgsChange(nowSelect);
-    } else if (onlineCompilerChoice == "wandbox") {
+    } else if (OJBetter.monaco.onlineCompilerChoice == "wandbox") {
         wandboxCompilerArgsChange(nowSelect);
     }
 }
-// TODO
+
 // 在线编译器通信
 async function onlineCompilerConnect(code, input) {
-    if (onlineCompilerChoice == "official") {
+    if (OJBetter.monaco.onlineCompilerChoice == "official") {
         return await officialCompiler(code, input);
-    } else if (onlineCompilerChoice == "rextester") {
+    } else if (OJBetter.monaco.onlineCompilerChoice == "rextester") {
         return await rextesterCompiler(code, input);
-    } else if (onlineCompilerChoice == "wandbox") {
+    } else if (OJBetter.monaco.onlineCompilerChoice == "wandbox") {
         return await wandboxCompiler(code, input);
     }
 }
@@ -10179,15 +10995,15 @@ async function addProblemPageCodeEditor() {
     let submitUrl;
     if (/\/problemset\//.test(href)) {
         // problemset
-        submitUrl = hostAddress + '/problemset/submit';
+        submitUrl = OJBetter.common.hostAddress + '/problemset/submit';
     } else if (/\/gym\//.test(href)) {
         // gym 题目
-        submitUrl = hostAddress + '/gym/' + ((href) => {
+        submitUrl = OJBetter.common.hostAddress + '/gym/' + ((href) => {
             const regex = /\/gym\/(?<num>[0-9a-zA-Z]*?)\/problem\//;
             const match = href.match(regex);
             return match && match.groups.num;
         })(href) + '/submit';
-    } else if (is_acmsguru) {
+    } else if (OJBetter.typeOfPage.is_acmsguru) {
         // acmsguru 题目
         submitUrl = href.replace(/\/problemsets[A-Za-z0-9\/#]*/, "/problemsets/acmsguru/submit");
     } else {
@@ -10205,7 +11021,7 @@ async function addProblemPageCodeEditor() {
 
     // 初始化
     CustomTestInit(); // 自定义测试数据面板
-    selectLang.val(compilerSelection);
+    selectLang.val(OJBetter.monaco.compilerSelection);
     changeMonacoLanguage(form);
 
     selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
@@ -10217,7 +11033,7 @@ async function addProblemPageCodeEditor() {
     // 提交
     submitButton.on('click', async function (event) {
         event.preventDefault();
-        if (isCodeSubmitConfirm) {
+        if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
             const submit = await createDialog(
                 i18next.t('submitCode.title', { ns: 'dialog' }),
                 i18next.t('submitCode.content', { ns: 'dialog' }),
@@ -10247,7 +11063,7 @@ async function addProblemPageCodeEditor() {
  * @returns {string} 目标语言，如果没有对应代码则返回中文
  */
 function getTargetLanguage(serverName) {
-    let targetLanguage = translationSupport[serverName][transTargetLang];
+    let targetLanguage = translationSupport[serverName][OJBetter.translation.targetLang];
     if (targetLanguage) return targetLanguage;
     else return translationSupport[serverName]['zh'];
 }
@@ -10355,17 +11171,17 @@ async function translate_deepl_api_free(raw) {
         text: [raw],
         target_lang: getTargetLanguage('deepl'),
         split_sentences: '1',
-        ...(enableEmphasisProtection || enableLinkProtection ? { tag_handling: 'html' } : {}),
-        ...Object.assign({}, ...deepl_data)
+        ...(OJBetter.deepl.enableEmphasisProtection || OJBetter.deepl.enableLinkProtection ? { tag_handling: 'html' } : {}),
+        ...Object.assign({}, ...OJBetter.deepl.config.data)
     });
 
     const options = {
         method: "POST",
-        url: deepl_proxy || "https://api-free.deepl.com/v2/translate",
+        url: OJBetter.deepl.config.proxy || "https://api-free.deepl.com/v2/translate",
         headers: {
-            "Authorization": `DeepL-Auth-Key ${deepl_key}`,
+            "Authorization": `DeepL-Auth-Key ${OJBetter.deepl.config.key}`,
             "Content-Type": "application/json",
-            ...Object.assign({}, ...deepl_header)
+            ...Object.assign({}, ...OJBetter.deepl.config.header)
         },
         data: data,
         onload: response => response.responseText,
@@ -10385,17 +11201,17 @@ async function translate_deepl_api_pro(raw) {
         text: [raw],
         target_lang: getTargetLanguage('deepl'),
         split_sentences: '1',
-        ...(enableEmphasisProtection || enableLinkProtection ? { tag_handling: 'html' } : {}),
-        ...Object.assign({}, ...deepl_data)
+        ...(OJBetter.deepl.enableEmphasisProtection || OJBetter.deepl.enableLinkProtection ? { tag_handling: 'html' } : {}),
+        ...Object.assign({}, ...OJBetter.deepl.config.data)
     });
 
     const options = {
         method: "POST",
-        url: deepl_proxy || "https://api.deepl.com/v2/translate",
+        url: OJBetter.deepl.config.proxy || "https://api.deepl.com/v2/translate",
         headers: {
-            "Authorization": `DeepL-Auth-Key ${deepl_key}`,
+            "Authorization": `DeepL-Auth-Key ${OJBetter.deepl.config.key}`,
             "Content-Type": "application/json",
-            ...Object.assign({}, ...deepl_header)
+            ...Object.assign({}, ...OJBetter.deepl.config.header)
         },
         data: data,
         onload: response => response.responseText,
@@ -10413,7 +11229,7 @@ async function translate_deepl_api_pro(raw) {
 async function translate_deeplx(text) {
     const options = {
         method: "POST",
-        url: deepl_proxy || 'https://api.deeplx.org/translate',
+        url: OJBetter.deepl.config.proxy || 'https://api.deeplx.org/translate',
         data: JSON.stringify({
             "text": text,
             "source_lang": "EN",
@@ -10421,7 +11237,7 @@ async function translate_deeplx(text) {
         }),
         headers: {
             'Content-Type': 'application/json',
-            ...(deepl_key ? { Authorization: `Bearer ${deepl_key}` } : {})
+            ...(OJBetter.deepl.config.key ? { Authorization: `Bearer ${OJBetter.deepl.config.key}` } : {})
         },
         responseType: "json",
     };
@@ -10589,27 +11405,27 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = (is_oldLatex || is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: transTargetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: transTargetLang });
+    const prompt = (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) ?
+        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang }) :
+        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang });
     const data = {
-        model: openai_model || modelDefault,
+        model: OJBetter.chatgpt.config.model || modelDefault,
         messages: [{
             role: "user",
             content: prompt + raw
         }],
         temperature: 0.7,
-        ...Object.assign({}, ...openai_data)
+        ...Object.assign({}, ...OJBetter.chatgpt.config.data)
     }
     const options = {
         method: "POST",
-        url: openai_proxy || 'https://api.openai.com/v1/chat/completions',
+        url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
         data: JSON.stringify(data),
         responseType: 'json',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + openai_key,
-            ...Object.assign({}, ...openai_header)
+            'Authorization': 'Bearer ' + OJBetter.chatgpt.config.key,
+            ...Object.assign({}, ...OJBetter.chatgpt.config.header)
         }
     }
     return await BaseTranslate(options,
@@ -10629,15 +11445,30 @@ async function translate_openai_stream(raw, translateDiv) {
         done: true,
         checkPassed: null,
         response: null,
+        responseText: null,
         text: "",
-        errors: []
+        error: null,
+        message: null
     };
-
-    for await (const delta of openai_stream(raw)) {
-        result.text += delta;
-        // 翻译结果面板更新
-        translateDiv.updateTranslateDiv(result.text, !(is_oldLatex || is_acmsguru), false);
+    const helpText = i18next.t('error.basic', { ns: 'translator' }); // 基本帮助提示信息
+    try {
+        for await (const delta of openai_stream(raw)) {
+            result.text += delta;
+            // 翻译结果面板更新
+            translateDiv.updateTranslateDiv(result.text, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru), false);
+        }
+        return result;
+    } catch (err) {
+        console.warn(err);
+        result.error = {
+            message: err.message || null,
+            stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
+            enumerable: err,
+            source: 'openai_stream'
+        };
+        result.message = `${i18next.t('error.GMRequest', { ns: 'translator' })}${helpText}`;
     }
+
     return result;
 }
 
@@ -10649,28 +11480,28 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = (is_oldLatex || is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: transTargetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: transTargetLang });
+    const prompt = (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) ?
+        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang }) :
+        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang });
     const data = {
-        model: openai_model || modelDefault,
+        model: OJBetter.chatgpt.config.model || modelDefault,
         messages: [{
             role: "user",
             content: prompt + raw
         }],
         temperature: 0.7,
         stream: true,
-        ...Object.assign({}, ...openai_data)
+        ...Object.assign({}, ...OJBetter.chatgpt.config.data)
     }
     const options = {
         method: "POST",
-        url: openai_proxy || 'https://api.openai.com/v1/chat/completions',
+        url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
         data: JSON.stringify(data),
         responseType: 'stream',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + openai_key,
-            ...Object.assign({}, ...openai_header)
+            'Authorization': 'Bearer ' + OJBetter.chatgpt.config.key,
+            ...Object.assign({}, ...OJBetter.chatgpt.config.header)
         }
     }
     const response = await GMRequest(options, true);
@@ -10716,7 +11547,9 @@ async function* openai_stream(raw) {
 
 /**
  * @typedef {Object} ErrorResponse
- * @property {Object} error 错误详情
+ * @property {Object} message 错误消息
+ * @property {Object} stack 错误堆栈
+ * @property {Object} enumerable 可枚举的错误属性
  * @property {string} source 错误来源
  */
 
@@ -10726,7 +11559,7 @@ async function* openai_stream(raw) {
  * @property {CheckResponseResult|null} checkPassed 检查是否通过的结果
  * @property {Object|null} response 响应对象
  * @property {string|null} text 处理后的文本
- * @property {ErrorResponse[]} errors 错误列表
+ * @property {ErrorResponse} error 错误列表
  * @property {string|null} message 可能的消息
  */
 
@@ -10743,24 +11576,25 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
         done: false,
         checkPassed: null,
         response: null,
-        text: null,
-        errors: [],
+        responseText: null,
+        text: "",
+        error: null,
         message: null
     };
     const helpText = i18next.t('error.basic', { ns: 'translator' }); // 基本帮助提示信息
     const toDo = async () => {
         try {
             result.response = await GMRequest(options);
+            result.responseText = result.response.responseText;
             result.text = getResponseText(result.response);
         } catch (err) {
             console.warn(err);
-            result.errors.push({
-                error: {
-                    message: err.message || null,
-                    stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
-                    enumerable: err,
-                }, source: 'GMRequest'
-            });
+            result.error = {
+                message: err.message || null,
+                stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
+                enumerable: err,
+                source: 'GMRequest'
+            };
             result.message = `${i18next.t('error.GMRequest', { ns: 'translator' })}${helpText}`;
             throw result;
         }
@@ -10768,13 +11602,12 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
             result.text = processer(result.text);
         } catch (err) {
             console.warn(err);
-            result.errors.push({
-                error: {
-                    message: err.message,
-                    stack: err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;'),
-                    enumerable: err,
-                }, source: 'Processer'
-            });
+            result.error = {
+                message: err.message || null,
+                stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
+                enumerable: err,
+                source: 'processer'
+            };
             result.message = `${i18next.t('error.processer', { ns: 'translator' })}${helpText}`;
             throw result;
         }
@@ -10785,13 +11618,12 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
             return result;
         } catch (err) {
             console.warn(err);
-            result.errors.push({
-                error: {
-                    message: err.message,
-                    stack: err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;'),
-                    enumerable: err,
-                }, source: 'CheckResponse'
-            });
+            result.error = {
+                message: err.message || null,
+                stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
+                enumerable: err,
+                source: 'checkResponse'
+            };
             result.message = `${i18next.t('error.checkResponse', { ns: 'translator' })}${helpText}`;
             throw result;
         }
@@ -10807,6 +11639,44 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
             };
             return detailedError;
         }
+    });
+}
+
+/**
+ * 查询服务余额
+ * @param {Object} quotaConfig - 配额配置对象
+ * @returns {Promise} 返回包含余额信息的 Promise
+ */
+async function queryServerBalance(quotaConfig) {
+    // 确保传入了有效的配置对象
+    if (!quotaConfig || !quotaConfig.url) {
+        return Promise.reject(new Error('Quota configuration is missing.'));
+    }
+
+    // 准备请求选项
+    const requestOptions = {
+        method: quotaConfig.method || 'GET',
+        url: quotaConfig.url,
+        headers: {
+            ...Object.assign({}, ...quotaConfig.header)
+        },
+        data: JSON.stringify({ ...Object.assign({}, ...quotaConfig.data) })
+    };
+
+    // 发送请求并返回 Promise
+    return GMRequest(requestOptions).then(response => {
+        try {
+            const responseData = JSON.parse(response.responseText);
+            // 从响应数据中提取余额
+            const surplusPath = quotaConfig.surplus;
+            const surplusValue = evaluatePathOrExpression(responseData, surplusPath);
+            return surplusValue;
+        } catch (error) {
+            return Promise.reject(new Error('Failed to parse balance response.'));
+        }
+    }).catch(error => {
+        console.warn('Error querying balance:', error);
+        return Promise.reject(error);
     });
 }
 
@@ -10834,7 +11704,7 @@ async function loadRequiredFunctions() {
         initI18next(), // i18next初始化
         initButtonFunc(), // 加载按钮相关函数
         checkScriptVersion(), // 更新检查
-        ...(is_acmsguru ? [acmsguruReblock()] : []) // 为acmsguru题面重新划分div
+        ...(OJBetter.typeOfPage.is_acmsguru ? [acmsguruReblock()] : []) // 为acmsguru题面重新划分div
     ]);
 }
 
@@ -10846,23 +11716,22 @@ function initOnDOMReady() {
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
     localizeWebsite(); // 网站本地化替换
-    addtargetAreaCss(); // 加载鼠标悬浮覆盖层css
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
-    if (expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
-    if (renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
-    if (is_problem) {
+    if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
+    if (OJBetter.basic.renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
+    if (OJBetter.typeOfPage.is_problem) {
         const problemPageLinkbar = new ProblemPageLinkbar(); // 创建题目页相关链接栏
-        if (showJumpToLuogu) CF2luogu(problemPageLinkbar); // 跳转到洛谷按钮
-        if (showClistRating_problem) showRatingByClist_problem(problemPageLinkbar); // problem页显示Rating
+        if (OJBetter.basic.showJumpToLuogu) CF2luogu(problemPageLinkbar); // 跳转到洛谷按钮
+        if (OJBetter.clist.enabled.problem) showRatingByClist_problem(problemPageLinkbar); // problem页显示Rating
     }
-    if (is_contest) {
-        if (showClistRating_contest) showRatingByClist_contest(); // contest页显示Rating
+    if (OJBetter.typeOfPage.is_contest) {
+        if (OJBetter.clist.enabled.contest) showRatingByClist_contest(); // contest页显示Rating
     }
-    if (is_problemset) {
-        if (showClistRating_problemset) showRatingByClist_problemset(); // problemset页显示Rating
+    if (OJBetter.typeOfPage.is_problemset) {
+        if (OJBetter.clist.enabled.problemset) showRatingByClist_problemset(); // problemset页显示Rating
     }
-    if (is_problem && problemPageCodeEditor) {
+    if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
 }
@@ -10880,9 +11749,9 @@ function onResourcesReady(loadingMessage) {
  * 可以异步并行的函数
  */
 function initializeInParallel(loadingMessage) {
-    if (darkMode == "dark") darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
-    if (commentPaging) CommentPagination(); // 评论区分页
-    if (commentTranslationMode == "2") multiChoiceTranslation(); // 选段翻译支持
+    if (OJBetter.basic.darkMode == "dark") darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
+    if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
+    if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
 }
 
 /**
@@ -10890,16 +11759,16 @@ function initializeInParallel(loadingMessage) {
  */
 async function initializeSequentially(loadingMessage) {
     await addConversionButton(); // 添加MD/复制/翻译按钮
-    if ((is_problem || is_completeProblemset) && memoryTranslateHistory) {
+    if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
         await initTransResultsRecover(); // 翻译结果恢复功能初始化
     }
-    if (autoTranslation) {
+    if (OJBetter.translation.auto.enabled) {
         await initTransWhenViewable(); // 自动翻译
     }
-    if (standingsRecolor && is_cfStandings) {
+    if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
 }
 
 /**
@@ -10910,7 +11779,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingMessage = new LoadingMessage();
     await loadRequiredFunctions(); // 加载必须的函数
     initOnDOMReady(); // DOM加载后即可执行的函数
-    if (showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
+    if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
 
     // 检查页面资源是否已经完全加载
     if (document.readyState === 'complete') {
