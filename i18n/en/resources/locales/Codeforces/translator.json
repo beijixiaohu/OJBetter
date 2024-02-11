@@ -13,7 +13,7 @@
         "openai_isStream": "Current stream transfer is not enabled. You will have to wait a long time before you can see the result, please be patient."
     },
     "error": {
-        "basic": "\n\nPlease try again or replace the translation interface.\n\nTap the Debug icon in the top right toolbar to see more information",
+        "basic": "\n\nPlease retry or change the translation interface.\n\nClick on the Raw Data button in the upper right toolbar for more information",
         "unexpected": "**:( Translation encountered problem：** unexpected error\n\nPlease try again or replace the translation interface",
         "youdao413": "413 Request Entity Too Large\n\nText length exceeds the limit of the channel translation interface, please replace other translation interfaces",
         "deepl429": "Requests are too frequent, please try again later and try again\n\nthat is usually due to frequent translations within a short time, or to a one-time translation of more than 5,000 characters.\n\nDeepL limits the number and frequency of translations,\n\nthis is temporary, returning to normal after some time",
