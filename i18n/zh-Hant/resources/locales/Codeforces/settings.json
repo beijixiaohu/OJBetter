@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "保護**號",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签<code>\\\\<strong\\\\></code>，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
             },
             "enableLinkProtection": {
                 "title": "保護連結",
-                "helpText": "<strong>僅在API模式下使用官方API時，該選項才會生效</strong><p>DeepL 可能會錯誤處理MarkDown 中的鏈接，</p><p>開啟此選項後，會將文字中的連結符號 <strong>[]()</strong> 替換為HTML標籤<code>\\\\<a\\\\></code>，並在翻譯請求頭中自動加入<code>tag_handling: html</code>來使得DeepL不破壞連結以及其中的內容</p>"
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "提交按鈕位置",
-                "helpText": "<p>選擇程式碼測試和提交按鈕的位置</p>",
+                "helpText": "選擇程式碼測試和提交按鈕的位置",
                 "options": {
                     "bottom": "底部",
                     "top": "頂欄"
