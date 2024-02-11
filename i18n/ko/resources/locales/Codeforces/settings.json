@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "보호** 아니요.",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "helpText": "<strong>이 옵션은 공식 API가 API 모드에서 사용되는 경우에만 작동합니다</strong><p>DeepL 마크다운에서 강조를 잘못 처리할 수 있습니다 <strong>**</strong> </p><p>이로 인해 번역 결과에서 래핑된 콘텐츠가 누락될 수 있습니다.</p><p>이 옵션을 켜면 텍스트의 강조가 <strong>**</strong> HTML 태그로 대체되고<code>tag_handling: html</code>번역 요청 헤더에 자동으로 추가되어 DeepL 강조와 해당 콘텐츠가 깨지지 않도록</p>"
             },
             "enableLinkProtection": {
                 "title": "링크 보호",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "helpText": "<strong>이 옵션은 공식 API를 API 모드에서 사용하는 경우에만 작동합니다</strong><p>DeepL 마크다운에서 링크를 잘못 처리할 수 있음,</p><p>이 옵션을 켜면 텍스트 <strong>[]()</strong> 의 링크 기호를 HTML 태그로 바꾸고 번역 요청 헤더에<code>tag_handling: html</code>을 자동으로 추가하여 DeepL 링크와 해당 콘텐츠가 손상되지 않도록 합니다</p>."
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "제출 버튼 위치",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "helpText": "코드 테스트 및 제출 버튼의 위치를 선택합니다.",
                 "options": {
                     "bottom": "bottoms",
                     "top": "난간"
