@@ -9,6 +9,7 @@
     },
     "transingTip": {
         "basic": "正在使用 {{server}} 翻译中……请稍等",
+        "deeplApi":"正在使用 DeepL API 翻译中……请稍等\n\n应用的配置： {{deepl_configName}}\n\n",
         "openai": "正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： {{openai_name}}\n\n",
         "openai_isStream": "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待"
     },
@@ -27,5 +28,9 @@
     },
     "translateDiv": {
         "topTextSuffix": " 翻译"
+    },
+    "contextMenu": {
+        "edit": "编辑",
+        "delete": "删除"
     }
 }

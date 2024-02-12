@@ -4066,8 +4066,14 @@ class ConfigManager {
      */
     createContextMenu() {
         const menu = $(`<div id='config_bar_menu' style='display: none;'></div>`);
-        const editItem = $(`<div class='config_bar_menu_item' id='config_bar_menu_edit'>修改</div>`);
-        const deleteItem = $(`<div class='config_bar_menu_item' id='config_bar_menu_delete'>删除</div>`);
+        const editItem = $(`
+        <div class='config_bar_menu_item' id='config_bar_menu_edit'>
+            ${i18next.t('contextMenu.edit', { ns: 'translator' })}
+        </div>`);
+        const deleteItem = $(`
+        <div class='config_bar_menu_item' id='config_bar_menu_delete'>
+            ${i18next.t('contextMenu.delete', { ns: 'translator' })}
+        </div>`);
         menu.append(editItem);
         menu.append(deleteItem);
         this.editItem = editItem;
@@ -6791,7 +6797,7 @@ class TranslateDiv {
     }
 
     /**
-     * 设置翻译框顶部的文本
+     * 获取翻译框顶部的文本
      * @returns {string} 返回翻译框顶部的文本
      */
     getTopText() {
@@ -7440,10 +7446,11 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         let rawData = {};
         try {
             if (translation == "deepl") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 if (OJBetter.deepl.config.type == 'free') {
                     rawData = await translate_deepl(text);
+                    translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 } else if (OJBetter.deepl.config.type == 'api') {
+                    translateDiv.updateTranslateDiv(`${i18next.t('transingTip.deeplApi', { ns: 'translator', deepl_configName: OJBetter.deepl.config.name })}`, is_renderLaTeX);
                     if (OJBetter.deepl.config.apiGenre == 'deeplx') {
                         rawData = await translate_deeplx(text);
                     } else {
@@ -9024,26 +9031,30 @@ async function createMonacoEditor(language, form, support) {
     /**
      * LSP连接状态指示
      */
-    let lspStateDiv = $(`
+    const lspStateButton = $(`
     <div id="lspStateDiv" class="ojb_btn ojb_btn_popover top loading">
         <i class="iconfont">&#xe658;</i>
         <span class="popover_content">${i18next.t('lsp.connect', { ns: 'codeEditor' })}</span>
     </div>
     `).on('click', () => {
-        OJB_showModal(lspStateDiv);
-        OJB_addDraggable(lspStateDiv);
-        LSPLog.show();
+        OJB_showModal(LSPLogDiv);
+        LSPLogDiv.show();
     });
-    form.topRightDiv.prepend(lspStateDiv);
+    form.topRightDiv.prepend(lspStateButton);
 
-    var LSPLog = $(`<div id="LSPLog" style="display: none;"><button class="ojb_btn">${i18next.t('close', { ns: 'common' })}</button>
-        <div id="LSPLogList" style="overflow: auto;"></div><div>`);
-    $('body').append(LSPLog);
-    var LSPLogList = $('<ul></ul>');
+    const LSPLogDiv = $(`
+    <dialog id="LSPLog" style="display: none;">
+        <button class="ojb_btn">${i18next.t('close', { ns: 'common' })}</button>
+        <div id="LSPLogList" style="overflow: auto;"></div>
+    <dialog>`);
+    $('body').append(LSPLogDiv);
+
+    const LSPLogList = $('<ul></ul>');
     $('#LSPLogList').append(LSPLogList);
-    var closeButton = LSPLog.find('button');
+
+    const closeButton = LSPLogDiv.find('button');
     closeButton.on('click', function () {
-        OJB_closeModal(lspStateDiv);
+        OJB_closeModal(LSPLogDiv);
     });
 
     /**
@@ -9088,14 +9099,14 @@ async function createMonacoEditor(language, form, support) {
     var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
     languageSocket.onopen = () => {
         languageSocketState = true;
-        lspStateDiv.setButtonPopover(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
+        lspStateButton.setButtonPopover(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
         pushLSPLogMessage("info", "languageSocket 连接已建立");
     };
     languageSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.id === 0 && message.result) {
             // 初始化完成
-            lspStateDiv.setButtonState('success', i18next.t('lsp.connected', { ns: 'codeEditor' }));
+            lspStateButton.setButtonState('success', i18next.t('lsp.connected', { ns: 'codeEditor' }));
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
             CFBetter_monaco.openDocRequest(); // 打开文档
@@ -9126,7 +9137,7 @@ async function createMonacoEditor(language, form, support) {
     };
     languageSocket.onclose = (event) => {
         languageSocketState = false;
-        lspStateDiv.setButtonState('error', i18next.t('lsp.error', { ns: 'codeEditor' }));
+        lspStateButton.setButtonState('error', i18next.t('lsp.error', { ns: 'codeEditor' }));
         pushLSPLogMessage("warn", "languageSocket 连接已关闭");
     };
 
