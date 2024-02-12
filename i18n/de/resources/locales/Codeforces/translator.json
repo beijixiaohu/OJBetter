@@ -9,6 +9,7 @@
     },
     "transingTip": {
         "basic": "In Gebrauch {{server}} Übersetzung in Arbeit……Bitte warten Sie.",
+        "deeplApi": "In Arbeit DeepL API-Übersetzung in Arbeit……Bitte warten\n\nKonfiguration der Anwendung： {{deepl_configName}}\n\n",
         "openai": "ChatGPT-Übersetzung in Arbeit……Bitte warten\n\nKonfiguration der Anwendung： {{openai_name}}\n\n",
         "openai_isStream": "Das Streaming ist derzeit nicht aktiviert, Sie müssen also lange warten, bis Sie die Ergebnisse sehen können. Bitte haben Sie etwas Geduld!"
     },
@@ -27,5 +28,9 @@
     },
     "translateDiv": {
         "topTextSuffix": " Rendering"
+    },
+    "contextMenu": {
+        "edit": "Compiler",
+        "delete": "Entfernen von"
     }
 }
