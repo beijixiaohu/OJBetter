@@ -86,11 +86,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "Protezione** No.",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "helpText": "<strong>Questa opzione funziona solo se l'API ufficiale è utilizzata in modalità API</strong><p>DeepL può gestire in modo errato l'enfasi in MarkDown <strong>**</strong> </p><p>Questo può far sì che il risultato della traduzione manchi del suo contenuto avvolto.</p><p>Quando questa opzione è attivata, l'enfasi nel testo <strong>**</strong> viene sostituita con tag HTML e<code>tag_handling: html</code>viene aggiunto automaticamente all'intestazione della richiesta di traduzione, in modo che DeepL non interrompa l'enfasi e il suo contenuto</p>"
             },
             "enableLinkProtection": {
                 "title": "Proteggere i link",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "helpText": "<strong>Questa opzione funziona solo se l'API ufficiale viene utilizzata in modalità API</strong><p>DeepL può gestire in modo errato i collegamenti in MarkDown,</p><p>Quando questa opzione è attivata, sostituisce i simboli di collegamento nel testo <strong>[]()</strong> con i tag HTML e aggiunge automaticamente<code>tag_handling: html</code>all'intestazione della richiesta di traduzione per evitare che DeepL interrompa i collegamenti e i loro contenuti</p>"
             }
         },
         "chatgpt": {
@@ -233,7 +233,7 @@
             },
             "submitButtonPosition": {
                 "label": "Posizione del pulsante Invia",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "helpText": "Scelga la posizione dei pulsanti di test del codice e di invio.",
                 "options": {
                     "bottom": "fondi",
                     "top": "parapetto"

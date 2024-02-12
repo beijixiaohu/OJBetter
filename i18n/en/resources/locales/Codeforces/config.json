@@ -14,31 +14,31 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "Quota inquiry",
+            "alert": "<p>If you are using a service that supports quota lookup, you can configure it here</p>",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "API Address.",
+                "placeholder": "Please enter the API address",
+                "tipText": "<p>Fill in the API address of the query amount and the script will automatically send a request to that address</p>"
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "Request Type.",
+                "tipText": "<p>Select the type of request for query amount</p>"
             },
             "header": {
                 "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "placeholder": "Fill in the key-value pairs added to the request header here",
                 "tipText": "<p>Example：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "data": {
                 "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "placeholder": "Fill in the key-value pairs added to the request data here",
                 "tipText": "<p>Example：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "label": "Data path.",
+                "placeholder": "Please enter the JSON path, using dot separators",
+                "tipText": "<p>Fill in the balance value in the interface to return the path in the JSON, the script will automatically get the value under the path, support each other four operations</p><p>Sample format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },

@@ -14,31 +14,31 @@
             }
         },
         "quota": {
-            "title": "额度查询",
-            "alert": "<p>如果你使用的服务支持额度查询，可以在此配置</p>",
+            "title": "제한 문의",
+            "alert": "<p>쿼터 쿼리를 지원하는 서비스를 사용하는 경우 여기에서 구성할 수 있습니다(</p>).",
             "url": {
-                "label": "API地址:",
-                "placeholder": "请输入API地址",
-                "tipText": "<p>填写查询额度的API地址，脚本会自动向该地址发送请求</p>"
+                "label": "API 주소.",
+                "placeholder": "API 주소를 입력하세요.",
+                "tipText": "<p>쿼리 금액의 API 주소를 입력하면 스크립트가 자동으로 해당 주소(</p>)로 요청을 보냅니다."
             },
             "method": {
-                "label": "请求类型:",
-                "tipText": "<p>选择查询额度的请求类型</p>"
+                "label": "요청 유형.",
+                "tipText": "<p>조회 금액 요청 유형 선택</p>"
             },
             "header": {
-                "label": "header",
-                "placeholder": "在这里填写向请求header中添加的键值对",
+                "label": "헤더",
+                "placeholder": "여기에서 요청 헤더에 추가된 키-값 쌍을 입력합니다.",
                 "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "data": {
-                "label": "data",
-                "placeholder": "在这里填写向请求data中添加的键值对",
+                "label": "데이터",
+                "placeholder": "요청 데이터에 추가된 키-값 쌍을 여기에 입력합니다.",
                 "tipText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>name1 : 123<br>name2 : cccc</p></div>"
             },
             "surplus": {
-                "label": "数据路径:",
-                "placeholder": "请输入JSON路径，使用点分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "label": "데이터 경로.",
+                "placeholder": "점 구분 기호를 사용하여 JSON 경로를 입력하세요.",
+                "tipText": "<p>인터페이스에 잔액 값을 입력하여 JSON의 경로를 반환하면 스크립트가 자동으로 경로 아래의 값을 가져오고 서로 네 가지 작업을 지원합니다</p><p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },
