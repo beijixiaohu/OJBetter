@@ -9,6 +9,7 @@
     },
     "transingTip": {
         "basic": "{{server}} 翻訳中……しばらくお待ちください",
+        "deeplApi": "進行中 DeepL API の翻訳が進行中……しばらくお待ちください\n\nアプリケーションの構成： {{deepl_configName}}\n\n",
         "openai": "ChatGPTの翻訳中……ちょっと待つ\n\n彼女の設定： {{openai_name}}\n\n",
         "openai_isStream": "ストリーミングは現在使用中ではありません。結果を確認するためには少々お待ちください。"
     },
@@ -27,5 +28,9 @@
     },
     "translateDiv": {
         "topTextSuffix": " 翻訳"
+    },
+    "contextMenu": {
+        "edit": "コンパイラ",
+        "delete": "削除"
     }
 }
