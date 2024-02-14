@@ -5,7 +5,7 @@
         "translation": "Rendering",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "Kompatibilität"
+        "dev": "调试维护"
     },
     "common": {
         "configManageTitle": "Konfigurationsmanagement",
@@ -273,11 +273,51 @@
             "performanceWarning": "Hinweis：Zu viele statische ergänzende Regeln können die Leistung beeinträchtigen"
         }
     },
-    "compatibilitySettings": {
-        "title": "Kompatible Einstellungen",
-        "loaded": {
-            "label": "Kein Warten auf das Laden von Seitenressourcen",
-            "helpText": "<p>Um zu verhindern, dass unerwartete Fehler durch die Ausführung von Skripten auftreten, bevor die Ressourcen der Seite fertig geladen sind (vor allem verschiedene js), warten Skripte standardmäßig auf das Ereignis window.onload</p><p>Wenn die Lademeldung oben auf Ihrer Seite immer bei：\"Waiting for page resources to load\" bleibt, obwohl die Seite bereits fertig geladen ist</p><p><u>, sollten Sie zunächst prüfen, ob ob es sich um ein Netzwerkproblem handelt,</u></p><p>wenn nicht, kann es daran liegen, dass das Ereignis window.onload in Ihrem Browser zu früh ausgelöst wird (vor DOMContentLoaded),</p><p>dann können Sie versuchen, diese Option zu aktivieren, um nicht mehr auf das Ereignis window.onload zu warten</p><p><u>Hinweis：wenn Sie keines der oben genannten Probleme haben, schalten Sie diese Option bitte nicht ein</u></p>"
+    "devSettings": {
+        "title": "调试维护",
+        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
+        "load": {
+            "title": "加载",
+            "notWaiteLoaded": {
+                "label": "不等待页面资源完全加载",
+                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+            }
+        },
+        "l10n": {
+            "title": "脚本本地化",
+            "refreshScrpitCache": {
+                "label": "刷新缓存",
+                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
+                "button": "刷新"
+            }
+        },
+        "indexedDB": {
+            "title": "IndexedDB数据库",
+            "clear": {
+                "label": "清除数据",
+                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
+                "button": "清除"
+            },
+            "inputOrExport": {
+                "label": "导入/导出数据",
+                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
+                "export": "导出",
+                "import": "importieren (Daten)"
+            }
+        },
+        "configuration": {
+            "title": "脚本配置",
+            "clear": {
+                "label": "清除配置",
+                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
+                "button": "清除"
+            },
+            "inputOrExport": {
+                "label": "导入/导出数据",
+                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
+                "export": "导出",
+                "import": "importieren (Daten)"
+            }
         }
     }
 }
