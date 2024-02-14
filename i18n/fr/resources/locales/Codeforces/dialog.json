@@ -45,5 +45,37 @@
             "être",
             "bouché"
         ]
+    },
+    "isClearDatabase": {
+        "title": "La base de données est-elle vidée ?",
+        "content": "Êtes-vous sûr de vouloir vider la base de données ? Elle est irrécupérable.",
+        "buttons": [
+            "clair",
+            "annulations"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Réinitialise-t-il toutes les configurations ?",
+        "content": "Êtes-vous sûr de vouloir réinitialiser toutes les configurations ? C'est irrécupérable.",
+        "buttons": [
+            "reprovision",
+            "annulations"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "是否导入数据库？",
+        "content": "你确定要导入数据库吗？这将导致现有数据库数据被覆盖，这是不可恢复的。",
+        "buttons": [
+            "导入",
+            "annulations"
+        ]
+    },
+    "isImportSettings": {
+        "title": "是否导入设置？",
+        "content": "你确定要导入设置吗？这将导致现有设置数据被覆盖，这是不可恢复的。",
+        "buttons": [
+            "导入",
+            "annulations"
+        ]
     }
 }
