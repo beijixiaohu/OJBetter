@@ -1,0 +1,18 @@
+{
+  "AcWingBetter!": {
+    "dev": "3.26",
+    "release": "3.27"
+  },
+  "AtcoderBetter!": {
+    "dev": "1.12",
+    "release": "1.12"
+  },
+  "CodeforcesBetter!": {
+    "dev": "1.72.33",
+    "release": "1.72"
+  },
+  "NowcoderBetter!": {
+    "dev": "1.11",
+    "release": "1.11"
+  }
+}
