@@ -5,7 +5,7 @@
         "translation": "l'équarrissage",
         "clist": "Clist",
         "monaco": "Monaco",
-        "dev": "调试维护"
+        "dev": "Maintenance"
     },
     "common": {
         "configManageTitle": "gestion de la configuration",
@@ -274,49 +274,49 @@
         }
     },
     "devSettings": {
-        "title": "调试维护",
-        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
+        "title": "Maintenance",
+        "notice": "<p>Note：Normalement, vous n'avez pas besoin d'utiliser ces fonctions.</p><p>Si vous n'êtes pas sûr de la signification des fonctions, ne les utilisez pas !</p>",
         "load": {
-            "title": "加载",
+            "title": "(de la cargaison, etc.) chargement",
             "notWaiteLoaded": {
-                "label": "不等待页面资源完全加载",
-                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+                "label": "Pas d'attente de chargement complet des ressources de la page",
+                "helpText": "<p>Si le message d'invite de chargement reste toujours：\"Waiting for page resources to load\" alors que la page est entièrement chargée</p><p>, vous devriez d'abord vérifier s'il s'agit d'un problème de réseau,</p><p>si ce n'est pas le cas, puis essayer d'activer l'option et d'aller sur Github pour signaler l'erreur, y compris les informations relatives à la version du navigateur et au système d'exploitation, afin qu'elle puisse être analysée et reproduite.</p>"
             }
         },
         "l10n": {
-            "title": "脚本本地化",
+            "title": "Localisation du scénario",
             "refreshScrpitCache": {
-                "label": "刷新缓存",
-                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
-                "button": "刷新"
+                "label": "Rafraîchir le cache",
+                "helpText": "<p>Les données localisées du script sont mises en cache localement pour accélérer le chargement, avec un cycle de rafraîchissement automatique d'une semaine, et vous pouvez forcer un rafraîchissement immédiat des données en cliquant sur Refresh</p>.",
+                "button": "rafraîchir (fenêtre d'ordinateur)"
             }
         },
         "indexedDB": {
-            "title": "IndexedDB数据库",
+            "title": "Base de données IndexedDB",
             "clear": {
-                "label": "清除数据",
-                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
-                "button": "清除"
+                "label": "Effacer les données",
+                "helpText": "<p>L'effacement des données locales d'IndexedDB effacera toutes les données de la base de données CFBetter, soyez prudent</p>.",
+                "button": "dégagement"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
-                "export": "导出",
-                "import": "导入"
+                "label": "Importer/exporter des données",
+                "helpText": "<p>Vous pouvez exporter les données actuelles d'IndexedDB ou importer des données exportées par d'autres personnes</p>",
+                "export": "dériver",
+                "import": "importation (données)"
             }
         },
         "configuration": {
-            "title": "脚本配置",
+            "title": "Configuration des scripts",
             "clear": {
-                "label": "清除配置",
-                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
-                "button": "清除"
+                "label": "Effacer la configuration",
+                "helpText": "<p>L'effacement des données de configuration des scripts locaux réinitialisera la configuration des scripts à son état initial, veuillez donc procéder avec prudence</p>",
+                "button": "dégagement"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
-                "export": "导出",
-                "import": "导入"
+                "label": "Importer/exporter des données",
+                "helpText": "<p>Vous pouvez exporter la configuration actuelle du script ou importer une configuration déjà exportée</p>",
+                "export": "dériver",
+                "import": "importation (données)"
             }
         }
     }
