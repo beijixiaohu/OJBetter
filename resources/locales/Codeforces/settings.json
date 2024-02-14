@@ -5,13 +5,13 @@
         "translation": "翻译",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "兼容"
+        "dev": "调试维护"
     },
-    "common":{
-        "configManageTitle":"配置管理",
-        "missing":{
-            "radio":"当前设置要求必须添加并选中一项配置",
-            "input":"当前设置要求必须填写内容"
+    "common": {
+        "configManageTitle": "配置管理",
+        "missing": {
+            "radio": "当前设置要求必须添加并选中一项配置",
+            "input": "当前设置要求必须填写内容"
         }
     },
     "basicSettings": {
@@ -54,9 +54,9 @@
         "title": "本地化设置",
         "scriptLanguageLabel": "脚本语言",
         "websiteLanguageLabel": "网站语言",
-        "notice":{
-            "1":"<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>点击这里</a>，即可前往协助改进。</p><p>感谢你的贡献！</p>",
-            "2":"<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎你前往完善<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 本地化规则 </a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+        "notice": {
+            "1": "<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>点击这里</a>，即可前往协助改进。</p><p>感谢你的贡献！</p>",
+            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎你前往完善<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 本地化规则 </a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
         }
     },
     "translationSettings": {
@@ -75,22 +75,22 @@
                 }
             }
         },
-        "deepl":{
-            "mode":{
-                "title":"模式",
-                "select":{
-                    "free":"免费",
-                    "api":"API"
+        "deepl": {
+            "mode": {
+                "title": "模式",
+                "select": {
+                    "free": "免费",
+                    "api": "API"
                 },
-                "helpText":"选择DeepL服务的模式，默认为免费模式，不需要提供API，但是受到官方较多的频率限制。API模式下，需要添加配置，可以选择官方API：API free、API Pro，以及非官方的deeplx"
+                "helpText": "选择DeepL服务的模式，默认为免费模式，不需要提供API，但是受到官方较多的频率限制。API模式下，需要添加配置，可以选择官方API：API free、API Pro，以及非官方的deeplx"
             },
-            "enableEmphasisProtection":{
-                "title":"保护**号",
-                "helpText":"<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+            "enableEmphasisProtection": {
+                "title": "保护**号",
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
             },
-            "enableLinkProtection":{
-                "title":"保护链接",
-                "helpText":"<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+            "enableLinkProtection": {
+                "title": "保护链接",
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {
@@ -231,12 +231,12 @@
                 "label": "鼠标滚动锁定",
                 "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
             },
-            "submitButtonPosition":{
-                "label":"提交按钮位置",
-                "helpText":"选择代码测试和提交按钮的位置",
-                "options":{
-                    "bottom":"底部",
-                    "top":"顶栏"
+            "submitButtonPosition": {
+                "label": "提交按钮位置",
+                "helpText": "选择代码测试和提交按钮的位置",
+                "options": {
+                    "bottom": "底部",
+                    "top": "顶栏"
                 }
             }
         },
@@ -273,11 +273,51 @@
             "performanceWarning": "注意：过多的静态补全规则会影响性能"
         }
     },
-    "compatibilitySettings": {
-        "title": "兼容设置",
-        "loaded": {
-            "label": "不等待页面资源加载",
-            "helpText": "<p>为了防止在页面资源未加载完成前（主要是各种js）执行脚本产生意外的错误，脚本默认会等待 window.onload 事件</p><p>如果你的页面上方的加载信息始终停留在：“等待页面资源加载”，即使页面已经完成加载</p><p><u>你首先应该确认是否是网络问题，</u></p><p>如果不是，那这可能是由于 window.onload 事件在你的浏览器中触发过早（早于DOMContentLoaded），</p><p>你可以尝试开启该选项来不再等待 window.onload 事件</p><p><u>注意：如果没有上述问题，请不要开启该选项</u></p>"
+    "devSettings": {
+        "title": "调试维护",
+        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
+        "load": {
+            "title": "加载",
+            "notWaiteLoaded": {
+                "label": "不等待页面资源完全加载",
+                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+            }
+        },
+        "l10n": {
+            "title": "脚本本地化",
+            "refreshScrpitCache": {
+                "label": "刷新缓存",
+                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
+                "button": "刷新"
+            }
+        },
+        "indexedDB": {
+            "title": "IndexedDB数据库",
+            "clear": {
+                "label": "清除数据",
+                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
+                "button": "清除"
+            },
+            "inputOrExport": {
+                "label": "导入/导出数据",
+                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
+                "export": "导出",
+                "import": "导入"
+            }
+        },
+        "configuration": {
+            "title": "脚本配置",
+            "clear": {
+                "label": "清除配置",
+                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
+                "button": "清除"
+            },
+            "inputOrExport": {
+                "label": "导入/导出数据",
+                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
+                "export": "导出",
+                "import": "导入"
+            }
         }
     }
 }
