@@ -5,7 +5,7 @@
         "translation": "Translation",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "Compatible"
+        "dev": "Maintenance"
     },
     "common": {
         "configManageTitle": "configuration management",
@@ -273,11 +273,51 @@
             "performanceWarning": "Note：Too many static complementary rules can affect performance"
         }
     },
-    "compatibilitySettings": {
-        "title": "Compatible Settings",
-        "loaded": {
-            "label": "No waiting for page resources to load",
-            "helpText": "<p>To prevent unexpected errors from executing scripts before the page resources have finished loading (mainly various js), scripts wait for the window.onload event by default</p><p>If the loading message at the top of your page always stays at：\"Waiting for page resources to load\" even though the page has already finished loading</p><p><u>you should first check to see if whether it is a network problem,</u></p><p>if not, it may be due to the window.onload event being triggered too early in your browser (before DOMContentLoaded),</p><p>you can try to turn on this option to stop waiting for the window.onload event</p><p><u>Note：if you don't have any of the above problems, please don't turn on this option</u></p>"
+    "devSettings": {
+        "title": "Maintenance",
+        "notice": "<p>Note：Normally you do not need to use these functions.</p><p>If you are not sure of the meaning of the functions, do not operate them!</p>",
+        "load": {
+            "title": "(of cargo etc) load",
+            "notWaiteLoaded": {
+                "label": "No waiting for page resources to fully load",
+                "helpText": "<p>If the loading prompt message always stays at：\"Waiting for page resources to load\" even though the page is fully loaded</p><p>you should first confirm if it's a network issue,</p><p>if not, then try to turn on the option and head to Github to report the error, including browser version information and operating system information, so that you can analyze the replication.</p>"
+            }
+        },
+        "l10n": {
+            "title": "Script Localization",
+            "refreshScrpitCache": {
+                "label": "Refresh Cache",
+                "helpText": "<p>The script's localized data is cached locally to speed up loading, with an automatic refresh cycle of one week, and you can force an immediate refresh of the data by clicking Refresh</p>",
+                "button": "refresh (computer window)"
+            }
+        },
+        "indexedDB": {
+            "title": "IndexedDB database",
+            "clear": {
+                "label": "Clear data",
+                "helpText": "<p>Clearing the local IndexedDB data will clear all data in the CFBetter database, please be careful</p>",
+                "button": "removals"
+            },
+            "inputOrExport": {
+                "label": "Import/export data",
+                "helpText": "<p>You can export the current IndexedDB data or import data exported by others</p>",
+                "export": "derive",
+                "import": "import (data)"
+            }
+        },
+        "configuration": {
+            "title": "Script Configuration",
+            "clear": {
+                "label": "Clear Configuration",
+                "helpText": "<p>Clearing the local script configuration data will reset the script configuration to its initial state, please proceed with caution</p>",
+                "button": "removals"
+            },
+            "inputOrExport": {
+                "label": "Import/export data",
+                "helpText": "<p>You can export the current script configuration, or import an already exported configuration</p>",
+                "export": "derive",
+                "import": "import (data)"
+            }
         }
     }
 }
