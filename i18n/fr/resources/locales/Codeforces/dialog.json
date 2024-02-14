@@ -63,18 +63,18 @@
         ]
     },
     "isImportDatabase": {
-        "title": "是否导入数据库？",
-        "content": "你确定要导入数据库吗？这将导致现有数据库数据被覆盖，这是不可恢复的。",
+        "title": "La base de données est-elle importée ?",
+        "content": "Êtes-vous sûr de vouloir importer la base de données ? Cette opération entraînera l'écrasement des données de la base existante, ce qui est irrécupérable.",
         "buttons": [
-            "导入",
+            "importation (données)",
             "annulations"
         ]
     },
     "isImportSettings": {
-        "title": "是否导入设置？",
-        "content": "你确定要导入设置吗？这将导致现有设置数据被覆盖，这是不可恢复的。",
+        "title": "Les paramètres sont-ils importés ?",
+        "content": "Êtes-vous sûr de vouloir importer les paramètres ? Cela entraînera l'écrasement des données de paramétrage existantes, ce qui est irrécupérable.",
         "buttons": [
-            "导入",
+            "importation (données)",
             "annulations"
         ]
     }
