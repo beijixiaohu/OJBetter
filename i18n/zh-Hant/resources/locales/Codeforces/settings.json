@@ -5,7 +5,7 @@
         "translation": "翻譯",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "相容"
+        "dev": "調試維護"
     },
     "common": {
         "configManageTitle": "配置管理",
@@ -273,11 +273,51 @@
             "performanceWarning": "注意：過多的靜態補全規則會影響效能"
         }
     },
-    "compatibilitySettings": {
-        "title": "相容設定",
-        "loaded": {
-            "label": "不等待頁面資源加載",
-            "helpText": "<p>為了防止在頁面資源未載入完成前（主要是各種js）執行腳本產生意外的錯誤，腳本預設會等待window.onload 事件</p><p>如果你的頁面上方的載入資訊始終停留在：「等待頁面資源載入”，即使頁面已經完成加載</p><p><u>你首先應該確認是否是網絡問題，</u></p><p>如果不是，那這可能是由於window.onload 事件在你的瀏覽器中觸發過早（早於DOMContentLoaded），</p><p>你可以嘗試開啟該選項來不再等待window.onload 事件</p><p><u>注意：如果沒有上述問題，請不要開啟該選項</u></p>"
+    "devSettings": {
+        "title": "調試維護",
+        "notice": "<p>注意：通常情況下你不需要使用這些功能。</p><p>不清楚各項功能的意義，請勿操作！</p>",
+        "load": {
+            "title": "載入",
+            "notWaiteLoaded": {
+                "label": "不等待頁面資源完全加載",
+                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+            }
+        },
+        "l10n": {
+            "title": "腳本本地化",
+            "refreshScrpitCache": {
+                "label": "刷新快取",
+                "helpText": "<p>腳本的在地化資料會快取在本地以加快載入速度，自動刷新週期為一周，你可以點擊刷新強制立即刷新資料</p>",
+                "button": "重新整理"
+            }
+        },
+        "indexedDB": {
+            "title": "IndexedDB資料庫",
+            "clear": {
+                "label": "清除數據",
+                "helpText": "<p>清除本地的IndexedDB數據，會清除CFBetter 資料庫中的所有數據，請謹慎操作</p>",
+                "button": "清除"
+            },
+            "inputOrExport": {
+                "label": "導入/匯出數據",
+                "helpText": "<p>你可以匯出目前的IndexedDB數據，或是匯入其他人匯出的數據</p>",
+                "export": "匯出",
+                "import": "導入"
+            }
+        },
+        "configuration": {
+            "title": "腳本配置",
+            "clear": {
+                "label": "清除配置",
+                "helpText": "<p>清除本地的腳本配置數據，會將腳本配置重設為初始狀態，請謹慎操作</p>",
+                "button": "清除"
+            },
+            "inputOrExport": {
+                "label": "導入/匯出數據",
+                "helpText": "<p>你可以匯出目前的腳本配置，或是匯入已經匯出的配置</p>",
+                "export": "匯出",
+                "import": "導入"
+            }
         }
     }
 }
