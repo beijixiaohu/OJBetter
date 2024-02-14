@@ -5,7 +5,7 @@
         "translation": "renderizado",
         "clist": "Clist",
         "monaco": "Mónaco",
-        "dev": "调试维护"
+        "dev": "Mantenimiento"
     },
     "common": {
         "configManageTitle": "gestión de la configuración",
@@ -274,48 +274,48 @@
         }
     },
     "devSettings": {
-        "title": "调试维护",
-        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
+        "title": "Mantenimiento",
+        "notice": "<p>Nota：Normalmente no necesitará utilizar estas funciones.</p><p>Si no está seguro del significado de las funciones, ¡no las utilice!</p>",
         "load": {
-            "title": "加载",
+            "title": "(de carga, etc.) carga",
             "notWaiteLoaded": {
-                "label": "不等待页面资源完全加载",
-                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+                "label": "No hay que esperar a que los recursos de la página se carguen por completo",
+                "helpText": "<p>Si el mensaje de aviso de carga se queda siempre en：\"Esperando a que se carguen los recursos de la página\" aunque la página esté completamente cargada</p><p>debería confirmar primero si se trata de un problema de red,</p><p>si no es así, entonces intente activar la opción e ir a Github para informar del error, incluyendo la información de la versión del navegador y del sistema operativo, para que pueda ser analizado y reproducido.</p>"
             }
         },
         "l10n": {
-            "title": "脚本本地化",
+            "title": "Localización de guiones",
             "refreshScrpitCache": {
-                "label": "刷新缓存",
-                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
-                "button": "刷新"
+                "label": "Actualizar caché",
+                "helpText": "<p>Los datos localizados del script se almacenan en caché local para acelerar la carga, con un ciclo de actualización automática de una semana, y puede forzar una actualización inmediata de los datos pulsando en Actualizar</p>.",
+                "button": "refrescar (ventana del ordenador)"
             }
         },
         "indexedDB": {
-            "title": "IndexedDB数据库",
+            "title": "Base de datos IndexedDB",
             "clear": {
-                "label": "清除数据",
-                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
-                "button": "清除"
+                "label": "Borrar datos",
+                "helpText": "<p>Borrar los datos locales de IndexedDB borrará todos los datos de la base de datos CFBetter, por favor tenga cuidado</p>",
+                "button": "liquidación"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
-                "export": "导出",
+                "label": "Importar/exportar datos",
+                "helpText": "<p>Puede exportar los datos actuales de IndexedDB o importar los datos exportados por otros</p>",
+                "export": "derivar",
                 "import": "importar (datos)"
             }
         },
         "configuration": {
-            "title": "脚本配置",
+            "title": "Configuración del script",
             "clear": {
-                "label": "清除配置",
-                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
-                "button": "清除"
+                "label": "Borrar configuración",
+                "helpText": "<p>Borrar los datos de configuración del script local restablecerá la configuración del script a su estado inicial, así que proceda con precaución</p>",
+                "button": "liquidación"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
-                "export": "导出",
+                "label": "Importar/exportar datos",
+                "helpText": "<p>Puede exportar la configuración actual del script, o importar una configuración ya exportada</p>",
+                "export": "derivar",
                 "import": "importar (datos)"
             }
         }
