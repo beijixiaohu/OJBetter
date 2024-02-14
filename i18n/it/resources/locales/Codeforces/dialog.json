@@ -45,5 +45,37 @@
             "essere",
             "intasato"
         ]
+    },
+    "isClearDatabase": {
+        "title": "Il database è stato svuotato?",
+        "content": "È sicuro di voler svuotare il database? Non è recuperabile.",
+        "buttons": [
+            "chiaro",
+            "cancellazioni"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Azzera tutte le configurazioni?",
+        "content": "È sicuro di voler resettare tutte le configurazioni? Non è recuperabile.",
+        "buttons": [
+            "riproposizione",
+            "cancellazioni"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "Il database è importato?",
+        "content": "È sicuro di voler importare il database? Ciò comporterà la sovrascrittura dei dati del database esistente, il che è irrecuperabile.",
+        "buttons": [
+            "importare (dati)",
+            "cancellazioni"
+        ]
+    },
+    "isImportSettings": {
+        "title": "Le impostazioni sono importate?",
+        "content": "È sicuro di voler importare le impostazioni? Questo causerà la sovrascrittura dei dati delle impostazioni esistenti, il che è irrecuperabile.",
+        "buttons": [
+            "importare (dati)",
+            "cancellazioni"
+        ]
     }
 }
