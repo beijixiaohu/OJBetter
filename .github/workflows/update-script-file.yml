@@ -12,12 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '20'
 
       - name: Read versions and update JSON
         run: node .github/scripts/update-version.js
@@ -26,7 +26,7 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add versions.json
+          git add script/versions.json
           git commit -m "Update script versions file" -a || echo "No changes to commit"
           git push
   sync_to_oss:
