@@ -9,6 +9,7 @@
     },
     "transingTip": {
         "basic": "In uso {{server}} Traduzione in corso……Attendere prego.",
+        "deeplApi": "In corso DeepL Traduzione API in corso……Attendere\n\nConfigurazione dell'applicazione： {{deepl_configName}}\n\n",
         "openai": "Traduzione ChatGPT in corso……Attendere\n\nConfigurazione dell'applicazione： {{openai_name}}\n\n",
         "openai_isStream": "Lo streaming non è attualmente abilitato, dovrà attendere a lungo per vedere i risultati, la preghiamo di essere paziente!"
     },
@@ -27,5 +28,9 @@
     },
     "translateDiv": {
         "topTextSuffix": " rendering"
+    },
+    "contextMenu": {
+        "edit": "compilatore",
+        "delete": "rimozione"
     }
 }

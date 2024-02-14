@@ -5,7 +5,7 @@
         "translation": "renderizado",
         "clist": "Clist",
         "monaco": "Mónaco",
-        "compatibility": "compatibilidad"
+        "dev": "Mantenimiento"
     },
     "common": {
         "configManageTitle": "gestión de la configuración",
@@ -273,11 +273,51 @@
             "performanceWarning": "Nota：Demasiadas reglas complementarias estáticas pueden afectar al rendimiento"
         }
     },
-    "compatibilitySettings": {
-        "title": "Ajustes compatibles",
-        "loaded": {
-            "label": "No hay que esperar a que se carguen los recursos de la página",
-            "helpText": "<p>Para evitar errores inesperados por la ejecución de scripts antes de que los recursos de la página hayan terminado de cargarse (principalmente varios js), los scripts esperan al evento window.onload por defecto</p><p>Si el mensaje de carga en la parte superior de su página siempre se queda en：\"Esperando a que se carguen los recursos de la página\" aunque la página ya haya terminado de cargarse</p><p><u>debería comprobar primero si si se trata de un problema de red,</u></p><p>si no es así, puede deberse a que el evento window.onload se active demasiado pronto en su navegador (antes de DOMContentLoaded),</p><p>puede intentar activar esta opción para dejar de esperar al evento window.onload</p><p><u>Nota：si no tiene ninguno de los problemas anteriores, por favor no active esta opción</u></p>"
+    "devSettings": {
+        "title": "Mantenimiento",
+        "notice": "<p>Nota：Normalmente no necesitará utilizar estas funciones.</p><p>Si no está seguro del significado de las funciones, ¡no las utilice!</p>",
+        "load": {
+            "title": "(de carga, etc.) carga",
+            "notWaiteLoaded": {
+                "label": "No hay que esperar a que los recursos de la página se carguen por completo",
+                "helpText": "<p>Si el mensaje de aviso de carga se queda siempre en：\"Esperando a que se carguen los recursos de la página\" aunque la página esté completamente cargada</p><p>debería confirmar primero si se trata de un problema de red,</p><p>si no es así, entonces intente activar la opción e ir a Github para informar del error, incluyendo la información de la versión del navegador y del sistema operativo, para que pueda ser analizado y reproducido.</p>"
+            }
+        },
+        "l10n": {
+            "title": "Localización de guiones",
+            "refreshScrpitCache": {
+                "label": "Actualizar caché",
+                "helpText": "<p>Los datos localizados del script se almacenan en caché local para acelerar la carga, con un ciclo de actualización automática de una semana, y puede forzar una actualización inmediata de los datos pulsando en Actualizar</p>.",
+                "button": "refrescar (ventana del ordenador)"
+            }
+        },
+        "indexedDB": {
+            "title": "Base de datos IndexedDB",
+            "clear": {
+                "label": "Borrar datos",
+                "helpText": "<p>Borrar los datos locales de IndexedDB borrará todos los datos de la base de datos CFBetter, por favor tenga cuidado</p>",
+                "button": "liquidación"
+            },
+            "inputOrExport": {
+                "label": "Importar/exportar datos",
+                "helpText": "<p>Puede exportar los datos actuales de IndexedDB o importar los datos exportados por otros</p>",
+                "export": "derivar",
+                "import": "importar (datos)"
+            }
+        },
+        "configuration": {
+            "title": "Configuración del script",
+            "clear": {
+                "label": "Borrar configuración",
+                "helpText": "<p>Borrar los datos de configuración del script local restablecerá la configuración del script a su estado inicial, así que proceda con precaución</p>",
+                "button": "liquidación"
+            },
+            "inputOrExport": {
+                "label": "Importar/exportar datos",
+                "helpText": "<p>Puede exportar la configuración actual del script, o importar una configuración ya exportada</p>",
+                "export": "derivar",
+                "import": "importar (datos)"
+            }
         }
     }
 }

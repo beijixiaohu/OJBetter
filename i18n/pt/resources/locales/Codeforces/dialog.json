@@ -45,5 +45,37 @@
             "ser",
             "entupido"
         ]
+    },
+    "isClearDatabase": {
+        "title": "A base de dados foi esvaziada?",
+        "content": "Tem a certeza que quer esvaziar a base de dados? É irrecuperável.",
+        "buttons": [
+            "claro",
+            "cancelamentos"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Reinicia todas as configurações?",
+        "content": "Tem a certeza de que quer repor todas as configurações? É irrecuperável.",
+        "buttons": [
+            "reprovisão",
+            "cancelamentos"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "A base de dados foi importada?",
+        "content": "Tem a certeza de que pretende importar a base de dados? Se o fizer, os dados existentes na base de dados serão substituídos, o que é irrecuperável.",
+        "buttons": [
+            "importação (dados)",
+            "cancelamentos"
+        ]
+    },
+    "isImportSettings": {
+        "title": "As definições são importadas?",
+        "content": "Tem a certeza de que pretende importar as definições? Isso fará com que os dados das definições existentes sejam substituídos, o que é irrecuperável.",
+        "buttons": [
+            "importação (dados)",
+            "cancelamentos"
+        ]
     }
 }

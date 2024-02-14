@@ -5,7 +5,7 @@
         "translation": "l'équarrissage",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "la compatibilité"
+        "dev": "Maintenance"
     },
     "common": {
         "configManageTitle": "gestion de la configuration",
@@ -273,11 +273,51 @@
             "performanceWarning": "Note：Un trop grand nombre de règles complémentaires statiques peut nuire aux performances."
         }
     },
-    "compatibilitySettings": {
-        "title": "Paramètres compatibles",
-        "loaded": {
-            "label": "Pas d'attente de chargement des ressources de la page",
-            "helpText": "<p>Pour éviter les erreurs inattendues dues à l'exécution de scripts avant que les ressources de la page n'aient fini de se charger (principalement divers js), les scripts attendent l'événement window.onload par défaut</p><p>Si le message de chargement en haut de votre page reste toujours sur：\"Waiting for page resources to load\" alors que la page a déjà fini de se charger</p><p><u>, vous devriez d'abord vérifier si s'il s'agit d'un problème de réseau,</u></p><p>si ce n'est pas le cas, il se peut que l'événement window.onload soit déclenché trop tôt dans votre navigateur (avant DOMContentLoaded),</p><p>vous pouvez essayer d'activer cette option pour ne plus attendre l'événement window.onload</p><p><u>Note：si vous n'avez aucun des problèmes ci-dessus, n'activez pas cette option</u></p>"
+    "devSettings": {
+        "title": "Maintenance",
+        "notice": "<p>Note：Normalement, vous n'avez pas besoin d'utiliser ces fonctions.</p><p>Si vous n'êtes pas sûr de la signification des fonctions, ne les utilisez pas !</p>",
+        "load": {
+            "title": "(de la cargaison, etc.) chargement",
+            "notWaiteLoaded": {
+                "label": "Pas d'attente de chargement complet des ressources de la page",
+                "helpText": "<p>Si le message d'invite de chargement reste toujours：\"Waiting for page resources to load\" alors que la page est entièrement chargée</p><p>, vous devriez d'abord vérifier s'il s'agit d'un problème de réseau,</p><p>si ce n'est pas le cas, puis essayer d'activer l'option et d'aller sur Github pour signaler l'erreur, y compris les informations relatives à la version du navigateur et au système d'exploitation, afin qu'elle puisse être analysée et reproduite.</p>"
+            }
+        },
+        "l10n": {
+            "title": "Localisation du scénario",
+            "refreshScrpitCache": {
+                "label": "Rafraîchir le cache",
+                "helpText": "<p>Les données localisées du script sont mises en cache localement pour accélérer le chargement, avec un cycle de rafraîchissement automatique d'une semaine, et vous pouvez forcer un rafraîchissement immédiat des données en cliquant sur Refresh</p>.",
+                "button": "rafraîchir (fenêtre d'ordinateur)"
+            }
+        },
+        "indexedDB": {
+            "title": "Base de données IndexedDB",
+            "clear": {
+                "label": "Effacer les données",
+                "helpText": "<p>L'effacement des données locales d'IndexedDB effacera toutes les données de la base de données CFBetter, soyez prudent</p>.",
+                "button": "dégagement"
+            },
+            "inputOrExport": {
+                "label": "Importer/exporter des données",
+                "helpText": "<p>Vous pouvez exporter les données actuelles d'IndexedDB ou importer des données exportées par d'autres personnes</p>",
+                "export": "dériver",
+                "import": "importation (données)"
+            }
+        },
+        "configuration": {
+            "title": "Configuration des scripts",
+            "clear": {
+                "label": "Effacer la configuration",
+                "helpText": "<p>L'effacement des données de configuration des scripts locaux réinitialisera la configuration des scripts à son état initial, veuillez donc procéder avec prudence</p>",
+                "button": "dégagement"
+            },
+            "inputOrExport": {
+                "label": "Importer/exporter des données",
+                "helpText": "<p>Vous pouvez exporter la configuration actuelle du script ou importer une configuration déjà exportée</p>",
+                "export": "dériver",
+                "import": "importation (données)"
+            }
         }
     }
 }

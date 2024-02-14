@@ -45,5 +45,37 @@
             "be",
             "clogged"
         ]
+    },
+    "isClearDatabase": {
+        "title": "Is the database emptied?",
+        "content": "Are you sure you want to empty the database? It's unrecoverable.",
+        "buttons": [
+            "empty",
+            "Cancel"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Does it reset all configurations?",
+        "content": "Are you sure you want to reset all configurations? It's not recoverable.",
+        "buttons": [
+            "reprovision",
+            "Cancel"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "Is the database imported?",
+        "content": "Are you sure you want to import the database? This will cause the existing database data to be overwritten, which is unrecoverable.",
+        "buttons": [
+            "import (data)",
+            "Cancel"
+        ]
+    },
+    "isImportSettings": {
+        "title": "Are the settings imported?",
+        "content": "Are you sure you want to import the settings? This will cause the existing settings data to be overwritten, which is unrecoverable.",
+        "buttons": [
+            "import (data)",
+            "Cancel"
+        ]
     }
 }

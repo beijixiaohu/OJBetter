@@ -5,7 +5,7 @@
         "translation": "Rendering",
         "clist": "Clist",
         "monaco": "Monaco",
-        "compatibility": "Kompatibilität"
+        "dev": "Wartung"
     },
     "common": {
         "configManageTitle": "Konfigurationsmanagement",
@@ -273,11 +273,51 @@
             "performanceWarning": "Hinweis：Zu viele statische ergänzende Regeln können die Leistung beeinträchtigen"
         }
     },
-    "compatibilitySettings": {
-        "title": "Kompatible Einstellungen",
-        "loaded": {
-            "label": "Kein Warten auf das Laden von Seitenressourcen",
-            "helpText": "<p>Um zu verhindern, dass unerwartete Fehler durch die Ausführung von Skripten auftreten, bevor die Ressourcen der Seite fertig geladen sind (vor allem verschiedene js), warten Skripte standardmäßig auf das Ereignis window.onload</p><p>Wenn die Lademeldung oben auf Ihrer Seite immer bei：\"Waiting for page resources to load\" bleibt, obwohl die Seite bereits fertig geladen ist</p><p><u>, sollten Sie zunächst prüfen, ob ob es sich um ein Netzwerkproblem handelt,</u></p><p>wenn nicht, kann es daran liegen, dass das Ereignis window.onload in Ihrem Browser zu früh ausgelöst wird (vor DOMContentLoaded),</p><p>dann können Sie versuchen, diese Option zu aktivieren, um nicht mehr auf das Ereignis window.onload zu warten</p><p><u>Hinweis：wenn Sie keines der oben genannten Probleme haben, schalten Sie diese Option bitte nicht ein</u></p>"
+    "devSettings": {
+        "title": "Wartung",
+        "notice": "<p>Hinweis：Normalerweise brauchen Sie diese Funktionen nicht zu verwenden.</p><p>Wenn Sie sich über die Bedeutung der Funktionen nicht im Klaren sind, bedienen Sie sie nicht!</p>",
+        "load": {
+            "title": "(von Fracht etc.) Ladung",
+            "notWaiteLoaded": {
+                "label": "Kein Warten auf das vollständige Laden der Seitenressourcen",
+                "helpText": "<p>Wenn die Meldung zur Ladeaufforderung immer bei：\"Waiting for page resources to load\" (Warten auf das Laden der Seitenressourcen) bleibt, obwohl die Seite vollständig geladen ist</p><p>, sollten Sie zunächst prüfen, ob es sich um ein Netzwerkproblem handelt,</p><p>, falls nicht, dann versuchen Sie, die Option zu aktivieren und gehen Sie zu Github, um den Fehler zu melden, einschließlich Informationen zur Browserversion und zum Betriebssystem, damit er analysiert und reproduziert werden kann.</p>"
+            }
+        },
+        "l10n": {
+            "title": "Skript-Lokalisierung",
+            "refreshScrpitCache": {
+                "label": "Cache aktualisieren",
+                "helpText": "<p>Die lokalisierten Daten des Skripts werden lokal zwischengespeichert, um das Laden zu beschleunigen. Der automatische Aktualisierungszyklus beträgt eine Woche und Sie können eine sofortige Aktualisierung der Daten erzwingen, indem Sie auf Aktualisieren</p>klicken.",
+                "button": "Aktualisieren (Computerfenster)"
+            }
+        },
+        "indexedDB": {
+            "title": "IndexedDB Datenbank",
+            "clear": {
+                "label": "Daten löschen",
+                "helpText": "<p>Wenn Sie die lokalen IndexedDB-Daten löschen, werden alle Daten in der CFBetter-Datenbank gelöscht. Bitte seien Sie vorsichtig</p>",
+                "button": "Freigabe"
+            },
+            "inputOrExport": {
+                "label": "Daten importieren/exportieren",
+                "helpText": "<p>Sie können die aktuellen IndexedDB-Daten exportieren oder von anderen exportierte Daten importieren</p>",
+                "export": "ableiten",
+                "import": "importieren (Daten)"
+            }
+        },
+        "configuration": {
+            "title": "Skript-Konfiguration",
+            "clear": {
+                "label": "Konfiguration löschen",
+                "helpText": "<p>Wenn Sie die lokalen Skriptkonfigurationsdaten löschen, wird die Skriptkonfiguration auf ihren Ausgangszustand zurückgesetzt. Gehen Sie daher mit Vorsicht vor</p>",
+                "button": "Freigabe"
+            },
+            "inputOrExport": {
+                "label": "Daten importieren/exportieren",
+                "helpText": "<p>Sie können die aktuelle Skriptkonfiguration exportieren oder eine bereits exportierte Konfiguration importieren</p>",
+                "export": "ableiten",
+                "import": "importieren (Daten)"
+            }
         }
     }
 }

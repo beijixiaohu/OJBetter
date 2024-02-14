@@ -9,6 +9,7 @@
     },
     "transingTip": {
         "basic": "In use {{server}} Translation in progress……Please wait.",
+        "deeplApi": "In progress DeepL API translation in progress……Please wait\n\nConfiguration of the application： {{deepl_configName}}\n\n",
         "openai": "ChatGPT translation in progress……Please wait\n\nConfiguration of the application： {{openai_name}}\n\n",
         "openai_isStream": "Current stream transfer is not enabled. You will have to wait a long time before you can see the result, please be patient."
     },
@@ -27,5 +28,9 @@
     },
     "translateDiv": {
         "topTextSuffix": " Translate"
+    },
+    "contextMenu": {
+        "edit": "compiler",
+        "delete": "Delete"
     }
 }

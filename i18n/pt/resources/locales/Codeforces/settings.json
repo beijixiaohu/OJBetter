@@ -5,7 +5,7 @@
         "translation": "renderização",
         "clist": "Clista",
         "monaco": "Mónaco",
-        "compatibility": "compatibilidade"
+        "dev": "Manutenção"
     },
     "common": {
         "configManageTitle": "gestão da configuração",
@@ -273,11 +273,51 @@
             "performanceWarning": "Nota：Demasiadas regras complementares estáticas podem afetar o desempenho"
         }
     },
-    "compatibilitySettings": {
-        "title": "Definições compatíveis",
-        "loaded": {
-            "label": "Não espere que os recursos da página sejam carregados",
-            "helpText": "<p>Para evitar erros inesperados de execução de scripts antes de os recursos da página terem terminado de carregar (principalmente vários js), os scripts esperam pelo evento window.onload por predefinição</p><p>Se a mensagem de carregamento no topo da sua página se mantiver sempre em：\"Waiting for page resources to load\" (A aguardar que os recursos da página carreguem), apesar de a página já ter terminado de carregar</p><p><u>, deve primeiro verificar se se se trata de um problema de rede,</u></p><p>se não, pode dever-se ao facto de o evento window.onload ser acionado demasiado cedo no seu navegador (antes de DOMContentLoaded),</p><p>pode tentar ativar esta opção para deixar de esperar pelo evento window.onload</p><p><u>Nota：se não tiver nenhum dos problemas acima referidos, não active esta opção</u></p>"
+    "devSettings": {
+        "title": "Manutenção",
+        "notice": "<p>Nota：Normalmente, não precisa de utilizar estas funções.</p><p>Se não tiver a certeza do significado das funções, não as utilize!</p>",
+        "load": {
+            "title": "(de carga, etc.) carga",
+            "notWaiteLoaded": {
+                "label": "Não espere que os recursos da página sejam totalmente carregados",
+                "helpText": "<p>Se a mensagem de aviso de carregamento se mantiver sempre em：\"Waiting for page resources to load\" mesmo que a página esteja totalmente carregada</p><p>deve primeiro confirmar se é um problema de rede,</p><p>caso contrário, tente ativar a opção e vá ao Github para comunicar o erro, incluindo informações sobre a versão do browser e do sistema operativo, para que possa ser analisado e reproduzido.</p>"
+            }
+        },
+        "l10n": {
+            "title": "Localização do guião",
+            "refreshScrpitCache": {
+                "label": "Atualizar a cache",
+                "helpText": "<p>Os dados localizados do script são armazenados localmente em cache para acelerar o carregamento, com um ciclo de atualização automática de uma semana, e pode forçar uma atualização imediata dos dados clicando em Atualizar</p>",
+                "button": "atualizar (janela do computador)"
+            }
+        },
+        "indexedDB": {
+            "title": "Base de dados IndexedDB",
+            "clear": {
+                "label": "Limpar dados",
+                "helpText": "<p>Limpar os dados locais da IndexedDB irá limpar todos os dados da base de dados CFBetter, por favor tenha cuidado</p>",
+                "button": "apuramento"
+            },
+            "inputOrExport": {
+                "label": "Importar/exportar dados",
+                "helpText": "<p>Pode exportar os dados actuais do IndexedDB ou importar dados exportados por outros</p>",
+                "export": "derivar",
+                "import": "importação (dados)"
+            }
+        },
+        "configuration": {
+            "title": "Configuração do guião",
+            "clear": {
+                "label": "Limpar configuração",
+                "helpText": "<p>A limpeza dos dados de configuração do script local irá repor a configuração do script no seu estado inicial, pelo que deve proceder com cuidado</p>",
+                "button": "apuramento"
+            },
+            "inputOrExport": {
+                "label": "Importar/exportar dados",
+                "helpText": "<p>Pode exportar a configuração atual do script ou importar uma configuração já exportada</p>",
+                "export": "derivar",
+                "import": "importação (dados)"
+            }
         }
     }
 }

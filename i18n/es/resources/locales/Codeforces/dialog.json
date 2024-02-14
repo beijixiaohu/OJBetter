@@ -45,5 +45,37 @@
             "sea",
             "obstruido"
         ]
+    },
+    "isClearDatabase": {
+        "title": "¿Se ha vaciado la base de datos?",
+        "content": "¿Está seguro de que quiere vaciar la base de datos? Es irrecuperable.",
+        "buttons": [
+            "borrar",
+            "cancelaciones"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "¿Reinicia todas las configuraciones?",
+        "content": "¿Está seguro de que quiere restablecer todas las configuraciones? Es irrecuperable.",
+        "buttons": [
+            "reprovisión",
+            "cancelaciones"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "¿Se ha importado la base de datos?",
+        "content": "¿Está seguro de que desea importar la base de datos? Esto provocará que se sobrescriban los datos existentes de la base de datos, lo que es irrecuperable.",
+        "buttons": [
+            "importar (datos)",
+            "cancelaciones"
+        ]
+    },
+    "isImportSettings": {
+        "title": "¿Se importan los ajustes?",
+        "content": "¿Está seguro de que desea importar los ajustes? Esto hará que se sobrescriban los datos de configuración existentes, lo que es irrecuperable.",
+        "buttons": [
+            "importar (datos)",
+            "cancelaciones"
+        ]
     }
 }

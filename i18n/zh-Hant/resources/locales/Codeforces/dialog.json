@@ -45,5 +45,37 @@
             "是",
             "否"
         ]
+    },
+    "isClearDatabase": {
+        "title": "是否清空資料庫？",
+        "content": "你確定要清空資料庫嗎？這是不可恢復的。",
+        "buttons": [
+            "清空",
+            "取消"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "是否重置所有配置？",
+        "content": "你確定要重置所有配置嗎？這是不可恢復的。",
+        "buttons": [
+            "重置",
+            "取消"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "是否導入資料庫？",
+        "content": "你確定要匯入資料庫嗎？這將導致現有資料庫資料被覆蓋，這是不可恢復的。",
+        "buttons": [
+            "導入",
+            "取消"
+        ]
+    },
+    "isImportSettings": {
+        "title": "是否導入設定？",
+        "content": "你確定要匯入設定嗎？這將導致現有設定資料被覆蓋，這是不可恢復的。",
+        "buttons": [
+            "導入",
+            "取消"
+        ]
     }
 }

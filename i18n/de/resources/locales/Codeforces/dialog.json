@@ -45,5 +45,37 @@
             "sein",
             "Verstopft"
         ]
+    },
+    "isClearDatabase": {
+        "title": "Ist die Datenbank geleert?",
+        "content": "Sind Sie sicher, dass Sie die Datenbank leeren wollen? Sie ist nicht wiederherstellbar.",
+        "buttons": [
+            "löschen",
+            "Stornierungen"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Werden dabei alle Konfigurationen zurückgesetzt?",
+        "content": "Sind Sie sicher, dass Sie alle Konfigurationen zurücksetzen möchten? Es ist nicht wiederherstellbar.",
+        "buttons": [
+            "Reprovision",
+            "Stornierungen"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "Ist die Datenbank importiert?",
+        "content": "Sind Sie sicher, dass Sie die Datenbank importieren möchten? Dies führt dazu, dass bestehende Datenbankdaten überschrieben werden, was nicht wiederherstellbar ist.",
+        "buttons": [
+            "importieren (Daten)",
+            "Stornierungen"
+        ]
+    },
+    "isImportSettings": {
+        "title": "Werden die Einstellungen importiert?",
+        "content": "Sind Sie sicher, dass Sie die Einstellungen importieren möchten? Dadurch werden die vorhandenen Einstellungsdaten überschrieben, was nicht wiederherstellbar ist.",
+        "buttons": [
+            "importieren (Daten)",
+            "Stornierungen"
+        ]
     }
 }
