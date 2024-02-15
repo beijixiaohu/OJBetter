@@ -1,4 +1,4 @@
-name: Sync to OSS
+name: Update I18n File
 
 on:
   push:
@@ -19,6 +19,7 @@ jobs:
         run: |
           find . -name "*.json" -print0 | xargs -0 -n1 jq . >/dev/null
   sync_to_oss:
+    needs: validate-json
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
