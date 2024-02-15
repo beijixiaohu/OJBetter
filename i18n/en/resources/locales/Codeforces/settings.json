@@ -5,8 +5,8 @@
         "translation": "Translation",
         "clist": "Clist",
         "monaco": "Monaco",
-        "dev": "safeguard",
-        "about": "with respect to"
+        "dev": "Safeguard",
+        "about": "About"
     },
     "common": {
         "configManageTitle": "configuration management",
@@ -275,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "safeguard",
+        "title": "Safeguard",
         "notice": "<p>Note：Normally you do not need to use these functions.</p><p>If you are not sure of the meaning of the functions, do not operate them!</p>",
         "load": {
             "title": "(of cargo etc) load",
@@ -322,7 +322,7 @@
         }
     },
     "about": {
-        "title": "with respect to",
+        "title": "About",
         "version": "Version：",
         "update": {
             "title": "update",

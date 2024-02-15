@@ -328,7 +328,7 @@
             "title": "mettre à jour",
             "channel": {
                 "label": "canal de mise à jour",
-                "helpText": "<p>你可以选择脚本的更新通道</p><p>注意：测试版本会在 Github 上每一次 commit 后自动推送，因此其未经过广泛测试验证，可能存在各种未知问题。</p><p>有关测试版本的问题请在 Github 上提 issues，并添加 Beta 标签</p>",
+                "helpText": "<p>Vous pouvez choisir le canal de mise à jour pour le script</p><p>Notez que la version beta de：est automatiquement poussée après chaque commit sur Github, elle n'a donc pas été testée de manière extensive et peut avoir des problèmes inconnus.</p><p>Veuillez soulever des problèmes sur Github et ajouter les tags Beta pour les problèmes liés à la version beta</p>",
                 "options": {
                     "release": "version stable",
                     "dev": "version bêta"
