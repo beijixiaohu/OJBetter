@@ -5,7 +5,8 @@
         "translation": "Translation",
         "clist": "Clist",
         "monaco": "Monaco",
-        "dev": "Maintenance"
+        "dev": "safeguard",
+        "about": "with respect to"
     },
     "common": {
         "configManageTitle": "configuration management",
@@ -55,8 +56,8 @@
         "scriptLanguageLabel": "Script Language",
         "websiteLanguageLabel": "Website Language",
         "notice": {
-            "1": "<strong>Help improve the quality of translations</strong><p>The author is only familiar with Simplified Chinese and English, for all other languages, scripts and language localization of the website are done by machine translation (Deepl & Google) and the translation workflow is hosted by crowddin.</p><p>If you'd like to help improve the quality of localized translations for a particular language,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>click here</a>to go there and help improve it.</p><p>Thank you for your contribution!</p>",
-            "2": "<strong>Help Improve Website Language Localization</strong><p>If you think there is a need to localize some part of your website and localization substitution won't cause serious performance problems, you are welcome to improve the<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> localization rule </a>.</p><p>If you want to add a new rule, you need to add its Simplified Chinese version：fork and modify the rule file, and then launch a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can also go to crowdin later to improve the quality of the translation for the other languages.</p>"
+            "1": "<strong>Help improve the quality of translations</strong><p>The author is only familiar with Simplified Chinese and English, for all other languages, the scripts and the language localization of the website are done by machine translation (Deepl & Google) and the translation workflow is hosted by crowddin.</p><p>If you are happy to help improve the quality of localized translations for a particular language,</p><p>you are welcome to<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>go to</a>to help improve it, and your contribution is appreciated!</p>",
+            "2": "<strong>Helping to improve website language localization</strong><p>If you think that localization is necessary somewhere on your website, and localization substitution will not cause serious performance problems, you are welcome to<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>go to Improving Localization Rules</a>.</p><p>If you want to add a new rule, you need to add the Simplified Chinese version of the rule：fork and modify the rule file, then launch a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can go to crowdin later to improve the quality of the translation for the other languages as well.</p>"
         }
     },
     "translationSettings": {
@@ -184,7 +185,7 @@
         "title": "Clist Settings",
         "basics": {
             "name": "Basic",
-            "notice": "<p>Note：Access to Clist data requires valid login credentials, you have two options：</p><p>Fill in<a href='https://clist.by/' target='_blank'> below clist.by <a/>the official API key,</p><p>or keep the clist.by website in your browser logged in (i.e. cookie is valid)</p>",
+            "notice": "<p>Note：Access to Clist data requires valid login credentials, you have two options：</p><p>Fill in<a href='https://clist.by/' target='_blank'> below clist.by </a>the official API key,</p><p>or keep the clist.by website in your browser logged in (i.e. cookie is valid)</p>",
             "key": {
                 "title": "KEY.",
                 "helpText": "<p>Sample format：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -274,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "Maintenance",
+        "title": "safeguard",
         "notice": "<p>Note：Normally you do not need to use these functions.</p><p>If you are not sure of the meaning of the functions, do not operate them!</p>",
         "load": {
             "title": "(of cargo etc) load",
@@ -317,6 +318,30 @@
                 "helpText": "<p>You can export the current script configuration, or import an already exported configuration</p>",
                 "export": "derive",
                 "import": "import (data)"
+            }
+        }
+    },
+    "about": {
+        "title": "with respect to",
+        "version": "Version：",
+        "update": {
+            "title": "update",
+            "channel": {
+                "label": "update channel",
+                "helpText": "<p>You can choose the update channel for the script</p><p>Note：Beta versions are automatically pushed after every commit on Github, so they are not verified and may have a lot of issues</p><p>For issues with beta versions please raise issues on Github and add Beta tags</p>",
+                "options": {
+                    "release": "stable version",
+                    "beta": "beta version"
+                }
+            },
+            "source": {
+                "label": "update source",
+                "helpText": "<p>You can choose the download source for the scripts</p><p>They are updated synchronously.</p>",
+                "options": {
+                    "greasyfork": "GreasyFork",
+                    "github": "Github",
+                    "aliyunoss": "Aliyun OSS"
+                }
             }
         }
     }
