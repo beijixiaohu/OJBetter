@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.35
+// @version      1.72.36
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -563,6 +563,23 @@ const getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOr
 };
 
 /**
+ * 版本号比较方法
+ * @param {string} version1 版本号1
+ * @param {string} version2 版本号2
+ * @returns {number} -1: version1 < version2, 0: version1 = version2, 1: version1 > version2
+ */
+const compareVersions = function (version1 = "0", version2 = "0") {
+    const v1Array = version1.split(".").map(Number);
+    const v2Array = version2.split(".").map(Number);
+    const length = Math.max(v1Array.length, v2Array.length);
+    for (let i = 0; i < length; i++) {
+        const diff = (v1Array[i] || 0) - (v2Array[i] || 0);
+        if (diff) return Math.sign(diff);
+    }
+    return 0;
+}
+
+/**
  * 初始化全局变量
  */
 async function initVar() {
@@ -710,23 +727,26 @@ async function initVar() {
     OJBetter.about.updateSource = getGMValue("updateSource", "greasyfork");
 }
 
+// TODO 5
 /**
  * 公告
  */
 async function showAnnounce() {
-    if (OJBetter.state.lastReadAnnounceVer < GM_info.script.version) {
-        const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${GM_info.script.version}`;
+    if (compareVersions(OJBetter.state.version, OJBetter.state.lastReadAnnounceVer) === 1) {
+        const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${OJBetter.state.version}`;
         const ok = await createDialog(
             title,
-            i18next.t('announce.content', { ns: 'dialog' }),
+            OJBetter.about.updateChannel == "release" ?
+                i18next.t('announce.content', { ns: 'dialog' }) :
+                i18next.t('announce.divContent', { ns: 'dialog' }),
             [
                 null,
                 i18next.t('announce.buttons.0', { ns: 'dialog' })
             ],
-            undefined, true
+            true
         ); //跳过折叠块确认
         if (ok) {
-            GM_setValue('lastReadAnnounceVer', GM_info.script.version);
+            GM_setValue('lastReadAnnounceVer', OJBetter.state.version);
         }
     }
 };
@@ -760,7 +780,6 @@ function showWarnMessage() {
 // 常量
 const OJBetterName = 'Codeforces Better!';
 const findHelpText1 = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 寻求帮助\n\n';
-const findHelpText2 = '如遇问题，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 反馈';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
 const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
@@ -3637,23 +3656,6 @@ function clearI18nextCache() {
  * 更新检查
  */
 async function checkScriptVersion() {
-    /**
-     * 版本号比较
-     * @param {string} version1 版本号1
-     * @param {string} version2 版本号2
-     * @returns {number} -1: version1 < version2, 0: version1 = version2, 1: version1 > version2
-     */
-    const compareVersions = function (version1 = "0", version2 = "0") {
-        const v1Array = version1.split(".").map(Number);
-        const v2Array = version2.split(".").map(Number);
-        const length = Math.max(v1Array.length, v2Array.length);
-        for (let i = 0; i < length; i++) {
-            const diff = (v1Array[i] || 0) - (v2Array[i] || 0);
-            if (diff) return Math.sign(diff);
-        }
-        return 0;
-    }
-
     try {
         const versionResponse = await GMRequest({
             method: "GET",
@@ -4014,7 +4016,7 @@ async function initI18next() {
                     backendOptions: [{
                         prefix: 'i18next_res_',
                         expirationTime: 7 * 24 * 60 * 60 * 1000,
-                        defaultVersion: 'v1.25',
+                        defaultVersion: `v${OJBetter.state.version}`,
                         store: typeof window !== 'undefined' ? window.localStorage : null
                     }, {
                         /* options for secondary backend */
@@ -5168,6 +5170,7 @@ const about_settings_HTML = `
     <h3 data-i18n="settings:about.title"></h3>
     <hr>
     <div class='versionInfo'>
+        <p>Codeforces Better!</p>
         <p><span data-i18n="settings:about.version"></span><span id="nowVersion">${OJBetter.state.version}</span></p>
         <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a> 
         <a target="_blank" href="https://greasyfork.org/zh-CN/scripts/465777">GreasyFork</a></p>
@@ -5947,9 +5950,8 @@ async function initSettingsPanel() {
     });
 };
 
-// html2md转换/处理规则
-var turndownService = new TurndownService({ bulletListMarker: '-' });
-var turndown = turndownService.turndown;
+// html2markdown转换/处理规则
+const turndownService = new TurndownService({ bulletListMarker: '-' });
 
 // 保留原始
 turndownService.keep(['del']);
@@ -6025,6 +6027,20 @@ turndownService.addRule('sectionTitle', {
         return '**' + content + '**'
     }
 })
+
+// property-title
+turndownService.addRule('property-title', {
+    filter: function (node) {
+        return (
+            node.nodeName === 'DIV' &&
+            node.classList.contains('property-title')
+        )
+    },
+    replacement: function (content) {
+        return content + ': '
+    }
+})
+
 
 // bordertable
 turndownService.addRule('bordertable', {
