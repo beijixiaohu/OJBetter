@@ -328,10 +328,10 @@
             "title": "更新",
             "channel": {
                 "label": "更新頻道",
-                "helpText": "<p>你可以選擇腳本的更新通道</p><p>注意：測試版本會在Github 上每一次commit 後自動推送，因此其未經過驗證，可能存在大量問題</p><p>測試版的問題請在Github 上提issues，並加上Beta 標籤</p>",
+                "helpText": "<p>你可以選擇腳本的更新通道</p><p>注意：測試版本會在Github 上每一次commit 後自動推送，因此其未經過廣泛測試驗證，可能存在各種未知問題。</p><p>有關測試版本的問題請在Github 上提issues，並加上Beta 標籤</p>",
                 "options": {
                     "release": "穩定版",
-                    "beta": "測試版"
+                    "dev": "測試版"
                 }
             },
             "source": {

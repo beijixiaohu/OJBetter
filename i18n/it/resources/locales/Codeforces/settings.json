@@ -328,10 +328,10 @@
             "title": "aggiornamento",
             "channel": {
                 "label": "canale di aggiornamento",
-                "helpText": "<p>Può scegliere il canale di aggiornamento per lo script</p><p>Nota：Le versioni beta vengono inviate automaticamente dopo ogni commit su Github, quindi non sono verificate e possono avere molti problemi</p><p>Per i problemi con le versioni beta, si prega di sollevare problemi su Github e aggiungere i tag Beta</p>",
+                "helpText": "<p>Può scegliere il canale di aggiornamento per lo script</p><p>Si noti che la versione beta di：viene automaticamente inviata dopo ogni commit su Github, pertanto non è stata testata in modo approfondito e potrebbe presentare vari problemi sconosciuti.</p><p>Si prega di sollevare problemi su Github e di aggiungere i tag Beta per i problemi con la versione beta</p>",
                 "options": {
                     "release": "versione stabile",
-                    "beta": "versione beta"
+                    "dev": "versione beta"
                 }
             },
             "source": {
