@@ -27,4 +27,5 @@ Object.keys(directories).forEach((key) => {
   });
 });
 
-fs.writeFileSync(path.join('script'， 'versions.json'), JSON.stringify(versions, null, 4));
+fs.writeFileSync(path.join('script', 'versions.json'), JSON.stringify(versions, null, 4));
+
