@@ -1,6 +1,6 @@
 {
     "acwing-better": {
-        "dev": "3.26",
+        "dev": "3.27",
         "release": "3.27"
     },
     "atcoder-better": {
@@ -8,7 +8,7 @@
         "release": "1.12"
     },
     "codeforces-better": {
-        "dev": "1.72.33",
+        "dev": "1.72.34",
         "release": "1.72"
     },
     "nowcoder-better": {

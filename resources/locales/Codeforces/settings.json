@@ -5,7 +5,8 @@
         "translation": "翻译",
         "clist": "Clist",
         "monaco": "Monaco",
-        "dev": "调试维护"
+        "dev": "维护",
+        "about": "关于"
     },
     "common": {
         "configManageTitle": "配置管理",
@@ -55,8 +56,8 @@
         "scriptLanguageLabel": "脚本语言",
         "websiteLanguageLabel": "网站语言",
         "notice": {
-            "1": "<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>点击这里</a>，即可前往协助改进。</p><p>感谢你的贡献！</p>",
-            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎你前往完善<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 本地化规则 </a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+            "1": "<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，</p><p>欢迎<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>前往协助改进</a>，感谢你的贡献！</p>",
+            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
         }
     },
     "translationSettings": {
@@ -184,7 +185,7 @@
         "title": "Clist 设置",
         "basics": {
             "name": "基本",
-            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'> clist.by <a/>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
+            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'> clist.by </a>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
             "key": {
                 "title": "KEY:",
                 "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
@@ -274,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "调试维护",
+        "title": "维护",
         "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
         "load": {
             "title": "加载",
@@ -317,6 +318,30 @@
                 "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
                 "export": "导出",
                 "import": "导入"
+            }
+        }
+    },
+    "about":{
+        "title": "关于",
+        "version": "版本：",
+        "update":{
+            "title": "更新",
+            "channel":{
+                "label": "更新通道",
+                "helpText": "<p>你可以选择脚本的更新通道</p><p>注意：测试版本会在 Github 上每一次 commit 后自动推送，因此其未经过验证，可能存在大量问题</p><p>测试版本的问题请在 Github 上提 issues，并添加 Beta 标签</p>",
+                "options": {
+                    "release": "稳定版",
+                    "beta": "测试版"
+                }
+            },
+            "source":{
+                "label": "更新源",
+                "helpText": "<p>你可以选择脚本的下载源</p><p>它们会同步更新。</p>",
+                "options": {
+                    "greasyfork": "GreasyFork",
+                    "github": "Github",
+                    "aliyunoss": "阿里云OSS"
+                }
             }
         }
     }
