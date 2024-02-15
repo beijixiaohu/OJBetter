@@ -7,6 +7,14 @@
             "(eine Datei etc.) speichern (Informatik)"
         ]
     },
+    "update": {
+        "title": "{{scriptName}} Es gibt eine neue Version!",
+        "content": "** Versionsinformationen：{{oldVersion}} → {{newVersion}}**\n\nHinweis：Aufgrund der Cache-Aktualisierungspolitik der Plattform kann es vorkommen, dass das Update bei der ersten Veröffentlichung einer neuen Version noch auf die alte Version verweist.\n\nNormalerweise können Sie einfach auf Update aussetzen klicken und Sie werden für die Dauer dieser Browser-Sitzung bis zum nächsten Öffnen des Browsers nicht mehr zu einem Update aufgefordert.\n\nOder gehen Sie zu Einstellungen - Info, um die Update-Quelle umzuschalten.",
+        "buttons": [
+            "Vorläufig kein Update.",
+            "Update"
+        ]
+    },
     "announce": {
         "title": "Aktualisiert auf",
         "content": "#### \n\nZuletzt aktualisiertes Protokoll\n\n---1.73\n\n",
