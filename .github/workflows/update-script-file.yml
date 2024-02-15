@@ -30,6 +30,7 @@ jobs:
           git commit -m "Update script versions file" -a || echo "No changes to commit"
           git push
   sync_to_oss:
+    needs: update-version-json
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
