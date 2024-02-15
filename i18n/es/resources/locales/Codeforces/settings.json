@@ -5,7 +5,8 @@
         "translation": "renderizado",
         "clist": "Clist",
         "monaco": "Mónaco",
-        "dev": "Mantenimiento"
+        "dev": "salvaguardar",
+        "about": "con respecto a"
     },
     "common": {
         "configManageTitle": "gestión de la configuración",
@@ -55,8 +56,8 @@
         "scriptLanguageLabel": "lenguaje de programación",
         "websiteLanguageLabel": "Idioma del sitio web",
         "notice": {
-            "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si desea ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>haga clic aquí</a>para ir allí y ayudar a mejorarlo.</p><p>¡Gracias por su contribución!</p>",
-            "2": "<strong>Ayude a mejorar la localización del idioma del sitio web</strong><p>Si cree que es necesario localizar una parte de su sitio web y sustituirla localmente no causará graves problemas de rendimiento, le invitamos a mejorar la regla de localización<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>.</p><p>Si desea añadir una nueva regla, deberá añadir su versión en chino simplificado：bifurcar y modificar el archivo de la regla y, a continuación, lanzar un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y también podrá acudir a crowdin más adelante para mejorar la calidad de la traducción para los demás idiomas.</p>"
+            "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si le apetece ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,</p><p>le invitamos a<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>ir a</a>para ayudar a mejorarlo, ¡y su contribución es muy apreciada!</p>",
+            "2": "<strong>Ayudar a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en algún lugar de su sitio web y que sustituirla no causará graves problemas de rendimiento, le invitamos a<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ir a Mejorar las reglas de localización</a>.</p><p>Si desea añadir una nueva regla, deberá añadir la versión en chino simplificado de la regla：bifurque y modifique el archivo de la regla y, a continuación, lance un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más adelante para mejorar la calidad de la traducción también para los demás idiomas.</p>"
         }
     },
     "translationSettings": {
@@ -184,7 +185,7 @@
         "title": "Ajustes Clist",
         "basics": {
             "name": "fundamental",
-            "notice": "<p>Nota：El acceso a los datos de Clist requiere unas credenciales de inicio de sesión válidas, tiene dos opciones：</p><p>Rellene la<a href='https://clist.by/' target='_blank'> clist.by <a/>clave API oficial que aparece a continuación,</p><p>o mantenga la página web clist.by en su navegador con la sesión iniciada (es decir, la cookie es válida)</p>",
+            "notice": "<p>Nota：El acceso a los datos de Clist requiere unas credenciales de inicio de sesión válidas, tiene dos opciones：</p><p>Rellene la<a href='https://clist.by/' target='_blank'> clist.by </a>clave API oficial que aparece a continuación,</p><p>o mantenga la página web clist.by en su navegador con la sesión iniciada (es decir, la cookie es válida)</p>",
             "key": {
                 "title": "CLAVE.",
                 "helpText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -274,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "Mantenimiento",
+        "title": "salvaguardar",
         "notice": "<p>Nota：Normalmente no necesitará utilizar estas funciones.</p><p>Si no está seguro del significado de las funciones, ¡no las utilice!</p>",
         "load": {
             "title": "(de carga, etc.) carga",
@@ -317,6 +318,30 @@
                 "helpText": "<p>Puede exportar la configuración actual del script, o importar una configuración ya exportada</p>",
                 "export": "derivar",
                 "import": "importar (datos)"
+            }
+        }
+    },
+    "about": {
+        "title": "con respecto a",
+        "version": "Versión：",
+        "update": {
+            "title": "actualización",
+            "channel": {
+                "label": "canal de actualización",
+                "helpText": "<p>Puede elegir el canal de actualización para el script</p><p>Nota：Las versiones beta se empujan automáticamente después de cada commit en Github, por lo que no están verificadas y pueden tener muchos problemas</p><p>Para problemas con las versiones beta por favor plantee problemas en Github y añada etiquetas Beta</p>",
+                "options": {
+                    "release": "versión estable",
+                    "beta": "versión beta"
+                }
+            },
+            "source": {
+                "label": "fuente de actualización",
+                "helpText": "<p>Puede elegir la fuente de descarga de los scripts</p><p>Se actualizarán simultáneamente.</p>",
+                "options": {
+                    "greasyfork": "GreasyFork",
+                    "github": "Github",
+                    "aliyunoss": "Aliyun OSS"
+                }
             }
         }
     }
