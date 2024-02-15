@@ -328,10 +328,10 @@
             "title": "update",
             "channel": {
                 "label": "update channel",
-                "helpText": "<p>You can choose the update channel for the script</p><p>Note：Beta versions are automatically pushed after every commit on Github, so they are not verified and may have a lot of issues</p><p>For issues with beta versions please raise issues on Github and add Beta tags</p>",
+                "helpText": "<p>You can choose the update channel for the script</p><p>Note that the beta version of：is automatically pushed after every commit on Github, so it has not been extensively tested and may have various unknown issues.</p><p>Please raise issues on Github and add Beta tags for issues with the beta version</p>",
                 "options": {
                     "release": "stable version",
-                    "beta": "beta version"
+                    "dev": "beta version"
                 }
             },
             "source": {
