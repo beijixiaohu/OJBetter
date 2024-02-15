@@ -7,6 +7,14 @@
             "guardar (un archivo, etc.) (informática)"
         ]
     },
+    "update": {
+        "title": "{{scriptName}} ¡Hay una nueva versión!",
+        "content": "** Información sobre la versión：{{oldVersion}} → {{newVersion}}**\n\nNota：Debido a la política de actualización de la caché de la plataforma, cuando se publica por primera vez una nueva versión, es posible que la actualización siga apuntando a la versión antigua.\n\nPor lo general, sólo tiene que hacer clic en Suspender actualización y no se le volverá a solicitar una actualización mientras dure esta sesión del navegador hasta la próxima vez que vuelva a abrir el navegador.\n\nO vaya a Panel de configuración - Acerca de para alternar la fuente de actualización.",
+        "buttons": [
+            "Por ahora no hay novedades.",
+            "actualización"
+        ]
+    },
     "announce": {
         "title": "Actualizado a",
         "content": "#### \n\nÚltimo registro actualizado\n\n---1.73\n\n",

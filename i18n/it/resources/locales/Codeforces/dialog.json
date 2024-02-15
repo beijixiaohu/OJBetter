@@ -7,6 +7,14 @@
             "salvare (un file, ecc.) (informatica)"
         ]
     },
+    "update": {
+        "title": "{{scriptName}} C'è una nuova versione!",
+        "content": "** Informazioni sulla versione：{{oldVersion}} → {{newVersion}}**\n\nNota：A causa della politica di aggiornamento della cache della piattaforma, quando viene rilasciata per la prima volta una nuova versione, l'aggiornamento potrebbe ancora puntare alla vecchia versione.\n\nDi solito può semplicemente cliccare su Sospendi aggiornamento e non le verrà più richiesto un aggiornamento per la durata di questa sessione del browser fino alla prossima riapertura del browser.\n\nOppure vada al Pannello impostazioni - Informazioni su per attivare la fonte di aggiornamento.",
+        "buttons": [
+            "Nessun aggiornamento per ora.",
+            "aggiornamento"
+        ]
+    },
     "announce": {
         "title": "Aggiornato a",
         "content": "#### \n\nUltimo registro aggiornato\n\n---1.73\n\n",

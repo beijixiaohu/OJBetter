@@ -7,6 +7,14 @@
             "Save"
         ]
     },
+    "update": {
+        "title": "{{scriptName}} There is a new version!",
+        "content": "** Version Information：{{oldVersion}} → {{newVersion}}**\n\nNote：Due to the platform's cache refresh policy, when a new version is first released, the update may still point to the old version.\n\nUsually you can just click on Suspend Update and you will not be prompted for an update again for the duration of this browser session until the next time you reopen the browser.\n\nOr go to Settings Panel - About to toggle the update source.",
+        "buttons": [
+            "No update for now.",
+            "update"
+        ]
+    },
     "announce": {
         "title": "Updated to",
         "content": "### \n\nRecently Updated Log\n\n---1.73\n\n",

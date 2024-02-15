@@ -5,7 +5,8 @@
         "translation": "レンダリング",
         "clist": "クライスト",
         "monaco": "モナコ",
-        "dev": "メンテナンス"
+        "dev": "セーフガード",
+        "about": "に対して"
     },
     "common": {
         "configManageTitle": "構成管理",
@@ -55,8 +56,8 @@
         "scriptLanguageLabel": "スクリプト言語",
         "websiteLanguageLabel": "ウェブサイト言語",
         "notice": {
-            "1": "<strong>翻訳品質の向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。その他の言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl & Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズ翻訳の品質向上にご協力いただける場合は、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>こちらをクリックしてください。</a>。</p><p>ご協力ありがとうございました！</p>",
-            "2": "<strong>ウェブサイトの言語ローカライゼーションの改善にご協力ください</strong><p>ウェブサイトの一部をローカライズする必要があり、ローカルで置き換えてもパフォーマンスに深刻な問題が生じないとお考えでしたら、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> ローカライゼーションルール </a>の改善を歓迎します。</p><p>新しいルールを追加したい場合は、その簡体字中国語版を追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを起動します。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。また、後でcrowdinにアクセスして他の言語の翻訳の品質を向上させることもできます。</p>"
+            "1": "<strong>翻訳の品質向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。他のすべての言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl＆Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズされた翻訳の質を向上させるために、</p><p>、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>、</a>、あなたの貢献を歓迎します！</p>",
+            "2": "<strong>ウェブサイト言語ローカライゼーションの改善支援</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、それを置き換えることで深刻なパフォーマンス問題が発生しないとお考えの方は、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ローカライゼーションルールの改善</a>にぜひアクセスしてください。</p><p>新しいルールを追加したい場合は、簡体字中国語版のルールを追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを立ち上げてください。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。後でcrowdinにアクセスして、他の言語の翻訳の品質も向上させることができます。</p>"
         }
     },
     "translationSettings": {
@@ -184,7 +185,7 @@
         "title": "クライスト・セッティング",
         "basics": {
             "name": "基本的",
-            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'> clist.by <a/>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
+            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'> clist.by </a>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
             "key": {
                 "title": "キー",
                 "helpText": "<p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXXXX</p></div>",
@@ -274,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "メンテナンス",
+        "title": "セーフガード",
         "notice": "<p>注：通常、これらの機能を使用する必要はありません。</p><p>関数の意味がよくわからない場合は、操作しないでください！</p>",
         "load": {
             "title": "に",
@@ -317,6 +318,30 @@
                 "helpText": "<p>現在のスクリプト構成をエクスポートしたり、すでにエクスポートされた構成をインポートすることができます</p>",
                 "export": "導く",
                 "import": "インポート"
+            }
+        }
+    },
+    "about": {
+        "title": "に対して",
+        "version": "バージョン：",
+        "update": {
+            "title": "更新",
+            "channel": {
+                "label": "更新チャネル",
+                "helpText": "<p>スクリプトの更新チャンネルを選択することができます</p><p>注意：ベータ版は、Github上でコミットされるたびに自動的にプッシュされるため、検証されておらず、多くの問題を抱えている可能性があります</p><p>ベータ版の問題については、Github上で問題を提起し、ベータ版タグを追加してください</p>",
+                "options": {
+                    "release": "安定版",
+                    "beta": "ベータ版"
+                }
+            },
+            "source": {
+                "label": "更新元",
+                "helpText": "<p>スクリプトのダウンロード元を選択できます。</p><p>同時に更新されます。</p>",
+                "options": {
+                    "greasyfork": "グレイシーフォーク",
+                    "github": "ギズブ",
+                    "aliyunoss": "アリユンOSS"
+                }
             }
         }
     }

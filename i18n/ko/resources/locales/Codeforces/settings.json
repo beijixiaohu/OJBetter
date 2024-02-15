@@ -5,7 +5,8 @@
         "translation": "렌더링",
         "clist": "Clist",
         "monaco": "모나코",
-        "dev": "유지 관리"
+        "dev": "세이프가드",
+        "about": "다음과 관련하여"
     },
     "common": {
         "configManageTitle": "구성 관리",
@@ -55,8 +56,8 @@
         "scriptLanguageLabel": "스크립팅 언어",
         "websiteLanguageLabel": "웹사이트 언어",
         "notice": {
-            "1": "<strong>번역 품질 개선에 도움을 주세요</strong><p>작성자는 중국어 간체와 영어에만 익숙하며, 다른 모든 언어의 경우 웹사이트의 스크립트 및 언어 현지화는 기계 번역(Deep & Google)으로 수행되며 번역 워크플로는 크라우드인에서 호스팅합니다.</p><p>특정 언어의 현지화 번역 품질을 개선하는 데 도움을 주고 싶으시면<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'></a>으로 이동하여 개선에 참여해 주세요.</p><p>여러분의 기여에 감사드립니다!</p>",
-            "2": "<strong>웹사이트 언어 현지화 개선 지원</strong><p>웹사이트의 일부를 현지화할 필요가 있고 현지에서 교체해도 성능에 심각한 문제가 발생하지 않는다고 생각되면<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> 현지화 규칙 </a>을 개선할 수 있습니다.</p><p>새 규칙을 추가하려면 중국어 간체 버전：포크를 추가하고 규칙 파일을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p>제출물이 병합되면 크라우드인에서 자동으로 다른 언어에 대한 번역을 완료하며, 나중에 크라우드인으로 이동하여 다른 언어에 대한 번역 품질을 개선할 수도 있습니다.</p>"
+            "1": "<strong>번역 품질 개선에 도움을 주세요</strong><p>작성자는 중국어 간체와 영어에만 익숙하며, 다른 모든 언어의 경우 웹사이트의 스크립트 및 언어 현지화는 기계 번역(Deepl & Google)으로 수행되며 번역 워크플로는 크라우드딘에서 호스팅합니다.</p><p>특정 언어의 현지화 번역 품질을 개선하는 데 도움을 주실 수 있다면</p><p><a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'></a>으로 이동하여 도움을 주시면 감사하겠습니다!</p>",
+            "2": "<strong>웹사이트 언어 현지화 개선하기</strong><p>웹사이트의 어딘가에 현지화가 필요하고 이를 교체해도 심각한 성능 문제가 발생하지 않는다고 생각되면<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>현지화 규칙 개선하기</a>로 이동하세요.</p><p>새 규칙을 추가하려면 중국어 간체 버전의 규칙：포크를 추가하고 규칙 파일을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p>제출이 병합되면 크라우드인이 자동으로 다른 언어의 번역을 완료하고 나중에 크라우드인으로 이동하여 다른 언어의 번역 품질도 개선할 수 있습니다.</p>"
         }
     },
     "translationSettings": {
@@ -184,7 +185,7 @@
         "title": "클리스트 설정",
         "basics": {
             "name": "기본",
-            "notice": "<p>참고：Clist 데이터에 액세스하려면 유효한 로그인 자격 증명이 필요하며, 두 가지 옵션이 있습니다.：</p><p><a href='https://clist.by/' target='_blank'> clist.by <a/>공식 API 키를 아래에 입력하거나,</p><p>또는 브라우저에서 clist.by 웹사이트에 로그인한 상태로 유지(예: 쿠키가 유효함)</p>.",
+            "notice": "<p>참고：Clist 데이터에 액세스하려면 유효한 로그인 자격 증명이 필요하며, 두 가지 옵션이 있습니다.：</p><p><a href='https://clist.by/' target='_blank'> clist.by </a>공식 API 키를 아래에 입력하거나,</p><p>또는 브라우저에서 clist.by 웹사이트에 로그인한 상태(즉, 쿠키가 유효한 상태)를 유지합니다(</p>).",
             "key": {
                 "title": "KEY.",
                 "helpText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -274,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "유지 관리",
+        "title": "세이프가드",
         "notice": "<p>참고：일반적으로 이러한 기능은 사용할 필요가 없습니다.</p><p>기능의 의미를 잘 모르는 경우에는 작동하지 마세요!</p>",
         "load": {
             "title": "(화물 등) 적재량",
@@ -317,6 +318,30 @@
                 "helpText": "<p>현재 스크립트 구성을 내보내거나 이미 내보낸 구성을 가져올 수 있습니다(</p>).",
                 "export": "파생",
                 "import": "가져오기(데이터)"
+            }
+        }
+    },
+    "about": {
+        "title": "다음과 관련하여",
+        "version": "버전：",
+        "update": {
+            "title": "업데이트",
+            "channel": {
+                "label": "채널 업데이트",
+                "helpText": "<p>스크립트의 업데이트 채널을 선택할 수 있습니다</p><p>참고：베타 버전은 Github에서 커밋할 때마다 자동으로 푸시되므로 검증되지 않았으며 많은 문제가 있을 수 있습니다</p><p>베타 버전에 문제가 있는 경우 Github에 문제를 제기하고 베타 태그를 추가하세요</p>",
+                "options": {
+                    "release": "안정 버전",
+                    "beta": "베타 버전"
+                }
+            },
+            "source": {
+                "label": "업데이트 소스",
+                "helpText": "<p>스크립트 다운로드 소스를 선택할 수 있습니다</p><p>동시에 업데이트됩니다.</p>",
+                "options": {
+                    "greasyfork": "그리시포크",
+                    "github": "Github",
+                    "aliyunoss": "알리윤 OSS"
+                }
             }
         }
     }

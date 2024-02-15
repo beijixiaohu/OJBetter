@@ -7,6 +7,14 @@
             "enregistrer (un fichier, etc.) (informatique)"
         ]
     },
+    "update": {
+        "title": "{{scriptName}} Il y a une nouvelle version !",
+        "content": "** Informations sur la version：{{oldVersion}} → {{newVersion}}**\n\nNote：En raison de la politique de rafraîchissement du cache de la plateforme, lorsqu'une nouvelle version est publiée pour la première fois, la mise à jour peut encore pointer vers l'ancienne version.\n\nEn général, vous pouvez simplement cliquer sur Suspendre la mise à jour et vous ne serez plus invité à effectuer une mise à jour pour la durée de cette session de navigation jusqu'à la prochaine fois que vous rouvrirez le navigateur.\n\nVous pouvez aussi aller dans Panneau de configuration - À propos de pour basculer la source de mise à jour.",
+        "buttons": [
+            "Pas de mise à jour pour l'instant.",
+            "mettre à jour"
+        ]
+    },
     "announce": {
         "title": "Mise à jour",
         "content": "#### \n\nDernière mise à jour du journal\n\n---1.73\n\n",
