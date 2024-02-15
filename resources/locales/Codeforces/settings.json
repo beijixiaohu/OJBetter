@@ -331,12 +331,12 @@
                 "helpText": "<p>你可以选择脚本的更新通道</p><p>注意：测试版本会在 Github 上每一次 commit 后自动推送，因此其未经过验证，可能存在大量问题</p><p>测试版本的问题请在 Github 上提 issues，并添加 Beta 标签</p>",
                 "options": {
                     "release": "稳定版",
-                    "beta": "测试版"
+                    "dev": "测试版"
                 }
             },
             "source":{
                 "label": "更新源",
-                "helpText": "<p>你可以选择脚本的下载源</p><p>它们会同步更新。</p>",
+                "helpText": "<p>你可以选择脚本的下载源，它们均会同步更新。</p><p>其中 GreasyFork 不支持测试通道。</p>",
                 "options": {
                     "greasyfork": "GreasyFork",
                     "github": "Github",

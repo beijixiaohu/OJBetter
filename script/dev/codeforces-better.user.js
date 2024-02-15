@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.34
+// @version      1.72.35
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -66,6 +66,24 @@
 const OJBetter = {};
 
 /**
+ * @namespace state
+ * @desc 描述脚本的当前状态。
+ * @memberof OJBetter
+ */
+OJBetter.state = {
+    /** @type {string} 脚本名*/
+    name: GM_info.script.name,
+    /** @type {string} 版本号*/
+    version: GM_info.script.version,
+    /** @type {boolean?} 是否跳过页面加载等待 */
+    notWaiteLoaded: undefined,
+    /** @type {string} 最后读取的公告版本 */
+    lastReadAnnounceVer: undefined,
+    /** @type {number} 当前已打开的模态对话框数量*/
+    openDialogCount: 0
+};
+
+/**
  * @namespace common
  * @desc 通用设置和属性。
  * @memberof OJBetter
@@ -79,20 +97,6 @@ OJBetter.common = {
     taskQueue: undefined,
     /** @type {object} CFBetter数据库连接实例*/
     database: undefined
-};
-
-/**
- * @namespace state
- * @desc 描述脚本的当前状态。
- * @memberof OJBetter
- */
-OJBetter.state = {
-    /** @type {boolean?} 是否跳过页面加载等待 */
-    notWaiteLoaded: undefined,
-    /** @type {string} 最后读取的公告版本 */
-    lastReadAnnounceVer: undefined,
-    /** @type {number} 当前已打开的模态对话框数量*/
-    openDialogCount: 0
 };
 
 /**
@@ -352,6 +356,50 @@ OJBetter.chatgpt = {
     /** @type {boolean?} 是否为流式传输 */
     isStream: undefined
 };
+
+/**
+ * @namespace about
+ * @desc 关于页信息
+ * @memberof OJBetter
+ */
+OJBetter.about = {
+    /** @type {string?} 更新通道 */
+    updateChannel: undefined,
+    /** @type {string?} 更新源 */
+    updateSource: undefined
+};
+
+/**
+ * @namespace supportList
+ * @desc 支持列表
+ * @memberof OJBetter
+ */
+OJBetter.supportList = {
+    /** @type {object} 翻译支持列表和对应语言代码*/
+    translationSupport: {
+        'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
+        'iflyrec': { 'zh': '1' },
+        'youdao': { 'zh': 'AUTO' },
+        'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
+        'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
+        'openai': { 'zh': '中文', 'zh-Hant': '繁體中文', 'de': 'Deutsch', 'fr': 'Français', 'ko': '한국어', 'pt': 'Português', 'ja': '日本語', 'es': 'Español', 'it': 'Italiano', 'hi': 'हिन्दी' }
+    },
+    /** @type {object} 更新源支持列表*/
+    updateSourceSupportList: {
+        'greasyfork': {
+            'release': true,
+            'dev': false
+        },
+        'github': {
+            'release': true,
+            'dev': true
+        },
+        'aliyunoss': {
+            'release': true,
+            'dev': true
+        }
+    }
+}
 
 // ------------------------------
 // 一些工具函数
@@ -658,6 +706,8 @@ async function initVar() {
             });
         }
     }
+    OJBetter.about.updateChannel = getGMValue("updateChannel", "release");
+    OJBetter.about.updateSource = getGMValue("updateSource", "greasyfork");
 }
 
 /**
@@ -718,15 +768,6 @@ m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
-// 翻译支持
-const translationSupport = {
-    'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
-    'iflyrec': { 'zh': '1' },
-    'youdao': { 'zh': 'AUTO' },
-    'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
-    'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
-    'openai': { 'zh': '中文', 'zh-Hant': '繁體中文', 'de': 'Deutsch', 'fr': 'Français', 'ko': '한국어', 'pt': 'Português', 'ja': '日本語', 'es': 'Español', 'it': 'Italiano', 'hi': 'हिन्दी' }
-}
 
 
 /**
@@ -1875,9 +1916,13 @@ header .enter-or-register-box, header .languages {
     text-decoration: none;
     display: flex;
     width: 100%;
+    font-size: 16px;
     color: gray;
+    background-color: #ffffff;
+    border: none;
     letter-spacing: 2px;
     padding: 7px;
+    margin: 0px;
     border-radius: 4px;
     align-items: center;
     -webkit-box-sizing: border-box;
@@ -1886,6 +1931,17 @@ header .enter-or-register-box, header .languages {
 }
 .CFBetter_setting_sidebar li a.active {
     background-color: #eceff1c7;
+}
+/* 链接样式 */
+.CFBetter_setting_menu a {
+    font-size: 13px;
+    color: #009688;
+    background-color: #E0F2F1;
+    border: 1px solid #009688;
+    border-radius: 4px;
+    padding: 0px 5px;
+    margin: 0px 5px;
+    text-decoration: none;
 }
 /* 下拉选择框 */
 .CFBetter_setting_menu select {
@@ -2426,34 +2482,6 @@ div#update_panel {
     border: 1px solid #848484;
     border-radius: 8px;
 }
-div#update_panel #updating {
-    cursor: pointer;
-	display: inline-flex;
-	padding: 3px;
-	background-color: #1aa06d;
-	color: #ffffff;
-	font-size: 14px;
-	line-height: 1.5rem;
-	font-weight: 500;
-	justify-content: center;
-	width: 100%;
-	border-radius: 0.375rem;
-	border: none;
-	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-div#update_panel #updating a {
-    text-decoration: none;
-    color: white;
-    display: flex;
-    position: inherit;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 22px;
-    font-size: 14px;
-    justify-content: center;
-    align-items: center;
-}
 #skip_menu {
     display: flex;
     margin-top: 10px;
@@ -2701,6 +2729,17 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     color: #F44336;
     border: 1px dashed #009688;
     background-color: #ffebcd;
+}
+/* 版本信息 */
+.versionInfo{
+    display: grid;
+    justify-items: center;
+    color: #00796B;
+    font-size: 16px;
+    padding: 10px;
+}
+.versionInfo>* {
+    margin: 10px 0px;
 }
 /* RatingByClist */
 .ratingBadge, html[data-theme=dark] button.ratingBadge{
@@ -3476,7 +3515,7 @@ async function getExternalJSON(url) {
 }
 
 /**
- * 创建确认对话框
+ * 创建确认对话框dialog
  * @param {string} title 标题
  * @param {string} content 内容
  * @param {string[]} buttons 按钮 (取消 确定) 可以为null
@@ -3597,85 +3636,64 @@ function clearI18nextCache() {
 /**
  * 更新检查
  */
-function checkScriptVersion() {
-    function compareVersions(version1 = "0", version2 = "0") {
-        const v1Array = String(version1).split(".");
-        const v2Array = String(version2).split(".");
-        const minLength = Math.min(v1Array.length, v2Array.length);
-        let result = 0;
-        for (let i = 0; i < minLength; i++) {
-            const curV1 = Number(v1Array[i]);
-            const curV2 = Number(v2Array[i]);
-            if (curV1 > curV2) {
-                result = 1;
-                break;
-            } else if (curV1 < curV2) {
-                result = -1;
-                break;
-            }
+async function checkScriptVersion() {
+    /**
+     * 版本号比较
+     * @param {string} version1 版本号1
+     * @param {string} version2 版本号2
+     * @returns {number} -1: version1 < version2, 0: version1 = version2, 1: version1 > version2
+     */
+    const compareVersions = function (version1 = "0", version2 = "0") {
+        const v1Array = version1.split(".").map(Number);
+        const v2Array = version2.split(".").map(Number);
+        const length = Math.max(v1Array.length, v2Array.length);
+        for (let i = 0; i < length; i++) {
+            const diff = (v1Array[i] || 0) - (v2Array[i] || 0);
+            if (diff) return Math.sign(diff);
         }
-        if (result === 0 && v1Array.length !== v2Array.length) {
-            const v1IsBigger = v1Array.length > v2Array.length;
-            const maxLenArray = v1IsBigger ? v1Array : v2Array;
-            for (let i = minLength; i < maxLenArray.length; i++) {
-                const curVersion = Number(maxLenArray[i]);
-                if (curVersion > 0) {
-                    v1IsBigger ? result = 1 : result = -1;
-                    break;
-                }
-            }
-        }
-        return result;
+        return 0;
     }
 
-    GM_xmlhttpRequest({
-        method: "GET",
-        url: "https://greasyfork.org/zh-CN/scripts/465777.json",
-        timeout: 10 * 1e3,
-        onload: function (response) {
-            const scriptData = JSON.parse(response.responseText);
-            const skipUpdate = getCookie("skipUpdate");
+    try {
+        const versionResponse = await GMRequest({
+            method: "GET",
+            url: "https://aowuucdn.oss-accelerate.aliyuncs.com/script/versions.json",
+            timeout: 10 * 1e3,
+        });
+        const versionData = JSON.parse(versionResponse.responseText);
+        const { 'codeforces-better': { dev: version_dev, release: version_release } } = versionData;
+        const baseUrls = {
+            greasyfork: 'https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js',
+            github: `https://github.com/beijixiaohu/OJBetter/raw/main/script/${OJBetter.about.updateChannel}/codeforces-better.user.js`,
+            aliyunoss: `https://aowuucdn.oss-accelerate.aliyuncs.com/script/${OJBetter.about.updateChannel}/codeforces-better.user.js`
+        };
+        /** @type {string} 更新跳转url */
+        const updateUrl = baseUrls[OJBetter.about.updateSource];
+        /** @type {string} 是否暂时跳过cookie */
+        const skipUpdate = getCookie("skipUpdate");
+        /** @type {string} 当前更新频道的最新版本 */
+        const version = OJBetter.about.updateChannel == "release" ? version_release : version_dev;
+        if (compareVersions(version, OJBetter.state.version) === 1 && skipUpdate !== "true") {
+            const updateConfirmed = await createDialog(
+                i18next.t('update.title', { ns: 'dialog', scriptName: OJBetter.state.name }),
+                i18next.t('update.content', { ns: 'dialog', oldVersion: OJBetter.state.version, newVersion: version }),
+                [
+                    i18next.t('update.buttons.0', { ns: 'dialog' }),
+                    i18next.t('update.buttons.1', { ns: 'dialog' })
+                ],
+                true
+            );
 
-            if (
-                scriptData.name === GM_info.script.name &&
-                compareVersions(scriptData.version, GM_info.script.version) === 1 &&
-                skipUpdate !== "true"
-            ) {
-                const element = $(`
-                    <dialog id='update_panel'>
-                        <h3>${GM_info.script.name}有新版本！</h3>
-                        <hr>
-                        <div class='update_panel_menu'>
-                            <span class ='tip'>版本信息：${GM_info.script.version} → ${scriptData.version}</span>
-                        </div>
-                        <br>
-                        <div id="skip_menu">
-                            <div class="help_tip">
-                                ${helpCircleHTML}
-                                <div class="tip_text">
-                                    <p><b>更新遇到了问题？</b></p>
-                                    <p>由于 Greasyfork 平台的原因，当新版本刚发布时，点击 Greasyfork 上的更新按钮<u>可能</u>会出现<u>实际更新/安装的却是上一个版本</u>的情况</p>
-                                    <p>通常你只需要稍等几分钟，然后再次前往更新/安装即可</p>
-                                    <p>你也可以<u>点击下方按钮，在本次浏览器会话期间将不再提示更新</u></p>
-                                    <button id='skip_update' class='ojb_btn'>暂不更新</button>
-                                </div>
-                            </div>
-                            <button id='updating'><a target="_blank" href="${scriptData.url}">更新</a></button>
-                        </div>
-                    </dialog>
-                `);
-                $("body").append(element);
-                OJB_showModal(element);
-                OJB_addDraggable(element);
-
-                $("#skip_update").click(function () {
-                    document.cookie = "skipUpdate=true; expires=session; path=/";
-                    OJB_closeAndRemoveModal(element);
-                });
+            if (updateConfirmed) {
+                window.location.href = updateUrl;
+            } else {
+                document.cookie = "skipUpdate=true; expires=session; path=/";
             }
         }
-    });
-};
+    } catch (error) {
+        console.error("更新检查失败：", error);
+    }
+}
 
 /**
  * 提示信息类
@@ -4536,6 +4554,7 @@ const CFBetter_setting_sidebar_HTML = `
         <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
         <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
         <li><a href="#dev-settings" id="sidebar-dev-settings" data-i18n="settings:sidebar.dev"></a></li>
+        <li><a href="#about-settings" id="sidebar-about-settings" data-i18n="settings:sidebar.about"></a></li>
     </ul>
 </div>
 `;
@@ -5073,7 +5092,6 @@ const code_editor_settings_HTML = `
 </div>
 `;
 
-// TODO 2
 const dev_settings_HTML = `
 <div id="dev-settings" class="settings-page">
     <h3 data-i18n="settings:devSettings.title"></h3>
@@ -5144,6 +5162,44 @@ const dev_settings_HTML = `
 </div>
 `;
 
+// TODO 2
+const about_settings_HTML = `
+<div id="about-settings" class="settings-page">
+    <h3 data-i18n="settings:about.title"></h3>
+    <hr>
+    <div class='versionInfo'>
+        <p><span data-i18n="settings:about.version"></span><span id="nowVersion">${OJBetter.state.version}</span></p>
+        <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a> 
+        <a target="_blank" href="https://greasyfork.org/zh-CN/scripts/465777">GreasyFork</a></p>
+    </div>
+    <hr>
+    <h5 data-i18n="settings:about.update.title"></h5>
+    <div class='CFBetter_setting_list'>
+        <label for="updateChannel"><span data-i18n="settings:about.update.channel.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:about.update.channel.helpText"></div>
+        </div>
+        <select id="updateChannel" name="updateChannel">
+            <option value="release" data-i18n="settings:about.update.channel.options.release"></option>
+            <option value="dev" data-i18n="settings:about.update.channel.options.dev"></option>
+        </select>
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="updateSource"><span data-i18n="settings:about.update.source.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:about.update.source.helpText"></div>
+        </div>
+        <select id="updateSource" name="updateSource">
+            <option value="greasyfork" data-i18n="settings:about.update.source.options.greasyfork"></option>
+            <option value="github" data-i18n="settings:about.update.source.options.github"></option>
+            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
+        </select>
+    </div>
+</div>
+`;
+
 const CFBetter_setting_content_HTML = `
 <div class="CFBetter_setting_content">
     ${basic_settings_HTML}
@@ -5152,6 +5208,7 @@ const CFBetter_setting_content_HTML = `
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
     ${dev_settings_HTML}
+    ${about_settings_HTML}
 </div>
 `;
 
@@ -5501,7 +5558,7 @@ async function initSettingsPanel() {
          * @param {Object} translationSupport 翻译支持的语言对应表
          */
         const updateRadioButtonsAvailability = (selector, targetLanguage) => {
-            Object.entries(translationSupport).forEach(([service, languages]) => {
+            Object.entries(OJBetter.supportList.translationSupport).forEach(([service, languages]) => {
                 const radioButton = $(selector).find(`input[value="${service}"]`);
                 const isEnabled = languages[targetLanguage];
                 $(radioButton).prop('disabled', !isEnabled);
@@ -5523,7 +5580,7 @@ async function initSettingsPanel() {
         };
 
         /**
-         * 更新下拉框的可用状态
+         * 更新翻译目标语言下拉框的可用状态
          * @param {string} selector 下拉框的选择器
          * @param {string} targetLanguage 目标语言
          * @param {Object} translationSupport 翻译支持的语言对应表
@@ -5531,14 +5588,14 @@ async function initSettingsPanel() {
         const updateSelectOptionsAvailability = (selector, targetLanguage) => {
             $(selector).children('option').each(function () {
                 const optionValue = $(this).val();
-                const isEnabled = translationSupport[optionValue] ? translationSupport[optionValue][targetLanguage] : true;
+                const isEnabled = OJBetter.supportList.translationSupport[optionValue] ? OJBetter.supportList.translationSupport[optionValue][targetLanguage] : true;
                 $(this).prop('disabled', !isEnabled);
             });
             validateSelectOption(selector);
         };
 
         /**
-         * 更新复选框的可用状态
+         * 更新翻译服务复选框的可用状态
          * @param {string} selector 复选框的选择器
          * @param {string} targetLanguage 目标语言
          * @param {Object} translationSupport 翻译支持的语言对应表
@@ -5546,12 +5603,27 @@ async function initSettingsPanel() {
         const updateCheckboxesAvailability = (selector, targetLanguage) => {
             $(selector).children('input').each(function () {
                 const checkboxValue = $(this).val();
-                const isEnabled = translationSupport[checkboxValue][targetLanguage];
+                const isEnabled = OJBetter.supportList.translationSupport[checkboxValue][targetLanguage];
                 $(this).prop('disabled', !isEnabled);
                 if (!isEnabled) {
                     $(this).prop('checked', false);
                 }
             });
+        };
+
+        /**
+         * 更新更新源下拉框的可用状态
+         * @param {string} selector 下拉框的选择器
+         * @param {string} targetLanguage 目标语言
+         * @param {Object} translationSupport 翻译支持的语言对应表
+         */
+        const updateUpdateSourceSelectOptionsAvailability = (selector, updateChannel) => {
+            $(selector).children('option').each(function () {
+                const optionValue = $(this).val();
+                const isEnabled = OJBetter.supportList.updateSourceSupportList[optionValue][updateChannel];
+                $(this).prop('disabled', !isEnabled);
+            });
+            validateSelectOption(selector);
         };
 
         /**
@@ -5681,6 +5753,13 @@ async function initSettingsPanel() {
         $('#configuration_clearButton').click(deleteAllConfigSettings);
         $('#configuration_exportButton').click(() => { downloadDataAsFile(exportSettingsToJSON(), 'configuration_export.json') });
         $('#configuration_importButton').click(() => { readFileInput((fileContent) => { importSettingsFromJSON(fileContent); }) });
+        // 关于
+        $('#updateChannel').val(GM_getValue("updateChannel"));
+        $('#updateSource').val(GM_getValue("updateSource"));
+        $('#updateChannel').change(function () {
+            var selectedLang = $(this).val();
+            updateUpdateSourceSelectOptionsAvailability('#updateSource', selectedLang);
+        });
 
         // 关闭
         const $settingMenu = $(".CFBetter_setting_menu");
@@ -5737,6 +5816,8 @@ async function initSettingsPanel() {
                 OJBetter_Bridge_SocketUrl: $('#OJBetter_Bridge_SocketUrl').val(),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
                 notWaiteLoaded: $("#notWaiteLoaded").prop("checked"),
+                updateChannel: $('#updateChannel').val(),
+                updateSource: $('#updateSource').val()
             };
             // tempConfigs的数据
             const tempConfigs = {
@@ -6573,7 +6654,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // Function to check if the service supports the target language
         function supportsTargetLanguage(service, targetLang) {
-            return translationSupport[service] && translationSupport[service][targetLang] !== undefined;
+            return OJBetter.supportList.translationSupport[service] && OJBetter.supportList.translationSupport[service][targetLang] !== undefined;
         }
 
         if (is_comment) {
@@ -11387,9 +11468,9 @@ async function addProblemPageCodeEditor() {
  * @returns {string} 目标语言，如果没有对应代码则返回中文
  */
 function getTargetLanguage(serverName) {
-    let targetLanguage = translationSupport[serverName][OJBetter.translation.targetLang];
+    let targetLanguage = OJBetter.supportList.translationSupport[serverName][OJBetter.translation.targetLang];
     if (targetLanguage) return targetLanguage;
-    else return translationSupport[serverName]['zh'];
+    else return OJBetter.supportList.translationSupport[serverName]['zh'];
 }
 
 /**
