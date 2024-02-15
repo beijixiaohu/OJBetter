@@ -5,7 +5,8 @@
         "translation": "Rendering",
         "clist": "Clist",
         "monaco": "Monaco",
-        "dev": "Wartung"
+        "dev": "sichern",
+        "about": "in Bezug auf"
     },
     "common": {
         "configManageTitle": "Konfigurationsmanagement",
@@ -55,8 +56,8 @@
         "scriptLanguageLabel": "Skriptsprache",
         "websiteLanguageLabel": "Website Sprache",
         "notice": {
-            "1": "<strong>Helfen Sie mit, die Qualität der Übersetzungen zu verbessern</strong><p>Der Autor ist nur mit vereinfachtem Chinesisch und Englisch vertraut. Für alle anderen Sprachen werden die Skripte und die Sprachlokalisierung der Website durch maschinelle Übersetzung (Deepl & Google) vorgenommen und der Übersetzungsworkflow wird von crowddin gehostet.</p><p>Wenn Sie helfen möchten, die Qualität der lokalisierten Übersetzungen für eine bestimmte Sprache zu verbessern,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>klicken Sie hier</a>, um dorthin zu gelangen und bei der Verbesserung zu helfen.</p><p>Vielen Dank für Ihren Beitrag!</p>",
-            "2": "<strong>Helfen Sie mit, die Sprachlokalisierung von Websites zu verbessern</strong><p>Wenn Sie der Meinung sind, dass es notwendig ist, einen Teil Ihrer Website zu lokalisieren und die lokale Ersetzung keine ernsthaften Leistungsprobleme verursacht, können Sie gerne die Lokalisierungsregel<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'> </a>verbessern.</p><p>Wenn Sie eine neue Regel hinzufügen möchten, müssen Sie deren vereinfachte chinesische Version：fork hinzufügen und die Regeldatei ändern und dann eine Pull-Anfrage starten.</p><p>Nachdem die Einreichung zusammengeführt wurde, vervollständigt crowdin automatisch die Übersetzung für die anderen Sprachen, und Sie können auch später zu crowdin gehen, um die Qualität der Übersetzung für die anderen Sprachen zu verbessern.</p>"
+            "1": "<strong>Helfen Sie mit, die Qualität der Übersetzungen zu verbessern</strong><p>Der Autor ist nur mit vereinfachtem Chinesisch und Englisch vertraut, für alle anderen Sprachen werden die Skripte und die Sprachlokalisierung der Website durch maschinelle Übersetzung (Deepl & Google) vorgenommen und der Übersetzungsworkflow wird von crowddin gehostet.</p><p>Wenn Sie gerne helfen möchten, die Qualität der lokalisierten Übersetzungen für eine bestimmte Sprache zu verbessern,</p><p>sind Sie herzlich eingeladen,<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>unter</a>zu besuchen, und Ihr Beitrag wird geschätzt!</p>",
+            "2": "<strong>Hilfe bei der Verbesserung der Sprachlokalisierung von Websites</strong><p>Wenn Sie der Meinung sind, dass die Lokalisierung irgendwo auf Ihrer Website notwendig ist und dass das Ersetzen der Lokalisierung keine ernsthaften Leistungsprobleme verursacht, können Sie gerne<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>unter Verbesserung der Lokalisierungsregeln</a>gehen.</p><p>Wenn Sie eine neue Regel hinzufügen möchten, müssen Sie die vereinfachte chinesische Version der Regel：fork hinzufügen und die Regeldatei ändern und dann eine Pull-Anfrage starten.</p><p>Nachdem die Einreichung zusammengeführt wurde, vervollständigt crowdin automatisch die Übersetzung für die anderen Sprachen. Sie können später zu crowdin gehen, um die Qualität der Übersetzung auch für die anderen Sprachen zu verbessern.</p>"
         }
     },
     "translationSettings": {
@@ -184,7 +185,7 @@
         "title": "Clist Einstellungen",
         "basics": {
             "name": "grundlegend",
-            "notice": "<p>Hinweis：Für den Zugriff auf Clist-Daten sind gültige Anmeldedaten erforderlich. Sie haben zwei Möglichkeiten:：</p><p>Geben Sie den offiziellen API-Schlüssel<a href='https://clist.by/' target='_blank'> clist.by <a/>unten ein,</p><p>oder lassen Sie die clist.by-Website in Ihrem Browser eingeloggt (d.h. das Cookie ist gültig)</p>",
+            "notice": "<p>Hinweis：Für den Zugriff auf Clist-Daten sind gültige Anmeldedaten erforderlich. Sie haben zwei Möglichkeiten:：</p><p>Geben Sie den offiziellen API-Schlüssel<a href='https://clist.by/' target='_blank'> clist.by </a>unten ein,</p><p>oder lassen Sie die clist.by-Website in Ihrem Browser eingeloggt (d.h. das Cookie ist gültig)</p>",
             "key": {
                 "title": "SCHLÜSSEL.",
                 "helpText": "<p>Beispielformat：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
@@ -274,7 +275,7 @@
         }
     },
     "devSettings": {
-        "title": "Wartung",
+        "title": "sichern",
         "notice": "<p>Hinweis：Normalerweise brauchen Sie diese Funktionen nicht zu verwenden.</p><p>Wenn Sie sich über die Bedeutung der Funktionen nicht im Klaren sind, bedienen Sie sie nicht!</p>",
         "load": {
             "title": "(von Fracht etc.) Ladung",
@@ -317,6 +318,30 @@
                 "helpText": "<p>Sie können die aktuelle Skriptkonfiguration exportieren oder eine bereits exportierte Konfiguration importieren</p>",
                 "export": "ableiten",
                 "import": "importieren (Daten)"
+            }
+        }
+    },
+    "about": {
+        "title": "in Bezug auf",
+        "version": "Version：",
+        "update": {
+            "title": "Update",
+            "channel": {
+                "label": "Update-Kanal",
+                "helpText": "<p>Sie können den Aktualisierungskanal für das Skript auswählen</p><p>Hinweis：Beta-Versionen werden automatisch nach jedem Commit auf Github gepusht, daher sind sie nicht verifiziert und können viele Probleme aufweisen</p><p>Für Probleme mit Beta-Versionen werfen Sie bitte Probleme auf Github auf und fügen Sie Beta-Tags hinzu</p>",
+                "options": {
+                    "release": "stabile Version",
+                    "beta": "Beta-Version"
+                }
+            },
+            "source": {
+                "label": "Update-Quelle",
+                "helpText": "<p>Sie können die Download-Quelle für die Skripte wählen</p><p>. Sie werden gleichzeitig aktualisiert.</p>",
+                "options": {
+                    "greasyfork": "GreasyFork",
+                    "github": "Github",
+                    "aliyunoss": "Aliyun OSS"
+                }
             }
         }
     }
