@@ -328,10 +328,10 @@
             "title": "Update",
             "channel": {
                 "label": "Update-Kanal",
-                "helpText": "<p>Sie können den Aktualisierungskanal für das Skript auswählen</p><p>Hinweis：Beta-Versionen werden automatisch nach jedem Commit auf Github gepusht, daher sind sie nicht verifiziert und können viele Probleme aufweisen</p><p>Für Probleme mit Beta-Versionen werfen Sie bitte Probleme auf Github auf und fügen Sie Beta-Tags hinzu</p>",
+                "helpText": "<p>Sie können den Update-Kanal für das Skript</p><p>wählen. Beachten Sie, dass die Beta-Version von：automatisch nach jedem Commit auf Github gepusht wird, daher wurde sie nicht ausgiebig getestet und kann verschiedene unbekannte Probleme aufweisen.</p><p>Bitte melden Sie Probleme auf Github und fügen Sie Beta-Tags für Probleme mit der Beta-Version hinzu</p>",
                 "options": {
                     "release": "stabile Version",
-                    "beta": "Beta-Version"
+                    "dev": "Beta-Version"
                 }
             },
             "source": {
