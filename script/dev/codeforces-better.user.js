@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.36
+// @version      1.72.37
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -77,7 +77,9 @@ OJBetter.state = {
     version: GM_info.script.version,
     /** @type {boolean?} 是否跳过页面加载等待 */
     notWaiteLoaded: undefined,
-    /** @type {string} 最后读取的公告版本 */
+    /** @type {string} 最后公告版本，用于标识版本更新完成提示 */
+    lastAnnounceVer: undefined,
+    /** @type {string} 最后读取的有效公告版本 */
     lastReadAnnounceVer: undefined,
     /** @type {number} 当前已打开的模态对话框数量*/
     openDialogCount: 0
@@ -584,6 +586,7 @@ const compareVersions = function (version1 = "0", version2 = "0") {
  */
 async function initVar() {
     const { hostname, href } = window.location;
+    OJBetter.state.lastAnnounceVer = getGMValue("lastAnnounceVer", "0");
     OJBetter.state.lastReadAnnounceVer = getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
     OJBetter.typeOfPage.is_oldLatex = $('.tex-span').length;
@@ -727,18 +730,26 @@ async function initVar() {
     OJBetter.about.updateSource = getGMValue("updateSource", "greasyfork");
 }
 
-// TODO 5
 /**
  * 公告
  */
 async function showAnnounce() {
-    if (compareVersions(OJBetter.state.version, OJBetter.state.lastReadAnnounceVer) === 1) {
+    /** @type {string} 最新公告版本*/
+    const lastAnnounceVer = i18next.t('lastVersion', { ns: 'announce' });
+    if (compareVersions(OJBetter.state.version, OJBetter.state.lastAnnounceVer) === 1) {
         const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${OJBetter.state.version}`;
+        /** @type {Boolean} 是否是新的公告 */
+        const isNewAnnounceVer = compareVersions(lastAnnounceVer, OJBetter.state.lastReadAnnounceVer) === 1;
+        const content = (() => {
+            if (isNewAnnounceVer) {
+                return i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
+            } else {
+                return i18next.t('announce.divContent', { ns: 'dialog' });
+            }
+        })();
         const ok = await createDialog(
             title,
-            OJBetter.about.updateChannel == "release" ?
-                i18next.t('announce.content', { ns: 'dialog' }) :
-                i18next.t('announce.divContent', { ns: 'dialog' }),
+            content,
             [
                 null,
                 i18next.t('announce.buttons.0', { ns: 'dialog' })
@@ -746,7 +757,10 @@ async function showAnnounce() {
             true
         ); //跳过折叠块确认
         if (ok) {
-            GM_setValue('lastReadAnnounceVer', OJBetter.state.version);
+            if (isNewAnnounceVer) {
+                GM_setValue('lastReadAnnounceVer', lastAnnounceVer);
+            }
+            GM_setValue('lastAnnounceVer', OJBetter.state.version);
         }
     }
 };
@@ -1506,11 +1520,10 @@ dialog::backdrop {
     cursor: pointer;
     background-color: #ffffff;
     color: #606266;
-    height: 22px;
     width: auto;
     font-size: 13px;
     border-radius: 0.3rem;
-    padding: 1px 5px;
+    padding: 2px 5px;
     margin: 0px 5px;
     border: 1px solid #dcdfe6;
 }
@@ -1731,6 +1744,14 @@ html:not([data-theme='dark']) .translateDiv {
     box-sizing: border-box;
     font-size: 13px;
 }
+.translate-problem-statement-panel{
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f9fa;
+    border: 1px solid #c5ebdf;
+    border-radius: 0.3rem;
+    margin: 4px 0px;
+}
 .translate-problem-statement-panel .ojb_btn {
     background: none;
     border: none;
@@ -1777,14 +1798,6 @@ html:not([data-theme='dark']) .translateDiv {
     background-color: #800;
     color: #fff;
     text-decoration: none;
-}
-.translate-problem-statement-panel{
-    display: flex;
-    justify-content: space-between;
-    background-color: #f9f9fa;
-    border: 1px solid #c5ebdf;
-    border-radius: 0.3rem;
-    margin: 4px 0px;
 }
 .translate-problem-statement table {
     border: 1px #ccc solid !important;
@@ -1904,7 +1917,7 @@ header .enter-or-register-box, header .languages {
 }
 .CFBetter_setting_content {
     flex-grow: 1;
-    margin: 20px 0px 0px 20px;
+    margin: 20px 0px 0px 12px;
     padding-right: 10px;
     max-height: 580px;
     overflow-y: auto;
@@ -2142,18 +2155,29 @@ header .enter-or-register-box, header .languages {
     justify-content: space-between;
 }
 
+.CFBetter_setting_list.alert_danger {
+    color: #F44336;
+    background-color: #FFEBEE;
+    border: 1px solid #F44336;
+    margin: 10px 0px;
+}
 .CFBetter_setting_list.alert_warn {
     color: #E65100;
     background-color: #FFF3E0;
     border: 1px solid #FF9800;
     margin: 10px 0px;
 }
-
 .CFBetter_setting_list.alert_tip {
     color: #009688;
     background-color: #E0F2F1;
     border: 1px solid #009688;
     margin: 10px 0px;
+}
+.CFBetter_setting_list.alert_info {
+    color: #ffffff;
+    background-color: #009688;
+    margin: 10px 0px;
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 }
 
 .CFBetter_setting_list p:not(:last-child) {
@@ -2814,20 +2838,25 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     outline: none;
 }
 #CFBetter_SubmitForm .topDiv {
-    display:flex;
+    height: 28px;
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 0px;
 }
 #CFBetter_SubmitForm .topDiv .topRightDiv {
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 0px;
 }
 /* 顶部区域 */
-#CFBetter_SubmitForm .topDiv button{
+#CFBetter_SubmitForm .topRightDiv>* {
     height: 100%;
-    padding: 5px 10px;
-    font-size: 14px;
+    box-sizing: border-box;
+}
+#CFBetter_SubmitForm .topRightDiv>button{
+    padding: 0px 8px;
 }
 #CFBetter_SubmitForm .topRightDiv {
     display: flex;
@@ -2948,6 +2977,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     animation: shake 0.07s infinite alternate;
 }
 #programTypeId{
+    height: 100%;
     padding: 5px 10px;
     border-radius: 6px;
     border-style: solid;
@@ -4003,7 +4033,7 @@ async function initI18next() {
             .use(i18nextChainedBackend)
             .init({
                 lng: OJBetter.localization.scriptLang,
-                ns: ['common', 'settings', 'config', 'dialog', 'alert', 'translator', 'button', 'codeEditor', 'comments'], // 命名空间列表
+                ns: ['common', 'settings', 'config', 'dialog', 'alert', 'translator', 'button', 'codeEditor', 'comments', 'announce'], // 命名空间列表
                 defaultNS: 'settings',
                 fallbackLng: ['zh', OJBetter.translation.targetLang],
                 load: 'currentOnly',
@@ -5098,7 +5128,7 @@ const dev_settings_HTML = `
 <div id="dev-settings" class="settings-page">
     <h3 data-i18n="settings:devSettings.title"></h3>
     <hr>
-    <div class='CFBetter_setting_list alert_warn'>
+    <div class='CFBetter_setting_list alert_danger'>
         <div>
             <p data-i18n="[html]settings:devSettings.notice"></p>
         </div>
@@ -5177,6 +5207,9 @@ const about_settings_HTML = `
     </div>
     <hr>
     <h5 data-i18n="settings:about.update.title"></h5>
+    <div id="thanksforDevChannelNotice" class='CFBetter_setting_list alert_info'>
+        <div data-i18n="[html]settings:about.update.thanksforDevChannelNotice"></div>
+    </div>
     <div class='CFBetter_setting_list'>
         <label for="updateChannel"><span data-i18n="settings:about.update.channel.label"></span></label>
         <div class="help_tip">
@@ -5639,7 +5672,7 @@ async function initSettingsPanel() {
         function createStructure(type, value, require, check = "") {
             return { type, value, require, check };
         }
-        // TODO 1
+
         // deepl配置
         const deeplStructure = {
             '#name': createStructure('text', 'name', true),
@@ -5762,7 +5795,10 @@ async function initSettingsPanel() {
         $('#updateChannel').change(function () {
             var selectedLang = $(this).val();
             updateUpdateSourceSelectOptionsAvailability('#updateSource', selectedLang);
+            if (selectedLang == "dev") $('#thanksforDevChannelNotice').show();
+            else $('#thanksforDevChannelNotice').hide();
         });
+        $('#updateChannel').change();
 
         // 关闭
         const $settingMenu = $(".CFBetter_setting_menu");

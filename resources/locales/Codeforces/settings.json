@@ -321,12 +321,13 @@
             }
         }
     },
-    "about":{
+    "about": {
         "title": "关于",
         "version": "版本：",
-        "update":{
+        "update": {
             "title": "更新",
-            "channel":{
+            "thanksforDevChannelNotice": "<p>感谢你加入测试通道，帮助 Codeforces Better! 变得更好。</p><p>问题反馈请前往<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "channel": {
                 "label": "更新通道",
                 "helpText": "<p>你可以选择脚本的更新通道</p><p>注意：测试版本会在 Github 上每一次 commit 后自动推送，因此其未经过广泛测试验证，可能存在各种未知问题。</p><p>有关测试版本的问题请在 Github 上提 issues，并添加 Beta 标签</p>",
                 "options": {
@@ -334,9 +335,9 @@
                     "dev": "测试版"
                 }
             },
-            "source":{
+            "source": {
                 "label": "更新源",
-                "helpText": "<p>你可以选择脚本的下载源，它们均会同步更新。</p><p>其中 GreasyFork 不支持测试通道。</p>",
+                "helpText": "<p>你可以选择脚本的下载源，它们均会同步更新。</p><p>其中 GreasyFork 不支持测试版通道。</p>",
                 "options": {
                     "greasyfork": "GreasyFork",
                     "github": "Github",
