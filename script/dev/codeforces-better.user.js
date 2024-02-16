@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.38
+// @version      1.72.39
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -740,8 +740,10 @@ async function showAnnounce() {
         const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${OJBetter.state.version}`;
         /** @type {Boolean} 是否是新的公告 */
         const isNewAnnounceVer = compareVersions(lastAnnounceVer, OJBetter.state.lastReadAnnounceVer) === 1;
+        /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
+        const showNewAnnounceVer = compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
         const content = (() => {
-            if (isNewAnnounceVer) {
+            if (isNewAnnounceVer && showNewAnnounceVer) {
                 return i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
             } else {
                 return i18next.t('announce.divContent', { ns: 'dialog' });
@@ -757,7 +759,7 @@ async function showAnnounce() {
             true
         ); //跳过折叠块确认
         if (ok) {
-            if (isNewAnnounceVer) {
+            if (isNewAnnounceVer && showNewAnnounceVer) {
                 GM_setValue('lastReadAnnounceVer', lastAnnounceVer);
             }
             GM_setValue('lastAnnounceVer', OJBetter.state.version);
