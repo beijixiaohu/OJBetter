@@ -17,9 +17,8 @@
     },
     "announce": {
         "title": "को अद्यतन किया गया",
-        "version": "1.73",
-        "content": "####नवीनतम अपडेट लॉग\n\n\n\n",
-        "divContent": "बीटा संस्करण के लिए कोई अपडेट लॉग नहीं है, **[अपडेट कमिट्स](https://github.com/beijixiaohu/OJBetter/commits/main/)**",
+        "noContent": "\n\nवर्तमान संस्करण के लिए कोई अद्यतन लॉग नहीं है",
+        "divContent": "\n\nबीटा संस्करण के लिए कोई अपडेट लॉग नहीं है, [अपडेट कमिट](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
             "अच्छा ऐसा है"
         ]
