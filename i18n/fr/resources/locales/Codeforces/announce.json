@@ -1,0 +1,5 @@
+{
+    "lastVersion": "1.71",
+    "1.72": "- Correction du panneau de configuration de ChatGPT qui ne s'affiche pas, merci à @caoxuanming pour le feedback\n\n- Ajout d'un interrupteur de configuration \"Mouse Scroll Lock\", activé par défaut, merci à @liuhao6 pour la suggestion",
+    "1.71": "- Mise à jour de l'API pour l'évaluation de la liste en v4, ajustement de la méthode de récupération des données de la page de titre pour récupérer via l'API, merci à @wrkwrk pour la suggestion\n\n\n\n- Ajout de l'option \"Streaming\" pour la traduction de ChatGPT, activée par défaut\n\n\n\n- Correction des résultats vides de Google Translate Merci à @ shicxin\n\n\n\n- Ajout d'un interrupteur de configuration \"confirmer ou non la soumission du code deux fois\", activé par défaut Merci à la suggestion de @Rikkual\n\n\n\n- Ajout d'un petit bouton de zone dans la page de l'ensemble des sujets\n\n\n\n- Correction du problème que le résultat de la traduction ne s'affiche pas lorsque l'on fait un clic droit sur la page de l'ensemble des sujets pour l'imprimer Merci à @zfs732 pour ses commentaires !"
+}
