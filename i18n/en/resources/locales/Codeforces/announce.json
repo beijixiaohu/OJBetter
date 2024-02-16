@@ -1,0 +1,5 @@
+{
+    "lastVersion": "1.71",
+    "1.72": "- Fix ChatGPT configuration panel not showing, thanks to @caoxuanming for the feedback\n\n- Add a configuration switch \"Mouse Scroll Lock\", on by default, thanks to @liuhao6 for the suggestion",
+    "1.71": "- Update API for clist rating to v4, adjust the data fetching method of title page to fetch via API, thanks to @wrkwrk for the suggestion\n\n\n\n- Add ChatGPT Translation \"Streaming\" option, on by default\n\n\n\n- Fix Google Translate result is empty Thanks to @ shicxin's feedback\n\n\n\n- Add a configure switch \"whether to confirm code submission twice\", on by default Thanks to @Rikkual's suggestion\n\n\n\n- Add a small area button in the full topic set page\n\n\n\n- Fix the problem that the translation result is not shown when the full topic set page is right-clicked to print Thanks to @zfs732 for his feedback!"
+}
