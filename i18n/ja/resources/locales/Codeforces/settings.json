@@ -326,6 +326,7 @@
         "version": "バージョン：",
         "update": {
             "title": "更新",
+            "thanksforDevChannelNotice": "<p>テストチャンネルにご参加いただき、Codeforces Better!</p><p>ご質問は<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>まで。",
             "channel": {
                 "label": "更新チャネル",
                 "helpText": "<p>スクリプトの更新チャンネルを選択できます</p><p>なお、：のベータ版は、Github 上でコミットされるたびに自動的にプッシュされるため、広範なテストが行われておらず、さまざまな未知の問題がある可能性があります。</p><p>Github で問題を提起し、ベータ版</p>の問題についてはベータ版タグを追加してください。",
@@ -336,7 +337,7 @@
             },
             "source": {
                 "label": "更新元",
-                "helpText": "<p>スクリプトのダウンロード元を選択できます。</p><p>同時に更新されます。</p>",
+                "helpText": "<p>スクリプトのダウンロードソースを選択することができ、それらはすべて同時に更新されます。</p><p>ベータチャンネルはGreasyForkではサポートされていません。</p>",
                 "options": {
                     "greasyfork": "グレイシーフォーク",
                     "github": "ギズブ",
