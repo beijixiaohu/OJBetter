@@ -17,9 +17,8 @@
     },
     "announce": {
         "title": "次に更新",
-        "version": "1.73",
-        "content": "#### 最近の更新日誌\n\n\n\n",
-        "divContent": "ベータ版の更新ログはありません。**[Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)**",
+        "noContent": "\n\n現在のバージョンの変更履歴はありません。",
+        "divContent": "\n\nベータ版には変更履歴がありません。[Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
             "了解"
         ]
