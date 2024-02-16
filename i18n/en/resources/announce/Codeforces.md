@@ -8,23 +8,23 @@
 - Add judgment on the text before translation, if it is suspected to be a code snippet, it will not be automatically translated, and a pop-up window will be prompted before clicking on the translation.
 - Add the ability to select the target language for translation services
 - Add an about page, as well as an update channel and update source selection item
-- 添加调试维护页面，包括缓存刷新，数据清除，导入导出
-- 添加自定义选项： ‘代码编辑器提交按钮位置‘ ，默认为底部，感谢 @lishufood 的建议
-- 改进翻译功能的相关方法，以及报错信息的显示方式
-- 改进自动翻译的性能，以及可能无法自动翻译的问题
-- 改进代码样例在线运行的相关代码
-- 改进运行结果差异对比方法 codeDiff()
-- 改进 dialog 窗口为背景内容不再会随鼠标一起滚动
-- 改进代码编辑器固定到右侧，底部，全屏时的样式，感谢 @lishufood 的建议
-- 改进 .html2md-panel 面板在 simple 模式下的显示效果
-- 改进设置面板中配置页面的样式
-- 修复问题页代码编辑器在切换网站的 移动/桌面 版本后报错的问题
-- 修复 getMarkdown() 方法的一处错误，其错误的将数据直接存储到 DOM 中，导致页面性能下降
-- 修复关闭‘折叠块自动展开’后折叠块内的翻译按钮不显示的问题，感谢 @MoYuToGo 的反馈
-- 由于"不等待页面资源完全加载"选项理论上已无意义，故重命名以取消之前可能的选中状态
-- 调整大量的代码结构
-- **大量的 css class 重命名，因此如果你使用了stylus自定义样式，可能需要调整**
-- 一些其他的调整和改进
+- Add debugging maintenance page, including cache refresh, data clear, import and export
+- Add custom option： 'Code Editor Submit Button Position', defaults to bottom, thanks to @lishufood for the suggestion!
+- Improvements to the translation function and the display of error messages.
+- Improvements to the performance of automatic translations, as well as issues that may not be translated automatically
+- Improvements to code samples related to running the code online
+- Improved method for comparing differences in run results codeDiff()
+- Improved dialog window background content no longer scrolls with the mouse.
+- Improve the style of the code editor when it is fixed to the right side, bottom, and full screen, thanks to @lishufood for the suggestion!
+- Improved display of .html2md-panel panel in simple mode
+- Improved styling of the configuration page in the settings panel
+- Fix the problem with the issue page code editor reporting errors after switching between mobile/desktop versions of the site
+- Fix a bug in the getMarkdown() method, which incorrectly stored data directly into the DOM, resulting in a performance degradation.
+- Fix the problem that the translation button inside the folded block doesn't show up after turning off 'Folded Block Auto Expand', thanks to @MoYuToGo's feedback!
+- Since the "Do not wait for page resources to fully load" option is theoretically meaningless, it was renamed to uncheck the previously possible state
+- Adjustment of a large number of code structures
+- **lots of css class renaming, so you may need to tweak that if you're using stylus custom styles**
+- Some other tweaks and improvements
 
 ## 1.72
 
@@ -42,13 +42,13 @@
 
 ## 1.70
 
-- 在题目页下方添加代码编辑器，支持在线代码测试、代码提交等，具体请阅读 信息 页
-- 修复插入脚本按钮、翻译结果时会被当做题目描述更改的问题
-- 完善 组合混搭管理 页面的汉化
-- 增加 "自动翻译短文本" 功能, 默认关闭
-- 改进翻译等待间隔的实现方式，现在等待间隔全局生效
-- 改进 "显示目标区域范围" 的实现方式
-- 完善黑暗模式，改进样例元素的 hover 样式 感谢 @SUPERLWR 的反馈
-- 增加设置面板选项: 翻译-过滤文本中的\*\*号 感谢 @Dog_E 、CreMicro 的反馈
-- 修复关闭“显示加载提示信息”后，Clist Rating 无法正常显示的问题，感谢 Vistarin 的反馈
-- 一些其他改进和修复
+- Add a code editor at the bottom of the title page to support online code testing, code submission, etc. Please read the information page.
+- Fixed the problem that when inserting script buttons and translating results, they were treated as changes to the title description.
+- Improvement of the Chinese version of the portfolio mixing management page
+- Add "Auto-translate short text" function, off by default.
+- Improved implementation of translation wait intervals, now wait intervals take effect globally
+- Improvement of the "Show target area range" implementation
+- Improved dark mode, improved hover styles on sample elements Thanks to @SUPERLWR for the feedback!
+- Add settings panel option: Translation - Filter \*\*signs in text Thanks to @Dog_E, CreMicro for their feedback!
+- Fixed the issue that Clist Rating could not be displayed correctly after turning off "Show loading alerts", thanks to Vistarin's feedback.
+- Some other improvements and fixes
