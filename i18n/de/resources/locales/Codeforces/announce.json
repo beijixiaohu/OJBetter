@@ -1,0 +1,5 @@
+{
+    "lastVersion": "1.71",
+    "1.72": "- ChatGPT-Konfigurationspanel wird nicht angezeigt, danke an @caoxuanming für das Feedback\n\n- Hinzufügen eines Konfigurationsschalters \"Mouse Scroll Lock\", standardmäßig aktiviert, danke an @liuhao6 für den Vorschlag",
+    "1.71": "- Aktualisieren Sie die API für die Listenbewertung auf v4, passen Sie die Datenabrufmethode der Titelseite so an, dass sie über die API abgerufen wird, danke an @wrkwrk für den Vorschlag\n\n\n\n- Fügen Sie die Option \"Streaming\" für die ChatGPT-Übersetzung hinzu, standardmäßig aktiviert\n\n\n\n- Korrigieren Sie, dass das Ergebnis von Google Translate leer ist, danke an @ shicxin's feedback\n\n\n\n- Fügen Sie einen Konfigurationsschalter \"ob die Codeübermittlung zweimal bestätigt werden soll\" hinzu, standardmäßig aktiviert Danke an @Rikkual's suggestion\n\n\n\n- Fügen Sie einen kleinen Bereichsbutton auf der Seite mit dem vollständigen Themensatz hinzu\n\n\n\n- Beheben Sie das Problem, dass das Übersetzungsergebnis nicht angezeigt wird, wenn die Seite mit dem vollständigen Themensatz mit der rechten Maustaste zum Drucken angeklickt wird Danke an @zfs732 für sein Feedback!"
+}
