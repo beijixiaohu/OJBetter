@@ -1,0 +1,5 @@
+{
+    "lastVersion": "1.71",
+    "1.72": "- Arreglar el panel de configuración de ChatGPT que no se muestra, gracias a @caoxuanming por la sugerencia\n\n- Añadir un interruptor de configuración \"Bloqueo de desplazamiento del ratón\", activado por defecto, gracias a @liuhao6 por la sugerencia",
+    "1.71": "- Update API for clist rating to v4, adjust the data fetching method of title page to fetch via API, thanks to @wrkwrk for the suggestion\n\n\n\n- Add ChatGPT Translation \"Streaming\" option, on by default\n\n\n\n- Fix Google Translate result is empty Thanks to @ ¡shicxin por su sugerencia\n\n\n\n- Añadir un interruptor de configuración \"si confirmar el envío del código dos veces\", activado por defecto Gracias a @Rikkual por su sugerencia\n\n\n\n- Añadir un pequeño botón de área en la página de conjunto de temas completa\n\n\n\n- Solucionar el problema de que el resultado de la traducción no aparece cuando se hace clic con el botón derecho del ratón en la página de conjunto de temas completa para imprimir Gracias a @zfs732 por su sugerencia!"
+}
