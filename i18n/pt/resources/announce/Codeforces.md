@@ -8,23 +8,23 @@
 - Se suspeitar que se trata de um fragmento de código, não será traduzido automaticamente e ser-lhe-á pedida uma janela pop-up antes de clicar na tradução.
 - Adicione a capacidade de selecionar a língua de chegada para os serviços de tradução
 - Adicione uma página sobre, bem como um canal de atualização e selecções de fonte de atualização
-- 添加调试维护页面，包括缓存刷新，数据清除，导入导出
-- 添加自定义选项： ‘代码编辑器提交按钮位置‘ ，默认为底部，感谢 @lishufood 的建议
-- 改进翻译功能的相关方法，以及报错信息的显示方式
-- 改进自动翻译的性能，以及可能无法自动翻译的问题
-- 改进代码样例在线运行的相关代码
-- 改进运行结果差异对比方法 codeDiff()
-- 改进 dialog 窗口为背景内容不再会随鼠标一起滚动
-- 改进代码编辑器固定到右侧，底部，全屏时的样式，感谢 @lishufood 的建议
-- 改进 .html2md-panel 面板在 simple 模式下的显示效果
-- 改进设置面板中配置页面的样式
-- 修复问题页代码编辑器在切换网站的 移动/桌面 版本后报错的问题
-- 修复 getMarkdown() 方法的一处错误，其错误的将数据直接存储到 DOM 中，导致页面性能下降
-- 修复关闭‘折叠块自动展开’后折叠块内的翻译按钮不显示的问题，感谢 @MoYuToGo 的反馈
-- 由于"不等待页面资源完全加载"选项理论上已无意义，故重命名以取消之前可能的选中状态
-- 调整大量的代码结构
-- **大量的 css class 重命名，因此如果你使用了stylus自定义样式，可能需要调整**
-- 一些其他的调整和改进
+- Adicione a página de manutenção de depuração, incluindo a atualização da cache, a limpeza de dados, a importação e a exportação.
+- Adicione a opção personalizada： 'Code Editor Submit Button Position' (Posição do botão de envio do editor de código), a predefinição é inferior, graças a @lishufood pela sugestão!
+- Melhorias na função de tradução e na visualização de mensagens de erro.
+- Melhoria do desempenho da tradução automática e o problema de não poder ser traduzido automaticamente
+- Melhorias nas amostras de código relacionadas com a execução em linha
+- Método melhorado para comparar diferenças nos resultados da execução codeDiff()
+- O conteúdo de fundo da janela de diálogo melhorado já não se desloca com o rato.
+- Melhore o estilo do editor de código quando este está fixo no lado direito, em baixo e em ecrã inteiro, graças a @lishufood pela sugestão!
+- Melhoria da apresentação do painel .html2md-panel no modo simples
+- Melhore o estilo da página de configuração no painel de definições
+- Corrija o problema em que o editor de código da página de problemas reportava um erro depois de mudar a versão móvel/desktop do sítio Web.
+- Corrigir um erro no método getMarkdown(), que armazenava incorretamente dados diretamente no DOM, resultando numa degradação do desempenho.
+- Corrija o problema de o botão de tradução dentro do bloco dobrado não ser apresentado depois de desativar a "Expansão automática do bloco dobrado", graças ao feedback de @MoYuToGo!
+- Uma vez que a opção "Não esperar que os recursos da página sejam totalmente carregados" é teoricamente sem sentido, foi renomeada para desmarcar o estado anteriormente possível
+- Adaptação de um grande número de estruturas de código
+- **muitas renomeações de classes css, pelo que poderá ter de as ajustar se estiver a utilizar estilos personalizados do stylus**
+- Alguns outros ajustes e melhorias
 
 ## 1.72
 
@@ -42,13 +42,13 @@
 
 ## 1.70
 
-- 在题目页下方添加代码编辑器，支持在线代码测试、代码提交等，具体请阅读 信息 页
-- 修复插入脚本按钮、翻译结果时会被当做题目描述更改的问题
-- 完善 组合混搭管理 页面的汉化
-- 增加 "自动翻译短文本" 功能, 默认关闭
-- 改进翻译等待间隔的实现方式，现在等待间隔全局生效
-- 改进 "显示目标区域范围" 的实现方式
-- 完善黑暗模式，改进样例元素的 hover 样式 感谢 @SUPERLWR 的反馈
-- 增加设置面板选项: 翻译-过滤文本中的\*\*号 感谢 @Dog_E 、CreMicro 的反馈
-- 修复关闭“显示加载提示信息”后，Clist Rating 无法正常显示的问题，感谢 Vistarin 的反馈
-- 一些其他改进和修复
+- Adicione um editor de código na parte inferior da página de título para suportar testes de código online, submissão de código, etc. Para mais informações, leia a página de informações.
+- Foi corrigido o problema em que, ao inserir botões de script e traduzir resultados, estes eram tratados como alterações à descrição do título.
+- Melhoria da página Gestão do Mashup de Portefólio
+- Adicione a função "Tradução automática de texto curto", desactivada por predefinição.
+- Implementação melhorada dos intervalos de espera de tradução, agora os intervalos de espera funcionam globalmente
+- Melhorias na implementação de "mostrar a área de alcance do alvo"
+- Modo escuro melhorado, estilos de foco melhorados em elementos de amostra Obrigado a @SUPERLWR pelo feedback!
+- Adicionar a opção do painel de definições: Tradução - Filtrar \*\*sinais no texto Agradecimentos a @Dog_E, CreMicro pelos seus comentários!
+- Foi corrigido o problema em que a Classificação da Lista não era apresentada corretamente depois de desativar a opção "Mostrar alertas de carregamento", graças ao feedback de Vistarin.
+- Algumas outras melhorias e correcções
