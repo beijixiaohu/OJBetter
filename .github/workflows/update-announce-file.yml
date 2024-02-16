@@ -1,0 +1,26 @@
+name: Update Announce File
+
+on:
+  push:
+    paths:
+      - 'resources/announce/*.md'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Convert Markdown to JSON
+        run: python .github/scripts/update-announce.py
+
+      - name: Commit and push if changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update announce.json files"
