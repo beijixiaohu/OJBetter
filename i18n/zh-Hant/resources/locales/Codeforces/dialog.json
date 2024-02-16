@@ -17,9 +17,8 @@
     },
     "announce": {
         "title": "已更新至",
-        "version": "1.73",
-        "content": "####最近更新日誌\n\n\n\n",
-        "divContent": "測試版沒有更新日誌，**[更新Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)**",
+        "noContent": "\n\n目前版本沒有更新日誌",
+        "divContent": "\n\n測試版沒有更新日誌，[更新Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
             "我知道了"
         ]
