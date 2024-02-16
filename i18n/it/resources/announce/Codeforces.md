@@ -8,23 +8,23 @@
 - Aggiungere un giudizio sul testo prima della traduzione; se si sospetta che si tratti di un frammento di codice, non verrà tradotto automaticamente e verrà richiesta una finestra pop-up prima di cliccare sulla traduzione.
 - Aggiungere la possibilità di selezionare la lingua di destinazione per i servizi di traduzione.
 - Aggiunga una pagina informativa, così come un canale di aggiornamento e le selezioni della fonte di aggiornamento.
-- 添加调试维护页面，包括缓存刷新，数据清除，导入导出
-- 添加自定义选项： ‘代码编辑器提交按钮位置‘ ，默认为底部，感谢 @lishufood 的建议
-- 改进翻译功能的相关方法，以及报错信息的显示方式
-- 改进自动翻译的性能，以及可能无法自动翻译的问题
-- 改进代码样例在线运行的相关代码
-- 改进运行结果差异对比方法 codeDiff()
-- 改进 dialog 窗口为背景内容不再会随鼠标一起滚动
-- 改进代码编辑器固定到右侧，底部，全屏时的样式，感谢 @lishufood 的建议
-- 改进 .html2md-panel 面板在 simple 模式下的显示效果
-- 改进设置面板中配置页面的样式
-- 修复问题页代码编辑器在切换网站的 移动/桌面 版本后报错的问题
-- 修复 getMarkdown() 方法的一处错误，其错误的将数据直接存储到 DOM 中，导致页面性能下降
-- 修复关闭‘折叠块自动展开’后折叠块内的翻译按钮不显示的问题，感谢 @MoYuToGo 的反馈
-- 由于"不等待页面资源完全加载"选项理论上已无意义，故重命名以取消之前可能的选中状态
-- 调整大量的代码结构
-- **大量的 css class 重命名，因此如果你使用了stylus自定义样式，可能需要调整**
-- 一些其他的调整和改进
+- Aggiungere la pagina di manutenzione del debug, compreso l'aggiornamento della cache, la cancellazione dei dati, l'importazione e l'esportazione.
+- Aggiunge l'opzione personalizzata： 'Posizione del pulsante di invio dell'editor di codice', predefinita in basso, grazie a @lishufood per il suggerimento!
+- Miglioramenti alla funzione di traduzione e alla visualizzazione dei messaggi di errore.
+- Miglioramento delle prestazioni della traduzione automatica e il problema che potrebbe non essere tradotto automaticamente
+- Miglioramenti ai campioni di codice relativi all'esecuzione online
+- Metodo migliorato per confrontare le differenze nei risultati dell'esecuzione codeDiff()
+- Il contenuto di sfondo della finestra di dialogo migliorato non scorre più con il mouse.
+- Migliora lo stile dell'editor di codice quando è fissato sul lato destro, in basso e a schermo intero, grazie a @lishufood per il suggerimento!
+- Miglioramento della visualizzazione del pannello .html2md-panel in modalità semplice
+- Migliorare lo stile della pagina di configurazione nel pannello delle impostazioni
+- Risolvere il problema per cui l'editor di codice della pagina dei problemi riportava un errore dopo aver cambiato la versione mobile/desktop del sito web.
+- Correzione di un bug nel metodo getMarkdown(), che memorizzava erroneamente i dati direttamente nel DOM, con conseguente degrado delle prestazioni.
+- Risolva il problema che il pulsante di traduzione all'interno del blocco piegato non viene visualizzato dopo aver disattivato 'Espansione automatica del blocco piegato', grazie al feedback di @MoYuToGo!
+- Poiché l'opzione "Non attendere il caricamento completo delle risorse della pagina" è teoricamente priva di significato, è stata rinominata per deselezionare lo stato precedentemente possibile
+- Regolazione di un gran numero di strutture di codice
+- **molte rinominazioni di classi css, quindi potrebbe essere necessario modificare questo aspetto se sta usando gli stili personalizzati di Stylus**.
+- Altre modifiche e miglioramenti
 
 ## 1.72
 
@@ -42,13 +42,13 @@
 
 ## 1.70
 
-- 在题目页下方添加代码编辑器，支持在线代码测试、代码提交等，具体请阅读 信息 页
-- 修复插入脚本按钮、翻译结果时会被当做题目描述更改的问题
-- 完善 组合混搭管理 页面的汉化
-- 增加 "自动翻译短文本" 功能, 默认关闭
-- 改进翻译等待间隔的实现方式，现在等待间隔全局生效
-- 改进 "显示目标区域范围" 的实现方式
-- 完善黑暗模式，改进样例元素的 hover 样式 感谢 @SUPERLWR 的反馈
-- 增加设置面板选项: 翻译-过滤文本中的\*\*号 感谢 @Dog_E 、CreMicro 的反馈
-- 修复关闭“显示加载提示信息”后，Clist Rating 无法正常显示的问题，感谢 Vistarin 的反馈
-- 一些其他改进和修复
+- Aggiungere un editor di codice nella parte inferiore della pagina del titolo, per supportare il test del codice online, l'invio del codice, ecc.
+- È stato risolto il problema per cui, quando si inseriscono i pulsanti di script e si traducono i risultati, questi vengono trattati come modifiche alla descrizione del titolo.
+- Miglioramento della pagina Gestione del Mashup del Portafoglio
+- Aggiungere la funzione "Traduzione automatica di testi brevi", disattivata per impostazione predefinita.
+- Miglioramento dell'implementazione degli intervalli di attesa della traduzione, ora gli intervalli di attesa funzionano a livello globale
+- Miglioramenti all'implementazione di "Mostra area di destinazione".
+- Modalità scura migliorata, stili hover migliorati sugli elementi campione Grazie a @SUPERLWR per il feedback!
+- Aggiungere l'opzione del pannello delle impostazioni: Traduzione - Filtrare i segni \*\*nel testo Grazie a @Dog_E, CreMicro per il loro feedback!
+- È stato risolto il problema per cui la Valutazione Clist non poteva essere visualizzata correttamente dopo aver disattivato "Mostra avvisi di caricamento", grazie al feedback di Vistarin.
+- Altri miglioramenti e correzioni
