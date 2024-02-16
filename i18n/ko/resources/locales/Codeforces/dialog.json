@@ -17,9 +17,8 @@
     },
     "announce": {
         "title": "다음으로 업데이트되었습니다.",
-        "version": "1.73",
-        "content": "#### 최근 업데이트 저널\n\n\n\n",
-        "divContent": "베타에 대한 업데이트 로그가 없습니다. **[업데이트 커밋](https://github.com/beijixiaohu/OJBetter/commits/main/)**.",
+        "noContent": "\n\n현재 버전에 대한 변경 로그가 없습니다.",
+        "divContent": "\n\n베타 버전에는 변경 로그가 없으며, [업데이트 커밋](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
             "알아요"
         ]
