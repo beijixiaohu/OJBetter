@@ -10,21 +10,21 @@
 - Fügen Sie eine Info-Seite sowie einen Aktualisierungskanal und eine Auswahl von Aktualisierungsquellen hinzu.
 - Hinzufügen einer Wartungsseite zur Fehlersuche, einschließlich Cache-Aktualisierung, Datenlöschung, Import und Export.
 - Fügen Sie die benutzerdefinierte Option： 'Position der Einreichungsschaltfläche des Code-Editors' hinzu, Standardeinstellung ist unten, danke an @lishufood für den Vorschlag!
-- 改进翻译功能的相关方法，以及报错信息的显示方式
-- 改进自动翻译的性能，以及可能无法自动翻译的问题
-- 改进代码样例在线运行的相关代码
-- 改进运行结果差异对比方法 codeDiff()
-- 改进 dialog 窗口为背景内容不再会随鼠标一起滚动
-- 改进代码编辑器固定到右侧，底部，全屏时的样式，感谢 @lishufood 的建议
-- 改进 .html2md-panel 面板在 simple 模式下的显示效果
-- 改进设置面板中配置页面的样式
-- 修复问题页代码编辑器在切换网站的 移动/桌面 版本后报错的问题
-- 修复 getMarkdown() 方法的一处错误，其错误的将数据直接存储到 DOM 中，导致页面性能下降
-- 修复关闭‘折叠块自动展开’后折叠块内的翻译按钮不显示的问题，感谢 @MoYuToGo 的反馈
-- 由于"不等待页面资源完全加载"选项理论上已无意义，故重命名以取消之前可能的选中状态
-- 调整大量的代码结构
-- **大量的 css class 重命名，因此如果你使用了stylus自定义样式，可能需要调整**
-- 一些其他的调整和改进
+- Verbesserungen bei der Übersetzungsfunktion und der Anzeige von Fehlermeldungen.
+- Verbesserung der Leistung der automatischen Übersetzung und des Problems, dass sie nicht automatisch übersetzt werden darf
+- Verbesserungen an Codebeispielen im Zusammenhang mit der Online-Ausführung
+- Verbesserte Methode zum Vergleichen von Unterschieden in Laufergebnissen codeDiff()
+- Der Hintergrundinhalt des Dialogfensters scrollt nicht mehr mit der Maus.
+- Verbessern Sie den Stil des Code-Editors, wenn er auf der rechten Seite, unten und im Vollbildmodus fixiert ist. Danke an @lishufood für den Vorschlag!
+- Verbesserte Anzeige des Panels .html2md-panel im einfachen Modus
+- Verbessern Sie den Stil der Konfigurationsseite im Einstellungsfenster
+- Behebung des Problems, dass der Code-Editor der Ausgabeseite einen Fehler meldete, wenn Sie die Mobil-/Desktop-Version der Website umschalteten.
+- Behebung eines Fehlers in der Methode getMarkdown(), durch den Daten fälschlicherweise direkt im DOM gespeichert wurden, was zu einer Leistungsverschlechterung führte.
+- Beheben Sie das Problem, dass die Übersetzungsschaltfläche innerhalb des gefalteten Blocks nicht angezeigt wird, nachdem Sie 'Folded Block Auto Expand' deaktiviert haben, dank des Feedbacks von @MoYuToGo!
+- Da die Option "Nicht warten, bis die Seitenressourcen vollständig geladen sind" theoretisch bedeutungslos ist, wurde sie umbenannt, um den zuvor möglichen Zustand zu deaktivieren
+- Anpassung einer großen Anzahl von Codestrukturen
+- **Viele Umbenennungen von CSS-Klassen, so dass Sie diese möglicherweise anpassen müssen, wenn Sie die benutzerdefinierten Stile von Stylus verwenden**.
+- Einige andere Optimierungen und Verbesserungen
 
 ## 1.72
 
@@ -42,13 +42,13 @@
 
 ## 1.70
 
-- 在题目页下方添加代码编辑器，支持在线代码测试、代码提交等，具体请阅读 信息 页
-- 修复插入脚本按钮、翻译结果时会被当做题目描述更改的问题
-- 完善 组合混搭管理 页面的汉化
-- 增加 "自动翻译短文本" 功能, 默认关闭
-- 改进翻译等待间隔的实现方式，现在等待间隔全局生效
-- 改进 "显示目标区域范围" 的实现方式
-- 完善黑暗模式，改进样例元素的 hover 样式 感谢 @SUPERLWR 的反馈
-- 增加设置面板选项: 翻译-过滤文本中的\*\*号 感谢 @Dog_E 、CreMicro 的反馈
-- 修复关闭“显示加载提示信息”后，Clist Rating 无法正常显示的问题，感谢 Vistarin 的反馈
-- 一些其他改进和修复
+- Fügen Sie unten auf der Titelseite einen Code-Editor hinzu, um das Testen von Online-Code, die Übermittlung von Code usw. zu unterstützen. Details finden Sie auf der Informationsseite.
+- Das Problem wurde behoben, dass beim Einfügen von Skript-Schaltflächen und beim Übersetzen von Ergebnissen diese als Änderungen an der Titelbeschreibung behandelt wurden.
+- Verbesserung der Seite Portfolio Mashup Management
+- Fügen Sie die Funktion "Kurztext automatisch übersetzen" hinzu, die standardmäßig deaktiviert ist.
+- Verbesserte Implementierung von Warteintervallen für Übersetzungen, jetzt funktionieren Warteintervalle global
+- Verbesserungen bei der Implementierung von "Zielbereich anzeigen".
+- Verbesserter dunkler Modus, verbesserte Hover-Stile für Beispielelemente Danke an @SUPERLWR für das Feedback!
+- Option des Einstellungsfeldes hinzufügen: Übersetzung - Zeichen im Text filtern Danke an @Dog_E, CreMicro für ihr Feedback!
+- Dank des Feedbacks von Vistarin wurde das Problem behoben, dass die Clist-Bewertung nicht korrekt angezeigt wurde, nachdem die Option "Ladewarnungen anzeigen" deaktiviert wurde.
+- Einige andere Verbesserungen und Korrekturen
