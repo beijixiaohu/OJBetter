@@ -1,5 +1,4 @@
 import os
-import re
 import json
 from collections import OrderedDict
 
@@ -8,8 +7,11 @@ def parse_markdown(md_content):
     current_version = None
     for line in md_content.split("\n"):
         if line.startswith("## "):
-            current_version = line.strip("# ").strip()
-            versions[current_version] = ""
+            if len(versions) < 3:
+                current_version = line.strip("# ").strip()
+                versions[current_version] = ""
+            else:
+                break
         elif current_version:
             versions[current_version] += "\n\n" + line.strip()
     return versions
@@ -29,12 +31,11 @@ def main():
             md_content = f.read()
 
         versions = parse_markdown(md_content)
-        # Keep only the latest 3 versions
-        latest_versions = list(versions.keys())[-3:]
-        versions = {ver: versions[ver].strip() for ver in latest_versions if ver in versions}
+        versions = {ver: versions[ver].strip() for ver in versions}
+        last_version = next(iter(versions))
 
         with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump({"lastVersion": latest_versions[-1], **versions}, f, ensure_ascii=False, indent=4)
+            json.dump({"lastVersion": last_version, **versions}, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     main()
