@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.37
+// @version      1.72.38
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -3691,6 +3691,7 @@ async function checkScriptVersion() {
             method: "GET",
             url: "https://aowuucdn.oss-accelerate.aliyuncs.com/script/versions.json",
             timeout: 10 * 1e3,
+            nocache: true
         });
         const versionData = JSON.parse(versionResponse.responseText);
         const { 'codeforces-better': { dev: version_dev, release: version_release } } = versionData;
