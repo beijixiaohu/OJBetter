@@ -326,6 +326,7 @@
         "version": "Versione：",
         "update": {
             "title": "aggiornamento",
+            "thanksforDevChannelNotice": "<p>Grazie per essersi unito al canale di test e per aver aiutato Codeforces Better! a migliorare.</p><p>Per domande vada su<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "canale di aggiornamento",
                 "helpText": "<p>Può scegliere il canale di aggiornamento per lo script</p><p>Si noti che la versione beta di：viene automaticamente inviata dopo ogni commit su Github, pertanto non è stata testata in modo approfondito e potrebbe presentare vari problemi sconosciuti.</p><p>Si prega di sollevare problemi su Github e di aggiungere i tag Beta per i problemi con la versione beta</p>",
@@ -336,7 +337,7 @@
             },
             "source": {
                 "label": "fonte di aggiornamento",
-                "helpText": "<p>Può scegliere la fonte di download per gli script</p><p>Saranno aggiornati simultaneamente.</p>",
+                "helpText": "<p>Può scegliere la fonte di download per i suoi script e tutti saranno aggiornati simultaneamente.</p><p>Il canale beta non è supportato da GreasyFork.</p>",
                 "options": {
                     "greasyfork": "GreasyFork",
                     "github": "Github",
