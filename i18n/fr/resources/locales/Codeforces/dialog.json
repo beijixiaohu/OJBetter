@@ -17,9 +17,8 @@
     },
     "announce": {
         "title": "Mise à jour",
-        "version": "1.73",
-        "content": "#### Mises à jour récentes Journal\n\n\n\n",
-        "divContent": "Il n'y a pas de journal des mises à jour pour la version bêta, **[Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)**",
+        "noContent": "\n\nIl n'y a pas de journal des modifications pour la version actuelle.",
+        "divContent": "\n\nLa version beta n'a pas de changelog, [Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
             "Je sais."
         ]
