@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "livello alto",
+            "title": "高级",
             "header": {
                 "label": "Intestazione personalizzata",
                 "placeholder": "(Facoltativo) Qui può inserire altre coppie chiave-valore da aggiungere all'intestazione della richiesta.",
@@ -55,7 +55,7 @@
                 "placeholder": "Assegni un nome a questa configurazione"
             },
             "key": {
-                "label": "CHIAVE.",
+                "label": "KEY:",
                 "placeholder": "Inserisca la CHIAVE",
                 "tipText": "<p>È necessario inserire la propria chiave DeepL,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">sito ufficiale</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>Lasciare vuoto per impostare l'impostazione predefinita su：gpt-3.5-turbo</p><p>Per un elenco di modelli, consulti la documentazione ufficiale di OpenAI<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\"></a></p><p><strong>Inoltre, se sta utilizzando l'API proxy fornita dal fornitore di servizi, verifichi se il fornitore di servizi supporta il modello corrispondente</strong></p>"
             },
             "key": {
-                "label": "CHIAVE.",
+                "label": "KEY:",
                 "placeholder": "Inserisca la CHIAVE",
                 "tipText": "<p>Deve inserire la propria chiave OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">sito ufficiale</a></p><p><b>Se utilizza l'API proxy fornita dal fornitore di servizi, deve inserire la chiave fornita dal fornitore di servizi</b></p>"
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "livello alto",
+            "title": "高级",
             "header": {
                 "label": "Intestazione personalizzata",
                 "placeholder": "(Facoltativo) Qui può inserire altre coppie chiave-valore da aggiungere all'intestazione della richiesta.",
