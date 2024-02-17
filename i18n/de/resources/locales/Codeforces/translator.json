@@ -2,9 +2,9 @@
     "servers": {
         "deepl": "DeepL",
         "iflyrec": "Xunfei hören",
-        "youdao": "an den Prinzipien von Wahrheit und Recht festhalten",
-        "google": "Google",
-        "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
+        "youdao": "有道",
+        "google": "谷歌",
+        "caiyun": "彩云小译",
         "openai": "ChatGPT"
     },
     "transingTip": {
