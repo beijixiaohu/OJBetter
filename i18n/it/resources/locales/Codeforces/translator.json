@@ -2,9 +2,9 @@
     "servers": {
         "deepl": "DeepL",
         "iflyrec": "Xunfei sente",
-        "youdao": "Il buon governo prevale.",
-        "google": "google",
-        "caiyun": "illuminati. nuvole colorate e piccole traduzioni",
+        "youdao": "有道",
+        "google": "谷歌",
+        "caiyun": "彩云小译",
         "openai": "ChatGPT"
     },
     "transingTip": {
