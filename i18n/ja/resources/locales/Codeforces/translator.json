@@ -1,10 +1,10 @@
 {
     "servers": {
-        "deepl": "ディープエル",
+        "deepl": "DeepL",
         "iflyrec": "ライブ表示",
-        "youdao": "真理と正義の原則を守る",
-        "google": "グーグル",
-        "caiyun": "雲のコンパイル",
+        "youdao": "有道",
+        "google": "谷歌",
+        "caiyun": "彩云小译",
         "openai": "ChatGPT"
     },
     "transingTip": {
