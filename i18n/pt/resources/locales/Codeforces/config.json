@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "高级",
+            "title": "nível elevado",
             "header": {
                 "label": "Cabeçalho personalizado",
                 "placeholder": "(Opcional) Pode preencher pares de valores chave adicionais para adicionar ao cabeçalho do pedido aqui.",
@@ -55,7 +55,7 @@
                 "placeholder": "Dê um nome a esta configuração"
             },
             "key": {
-                "label": "KEY:",
+                "label": "CHAVE.",
                 "placeholder": "Por favor, introduza a CHAVE",
                 "tipText": "<p>Tem de introduzir a sua própria chave DeepL,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">sítio Web oficial</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>Deixe-o em branco para predefinir：gpt-3.5-turbo</p><p>Para obter uma lista de modelos, consulte<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentação oficial da OpenAI</a></p><p><strong>Além disso, se estiver a utilizar a API de proxy fornecida pelo fornecedor de serviços, verifique se o fornecedor de serviços suporta o modelo correspondente</strong></p>"
             },
             "key": {
-                "label": "KEY:",
+                "label": "CHAVE.",
                 "placeholder": "Por favor, introduza a CHAVE",
                 "tipText": "<p>Tem de introduzir a sua própria chave OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">sítio Web oficial</a></p><p><b>Se estiver a utilizar a API proxy fornecida pelo fornecedor de serviços, deve preencher a chave fornecida pelo fornecedor de serviços</b></p>"
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "nível elevado",
             "header": {
                 "label": "Cabeçalho personalizado",
                 "placeholder": "(Opcional) Pode preencher pares de valores chave adicionais para adicionar ao cabeçalho do pedido aqui.",
