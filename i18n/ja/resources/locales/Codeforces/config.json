@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "高级",
+            "title": "ハイレベル",
             "header": {
                 "label": "header のカスタマイズ",
                 "placeholder": "(オプション) ここではheaderへ追加キーを追加することができます",
@@ -55,7 +55,7 @@
                 "placeholder": "この構成のための名前を入力してください"
             },
             "key": {
-                "label": "KEY:",
+                "label": "キー",
                 "placeholder": "KEYを入力してください。",
                 "tipText": "<p>ご自身のDeepLキーを入力する必要があります。<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">公式サイト</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>デフォルトは空白のまま：gpt-3.5-turbo</p><p>モデル一覧は<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI公式ドキュメント</a></p><p><strong>なお、サービスプロバイダが提供するプロキシAPIを利用する場合は、サービスプロバイダが対応モデルをサポートしているかどうかをご確認ください</strong></p>"
             },
             "key": {
-                "label": "KEY:",
+                "label": "キー",
                 "placeholder": "KEYを入力してください。",
                 "tipText": "<p>自らのOpenAI key、<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">入力</a></p><p><b>、サービス業者によって提供されるプロキシのAPIを使用している場合は、サービス提供されているキー</b></p> を入力してください"
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "ハイレベル",
             "header": {
                 "label": "header のカスタマイズ",
                 "placeholder": "(オプション) ここではheaderへ追加キーを追加することができます",
