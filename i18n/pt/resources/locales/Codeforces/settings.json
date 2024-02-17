@@ -326,6 +326,7 @@
         "version": "Versão：",
         "update": {
             "title": "atualização",
+            "thanksforDevChannelNotice": "<p>Obrigado por se juntar ao canal de testes e ajudar o Codeforces Better! a ficar melhor.</p><p>Para perguntas, vá para<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "canal de atualização",
                 "helpText": "<p>Pode escolher o canal de atualização para o script</p><p>Note que a versão beta de：é automaticamente enviada após cada confirmação no Github, pelo que não foi extensivamente testada e pode ter vários problemas desconhecidos.</p><p>Por favor, levante problemas no Github e adicione etiquetas Beta para problemas com a versão beta</p>",
@@ -336,7 +337,7 @@
             },
             "source": {
                 "label": "fonte de atualização",
-                "helpText": "<p>Pode escolher a fonte de transferência dos scripts</p><p>. Serão actualizados em simultâneo.</p>",
+                "helpText": "<p>Pode escolher a fonte de transferência para os seus scripts e todos eles serão actualizados simultaneamente.</p><p>O canal beta não é suportado pelo GreasyFork.</p>",
                 "options": {
                     "greasyfork": "Garfo Gorduroso",
                     "github": "Github",

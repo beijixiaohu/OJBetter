@@ -326,6 +326,7 @@
         "version": "版本：",
         "update": {
             "title": "更新",
+            "thanksforDevChannelNotice": "<p>感謝你加入測試通道，幫助Codeforces Better! 變得更好。</p><p>問題回饋請前往<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "更新頻道",
                 "helpText": "<p>你可以選擇腳本的更新通道</p><p>注意：測試版本會在Github 上每一次commit 後自動推送，因此其未經過廣泛測試驗證，可能存在各種未知問題。</p><p>有關測試版本的問題請在Github 上提issues，並加上Beta 標籤</p>",
@@ -336,7 +337,7 @@
             },
             "source": {
                 "label": "更新來源",
-                "helpText": "<p>你可以選擇腳本的下載來源</p><p>它們會同步更新。</p>",
+                "helpText": "<p>你可以選擇腳本的下載來源，它們都會同步更新。</p><p>其中GreasyFork 不支援測試版通道。</p>",
                 "options": {
                     "greasyfork": "GreasyFork",
                     "github": "Github",
