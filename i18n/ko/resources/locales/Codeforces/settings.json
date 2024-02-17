@@ -5,6 +5,7 @@
         "translation": "렌더링",
         "clist": "Clist",
         "monaco": "모나코",
+        "preference": "偏好",
         "dev": "세이프가드",
         "about": "다음과 관련하여"
     },
@@ -15,310 +16,322 @@
             "input": "현재 설정에는 필수 입력란이 필요합니다."
         }
     },
-    "basicSettings": {
-        "title": "기본 설정",
+    "basic": {
+        "title": "基本设置",
         "darkMode": {
-            "name": "다크 모드",
+            "name": "黑暗模式",
             "options": {
-                "dark": "어둡게",
-                "light": "낮 시간",
-                "system": "후속 조치 시스템"
+                "dark": "黑暗",
+                "light": "주간",
+                "system": "跟随系统"
             }
         },
-        "loadingInfo": {
-            "label": "로딩 경고 메시지 표시",
-            "helpText": "<p>로딩 정보 표시를 켜면 페이지가 로드될 때마다 상단에 로딩 정보 프롬프트가 표시됩니다：\"CodeforcesBetter -- xxx\"</p><p>이것은 스크립트가 현재 어떻게 작동하는지 확인하는 데 사용됩니다<strong>보고 싶지 않다면 다음을 선택할 수 있습니다. 끄기</strong></p><p><u>스크립트의 로딩 문제에 대한 피드백이 필요한 경우 스크린샷을 찍기 전에 이 옵션을 켜서 문제를 분석할 수 있도록</u></p>"
-        },
-        "targetArea": {
-            "label": "대상 영역의 범위 표시",
-            "helpText": "켜져 있으면 MD 보기/복사/번역 버튼 위에 마우스를 갖다 대면 대상 영역의 범위가 표시됩니다."
-        },
-        "expandBlocks": "접이식 블록 자동 펼치기",
+        "expandBlocks": "自动展开折叠块",
         "renderOptimization": {
-            "label": "폴딩 블록 렌더링 최적화",
-            "helpText": "<p>접힌 블록 요소에 포함 제약 조건 추가</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>포함: 레이아웃 스타일;</p></div><p>많은 수의 접힌 블록을 볼 때 브라우저가 느려지는 경우<strong>을 켜면</strong>다소 개선될 수 있습니다</p>."
+            "label": "접이식 블록 렌더링 최적화",
+            "helpText": "<p>为折叠块元素添加 contain 约束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>"
         },
         "paging": {
-            "label": "댓글 구분 페이지",
+            "label": "评论区分页",
             "helpText": "댓글은 별도의 페이지에 표시되며, 페이지당 지정된 수의<strong>메인 페이지</strong>로 표시됩니다."
         },
         "luoguJump": {
-            "label": "바위 계곡으로 점프 표시",
-            "helpText": "<p>코드포스 타이틀 중 일부는 LOGU OJ에 포함되어 있으며, 일부 타이틀에는 번역과 설명이 있습니다</p><p>디스플레이를 켰을 때 현재 타이틀이 포함되어 있으면 타이틀 오른쪽 상단에 LOGU 로고가 표시되며,</p><p>이를 클릭하면 해당 타이틀의 LOGU 페이지로 클릭 한 번으로 이동할 수 있습니다.</strong></p>"
+            "label": "바위 계곡으로 이동 표시",
+            "helpText": "<p>코드포스 타이틀 중 일부는 LOGU OJ에 포함되어 있으며, 일부 타이틀에는 번역과 설명이 있습니다</p><p>디스플레이가 켜져 있을 때 현재 타이틀이 포함되어 있으면 타이틀 오른쪽 상단에 LOGU 로고가 표시되고,</p><p>클릭하면 클릭 한 번으로 해당 타이틀의 해당 LOGU 페이지로 이동할 수 있습니다.</strong></p>"
         },
         "recolor": {
-            "label": "목록 다시 칠하기",
-            "helpText": "<p>코드포스 시스템을 사용하는 게임의 순위</p><p>\"점수/총계\" 범위에 따라 점수를 다시 채색</p><p>범위：1~0.7~0.45~0 진한 녹색→연한 주황색→진한 주황색→빨간색</p>"
+            "label": "重新着色榜单",
+            "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
         }
     },
-    "localizationSettings": {
-        "title": "현지화",
-        "scriptLanguageLabel": "스크립팅 언어",
-        "websiteLanguageLabel": "웹사이트 언어",
+    "localization": {
+        "title": "本地化设置",
+        "scriptLanguageLabel": "脚本语言",
+        "websiteLanguageLabel": "网站语言",
         "notice": {
-            "1": "<strong>번역 품질 개선에 도움을 주세요</strong><p>작성자는 중국어 간체와 영어에만 익숙하며, 다른 모든 언어의 경우 웹사이트의 스크립트 및 언어 현지화는 기계 번역(Deepl & Google)으로 수행되며 번역 워크플로는 크라우드딘에서 호스팅합니다.</p><p>특정 언어의 현지화 번역 품질을 개선하는 데 도움을 주실 수 있다면</p><p><a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'></a>으로 이동하여 도움을 주시면 감사하겠습니다!</p>",
-            "2": "<strong>웹사이트 언어 현지화 개선하기</strong><p>웹사이트의 어딘가에 현지화가 필요하고 이를 교체해도 심각한 성능 문제가 발생하지 않는다고 생각되면<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>현지화 규칙 개선하기</a>로 이동하세요.</p><p>새 규칙을 추가하려면 중국어 간체 버전의 규칙：포크를 추가하고 규칙 파일을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p>제출이 병합되면 크라우드인이 자동으로 다른 언어의 번역을 완료하고 나중에 크라우드인으로 이동하여 다른 언어의 번역 품질도 개선할 수 있습니다.</p>"
+            "1": "<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，</p><p>欢迎<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>前往协助改进</a>，感谢你的贡献！</p>",
+            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
         }
     },
-    "translationSettings": {
-        "title": "번역 설정",
+    "translation": {
+        "title": "翻译设置",
         "options": {
-            "title": "환경설정",
+            "title": "首选项",
             "services": {
-                "deepl": "DeepL 의 번역",
+                "deepl": "DeepL翻译",
                 "iflyrec": "쉰페이 듣기 번역",
                 "youdao": "유튜브 번역",
-                "google": "Google 번역",
-                "caiyun": "조명. 다채로운 구름과 작은 번역",
+                "google": "谷歌翻译",
+                "caiyun": "彩云小译",
                 "openai": {
-                    "name": "ChatGPT 번역",
-                    "helpText": "<p><b>아래 ChatGPT 구성에서 사용할 구성 정보를 추가하고 선택한 후 마우스 오른쪽 버튼을 클릭하여 구성을 수정 및 삭제하세요</b></p><p>자세한 내용은 스크립트 페이지</p>를 참조하세요."
+                    "name": "ChatGPT翻译",
+                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
                 }
             }
         },
         "deepl": {
             "mode": {
-                "title": "패러다임",
+                "title": "模式",
                 "select": {
-                    "free": "프리웨어",
+                    "free": "免费",
                     "api": "API"
                 },
-                "helpText": "DeepL 서비스 모드를 선택하면 기본값은 무료 모드이며 API를 제공 할 필요가 없지만 공식적으로 더 많은 주파수 제한이 있습니다. API 모드, 구성을 추가해야하며 공식 API：API 무료, API Pro 및 비공식 deeplx를 선택할 수 있습니다."
+                "helpText": "选择DeepL服务的模式，默认为免费模式，不需要提供API，但是受到官方较多的频率限制。API模式下，需要添加配置，可以选择官方API：API free、API Pro，以及非官方的deeplx"
             },
             "enableEmphasisProtection": {
-                "title": "보호** 아니요.",
-                "helpText": "<strong>이 옵션은 공식 API가 API 모드에서 사용되는 경우에만 작동합니다</strong><p>DeepL 마크다운에서 강조를 잘못 처리할 수 있습니다 <strong>**</strong> </p><p>이로 인해 번역 결과에서 래핑된 콘텐츠가 누락될 수 있습니다.</p><p>이 옵션을 켜면 텍스트의 강조가 <strong>**</strong> HTML 태그로 대체되고<code>tag_handling: html</code>번역 요청 헤더에 자동으로 추가되어 DeepL 강조와 해당 콘텐츠가 깨지지 않도록</p>"
+                "title": "保护**号",
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
             },
             "enableLinkProtection": {
-                "title": "링크 보호",
-                "helpText": "<strong>이 옵션은 공식 API를 API 모드에서 사용하는 경우에만 작동합니다</strong><p>DeepL 마크다운에서 링크를 잘못 처리할 수 있음,</p><p>이 옵션을 켜면 텍스트 <strong>[]()</strong> 의 링크 기호를 HTML 태그로 바꾸고 번역 요청 헤더에<code>tag_handling: html</code>을 자동으로 추가하여 DeepL 링크와 해당 콘텐츠가 손상되지 않도록 합니다</p>."
+                "title": "保护链接",
+                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
             }
         },
         "chatgpt": {
             "isStream": {
-                "name": "스트리밍",
-                "helpText": "<p>데이터 스트리밍 활성화, 타자기 효과</p>"
+                "name": "流式传输",
+                "helpText": "<p>启用数据流式传输，打字机效果</p>"
             }
         },
         "preference": {
-            "title": "환경설정",
+            "title": "偏好",
             "target": {
-                "title": "대상 언어",
-                "helpText": "참고：사용 가능한 번역 서비스는 대상 언어에 따라 다르므로 자세한 내용은 스크립트 페이지를 참조하세요."
+                "title": "目标语言",
+                "helpText": "注意：对于不同的目标语言，可用的翻译服务有所不同，具体请阅读脚本页的介绍"
             },
-            "comment_translation_choice": "댓글 섹션 번역",
-            "services": {
-                "follow": "환경설정 팔로우",
-                "deepl": "DeepL 의 번역",
-                "iflyrec": "쉰페이 듣기 번역",
-                "youdao": "유튜브 번역",
-                "google": "Google 번역",
-                "caiyun": "조명. 다채로운 구름과 작은 번역",
-                "openai": "ChatGPT 번역"
+            "comment_translation_choice": {
+                "title": "评论区翻译",
+                "services": {
+                    "follow": "跟随首选项",
+                    "deepl": "DeepL翻译",
+                    "iflyrec": "쉰페이 듣기 번역",
+                    "youdao": "유튜브 번역",
+                    "google": "谷歌翻译",
+                    "caiyun": "彩云小译",
+                    "openai": "ChatGPT翻译"
+                }
             }
         },
         "autoTranslation": {
             "title": "자동 번역",
-            "enable": "자동 번역 사용",
-            "helpText": "<p><strong>.ttypography, .comments 영역의 짧은 텍스트의 경우</strong></p><p>브라우저 창의 표시 영역(</p>)에 들어가면 자동으로 번역됩니다.",
+            "enable": "启用自动翻译",
+            "helpText": "<p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
             "shortTextLength": {
-                "name": "텍스트 길이",
-                "helpText": "<p>텍스트 길이가 이 값보다 작으면 짧은 텍스트</p>로 간주됩니다.",
-                "end": "캐릭터"
+                "name": "短文本长度",
+                "helpText": "<p>当文本长度小于该值时，视为短文本</p>",
+                "end": "字符",
+                "placeholder": "请输入长度"
             },
             "allowMixTrans": {
-                "name": "댓글 섹션의 혼합 번역",
-                "helpText": "<p>자동 번역 시 댓글 섹션의 각 짧은 텍스트 영역에 대해 아래 체크 표시된 서비스 중 하나를 독립적으로 무작위로 선택합니다.</p><p>병렬로 번역하기</p>",
+                "name": "评论区混合翻译",
+                "helpText": "<p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p><p>并行地进行翻译</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
-                    "iflyrec": "쉰페이(통신 회사)",
-                    "youdao": "진실과 옳음의 원칙을 준수합니다.",
-                    "google": "구글",
-                    "caiyun": "장밋빛 구름"
+                    "iflyrec": "讯飞",
+                    "youdao": "有道",
+                    "google": "谷歌",
+                    "caiyun": "彩云"
                 }
             }
         },
         "advanced": {
-            "name": "높은 수준",
+            "name": "高级",
             "mode": {
-                "name": "작동 모드",
-                "helpText": "<p>스크립트 작동 방식을 선택할 수 있습니다</p><p>○ 일반 모드：는 전체 영역을 한 번에 번역합니다</p><p>○ 세그먼트 모드：는 영역 내의 각&#60;&#112;&#47;&#62;및&#60;&#105;&#47;&#62;태그를 차례로 번역합니다</p><p>○ 선택된 세그먼트 모드：페이지에서&#60;&#112;&#47;&#62;및&#60;&#105;&#47;&#62;태그를 자유롭게 클릭하여 번역할 수 있습니다</p><div style='color:#f44336;'><p><u>참고：세그먼트/선택된 세그먼트 모드에서는 다음과 같은 문제가 발생합니다：</u></p><p>- 번역 인터페이스가 텍스트의 전체 맥락을 알 수 없어 번역의 품질이 저하됩니다.</p><p>-&#60;&#112;&#47;&#62;또는&#60;&#105;&#47;&#62;요소가 아니기 때문에 번역되지 않거나</strong>선택할 수 없는<strong>섹션이</p></div>있습니다.",
+                "name": "工作模式",
+                "helpText": "<p>你可以选择脚本的工作方式</p><p>○ 普通模式：会一次性翻译整个区域的内容</p><p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p><p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p><div style='color:#f44336;'><p><u>注意：分段/选段模式会产生如下问题：</u></p><p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p><p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p></div>",
                 "options": {
-                    "0": "일반 모드",
-                    "1": "세분화 모델",
-                    "2": "세분화 모델"
+                    "0": "普通模式",
+                    "1": "分段模式",
+                    "2": "选段模式"
                 }
             },
             "memory": {
-                "name": "이전 번역 자동 복구",
-                "helpText": "<p><strong>제목 페이지</strong>의 번역 정보를 로컬 인덱스DB에 자동 저장</p><p>다음에 페이지에 들어갈 때 번역 정보를 새로 고침/자동 복원</p>"
+                "name": "自动恢复历史翻译",
+                "helpText": "<p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p><p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>"
             },
             "retrans": {
-                "name": "재번역 시",
-                "helpText": "<p>재번역 시 '이전 결과 닫기' 또는 '이전 결과 버리기' 여부 선택</p>",
+                "name": "重新翻译时",
+                "helpText": "<p>选择在重新翻译时是'关闭旧的结果'还是'收起旧的结果'</p>",
                 "options": {
-                    "0": "이전 결과 닫기",
-                    "1": "오래된 결과 정리하기"
+                    "0": "关闭旧的结果",
+                    "1": "收起旧的结果"
                 }
             },
             "transWaitTime": {
-                "name": "대기 간격",
-                "helpText": "<p>두 번역 요청 사이의 대기 간격을 설정하면 이 설정은 전 세계적으로 적용되며 각 번역 서비스에 대해 독립적으로 계산됩니다.</p><p>권장 사항 200 + 밀리초</p><p>설명：ChatGPT 번역은 이 설정을 무시하고 기다리지 않습니다</p>.",
-                "end": "밀리초"
+                "name": "等待间隔",
+                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
+                "end": "毫秒",
+                "placeholder": "请输入间隔"
             },
             "replaceSymbol": {
-                "name": "라텍스 교체",
-                "helpText": "<p>이 스크립트는 먼저 모든 라텍스 수식을 제거하고 그 자리에 자리 표시자를 사용하여 수식이 번역 인터페이스에 의해 손상되지 않도록 합니다</p><p>대체물 자체가 손상될 확률은 번역 서비스마다 다르므로 자세한 내용은 스크립트 페이지의 지침을 참조하세요</p><p>참고：ChatGPT로 번역하는 경우 위 사항이 필요하지 않으므로 이 옵션의 영향을 받지 않습니다</p><p>자세한 내용은 스크립트 페이지에서 지침을 참조하세요</p>",
+                "name": "LaTeX替换符",
+                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p><p>具体你可以前往阅读脚本页的说明</p>",
                 "options": {
-                    "1": "사용 [ ]를 사용합니다.",
-                    "2": "사용 {}",
-                    "3": "사용 []"
+                    "1": "使用【】",
+                    "2": "使用{}",
+                    "3": "使用[]"
                 }
             },
             "filterTextWithoutEmphasis": {
-                "name": "텍스트에서 ** 기호 필터링",
-                "helpText": " <p>일부 번역 서비스(예: DeepL)는 마크다운에서 강조를 잘못 처리합니다. <strong>**</strong> </p><p>이로 인해 번역이 래핑된 콘텐츠를 놓칠 수 있으며, 강조를 제거하도록 선택할 수 있습니다(ChatGPT를 사용하면 이를 무시함) </p>."
+                "name": "过滤文本中的**号",
+                "helpText": " <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用ChatGPT会忽略该项) </p>"
             }
         }
     },
-    "clistSettings": {
-        "title": "클리스트 설정",
+    "clist": {
+        "title": "Clist 设置",
         "basics": {
             "name": "기본",
-            "notice": "<p>참고：Clist 데이터에 액세스하려면 유효한 로그인 자격 증명이 필요하며, 두 가지 옵션이 있습니다.：</p><p><a href='https://clist.by/' target='_blank'> clist.by </a>공식 API 키를 아래에 입력하거나,</p><p>또는 브라우저에서 clist.by 웹사이트에 로그인한 상태(즉, 쿠키가 유효한 상태)를 유지합니다(</p>).",
+            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'> clist.by </a>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
             "key": {
-                "title": "KEY.",
-                "helpText": "<p>샘플 형식：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
-                "keyPlaceholder": "키를 입력하세요."
+                "title": "KEY:",
+                "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
+                "keyPlaceholder": "请输入 KEY"
             }
         },
         "displayRating": {
-            "title": "평가 점수 표시",
+            "title": "显示Rating分",
             "contest": {
-                "name": "콘테스트 문제 세트 페이지",
-                "helpText": "<p>데이터 소스 clist.by</p><p>공식 API 키를 제공해야 함</p><p>또는 브라우저에 clist.by를 로그인 상태로 유지(예: 쿠키가 유효함)</p>",
-                "badge": "쿠키/API 키"
+                "name": "比赛问题集页",
+                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "badge": "Cookie/API KEY"
             },
             "problem": {
-                "name": "제목 페이지",
-                "helpText": "<p>데이터 소스 clist.by</p><p>공식 API 키를 제공해야 함</p><p>또는 브라우저에 clist.by를 로그인 상태로 유지(예: 쿠키가 유효함)</p>",
-                "badge": "쿠키/API 키"
+                "name": "题目页",
+                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "badge": "Cookie/API KEY"
             },
             "problemset": {
-                "name": "제목 페이지",
-                "helpText": "<p>데이터 소스 clist.by</p><p>공식 API 키를 제공해야 함</p><p>또는 브라우저에 clist.by를 로그인 상태로 유지(예: 쿠키가 유효함)</p>",
-                "badge": "쿠키/API 키"
+                "name": "题单页",
+                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {
-            "title": "스포일러 방지",
-            "helpText": "<p>등급 하위 표시 영역 위로 마우스를 이동했을 때만 표시됨</p>"
+            "title": "防剧透",
+            "helpText": "<p>只有当鼠标移动到Rating分展示区域上时才显示</p>"
         }
     },
-    "codeEditorSettings": {
-        "title": "모나코 편집기 설정",
+    "codeEditor": {
+        "title": "Monaco 编辑器设置",
         "basics": "기본",
         "problemPageCodeEditor": {
             "label": "제목 페이지에 편집기 추가",
-            "helpText": "제목 페이지 아래에 모나코 편집기를 추가하면 코드가 자동으로 저장되어 온라인 코드 실행이 가능합니다."
+            "helpText": "在题目页下面添加 Monaco 编辑器，代码会自动保存，提供在线代码运行"
         },
         "preferences": {
-            "title": "환경설정",
+            "title": "偏好",
             "isCodeSubmitConfirm": {
-                "label": "코드 제출에 대한 2차 확인",
-                "helpText": "모나코 편집기의 제목 페이지를 클릭하면 잘못된 제출을 방지하기 위해 코드가 제출될 때 두 번째로 팝업이 표시됩니다."
+                "label": "代码提交二次确认",
+                "helpText": "点击题目页 Monaco 编辑器的代码提交时会弹窗二次确认，防止误提交"
             },
             "alwaysConsumeMouseWheel": {
-                "label": "마우스 스크롤 잠금",
-                "helpText": "이 기능을 켜면 마우스 포인터가 모나코 편집기 내부에 있을 때 마우스 스크롤은 편집기의 콘텐츠만 스크롤합니다."
+                "label": "鼠标滚动锁定",
+                "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
             },
             "submitButtonPosition": {
-                "label": "제출 버튼 위치",
-                "helpText": "코드 테스트 및 제출 버튼의 위치를 선택합니다.",
+                "label": "提交按钮位置",
+                "helpText": "选择代码测试和提交按钮的位置",
                 "options": {
-                    "bottom": "bottoms",
-                    "top": "난간"
+                    "bottom": "底部",
+                    "top": "顶栏"
                 }
             }
         },
         "onlineCodeExecution": {
-            "title": "온라인 코드 실행",
+            "title": "在线代码运行",
             "compilerOptions": {
-                "codeforces": "코드포스",
-                "wandbox": "완드박스",
-                "rextester": "렉스터"
+                "codeforces": "Codeforces",
+                "wandbox": "wandbox",
+                "rextester": "rextester"
             }
         },
-        "lspSettings": {
-            "title": "LSP 설정",
+        "lsp": {
+            "title": "LSP 设置",
             "useLSP": {
-                "label": "LSP 사용",
-                "helpText": "<p>LSP 서버에 연결하여 코드 완성, 코드 진단, 서식 지정, 정의로 이동 등을 활성화합니다.</p><p>C++, Python 언어 지원</p><p>OJBetter_Bridge를 시작해야 하며, 지침은 스크립트 페이지</p>를 참조하세요."
+                "label": "使用 LSP",
+                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>"
             },
             "OJBetter_Bridge_WorkUri": {
-                "label": "작업 경로.",
-                "helpText": "<p>OJBetter_Bridge가 위치한 경로를 입력해야 합니다.</p><p>슬래시 또는 백슬래시 사용</p><p>기본 경로：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "label": "工作路径:",
+                "helpText": "<p>你需要填写 OJBetter_Bridge 所在的路径</p><p>使用正斜杠或反斜杠均可</p><p>默认路径：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
-                "label": "서버.",
-                "helpText": "<p>로컬 머신에 OJBetter_Bridge의 서버 URL을 입력해야 합니다.</p><p>기본 URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>일반적으로는 여기서 변경할 필요가 없으며, 변경해야 하는 경우 기본 URL 형식(</p>)과 일치하도록 하세요."
+                "label": "Server:",
+                "helpText": "<p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p><p>默认的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>"
             }
         },
         "staticCompletionEnhancement": {
             "title": "정적 완성도 향상",
             "cppCodeTemplateComplete": {
-                "label": "AcWing CPP 보완 템플릿",
-                "helpText": "<p>템플릿 출처:<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+                "label": "AcWing CPP 补全模板",
+                "helpText": "<p>模板来自<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
             },
-            "customization": "사용자 지정",
-            "performanceWarning": "참고：정적 보완 규칙이 너무 많으면 성능에 영향을 줄 수 있습니다."
+            "customization": "自定义",
+            "performanceWarning": "注意：过多的静态补全规则会影响性能"
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "세이프가드",
-        "notice": "<p>참고：일반적으로 이러한 기능은 사용할 필요가 없습니다.</p><p>기능의 의미를 잘 모르는 경우에는 작동하지 마세요!</p>",
+        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
         "load": {
-            "title": "(화물 등) 적재량",
+            "title": "加载",
             "notWaiteLoaded": {
-                "label": "페이지 리소스가 완전히 로드될 때까지 기다릴 필요가 없습니다.",
-                "helpText": "<p>페이지가 완전히 로드되었는데도 로딩 프롬프트 메시지가 항상：\"페이지 리소스가 로드되기를 기다리는 중\"에 머무는 경우</p><p>먼저 네트워크 문제인지 확인하고,</p><p>그렇지 않은 경우 옵션을 켜고 Github으로 이동하여 브라우저 버전 정보 및 운영 체제 정보를 포함하여 오류를 신고하여 분석 및 재현할 수 있도록 합니다.</p>"
+                "label": "不等待页面资源完全加载",
+                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
             }
         },
         "l10n": {
-            "title": "스크립트 현지화",
+            "title": "脚本本地化",
             "refreshScrpitCache": {
-                "label": "캐시 새로 고침",
-                "helpText": "<p>스크립트의 현지화된 데이터는 로딩 속도를 높이기 위해 로컬에 캐시되며 자동 새로 고침 주기는 1주일이며, 새로 고침(</p>)을 클릭하여 데이터를 즉시 강제로 새로 고칠 수 있습니다.",
-                "button": "새로 고침(컴퓨터 창)"
+                "label": "刷新缓存",
+                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
+                "button": "刷新"
             }
         },
         "indexedDB": {
-            "title": "인덱싱된 데이터베이스",
+            "title": "IndexedDB数据库",
             "clear": {
-                "label": "데이터 지우기",
-                "helpText": "<p>로컬 인덱스DB 데이터를 지우면 CFBetter 데이터베이스의 모든 데이터가 지워지므로 주의하세요</p>",
-                "button": "클리어런스"
+                "label": "清除数据",
+                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
+                "button": "清除"
             },
             "inputOrExport": {
-                "label": "데이터 가져오기/내보내기",
-                "helpText": "<p>현재 인덱싱된 데이터를 내보내거나 다른 사람이 내보낸 데이터를 가져올 수 있습니다.</p>",
-                "export": "파생",
+                "label": "导入/导出数据",
+                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
+                "export": "导出",
                 "import": "가져오기(데이터)"
             }
         },
         "configuration": {
-            "title": "스크립트 구성",
+            "title": "脚本配置",
             "clear": {
-                "label": "구성 지우기",
-                "helpText": "<p>로컬 스크립트 구성 데이터를 지우면 스크립트 구성이 초기 상태로 초기화되므로 주의해서 진행하시기 바랍니다.</p>",
-                "button": "클리어런스"
+                "label": "清除配置",
+                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
+                "button": "清除"
             },
             "inputOrExport": {
-                "label": "데이터 가져오기/내보내기",
-                "helpText": "<p>현재 스크립트 구성을 내보내거나 이미 내보낸 구성을 가져올 수 있습니다(</p>).",
-                "export": "파생",
+                "label": "导入/导出数据",
+                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
+                "export": "导出",
                 "import": "가져오기(데이터)"
             }
+        }
+    },
+    "preference": {
+        "title": "偏好",
+        "loadingInfo": {
+            "label": "显示加载提示信息",
+            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
+        },
+        "targetArea": {
+            "label": "显示目标区域范围",
+            "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
+        },
+        "iconButtonSize": {
+            "title": "图标按钮大小",
+            "helpText": "<p>设置翻译按钮的大小</p>",
+            "placeholder": "请输入按钮大小"
         }
     },
     "about": {
