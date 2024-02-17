@@ -10,6 +10,7 @@
 - Aggiunga una pagina informativa, così come un canale di aggiornamento e le selezioni della fonte di aggiornamento.
 - Aggiungere la pagina di manutenzione del debug, compreso l'aggiornamento della cache, la cancellazione dei dati, l'importazione e l'esportazione.
 - Aggiunge l'opzione personalizzata： 'Posizione del pulsante di invio dell'editor di codice', predefinita in basso, grazie a @lishufood per il suggerimento!
+- Migliorare ogni funzione di caricamento, eliminare alcune relazioni di attesa non necessarie, accelerare il tempo di caricamento dello script.
 - Miglioramenti alla funzione di traduzione e alla visualizzazione dei messaggi di errore.
 - Miglioramento delle prestazioni della traduzione automatica e il problema che potrebbe non essere tradotto automaticamente
 - Miglioramenti ai campioni di codice relativi all'esecuzione online
@@ -18,6 +19,7 @@
 - Migliora lo stile dell'editor di codice quando è fissato sul lato destro, in basso e a schermo intero, grazie a @lishufood per il suggerimento!
 - Miglioramento della visualizzazione del pannello .html2md-panel in modalità semplice
 - Migliorare lo stile della pagina di configurazione nel pannello delle impostazioni
+- Correggere gli errori dell'editor della pagina del titolo di acmsguru
 - Risolvere il problema per cui l'editor di codice della pagina dei problemi riportava un errore dopo aver cambiato la versione mobile/desktop del sito web.
 - Correzione di un bug nel metodo getMarkdown(), che memorizzava erroneamente i dati direttamente nel DOM, con conseguente degrado delle prestazioni.
 - Risolva il problema che il pulsante di traduzione all'interno del blocco piegato non viene visualizzato dopo aver disattivato 'Espansione automatica del blocco piegato', grazie al feedback di @MoYuToGo!
