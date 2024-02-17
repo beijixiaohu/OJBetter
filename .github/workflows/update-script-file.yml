@@ -22,13 +22,17 @@ jobs:
       - name: Read versions and update JSON
         run: node .github/scripts/update-version.js
 
-      - name: Commit and push if necessary
+      - name: Sync with remote main branch
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add script/versions.json
-          git commit -m "Update script versions file" -a || echo "No changes to commit"
-          git push
+          git fetch origin main
+          git rebase origin/main
+
+      - name: Commit and push if changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update script versions file"
   sync_to_oss:
     needs: update-version-json
     runs-on: ubuntu-latest
