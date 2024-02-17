@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "高级",
+            "title": "進階",
             "header": {
                 "label": "自訂header",
                 "placeholder": "（選填）你可以在這裡填入向請求header額外加入的鍵值對",
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "進階",
             "header": {
                 "label": "自訂header",
                 "placeholder": "（選填）你可以在這裡填入向請求header額外加入的鍵值對",
