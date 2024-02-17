@@ -1,10 +1,10 @@
 {
     "servers": {
-        "deepl": "DeepL",
+        "deepl": "डीपएल",
         "iflyrec": "iFlytek ने सुना",
-        "youdao": "有道",
-        "google": "谷歌",
-        "caiyun": "彩云小译",
+        "youdao": "Youdao",
+        "google": "गूगल",
+        "caiyun": "कैयुन शियाओयी",
         "openai": "चैटजीपीटी"
     },
     "transingTip": {
