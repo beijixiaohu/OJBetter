@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "高级",
+            "title": "높은 수준",
             "header": {
                 "label": "사용자 지정 헤더",
                 "placeholder": "(선택 사항) 여기에서 요청 헤더에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
@@ -55,7 +55,7 @@
                 "placeholder": "이 구성에 이름을 지정하세요."
             },
             "key": {
-                "label": "KEY:",
+                "label": "KEY.",
                 "placeholder": "KEY를 입력하세요.",
                 "tipText": "<p>DeepL 키,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">공식 웹사이트</a></p>를 입력해야 합니다."
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>비워두면 기본값은：gpt-3.5-turbo</p><p>모델 목록은<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI 공식 문서</a></p><p><strong>또한 서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우 서비스 제공업체가 해당 모델을 지원하는지</strong></p>확인하시기 바랍니다."
             },
             "key": {
-                "label": "KEY:",
+                "label": "KEY.",
                 "placeholder": "KEY를 입력하세요.",
                 "tipText": "<p><a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">공식 웹사이트</a></p><p><b>서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우, 서비스 제공업체에서 제공하는 키</b></p>를 입력해야 합니다."
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "높은 수준",
             "header": {
                 "label": "사용자 지정 헤더",
                 "placeholder": "(선택 사항) 여기에서 요청 헤더에 추가할 키-값 쌍을 추가로 입력할 수 있습니다.",
