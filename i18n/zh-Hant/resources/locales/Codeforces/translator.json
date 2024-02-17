@@ -3,8 +3,8 @@
         "deepl": "DeepL",
         "iflyrec": "訊飛聽見",
         "youdao": "有道",
-        "google": "谷歌",
-        "caiyun": "彩云小译",
+        "google": "Google",
+        "caiyun": "彩雲小譯",
         "openai": "ChatGPT"
     },
     "transingTip": {
