@@ -2,9 +2,9 @@
     "servers": {
         "deepl": "DeepL",
         "iflyrec": "Xunfei Oiga",
-        "youdao": "有道",
-        "google": "谷歌",
-        "caiyun": "彩云小译",
+        "youdao": "adherirse a los principios de la verdad y lo correcto",
+        "google": "google",
+        "caiyun": "lit. nubes de colores y pequeñas traducciones",
         "openai": "ChatGPT"
     },
     "transingTip": {
