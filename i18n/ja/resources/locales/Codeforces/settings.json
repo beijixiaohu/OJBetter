@@ -5,7 +5,7 @@
         "translation": "レンダリング",
         "clist": "クライスト",
         "monaco": "モナコ",
-        "preference": "偏好",
+        "preference": "プリファレンス",
         "dev": "セーフガード",
         "about": "に対して"
     },
@@ -17,22 +17,22 @@
         }
     },
     "basic": {
-        "title": "基本设置",
+        "title": "基本設定",
         "darkMode": {
-            "name": "黑暗模式",
+            "name": "ダークモード",
             "options": {
-                "dark": "黑暗",
+                "dark": "ほのぼの",
                 "light": "昼間",
-                "system": "跟随系统"
+                "system": "フォローアップシステム"
             }
         },
-        "expandBlocks": "自动展开折叠块",
+        "expandBlocks": "折りたたみブロックの自動展開",
         "renderOptimization": {
             "label": "折りたたみブロックレンダリングの最適化",
-            "helpText": "<p>为折叠块元素添加 contain 约束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>"
+            "helpText": "<p>折りたたまれたブロック要素にcontain制約を追加する</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>大量の折りたたまれたブロックを表示する際にブラウザの動作が重くなる場合は、<strong>これをオンにすると</strong>多少改善されるかもしれない</p>"
         },
         "paging": {
-            "label": "评论区分页",
+            "label": "コメント区別ページ",
             "helpText": "コメントは別ページに表示され、1ページあたり指定された数の<strong>メインフロア</strong>。"
         },
         "luoguJump": {
@@ -40,298 +40,298 @@
             "helpText": "<p>Codeforcesのタイトルの一部はLOGU OJに収録されており、一部のタイトルには翻訳と解説があります</p><p>表示をオンにすると、現在のタイトルが収録されている場合、タイトルの右上にLOGUのロゴが表示されます</p><p>これをクリックすると、そのタイトルに対応するLOGUのページにワンクリックでジャンプできます。</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
-            "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
+            "label": "リストの再カラー化",
+            "helpText": "<p>Codeforces システムを使用したレースリストについて</p><p>「スコア/合計」の範囲に従ってスコアを再カラー化</p><p>範囲：1~0.7~0.45~0 ダークグリーン→ライトオレンジ→ダークオレンジ→レッド</p>"
         }
     },
     "localization": {
-        "title": "本地化设置",
-        "scriptLanguageLabel": "脚本语言",
-        "websiteLanguageLabel": "网站语言",
+        "title": "ローカリゼーション",
+        "scriptLanguageLabel": "スクリプト言語",
+        "websiteLanguageLabel": "ウェブサイト言語",
         "notice": {
-            "1": "<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，</p><p>欢迎<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>前往协助改进</a>，感谢你的贡献！</p>",
-            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+            "1": "<strong>翻訳の品質向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。他のすべての言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl＆Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズされた翻訳の質を向上させるために、</p><p>、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>、</a>、あなたの貢献を歓迎します！</p>",
+            "2": "<strong>ウェブサイト言語ローカライゼーションの改善支援</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、それを置き換えることで深刻なパフォーマンス問題が発生しないとお考えの方は、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ローカライゼーションルールの改善</a>にぜひアクセスしてください。</p><p>新しいルールを追加したい場合は、簡体字中国語版のルールを追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを立ち上げてください。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。後でcrowdinにアクセスして、他の言語の翻訳の品質も向上させることができます。</p>"
         }
     },
     "translation": {
-        "title": "翻译设置",
+        "title": "翻訳設定",
         "options": {
-            "title": "首选项",
+            "title": "プリファレンス",
             "services": {
-                "deepl": "DeepL翻译",
+                "deepl": "DeepLの翻訳",
                 "iflyrec": "宣飛翻訳を聞く",
                 "youdao": "Youtube翻訳",
-                "google": "谷歌翻译",
-                "caiyun": "彩云小译",
+                "google": "グーグル翻訳",
+                "caiyun": "カラフルな雲と小さな翻訳",
                 "openai": {
-                    "name": "ChatGPT翻译",
-                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
+                    "name": "ChatGPT翻訳",
+                    "helpText": "<p><b>下記のChatGPTコンフィギュレーションで使用したいコンフィギュレーション情報を追加・選択し、右クリックでコンフィギュレーションを修正・削除してください</b></p><p>詳細はスクリプトページをお読みください</p>"
                 }
             }
         },
         "deepl": {
             "mode": {
-                "title": "模式",
+                "title": "パラダイム",
                 "select": {
-                    "free": "免费",
+                    "free": "フリーウェア",
                     "api": "API"
                 },
-                "helpText": "选择DeepL服务的模式，默认为免费模式，不需要提供API，但是受到官方较多的频率限制。API模式下，需要添加配置，可以选择官方API：API free、API Pro，以及非官方的deeplx"
+                "helpText": "DeepLサービスのモードを選択し、デフォルトは無料モードですが、APIを提供する必要はありませんが、公式のより多くの周波数の制限によって。 APIモードでは、設定を追加する必要があり、公式のAPIを選択することができます：API無料、API Proだけでなく、非公式のdeeplx"
             },
             "enableEmphasisProtection": {
-                "title": "保护**号",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "title": "プロテクション** No.",
+                "helpText": "<strong>このオプションは、公式 API を API モードで使用する場合にのみ機能します。</strong><p>DeepL は、MarkDown <strong>**</strong> </p><p>内の強調を誤って処理することがあります。このため、翻訳結果で折り返されたコンテンツが欠落することがあります。</p><p> <strong></strong></p>このオプションをオンにすると、テキスト内の強調が HTML タグに置き換えられ、<code>tag_handling: html</code>が翻訳要求ヘッダに自動的に追加されます。"
             },
             "enableLinkProtection": {
-                "title": "保护链接",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "title": "リンクの保護",
+                "helpText": "<strong>このオプションは、公式 API を API モードで使用する場合にのみ機能します。</strong><p>DeepL は、MarkDown のリンクを誤って処理することがあります。</p><p>このオプションをオンにすると、テキスト内のリンク記号 <strong>[]()</strong> が HTML タグに置き換えられ、<code>tag_handling: html</code>が翻訳要求ヘッダに自動的に追加され、DeepL がリンクとそのコンテンツを破壊しないようにします。</p>"
             }
         },
         "chatgpt": {
             "isStream": {
-                "name": "流式传输",
-                "helpText": "<p>启用数据流式传输，打字机效果</p>"
+                "name": "ストリーミング",
+                "helpText": "<p>データストリーミングの有効化、タイプライター効果</p>"
             }
         },
         "preference": {
-            "title": "偏好",
+            "title": "プリファレンス",
             "target": {
-                "title": "目标语言",
-                "helpText": "注意：对于不同的目标语言，可用的翻译服务有所不同，具体请阅读脚本页的介绍"
+                "title": "目標言語",
+                "helpText": "注：利用可能な翻訳サービスはターゲット言語によって異なりますので、詳しくはスクリプトのページをお読みください。"
             },
             "comment_translation_choice": {
-                "title": "评论区翻译",
+                "title": "コメント欄の翻訳",
                 "services": {
-                    "follow": "跟随首选项",
-                    "deepl": "DeepL翻译",
+                    "follow": "プリファレンスに従う",
+                    "deepl": "DeepLの翻訳",
                     "iflyrec": "宣飛翻訳を聞く",
                     "youdao": "Youtube翻訳",
-                    "google": "谷歌翻译",
-                    "caiyun": "彩云小译",
-                    "openai": "ChatGPT翻译"
+                    "google": "グーグル翻訳",
+                    "caiyun": "カラフルな雲と小さな翻訳",
+                    "openai": "ChatGPT翻訳"
                 }
             }
         },
         "autoTranslation": {
             "title": "自動翻訳",
-            "enable": "启用自动翻译",
-            "helpText": "<p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
+            "enable": "自動翻訳を有効にする",
+            "helpText": "<p><strong>.ttypography、.comments領域</strong></p><p>の短いテキストは、ブラウザウィンドウ</p>の可視領域に入ると自動的に翻訳されます。",
             "shortTextLength": {
-                "name": "短文本长度",
-                "helpText": "<p>当文本长度小于该值时，视为短文本</p>",
-                "end": "字符",
-                "placeholder": "请输入长度"
+                "name": "テキストの長さ",
+                "helpText": "<p>テキストの長さがこの値より短い場合、短いテキストとみなされる</p>",
+                "end": "性格",
+                "placeholder": "長さを入力してください"
             },
             "allowMixTrans": {
-                "name": "评论区混合翻译",
-                "helpText": "<p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p><p>并行地进行翻译</p>",
+                "name": "コメント欄の混訳",
+                "helpText": "<p>自動翻訳を行う場合、コメント欄の短いテキストエリアごとに、以下にチェックしたサービスのいずれかを独立してランダムに選択する</p><p>並列翻訳</p>",
                 "checkboxs": {
-                    "deepl": "DeepL",
-                    "iflyrec": "讯飞",
-                    "youdao": "有道",
-                    "google": "谷歌",
-                    "caiyun": "彩云"
+                    "deepl": "ディープエル",
+                    "iflyrec": "迅飛",
+                    "youdao": "真理と正義の原則を守る",
+                    "google": "グーグル",
+                    "caiyun": "ばらぐも"
                 }
             }
         },
         "advanced": {
-            "name": "高级",
+            "name": "ハイレベル",
             "mode": {
-                "name": "工作模式",
-                "helpText": "<p>你可以选择脚本的工作方式</p><p>○ 普通模式：会一次性翻译整个区域的内容</p><p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p><p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p><div style='color:#f44336;'><p><u>注意：分段/选段模式会产生如下问题：</u></p><p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p><p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p></div>",
+                "name": "動作モード",
+                "helpText": "<p>スクリプトがどのように動作するか選択することができます</p><p>○通常モード：一度に全領域を翻訳します</p><p>○分割モード：領域内の各&#60;&#112;&#47;&#62;と&#60;&#105;&#47;&#62;タグを順番に翻訳します</p><p>○選択分割モード：ページ上の任意の&#60;&#112;&#47;&#62;と&#60;&#105;&#47;&#62;タグを自由にクリックして翻訳することができます</p><div style='color:#f44336;'><p><u>注意：分割/選択分割モードは次の問題を生じます：</u></p><p>- 翻訳インターフェースがテキストの文脈全体を知ることができなくなり、翻訳の質が低下します。</p><p></strong></p></div>-&#60;&#112;&#47;&#62;、&#60;&#105;&#47;&#62;要素ではないため、翻訳されない/選択できない<strong>セクションが存在する。",
                 "options": {
-                    "0": "普通模式",
-                    "1": "分段模式",
-                    "2": "选段模式"
+                    "0": "ノーマルモード",
+                    "1": "セグメンテーションモデル",
+                    "2": "セグメンテーションモデル"
                 }
             },
             "memory": {
-                "name": "自动恢复历史翻译",
-                "helpText": "<p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p><p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>"
+                "name": "過去の翻訳の自動復元",
+                "helpText": "<p><strong>タイトルページ</strong>の翻訳情報をローカルの indexDB に自動保存</p><p>次回アクセス時に翻訳情報をリフレッシュ／自動復元</p>"
             },
             "retrans": {
-                "name": "重新翻译时",
-                "helpText": "<p>选择在重新翻译时是'关闭旧的结果'还是'收起旧的结果'</p>",
+                "name": "再翻訳にあたって",
+                "helpText": "<p>再翻訳時に「古い結果を閉じる」か「古い結果を片付ける」かを選択する</p>",
                 "options": {
-                    "0": "关闭旧的结果",
-                    "1": "收起旧的结果"
+                    "0": "古い結果を閉じる",
+                    "1": "古い結果を片付ける"
                 }
             },
             "transWaitTime": {
-                "name": "等待间隔",
-                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
-                "end": "毫秒",
-                "placeholder": "请输入间隔"
+                "name": "待機時間",
+                "helpText": "<p>2つの翻訳リクエスト間の待機間隔を設定します。この設定はグローバルに適用され、各翻訳サービスごとに独立して計算されます</p><p>推奨 200 + ミリ秒</p><p>説明：ChatGPT翻訳はこの設定を無視し、待機しません</p>",
+                "end": "ミリ秒",
+                "placeholder": "間隔を入力してください"
             },
             "replaceSymbol": {
-                "name": "LaTeX替换符",
-                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p><p>具体你可以前往阅读脚本页的说明</p>",
+                "name": "LaTeXの置き換え",
+                "helpText": "<p>このスクリプトは、まずLaTeXの数式をすべて取り出し、プレースホルダを使うことで、数式が翻訳インターフェースによって壊されないようにします</p><p>置換自体が壊される確率は翻訳サービスによって異なります。詳しくはスクリプトページの説明を読んでください</p><p>なお、：ChatGPTを使った翻訳では上記の必要はないので、このオプションの影響は受けません</p><p>詳しくはスクリプトページの説明を読んでください</p>",
                 "options": {
-                    "1": "使用【】",
-                    "2": "使用{}",
-                    "3": "使用[]"
+                    "1": "を使用する。",
+                    "2": "を使う。",
+                    "3": "を使用する。"
                 }
             },
             "filterTextWithoutEmphasis": {
-                "name": "过滤文本中的**号",
-                "helpText": " <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用ChatGPT会忽略该项) </p>"
+                "name": "テキスト中の**記号のフィルタリング",
+                "helpText": " <p>一部の翻訳サービス(DeepLなど)では、MarkDownでの強調の扱いが間違っています <strong>**</strong> </p><p>このため、翻訳がラッパーを見逃すことがあります。強調を削除することもできます(ChatGPTを使用すると無視されます) </p>"
             }
         }
     },
     "clist": {
-        "title": "Clist 设置",
+        "title": "クライスト・セッティング",
         "basics": {
             "name": "基本的",
-            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'> clist.by </a>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
+            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'> clist.by </a>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
             "key": {
-                "title": "KEY:",
-                "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
-                "keyPlaceholder": "请输入 KEY"
+                "title": "キー",
+                "helpText": "<p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "キーを入力してください"
             }
         },
         "displayRating": {
-            "title": "显示Rating分",
+            "title": "ショーの評価スコア",
             "contest": {
-                "name": "比赛问题集页",
-                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
-                "badge": "Cookie/API KEY"
+                "name": "コンテスト問題セットページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
             },
             "problem": {
-                "name": "题目页",
-                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
-                "badge": "Cookie/API KEY"
+                "name": "タイトルページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
             },
             "problemset": {
-                "name": "题单页",
-                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
-                "badge": "Cookie/API KEY"
+                "name": "タイトルページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
             }
         },
         "spoilerProtection": {
-            "title": "防剧透",
-            "helpText": "<p>只有当鼠标移动到Rating分展示区域上时才显示</p>"
+            "title": "ネタバレ防止",
+            "helpText": "<p>評価サブ表示エリアにマウスを移動したときのみ表示</p>"
         }
     },
     "codeEditor": {
-        "title": "Monaco 编辑器设置",
+        "title": "モナコ・エディターの設定",
         "basics": "基本的",
         "problemPageCodeEditor": {
             "label": "タイトルページにエディターを追加",
-            "helpText": "在题目页下面添加 Monaco 编辑器，代码会自动保存，提供在线代码运行"
+            "helpText": "タイトルページの下にMonacoエディタを追加すると、コードが自動的に保存され、オンラインコードが実行される。"
         },
         "preferences": {
-            "title": "偏好",
+            "title": "プリファレンス",
             "isCodeSubmitConfirm": {
-                "label": "代码提交二次确认",
-                "helpText": "点击题目页 Monaco 编辑器的代码提交时会弹窗二次确认，防止误提交"
+                "label": "コード提出の二次確認",
+                "helpText": "Monacoエディターのタイトルページをクリックすると、誤送信を防ぐためにコード送信時に2度目のポップアップが表示されます。"
             },
             "alwaysConsumeMouseWheel": {
-                "label": "鼠标滚动锁定",
-                "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
+                "label": "マウスのスクロールロック",
+                "helpText": "オンにすると、マウス・ポインタがモナコ・エディタ内にあるとき、マウス・スクロールはエディタの内容のみをスクロールします。"
             },
             "submitButtonPosition": {
-                "label": "提交按钮位置",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "label": "送信ボタンの位置",
+                "helpText": "コード・テストの場所と送信ボタンを選択する。",
                 "options": {
-                    "bottom": "底部",
-                    "top": "顶栏"
+                    "bottom": "ボトムス",
+                    "top": "欄干"
                 }
             }
         },
         "onlineCodeExecution": {
-            "title": "在线代码运行",
+            "title": "オンライン・コード・ラン",
             "compilerOptions": {
-                "codeforces": "Codeforces",
-                "wandbox": "wandbox",
-                "rextester": "rextester"
+                "codeforces": "コードフォース",
+                "wandbox": "ワンドボックス",
+                "rextester": "再試験者"
             }
         },
         "lsp": {
-            "title": "LSP 设置",
+            "title": "LSP設定",
             "useLSP": {
-                "label": "使用 LSP",
-                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>"
+                "label": "LSPの使用",
+                "helpText": "<p>コード補完、コード診断、書式設定、定義への移動などを有効にするためにLSPサーバーに接続</p><p>C++、Python言語をサポート</p><p>OJBetter_Bridgeを起動する必要があります。手順についてはスクリプトのページを参照してください</p>"
             },
             "OJBetter_Bridge_WorkUri": {
-                "label": "工作路径:",
-                "helpText": "<p>你需要填写 OJBetter_Bridge 所在的路径</p><p>使用正斜杠或反斜杠均可</p><p>默认路径：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "label": "仕事の道",
+                "helpText": "<p>OJBetter_Bridgeが配置されているパスを記入する必要があります</p><p>フォワードまたはバックスラッシュのいずれかを使用</p><p>デフォルトパス：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
-                "label": "Server:",
-                "helpText": "<p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p><p>默认的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>"
+                "label": "サーバー",
+                "helpText": "<p>ローカルマシンのOJBetter_BridgeのサーバーURLを記入する必要があります</p><p>デフォルトURL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>なお、通常はここを変更する必要はありません。変更する必要がある場合は、デフォルトのURL形式と一致させてください</p>"
             }
         },
         "staticCompletionEnhancement": {
             "title": "スタティック・コンプリートの強化",
             "cppCodeTemplateComplete": {
-                "label": "AcWing CPP 补全模板",
-                "helpText": "<p>模板来自<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+                "label": "AcWing CPP補完テンプレート",
+                "helpText": "<p><a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>のテンプレート"
             },
-            "customization": "自定义",
-            "performanceWarning": "注意：过多的静态补全规则会影响性能"
+            "customization": "カスタマイズ",
+            "performanceWarning": "注：静的補完ルールが多すぎるとパフォーマンスに影響することがある"
         }
     },
     "dev": {
         "title": "セーフガード",
-        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
+        "notice": "<p>注：通常、これらの機能を使用する必要はありません。</p><p>関数の意味がよくわからない場合は、操作しないでください！</p>",
         "load": {
-            "title": "加载",
+            "title": "に",
             "notWaiteLoaded": {
-                "label": "不等待页面资源完全加载",
-                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+                "label": "ページのリソースが完全にロードされるのを待つ必要がない",
+                "helpText": "<p></p><p>ページが完全にロードされているにもかかわらず、ローディングのプロンプトメッセージが常に：\"Waiting for page resources to load\" のままである場合は、まずネットワークの問題かどうかを確認する必要があります。</p><p>そうでない場合は、オプションをオンにしてGithubにアクセスして、ブラウザのバージョン情報とオペレーティングシステムの情報を含めてエラーを報告し、分析して再現できるようにしてみてください。</p>"
             }
         },
         "l10n": {
-            "title": "脚本本地化",
+            "title": "スクリプトのローカライズ",
             "refreshScrpitCache": {
-                "label": "刷新缓存",
-                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
-                "button": "刷新"
+                "label": "キャッシュのリフレッシュ",
+                "helpText": "<p></p>スクリプトのローカライズされたデータは、読み込みを高速化するためにローカルにキャッシュされ、自動更新サイクルは1週間です。",
+                "button": "リフレッシュ"
             }
         },
         "indexedDB": {
-            "title": "IndexedDB数据库",
+            "title": "IndexedDBデータベース",
             "clear": {
-                "label": "清除数据",
-                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
-                "button": "清除"
+                "label": "クリアデータ",
+                "helpText": "<p>ローカルのIndexedDBのデータをクリアすると、CFBetterデータベースのすべてのデータがクリアされます。</p>、ご注意ください。",
+                "button": "クリアランス"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
-                "export": "导出",
+                "label": "データのインポート/エクスポート",
+                "helpText": "<p>現在の IndexedDB デー タ を エ ク ス ポー ト し た り 、 他の人がエ ク ス ポー ト し たデー タ を イ ン ポー ト し た り す る こ と がで き ます</p>",
+                "export": "導く",
                 "import": "インポート"
             }
         },
         "configuration": {
-            "title": "脚本配置",
+            "title": "スクリプト構成",
             "clear": {
-                "label": "清除配置",
-                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
-                "button": "清除"
+                "label": "クリアコンフィギュレーション",
+                "helpText": "<p>ローカルのスクリプト構成データをクリアすると、スクリプト構成が初期状態にリセットされるため、注意して行ってください。</p>",
+                "button": "クリアランス"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
-                "export": "导出",
+                "label": "データのインポート/エクスポート",
+                "helpText": "<p>現在のスクリプト構成をエクスポートしたり、すでにエクスポートされた構成をインポートすることができます</p>",
+                "export": "導く",
                 "import": "インポート"
             }
         }
     },
     "preference": {
-        "title": "偏好",
+        "title": "プリファレンス",
         "loadingInfo": {
-            "label": "显示加载提示信息",
-            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
+            "label": "ローディング警告メッセージの表示",
+            "helpText": "<p>ロード情報を表示するをオンにすると、ページがロードされるたびに、ロード情報のプロンプトが上部に表示されます：\"CodeforcesBetter -- xxx\"</p><p>これは、スクリプトが現在どのように動作しているかを確認するために使用されます<strong>もし表示したくない場合は、以下を選択できます。オフ</strong></p><p><u>なお、スクリプトの読み込みに関する問題のフィードバックが必要な場合は、スクリーンショットを撮る前にこのオプションをオンにして、問題を分析できるようにしてください</u></p>"
         },
         "targetArea": {
-            "label": "显示目标区域范围",
-            "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
+            "label": "ターゲットエリアの範囲を表示",
+            "helpText": "オンの場合、MD表示/コピー/変換ボタン上にマウスを置くと、そのターゲット領域の範囲が表示されます。"
         },
         "iconButtonSize": {
-            "title": "图标按钮大小",
-            "helpText": "<p>设置翻译按钮的大小</p>",
-            "placeholder": "请输入按钮大小"
+            "title": "アイコン ボタンのサイズ",
+            "helpText": "<p>翻訳ボタンのサイズ設定</p>",
+            "placeholder": "ボタンサイズを入力してください。"
         }
     },
     "about": {
