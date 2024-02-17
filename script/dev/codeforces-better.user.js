@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.43
+// @version      1.72.44
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -1210,7 +1210,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
-        html[data-theme=dark] .input-output-copier:hover, html[data-theme=dark] .translate-problem-statement-panel,
+        html[data-theme=dark] .translate-problem-statement-panel,
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
         html[data-theme=dark] .OJBetter_setting_list,
@@ -1251,13 +1251,14 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] #addCustomTest, 
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs, html[data-theme=dark] .OJBetter_setting_menu a,
-        html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] .config::before{
+        html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] .config::before,
+        html[data-theme=dark] #statePanel, html[data-theme=dark] .test-case{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
             border-bottom: 1px solid #424b56 !important;
         }
-        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer{
+        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer, html[data-theme=dark] #customTestBlock #customTests{
             border-top: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .topic .content {
@@ -6196,8 +6197,9 @@ function isLikelyCodeSnippet(text) {
         'raise', 'with', 'lambda', 'print'
     ];
     // 代码的特殊字符
-    const codeChars = [';', '{', '}', '<', '>', '=', '+', '-', '/',
+    const codeChars = [';', '{', '}', '<', '>', '=', '+', '-',
         '&', '|', '#', ':', '\'\'\'', '\"\"\"', '->'];
+
     // 普通文本的标点符号
     const textChars = ['.', ',', '?', '!', ':', '"', "'"];
 
@@ -6222,13 +6224,8 @@ function isLikelyCodeSnippet(text) {
     // 检查Python的缩进特征
     const hasPythonIndentation = cleanedText.includes('\n    ') || cleanedText.includes('\n\t');
 
-    // 如果代码关键字数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
-    if ((keywordCount > 2 && codeCharCount > textCharCount) || hasPythonIndentation) {
-        return true;
-    }
-
-    // 如果特殊代码字符数量显著高于普通文本标点符号数量，则可能是代码
-    if (codeCharCount > textCharCount * 2) {
+    // 如果代码关键字数量或者特殊代码字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
+    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2||hasPythonIndentation) {
         return true;
     }
 
@@ -8431,11 +8428,13 @@ function creatRatingCss(hasBorder = true) {
         dynamicCss += `}\n`;
     }
     GM_addStyle(dynamicCss);
-    GM_addStyle(`
+    if (OJBetter.clist.ratingHidden) {
+        GM_addStyle(`
         #clistButton {
             color: #ffffff00;
         }
     `);
+    }
 }
 
 /**
