@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "hohes Niveau",
+            "title": "高级",
             "header": {
                 "label": "Benutzerdefinierte Kopfzeile",
                 "placeholder": "(Optional) Hier können Sie zusätzliche Schlüssel-Wert-Paare eingeben, die der Kopfzeile der Anfrage hinzugefügt werden sollen.",
@@ -55,7 +55,7 @@
                 "placeholder": "Bitte geben Sie dieser Konfiguration einen Namen"
             },
             "key": {
-                "label": "SCHLÜSSEL.",
+                "label": "KEY:",
                 "placeholder": "Bitte geben Sie den KEY ein",
                 "tipText": "<p>Sie müssen Ihren eigenen DeepL Schlüssel eingeben,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">offizielle Website</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>Lassen Sie das Feld leer, um den Standardwert：gpt-3.5-turbo</p><p>zu verwenden. Eine Liste der Modelle finden Sie in der offiziellen OpenAI-Dokumentation<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\"></a></p><p><strong>Wenn Sie die vom Service Provider bereitgestellte Proxy-API verwenden, überprüfen Sie bitte, ob der Service Provider das entsprechende Modell unterstützt</strong></p>"
             },
             "key": {
-                "label": "SCHLÜSSEL.",
+                "label": "KEY:",
                 "placeholder": "Bitte geben Sie den KEY ein",
                 "tipText": "<p>Sie müssen Ihren eigenen OpenAI-Schlüssel eingeben,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">offizielle Website</a></p><p><b>Wenn Sie die vom Dienstanbieter bereitgestellte Proxy-API verwenden, sollten Sie den vom Dienstanbieter bereitgestellten Schlüssel eingeben</b></p>"
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "hohes Niveau",
+            "title": "高级",
             "header": {
                 "label": "Benutzerdefinierte Kopfzeile",
                 "placeholder": "(Optional) Hier können Sie zusätzliche Schlüssel-Wert-Paare eingeben, die der Kopfzeile der Anfrage hinzugefügt werden sollen.",
