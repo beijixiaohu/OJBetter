@@ -5,7 +5,7 @@
         "translation": "renderização",
         "clist": "Clista",
         "monaco": "Mónaco",
-        "preference": "偏好",
+        "preference": "preferências",
         "dev": "salvaguardar",
         "about": "em relação a"
     },
@@ -17,22 +17,22 @@
         }
     },
     "basic": {
-        "title": "基本设置",
+        "title": "Definições básicas",
         "darkMode": {
-            "name": "黑暗模式",
+            "name": "modo escuro",
             "options": {
-                "dark": "黑暗",
+                "dark": "sombriamente",
                 "light": "diurno",
-                "system": "跟随系统"
+                "system": "sistema de acompanhamento"
             }
         },
-        "expandBlocks": "自动展开折叠块",
+        "expandBlocks": "Desdobramento automático dos blocos dobráveis",
         "renderOptimization": {
             "label": "Otimização da renderização de blocos de dobragem",
-            "helpText": "<p>为折叠块元素添加 contain 约束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>"
+            "helpText": "<p>Adicione restrições de contenção a elementos de blocos dobrados</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Se o seu navegador apresentar atrasos ao visualizar um grande número de blocos dobrados, ativá-lo<strong>pode</strong>melhorar um pouco</p>"
         },
         "paging": {
-            "label": "评论区分页",
+            "label": "Comentários Página de distinção",
             "helpText": "Os comentários são apresentados em páginas separadas, com um número especificado de<strong>andar principal</strong>por página."
         },
         "luoguJump": {
@@ -40,298 +40,298 @@
             "helpText": "<p>Alguns dos títulos do Codeforces estão incluídos no JO LOGU, e alguns títulos têm traduções e explicações</p><p>Quando o ecrã é ligado, se o título atual estiver incluído, o logótipo LOGU será apresentado no canto superior direito do título,</p><p>Se clicar nele, poderá saltar para a página LOGU correspondente a esse título com um clique.</strong></p>"
         },
         "recolor": {
-            "label": "重新着色榜单",
-            "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
+            "label": "Recolorir a lista",
+            "helpText": "<p>Para a lista de corridas que utilizam o sistema Codeforces</p><p>Volte a colorir as pontuações de acordo com o intervalo de \"Pontuação/Total\"</p><p>Intervalo：1~0,7~0,45~0 Verde escuro→Laranja claro→Laranja escuro→Vermelho</p>"
         }
     },
     "localization": {
-        "title": "本地化设置",
-        "scriptLanguageLabel": "脚本语言",
-        "websiteLanguageLabel": "网站语言",
+        "title": "localização",
+        "scriptLanguageLabel": "linguagem de script",
+        "websiteLanguageLabel": "Língua do sítio Web",
         "notice": {
-            "1": "<strong>帮助改进翻译质量</strong><p>作者只熟悉简体中文和英文，对于其他语言，脚本以及网站的语言本地化均由机器翻译完成（Deepl&Google），翻译工作流由crowdin托管。</p><p>如果你乐意帮助改进某个语言的本地化翻译质量，</p><p>欢迎<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>前往协助改进</a>，感谢你的贡献！</p>",
-            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+            "1": "<strong>Ajude a melhorar a qualidade das traduções</strong><p>O autor só está familiarizado com o chinês simplificado e o inglês, para todas as outras línguas, os guiões e a localização linguística do sítio Web são feitos por tradução automática (Deepl e Google) e o fluxo de trabalho de tradução é alojado pelo crowddin.</p><p>Se quiser ajudar a melhorar a qualidade das traduções localizadas para uma língua em particular,</p><p>é bem-vindo a<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>ir a</a>para ajudar a melhorá-la, e a sua contribuição é apreciada!</p>",
+            "2": "<strong>Ajudar a melhorar a localização da língua do sítio Web</strong><p>Se pensa que a localização é necessária algures no seu sítio Web e que a sua substituição não causará problemas graves de desempenho, pode<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ir para Melhorar as regras de localização</a>.</p><p>Se pretender adicionar uma nova regra, tem de adicionar a versão em chinês simplificado da regra：fork e modificar o ficheiro da regra e, em seguida, lançar um pull request.</p><p>Após a fusão da submissão, o crowdin completará automaticamente a tradução para as outras línguas e pode ir ao crowdin mais tarde para melhorar a qualidade da tradução também para as outras línguas.</p>"
         }
     },
     "translation": {
-        "title": "翻译设置",
+        "title": "Definições de tradução",
         "options": {
-            "title": "首选项",
+            "title": "preferências",
             "services": {
-                "deepl": "DeepL翻译",
+                "deepl": "Tradução de DeepL",
                 "iflyrec": "Xunfei Ouça Traduzir",
                 "youdao": "Tradução do Youtube",
-                "google": "谷歌翻译",
-                "caiyun": "彩云小译",
+                "google": "Google Tradutor",
+                "caiyun": "lit. nuvens coloridas e pequenas traduções",
                 "openai": {
-                    "name": "ChatGPT翻译",
-                    "helpText": "<p><b>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置</b></p><p>具体请阅读脚本页的介绍</p>"
+                    "name": "Tradução do ChatGPT",
+                    "helpText": "<p><b>Tem de adicionar e selecionar as informações de configuração que pretende utilizar na Configuração do ChatGPT abaixo, clicar com o botão direito do rato para modificar e eliminar a configuração</b></p><p>Leia a página do guião para obter mais informações</p>"
                 }
             }
         },
         "deepl": {
             "mode": {
-                "title": "模式",
+                "title": "paradigma",
                 "select": {
-                    "free": "免费",
+                    "free": "freeware",
                     "api": "API"
                 },
-                "helpText": "选择DeepL服务的模式，默认为免费模式，不需要提供API，但是受到官方较多的频率限制。API模式下，需要添加配置，可以选择官方API：API free、API Pro，以及非官方的deeplx"
+                "helpText": "Seleccione o modo do serviço DeepL. Por defeito, o modo gratuito não precisa de fornecer a API, mas as restrições oficiais de frequência são maiores. Modo API, tem de adicionar a configuração, pode escolher a API oficial：API gratuita, API Pro, bem como o deeplx não oficial"
             },
             "enableEmphasisProtection": {
-                "title": "保护**号",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "title": "Proteção** Não.",
+                "helpText": "<strong>Esta opção só funciona se a API oficial for usada no modo API</strong><p>DeepL pode tratar incorretamente a ênfase em MarkDown <strong>**</strong> </p><p>Isto pode fazer com que o resultado da tradução perca o seu conteúdo embrulhado.</p><p>Quando esta opção está activada, a ênfase no texto <strong>**</strong> é substituída por etiquetas HTML e<code>tag_handling: html</code>é automaticamente adicionada ao cabeçalho do pedido de tradução para que DeepL não quebre a ênfase e o seu conteúdo</p>"
             },
             "enableLinkProtection": {
-                "title": "保护链接",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "title": "Proteger as ligações",
+                "helpText": "<strong>Esta opção só funciona se a API oficial for utilizada no modo API</strong><p>DeepL pode tratar incorretamente as hiperligações em MarkDown,</p><p>Quando esta opção está activada, substitui os símbolos de hiperligação no texto <strong>[]()</strong> por etiquetas HTML e adiciona automaticamente<code>tag_handling: html</code>ao cabeçalho do pedido de tradução para evitar que DeepL quebre as hiperligações e os seus conteúdos</p>"
             }
         },
         "chatgpt": {
             "isStream": {
-                "name": "流式传输",
-                "helpText": "<p>启用数据流式传输，打字机效果</p>"
+                "name": "transmissão",
+                "helpText": "<p>Permitir o fluxo de dados, efeito de máquina de escrever</p>"
             }
         },
         "preference": {
-            "title": "偏好",
+            "title": "preferências",
             "target": {
-                "title": "目标语言",
-                "helpText": "注意：对于不同的目标语言，可用的翻译服务有所不同，具体请阅读脚本页的介绍"
+                "title": "língua-alvo",
+                "helpText": "Nota：Os serviços de tradução disponíveis diferem para diferentes línguas de destino, leia a página do guião para obter mais informações."
             },
             "comment_translation_choice": {
-                "title": "评论区翻译",
+                "title": "Tradução da secção de comentários",
                 "services": {
-                    "follow": "跟随首选项",
-                    "deepl": "DeepL翻译",
+                    "follow": "Siga as preferências",
+                    "deepl": "Tradução de DeepL",
                     "iflyrec": "Xunfei Ouça Traduzir",
                     "youdao": "Tradução do Youtube",
-                    "google": "谷歌翻译",
-                    "caiyun": "彩云小译",
-                    "openai": "ChatGPT翻译"
+                    "google": "Google Tradutor",
+                    "caiyun": "lit. nuvens coloridas e pequenas traduções",
+                    "openai": "Tradução do ChatGPT"
                 }
             }
         },
         "autoTranslation": {
             "title": "tradução automática",
-            "enable": "启用自动翻译",
-            "helpText": "<p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
+            "enable": "Ativar a tradução automática",
+            "helpText": "<p>Para textos curtos na área<strong>.ttypography, .comments</strong></p><p>são traduzidos automaticamente quando entram na área visível da janela do browser</p>",
             "shortTextLength": {
-                "name": "短文本长度",
-                "helpText": "<p>当文本长度小于该值时，视为短文本</p>",
-                "end": "字符",
-                "placeholder": "请输入长度"
+                "name": "Comprimento do texto",
+                "helpText": "<p>Quando o comprimento do texto é inferior a este valor, é considerado como um texto curto</p>",
+                "end": "carácter",
+                "placeholder": "Introduza o comprimento"
             },
             "allowMixTrans": {
-                "name": "评论区混合翻译",
-                "helpText": "<p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p><p>并行地进行翻译</p>",
+                "name": "Tradução mista da secção de comentários",
+                "helpText": "<p>Ao traduzir automaticamente, para cada área de texto curto na secção de comentários, seleccione de forma independente e aleatória um dos serviços assinalados abaixo</p><p>Traduzir em paralelo</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
-                    "iflyrec": "讯飞",
-                    "youdao": "有道",
-                    "google": "谷歌",
-                    "caiyun": "彩云"
+                    "iflyrec": "Xunfei (empresa de telecomunicações)",
+                    "youdao": "aderir aos princípios da verdade e do direito",
+                    "google": "google",
+                    "caiyun": "nuvens cor-de-rosa"
                 }
             }
         },
         "advanced": {
-            "name": "高级",
+            "name": "nível elevado",
             "mode": {
-                "name": "工作模式",
-                "helpText": "<p>你可以选择脚本的工作方式</p><p>○ 普通模式：会一次性翻译整个区域的内容</p><p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p><p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p><div style='color:#f44336;'><p><u>注意：分段/选段模式会产生如下问题：</u></p><p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p><p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p></div>",
+                "name": "modo de funcionamento",
+                "helpText": "<p>Pode escolher a forma como o script funciona</p><p>○ Modo Normal：traduzirá toda a área de uma só vez</p><p>○ Modo Segmentado：traduzirá cada etiqueta&#60;&#112;&#47;&#62;e&#60;&#105;&#47;&#62;dentro da área, por sua vez</p><p>○ Modo Segmentado Selecionado：Pode clicar em quaisquer etiquetas&#60;&#112;&#47;&#62;e&#60;&#105;&#47;&#62;na página para as traduzir</p><div style='color:#f44336;'><p><u>NOTA：O Modo Segmentado/Selecionado Segmentado cria os seguintes problemas：</u></p><p>- torna impossível que a interface de tradução conheça todo o contexto do texto, o que reduz a qualidade da tradução.</p><p>- Haverá secções<strong>que não serão traduzidas/não poderão ser seleccionadas</strong>porque não são elementos&#60;&#112;&#47;&#62;ou&#60;&#105;&#47;&#62;</p></div>",
                 "options": {
-                    "0": "普通模式",
-                    "1": "分段模式",
-                    "2": "选段模式"
+                    "0": "modo normal",
+                    "1": "modelo de segmentação",
+                    "2": "modelo de segmentação"
                 }
             },
             "memory": {
-                "name": "自动恢复历史翻译",
-                "helpText": "<p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p><p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>"
+                "name": "Recuperação automática de traduções históricas",
+                "helpText": "<p>Salva automaticamente as informações de tradução na página de título<strong></strong>para o indexDB local</p><p>Refresca / restaura automaticamente as informações de tradução na próxima vez que a página for acedida</p>"
             },
             "retrans": {
-                "name": "重新翻译时",
-                "helpText": "<p>选择在重新翻译时是'关闭旧的结果'还是'收起旧的结果'</p>",
+                "name": "Após a retradução",
+                "helpText": "<p>Escolha se quer \"fechar resultados antigos\" ou \"guardar resultados antigos\" na retradução</p>",
                 "options": {
-                    "0": "关闭旧的结果",
-                    "1": "收起旧的结果"
+                    "0": "Feche os resultados antigos",
+                    "1": "Guardar os resultados antigos"
                 }
             },
             "transWaitTime": {
-                "name": "等待间隔",
-                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
-                "end": "毫秒",
-                "placeholder": "请输入间隔"
+                "name": "Intervalo de espera",
+                "helpText": "<p>Defina o intervalo de espera entre dois pedidos de tradução, esta definição terá efeito global e é calculada independentemente para cada serviço de tradução</p><p>Recomendação 200 + milissegundos</p><p>Descrição：As traduções ChatGPT ignoram esta definição e não esperam</p>",
+                "end": "milissegundo",
+                "placeholder": "Introduza o intervalo"
             },
             "replaceSymbol": {
-                "name": "LaTeX替换符",
-                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p><p>具体你可以前往阅读脚本页的说明</p>",
+                "name": "Substituição do LaTeX",
+                "helpText": "<p>O guião assegura que as fórmulas não são corrompidas pela interface de tradução, retirando primeiro todas as fórmulas LaTeX e utilizando espaços reservados para elas</p><p>A probabilidade de as substituições serem corrompidas varia de serviço de tradução para serviço de tradução, leia as instruções na página do guião para obter detalhes</p><p>Note que：Traduzir com ChatGPT não requer o acima referido e, portanto, não é afetado por esta opção</p><p>Para obter detalhes, pode ir à página do guião para obter instruções</p>",
                 "options": {
-                    "1": "使用【】",
-                    "2": "使用{}",
-                    "3": "使用[]"
+                    "1": "Utilize [ ]",
+                    "2": "Utilize {}",
+                    "3": "Utilize []"
                 }
             },
             "filterTextWithoutEmphasis": {
-                "name": "过滤文本中的**号",
-                "helpText": " <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用ChatGPT会忽略该项) </p>"
+                "name": "Filtragem de sinais ** no texto",
+                "helpText": " <p>Alguns serviços de tradução (por exemplo, DeepL) tratam incorretamente a ênfase no MarkDown <strong>**</strong> </p><p>Isto pode fazer com que a tradução não atinja o seu invólucro, pode optar por remover a ênfase (o ChatGPT ignora-a) </p>"
             }
         }
     },
     "clist": {
-        "title": "Clist 设置",
+        "title": "Definições da lista",
         "basics": {
             "name": "fundamental",
-            "notice": "<p>注意：访问Clist数据需要有效的登录凭证，你有两种选择：</p><p>在下方填写<a href='https://clist.by/' target='_blank'> clist.by </a>官方的 API key，</p><p>或者使浏览器中的 clist.by 网站处于登录状态（即 Cookie 有效）</p>",
+            "notice": "<p>Nota：O acesso aos dados Clist requer credenciais de início de sessão válidas, tem duas opções：</p><p>Preencha a chave API oficial<a href='https://clist.by/' target='_blank'> clist.by </a>abaixo,</p><p>ou mantenha o sítio Web clist.by no seu browser com sessão iniciada (ou seja, o cookie é válido)</p>",
             "key": {
-                "title": "KEY:",
-                "helpText": "<p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXX</p></div>",
-                "keyPlaceholder": "请输入 KEY"
+                "title": "CHAVE.",
+                "helpText": "<p>Exemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "Introduza a CHAVE"
             }
         },
         "displayRating": {
-            "title": "显示Rating分",
+            "title": "Mostrar classificação Pontuação",
             "contest": {
-                "name": "比赛问题集页",
-                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "name": "Página do conjunto de perguntas do concurso",
+                "helpText": "<p>Fonte de dados clist.by</p><p>Tem de fornecer a chave API oficial</p><p>ou manter o clist.by ligado no seu browser (ou seja, o cookie é válido)</p>",
                 "badge": "Cookie/API KEY"
             },
             "problem": {
-                "name": "题目页",
-                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "name": "página de rosto",
+                "helpText": "<p>Fonte de dados clist.by</p><p>Tem de fornecer a chave API oficial</p><p>ou manter o clist.by ligado no seu browser (ou seja, o cookie é válido)</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
-                "name": "题单页",
-                "helpText": "<p>数据来源 clist.by</p><p>你需要提供官方的 API key</p><p>或让你的浏览器上的 clist.by 处于登录状态（即 cookie 有效）</p>",
+                "name": "página de rosto",
+                "helpText": "<p>Fonte de dados clist.by</p><p>Tem de fornecer a chave API oficial</p><p>ou manter o clist.by ligado no seu browser (ou seja, o cookie é válido)</p>",
                 "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {
-            "title": "防剧透",
-            "helpText": "<p>只有当鼠标移动到Rating分展示区域上时才显示</p>"
+            "title": "à prova de spoilers",
+            "helpText": "<p>Apresentado apenas quando o rato é movido sobre a área de subvisualização da Classificação</p>"
         }
     },
     "codeEditor": {
-        "title": "Monaco 编辑器设置",
+        "title": "Definições do Editor Mónaco",
         "basics": "fundamental",
         "problemPageCodeEditor": {
             "label": "Adicione o editor à página de título",
-            "helpText": "在题目页下面添加 Monaco 编辑器，代码会自动保存，提供在线代码运行"
+            "helpText": "Adicione o editor Monaco por baixo da página de título e o código será guardado automaticamente, permitindo a execução do código em linha"
         },
         "preferences": {
-            "title": "偏好",
+            "title": "preferências",
             "isCodeSubmitConfirm": {
-                "label": "代码提交二次确认",
-                "helpText": "点击题目页 Monaco 编辑器的代码提交时会弹窗二次确认，防止误提交"
+                "label": "Confirmação secundária da apresentação do código",
+                "helpText": "Se clicar na página de título do editor Mónaco, aparecerá uma segunda vez quando o código for submetido para evitar submissões falsas."
             },
             "alwaysConsumeMouseWheel": {
-                "label": "鼠标滚动锁定",
-                "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
+                "label": "Bloqueio de deslocamento do rato",
+                "helpText": "Quando ativado, quando o ponteiro do rato está dentro do editor monaco, o deslocamento do rato só se desloca pelo conteúdo do editor"
             },
             "submitButtonPosition": {
-                "label": "提交按钮位置",
-                "helpText": "选择代码测试和提交按钮的位置",
+                "label": "Localização do botão Enviar",
+                "helpText": "Escolha a localização dos botões de teste de código e de envio",
                 "options": {
-                    "bottom": "底部",
-                    "top": "顶栏"
+                    "bottom": "fundos",
+                    "top": "parapeito"
                 }
             }
         },
         "onlineCodeExecution": {
-            "title": "在线代码运行",
+            "title": "Código online Executar",
             "compilerOptions": {
-                "codeforces": "Codeforces",
-                "wandbox": "wandbox",
+                "codeforces": "Forças de código",
+                "wandbox": "caixa de varinha",
                 "rextester": "rextester"
             }
         },
         "lsp": {
-            "title": "LSP 设置",
+            "title": "Definições LSP",
             "useLSP": {
-                "label": "使用 LSP",
-                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>"
+                "label": "Utilizar o LSP",
+                "helpText": "<p>Ligue-se ao servidor LSP para permitir a conclusão de código, diagnóstico de código, formatação, ir para definições, etc.</p><p>Suporte para linguagens C++, Python</p><p>Tem de iniciar o OJBetter_Bridge, consulte a página do script para obter instruções</p>"
             },
             "OJBetter_Bridge_WorkUri": {
-                "label": "工作路径:",
-                "helpText": "<p>你需要填写 OJBetter_Bridge 所在的路径</p><p>使用正斜杠或反斜杠均可</p><p>默认路径：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "label": "Percurso profissional.",
+                "helpText": "<p>Tem de preencher o caminho onde se encontra o OJBetter_Bridge</p><p>Utilize uma barra invertida ou uma barra invertida</p><p>Caminho predefinido：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
-                "label": "Server:",
-                "helpText": "<p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p><p>默认的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>"
+                "label": "Servidor.",
+                "helpText": "<p>Tem de preencher o URL do servidor do OJBetter_Bridge na sua máquina local</p><p>URL predefinido: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Note que, normalmente, não precisa de alterar este ponto; se precisar de o alterar, faça-o de forma consistente com o formato de URL predefinido</p>"
             }
         },
         "staticCompletionEnhancement": {
             "title": "Ampliação da conclusão estática",
             "cppCodeTemplateComplete": {
-                "label": "AcWing CPP 补全模板",
-                "helpText": "<p>模板来自<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+                "label": "Modelos complementares AcWing CPP",
+                "helpText": "<p>Modelo de<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
             },
-            "customization": "自定义",
-            "performanceWarning": "注意：过多的静态补全规则会影响性能"
+            "customization": "personalização",
+            "performanceWarning": "Nota：Demasiadas regras complementares estáticas podem afetar o desempenho"
         }
     },
     "dev": {
         "title": "salvaguardar",
-        "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
+        "notice": "<p>Nota：Normalmente, não precisa de utilizar estas funções.</p><p>Se não tiver a certeza do significado das funções, não as utilize!</p>",
         "load": {
-            "title": "加载",
+            "title": "(de carga, etc.) carga",
             "notWaiteLoaded": {
-                "label": "不等待页面资源完全加载",
-                "helpText": "<p>如果加载提示信息始终停留在：“等待页面资源加载”，即使页面已经完全加载</p><p>你首先应该确认是否是网络问题，</p><p>如果不是，则尝试开启该选项，并前往 Github 报告错误，包括浏览器版本信息和操作系统信息，以便分析复现。</p>"
+                "label": "Não espere que os recursos da página sejam totalmente carregados",
+                "helpText": "<p>Se a mensagem de aviso de carregamento se mantiver sempre em：\"Waiting for page resources to load\" mesmo que a página esteja totalmente carregada</p><p>deve primeiro confirmar se é um problema de rede,</p><p>caso contrário, tente ativar a opção e vá ao Github para comunicar o erro, incluindo informações sobre a versão do browser e do sistema operativo, para que possa ser analisado e reproduzido.</p>"
             }
         },
         "l10n": {
-            "title": "脚本本地化",
+            "title": "Localização do guião",
             "refreshScrpitCache": {
-                "label": "刷新缓存",
-                "helpText": "<p>脚本的本地化数据会缓存在本地以加快加载速度，自动刷新周期为一周，你可以点击刷新强制立即刷新数据</p>",
-                "button": "刷新"
+                "label": "Atualizar a cache",
+                "helpText": "<p>Os dados localizados do script são armazenados localmente em cache para acelerar o carregamento, com um ciclo de atualização automática de uma semana, e pode forçar uma atualização imediata dos dados clicando em Atualizar</p>",
+                "button": "atualizar (janela do computador)"
             }
         },
         "indexedDB": {
-            "title": "IndexedDB数据库",
+            "title": "Base de dados IndexedDB",
             "clear": {
-                "label": "清除数据",
-                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
-                "button": "清除"
+                "label": "Limpar dados",
+                "helpText": "<p>Limpar os dados locais da IndexedDB irá limpar todos os dados da base de dados CFBetter, por favor tenha cuidado</p>",
+                "button": "apuramento"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的IndexedDB数据，或者导入其他人导出的数据</p>",
-                "export": "导出",
+                "label": "Importar/exportar dados",
+                "helpText": "<p>Pode exportar os dados actuais do IndexedDB ou importar dados exportados por outros</p>",
+                "export": "derivar",
                 "import": "importação (dados)"
             }
         },
         "configuration": {
-            "title": "脚本配置",
+            "title": "Configuração do guião",
             "clear": {
-                "label": "清除配置",
-                "helpText": "<p>清除本地的脚本配置数据，会将脚本配置重置为初始状态，请谨慎操作</p>",
-                "button": "清除"
+                "label": "Limpar configuração",
+                "helpText": "<p>A limpeza dos dados de configuração do script local irá repor a configuração do script no seu estado inicial, pelo que deve proceder com cuidado</p>",
+                "button": "apuramento"
             },
             "inputOrExport": {
-                "label": "导入/导出数据",
-                "helpText": "<p>你可以导出当前的脚本配置，或者导入已经导出的配置</p>",
-                "export": "导出",
+                "label": "Importar/exportar dados",
+                "helpText": "<p>Pode exportar a configuração atual do script ou importar uma configuração já exportada</p>",
+                "export": "derivar",
                 "import": "importação (dados)"
             }
         }
     },
     "preference": {
-        "title": "偏好",
+        "title": "preferências",
         "loadingInfo": {
-            "label": "显示加载提示信息",
-            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
+            "label": "Visualizar uma mensagem de alerta de carregamento",
+            "helpText": "<p>Quando ativa a opção Mostrar informações de carregamento, é apresentada uma mensagem de informações de carregamento no topo sempre que a página é carregada：\"CodeforcesBetter -- xxx\"</p><p>Isto é utilizado para ver como o script está a funcionar atualmente<strong>Se não quiser ver, pode optar por Off</strong></p><p><u>Deve ter em atenção que, se precisar de feedback sobre quaisquer problemas de carregamento com o script, active esta opção antes de tirar uma captura de ecrã, para que o problema possa ser analisado</u></p>"
         },
         "targetArea": {
-            "label": "显示目标区域范围",
-            "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
+            "label": "Visualize o alcance da área alvo",
+            "helpText": "Quando ligado, o intervalo da sua área de destino é apresentado quando o rato passa sobre o botão Ver/Copiar/Transladar de MD."
         },
         "iconButtonSize": {
-            "title": "图标按钮大小",
-            "helpText": "<p>设置翻译按钮的大小</p>",
-            "placeholder": "请输入按钮大小"
+            "title": "Ícone Tamanho do botão",
+            "helpText": "<p>Definir o tamanho do botão de tradução</p>",
+            "placeholder": "Introduza o tamanho do botão"
         }
     },
     "about": {
