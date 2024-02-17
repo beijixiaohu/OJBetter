@@ -5,6 +5,7 @@
         "translation": "翻譯",
         "clist": "Clist",
         "monaco": "Monaco",
+        "preference": "偏好",
         "dev": "維護",
         "about": "關於"
     },
@@ -15,7 +16,7 @@
             "input": "目前設定要求必須填寫內容"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "基本設定",
         "darkMode": {
             "name": "黑暗模式",
@@ -25,33 +26,25 @@
                 "system": "跟隨系統"
             }
         },
-        "loadingInfo": {
-            "label": "顯示載入提示訊息",
-            "helpText": "<p>當你開啟顯示載入資訊時，每次載入頁面時會在上方顯示載入資訊提示：“CodeforcesBetter —— xxx”</p><p>這用於了解腳本目前的工作情況，<strong>如果你不想看到，可以選擇關閉</strong></p><p><u>需要說明的是，如果你需要回饋腳本的任何載入問題，請開啟該選項後再截圖，以便於分析問題</u></p>"
-        },
-        "targetArea": {
-            "label": "顯示目標區域範圍",
-            "helpText": "開啟後當滑鼠懸浮在MD視圖/複製/翻譯按鈕上時，會顯示其目標區域的範圍。"
-        },
         "expandBlocks": "自動展開折疊塊",
         "renderOptimization": {
             "label": "折疊塊渲染優化",
-            "helpText": "<p>為折疊塊元素添加contain 約束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的瀏覽器查看大量折疊塊時比較卡頓，開啟後<strong>可能</strong>會有一定程度的改善</p>"
+            "helpText": "<p>為折疊塊元素加上contain 限制</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的瀏覽器查看大量折疊塊時比較卡頓，開啟後<strong>可能</strong>會有一定程度的改善</p>"
         },
         "paging": {
             "label": "評論區分頁",
-            "helpText": "對評論區分頁顯示，每頁顯示指定數量的<strong>主樓</strong>。"
+            "helpText": "評論區分頁顯示，每頁顯示指定數量的<strong>主樓</strong>。"
         },
         "luoguJump": {
             "label": "顯示跳到洛谷",
-            "helpText": "<p>洛谷OJ上收錄了Codeforces的部分題目，有些題目有翻譯和題解</p><p>開啟顯示後，如果當前題目被收錄，則會在題目的右上角顯示洛谷標誌，</p><p>點擊即可一鍵跳轉到該題洛谷的對應頁面。</strong></p>"
+            "helpText": "<p>洛谷OJ上收錄了Codeforces的部分題目，有些題目有翻譯和題解</p><p>開啟顯示後，如果當前題目被收錄，則會在題目的右上角顯示洛谷標誌，</p><p>點選即可一鍵跳到該題洛谷的對應頁。</strong></p>"
         },
         "recolor": {
             "label": "重新著色榜單",
-            "helpText": "<p>對於採用Codeforces 賽制的比賽榜單</p><p>按照「得分/總分」所在的範圍為分數重新漸變著色</p><p>範圍：1~0.7~0.45~0 深綠色→淺橙色→深橙色→紅色</p>"
+            "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
         }
     },
-    "localizationSettings": {
+    "localization": {
         "title": "本地化設定",
         "scriptLanguageLabel": "腳本語言",
         "websiteLanguageLabel": "網站語言",
@@ -60,7 +53,7 @@
             "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "翻譯設定",
         "options": {
             "title": "首選項",
@@ -97,24 +90,26 @@
         "chatgpt": {
             "isStream": {
                 "name": "串流媒體",
-                "helpText": "<p>啟用資料串流傳輸，打字機效果</p>"
+                "helpText": "<p>啟用資料串流，打字機效果</p>"
             }
         },
         "preference": {
             "title": "偏好",
             "target": {
                 "title": "目標語言",
-                "helpText": "注意：對於不同的目標語言，可用的翻譯服務有所不同，具體請閱讀腳本頁的介紹"
+                "helpText": "注意：對於不同的目標語言，可用的翻譯服務有所不同，請閱讀腳本頁的介紹"
             },
-            "comment_translation_choice": "評論區翻譯",
-            "services": {
-                "follow": "跟隨首選項",
-                "deepl": "DeepL翻譯",
-                "iflyrec": "訊飛聽見翻譯",
-                "youdao": "有道翻譯",
-                "google": "Google翻譯",
-                "caiyun": "彩雲小譯",
-                "openai": "ChatGPT翻譯"
+            "comment_translation_choice": {
+                "title": "評論區翻譯",
+                "services": {
+                    "follow": "跟隨首選項",
+                    "deepl": "DeepL翻譯",
+                    "iflyrec": "訊飛聽見翻譯",
+                    "youdao": "有道翻譯",
+                    "google": "Google翻譯",
+                    "caiyun": "彩雲小譯",
+                    "openai": "ChatGPT翻譯"
+                }
             }
         },
         "autoTranslation": {
@@ -123,12 +118,13 @@
             "helpText": "<p>對於<strong>.ttypography, .comments 區域</strong>中的短文本，</p><p>當其進入瀏覽器視窗的可視區域時自動翻譯</p>",
             "shortTextLength": {
                 "name": "短文本長度",
-                "helpText": "<p>當文字長度小於該值時，視為短文本</p>",
-                "end": "字元"
+                "helpText": "<p>當文字長度小於該值時，視為短文字</p>",
+                "end": "字元",
+                "placeholder": "請輸入長度"
             },
             "allowMixTrans": {
                 "name": "評論區混合翻譯",
-                "helpText": "<p>自動翻譯時，對於評論區中的每一個短文本區域，獨立的在下方勾選的服務中隨機選擇一個，</p><p>並行地進行翻譯</p>",
+                "helpText": "<p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p><p>并行地进行翻译</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
                     "iflyrec": "訊飛",
@@ -142,7 +138,7 @@
             "name": "進階",
             "mode": {
                 "name": "工作模式",
-                "helpText": "<p>你可以選擇腳本的工作方式</p><p>○ 普通模式：會一次性翻譯整個區域的內容</p><p>○ 分段模式：會對區域內的每一個&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;標籤依序進行翻譯</p><p>○ 選段模式：你可以自由點選頁面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;標籤進行翻譯</p><div style='color:#f44336;'><p><u>注意：分段/選段模式會產生如下問題：</u></p><p>- 使得翻譯介面無法知曉整個文本的上下文訊息，會降低翻譯品質。</p><p>- 會有<strong>部分內容不會被翻譯/不能被選中</strong>，因為它們不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p></div>",
+                "helpText": "<p>你可以选择脚本的工作方式</p><p>○ 普通模式：会一次性翻译整个区域的内容</p><p>○ 分段模式：会对区域内的每一个&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签依次进行翻译</p><p>○ 选段模式：你可以自由点选页面上的任何&#60;&#112;&#47;&#62;和&#60;&#105;&#47;&#62;标签进行翻译</p><div style='color:#f44336;'><p><u>注意：分段/选段模式会产生如下问题：</u></p><p>- 使得翻译接口无法知晓整个文本的上下文信息，会降低翻译质量。</p><p>- 会有<strong>部分内容不会被翻译/不能被选中</strong>，因为它们不是&#60;&#112;&#47;&#62;或&#60;&#105;&#47;&#62;元素</p></div>",
                 "options": {
                     "0": "普通模式",
                     "1": "分段模式",
@@ -151,7 +147,7 @@
             },
             "memory": {
                 "name": "自動恢復歷史翻譯",
-                "helpText": "<p>將<strong>題目頁面</strong>上的翻譯資訊自動儲存到本機indexDB中</p><p>刷新/ 下一次進入頁面時自動恢復翻譯訊息</p>"
+                "helpText": "<p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p><p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>"
             },
             "retrans": {
                 "name": "重新翻譯時",
@@ -163,12 +159,13 @@
             },
             "transWaitTime": {
                 "name": "等待間隔",
-                "helpText": "<p>設定兩次翻譯請求間的等待間隔，該設定會全域生效，各個翻譯服務之間獨立計算</p><p>建議200 + 毫秒</p><p>說明：ChatGPT 翻譯時會忽略該設置，不等待</p>",
-                "end": "毫秒"
+                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
+                "end": "毫秒",
+                "placeholder": "請輸入間隔"
             },
             "replaceSymbol": {
                 "name": "LaTeX替換符",
-                "helpText": "<p>腳本透過先取出所有的LaTeX公式，並使用替換符佔位，來確保公式不會被翻譯介面所破壞</p><p>對於各個翻譯服務，不同的替換符本身遭到破壞的機率有所不同，具體請閱讀腳本頁的說明</p><p>注意：使用ChatGPT翻譯時不需要上述操作, 因此不受此選項影響</p><p>具體你可以前往閱讀腳本頁的說明</p>",
+                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p><p>具体你可以前往阅读脚本页的说明</p>",
                 "options": {
                     "1": "使用【】",
                     "2": "使用{}",
@@ -177,11 +174,11 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "過濾文字中的**號",
-                "helpText": " <p>一些翻譯服務(例如DeepL)會錯誤處理MarkDown 中的著重號 <strong>**</strong> </p><p>這可能會導致翻譯結果漏掉其包裹的內容，你可以選擇將著重號去掉(使用ChatGPT會忽略該項) </p>"
+                "helpText": " <p>有些翻譯服務(例如DeepL)會錯誤處理MarkDown 中的著重號 <strong>**</strong> </p><p>這可能會導致翻譯結果漏掉其包裹的內容，你可以選擇將著重號去掉(使用ChatGPT會忽略該項) </p>"
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Clist 設定",
         "basics": {
             "name": "基本",
@@ -196,17 +193,17 @@
             "title": "顯示Rating分",
             "contest": {
                 "name": "比賽問題集頁",
-                "helpText": "<p>資料來源clist.by</p><p>你需要提供官方的API key</p><p>或讓你的瀏覽器上的clist.by 處於登入狀態（即cookie 有效）</p>",
+                "helpText": "<p>資料來源clist.by</p><p>你需要提供官方的API key</p><p>或讓你的瀏覽器上的clist.by 處於登錄狀態（即cookie 有效）</p>",
                 "badge": "Cookie/API KEY"
             },
             "problem": {
                 "name": "題目頁",
-                "helpText": "<p>資料來源clist.by</p><p>你需要提供官方的API key</p><p>或讓你的瀏覽器上的clist.by 處於登入狀態（即cookie 有效）</p>",
+                "helpText": "<p>資料來源clist.by</p><p>你需要提供官方的API key</p><p>或讓你的瀏覽器上的clist.by 處於登錄狀態（即cookie 有效）</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
                 "name": "題單頁",
-                "helpText": "<p>資料來源clist.by</p><p>你需要提供官方的API key</p><p>或讓你的瀏覽器上的clist.by 處於登入狀態（即cookie 有效）</p>",
+                "helpText": "<p>資料來源clist.by</p><p>你需要提供官方的API key</p><p>或讓你的瀏覽器上的clist.by 處於登錄狀態（即cookie 有效）</p>",
                 "badge": "Cookie/API KEY"
             }
         },
@@ -215,7 +212,7 @@
             "helpText": "<p>只有當滑鼠移動到Rating分展示區域上時才顯示</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Monaco 編輯器設定",
         "basics": "基本",
         "problemPageCodeEditor": {
@@ -249,19 +246,19 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "LSP 設定",
             "useLSP": {
                 "label": "使用LSP",
-                "helpText": "<p>連接LSP Server，以啟用程式碼補全、程式碼診斷、格式化、轉到定義等功能</p><p>支援C++、Python語言</p><p>你需要啟動OJBetter_Bridge ，具體請查看腳本頁的說明</p>"
+                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>"
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "工作路徑:",
-                "helpText": "<p>你要填入OJBetter_Bridge 所在的路徑</p><p>使用正斜線或反斜線皆可</p><p>預設路徑：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>你需要填寫OJBetter_Bridge 所在的路徑</p><p>使用正斜線或反斜線均可</p><p>預設路徑：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Server:",
-                "helpText": "<p>你需要填寫你本機中OJBetter_Bridge 的Server URL</p><p>預設的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>注意，你通常不需要更改這裡，如需更改，請與預設URL格式一致</p>"
+                "helpText": "<p>你需要填寫你本機中OJBetter_Bridge 的Server URL</p><p>預設的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127. .0.1:2323/</p></div><p>注意，你通常不需要更改這裡，如需更改，請與預設URL格式一致</p>"
             }
         },
         "staticCompletionEnhancement": {
@@ -274,7 +271,7 @@
             "performanceWarning": "注意：過多的靜態補全規則會影響效能"
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "維護",
         "notice": "<p>注意：通常情況下你不需要使用這些功能。</p><p>不清楚各項功能的意義，請勿操作！</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "匯出",
                 "import": "導入"
             }
+        }
+    },
+    "preference": {
+        "title": "偏好",
+        "loadingInfo": {
+            "label": "顯示載入提示訊息",
+            "helpText": "<p>當你開啟顯示載入資訊時，每次載入頁面時會在上方顯示載入資訊提示：“CodeforcesBetter —— xxx”</p><p>這用於了解腳本目前的工作情況，<strong>如果你不想看到，可以選擇關閉</strong></p><p><u>需要說明的是，如果你需要反饋腳本的任何載入問題，請開啟該選項後再截圖，以便於分析問題</u></p>"
+        },
+        "targetArea": {
+            "label": "顯示目標區域範圍",
+            "helpText": "開啟後當滑鼠懸浮在MD視圖/複製/翻譯按鈕上時，會顯示其目標區域的範圍。"
+        },
+        "iconButtonSize": {
+            "title": "圖示按鈕大小",
+            "helpText": "<p>設定翻譯按鈕的大小</p>",
+            "placeholder": "請輸入按鈕大小"
         }
     },
     "about": {

@@ -5,6 +5,7 @@
         "translation": "renderizado",
         "clist": "Clist",
         "monaco": "Mónaco",
+        "preference": "preferencias",
         "dev": "salvaguardar",
         "about": "con respecto a"
     },
@@ -15,7 +16,7 @@
             "input": "La configuración actual requiere campos obligatorios"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "Ajustes básicos",
         "darkMode": {
             "name": "modo oscuro",
@@ -24,14 +25,6 @@
                 "light": "durante el día",
                 "system": "sistema de seguimiento"
             }
-        },
-        "loadingInfo": {
-            "label": "Visualización de un mensaje de alerta de carga",
-            "helpText": "<p>Cuando active Mostrar información de carga, se mostrará un aviso de información de carga en la parte superior cada vez que se cargue la página：\"CodeforcesBetter -- xxx\"</p><p>Esto se utiliza para ver cómo está funcionando actualmente el script<strong>Si no desea verlo, puede optar por Desactivar</strong></p><p><u>Cabe señalar que si necesita información sobre cualquier problema de carga del script, active esta opción antes de realizar una captura de pantalla para que se pueda analizar el problema</u></p>"
-        },
-        "targetArea": {
-            "label": "Visualizar el alcance de la zona objetivo",
-            "helpText": "Cuando está activada, se muestra el alcance de su área de destino al pasar el ratón por encima del botón Ver/Copiar/Traducir de MD."
         },
         "expandBlocks": "Despliegue automático de los bloques plegables",
         "renderOptimization": {
@@ -47,20 +40,20 @@
             "helpText": "<p>Algunos de los títulos de Codeforces están incluidos en LOGU OJ, y algunos títulos tienen traducciones y explicaciones</p><p>Al encender la pantalla, si el título actual está incluido, aparecerá el logotipo de LOGU en la esquina superior derecha del título,</p><p>Al hacer clic en él podrá saltar a la página de LOGU correspondiente a ese título con un solo clic.</strong></p>"
         },
         "recolor": {
-            "label": "Lista de cambio de color",
-            "helpText": "<p>Para las clasificaciones de las partidas que utilizan el sistema Codeforces</p><p>Recoloree las puntuaciones según el rango de \"Puntuación/Total\"</p><p>Rango：1~0.7~0.45~0 Verde oscuro→Naranja claro→Naranja oscuro→Rojo</p>"
+            "label": "Recolorear la lista",
+            "helpText": "<p>Para la lista de carreras que utilizan el sistema Codeforces</p><p>Recoloree las puntuaciones según el rango de \"Puntuación/Total\"</p><p>Rango：1~0.7~0.45~0 Verde oscuro→Naranja claro→Naranja oscuro→Rojo</p>"
         }
     },
-    "localizationSettings": {
+    "localization": {
         "title": "localización",
         "scriptLanguageLabel": "lenguaje de programación",
         "websiteLanguageLabel": "Idioma del sitio web",
         "notice": {
             "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si le apetece ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,</p><p>le invitamos a<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>ir a</a>para ayudar a mejorarlo, ¡y su contribución es muy apreciada!</p>",
-            "2": "<strong>Ayudar a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en algún lugar de su sitio web y que sustituirla no causará graves problemas de rendimiento, le invitamos a<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ir a Mejorar las reglas de localización</a>.</p><p>Si desea añadir una nueva regla, deberá añadir la versión en chino simplificado de la regla：bifurque y modifique el archivo de la regla y, a continuación, lance un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más adelante para mejorar la calidad de la traducción también para los demás idiomas.</p>"
+            "2": "<strong>Ayudar a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en algún lugar de su sitio web y que sustituirla no causará graves problemas de rendimiento, le invitamos a<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ir a Mejorar las reglas de localización</a>.</p><p>Si desea añadir una nueva regla, deberá añadir la versión en chino simplificado de la regla：bifurque y modifique el archivo de la regla y, a continuación, lance un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más tarde para mejorar la calidad de la traducción también para los demás idiomas.</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "Ajustes de traducción",
         "options": {
             "title": "preferencias",
@@ -83,7 +76,7 @@
                     "free": "freeware",
                     "api": "API"
                 },
-                "helpText": "Seleccione el modo de DeepL servicio, el valor predeterminado es el modo libre, no es necesario proporcionar la API, pero por el oficial más restricciones de frecuencia. modo de API, es necesario añadir la configuración, puede elegir la API oficial：API libre, API Pro, así como no oficial deeplx"
+                "helpText": "Seleccione el modo de DeepL servicio, el valor predeterminado es el modo libre, no es necesario proporcionar la API, pero por el oficial más restricciones de frecuencia. modo de API, es necesario añadir la configuración, puede elegir la API oficial：API libre, API Pro, así como la no oficial deeplx"
             },
             "enableEmphasisProtection": {
                 "title": "Protección** No.",
@@ -106,15 +99,17 @@
                 "title": "lengua meta",
                 "helpText": "Nota：Los servicios de traducción disponibles difieren para los distintos idiomas de destino, por favor lea la página del script para más detalles."
             },
-            "comment_translation_choice": "Traducción de la sección de comentarios",
-            "services": {
-                "follow": "Siga las preferencias",
-                "deepl": "Traducción de DeepL",
-                "iflyrec": "Xunfei Hear Traducir",
-                "youdao": "Traducción de Youtube",
-                "google": "Google Translate",
-                "caiyun": "lit. nubes de colores y pequeñas traducciones",
-                "openai": "ChatGPT Traducción"
+            "comment_translation_choice": {
+                "title": "Traducción de la sección de comentarios",
+                "services": {
+                    "follow": "Siga las preferencias",
+                    "deepl": "Traducción de DeepL",
+                    "iflyrec": "Xunfei Hear Traducir",
+                    "youdao": "Traducción de Youtube",
+                    "google": "Google Translate",
+                    "caiyun": "lit. nubes de colores y pequeñas traducciones",
+                    "openai": "ChatGPT Traducción"
+                }
             }
         },
         "autoTranslation": {
@@ -124,7 +119,8 @@
             "shortTextLength": {
                 "name": "Longitud del texto",
                 "helpText": "<p>Cuando la longitud del texto es inferior a este valor, se considera un texto corto</p>",
-                "end": "carácter"
+                "end": "carácter",
+                "placeholder": "Introduzca la longitud"
             },
             "allowMixTrans": {
                 "name": "Traducción mixta de la sección de comentarios",
@@ -151,7 +147,7 @@
             },
             "memory": {
                 "name": "Recuperación automática de traducciones históricas",
-                "helpText": "<p>Guarda automáticamente la información de traducción de la página de título<strong></strong>en el indexDB local</p><p>Refresca / restaura automáticamente la información de traducción la próxima vez que entre en la página</p>"
+                "helpText": "<p>Guarda automáticamente la información de traducción de la página de título<strong></strong>en el indexDB local</p><p>Refresca / restaura automáticamente la información de traducción la próxima vez que se acceda a la página</p>"
             },
             "retrans": {
                 "name": "Tras la retraducción",
@@ -164,7 +160,8 @@
             "transWaitTime": {
                 "name": "Intervalo de espera",
                 "helpText": "<p>Establezca el intervalo de espera entre dos solicitudes de traducción, este ajuste tendrá efecto globalmente y se calcula de forma independiente para cada servicio de traducción</p><p>Recomendación 200 + milisegundos</p><p>Descripción：Las traducciones ChatGPT ignoran este ajuste y no esperan</p>",
-                "end": "milisegundo"
+                "end": "milisegundo",
+                "placeholder": "Introduzca el intervalo"
             },
             "replaceSymbol": {
                 "name": "Sustitución de LaTeX",
@@ -177,11 +174,11 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtrado de signos ** en el texto",
-                "helpText": " <p>Algunos servicios de traducción (por ejemplo, DeepL) manejan incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que la traducción pierda su contenido envuelto, puede optar por eliminar el énfasis (el uso de ChatGPT ignora esto) </p>"
+                "helpText": " <p>Algunos servicios de traducción (por ejemplo, DeepL) manejan incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que la traducción pierda su envoltorio, puede optar por eliminar el énfasis (el uso de ChatGPT lo ignora) </p>"
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Ajustes Clist",
         "basics": {
             "name": "fundamental",
@@ -212,10 +209,10 @@
         },
         "spoilerProtection": {
             "title": "a prueba de spoilers",
-            "helpText": "<p>Sólo se muestra cuando el ratón se desplaza sobre la subzona de visualización de la clasificación</p>"
+            "helpText": "<p>Sólo se muestra cuando el ratón se desplaza sobre la subárea de visualización de la clasificación</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Ajustes del editor de Mónaco",
         "basics": "fundamental",
         "problemPageCodeEditor": {
@@ -249,7 +246,7 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "Ajustes LSP",
             "useLSP": {
                 "label": "Utilización del LSP",
@@ -274,7 +271,7 @@
             "performanceWarning": "Nota：Demasiadas reglas complementarias estáticas pueden afectar al rendimiento"
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "salvaguardar",
         "notice": "<p>Nota：Normalmente no necesitará utilizar estas funciones.</p><p>Si no está seguro del significado de las funciones, ¡no las utilice!</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "derivar",
                 "import": "importar (datos)"
             }
+        }
+    },
+    "preference": {
+        "title": "preferencias",
+        "loadingInfo": {
+            "label": "Visualización de un mensaje de alerta de carga",
+            "helpText": "<p>Cuando active Mostrar información de carga, se mostrará un aviso de información de carga en la parte superior cada vez que se cargue la página：\"CodeforcesBetter -- xxx\"</p><p>Esto se utiliza para ver cómo está funcionando actualmente el script<strong>Si no desea verlo, puede optar por Desactivar</strong></p><p><u>Cabe señalar que si necesita información sobre cualquier problema de carga del script, active esta opción antes de realizar una captura de pantalla para que se pueda analizar el problema</u></p>"
+        },
+        "targetArea": {
+            "label": "Visualizar el alcance de la zona objetivo",
+            "helpText": "Cuando está activada, se muestra el alcance de su área de destino al pasar el ratón por encima del botón Ver/Copiar/Traducir de MD."
+        },
+        "iconButtonSize": {
+            "title": "Icono Tamaño del botón",
+            "helpText": "<p>Ajuste del tamaño del botón de traducción</p>",
+            "placeholder": "Introduzca el tamaño del botón"
         }
     },
     "about": {

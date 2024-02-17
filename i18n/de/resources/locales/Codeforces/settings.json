@@ -5,6 +5,7 @@
         "translation": "Rendering",
         "clist": "Clist",
         "monaco": "Monaco",
+        "preference": "Einstellungen",
         "dev": "sichern",
         "about": "in Bezug auf"
     },
@@ -15,23 +16,15 @@
             "input": "Aktuelle Einstellungen erfordern Pflichtfelder"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "Grundeinstellungen",
         "darkMode": {
             "name": "Dunkelmodus",
             "options": {
                 "dark": "düster",
-                "light": "tagsüber",
+                "light": "Tagsüber",
                 "system": "Follow-up-System"
             }
-        },
-        "loadingInfo": {
-            "label": "Anzeige einer Warnmeldung beim Laden",
-            "helpText": "<p>Wenn Sie die Option Ladeinformationen anzeigen aktivieren, wird jedes Mal, wenn die Seite geladen wird, oben eine Ladeinformationsabfrage angezeigt：\"CodeforcesBetter -- xxx\"</p><p>Dies dient dazu, zu sehen, wie das Skript derzeit funktioniert<strong>Wenn Sie dies nicht sehen möchten, können Sie die Option Aus</strong></p><p><u>Wenn Sie Feedback zu Ladeproblemen mit dem Skript benötigen, schalten Sie diese Option bitte ein, bevor Sie einen Screenshot machen, damit das Problem analysiert werden kann</u></p>"
-        },
-        "targetArea": {
-            "label": "Anzeige der Reichweite des Zielgebiets",
-            "helpText": "Wenn diese Funktion aktiviert ist, wird der Bereich des Zielbereichs angezeigt, wenn Sie den Mauszeiger über die Schaltfläche MD Ansicht/Kopieren/Translieren bewegen."
         },
         "expandBlocks": "Automatisches Entfalten von Faltblöcken",
         "renderOptimization": {
@@ -47,11 +40,11 @@
             "helpText": "<p>Einige der Codeforces-Titel sind in LOGU OJ enthalten, und für einige Titel gibt es Übersetzungen und Erklärungen</p><p>. Wenn das Display eingeschaltet ist und der aktuelle Titel enthalten ist, wird das LOGU-Logo in der oberen rechten Ecke des Titels angezeigt,</p><p>. Wenn Sie darauf klicken, können Sie mit einem Klick auf die entsprechende LOGU-Seite für diesen Titel springen.</strong></p>"
         },
         "recolor": {
-            "label": "Liste neu einfärben",
-            "helpText": "<p>Für die Rangliste der Spiele, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
+            "label": "Die Liste neu färben",
+            "helpText": "<p>Für die Liste der Rennen, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
         }
     },
-    "localizationSettings": {
+    "localization": {
         "title": "Lokalisierung",
         "scriptLanguageLabel": "Skriptsprache",
         "websiteLanguageLabel": "Website Sprache",
@@ -60,7 +53,7 @@
             "2": "<strong>Hilfe bei der Verbesserung der Sprachlokalisierung von Websites</strong><p>Wenn Sie der Meinung sind, dass die Lokalisierung irgendwo auf Ihrer Website notwendig ist und dass das Ersetzen der Lokalisierung keine ernsthaften Leistungsprobleme verursacht, können Sie gerne<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>unter Verbesserung der Lokalisierungsregeln</a>gehen.</p><p>Wenn Sie eine neue Regel hinzufügen möchten, müssen Sie die vereinfachte chinesische Version der Regel：fork hinzufügen und die Regeldatei ändern und dann eine Pull-Anfrage starten.</p><p>Nachdem die Einreichung zusammengeführt wurde, vervollständigt crowdin automatisch die Übersetzung für die anderen Sprachen. Sie können später zu crowdin gehen, um die Qualität der Übersetzung auch für die anderen Sprachen zu verbessern.</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "Einstellungen für die Übersetzung",
         "options": {
             "title": "Einstellungen",
@@ -83,11 +76,11 @@
                     "free": "Freeware",
                     "api": "API"
                 },
-                "helpText": "Wählen Sie den Modus des DeepL Dienstes, der Standard ist der kostenlose Modus, Sie müssen keine API bereitstellen, aber durch die offizielle mehr Frequenz Einschränkungen. API-Modus, müssen Sie die Konfiguration hinzuzufügen, können Sie die offizielle API：API kostenlos, API Pro, sowie inoffizielle deeplx wählen"
+                "helpText": "Wählen Sie den Modus des DeepL Dienstes, der Standard ist der kostenlose Modus, Sie müssen keine API zur Verfügung stellen, aber durch die offizielle mehr Frequenzbeschränkungen. API-Modus, müssen Sie die Konfiguration hinzufügen, Sie können die offizielle API：API frei, API Pro, sowie die inoffizielle deeplx wählen"
             },
             "enableEmphasisProtection": {
                 "title": "Schutz** Nein.",
-                "helpText": "<strong>Diese Option funktioniert nur, wenn die offizielle API im API-Modus verwendet wird</strong><p>DeepL kann die Hervorhebung in MarkDown <strong>**</strong> </p><p>falsch behandeln. Dies kann dazu führen, dass dem Übersetzungsergebnis der umbrochene Inhalt fehlt.</p><p>Wenn diese Option aktiviert ist, wird die Hervorhebung im Text <strong>**</strong> durch HTML-Tags ersetzt und<code>tag_handling: html</code>wird automatisch zum Header der Übersetzungsanfrage hinzugefügt, damit DeepL die Hervorhebung und deren Inhalt nicht unterbricht</p>"
+                "helpText": "<strong>Diese Option funktioniert nur, wenn die offizielle API im API-Modus verwendet wird</strong><p>DeepL kann die Hervorhebung in MarkDown <strong>**</strong> </p><p>falsch behandeln. Dies kann dazu führen, dass dem Übersetzungsergebnis der umbrochene Inhalt fehlt.</p><p>Wenn diese Option aktiviert ist, wird die Hervorhebung im Text <strong>**</strong> durch HTML-Tags ersetzt und<code>tag_handling: html</code>wird automatisch zum Header der Übersetzungsanfrage hinzugefügt, damit DeepL die Hervorhebung und ihren Inhalt nicht unterbricht</p>"
             },
             "enableLinkProtection": {
                 "title": "Links schützen",
@@ -106,15 +99,17 @@
                 "title": "Zielsprache",
                 "helpText": "Hinweis：Die verfügbaren Übersetzungsdienste unterscheiden sich für verschiedene Zielsprachen, bitte lesen Sie die Skriptseite für weitere Details."
             },
-            "comment_translation_choice": "Übersetzung des Kommentarbereichs",
-            "services": {
-                "follow": "Präferenzen folgen",
-                "deepl": "Übersetzung von DeepL",
-                "iflyrec": "Xunfei Hear Übersetzen",
-                "youdao": "Youtube Übersetzung",
-                "google": "Google Übersetzen",
-                "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
-                "openai": "ChatGPT Übersetzung"
+            "comment_translation_choice": {
+                "title": "Übersetzung des Kommentarbereichs",
+                "services": {
+                    "follow": "Präferenzen folgen",
+                    "deepl": "Übersetzung von DeepL",
+                    "iflyrec": "Xunfei Hear Übersetzen",
+                    "youdao": "Youtube Übersetzung",
+                    "google": "Google Übersetzen",
+                    "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
+                    "openai": "ChatGPT Übersetzung"
+                }
             }
         },
         "autoTranslation": {
@@ -124,7 +119,8 @@
             "shortTextLength": {
                 "name": "Textlänge",
                 "helpText": "<p>Wenn der Text kürzer als dieser Wert ist, wird er als Kurztext betrachtet</p>",
-                "end": "Zeichen"
+                "end": "Zeichen",
+                "placeholder": "Bitte geben Sie die Länge ein"
             },
             "allowMixTrans": {
                 "name": "Gemischte Übersetzung des Kommentarbereichs",
@@ -164,7 +160,8 @@
             "transWaitTime": {
                 "name": "Wartezeit Intervall",
                 "helpText": "<p>Legen Sie das Warteintervall zwischen zwei Übersetzungsanfragen fest. Diese Einstellung wird global wirksam und wird für jeden Übersetzungsdienst unabhängig berechnet</p><p>Empfehlung 200 + Millisekunden</p><p>Beschreibung：ChatGPT-Übersetzungen ignorieren diese Einstellung und warten nicht</p>",
-                "end": "Millisekunde"
+                "end": "Millisekunde",
+                "placeholder": "Bitte geben Sie das Intervall ein"
             },
             "replaceSymbol": {
                 "name": "LaTeX-Ersatz",
@@ -177,11 +174,11 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtern von ** Zeichen im Text",
-                "helpText": " <p>Einige Übersetzungsdienste (z.B. DeepL) behandeln die Hervorhebung in MarkDown nicht korrekt <strong>**</strong> </p><p>Dies kann dazu führen, dass die Übersetzung ihren verpackten Inhalt nicht erhält. Sie können die Hervorhebung entfernen (mit ChatGPT wird dies ignoriert) </p>"
+                "helpText": " <p>Einige Übersetzungsdienste (z.B. DeepL) behandeln die Hervorhebung in MarkDown nicht korrekt <strong>**</strong> </p><p>Dies kann dazu führen, dass die Übersetzung ihren Wrapper vermisst. Sie können die Hervorhebung entfernen (mit ChatGPT wird sie ignoriert) </p>"
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Clist Einstellungen",
         "basics": {
             "name": "grundlegend",
@@ -212,10 +209,10 @@
         },
         "spoilerProtection": {
             "title": "Spoilerfest",
-            "helpText": "<p>Wird nur angezeigt, wenn die Maus über den Unteranzeigebereich Bewertung bewegt wird</p>"
+            "helpText": "<p>Wird nur angezeigt, wenn Sie die Maus über den Unteranzeigebereich Bewertung bewegen</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Monaco Editor Einstellungen",
         "basics": "grundlegend",
         "problemPageCodeEditor": {
@@ -230,7 +227,7 @@
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Maus-Scrollsperre",
-                "helpText": "Wenn diese Option aktiviert ist und sich der Mauszeiger innerhalb des Monaco-Editors befindet, wird beim Scrollen mit der Maus nur der Inhalt innerhalb des Editors gescrollt."
+                "helpText": "Wenn diese Funktion aktiviert ist und sich der Mauszeiger im Monaco-Editor befindet, wird beim Scrollen mit der Maus nur der Inhalt des Editors gescrollt."
             },
             "submitButtonPosition": {
                 "label": "Position der Schaltfläche Senden",
@@ -249,7 +246,7 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "LSP-Einstellungen",
             "useLSP": {
                 "label": "Verwendung des LSP",
@@ -274,7 +271,7 @@
             "performanceWarning": "Hinweis：Zu viele statische ergänzende Regeln können die Leistung beeinträchtigen"
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "sichern",
         "notice": "<p>Hinweis：Normalerweise brauchen Sie diese Funktionen nicht zu verwenden.</p><p>Wenn Sie sich über die Bedeutung der Funktionen nicht im Klaren sind, bedienen Sie sie nicht!</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "ableiten",
                 "import": "importieren (Daten)"
             }
+        }
+    },
+    "preference": {
+        "title": "Einstellungen",
+        "loadingInfo": {
+            "label": "Anzeige einer Warnmeldung beim Laden",
+            "helpText": "<p>Wenn Sie die Option Ladeinformationen anzeigen aktivieren, wird jedes Mal, wenn die Seite geladen wird, oben eine Ladeinformationsabfrage angezeigt：\"CodeforcesBetter -- xxx\"</p><p>Dies dient dazu, zu sehen, wie das Skript derzeit funktioniert<strong>Wenn Sie dies nicht sehen möchten, können Sie die Option Aus</strong></p><p><u>Wenn Sie Feedback zu Ladeproblemen mit dem Skript benötigen, schalten Sie diese Option bitte ein, bevor Sie einen Screenshot machen, damit das Problem analysiert werden kann</u></p>"
+        },
+        "targetArea": {
+            "label": "Anzeige der Reichweite des Zielgebiets",
+            "helpText": "Wenn diese Funktion aktiviert ist, wird der Bereich des Zielbereichs angezeigt, wenn Sie den Mauszeiger über die Schaltfläche MD Ansicht/Kopieren/Translieren bewegen."
+        },
+        "iconButtonSize": {
+            "title": "Icon Schaltfläche Größe",
+            "helpText": "<p>Einstellen der Größe der Übersetzungsschaltfläche</p>",
+            "placeholder": "Bitte geben Sie eine Tastengröße ein"
         }
     },
     "about": {

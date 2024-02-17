@@ -10,6 +10,7 @@
 - Add an about page, as well as an update channel and update source selection item
 - Add debugging maintenance page, including cache refresh, data clear, import and export
 - Add custom option： 'Code Editor Submit Button Position', defaults to bottom, thanks to @lishufood for the suggestion!
+- Improve each loading function, remove some unnecessary waiting relationships, speed up the script loading time
 - Improvements to the translation function and the display of error messages.
 - Improvements to the performance of automatic translations, as well as issues that may not be translated automatically
 - Improvements to code samples related to running the code online
@@ -18,6 +19,7 @@
 - Improve the style of the code editor when it is fixed to the right side, bottom, and full screen, thanks to @lishufood for the suggestion!
 - Improved display of .html2md-panel panel in simple mode
 - Improved styling of the configuration page in the settings panel
+- Fix acmsguru topic title page editor reporting errors
 - Fix the problem with the issue page code editor reporting errors after switching between mobile/desktop versions of the site
 - Fix a bug in the getMarkdown() method, which incorrectly stored data directly into the DOM, resulting in a performance degradation.
 - Fix the problem that the translation button inside the folded block doesn't show up after turning off 'Folded Block Auto Expand', thanks to @MoYuToGo's feedback!

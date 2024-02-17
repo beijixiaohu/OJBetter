@@ -5,6 +5,7 @@
         "translation": "Translation",
         "clist": "Clist",
         "monaco": "Monaco",
+        "preference": "preferences",
         "dev": "Safeguard",
         "about": "About"
     },
@@ -15,64 +16,56 @@
             "input": "Current settings require mandatory fields"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "Basic settings",
         "darkMode": {
-            "name": "Dark Theme",
+            "name": "dark mode",
             "options": {
-                "dark": "Dark",
-                "light": "Light",
-                "system": "System"
+                "dark": "darkly",
+                "light": "daytime",
+                "system": "follow-up system"
             }
         },
-        "loadingInfo": {
-            "label": "Show load alert message",
-            "helpText": "<p>When you turn on Show loading info, a loading info prompt will be displayed at the top every time the page loads：\"CodeforcesBetter -- xxx\"</p><p>This is used to see how the script is currently working<strong>If you don't want to see it, you can choose to Off</strong></p><p><u>It is important to note that if you need feedback on any loading issues with the script, please turn this option on before taking a screenshot to make it easier to analyze the issue</u></p>"
-        },
-        "targetArea": {
-            "label": "Display target area range",
-            "helpText": "When turned on, the range of its target area is displayed when the mouse is hovered over the MD View/Copy/Translate button."
-        },
-        "expandBlocks": "Auto-expand folding blocks",
+        "expandBlocks": "Automatic unfolding of folding blocks",
         "renderOptimization": {
-            "label": "Folding block rendering optimization",
-            "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser lags when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
+            "label": "Folded block rendering optimization",
+            "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser is laggy when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
         },
         "paging": {
-            "label": "Comment Pagination",
-            "helpText": "Pagination of comments shows the specified number of<strong>main floor</strong> per page."
+            "label": "Comments Distinction Page",
+            "helpText": "The comments are displayed on separate pages, with a specified number of<strong>main floor</strong>per page."
         },
         "luoguJump": {
-            "label": "Show jump to Luogu",
-            "helpText": "<p>Some Codeforces questions are included on Luogu Oj. Some questions have translations and solutions.</p><p>After turning on the display, if the current question is included, the Luogu logo will be displayed in the upper right corner of the question.</p><p>Click to jump with one click. Go to the corresponding page of Luogu for this question.</strong></p>"
+            "label": "Show Jump to Rock Valley",
+            "helpText": "<p>Some of the Codeforces titles are included on LOGU OJ, some titles have translations and explanations</p><p>When the display is turned on, if the current title is included, the LOGU logo will be displayed in the upper right corner of the title,</p><p>Clicking on it will allow you to jump to the corresponding LOGU page for that title with one click.</strong></p>"
         },
         "recolor": {
-            "label": "Recolor list",
-            "helpText": "<p>For the competition list using the Codeforces format</p><p>Re-color the gradient according to the range of \"score/total score\"</p><p>Range：1~0.7~0.45~0 Dark green → light orange → dark orange → red</p>"
+            "label": "Recoloring the list",
+            "helpText": "<p>For the list of races using the Codeforces system</p><p>Recolor the scores according to the range of \"Score/Total\"</p><p>Range：1~0.7~0.45~0 Dark Green→Light Orange→Dark Orange→Red</p>"
         }
     },
-    "localizationSettings": {
-        "title": "Localization Settings",
-        "scriptLanguageLabel": "Script Language",
+    "localization": {
+        "title": "localization",
+        "scriptLanguageLabel": "scripting language",
         "websiteLanguageLabel": "Website Language",
         "notice": {
             "1": "<strong>Help improve the quality of translations</strong><p>The author is only familiar with Simplified Chinese and English, for all other languages, the scripts and the language localization of the website are done by machine translation (Deepl & Google) and the translation workflow is hosted by crowddin.</p><p>If you are happy to help improve the quality of localized translations for a particular language,</p><p>you are welcome to<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>go to</a>to help improve it, and your contribution is appreciated!</p>",
             "2": "<strong>Helping to improve website language localization</strong><p>If you think that localization is necessary somewhere on your website, and localization substitution will not cause serious performance problems, you are welcome to<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>go to Improving Localization Rules</a>.</p><p>If you want to add a new rule, you need to add the Simplified Chinese version of the rule：fork and modify the rule file, then launch a pull request.</p><p>After the submission is merged, crowdin will automatically complete the translation for the other languages, and you can go to crowdin later to improve the quality of the translation for the other languages as well.</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "Translation settings",
         "options": {
-            "title": "Preferences",
+            "title": "preferences",
             "services": {
-                "deepl": "DeepL Translation",
-                "iflyrec": "Iflyrec Translation",
-                "youdao": "Youdao translation",
-                "google": "Google Translation",
-                "caiyun": "Caiyun Translation",
+                "deepl": "Translation of DeepL",
+                "iflyrec": "Xunfei Hear Translate",
+                "youdao": "Youtube translation",
+                "google": "Google Translate",
+                "caiyun": "colorful clouds and small translations",
                 "openai": {
                     "name": "ChatGPT Translation",
-                    "helpText": "<p><b>You need to add and select the configuration information you want to use in the ChatGPT configuration below. You can modify and delete the configuration by right-clicking</b></p><p>Please read the introduction on the script page</p>"
+                    "helpText": "<p><b>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right click to modify and delete the configuration</b></p><p>Please read the script page for details</p>"
                 }
             }
         },
@@ -96,57 +89,60 @@
         },
         "chatgpt": {
             "isStream": {
-                "name": "Streaming",
+                "name": "streaming",
                 "helpText": "<p>Enabling data streaming, typewriter effect</p>"
             }
         },
         "preference": {
-            "title": "Preferences",
+            "title": "preferences",
             "target": {
-                "title": "Target language",
-                "helpText": "Note：For different target languages, the available translation services are different. Please read the introduction on the script page for details."
+                "title": "target language",
+                "helpText": "Note：The available translation services vary for different target languages, please read the script page for details."
             },
-            "comment_translation_choice": "Translate comments section",
-            "services": {
-                "follow": "Follow Preferences",
-                "deepl": "DeepL Translation",
-                "iflyrec": "Iflyrec Translation",
-                "youdao": "Youdao translation",
-                "google": "Google Translation",
-                "caiyun": "Caiyun Translation",
-                "openai": "ChatGPT Translation"
+            "comment_translation_choice": {
+                "title": "Translation of the comments section",
+                "services": {
+                    "follow": "Follow Preferences",
+                    "deepl": "Translation of DeepL",
+                    "iflyrec": "Xunfei Hear Translate",
+                    "youdao": "Youtube translation",
+                    "google": "Google Translate",
+                    "caiyun": "colorful clouds and small translations",
+                    "openai": "ChatGPT Translation"
+                }
             }
         },
         "autoTranslation": {
-            "title": "Automatically translate",
-            "enable": "Enable Auto Translate",
+            "title": "automatic translation",
+            "enable": "Enable automatic translation",
             "helpText": "<p>For short texts in the<strong>.ttypography, .comments area</strong></p><p>are automatically translated when they enter the visible area of the browser window</p>",
             "shortTextLength": {
-                "name": "short text length",
+                "name": "Text length",
                 "helpText": "<p>When the text length is less than this value, it is considered as a short text</p>",
-                "end": "chars."
+                "end": "character",
+                "placeholder": "Please enter the length"
             },
             "allowMixTrans": {
                 "name": "Mixed translation of the comments section",
                 "helpText": "<p>When translating automatically, for each short text area in the comments section, independently and randomly select one of the services checked below</p><p>Translate in parallel</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
-                    "iflyrec": "iflyrec",
-                    "youdao": "Youdao",
-                    "google": "Google",
-                    "caiyun": "Caiyun"
+                    "iflyrec": "Xunfei (telecommunications company)",
+                    "youdao": "learned and virtuous",
+                    "google": "google",
+                    "caiyun": "rosy clouds"
                 }
             }
         },
         "advanced": {
-            "name": "Advanced",
+            "name": "high level",
             "mode": {
-                "name": "Operating mode",
-                "helpText": "<p>You can choose how the script works</p><p>○ Normal mode：will translate the whole area at once</p><p>○ Segment Mode：will translate each&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tag in the area in turn</p><p>○ Selection Mode：You are free to click on any&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tags on the page to translate them</p><div style='color:#f44336;'><p><u>Note：Segmented/Selection segmented modes cause the following problems：</u></p><p>- they make it impossible for the translation interface to know the whole text in context and reduce the quality of the translation.</p><p>- There will be<strong>sections that will not be translated/cannot be selected</strong>because they are not&#60;&#112;&#47;&#62;or&#60;&#105;&#47;&#62;elements</p></div>",
+                "name": "operating mode",
+                "helpText": "<p>You can choose how the script works</p><p>○ Normal mode：will translate the whole area at once</p><p>○ Segmented mode：will translate each&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tag in the area in turn</p><p>○ Selected segmented mode：You are free to click on any&#60;&#112;&#47;&#62;and&#60;&#105;&#47;&#62;tags on the page to translate them</p><div style='color:#f44336;'><p><u>NOTE：Segmented/selected segmented modes cause the following problems：</u></p><p>- they make it impossible for the translation interface to know the whole text in context and reduce the quality of the translation.</p><p>- There will be<strong>sections that will not be translated/cannot be selected</strong>because they are not&#60;&#112;&#47;&#62;or&#60;&#105;&#47;&#62;elements</p></div>",
                 "options": {
-                    "0": "Normal Mode",
-                    "1": "Segment Mode",
-                    "2": "Selection Mode"
+                    "0": "normal mode",
+                    "1": "segmentation model",
+                    "2": "segmentation model"
                 }
             },
             "memory": {
@@ -154,37 +150,38 @@
                 "helpText": "<p>Automatically saves the translation information on the<strong>title page</strong>to the local indexDB</p><p>Automatically restores the translation information when refreshing/next entering the page</p>"
             },
             "retrans": {
-                "name": "When retranslating",
-                "helpText": "<p>Choose whether to 'Close old results' or 'Collapse old results' when retranslating</p>",
+                "name": "Upon retranslation",
+                "helpText": "<p>Choose whether to 'close old results' or 'put away old results' on retranslation</p>",
                 "options": {
                     "0": "Close old results",
-                    "1": "Collapse old results"
+                    "1": "Putting away old results"
                 }
             },
             "transWaitTime": {
                 "name": "Waiting Interval",
                 "helpText": "<p>Sets the waiting interval between two translation requests, this setting takes effect globally and is calculated independently for each translation service</p><p>Recommendation 200 + milliseconds</p><p>Description：ChatGPT translations ignore this setting and do not wait</p>",
-                "end": "ms"
+                "end": "millisecond",
+                "placeholder": "Please enter the interval"
             },
             "replaceSymbol": {
                 "name": "LaTeX Replacement",
-                "helpText": "<p>The script ensures that all LaTeX formulas are extracted and placeholder symbols are used to prevent them from being disrupted by translation interfaces.</p><p>For different translation services, the probability of the placeholder symbols themselves being disrupted varies. Please refer to the instructions on the script page for details.</p><p>Note: This option does not apply when translating with ChatGPT, so it is not affected by this option.</p><p>You can find more information in the instructions on the script page.</p>",
+                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and placing them with substitutions</p><p>The probability of the substitutions themselves being corrupted varies from translation service to translation service, please read the instructions on the script page for more information</p><p>Note that：Translating with ChatGPT does not require the above actions, and is therefore not affected by this option</p><p>For more information, you can go to the script page for more information</p>",
                 "options": {
-                    "1": "use【】",
-                    "2": "use{}",
-                    "3": "use[]"
+                    "1": "Use [ ]",
+                    "2": "Use {}",
+                    "3": "Use []"
                 }
             },
             "filterTextWithoutEmphasis": {
-                "name": "Filtering of ** symbols in text",
-                "helpText": " <p>Some translation services (such as DeepL) mishandle the emphasis symbol in Markdown <strong>**</strong></p><p>This may cause the translated result to omit the wrapped content. You can choose to remove the emphasis symbol (this will be ignored when using ChatGPT)</p>"
+                "name": "Filtering of ** signs in text",
+                "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Clist Settings",
         "basics": {
-            "name": "Basic",
+            "name": "fundamental",
             "notice": "<p>Note：Access to Clist data requires valid login credentials, you have two options：</p><p>Fill in<a href='https://clist.by/' target='_blank'> below clist.by </a>the official API key,</p><p>or keep the clist.by website in your browser logged in (i.e. cookie is valid)</p>",
             "key": {
                 "title": "KEY.",
@@ -195,38 +192,38 @@
         "displayRating": {
             "title": "Show Rating Score",
             "contest": {
-                "name": "Contest ProblemSet Page",
-                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
+                "name": "Contest Question Set Page",
+                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in (i.e. cookie active) on your browser</p>",
                 "badge": "Cookie/API KEY"
             },
             "problem": {
-                "name": "Title Page",
-                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
+                "name": "title page",
+                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in (i.e. cookie active) on your browser</p>",
                 "badge": "Cookie/API KEY"
             },
             "problemset": {
-                "name": "Problemset Page",
-                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in on your browser (i.e. cookie is valid)</p>",
+                "name": "title page",
+                "helpText": "<p>Data source clist.by</p><p>You need to provide the official API key</p><p>or keep clist.by logged in (i.e. cookie active) on your browser</p>",
                 "badge": "Cookie/API KEY"
             }
         },
         "spoilerProtection": {
-            "title": "Spoiler-proof",
+            "title": "spoiler-proof",
             "helpText": "<p>Displayed only when the mouse is moved over the Rating sub-display area</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Monaco Editor Settings",
-        "basics": "Basic",
+        "basics": "fundamental",
         "problemPageCodeEditor": {
-            "label": "Add editor to problem page",
-            "helpText": "Add Monaco editor below the problem page and the code will be saved automatically, providing online code running"
+            "label": "Add editor to title page",
+            "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
         },
         "preferences": {
-            "title": "Preferences",
+            "title": "preferences",
             "isCodeSubmitConfirm": {
                 "label": "Secondary confirmation of code submission",
-                "helpText": "Clicking on the problem page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
+                "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",
@@ -249,14 +246,14 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "LSP Settings",
             "useLSP": {
-                "label": "Use LSP",
+                "label": "Using the LSP",
                 "helpText": "<p>Connect to LSP Server to enable code completion, code diagnostics, formatting, go to definitions, etc.</p><p>Support for C++, Python languages</p><p>You will need to start OJBetter_Bridge, as described on the scripts page</p>"
             },
             "OJBetter_Bridge_WorkUri": {
-                "label": "Working Directory",
+                "label": "Work path.",
                 "helpText": "<p>You need to fill in the path where OJBetter_Bridge is located</p><p>Use either forward slash or backslash</p><p>Default path：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
@@ -270,11 +267,11 @@
                 "label": "AcWing CPP Complementary Templates",
                 "helpText": "<p>Template from<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
             },
-            "customization": "Custom",
+            "customization": "customizable",
             "performanceWarning": "Note：Too many static complementary rules can affect performance"
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "Safeguard",
         "notice": "<p>Note：Normally you do not need to use these functions.</p><p>If you are not sure of the meaning of the functions, do not operate them!</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "derive",
                 "import": "import (data)"
             }
+        }
+    },
+    "preference": {
+        "title": "preferences",
+        "loadingInfo": {
+            "label": "Show load alert message",
+            "helpText": "<p>When you turn on Show loading info, a loading info prompt will be displayed at the top every time the page loads：\"CodeforcesBetter -- xxx\"</p><p>This is used to see how the script is currently working<strong>If you don't want to see it, you can choose to Off</strong></p><p><u>It is important to note that if you need feedback on any loading issues with the script, please turn this option on before taking a screenshot to make it easier to analyze the issue</u></p>"
+        },
+        "targetArea": {
+            "label": "Display the range of the target area",
+            "helpText": "When turned on, the range of its target area is displayed when the mouse is hovered over the MD View/Copy/Translate button."
+        },
+        "iconButtonSize": {
+            "title": "Icon Button Size",
+            "helpText": "<p>Setting the size of the translation button</p>",
+            "placeholder": "Please enter a button size"
         }
     },
     "about": {

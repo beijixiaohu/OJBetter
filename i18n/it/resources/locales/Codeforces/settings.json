@@ -5,6 +5,7 @@
         "translation": "rendering",
         "clist": "Clist",
         "monaco": "Monaco",
+        "preference": "preferenze",
         "dev": "salvaguardare",
         "about": "rispetto a"
     },
@@ -15,7 +16,7 @@
             "input": "Le impostazioni attuali richiedono campi obbligatori"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "Impostazioni di base",
         "darkMode": {
             "name": "modalità scura",
@@ -24,14 +25,6 @@
                 "light": "diurno",
                 "system": "Sistema di follow-up"
             }
-        },
-        "loadingInfo": {
-            "label": "Visualizzazione di un messaggio di avviso di caricamento",
-            "helpText": "<p>Quando attiva l'opzione Mostra informazioni sul caricamento, un messaggio di informazioni sul caricamento verrà visualizzato nella parte superiore ogni volta che la pagina viene caricata：\"CodeforcesBetter -- xxx\"</p><p>Questo viene utilizzato per vedere come lo script sta attualmente lavorando<strong>Se non desidera vederlo, può scegliere di Off</strong></p><p><u>Si noti che se ha bisogno di un feedback su eventuali problemi di caricamento dello script, la preghiamo di attivare questa opzione prima di scattare uno screenshot, in modo che il problema possa essere analizzato</u></p>"
-        },
-        "targetArea": {
-            "label": "Visualizzare il raggio d'azione dell'area di destinazione",
-            "helpText": "Quando è attiva, l'intervallo della sua area di destinazione viene visualizzato quando il mouse passa sopra il pulsante MD View/Copy/Translate."
         },
         "expandBlocks": "Svolgimento automatico dei blocchi pieghevoli",
         "renderOptimization": {
@@ -47,11 +40,11 @@
             "helpText": "<p>Alcuni titoli di Codeforces sono inclusi in LOGU OJ, e alcuni titoli hanno traduzioni e spiegazioni</p><p>Quando il display è acceso, se il titolo corrente è incluso, il logo LOGU sarà visualizzato nell'angolo superiore destro del titolo,</p><p>Facendo clic su di esso potrà saltare alla pagina LOGU corrispondente per quel titolo con un solo clic.</strong></p>"
         },
         "recolor": {
-            "label": "Elenco ricolora",
-            "helpText": "<p>Per le classifiche delle partite che utilizzano il sistema Codeforces</p><p>Ricolori i punteggi in base all'intervallo \"Punteggio/Totale\"</p><p>Intervallo：1~0,7~0,45~0 Verde scuro→Arancio chiaro→Arancio scuro→Rosso</p>"
+            "label": "Ricolorare l'elenco",
+            "helpText": "<p>Per l'elenco delle gare che utilizzano il sistema Codeforces</p><p>Ricolori i punteggi in base all'intervallo \"Punteggio/Totale\"</p><p>Intervallo：1~0,7~0,45~0 Verde scuro→Arancio chiaro→Arancio scuro→Rosso</p>"
         }
     },
-    "localizationSettings": {
+    "localization": {
         "title": "localizzazione",
         "scriptLanguageLabel": "linguaggio di scripting",
         "websiteLanguageLabel": "Lingua del sito web",
@@ -60,7 +53,7 @@
             "2": "<strong>Contribuire a migliorare la localizzazione linguistica del sito web</strong><p>Se ritiene che la localizzazione sia necessaria in qualche punto del suo sito web e che la sua sostituzione non causerà gravi problemi di prestazioni, può<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>andare a Migliorare le regole di localizzazione</a>.</p><p>Se desidera aggiungere una nuova regola, deve aggiungere la versione in cinese semplificato della regola：e modificare il file della regola, quindi lanciare una richiesta di pull.</p><p>Dopo che l'invio sarà unito, crowdin completerà automaticamente la traduzione per le altre lingue e lei potrà accedere a crowdin in seguito per migliorare la qualità della traduzione anche per le altre lingue.</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "Impostazioni di traduzione",
         "options": {
             "title": "preferenze",
@@ -69,7 +62,7 @@
                 "iflyrec": "Xunfei sente tradurre",
                 "youdao": "Traduzione su Youtube",
                 "google": "Google Translate",
-                "caiyun": "illuminati. nuvole colorate e piccole traduzioni",
+                "caiyun": "illuminato. nuvole colorate e piccole traduzioni",
                 "openai": {
                     "name": "Traduzione ChatGPT",
                     "helpText": "<p><b>Deve aggiungere e selezionare le informazioni di configurazione che desidera utilizzare nella Configurazione ChatGPT qui sotto, fare clic con il tasto destro del mouse per modificare ed eliminare la configurazione</b></p><p>Per maggiori dettagli, legga la pagina dello script</p>"
@@ -83,7 +76,7 @@
                     "free": "freeware",
                     "api": "API"
                 },
-                "helpText": "Selezionare la modalità del servizio DeepL, l'impostazione predefinita è la modalità gratuita, non è necessario fornire l'API, ma le restrizioni ufficiali prevedono una maggiore frequenza. Modalità API, è necessario aggiungere la configurazione, può scegliere l'API ufficiale：API free, API Pro, così come deeplx non ufficiale."
+                "helpText": "Selezionare la modalità del servizio DeepL, l'impostazione predefinita è la modalità gratuita, non è necessario fornire l'API, ma le restrizioni ufficiali prevedono una maggiore frequenza. Modalità API, è necessario aggiungere la configurazione, può scegliere l'API ufficiale：API free, API Pro, così come il deeplx non ufficiale."
             },
             "enableEmphasisProtection": {
                 "title": "Protezione** No.",
@@ -106,15 +99,17 @@
                 "title": "lingua di destinazione",
                 "helpText": "Nota：I servizi di traduzione disponibili differiscono per le diverse lingue di destinazione, legga la pagina dello script per i dettagli."
             },
-            "comment_translation_choice": "Traduzione della sezione commenti",
-            "services": {
-                "follow": "Seguire le preferenze",
-                "deepl": "Traduzione di DeepL",
-                "iflyrec": "Xunfei sente tradurre",
-                "youdao": "Traduzione su Youtube",
-                "google": "Google Translate",
-                "caiyun": "illuminati. nuvole colorate e piccole traduzioni",
-                "openai": "Traduzione ChatGPT"
+            "comment_translation_choice": {
+                "title": "Traduzione della sezione commenti",
+                "services": {
+                    "follow": "Seguire le preferenze",
+                    "deepl": "Traduzione di DeepL",
+                    "iflyrec": "Xunfei sente tradurre",
+                    "youdao": "Traduzione su Youtube",
+                    "google": "Google Translate",
+                    "caiyun": "illuminato. nuvole colorate e piccole traduzioni",
+                    "openai": "Traduzione ChatGPT"
+                }
             }
         },
         "autoTranslation": {
@@ -124,15 +119,16 @@
             "shortTextLength": {
                 "name": "Lunghezza del testo",
                 "helpText": "<p>Quando la lunghezza del testo è inferiore a questo valore, viene considerato come un testo breve</p>",
-                "end": "carattere"
+                "end": "carattere",
+                "placeholder": "Inserisca la lunghezza"
             },
             "allowMixTrans": {
                 "name": "Traduzione mista della sezione commenti",
-                "helpText": "<p>Durante la traduzione automatica, per ogni breve area di testo nella sezione commenti, selezioni in modo indipendente e casuale uno dei servizi spuntati sotto</p><p>Tradurre in parallelo</p>",
+                "helpText": "<p>Durante la traduzione automatica, per ogni breve area di testo nella sezione commenti, selezioni in modo indipendente e casuale uno dei servizi spuntati qui sotto</p><p>Tradurre in parallelo</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
                     "iflyrec": "Xunfei (società di telecomunicazioni)",
-                    "youdao": "Il buon governo prevale.",
+                    "youdao": "aderire ai principi della verità e del diritto",
                     "google": "google",
                     "caiyun": "nuvole rosate"
                 }
@@ -151,7 +147,7 @@
             },
             "memory": {
                 "name": "Recupero automatico delle traduzioni storiche",
-                "helpText": "<p>Salva automaticamente le informazioni di traduzione sulla pagina del titolo<strong></strong>nell'indexDB locale</p><p>Aggiorna / ripristina automaticamente le informazioni di traduzione al successivo accesso alla pagina</p>"
+                "helpText": "<p>Salva automaticamente le informazioni di traduzione della pagina del titolo<strong></strong>nell'indexDB locale</p><p>Aggiorna / ripristina automaticamente le informazioni di traduzione al successivo accesso alla pagina</p>"
             },
             "retrans": {
                 "name": "Dopo la ritraduzione",
@@ -164,24 +160,25 @@
             "transWaitTime": {
                 "name": "Intervallo di attesa",
                 "helpText": "<p>Imposta l'intervallo di attesa tra due richieste di traduzione; questa impostazione ha effetto a livello globale ed è calcolata in modo indipendente per ogni servizio di traduzione</p><p>Raccomandazione 200 + millisecondi</p><p>Descrizione：Le traduzioni ChatGPT ignorano questa impostazione e non attendono</p>",
-                "end": "millisecondo"
+                "end": "millisecondo",
+                "placeholder": "Inserisca l'intervallo"
             },
             "replaceSymbol": {
                 "name": "Sostituzione di LaTeX",
-                "helpText": "<p>Lo script assicura che le formule non vengano corrotte dall'interfaccia di traduzione, eliminando prima tutte le formule LaTeX e utilizzando dei segnaposto per esse</p><p>La probabilità che le sostituzioni stesse vengano corrotte varia da servizio di traduzione a servizio di traduzione, si prega di leggere le istruzioni sulla pagina dello script per i dettagli</p><p>Si noti che：La traduzione con ChatGPT non richiede quanto sopra, e quindi non è influenzata da questa opzione</p><p>Per i dettagli, può andare alla pagina dello script per le istruzioni</p>",
+                "helpText": "<p>Lo script assicura che le formule non vengano corrotte dall'interfaccia di traduzione, eliminando prima tutte le formule LaTeX e utilizzando dei segnaposto per esse</p><p>La probabilità che le sostituzioni stesse vengano corrotte varia da servizio di traduzione a servizio di traduzione, si prega di leggere le istruzioni sulla pagina dello script per i dettagli</p><p>Si noti che：La traduzione con ChatGPT non richiede quanto sopra e quindi non è influenzata da questa opzione</p><p>Per i dettagli, può andare alla pagina dello script per le istruzioni</p>",
                 "options": {
                     "1": "Utilizzi [ ]",
                     "2": "Utilizzi {}",
-                    "3": "Utilizzi []"
+                    "3": "Utilizza []"
                 }
             },
             "filterTextWithoutEmphasis": {
-                "name": "Filtro dei segni ** nel testo",
-                "helpText": " <p>Alcuni servizi di traduzione (ad esempio DeepL) gestiscono in modo errato l'enfasi in MarkDown <strong>**</strong> </p><p>Questo può far sì che la traduzione perda il suo contenuto avvolto, lei può scegliere di rimuovere l'enfasi (l'uso di ChatGPT lo ignora) </p>"
+                "name": "Filtrazione dei segni ** nel testo",
+                "helpText": " <p>Alcuni servizi di traduzione (ad esempio DeepL) gestiscono in modo errato l'enfasi in MarkDown <strong>**</strong> </p><p>Questo può far sì che la traduzione manchi il suo involucro; può scegliere di rimuovere l'enfasi (usando ChatGPT la ignora) </p>"
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Impostazioni Clist",
         "basics": {
             "name": "fondamentale",
@@ -215,7 +212,7 @@
             "helpText": "<p>Viene visualizzato solo quando il mouse viene spostato sull'area di visualizzazione secondaria Rating</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Impostazioni dell'Editor Monaco",
         "basics": "fondamentale",
         "problemPageCodeEditor": {
@@ -230,7 +227,7 @@
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Blocco dello scorrimento del mouse",
-                "helpText": "Se attivata, quando il puntatore del mouse si trova all'interno dell'editor monaco, lo scorrimento del mouse farà scorrere solo il contenuto all'interno dell'editor."
+                "helpText": "Se attivata, quando il puntatore del mouse si trova all'interno dell'editor monaco, lo scorrimento del mouse farà scorrere solo il contenuto dell'editor."
             },
             "submitButtonPosition": {
                 "label": "Posizione del pulsante Invia",
@@ -249,7 +246,7 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "Impostazioni LSP",
             "useLSP": {
                 "label": "Utilizzo dell'LSP",
@@ -274,7 +271,7 @@
             "performanceWarning": "Nota：Troppe regole complementari statiche possono influire sulle prestazioni."
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "salvaguardare",
         "notice": "<p>Nota：Normalmente non è necessario utilizzare queste funzioni.</p><p>Se non è sicuro del significato delle funzioni, non le utilizzi!</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "derivare",
                 "import": "importare (dati)"
             }
+        }
+    },
+    "preference": {
+        "title": "preferenze",
+        "loadingInfo": {
+            "label": "Visualizzazione di un messaggio di avviso di caricamento",
+            "helpText": "<p>Quando attiva l'opzione Mostra informazioni sul caricamento, un messaggio di informazioni sul caricamento verrà visualizzato nella parte superiore ogni volta che la pagina viene caricata：\"CodeforcesBetter -- xxx\"</p><p>Questo viene utilizzato per vedere come lo script sta attualmente lavorando<strong>Se non desidera vederlo, può scegliere di Off</strong></p><p><u>Si noti che se ha bisogno di un feedback su eventuali problemi di caricamento dello script, la preghiamo di attivare questa opzione prima di scattare uno screenshot, in modo che il problema possa essere analizzato</u></p>"
+        },
+        "targetArea": {
+            "label": "Visualizzare il raggio d'azione dell'area di destinazione",
+            "helpText": "Quando è attiva, l'intervallo della sua area di destinazione viene visualizzato quando il mouse passa sopra il pulsante MD View/Copy/Translate."
+        },
+        "iconButtonSize": {
+            "title": "Icona Dimensione del pulsante",
+            "helpText": "<p>Impostazione delle dimensioni del pulsante di traduzione</p>",
+            "placeholder": "Inserisca la dimensione del pulsante"
         }
     },
     "about": {

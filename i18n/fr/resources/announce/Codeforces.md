@@ -10,6 +10,7 @@
 - Ajoutez une page "à propos", ainsi qu'un canal de mise à jour et des sélections de sources de mise à jour.
 - Ajout d'une page de maintenance de débogage, comprenant l'actualisation du cache, l'effacement des données, l'importation et l'exportation.
 - Ajouter l'option personnalisée： 'Code Editor Submit Button Position', par défaut en bas, merci à @lishufood pour sa suggestion !
+- Amélioration de chaque fonction de chargement, suppression de certaines relations d'attente inutiles, accélération du temps de chargement des scripts.
 - Amélioration de la fonction de traduction et de l'affichage des messages d'erreur.
 - Amélioration des performances de la traduction automatique et problème de la traduction non automatique
 - Amélioration des exemples de code relatifs à l'exécution en ligne
@@ -18,6 +19,7 @@
 - Améliorer le style de l'éditeur de code lorsqu'il est fixé sur le côté droit, en bas et en plein écran, merci à @lishufood pour la suggestion !
 - Amélioration de l'affichage du panneau .html2md-panel en mode simple
 - Améliorer le style de la page de configuration dans le panneau de configuration
+- Corriger les erreurs de l'éditeur de la page de titre d'acmsguru
 - Correction d'une erreur dans l'éditeur de code de la page de problèmes après le passage de la version mobile à la version de bureau du site web.
 - Correction d'un bogue dans la méthode getMarkdown(), qui stockait incorrectement les données directement dans le DOM, ce qui entraînait une dégradation des performances.
 - Correction du problème d'affichage du bouton de traduction à l'intérieur du bloc plié après avoir désactivé la fonction 'Folded Block Auto Expand', grâce au feedback de @MoYuToGo !

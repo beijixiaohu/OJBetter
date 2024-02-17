@@ -5,6 +5,7 @@
         "translation": "l'équarrissage",
         "clist": "Clist",
         "monaco": "Monaco",
+        "preference": "préférences",
         "dev": "sauvegarder",
         "about": "en ce qui concerne"
     },
@@ -15,7 +16,7 @@
             "input": "Les paramètres actuels requièrent des champs obligatoires"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "Paramètres de base",
         "darkMode": {
             "name": "mode sombre",
@@ -24,14 +25,6 @@
                 "light": "jour",
                 "system": "système de suivi"
             }
-        },
-        "loadingInfo": {
-            "label": "Affichage d'un message d'alerte de chargement",
-            "helpText": "<p>Lorsque vous activez l'option Afficher les informations de chargement, une invite d'informations de chargement s'affiche en haut de la page à chaque chargement：\"CodeforcesBetter -- xxx\"</p><p>Cela permet de voir comment le script fonctionne actuellement<strong>Si vous ne voulez pas voir ces informations, vous pouvez choisir de les désactiver. Désactiver</strong></p><p><u>Il convient de noter que si vous avez besoin d'un retour d'information sur des problèmes de chargement du script, veuillez activer cette option avant de prendre une capture d'écran afin que le problème puisse être analysé</u></p>"
-        },
-        "targetArea": {
-            "label": "Afficher la portée de la zone cible",
-            "helpText": "Lorsque cette option est activée, la portée de la zone cible s'affiche lorsque la souris passe sur le bouton MD View/Copy/Translate."
         },
         "expandBlocks": "Déploiement automatique des blocs pliants",
         "renderOptimization": {
@@ -43,15 +36,15 @@
             "helpText": "Les commentaires sont affichés sur des pages séparées, avec un nombre déterminé de<strong>main floor</strong>par page."
         },
         "luoguJump": {
-            "label": "Sauter vers Rock Valley",
+            "label": "Sauter à Rock Valley",
             "helpText": "<p>Certains titres de Codeforces sont inclus dans le JO LOGU, et certains titres ont des traductions et des explications</p><p>Lorsque l'écran est allumé, si le titre en cours est inclus, le logo LOGU sera affiché dans le coin supérieur droit du titre,</p><p>. En cliquant sur ce logo, vous pourrez accéder à la page LOGU correspondante pour ce titre en un seul clic.</strong></p>"
         },
         "recolor": {
-            "label": "Liste de recoloration",
-            "helpText": "<p>Pour les classements des jeux utilisant le système Codeforces</p><p>Recolorez les scores en fonction de la fourchette \"Score/Total\"</p><p>Fourchette：1~0.7~0.45~0 Vert foncé→Orange clair→Orange foncé→Rouge</p>"
+            "label": "Recoloration de la liste",
+            "helpText": "<p>Pour la liste des courses utilisant le système Codeforces</p><p>Recolorez les scores en fonction de la fourchette \"Score/Total\"</p><p>Fourchette：1~0.7~0.45~0 Vert foncé→Orange clair→Orange foncé→Rouge</p>"
         }
     },
-    "localizationSettings": {
+    "localization": {
         "title": "localisation",
         "scriptLanguageLabel": "langage de script",
         "websiteLanguageLabel": "Langue du site web",
@@ -60,7 +53,7 @@
             "2": "<strong>Aider à améliorer la localisation linguistique des sites web</strong><p>Si vous pensez que la localisation est nécessaire quelque part sur votre site web et que la remplacer ne causera pas de sérieux problèmes de performance, vous êtes invités à<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>aller à Améliorer les règles de localisation</a>.</p><p>Si vous souhaitez ajouter une nouvelle règle, vous devez ajouter la version chinoise simplifiée de la règle：fork et modifier le fichier de la règle, puis lancer une pull request.</p><p>Une fois la soumission fusionnée, crowdin complètera automatiquement la traduction pour les autres langues, et vous pourrez aller sur crowdin plus tard pour améliorer la qualité de la traduction pour les autres langues également.</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "Paramètres de traduction",
         "options": {
             "title": "préférences",
@@ -106,15 +99,17 @@
                 "title": "langue cible",
                 "helpText": "Note：Les services de traduction disponibles diffèrent selon les langues cibles. Veuillez consulter la page du script pour plus de détails."
             },
-            "comment_translation_choice": "Traduction de la section des commentaires",
-            "services": {
-                "follow": "Suivre les préférences",
-                "deepl": "Traduction de DeepL",
-                "iflyrec": "Xunfei Hear Translate",
-                "youdao": "Traduction sur Youtube",
-                "google": "Google Translate",
-                "caiyun": "lit. nuages colorés et petites traductions",
-                "openai": "ChatGPT Traduction"
+            "comment_translation_choice": {
+                "title": "Traduction de la section des commentaires",
+                "services": {
+                    "follow": "Suivre les préférences",
+                    "deepl": "Traduction de DeepL",
+                    "iflyrec": "Xunfei Hear Translate",
+                    "youdao": "Traduction sur Youtube",
+                    "google": "Google Translate",
+                    "caiyun": "lit. nuages colorés et petites traductions",
+                    "openai": "ChatGPT Traduction"
+                }
             }
         },
         "autoTranslation": {
@@ -124,7 +119,8 @@
             "shortTextLength": {
                 "name": "Longueur du texte",
                 "helpText": "<p>Lorsque la longueur du texte est inférieure à cette valeur, il est considéré comme un texte court</p>",
-                "end": "caractère"
+                "end": "caractère",
+                "placeholder": "Veuillez saisir la longueur"
             },
             "allowMixTrans": {
                 "name": "Traduction mixte de la section des commentaires",
@@ -151,7 +147,7 @@
             },
             "memory": {
                 "name": "Récupération automatique des traductions historiques",
-                "helpText": "<p>Enregistre automatiquement les informations de traduction sur la page de titre<strong></strong>dans l'indexDB local</p><p>Actualise / restaure automatiquement les informations de traduction lors du prochain accès à la page</p>"
+                "helpText": "<p>Enregistre automatiquement les informations de traduction de la page de titre<strong></strong>dans l'indexDB local</p><p>Actualise / restaure automatiquement les informations de traduction lors du prochain accès à la page</p>"
             },
             "retrans": {
                 "name": "Lors de la retraduction",
@@ -164,7 +160,8 @@
             "transWaitTime": {
                 "name": "Intervalle d'attente",
                 "helpText": "<p>Définir l'intervalle d'attente entre deux demandes de traduction, ce paramètre prend effet globalement et est calculé indépendamment pour chaque service de traduction</p><p>Recommandation 200 + millisecondes</p><p>Description：Les traductions ChatGPT ignorent ce paramètre et n'attendent pas</p>",
-                "end": "milliseconde"
+                "end": "milliseconde",
+                "placeholder": "Veuillez saisir l'intervalle"
             },
             "replaceSymbol": {
                 "name": "Remplacement de LaTeX",
@@ -177,11 +174,11 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtrage des signes ** dans le texte",
-                "helpText": " <p>Certains services de traduction (par exemple DeepL) ne traitent pas correctement l'accentuation dans MarkDown <strong>**</strong> </p><p>Cela peut entraîner l'absence de contenu enveloppé dans la traduction. Vous pouvez choisir de supprimer l'accentuation (l'utilisation de ChatGPT ne tient pas compte de cela) </p>"
+                "helpText": " <p>Certains services de traduction (par exemple DeepL) ne traitent pas correctement l'accent dans MarkDown <strong>**</strong> </p><p>La traduction peut alors manquer son wrapper, vous pouvez choisir de supprimer l'accent (l'utilisation de ChatGPT n'en tient pas compte) </p>"
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Réglages de la liste",
         "basics": {
             "name": "fondamental",
@@ -215,7 +212,7 @@
             "helpText": "<p>Affiché uniquement lorsque la souris est déplacée sur la zone d'affichage secondaire Rating</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Paramètres de l'éditeur de Monaco",
         "basics": "fondamental",
         "problemPageCodeEditor": {
@@ -249,7 +246,7 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "Paramètres LSP",
             "useLSP": {
                 "label": "Utilisation du FSL",
@@ -257,11 +254,11 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Parcours de travail.",
-                "helpText": "<p>Vous devez indiquer le chemin d'accès à OJBetter_Bridge</p><p>Utilisez une barre oblique ou une barre oblique inverse</p><p>Chemin d'accès par défaut：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>Vous devez indiquer le chemin d'accès à OJBetter_Bridge</p><p>Utilisez la barre oblique ou la barre oblique inverse</p><p>Chemin d'accès par défaut：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Serveur.",
-                "helpText": "<p>Vous devez indiquer l'URL du serveur de OJBetter_Bridge sur votre machine locale</p><p>URL par défaut : </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Notez qu'il n'est généralement pas nécessaire de modifier cette URL ; si vous devez le faire, veillez à ce qu'elle corresponde au format de l'URL par défaut</p>"
+                "helpText": "<p>Vous devez indiquer l'URL du serveur de OJBetter_Bridge sur votre machine locale</p><p>URL par défaut : </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Notez qu'il n'est généralement pas nécessaire de modifier cette URL. Si vous devez la modifier, veillez à ce qu'elle corresponde au format de l'URL par défaut :</p>"
             }
         },
         "staticCompletionEnhancement": {
@@ -274,7 +271,7 @@
             "performanceWarning": "Note：Un trop grand nombre de règles complémentaires statiques peut nuire aux performances."
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "sauvegarder",
         "notice": "<p>Note：Normalement, vous n'avez pas besoin d'utiliser ces fonctions.</p><p>Si vous n'êtes pas sûr de la signification des fonctions, ne les utilisez pas !</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "dériver",
                 "import": "importation (données)"
             }
+        }
+    },
+    "preference": {
+        "title": "préférences",
+        "loadingInfo": {
+            "label": "Affichage d'un message d'alerte de chargement",
+            "helpText": "<p>Lorsque vous activez l'option Afficher les informations de chargement, une invite d'informations de chargement s'affiche en haut de la page à chaque chargement：\"CodeforcesBetter -- xxx\"</p><p>Cela permet de voir comment le script fonctionne actuellement<strong>Si vous ne voulez pas voir ces informations, vous pouvez choisir de les désactiver. Désactiver</strong></p><p><u>Il convient de noter que si vous avez besoin d'un retour d'information sur des problèmes de chargement du script, veuillez activer cette option avant de prendre une capture d'écran afin que le problème puisse être analysé</u></p>"
+        },
+        "targetArea": {
+            "label": "Afficher la portée de la zone cible",
+            "helpText": "Lorsque cette option est activée, la portée de la zone cible s'affiche lorsque la souris passe sur le bouton MD View/Copy/Translate."
+        },
+        "iconButtonSize": {
+            "title": "Icône Taille du bouton",
+            "helpText": "<p>Réglage de la taille du bouton de traduction</p>",
+            "placeholder": "Veuillez saisir une taille de bouton"
         }
     },
     "about": {

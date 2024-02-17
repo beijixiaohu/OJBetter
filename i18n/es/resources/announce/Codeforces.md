@@ -10,6 +10,7 @@
 - Añada una página sobre, así como un canal de actualización y selecciones de fuente de actualización
 - Añada la página de mantenimiento de depuración, que incluye la actualización de la caché, el borrado de datos, la importación y la exportación.
 - Añadir opción personalizada： 'Code Editor Submit Button Position', por defecto abajo, ¡gracias a @lishufood por la sugerencia!
+- Mejorar cada función de carga, eliminar algunas relaciones de espera innecesarias, acelerar el tiempo de carga del script
 - Mejoras en la función de traducción y en la visualización de mensajes de error.
 - Mejora del rendimiento de la traducción automática y el problema de que no se traduzca automáticamente
 - Mejoras en las muestras de código relacionadas con la ejecución en línea
@@ -18,6 +19,7 @@
 - Mejorar el estilo del editor de código cuando se fija a la derecha, abajo y a pantalla completa, ¡gracias a @lishufood por la sugerencia!
 - Mejora de la visualización del panel .html2md-panel en modo simple
 - Mejorar el estilo de la página de configuración en el panel de ajustes
+- Corregir errores del editor de la página de título acmsguru
 - Se ha solucionado el problema por el que el editor de código de la página de incidencias informaba de un error tras cambiar la versión móvil/desktop del sitio web.
 - Corrección de un error en el método getMarkdown(), que almacenaba incorrectamente los datos directamente en el DOM, lo que provocaba una degradación del rendimiento.
 - Solucionado el problema de que el botón de traducción dentro del bloque plegado no se muestra después de desactivar 'Autoexpansión del bloque plegado', ¡gracias a los comentarios de @MoYuToGo!

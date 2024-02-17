@@ -10,6 +10,7 @@
 - Fügen Sie eine Info-Seite sowie einen Aktualisierungskanal und eine Auswahl von Aktualisierungsquellen hinzu.
 - Hinzufügen einer Wartungsseite zur Fehlersuche, einschließlich Cache-Aktualisierung, Datenlöschung, Import und Export.
 - Fügen Sie die benutzerdefinierte Option： 'Position der Einreichungsschaltfläche des Code-Editors' hinzu, Standardeinstellung ist unten, danke an @lishufood für den Vorschlag!
+- Verbessern Sie jede Ladefunktion, entfernen Sie einige unnötige Wartebeziehungen, beschleunigen Sie die Ladezeit des Skripts
 - Verbesserungen bei der Übersetzungsfunktion und der Anzeige von Fehlermeldungen.
 - Verbesserung der Leistung der automatischen Übersetzung und des Problems, dass sie nicht automatisch übersetzt werden darf
 - Verbesserungen an Codebeispielen im Zusammenhang mit der Online-Ausführung
@@ -18,6 +19,7 @@
 - Verbessern Sie den Stil des Code-Editors, wenn er auf der rechten Seite, unten und im Vollbildmodus fixiert ist. Danke an @lishufood für den Vorschlag!
 - Verbesserte Anzeige des Panels .html2md-panel im einfachen Modus
 - Verbessern Sie den Stil der Konfigurationsseite im Einstellungsfenster
+- Fehler im acmsguru Titelseiteneditor beheben
 - Behebung des Problems, dass der Code-Editor der Ausgabeseite einen Fehler meldete, wenn Sie die Mobil-/Desktop-Version der Website umschalteten.
 - Behebung eines Fehlers in der Methode getMarkdown(), durch den Daten fälschlicherweise direkt im DOM gespeichert wurden, was zu einer Leistungsverschlechterung führte.
 - Beheben Sie das Problem, dass die Übersetzungsschaltfläche innerhalb des gefalteten Blocks nicht angezeigt wird, nachdem Sie 'Folded Block Auto Expand' deaktiviert haben, dank des Feedbacks von @MoYuToGo!
