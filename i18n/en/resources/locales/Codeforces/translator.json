@@ -2,9 +2,9 @@
     "servers": {
         "deepl": "DeepL",
         "iflyrec": "Hearings",
-        "youdao": "有道",
-        "google": "谷歌",
-        "caiyun": "彩云小译",
+        "youdao": "learned and virtuous",
+        "google": "google",
+        "caiyun": "colorful clouds and small translations",
         "openai": "ChatGPT"
     },
     "transingTip": {
