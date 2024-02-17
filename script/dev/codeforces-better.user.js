@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.40
+// @version      1.72.41
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -1084,9 +1084,13 @@ function handleColorSchemeChange(event) {
     }
 }
 
-// 黑暗模式
+/**
+ * 黑暗模式
+ */
 (function setDark() {
-    // 初始化
+    /**
+     * 初始化
+     */
     function setDarkTheme() {
         const htmlElement = document.querySelector('html');
         if (htmlElement) {
@@ -1121,10 +1125,10 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, html[data-theme=dark] #pageContent,
         html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] .setting-name, html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
+        html[data-theme=dark] .setting-name, html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
         html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .CFBetter_setting_sidebar li a:link,
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
         html[data-theme=dark] .popup .content{
             color: #a0adb9 !important;
         }
@@ -1137,14 +1141,14 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
-        html[data-theme=dark] .user-admin, html[data-theme=dark] button.ojb_btn:hover,
-        html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] #CFBetter_statusBar,
+        html[data-theme=dark] .user-admin, html[data-theme=dark] .ojb_btn:hover,
+        html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest,
-        html[data-theme=dark] #customTestBlock{
+        html[data-theme=dark] #customTestBlock, html[data-theme=dark] .OJBetter_setting_list.alert_info{
             color: #9099a3 !important;
         }
         /* 文字颜色3 */
-        html[data-theme=dark] button.ojb_btn, html[data-theme=dark] #program-source-text-copy{
+        html[data-theme=dark] .ojb_btn, html[data-theme=dark] #program-source-text-copy{
             color: #6385a6;
         }
         html[data-theme=dark] input{
@@ -1153,6 +1157,10 @@ function handleColorSchemeChange(event) {
         /* 文字颜色4 */
         html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
             color: #cbd6e2 !important;
+        }
+        /* 文字颜色 浅绿 */
+        html[data-theme=dark] #SubmitButton{
+            color: #43A047;
         }
         /* 链接颜色 */
         html[data-theme=dark] a:link {
@@ -1179,24 +1187,25 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
         html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
         html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
-        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
+        html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
         html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
         html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
-        html[data-theme=dark] label.config_bar_ul_li_text:hover, html[data-theme=dark] button.ojb_btn:hover,
-        html[data-theme=dark] .CFBetter_setting_sidebar li a.active, html[data-theme=dark] .CFBetter_setting_sidebar li,
-        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-track,
-        html[data-theme=dark] .CFBetter_modal, html[data-theme=dark] .CFBetter_modal button:hover,
+        html[data-theme=dark] .ojb_btn:hover,
+        html[data-theme=dark] .OJBetter_setting_sidebar li a.active, html[data-theme=dark] .OJBetter_setting_sidebar li,
+        html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
+        html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
         html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
         html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
         html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
-         html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs,
-        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
+        html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover{
             background-color: #22272e !important;
             background-image: none;
         }
         /* 背景层次2 */
         html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
-        html[data-theme=dark] button.ojb_btn, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
+        html[data-theme=dark] .ojb_btn, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
         html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
         html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
@@ -1204,22 +1213,25 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .input-output-copier:hover, html[data-theme=dark] .translate-problem-statement-panel,
         html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
         html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
-        html[data-theme=dark] .CFBetter_setting_list,
-        html[data-theme=dark] .CFBetter_setting_menu hr, 
+        html[data-theme=dark] .OJBetter_setting_list,
+        html[data-theme=dark] .OJBetter_setting_menu hr, 
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
-        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .CFBetter_setting_sidebar li a,
-        html[data-theme=dark] .CFBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .CFBetter_setting_content::-webkit-scrollbar-thumb,
-        html[data-theme=dark] .CFBetter_modal button, html[data-theme=dark] .test-for-popup pre,
+        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .OJBetter_setting_sidebar li a,
+        html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-thumb,
+        html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] .test-for-popup pre,
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
-        html[data-theme=dark] ul.config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #CFBetter_statusBar,
+        html[data-theme=dark] ul.config_bar_ul::-webkit-scrollbar-thumb,  html[data-theme=dark] #OJBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] .sampleDiv,
         html[data-theme=dark] #addCustomTest, html[data-theme=dark] #LSPLog li:nth-child(odd),
-        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::before{
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::before,
+        html[data-theme=dark] .config::before, html[data-theme=dark] .config li.tempConfig_add_button:hover,
+        html[data-theme=dark] .OJBetter_setting_menu details, html[data-theme=dark] #config_bar_menu,
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button{
             background-color: #2d333b !important;
         }
         /* 实线边框颜色-圆角 */
         html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
-        html[data-theme=dark] button.ojb_btn, html[data-theme=dark] .sidebar-menu ul li,
+        html[data-theme=dark] .ojb_btn, html[data-theme=dark] .sidebar-menu ul li,
         html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
         html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
@@ -1229,16 +1241,17 @@ function handleColorSchemeChange(event) {
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
-        html[data-theme=dark] .CFBetter_setting_list, html[data-theme=dark] .config_bar_list,
+        html[data-theme=dark] .OJBetter_setting_list, html[data-theme=dark] .config_bar_list,
         html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
         html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
-        html[data-theme=dark] .CFBetter_setting_sidebar li, html[data-theme=dark] .CFBetter_setting_menu select,
-        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .CFBetter_modal button,
-        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #CFBetter_statusBar,
+        html[data-theme=dark] .OJBetter_setting_sidebar li, html[data-theme=dark] .OJBetter_setting_menu select,
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button,
+        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
         html[data-theme=dark] #addCustomTest, 
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
-        html[data-theme=dark] .CFBetter_setting_menu .CFBetter_checkboxs{
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs, html[data-theme=dark] .OJBetter_setting_menu a,
+        html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] .config::before{
             border: 1px solid #424b56 !important;
         }
         html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
@@ -1250,7 +1263,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .topic .content {
             border-left: 4px solid #424b56 !important;
         }
-        html[data-theme=dark] .CFBetter_setting_sidebar {
+        html[data-theme=dark] .OJBetter_setting_sidebar {
             border-right: 1px solid #424b56 !important;
         }
         html[data-theme=dark] hr {
@@ -1258,7 +1271,7 @@ function handleColorSchemeChange(event) {
         }
         /* 虚线边框颜色 */
         html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
-        html[data-theme=dark] .CFBetter_setting_menu_label_text{
+        html[data-theme=dark] .OJBetter_setting_menu_label_text{
             border: 1px dashed #424b56 !important;
         }
         html[data-theme=dark] li#add_button:hover{
@@ -1266,14 +1279,18 @@ function handleColorSchemeChange(event) {
             background-color: #2d333b !important;
             color: #03A9F4 !important;
         }
+        /* 无边框 */
+        html[data-theme=dark] .translate-problem-statement-panel .ojb_btn{
+            border: none !important;
+        }
         /* input-output-copier特殊处理 */
         html[data-theme=dark] .html2md-panel.input-output-copier,
         html[data-theme=dark] .translateDiv.input-output-copier,
-        html[data-theme=dark] #CFBetter_SubmitForm.input-output-copier{
+        html[data-theme=dark] #OJBetter_SubmitForm.input-output-copier{
             border: none !important;
         }
         html[data-theme=dark] .html2md-panel.input-output-copier:hover, 
-        html[data-theme=dark] #CFBetter_SubmitForm.input-output-copier:hover{
+        html[data-theme=dark] #OJBetter_SubmitForm.input-output-copier:hover{
             background-color: #ffffff00 !important;
         }
         /* focus-visible */
@@ -1301,6 +1318,13 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
             box-shadow: 0px 0px 0.5px 0.5px #30353b;
         }
+        /* 图标按钮状态样式 */
+        html[data-theme=dark] .ojb_btn_popover.success i:before, html[data-theme=dark] .ojb_btn_popover.success i {
+            color: #2e7d32;
+        }
+        html[data-theme=dark] .ojb_btn_popover i:before {
+            text-shadow: 1px 1px 0px #2d333b, 1px -1px 0px #2d333b, -1px -1px 0px #2d333b, -1px 1px 0px #2d333b;
+        }
         /* 其他样式 */
         html[data-theme=dark] .rated-user{
             display: initial;
@@ -1325,7 +1349,7 @@ function handleColorSchemeChange(event) {
             background-color: #ef9a9a !important;
             border-radius: 0px;
         }
-        html[data-theme=dark] .CFBetter_setting_menu, html[data-theme=dark] .CFBetter_modal{
+        html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .OJBetter_modal{
             box-shadow: 0px 0px 0px 4px #2d333b;
             border: 1px solid #2d333b;
         }
@@ -1335,7 +1359,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .alert{
             text-shadow: none;
         }
-        html[data-theme=dark] input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
+        html[data-theme=dark] input[type="radio"]:checked+.OJBetter_setting_menu_label_text {
             color: #a0adb9 !important;
             border: 1px solid #326154 !important;
         }
@@ -1473,10 +1497,9 @@ html {
 span.mdViewContent {
     white-space: pre-wrap;
 }
+
 /* 特殊处理，加上input-output-copier类, 让convertStatementToText方法忽略该元素 */
-.translateDiv.input-output-copier,
-.html2md-panel.input-output-copier,
-#CFBetter_SubmitForm.input-output-copier {
+.translateDiv.input-output-copier, .html2md-panel.input-output-copier, #OJBetter_SubmitForm.input-output-copier {
   font-size: initial;
   float: initial;
   color: initial;
@@ -1487,12 +1510,10 @@ span.mdViewContent {
   line-height: initial;
   text-transform: none;
 }
-
-.translateDiv.input-output-copier:hover,
-.html2md-panel.input-output-copier:hover,
-#CFBetter_SubmitForm.input-output-copier:hover {
+.translateDiv.input-output-copier:hover, .html2md-panel.input-output-copier:hover, #OJBetter_SubmitForm.input-output-copier:hover {
   background-color: #ffffff00;
 }
+
 /* dialog */
 dialog {
     margin: 0px;
@@ -1500,6 +1521,7 @@ dialog {
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.4);
 }
+
 /*题目页链接栏样式*/
 #problemToolbar {
     display: flex;
@@ -1509,6 +1531,7 @@ dialog::backdrop {
     height: 100%;
     margin: 0.5em;
 }
+
 /*html2md面板*/
 .html2md-panel {
     display: flex;
@@ -1525,6 +1548,7 @@ dialog::backdrop {
     position: absolute;
     right: 2%;
 }
+
 /*通用按钮*/
 .ojb_btn {
     display: flex;
@@ -1563,7 +1587,7 @@ dialog::backdrop {
     background-color: #79bbff;
 }
 .ojb_btn.success {  
-    color: #4CAF50;
+    color: #4caf50;
     border: 1px solid #C8E6C9;
     background-color: #f0f9eb;
 }
@@ -1608,7 +1632,7 @@ a.ojb_btn span {
 }
 .ojb_btn_popover i:before {
     position: absolute;
-    text-shadow: 0px 0px 4px #ffffff;
+    text-shadow: 1px 1px 0px #ffffff, 1px -1px 0px #ffffff, -1px -1px 0px #ffffff, -1px 1px 0px #ffffff;
 }
 .ojb_btn_popover span {
     cursor: initial;
@@ -1690,14 +1714,14 @@ a.ojb_btn span {
     color: #F44336;
 }
 .ojb_btn_popover.success i {
-    color: rgba(103, 194, 62, 0.9);
+    color: rgba(76, 175, 80, 0.9);
 }
 .ojb_btn_popover.success i:before {
     content: "\\e61e";
     font-size: 15px;
     left: 10px;
     bottom: 0%;
-    color: #67c23e;
+    color: #4caf50;
 }
 .ojb_btn_popover.enabled i {
     color: rgba(33, 150, 243, 0.6);
@@ -1719,6 +1743,7 @@ a.ojb_btn span {
 .ojb_btn_popover.reverse i {
     transform: rotate(180deg);
 }
+
 /*translateDiv样式*/
 .translateDiv .topText {
     display: flex;
@@ -1743,7 +1768,6 @@ a.ojb_btn span {
 html:not([data-theme='dark']) .translateDiv {
     box-shadow: 0px 0px 0.5px 0.5px #defdf378;
 }
-/* // TODO */
 .translate-problem-statement {
     justify-items: start;
     letter-spacing: 1.8px;
@@ -1839,12 +1863,13 @@ html:not([data-theme='dark']) .translateDiv {
 .problem-statement p:last-child {
     margin-bottom: 0px !important;
 }
-/*设置面板*/
+
+/*设置按钮*/
 header .enter-or-register-box, header .languages {
     position: absolute;
     right: 170px;
 }
-.ojb_btn.CFBetter_setting {
+.ojb_btn.OJBetter_setting {
     float: right;
     height: 30px;
     background: #60a5fa;
@@ -1852,14 +1877,14 @@ header .enter-or-register-box, header .languages {
     margin: 10px;
     border: 1px solid #60a5fa;
 }
-
-.ojb_btn.CFBetter_setting.open {
+.ojb_btn.OJBetter_setting.open {
     background-color: #e6e6e6;
     color: #727378;
     cursor: not-allowed;
 }
-/*// TODO*/
-.CFBetter_setting_menu {
+
+/*设置面板*/
+.OJBetter_setting_menu {
     box-shadow: 0px 0px 0px 4px #ffffff;
     position: fixed;
     top: 50%;
@@ -1876,29 +1901,29 @@ header .enter-or-register-box, header .languages {
     padding: 10px 20px 20px 10px;
     box-sizing: content-box;
 }
-.CFBetter_setting_menu h3 {
+.OJBetter_setting_menu h3 {
     margin-top: 10px;
 }
-.CFBetter_setting_menu h4 {
+.OJBetter_setting_menu h4 {
     margin: 15px 0px 10px 0px;
 }
-.CFBetter_setting_menu h4,.CFBetter_setting_menu h5 {
+.OJBetter_setting_menu h4,.OJBetter_setting_menu h5 {
     font-weight: 600;
 }
-.CFBetter_setting_menu hr {
+.OJBetter_setting_menu hr {
     border: none;
     height: 1px;
     background-color: #ccc;
     margin: 10px 0;
 }
-.CFBetter_setting_menu details {
+.OJBetter_setting_menu details {
     padding: 10px;
     margin-bottom: 5px;
     background-color: #ffffff;
     border-bottom: 1px solid #c9c6c696;
     border-radius: 8px;
 }
-.CFBetter_setting_menu .badge {
+.OJBetter_setting_menu .badge {
     border-radius: 4px;
     border: 1px solid #009688;
     color: #009688;
@@ -1907,28 +1932,27 @@ header .enter-or-register-box, header .languages {
     margin-left: 5px;
     margin-right: auto;
 }
-
-.CFBetter_setting_menu .missing {
+.OJBetter_setting_menu .missing {
     box-shadow: inset 0px 0px 1px 1px red;
 }
 /* 页面切换 */
-.settings-page {
+.OJBetter_setting_menu .settings-page {
     display: none;
 }
-.settings-page.active {
+.OJBetter_setting_menu .settings-page.active {
     display: block;
 }
-.CFBetter_setting_container {
+.OJBetter_setting_container {
     display: flex;
 }
-.CFBetter_setting_sidebar {
+.OJBetter_setting_sidebar {
     flex: 0 0 auto;
     min-width: 110px;
     padding: 6px 10px 6px 6px;
     margin: 20px 0px;
     border-right: 1px solid #d4d8e9;
 }
-.CFBetter_setting_content {
+.OJBetter_setting_content {
     flex-grow: 1;
     margin: 20px 0px 0px 12px;
     padding-right: 10px;
@@ -1936,28 +1960,28 @@ header .enter-or-register-box, header .languages {
     overflow-y: auto;
     box-sizing: border-box;
 }
-.CFBetter_setting_sidebar h3 {
+.OJBetter_setting_sidebar h3 {
     margin-top: 0;
 }
-.CFBetter_setting_sidebar hr {
+.OJBetter_setting_sidebar hr {
     margin-top: 10px;
     margin-bottom: 10px;
     border: none;
     border-top: 1px solid #DADCE0;
 }
-.CFBetter_setting_sidebar ul {
+.OJBetter_setting_sidebar ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
-.CFBetter_setting_sidebar li {
+.OJBetter_setting_sidebar li {
     margin: 5px 0px;
     background-color: #ffffff;
     border: 1px solid #d4d8e9;
     border-radius: 4px;
     font-size: 16px;
 }
-.CFBetter_setting_sidebar li a {
+.OJBetter_setting_sidebar li a {
     text-decoration: none;
     display: flex;
     width: 100%;
@@ -1974,11 +1998,11 @@ header .enter-or-register-box, header .languages {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.CFBetter_setting_sidebar li a.active {
+.OJBetter_setting_sidebar li a.active {
     background-color: #eceff1c7;
 }
 /* 链接样式 */
-.CFBetter_setting_menu a {
+.OJBetter_setting_menu a {
     font-size: 13px;
     color: #009688;
     background-color: #E0F2F1;
@@ -1989,7 +2013,7 @@ header .enter-or-register-box, header .languages {
     text-decoration: none;
 }
 /* 下拉选择框 */
-.CFBetter_setting_menu select {
+.OJBetter_setting_menu select {
     appearance: none;
     padding: 5px 10px;
     margin: -5px 0px;
@@ -1999,14 +2023,14 @@ header .enter-or-register-box, header .languages {
     color: #009688;
     font-size: 15px;
 }
-.CFBetter_setting_menu select:focus-visible {
+.OJBetter_setting_menu select:focus-visible {
     outline: none;
 }
-.CFBetter_setting_menu select option:disabled {
+.OJBetter_setting_menu select option:disabled {
     color: #EEEEEE;
 }
 /* 数值输入框 */
-.CFBetter_setting_menu input[type="number"] {
+.OJBetter_setting_menu input[type="number"] {
     width: 40px;
     color: #009688;
     font-size: 15px;
@@ -2017,37 +2041,36 @@ header .enter-or-register-box, header .languages {
     border-style: solid;
     border: 1px solid #ced4da;
 }
-.CFBetter_setting_menu input[type="number"]:focus-visible {
+.OJBetter_setting_menu input[type="number"]:focus-visible {
     outline: none;
 }
-.CFBetter_setting_menu input[type="number"]::-webkit-inner-spin-button,
-.CFBetter_setting_menu input[type="number"]::-webkit-outer-spin-button {
+.OJBetter_setting_menu input[type="number"]::-webkit-inner-spin-button,
+.OJBetter_setting_menu input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 /*设置面板-滚动条*/
-.CFBetter_setting_menu::-webkit-scrollbar, .CFBetter_setting_content::-webkit-scrollbar {
+.OJBetter_setting_menu::-webkit-scrollbar, .OJBetter_setting_content::-webkit-scrollbar {
     width: 5px;
     height: 7px;
     background-color: #aaa;
 }
-.CFBetter_setting_menu::-webkit-scrollbar-thumb, .CFBetter_setting_content::-webkit-scrollbar-thumb {
+.OJBetter_setting_menu::-webkit-scrollbar-thumb, .OJBetter_setting_content::-webkit-scrollbar-thumb {
     background-clip: padding-box;
     background-color: #d7d9e4;
 }
-.CFBetter_setting_menu::-webkit-scrollbar-track, .CFBetter_setting_content::-webkit-scrollbar-track {
+.OJBetter_setting_menu::-webkit-scrollbar-track, .OJBetter_setting_content::-webkit-scrollbar-track {
     background-color: #f1f1f1;
 }
 /*设置面板-关闭按钮*/
-.CFBetter_setting_menu .tool-box {
+.OJBetter_setting_menu .tool-box {
     position: absolute;
     width: 20px;
     height: 20px;
     top: 3px;
     right: 3px;
 }
-
-.CFBetter_setting_menu .btn-close {
+.OJBetter_setting_menu .btn-close {
     cursor: pointer;
     width: 20px;
     height: 20px;
@@ -2062,24 +2085,20 @@ header .enter-or-register-box, header .languages {
     color: transparent;
     font-size: 17px;
 }
-
-.CFBetter_setting_menu .btn-close:hover {
+.OJBetter_setting_menu .btn-close:hover {
     color: #ffffff;
     background-color: #ff0000cc;
     box-shadow: 0 5px 5px 0 #00000026;
 }
-
-.CFBetter_setting_menu .btn-close:active {
+.OJBetter_setting_menu .btn-close:active {
     color: #ffffffde;
     background-color: #ff000080;
 }
-
 /*设置面板-checkbox*/
-.CFBetter_setting_menu input[type=checkbox]:focus {
+.OJBetter_setting_menu input[type=checkbox]:focus {
     outline: 0px;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"] {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="checkbox"] {
     margin: 0px;
 	appearance: none;
     -webkit-appearance: none;
@@ -2092,8 +2111,7 @@ header .enter-or-register-box, header .languages {
 	position: relative;
 	box-sizing: border-box;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]::before {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="checkbox"]::before {
 	content: "";
     width: 17px;
     height: 17px;
@@ -2107,34 +2125,29 @@ header .enter-or-register-box, header .languages {
     transition: all 0.3s ease-in-out;
     box-sizing: border-box;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]::after {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="checkbox"]::after {
 	content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
 	position: absolute;
 	top: 0;
 	left: 24px;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]:checked {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="checkbox"]:checked {
 	border: 1.5px solid #C5CAE9;
 	background: #E8EAF6;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]:checked::before {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="checkbox"]:checked::before {
     background: #C5CAE9;
     border: 1.5px solid #7986CB;
     transform: translate(122%, 2%);
     transition: all 0.3s ease-in-out;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="checkbox"]:checked::after {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     position: absolute;
     top: 1.5px;
     left: 4.5px;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list button {
+.OJBetter_setting_menu .OJBetter_setting_list button {
     cursor: pointer;
     color: #7986cb;
     background-color: #e8eaf6;
@@ -2144,18 +2157,15 @@ header .enter-or-register-box, header .languages {
     margin: -5px 2px;
     padding: 5px 10px;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list button:hover {
+.OJBetter_setting_menu .OJBetter_setting_list button:hover {
     color: #e8eaf6;
     background-color: #7986cb;
     border: 1px solid #7986cb;
 }
-
-.CFBetter_setting_menu label, #darkMode_span, #loaded_span {
+.OJBetter_setting_menu label, #darkMode_span, #loaded_span {
     font-size: 16px;
 }
-
-.CFBetter_setting_list {
+.OJBetter_setting_list {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -2167,42 +2177,38 @@ header .enter-or-register-box, header .languages {
     border-radius: 8px;
     justify-content: space-between;
 }
-
-.CFBetter_setting_list.alert_danger {
+.OJBetter_setting_list.alert_danger {
     color: #F44336;
     background-color: #FFEBEE;
     border: 1px solid #F44336;
     margin: 10px 0px;
 }
-.CFBetter_setting_list.alert_warn {
+.OJBetter_setting_list.alert_warn {
     color: #E65100;
     background-color: #FFF3E0;
     border: 1px solid #FF9800;
     margin: 10px 0px;
 }
-.CFBetter_setting_list.alert_tip {
+.OJBetter_setting_list.alert_tip {
     color: #009688;
     background-color: #E0F2F1;
     border: 1px solid #009688;
     margin: 10px 0px;
 }
-.CFBetter_setting_list.alert_info {
+.OJBetter_setting_list.alert_info {
     color: #ffffff;
     background-color: #009688;
     margin: 10px 0px;
     box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
 }
-
-.CFBetter_setting_list p:not(:last-child) {
+.OJBetter_setting_list p:not(:last-child) {
     margin-bottom: 10px;
 }
-
-.CFBetter_setting_list p:not(:first-child) {
+.OJBetter_setting_list p:not(:first-child) {
     margin-top: 10px;
 }
-
 /*设置面板-checkboxs*/
-.CFBetter_setting_menu .CFBetter_checkboxs {
+.OJBetter_setting_menu .OJBetter_checkboxs {
     flex-basis: 100%;
     display: flex;
     padding: 8px;
@@ -2212,48 +2218,43 @@ header .enter-or-register-box, header .languages {
     border: 1px solid #c5cae9;
     background-color: #f0f8ff;
 }
-.CFBetter_setting_menu .CFBetter_checkboxs label {
+.OJBetter_setting_menu .OJBetter_checkboxs label {
     font-size: 13px;
     margin: 0px 6px 0px 3px;
 }
-.CFBetter_setting_menu .CFBetter_checkboxs input[type=checkbox]:checked+label{
+.OJBetter_setting_menu .OJBetter_checkboxs input[type=checkbox]:checked+label{
     color: #7986cb;
 }
-.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"] {
+.OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"] {
     border: none;
     width: 16px;
     height: 16px;
 }
-
-.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]::before{
+.OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before{
     background: #ffffff;
     transform: none;
     width: 16px;
     height: 16px;
 }
-
-.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked {
+.OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked {
 	background: none;
     border: none;
 }
-
-.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::before {
+.OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::before {
     border: 1.5px solid #95a2de;
     background: #e8eaf6;
 	transform: none;
 }
-
-.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:checked::after {
+.OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     top: 0px;
     left: 3.5px;
 }
-.CFBetter_setting_menu .CFBetter_checkboxs input[type="checkbox"]:disabled+label {
+.OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:disabled+label {
     color: #BDBDBD;
 }
-
 /*设置面板-radio*/
-.CFBetter_setting_menu label {
+.OJBetter_setting_menu label {
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
@@ -2261,8 +2262,7 @@ header .enter-or-register-box, header .languages {
     margin: 3px 0px;
     overflow-x: visible;
 }
-
-.CFBetter_setting_menu_label_text {
+.OJBetter_setting_menu_label_text {
     display: flex;
     border: 1px dashed #00aeeccc;
     height: 35px;
@@ -2278,21 +2278,18 @@ header .enter-or-register-box, header .languages {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-
-input[type="radio"]:checked+.CFBetter_setting_menu_label_text {
+input[type="radio"]:checked+.OJBetter_setting_menu_label_text {
     background: #41e49930;
     border: 1px solid green;
     color: green;
     text-shadow: 0px 0px 0.5px green;
 }
-
-input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
+input[type="radio"]:disabled+.OJBetter_setting_menu_label_text {
     background: #fafafa00;
     border: 1px solid #e0e0e07a;
     color: #e0e0e0;
 }
-
-.CFBetter_setting_menu label input[type="radio"], .CFBetter_contextmenu label input[type="radio"]{
+.OJBetter_setting_menu label input[type="radio"], .OJBetter_contextmenu label input[type="radio"]{
     appearance: none;
     list-style: none;
     padding: 0px !important;
@@ -2306,8 +2303,8 @@ input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
     white-space: nowrap;
     width: 1px;
 }
-
-.CFBetter_setting_menu input[type="text"] {
+/*设置面板-文本输入框*/
+.OJBetter_setting_menu input[type="text"] {
     display: block;
     height: 25px !important;
     width: 100%;
@@ -2321,18 +2318,15 @@ input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
     border: 1px solid #00aeeccc;
     box-shadow: 0 0 1px #0000004d;
 }
-
-.CFBetter_setting_menu .CFBetter_setting_list input[type="text"] {
+.OJBetter_setting_menu .OJBetter_setting_list input[type="text"] {
     margin-left: 5px;
 }
-
-.CFBetter_setting_menu input[type="text"]:focus-visible{
+.OJBetter_setting_menu input[type="text"]:focus-visible{
     border-style: solid;
     border-color: #3f51b5;
     outline: none;
 }
-
-.CFBetter_setting_menu_config_box {
+.OJBetter_setting_menu_config_box {
     width: 100%;
     display: grid;
     margin-top: 5px;
@@ -2340,20 +2334,20 @@ input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.CFBetter_setting_menu input::placeholder {
+.OJBetter_setting_menu input::placeholder {
     color: #727378;
 }
-.CFBetter_setting_menu input.no_default::placeholder{
+.OJBetter_setting_menu input.no_default::placeholder{
     color: #BDBDBD;
 }
-.CFBetter_setting_menu input.is_null::placeholder{
+.OJBetter_setting_menu input.is_null::placeholder{
     color: red;
     border-width: 1.5px;
 }
-.CFBetter_setting_menu input.is_null{
+.OJBetter_setting_menu input.is_null{
     border-color: red;
 }
-.CFBetter_setting_menu textarea {
+.OJBetter_setting_menu textarea {
     resize: vertical;
     display: block;
     width: 100%;
@@ -2367,17 +2361,16 @@ input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
     border: 1px solid #00aeeccc;
     box-shadow: 0 0 1px #0000004d;
 }
-.CFBetter_setting_menu textarea:focus-visible{
+.OJBetter_setting_menu textarea:focus-visible{
     border-style: solid;
     border-color: #3f51b5;
     outline: none;
 }
-.CFBetter_setting_menu textarea::placeholder{
+.OJBetter_setting_menu textarea::placeholder{
     color: #BDBDBD;
     font-size: 14px;
 }
-
-.CFBetter_setting_menu #tempConfig_save {
+.OJBetter_setting_menu #tempConfig_save {
     cursor: pointer;
 	display: inline-flex;
     padding: 5px;
@@ -2393,11 +2386,10 @@ input[type="radio"]:disabled+.CFBetter_setting_menu_label_text {
 	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     margin-top: 20px
 }
-.CFBetter_setting_menu button#debug_button.debug_button {
+.OJBetter_setting_menu button#debug_button.debug_button {
     width: 18%;
 }
-
-.CFBetter_setting_menu span.tip {
+.OJBetter_setting_menu span.tip {
     color: #999;
     font-size: 12px;
     font-weight: 500;
@@ -2444,7 +2436,7 @@ span.input_label {
     margin-left: 5px;
     margin-top: 3px;
 }
-.CFBetter_setting_menu .CFBetter_setting_menu_label_text .help_tip .help-icon {
+.OJBetter_setting_menu .OJBetter_setting_menu_label_text .help_tip .help-icon {
     color: #7fbeb2;
 }
 .help_tip .help-icon:hover + .tip_text, .help_tip .tip_text:hover {
@@ -2452,9 +2444,210 @@ span.input_label {
     cursor: help;
     width: 250px;
 }
+/* 版本信息 */
+.OJBetter_setting_menu .versionInfo{
+    display: grid;
+    justify-items: center;
+    font-size: 16px;
+    padding: 10px;
+}
+.OJBetter_setting_menu .versionInfo>* {
+    margin: 10px 0px;
+}
+
+/* 配置管理面板 */
+.config{
+    width: 100%;
+    margin: 10px 0px;
+}
+.config li.tempConfig_add_button {
+    cursor: pointer;
+    height: 40px;
+    border: 1px dashed #BDBDBD;
+    border-radius: 8px;
+    background-color: #fcfbfb36;
+    color: #bdbdbd;
+    font-size: 14px;
+    align-items: center;
+    justify-content: center;
+}
+.config li.tempConfig_add_button:hover {
+    border: 1px dashed #03A9F4;
+    background-color: #d7f0fb8c;
+    color: #03A9F4;
+}
+.config .config_bar_list {
+    display: flex;
+    width: 100%;
+    padding-bottom: 2px;
+    border: 1px solid #c5cae9;
+    background-color: #f0f8ff;
+    box-sizing: border-box;
+    border-radius: 0px 0px 8px 8px;
+}
+.config .config_bar_list input[type="radio"] {
+    appearance: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+.config .config_bar_list input[type="radio"] {
+    margin: 0px;
+}
+.config .config_bar_list input[type=radio]:focus {
+    outline: 0px;
+}
+.config .config_bar_ul_li_text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    height: 40px;
+    overflow-x: auto;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0px 4px;
+    padding: 3px;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,.05);
+    box-sizing: border-box;
+}
+.config .config_bar_ul li button {
+    background-color: #e6e6e6;
+    color: #727378;
+    height: 23px;
+    font-size: 14px;
+    border-radius: 0.3rem;
+    padding: 1px 5px;
+    margin: 5px;
+    border: none;
+    box-shadow: 0 0 1px #0000004d;
+}
+.config .config_bar_ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    padding-inline-start: 0px;
+    overflow-x: auto;
+    max-width: 100%;
+    margin: 0px;
+    padding: 5px;
+}
+.config .config_bar_ul li {
+    width: 80px;
+    display: grid;
+    margin: 4px 4px;
+    min-width: 100px;
+    box-sizing: border-box;
+}
+.config .config_bar_ul_li_text:hover {
+    background-color: #eae4dc24;
+}
+input[type="radio"]:checked + .config_bar_ul_li_text {
+    background: #41b3e430;
+    border: 1px solid #5e7ce0;
+    color: #5e7ce0;
+}
+.config .config_bar_ul::-webkit-scrollbar {
+    width: 5px;
+    height: 4px;
+}
+.config .config_bar_ul::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: #d7d9e4;
+    border-radius: 8px;
+}
+.config .config_bar_ul::-webkit-scrollbar-button:start:decrement {
+    width: 4px;
+    background-color: transparent;
+}
+.config .config_bar_ul::-webkit-scrollbar-button:end:increment {
+    width: 4px;
+    background-color: transparent;
+}
+.config .config_bar_ul::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+.config .config_bar_ul_li_text::-webkit-scrollbar {
+    width: 5px;
+    height: 7px;
+    background-color: #aaa;
+}
+.config .config_bar_ul_li_text::-webkit-scrollbar-thumb {
+    background-clip: padding-box;
+    background-color: #d7d9e4;
+}
+.config .config_bar_ul_li_text::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+.config .config_bar_list_add_div {
+    display: flex;
+    height: 40px;
+    margin: 4px 2px;
+}
+
+/* 修改菜单 */
+#config_bar_menu {
+    z-index: 400;
+    position: fixed;
+    width: 60px;
+    background: #ffffff;
+    box-shadow: 1px 1px 4px 0px #0000004d;
+    border: 0px solid rgba(0,0,0,0.04);
+    border-radius: 4px;
+    padding: 8px 0;
+}
+.config_bar_menu_item {
+    cursor: pointer;
+    padding: 2px 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: inset 0px 0px 0px 0px #8bb2d9;
+}
+#config_bar_menu_edit:hover {
+    background-color: #00aeec;
+    color: white;
+}
+#config_bar_menu_delete:hover {
+    background-color: #FF5722;
+    color: white;
+}
+
+/* 配置编辑页面 */
+#config_edit_menu {
+    z-index: 300;
+    width: 450px;
+}
+
+/* 黑暗模式选项按钮 */
+.dark-mode-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 350px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.dark-mode-selection label {
+    margin: 8px 0px 8px 8px;
+}
+.dark-mode-selection > * {
+    margin: 6px;
+}
+.dark-mode-selection .OJBetter_setting_menu_label_text {
+    border-radius: 8px;
+    margin-bottom: 0px;
+}
 
 /*确认弹窗*/
-.CFBetter_modal {
+.OJBetter_modal {
     z-index: 600;
     display: grid;
     position: fixed;
@@ -2471,11 +2664,11 @@ span.input_label {
     border: 1px solid #ffffff;
     color: #697e91;
 }
-.CFBetter_modal .buttons{
+.OJBetter_modal .buttons{
     display: flex;
     padding-top: 15px;
 }
-.CFBetter_modal button {
+.OJBetter_modal button {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -2499,16 +2692,16 @@ span.input_label {
     border-color: #009688;
     border: none;
 }
-.CFBetter_modal button.secondary{
+.OJBetter_modal button.secondary{
     background-color:#4DB6AC;
 }
-.CFBetter_modal button:hover{
+.OJBetter_modal button:hover{
     background-color:#4DB6AC;
 }
-.CFBetter_modal button.secondary:hover {
+.OJBetter_modal button.secondary:hover {
     background-color: #80CBC4;
 }
-.CFBetter_modal .help-icon {
+.OJBetter_modal .help-icon {
     margin: 0px 8px 0px 0px;
     height: 1em;
     width: 1em;
@@ -2520,237 +2713,12 @@ span.input_label {
     fill: currentColor;
     font-size: inherit;
 }
-.CFBetter_modal p {
+.OJBetter_modal p {
     margin: 5px 0px;
 }
-/*更新检查*/
-div#update_panel {
-    z-index: 200;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 240px;
-    transform: translate(-50%, -50%);
-    box-shadow: 0px 0px 4px 0px #0000004d;
-    padding: 10px 20px 20px 20px;
-    color: #444242;
-    background-color: #f5f5f5;
-    border: 1px solid #848484;
-    border-radius: 8px;
-}
-#skip_menu {
-    display: flex;
-    margin-top: 10px;
-    justify-content: flex-end;
-    align-items: center;
-}
-#skip_menu .help_tip {
-    margin-right: 5px;
-    margin-left: -5px;
-}
-#skip_menu .help-icon {
-    color: #f44336;
-}
-/* 配置管理面板 */
-.embed-responsive {
-    height: max-content;
-    padding-bottom: 0px;
-}
-.config_bar {
-    height: 70px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-li.tempConfig_add_button {
-    cursor: pointer;
-    height: 40px;
-    border: 1px dashed #BDBDBD;
-    border-radius: 8px;
-    background-color: #fcfbfb36;
-    color: #bdbdbd;
-    font-size: 14px;
-    align-items: center;
-    justify-content: center;
-}
-li.tempConfig_add_button:hover {
-    border: 1px dashed #03A9F4;
-    background-color: #d7f0fb8c;
-    color: #03A9F4;
-}
-.config{
-    width: 100%;
-    margin: 10px 0px;
-}
-.config_bar_list {
-    display: flex;
-    width: 100%;
-    padding-bottom: 2px;
-    border: 1px solid #c5cae9;
-    background-color: #f0f8ff;
-    box-sizing: border-box;
-    border-radius: 0px 0px 8px 8px;
-}
-.config_bar_list input[type="radio"] {
-    appearance: none;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-}
-.config_bar_list input[type="radio"] {
-    margin: 0px;
-}
-.config_bar_list input[type=radio]:focus {
-    outline: 0px;
-}
-label.config_bar_ul_li_text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    height: 40px;
-    overflow-x: auto;
-    font-size: 14px;
-    font-weight: 400;
-    margin: 0px 4px;
-    padding: 3px;
-    border: 1px solid #dedede;
-    border-radius: 10px;
-    box-shadow: 0px 2px 4px 0px rgba(0,0,0,.05);
-    box-sizing: border-box;
-}
-.config_bar_ul li button {
-    background-color: #e6e6e6;
-    color: #727378;
-    height: 23px;
-    font-size: 14px;
-    border-radius: 0.3rem;
-    padding: 1px 5px;
-    margin: 5px;
-    border: none;
-    box-shadow: 0 0 1px #0000004d;
-}
-.config_bar_ul {
-    display: flex;
-    align-items: center;
-    list-style-type: none;
-    padding-inline-start: 0px;
-    overflow-x: auto;
-    max-width: 100%;
-    margin: 0px;
-    padding: 5px;
-}
-.config_bar_ul li {
-    width: 80px;
-    display: grid;
-    margin: 4px 4px;
-    min-width: 100px;
-    box-sizing: border-box;
-}
-label.config_bar_ul_li_text:hover {
-    background-color: #eae4dc24;
-}
-input[type="radio"]:checked + .config_bar_ul_li_text {
-    background: #41b3e430;
-    border: 1px solid #5e7ce0;
-    color: #5e7ce0;
-}
-.config_bar_ul::-webkit-scrollbar {
-    width: 5px;
-    height: 4px;
-}
-.config_bar_ul::-webkit-scrollbar-thumb {
-    background-clip: padding-box;
-    background-color: #d7d9e4;
-    border-radius: 8px;
-}
-.config_bar_ul::-webkit-scrollbar-button:start:decrement {
-    width: 4px;
-    background-color: transparent;
-}
-.config_bar_ul::-webkit-scrollbar-button:end:increment {
-    width: 4px;
-    background-color: transparent;
-}
-.config_bar_ul::-webkit-scrollbar-track {
-    border-radius: 5px;
-}
-label.config_bar_ul_li_text::-webkit-scrollbar {
-    width: 5px;
-    height: 7px;
-    background-color: #aaa;
-}
-label.config_bar_ul_li_text::-webkit-scrollbar-thumb {
-    background-clip: padding-box;
-    background-color: #d7d9e4;
-}
-label.config_bar_ul_li_text::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-}
-.config_bar_list_add_div {
-    display: flex;
-    height: 40px;
-    margin: 4px 2px;
-}
-/* 修改菜单 */
-div#config_bar_menu {
-    z-index: 400;
-    position: fixed;
-    width: 60px;
-    background: #ffffff;
-    box-shadow: 1px 1px 4px 0px #0000004d;
-    border: 0px solid rgba(0,0,0,0.04);
-    border-radius: 4px;
-    padding: 8px 0;
-}
-div.config_bar_menu_item {
-    cursor: pointer;
-    padding: 2px 6px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 32px;
-    color: rgba(0,0,0,0.75);
-    font-size: 14px;
-    font-weight: 500;
-    box-shadow: inset 0px 0px 0px 0px #8bb2d9;
-}
-div#config_bar_menu_edit:hover {
-    background-color: #00aeec;
-    color: white;
-}
-div#config_bar_menu_delete:hover {
-    background-color: #FF5722;
-    color: white;
-}
-/* 配置页面 */
-#config_edit_menu {
-    z-index: 300;
-    width: 450px;
-}
-/* 黑暗模式选项 */
-.dark-mode-selection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 350px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-.dark-mode-selection label {
-    margin: 8px 0px 8px 8px;
-}
-.dark-mode-selection > * {
-    margin: 6px;
-}
-.dark-mode-selection .CFBetter_setting_menu_label_text {
-    border-radius: 8px;
-    margin-bottom: 0px;
-}
+
 /* 右键菜单 */
-.CFBetter_contextmenu {
+.OJBetter_contextmenu {
     z-index: 500;
     display: grid;
     position: absolute;
@@ -2762,13 +2730,13 @@ div#config_bar_menu_delete:hover {
     box-sizing: content-box;
     box-shadow: 0px 0px 0px 2px #eddbdb4d;
 }
-input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
+input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     background: #41e49930;
     border: 1px solid green;
     color: green;
     font-weight: 500;
 }
-.CFBetter_contextmenu_label_text {
+.OJBetter_contextmenu_label_text {
     display: flex;
     border: 1px dashed #80cbc4;
     height: 26px;
@@ -2781,22 +2749,12 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.CFBetter_contextmenu_label_text:hover {
+.OJBetter_contextmenu_label_text:hover {
     color: #F44336;
     border: 1px dashed #009688;
     background-color: #ffebcd;
 }
-/* 版本信息 */
-.versionInfo{
-    display: grid;
-    justify-items: center;
-    color: #00796B;
-    font-size: 16px;
-    padding: 10px;
-}
-.versionInfo>* {
-    margin: 10px 0px;
-}
+
 /* RatingByClist */
 .ratingBadge, html[data-theme=dark] button.ratingBadge{
     display: block;
@@ -2808,13 +2766,15 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     color: #B0BEC5;
     border: 1px solid #cccccc66;
 }
+
 /* 多选翻译 */
 .block_selected{
     box-shadow: 0px 0px 0px 1px #FF9800;
     outline: none;
 }
+
 /* 悬浮菜单 */
-.CFBetter_MiniTranslateButton {
+.OJBetter_MiniTranslateButton {
     z-index: 100;
     display: grid;
     position: absolute;
@@ -2826,19 +2786,21 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     box-shadow: 0px 0px 0px 2px #FFE0B2;
     border-radius: 100%;
 }
-.CFBetter_MiniTranslateButton:hover {
+.OJBetter_MiniTranslateButton:hover {
     cursor: pointer;
     box-shadow: 0px 0px 0px 2px #FFB74D;
 }
+
 /* acmsguru划分块 */
-.CFBetter_acmsguru {
+.OJBetter_acmsguru {
     margin: 0 0 1em!important;
 }
+
 /* 代码提交表单 */
-#CFBetter_SubmitForm.input-output-copier:hover {
+#OJBetter_SubmitForm.input-output-copier:hover {
     background-color: #ffffff00;
 }
-#CFBetter_SubmitForm input[type="number"] {
+#OJBetter_SubmitForm input[type="number"] {
     width: 40px;
     color: #009688;
     appearance: none;
@@ -2847,36 +2809,38 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     border: none;
     background-color: #ffffff00;
 }
-#CFBetter_SubmitForm :focus-visible {
+#OJBetter_SubmitForm :focus-visible {
     outline: none;
 }
-#CFBetter_SubmitForm .topDiv {
+#OJBetter_SubmitForm .topDiv {
     height: 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 0px;
 }
-#CFBetter_SubmitForm .topDiv .topRightDiv {
+#OJBetter_SubmitForm .topDiv .topRightDiv {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 0px;
 }
+
 /* 顶部区域 */
-#CFBetter_SubmitForm .topRightDiv>* {
+#OJBetter_SubmitForm .topRightDiv>* {
     height: 100%;
     box-sizing: border-box;
 }
-#CFBetter_SubmitForm .topRightDiv>button{
+#OJBetter_SubmitForm .topRightDiv>button{
     padding: 0px 8px;
 }
-#CFBetter_SubmitForm .topRightDiv {
+#OJBetter_SubmitForm .topRightDiv {
     display: flex;
     flex-wrap: wrap;
     gap: 0px;
     align-items: center;
 }
+
 /* LSP连接Log */
 #LSPLog{
     width: 500px;
@@ -2908,6 +2872,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 #LSPLog details{
     padding: 2px;
 }
+
 /* 代码编辑器 */
 #OJBetter_editor{
     box-sizing: border-box;
@@ -2941,6 +2906,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     z-index: 100;
     height: 28px;
 }
+
 /* monaco */
 #OJBetter_monaco {
     flex: 1;
@@ -2954,8 +2920,9 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .monaco-hover hr {
     margin: 4px -8px 4px !important;
 }
+
 /* 状态底栏 */
-#CFBetter_statusBar{
+#OJBetter_statusBar{
     height: 22px;
     font-size: 12px;
     color: #757575;
@@ -2964,16 +2931,17 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     padding: 3px;
     box-sizing: border-box;
 }
+
 /* 提交 */
-#CFBetter_submitDiv{
+#OJBetter_submitDiv{
     display: flex;
     padding-top: 15px;
     height: 35px;
 }
-#CFBetter_submitDiv >* {
+#OJBetter_submitDiv >* {
     border-radius: 6px;
 }
-#CFBetter_submitDiv > button {
+#OJBetter_submitDiv > button {
     height: 100%;
     aspect-ratio: 1 / 1;
 }
@@ -2997,8 +2965,9 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     border: 1px solid #ced4da;
     color: #212529;
 }
+
 /* 调试 */
-.CFBetter_loding{
+.OJBetter_loding{
     padding: 6px 0px 0px 5px;
     height: 22px;
 }
@@ -3037,6 +3006,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 #CompilerBox > * {  
     margin: 5px;
 }
+
 /* 自定义样例 */
 #customTestBlock {
     margin-top: 10px;
@@ -3046,21 +3016,17 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     box-sizing: border-box;
     position: relative;
 }
-
 #customTestBlock #customTests{
     border-top: 1px solid #d3d3d3;
     margin: 0px 0px 40px 0px;
 }
-
 #customTestBlock summary {
     cursor: pointer;
     padding: 10px;
 }
-
 #customTestBlock textarea {
     resize: vertical;
 }
-
 .sampleDiv {
     color: #727378;
     background-color: #FAFAFA;
@@ -3069,14 +3035,12 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     box-shadow: inset 0 0 1px #0000004d;
     position: relative;
 }
-
 .dynamicTextarea {
     width: 98%;
     height: 120px;
     margin: 10px 5px;
     border: 1px solid #E0E0E0;
 }
-
 .deleteCustomTest {
     cursor: pointer;
     position: absolute;
@@ -3090,13 +3054,11 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
     background-color: #ffffff00;
     align-items: center;
 }
-
 .deleteCustomTest:hover {
     fill: #EF5350;
     border: 1px solid #ef9a9a;
     background-color: #FFEBEE;
 }
-
 #addCustomTest {
     cursor: pointer;
     position: absolute;
@@ -3111,6 +3073,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 #addCustomTest:hover {
     background-color: #f5f5f5;
 }
+
 /* 调试结果 */
 #statePanel{
     display: none;
@@ -3152,6 +3115,7 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .test-case-judge {
     font-size: 13px;
 }
+
 /* 差异对比 */
 .output_diff {
     color: #5d4037;
@@ -3202,48 +3166,50 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 .diff_note {
     font-size: 10px;
 }
+
 /* 覆盖网站原本的样式 */
 #footer > div:nth-child(7) {
     left: 0px !important;
 }
+
 /* 移动设备 */
 @media (max-device-width: 450px) {
-    button.ojb_btn{
+    .ojb_btn{
         height: 2em;
         font-size: 1.2em;
     }
-    button.ojb_btn.CFBetter_setting{
+    .ojb_btn.OJBetter_setting{
         height: 2.5em;
         font-size: 1em;
     }
-    .CFBetter_setting_menu{
+    .OJBetter_setting_menu{
         width: 90%;
     }
-    .CFBetter_setting_menu label, #darkMode_span, #loaded_span, .CFBetter_setting_menu_label_text,
-    .CFBetter_setting_sidebar li{
+    .OJBetter_setting_menu label, #darkMode_span, #loaded_span, .OJBetter_setting_menu_label_text,
+    .OJBetter_setting_sidebar li{
         font-size: 1em;
     }
     .translate-problem-statement{
         font-size: 1.2em;
     }
-    .CFBetter_modal{
+    .OJBetter_modal{
         font-size: 1.5em;
     }
-    .CFBetter_setting_list, .translate-problem-statement{
+    .OJBetter_setting_list, .translate-problem-statement{
         padding: 0.5em;
     }
-    .CFBetter_setting_menu_label_text{
+    .OJBetter_setting_menu_label_text{
         height: 2.5em;
         padding: 0.5em;
     }
-    #pagBar #jump-input, #pagBar #items-per-page, .CFBetter_modal button{
+    #pagBar #jump-input, #pagBar #items-per-page, .OJBetter_modal button{
         height: 2.5em;
         font-size: 1em;
     }
     .translate-problem-statement p, .translate-problem-statement ul li{
         line-height: 1.5em !important;
     }
-    .CFBetter_contextmenu_label_text{
+    .OJBetter_contextmenu_label_text{
         height: 3em;
         font-size: 1em;
     }
@@ -3600,7 +3566,7 @@ function createDialog(title, content, buttons, renderMarkdown = false) {
         }
 
         const dialog = $(`
-        <dialog class="CFBetter_modal">
+        <dialog class="OJBetter_modal">
             <h2>${title}</h2>
             <div class="content">${contentHtml}</div>
         </dialog>
@@ -3769,7 +3735,7 @@ class LoadingMessage {
      * 创建提示信息元素
      */
     createStatusElement() {
-        const statusElement = $("<div></div>").addClass("alert CFBetter_alert")
+        const statusElement = $("<div></div>").addClass("alert OJBetter_alert")
             .css({
                 "margin": "1em",
                 "text-align": "center",
@@ -4335,7 +4301,7 @@ class ConfigManager {
      */
     constructor(element, prefix, tempConfig, structure, configHTML, allowChoice = true) {
         /** @param 设置面板DIV */
-        this.settingMenuDiv = $('#CFBetter_setting_menu');
+        this.settingMenuDiv = $('#OJBetter_setting_menu');
         this.element = $(element);
         this.prefix = prefix;
         this.tempConfig = tempConfig;
@@ -4597,8 +4563,8 @@ class ConfigManager {
     }
 }
 
-const CFBetter_setting_sidebar_HTML = `
-<div class="CFBetter_setting_sidebar">
+const OJBetter_setting_sidebar_HTML = `
+<div class="OJBetter_setting_sidebar">
     <ul>
         <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="settings:sidebar.basic"></a></li>
         <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="settings:sidebar.localization"></a></li>
@@ -4616,34 +4582,34 @@ const basic_settings_HTML = `
 <div id="basic-settings" class="settings-page active">
     <h3 data-i18n="settings:basic.title"></h3>
     <hr>
-    <div class='CFBetter_setting_list' style="padding: 0px 10px;">
+    <div class='OJBetter_setting_list' style="padding: 0px 10px;">
         <span id="darkMode_span" data-i18n="settings:basic.darkMode.name"></span>
         <div class="dark-mode-selection">
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="dark" />
-                <span class="CFBetter_setting_menu_label_text"
+                <span class="OJBetter_setting_menu_label_text"
                     data-i18n="settings:basic.darkMode.options.dark"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
-                <span class="CFBetter_setting_menu_label_text"
+                <span class="OJBetter_setting_menu_label_text"
                     data-i18n="settings:basic.darkMode.options.light"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="follow" />
-                <span class="CFBetter_setting_menu_label_text"
+                <span class="OJBetter_setting_menu_label_text"
                     data-i18n="settings:basic.darkMode.options.system"></span>
                 <span class="radio-icon"> </span>
             </label>
         </div>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
         <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4651,7 +4617,7 @@ const basic_settings_HTML = `
         </div>
         <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4659,7 +4625,7 @@ const basic_settings_HTML = `
         </div>
         <input type="checkbox" id="commentPaging" name="commentPaging">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4667,7 +4633,7 @@ const basic_settings_HTML = `
         </div>
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4682,7 +4648,7 @@ const l10n_settings_HTML = `
 <div id="l10n_settings" class="settings-page">
     <h3 data-i18n="settings:localization.title"></h3>
     <hr>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localization.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
             <option value="zh">简体中文</option>
@@ -4698,7 +4664,7 @@ const l10n_settings_HTML = `
             <option value="hi">हिन्दी</option>
         </select>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="localizationLanguage" style="display: flex;" data-i18n="settings:localization.websiteLanguageLabel"></label>
         <select id="localizationLanguage" name="localizationLanguage">
             <option value="initial">不改变</option>
@@ -4714,10 +4680,10 @@ const l10n_settings_HTML = `
             <option value="hi">हिन्दी</option>
         </select>
     </div>
-    <div class='CFBetter_setting_list alert_tip'>
+    <div class='OJBetter_setting_list alert_tip'>
         <div data-i18n="[html]settings:localization.notice.1"></div>
     </div>
-    <div class='CFBetter_setting_list alert_tip'>
+    <div class='OJBetter_setting_list alert_tip'>
         <div data-i18n="[html]settings:localization.notice.2"></div>
     </div>
 </div>
@@ -4728,7 +4694,7 @@ const translation_settings_HTML = `
     <h3 data-i18n="settings:translation.title"></h3>
     <hr>
     <h4 data-i18n="settings:translation.options.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="transTargetLang" style="display: flex;" data-i18n="settings:translation.preference.target.title"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4750,32 +4716,32 @@ const translation_settings_HTML = `
     <div id="translationServices">
         <label>
             <input type='radio' name='translation' value='deepl'>
-            <span class='CFBetter_setting_menu_label_text'
+            <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.deepl"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='iflyrec'>
-            <span class='CFBetter_setting_menu_label_text'
+            <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.iflyrec"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='youdao'>
-            <span class='CFBetter_setting_menu_label_text'
+            <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.youdao"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='google'>
-            <span class='CFBetter_setting_menu_label_text'
+            <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.google"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='caiyun'>
-            <span class='CFBetter_setting_menu_label_text'
+            <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.caiyun"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='openai'>
-            <span class='CFBetter_setting_menu_label_text'
+            <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.openai.name">
                 <div class="help_tip">
                     ${helpCircleHTML}
@@ -4787,7 +4753,7 @@ const translation_settings_HTML = `
     </div>
     <hr>
     <h4>DeepL</h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="deepl_type" style="display: flex;" data-i18n="settings:translation.deepl.mode.title"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4799,7 +4765,7 @@ const translation_settings_HTML = `
         </select>
     </div>
     <div id="deepl_config" class="config"></div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="enableEmphasisProtection" data-i18n="settings:translation.deepl.enableEmphasisProtection.title"></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
@@ -4808,7 +4774,7 @@ const translation_settings_HTML = `
         <div class="badge">Official API Only</div>
         <input type="checkbox" id="enableEmphasisProtection" name="enableEmphasisProtection">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="enableLinkProtection" data-i18n="settings:translation.deepl.enableLinkProtection.title"></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
@@ -4820,7 +4786,7 @@ const translation_settings_HTML = `
     <hr>
     <h4>ChatGPT</h4>
     <div id="chatgpt_config" class="config"></div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="openai_isStream" data-i18n="settings:translation.chatgpt.isStream.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4830,7 +4796,7 @@ const translation_settings_HTML = `
     </div>
     <hr>
     <h4 data-i18n="settings:translation.preference.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="comment_translation_choice" style="display: flex;"
             data-i18n="settings:translation.preference.comment_translation_choice.title">
         </label>
@@ -4846,7 +4812,7 @@ const translation_settings_HTML = `
     </div>
     <hr>
     <h4 data-i18n="settings:translation.autoTranslation.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="autoTranslation" data-i18n="settings:translation.autoTranslation.enable"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4854,7 +4820,7 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="autoTranslation" name="autoTranslation">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for='shortTextLength'>
             <div style="display: flex;align-items: center;"
                 data-i18n="settings:translation.autoTranslation.shortTextLength.name"></div>
@@ -4867,7 +4833,7 @@ const translation_settings_HTML = `
         <input type='number' id='shortTextLength' class='no_default' require=true data-i18n="[placeholder]settings:translation.autoTranslation.shortTextLength.placeholder">
         <span data-i18n="settings:translation.autoTranslation.shortTextLength.end"></span>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="allowMixTrans" data-i18n="settings:translation.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4875,7 +4841,7 @@ const translation_settings_HTML = `
             </div>
         </div>
         <input type="checkbox" id="allowMixTrans" name="allowMixTrans">
-        <div class='CFBetter_checkboxs'>
+        <div class='OJBetter_checkboxs'>
             <input type="checkbox" id="deepl" name="mixedTranslation" value="deepl">
             <label for="deepl" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.deepl"></label>
             <input type="checkbox" id="iflyrec" name="mixedTranslation" value="iflyrec">
@@ -4890,7 +4856,7 @@ const translation_settings_HTML = `
     </div>
     <hr>
     <h4 data-i18n="settings:translation.advanced.name"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="comment_translation_mode" style="display: flex;" data-i18n="settings:translation.advanced.mode.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4902,7 +4868,7 @@ const translation_settings_HTML = `
             <option value="2" data-i18n="settings:translation.advanced.mode.options.2"></option>
         </select>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="memoryTranslateHistory" data-i18n="settings:translation.advanced.memory.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4910,7 +4876,7 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="translation_retransAction" style="display: flex;" data-i18n="settings:translation.advanced.retrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4921,7 +4887,7 @@ const translation_settings_HTML = `
             <option value=1 data-i18n="settings:translation.advanced.retrans.options.1"></option>
         </select>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for='transWaitTime'>
             <div style="display: flex;align-items: center;" data-i18n="settings:translation.advanced.transWaitTime.name"></div>
         </label>
@@ -4932,7 +4898,7 @@ const translation_settings_HTML = `
         <input type='number' id='transWaitTime' class='no_default' require=true data-i18n="[placeholder]settings:translation.advanced.transWaitTime.placeholder">
         <span data-i18n="settings:translation.advanced.transWaitTime.end"></span>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="translation_replaceSymbol" style="display: flex;" data-i18n="settings:translation.advanced.replaceSymbol.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4944,7 +4910,7 @@ const translation_settings_HTML = `
             <option value=3 data-i18n="settings:translation.advanced.replaceSymbol.options.3"></option>
         </select>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="filterTextWithoutEmphasis" data-i18n="settings:translation.advanced.filterTextWithoutEmphasis.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4960,12 +4926,12 @@ const clist_rating_settings_HTML = `
     <h3 data-i18n="settings:clist.title"></h3>
     <hr>
     <h4 data-i18n="settings:clist.basics.name"></h4>
-    <div class='CFBetter_setting_list alert_tip'>
+    <div class='OJBetter_setting_list alert_tip'>
         <div>
             <p data-i18n="[html]settings:clist.basics.notice"></p>
         </div>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for='clist_Authorization'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="settings:clist.basics.key.title"></span>
@@ -4980,20 +4946,20 @@ const clist_rating_settings_HTML = `
     </div>
     <hr>
     <h4 data-i18n="settings:clist.displayRating.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="showClistRating_contest"><span data-i18n="settings:clist.displayRating.contest.name"></span></label>
         <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="showClistRating_problem"><span data-i18n="settings:clist.displayRating.problem.name"></span></label>
         <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="showClistRating_problemset"><span data-i18n="settings:clist.displayRating.problemset.name"></span></label>
         <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
     </div>
     <hr>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="RatingHidden"><span data-i18n="settings:clist.spoilerProtection.title"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5009,7 +4975,7 @@ const code_editor_settings_HTML = `
     <h3 data-i18n="settings:codeEditor.title"></h3>
     <hr>
     <h4 data-i18n="settings:codeEditor.basics"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="problemPageCodeEditor"><span
                 data-i18n="settings:codeEditor.problemPageCodeEditor.label"></span></label>
         <div class="help_tip">
@@ -5020,7 +4986,7 @@ const code_editor_settings_HTML = `
     </div>
     <hr>
     <h4 data-i18n="settings:codeEditor.preferences.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="isCodeSubmitConfirm"><span
                 data-i18n="settings:codeEditor.preferences.isCodeSubmitConfirm.label"></span></label>
         <div class="help_tip">
@@ -5029,7 +4995,7 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
                 data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
@@ -5038,7 +5004,7 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
                 data-i18n="settings:codeEditor.preferences.submitButtonPosition.label"></span></label>
         <div class="help_tip">
@@ -5054,22 +5020,22 @@ const code_editor_settings_HTML = `
     <h4 data-i18n="settings:codeEditor.onlineCodeExecution.title"></h4>
     <label>
         <input type='radio' name='compiler' value='official'>
-        <span class='CFBetter_setting_menu_label_text'
+        <span class='OJBetter_setting_menu_label_text'
             data-i18n="settings:codeEditor.onlineCodeExecution.compilerOptions.codeforces"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='wandbox'>
-        <span class='CFBetter_setting_menu_label_text'
+        <span class='OJBetter_setting_menu_label_text'
             data-i18n="settings:codeEditor.onlineCodeExecution.compilerOptions.wandbox"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='rextester'>
-        <span class='CFBetter_setting_menu_label_text'
+        <span class='OJBetter_setting_menu_label_text'
             data-i18n="settings:codeEditor.onlineCodeExecution.compilerOptions.rextester"></span>
     </label>
     <hr>
     <h4 data-i18n="settings:codeEditor.lsp.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="useLSP"><span data-i18n="settings:codeEditor.lsp.useLSP.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5077,7 +5043,7 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for='OJBetter_Bridge_WorkUri'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="settings:codeEditor.lsp.OJBetter_Bridge_WorkUri.label"></span>
@@ -5092,7 +5058,7 @@ const code_editor_settings_HTML = `
         <input type='text' id='OJBetter_Bridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/'
             require=true>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for='OJBetter_Bridge_SocketUrl'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label"
@@ -5110,7 +5076,7 @@ const code_editor_settings_HTML = `
     </div>
     <hr>
     <h4 data-i18n="settings:codeEditor.staticCompletionEnhancement.title"></h4>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="cppCodeTemplateComplete"><span
                 data-i18n="settings:codeEditor.staticCompletionEnhancement.cppCodeTemplateComplete.label"></span></label>
         <div class="help_tip">
@@ -5121,7 +5087,7 @@ const code_editor_settings_HTML = `
     </div>
     <hr>
     <h5 data-i18n="settings:codeEditor.staticCompletionEnhancement.customization"></h5>
-    <div class='CFBetter_setting_list alert_warn'>
+    <div class='OJBetter_setting_list alert_warn'>
         <div>
             <p data-i18n="settings:codeEditor.staticCompletionEnhancement.performanceWarning"></p>
         </div>
@@ -5131,10 +5097,10 @@ const code_editor_settings_HTML = `
 `;
 
 const preference_settings_HTML = `
-<div id="preference-settings" class="settings-page active">
+<div id="preference-settings" class="settings-page">
     <h3 data-i18n="settings:preference.title"></h3>
     <hr>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5142,7 +5108,7 @@ const preference_settings_HTML = `
         </div>
         <input type="checkbox" id="showLoading" name="showLoading">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="hoverTargetAreaDisplay" data-i18n="settings:preference.targetArea.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5150,7 +5116,7 @@ const preference_settings_HTML = `
         </div>
         <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for='iconButtonSize'>
             <div style="display: flex;align-items: center;" data-i18n="settings:preference.iconButtonSize.title"></div>
         </label>
@@ -5168,14 +5134,14 @@ const dev_settings_HTML = `
 <div id="dev-settings" class="settings-page">
     <h3 data-i18n="settings:dev.title"></h3>
     <hr>
-    <div class='CFBetter_setting_list alert_danger'>
+    <div class='OJBetter_setting_list alert_danger'>
         <div>
             <p data-i18n="[html]settings:dev.notice"></p>
         </div>
     </div>
     <hr>
     <h5 data-i18n="settings:dev.load.title"></h5>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="notWaiteLoaded"><span data-i18n="settings:dev.load.notWaiteLoaded.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5185,7 +5151,7 @@ const dev_settings_HTML = `
     </div>
     <hr>
     <h5 data-i18n="settings:dev.l10n.title"></h5>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.l10n.refreshScrpitCache.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5195,7 +5161,7 @@ const dev_settings_HTML = `
     </div>
     <hr>
     <h5 data-i18n="settings:dev.indexedDB.title"></h5>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.indexedDB.clear.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5203,7 +5169,7 @@ const dev_settings_HTML = `
         </div>
         <button type="button" id="indexedDB_clearButton" name="indexedDB_clearButton" data-i18n="settings:dev.indexedDB.clear.button"></button>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.indexedDB.inputOrExport.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5214,7 +5180,7 @@ const dev_settings_HTML = `
     </div>
     <hr>
     <h5 data-i18n="settings:dev.configuration.title"></h5>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.configuration.clear.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5222,7 +5188,7 @@ const dev_settings_HTML = `
         </div>
         <button type="button" id="configuration_clearButton" name="configuration_clearButton" data-i18n="settings:dev.configuration.clear.button"></button>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.configuration.inputOrExport.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5247,10 +5213,10 @@ const about_settings_HTML = `
     </div>
     <hr>
     <h5 data-i18n="settings:about.update.title"></h5>
-    <div id="thanksforDevChannelNotice" class='CFBetter_setting_list alert_info'>
+    <div id="thanksforDevChannelNotice" class='OJBetter_setting_list alert_info'>
         <div data-i18n="[html]settings:about.update.thanksforDevChannelNotice"></div>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="updateChannel"><span data-i18n="settings:about.update.channel.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5261,7 +5227,7 @@ const about_settings_HTML = `
             <option value="dev" data-i18n="settings:about.update.channel.options.dev"></option>
         </select>
     </div>
-    <div class='CFBetter_setting_list'>
+    <div class='OJBetter_setting_list'>
         <label for="updateSource"><span data-i18n="settings:about.update.source.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5276,8 +5242,8 @@ const about_settings_HTML = `
 </div>
 `;
 
-const CFBetter_setting_content_HTML = `
-<div class="CFBetter_setting_content">
+const OJBetter_setting_content_HTML = `
+<div class="OJBetter_setting_content">
     ${basic_settings_HTML}
     ${l10n_settings_HTML}
     ${translation_settings_HTML}
@@ -5291,20 +5257,20 @@ const CFBetter_setting_content_HTML = `
 
 // 设置界面HTML
 const CFBetterSettingMenu_HTML = `
-    <dialog class='CFBetter_setting_menu' id='CFBetter_setting_menu'>
+    <dialog class='OJBetter_setting_menu' id='OJBetter_setting_menu'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
-        <div class="CFBetter_setting_container">
-            ${CFBetter_setting_sidebar_HTML}
-            ${CFBetter_setting_content_HTML}
+        <div class="OJBetter_setting_container">
+            ${OJBetter_setting_sidebar_HTML}
+            ${OJBetter_setting_content_HTML}
         </div>
     </dialog>
 `;
 
 const apiCustomConfigHTML = (prefix) => {
     return `
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <label for='${prefix}_header'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="config:common.advanced.header.label"></span>
@@ -5316,7 +5282,7 @@ const apiCustomConfigHTML = (prefix) => {
         </label>
         <textarea id="${prefix}_header" placeholder='' require = false data-i18n="[placeholder]config:common.advanced.header.placeholder"></textarea>
     </div>
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <label for='${prefix}_data'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="config:common.advanced.data.label"></span>
@@ -5333,7 +5299,7 @@ const apiCustomConfigHTML = (prefix) => {
 
 const apiQuotaConfigHTML = (prefix) => {
     return `
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <label for='${prefix}_quota_url'>
         <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="config:common.quota.url.label"></span>
@@ -5345,7 +5311,7 @@ const apiQuotaConfigHTML = (prefix) => {
         </label>
         <input type='text' id='${prefix}_quota_url' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:common.quota.url.placeholder">
     </div>
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <label for="${prefix}_quota_method" style="display: flex;" data-i18n="config:common.quota.method.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5356,7 +5322,7 @@ const apiQuotaConfigHTML = (prefix) => {
             <option value="post">POST</option>
         </select>
     </div>
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <label for='${prefix}_quota_header'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="config:common.quota.header.label"></span>
@@ -5368,7 +5334,7 @@ const apiQuotaConfigHTML = (prefix) => {
         </label>
         <textarea id="${prefix}_quota_header" placeholder='' require = false data-i18n="[placeholder]config:common.quota.header.placeholder"></textarea>
     </div>
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <label for='${prefix}_quota_data'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="config:common.quota.data.label"></span>
@@ -5380,7 +5346,7 @@ const apiQuotaConfigHTML = (prefix) => {
         </label>
         <textarea id="${prefix}_quota_data" placeholder='' require = false data-i18n="[placeholder]config:common.quota.data.placeholder"></textarea>
     </div>
-    <div class="CFBetter_setting_list">
+    <div class="OJBetter_setting_list">
         <div style="display: flex;align-items: center;">
                 <span class="input_label" data-i18n="config:common.quota.surplus.label"></span>
                 <div class="help_tip">
@@ -5395,21 +5361,21 @@ const apiQuotaConfigHTML = (prefix) => {
 }
 
 const deeplConfigEditHTML = `
-    <dialog class='CFBetter_setting_menu' id='config_edit_menu'>
-    <div class='CFBetter_setting_content'>
+    <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
+    <div class='OJBetter_setting_content'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
         <h4 data-i18n="config:deepl.title"></h4>
         <h5 data-i18n="config:deepl.basic.title"></h5>
         <hr>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='name'>
                 <span class="input_label" data-i18n="config:deepl.basic.name.label"></span>
             </label>
             <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.name.placeholder">
         </div>
-        <div class='CFBetter_setting_list'>
+        <div class='OJBetter_setting_list'>
             <label for="deepl_apiGenre" style="display: flex;" data-i18n="config:deepl.genre.label"></label>
             <div class="help_tip">
                 ${helpCircleHTML}
@@ -5421,7 +5387,7 @@ const deeplConfigEditHTML = `
                 <option value="deeplx">deeplx</option>
             </select>
         </div>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='deepl_key'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label" data-i18n="config:deepl.basic.key.label"></span>
@@ -5433,7 +5399,7 @@ const deeplConfigEditHTML = `
             </label>
             <input type='text' id='deepl_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:deepl.basic.key.placeholder">
         </div>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='deepl_proxy'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label" data-i18n="config:deepl.basic.proxy.label">Proxy API:</span>
@@ -5460,21 +5426,21 @@ const deeplConfigEditHTML = `
 `;
 
 const chatgptConfigEditHTML = `
-    <dialog class='CFBetter_setting_menu' id='config_edit_menu'>
-    <div class='CFBetter_setting_content'>
+    <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
+    <div class='OJBetter_setting_content'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
         <h4 data-i18n="config:chatgpt.title"></h4>
         <h5 data-i18n="config:chatgpt.basic.title"></h5>
         <hr>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='name'>
                 <span class="input_label" data-i18n="config:chatgpt.basic.name.label"></span>
             </label>
             <input type='text' id='name' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.name.placeholder">
         </div>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='chatgpt_model'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label" data-i18n="[html]config:chatgpt.basic.model.label"></span>
@@ -5486,7 +5452,7 @@ const chatgptConfigEditHTML = `
             </label>
             <input type='text' id='chatgpt_model' placeholder='gpt-3.5-turbo' require = false>
         </div>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='chatgpt_key'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label" data-i18n="config:chatgpt.basic.key.label"></span>
@@ -5498,7 +5464,7 @@ const chatgptConfigEditHTML = `
             </label>
             <input type='text' id='chatgpt_key' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:chatgpt.basic.key.placeholder">
         </div>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='chatgpt_proxy'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label" data-i18n="config:chatgpt.basic.proxy.label">Proxy API:</span>
@@ -5525,24 +5491,24 @@ const chatgptConfigEditHTML = `
 `;
 
 const CompletConfigEditHTML = `
-    <dialog class='CFBetter_setting_menu' id='config_edit_menu'>
-    <div class='CFBetter_setting_content'>
+    <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
+    <div class='OJBetter_setting_content'>
         <div class="tool-box">
             <button class="btn-close">×</button>
         </div>
         <h4 data-i18n="config:complet.title"></h4>
         <hr>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='name'>
                 <span class="input_label" data-i18n="config:complet.name.label"></span>
             </label>
             <input type='text' id='name' class='no_default' placeholder='' require = true  data-i18n="[placeholder]config:complet.name.placeholder">
         </div>
-        <div class='CFBetter_setting_list'>
+        <div class='OJBetter_setting_list'>
             <label for="complet_isChoose"><span id="loaded_span" data-i18n="config:complet.choose.label"></span></label>
             <input type="checkbox" id="complet_isChoose" name="complet_isChoose" require = false>
         </div>
-        <div class='CFBetter_setting_list'>
+        <div class='OJBetter_setting_list'>
             <label for="complet_genre" style="display: flex;" data-i18n="config:complet.genre.label"></label>
             <div class="help_tip">
                 ${helpCircleHTML}
@@ -5553,7 +5519,7 @@ const CompletConfigEditHTML = `
                 <option value="ace">ace</option>
             </select>
         </div>
-        <div class='CFBetter_setting_list'>
+        <div class='OJBetter_setting_list'>
             <label for="complet_language" style="display: flex;" data-i18n="config:complet.language.label"></label>
             <select id="complet_language" name="complet_language">
                 <option value="cpp">cpp</option>
@@ -5562,7 +5528,7 @@ const CompletConfigEditHTML = `
                 <option value="c">c</option>
             </select>
         </div>
-        <div class="CFBetter_setting_list">
+        <div class="OJBetter_setting_list">
             <label for='complet_jsonUrl'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label">JSON URL:</span>
@@ -5572,7 +5538,7 @@ const CompletConfigEditHTML = `
                     </div>
                 </div>
             </label>
-            <div class='CFBetter_setting_list alert_warn' data-i18n="[html]config:complet.jsonurl.alert"></div>
+            <div class='OJBetter_setting_list alert_warn' data-i18n="[html]config:complet.jsonurl.alert"></div>
             <input type='text' id='complet_jsonUrl' class='no_default' placeholder='' require = true data-i18n="[placeholder]config:complet.jsonurl.placeholder">
         </div>
         <button id='tempConfig_save' data-i18n="common:save"></button>
@@ -5586,7 +5552,7 @@ const CompletConfigEditHTML = `
 async function initSettingsPanel() {
     // 添加右上角设置按钮
     function insertCFBetterSettingButton(location, method) {
-        $(location)[method](`<button class='ojb_btn CFBetter_setting'>
+        $(location)[method](`<button class='ojb_btn OJBetter_setting'>
         Codeforces Better ${i18next.t('settings', { ns: 'common' })}</button>`);
     }
 
@@ -5594,7 +5560,7 @@ async function initSettingsPanel() {
     insertCFBetterSettingButton(".enter-or-register-box", "after");
     if (OJBetter.typeOfPage.is_completeProblemset) insertCFBetterSettingButton(".lang", "before");
 
-    const $settingBtns = $(".CFBetter_setting");
+    const $settingBtns = $(".OJBetter_setting");
     $settingBtns.click(() => {
         $settingBtns.prop("disabled", true).addClass("open");
 
@@ -5604,11 +5570,11 @@ async function initSettingsPanel() {
 
         elementLocalize(settingMenu); // 加载i18n
         OJB_showModal(settingMenu);
-        OJB_addDraggable($('#CFBetter_setting_menu')); // 窗口支持拖拽
+        OJB_addDraggable($('#OJBetter_setting_menu')); // 窗口支持拖拽
 
         // help帮助悬浮窗位置更新
         $(document).on('mouseenter', '.help-icon', function (event) {
-            var menuOffset = $('.CFBetter_setting_menu:last').offset();
+            var menuOffset = $('.OJBetter_setting_menu:last').offset();
             var mouseX = event.pageX - menuOffset.left;
             var mouseY = event.pageY - menuOffset.top;
 
@@ -5619,9 +5585,9 @@ async function initSettingsPanel() {
         });
 
         // 选项卡切换
-        $('.CFBetter_setting_sidebar a').click(function (event) {
+        $('.OJBetter_setting_sidebar a').click(function (event) {
             event.preventDefault();
-            $('.CFBetter_setting_sidebar a').removeClass('active');
+            $('.OJBetter_setting_sidebar a').removeClass('active');
             $('.settings-page').removeClass('active');
             $(this).addClass('active');
             const targetPageId = $(this).attr('href').substring(1);
@@ -5789,7 +5755,7 @@ async function initSettingsPanel() {
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
-        $('.CFBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
+        $('.OJBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
             if (OJBetter.translation.auto.mixTrans.servers.indexOf($(this).val()) > -1) {
                 $(this).prop('checked', true);
             }
@@ -5799,7 +5765,7 @@ async function initSettingsPanel() {
             var selectedLang = $(this).val();
             updateRadioButtonsAvailability('#translationServices', selectedLang);
             updateSelectOptionsAvailability('#comment_translation_choice', selectedLang);
-            updateCheckboxesAvailability('.CFBetter_checkboxs', selectedLang);
+            updateCheckboxesAvailability('.OJBetter_checkboxs', selectedLang);
         });
         $('#transTargetLang').val(GM_getValue("transTargetLang"));
         $('#transTargetLang').change();
@@ -5843,7 +5809,7 @@ async function initSettingsPanel() {
         $('#updateChannel').change();
 
         // 关闭
-        const $settingMenu = $(".CFBetter_setting_menu");
+        const $settingMenu = $(".OJBetter_setting_menu");
         $settingMenu.on("click", ".btn-close", async () => {
             // 设置的数据
             const settings = {
@@ -5870,7 +5836,7 @@ async function initSettingsPanel() {
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
                 mixedTranslation: (() => {
                     let mixedTranslation = [];
-                    $('.CFBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
+                    $('.OJBetter_checkboxs').find('input[type="checkbox"][name="mixedTranslation"]').each(function () {
                         if ($(this).is(":checked")) {
                             mixedTranslation.push($(this).val());
                         }
@@ -5963,7 +5929,7 @@ async function initSettingsPanel() {
                     {
                         let selectedIndex = $('input[name="translation"]:checked').length > 0;
                         if (!selectedIndex) {
-                            $('.CFBetter_setting_sidebar a').removeClass('active');
+                            $('.OJBetter_setting_sidebar a').removeClass('active');
                             $('.settings-page').removeClass('active');
                             $('#sidebar-translation-settings').addClass('active');
                             $('#translation-settings').addClass('active');
@@ -6733,11 +6699,11 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         let is_comment = button.IsCommentButton();
 
         // 移除旧的
-        if (!$(e.target).closest('.CFBetter_contextmenu').length) {
-            $('.CFBetter_contextmenu').remove();
+        if (!$(e.target).closest('.OJBetter_contextmenu').length) {
+            $('.OJBetter_contextmenu').remove();
         }
 
-        var menu = $('<div class="CFBetter_contextmenu"></div>');
+        var menu = $('<div class="OJBetter_contextmenu"></div>');
         var translations = [
             { value: 'deepl', name: i18next.t('translation.options.services.deepl', { ns: 'settings' }) },
             { value: 'iflyrec', name: i18next.t('translation.options.services.iflyrec', { ns: 'settings' }) },
@@ -6753,13 +6719,13 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
 
         if (is_comment) {
-            var label = $('<label><input type="radio" name="translation" value="0"><span class="CFBetter_contextmenu_label_text">跟随首选项</span></label>');
+            var label = $('<label><input type="radio" name="translation" value="0"><span class="OJBetter_contextmenu_label_text">跟随首选项</span></label>');
             menu.append(label);
         }
         translations.forEach(function (translation) {
             if (supportsTargetLanguage(translation.value, OJBetter.translation.targetLang)) {
                 var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
-                <span class="CFBetter_contextmenu_label_text">${translation.name}</span></label>`);
+                <span class="OJBetter_contextmenu_label_text">${translation.name}</span></label>`);
                 menu.append(label);
             }
         });
@@ -6783,13 +6749,13 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
                 OJBetter.translation.choice = $('input[name="translation"]:checked').val();
                 GM_setValue("translation", OJBetter.translation.choice);
             }
-            $('.CFBetter_contextmenu').remove();
+            $('.OJBetter_contextmenu').remove();
         });
 
         // 点击区域外关闭菜单
         function handleClick(event) {
-            if (!$(event.target).closest('.CFBetter_contextmenu').length) {
-                $('.CFBetter_contextmenu').remove();
+            if (!$(event.target).closest('.OJBetter_contextmenu').length) {
+                $('.OJBetter_contextmenu').remove();
                 $(document).off('change', 'input[name="translation"]');
             } else {
                 $(document).one('click', handleClick);
@@ -6814,7 +6780,7 @@ async function transTask(button, element, type, is_comment, translation) {
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        var pElements = $(element).find("p:not(li p), li, .CFBetter_acmsguru");
+        var pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
@@ -6822,7 +6788,7 @@ async function transTask(button, element, type, is_comment, translation) {
         }
     } else if (OJBetter.translation.comment.transMode == "2") {
         // 选段翻译
-        var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .CFBetter_acmsguru");
+        var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
@@ -6918,19 +6884,19 @@ async function multiChoiceTranslation() {
         }
     `);
 
-    $(document).on('click', 'p, li:not(:has(.comment)), .CFBetter_acmsguru', function (e) {
+    $(document).on('click', 'p, li:not(:has(.comment)), .OJBetter_acmsguru', function (e) {
         let $this = $(this);
         e.stopPropagation();
         if ($this.hasClass('block_selected')) {
             $this.removeClass('block_selected');
             // 移除对应的按钮 
-            $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('CFBetter_p_id'));
+            $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('OJBetter_p_id'));
         } else {
             let id = getRandomNumber(8);
-            $this.attr('CFBetter_p_id', id);
+            $this.attr('OJBetter_p_id', id);
             $this.addClass('block_selected');
             // 添加按钮 
-            let menu = $(`<div class="CFBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
+            let menu = $(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
                 });
@@ -6952,7 +6918,7 @@ async function multiChoiceTranslation() {
                 $this.data("resultData", result);
                 $this.removeClass('block_selected');
                 // 移除对应的按钮 
-                $('.CFBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
+                $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
                 $this.attr('translated', '1'); // 标记已翻译
             });
         }
@@ -6985,7 +6951,7 @@ async function acmsguruReblock() {
         $('.ttypography').children().each(function () {
             var html = $(this).html();
             var replacedHtml = html.replace(/(?:<\/div>|<br><br>)(?<text>[\s\S]+?)(?=<br><br>)/g,
-                '<div align="left" class="CFBetter_acmsguru" >$<text></div>');
+                '<div align="left" class="OJBetter_acmsguru" >$<text></div>');
             $(this).html(replacedHtml);
         });
     }
@@ -7114,7 +7080,7 @@ async function addConversionButton() {
     });
 
     // 添加按钮到弹窗alert部分
-    $(".alert:not(.CFBetter_alert)").each(function () {
+    $(".alert:not(.OJBetter_alert)").each(function () {
         let id = "_alert_" + getRandomNumber(8);
         let panel = addButtonPanel(this, id, "child_level", true);
         addButtonWithTranslation(panel.translateButton, this, id, "child_level");
@@ -8829,8 +8795,8 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
 
 // 获取代码提交页的HTML元素
 async function getSubmitHTML(submitUrl) {
-    const cacheKey = 'CFBetter_CloneOriginalHTML';
-    const cookieKey = 'CFBetter_CloneOriginalHTML_time';
+    const cacheKey = 'OJBetter_CloneOriginalHTML';
+    const cookieKey = 'OJBetter_CloneOriginalHTML_time';
     if (getCookie(cookieKey) === '1') {
         // 存在缓存
         CloneOriginalHTML(submitUrl, cacheKey);
@@ -8875,7 +8841,7 @@ async function getCode(url) {
 // 创建代码编辑调试表单元素
 async function createCodeEditorForm(submitUrl, cloneHTML) {
     // 表单
-    let formDiv = $('<form method="post" id="CFBetter_SubmitForm" class="input-output-copier"></form>');
+    let formDiv = $('<form method="post" id="OJBetter_SubmitForm" class="input-output-copier"></form>');
     $('.ttypography').after(formDiv);
     formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.cf_csrf_token);
 
@@ -8943,7 +8909,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     formDiv.append(customTestDiv);
 
     // 调试/提交
-    let submitDiv = $('<div id="CFBetter_submitDiv"></div>');
+    let submitDiv = $('<div id="OJBetter_submitDiv"></div>');
     let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
     submitDiv.append(CompilerArgsInput);
 
@@ -9075,14 +9041,14 @@ async function createMonacoEditor(language, form, support) {
     var initialized = false; // 是否已初始化
     var serverInfo; // 服务器返回的支持信息
     var model; // model
-    var CFBetter_monaco = {};
-    window.CFBetter_monaco = CFBetter_monaco; // 全局方法
+    var OJBetter_monaco = {};
+    window.OJBetter_monaco = OJBetter_monaco; // 全局方法
 
     /**
      * 一些工具函数
      */
     // 将lsp格式的rang转换为Monaco格式
-    CFBetter_monaco.lspRangeToMonacoRange = function (range) {
+    OJBetter_monaco.lspRangeToMonacoRange = function (range) {
         const { start, end } = range;
         return new monaco.Range(
             start.line + 1,
@@ -9092,7 +9058,7 @@ async function createMonacoEditor(language, form, support) {
         );
     };
     // 将Monaco格式的rang转为lsp格式
-    CFBetter_monaco.MonacoRangeTolspRange = function (range) {
+    OJBetter_monaco.MonacoRangeTolspRange = function (range) {
         return {
             start: {
                 line: range.startLineNumber - 1,
@@ -9105,14 +9071,14 @@ async function createMonacoEditor(language, form, support) {
         };
     };
     // 将Monaco格式的position转为lsp格式的
-    CFBetter_monaco.MonacoPositionTolspPosition = function (position) {
+    OJBetter_monaco.MonacoPositionTolspPosition = function (position) {
         return {
             line: position.lineNumber - 1,
             character: position.column - 1,
         };
     };
     // 将Monaco格式的severity转为lsp格式的
-    CFBetter_monaco.MonacoSeverityTolspSeverity = function (severity) {
+    OJBetter_monaco.MonacoSeverityTolspSeverity = function (severity) {
         switch (severity) {
             case 8:
                 return 1;
@@ -9127,7 +9093,7 @@ async function createMonacoEditor(language, form, support) {
         }
     };
     // 将lsp格式的severity转为Monaco格式的
-    CFBetter_monaco.lspSeverityToMonacoSeverity = function (severity) {
+    OJBetter_monaco.lspSeverityToMonacoSeverity = function (severity) {
         switch (severity) {
             case 1:
                 return 8;
@@ -9142,7 +9108,7 @@ async function createMonacoEditor(language, form, support) {
         }
     };
     // 收集Monaco数据中的rang数据
-    CFBetter_monaco.CollectRange = function (item) {
+    OJBetter_monaco.CollectRange = function (item) {
         return {
             startLineNumber: item.startLineNumber,
             startColumn: item.startColumn,
@@ -9151,7 +9117,7 @@ async function createMonacoEditor(language, form, support) {
         };
     };
     // 收集Monaco position数据中的rang数据
-    CFBetter_monaco.CollectRangeByPosition = function (item) {
+    OJBetter_monaco.CollectRangeByPosition = function (item) {
         var word = model.getWordUntilPosition(item);
         return {
             startLineNumber: item.lineNumber,
@@ -9161,7 +9127,7 @@ async function createMonacoEditor(language, form, support) {
         };
     };
     // 将lsp格式的Edit转换为Monaco格式
-    CFBetter_monaco.lspEditToMonacoEdit = function (edit) {
+    OJBetter_monaco.lspEditToMonacoEdit = function (edit) {
         const edits = [];
 
         if (language == "python") {
@@ -9169,7 +9135,7 @@ async function createMonacoEditor(language, form, support) {
                 for (const item2 of item1.edits) {
                     const newElement = {
                         textEdit: {
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item2.range),
                             text: item2.newText,
                         },
                         resource: monaco.Uri.parse(item1.textDocument.uri),
@@ -9183,7 +9149,7 @@ async function createMonacoEditor(language, form, support) {
                 edit.changes[item1].forEach((item2) => {
                     const newElement = {
                         textEdit: {
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item2.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item2.range),
                             text: item2.newText,
                         },
                         resource: uri,
@@ -9198,7 +9164,7 @@ async function createMonacoEditor(language, form, support) {
                 for (const item of arr) {
                     const newElement = {
                         textEdit: {
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             text: item.newText,
                         },
                         resource: monaco.Uri.parse(key),
@@ -9246,7 +9212,7 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 添加快捷功能
      */
-    (CFBetter_monaco.addShortCuts = async () => {
+    (OJBetter_monaco.addShortCuts = async () => {
         // 从配置信息更新字体大小
         OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
@@ -9479,19 +9445,19 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 注册本地自动补全
      */
-    (CFBetter_monaco.RegisterLocalComplet = async () => {
+    (OJBetter_monaco.RegisterLocalComplet = async () => {
         // 补全器注册函数
         function registMyCompletionItemProvider(language, genre, rule) {
             if (genre == "monaco") {
                 monaco.languages.registerCompletionItemProvider(language, {
                     provideCompletionItems: function (model, position) {
-                        return parseMonacoCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
+                        return parseMonacoCompleter(rule, OJBetter_monaco.CollectRangeByPosition(position));
                     }
                 })
             } else if (genre == "ace") {
                 monaco.languages.registerCompletionItemProvider(language, {
                     provideCompletionItems: function (model, position) {
-                        return parseAceCompleter(rule, CFBetter_monaco.CollectRangeByPosition(position));
+                        return parseAceCompleter(rule, OJBetter_monaco.CollectRangeByPosition(position));
                     }
                 })
             }
@@ -9575,7 +9541,7 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 添加状态底栏
      */
-    var statusBar = $('<div id="CFBetter_statusBar">');
+    var statusBar = $('<div id="OJBetter_statusBar">');
     form.editorDiv.append(statusBar);
 
     /**
@@ -9598,14 +9564,14 @@ async function createMonacoEditor(language, form, support) {
             lspStateButton.setButtonState('success', i18next.t('lsp.connected', { ns: 'codeEditor' }));
             pushLSPLogMessage("info", "Initialization 完成");
             serverInfo = message.result; // 存下服务器支持信息
-            CFBetter_monaco.openDocRequest(); // 打开文档
+            OJBetter_monaco.openDocRequest(); // 打开文档
             if (!OJBetter.monaco.setting.language.includes(language)) {
                 OJBetter.monaco.setting.language.push(language);
-                CFBetter_monaco.RegistrationAfterInit(); // 注册语言及功能
+                OJBetter_monaco.RegistrationAfterInit(); // 注册语言及功能
             } else {
                 location.reload(); // 这里有问题，先贴个补丁
             }
-            CFBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
+            OJBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
         } else if (message.id === 0 && message.error) {
             pushLSPLogMessage("warn", "Initialization 失败");
         } else if (message.id !== undefined && responseHandlers[message.id]) {
@@ -9614,10 +9580,10 @@ async function createMonacoEditor(language, form, support) {
             delete responseHandlers[message.id]; // 删除已处理的事件触发函数
         } else if (message.method == "textDocument/publishDiagnostics") {
             // 接收代码诊断推送
-            CFBetter_monaco.updateMarkers(message);
+            OJBetter_monaco.updateMarkers(message);
         } else if (message.method == "workspace/applyEdit") {
             // 应用服务器推送的更改
-            CFBetter_monaco.applyEdit(message);
+            OJBetter_monaco.applyEdit(message);
         }
     };
     languageSocket.onerror = (error) => {
@@ -9732,7 +9698,7 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 发送初始化请求
      */
-    CFBetter_monaco.Initialize = () => {
+    OJBetter_monaco.Initialize = () => {
         //初始化initialize
         const capabilities = {
             workspace: {
@@ -9945,7 +9911,7 @@ async function createMonacoEditor(language, form, support) {
         languageSocket.send(JSON.stringify(initializeRequest));
 
         // 打开文档函数
-        CFBetter_monaco.openDocRequest = function () {
+        OJBetter_monaco.openDocRequest = function () {
             const initializ = {
                 jsonrpc: "2.0",
                 method: "initialized",
@@ -9975,7 +9941,7 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 注册语言及功能
      */
-    CFBetter_monaco.RegistrationAfterInit = () => {
+    OJBetter_monaco.RegistrationAfterInit = () => {
         // 注册语言
         monaco.languages.register({ id: language });
 
@@ -10011,7 +9977,7 @@ async function createMonacoEditor(language, form, support) {
                         version: model.getVersionId(),
                     },
                     contentChanges: event.changes.map((change) => ({
-                        range: CFBetter_monaco.MonacoRangeTolspRange(change.range),
+                        range: OJBetter_monaco.MonacoRangeTolspRange(change.range),
                         rangeLength: change.rangeLength,
                         text: change.text,
                     })),
@@ -10031,7 +9997,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                         context: {
                             triggerKind: context.triggerKind + 1, // 这里要+1，两边的定义不一样。。。
                             triggerCharacter: context.triggerCharacter,
@@ -10059,7 +10025,7 @@ async function createMonacoEditor(language, form, support) {
                                     additionalTextEdits: additionalTextEdits
                                         ? additionalTextEdits.map(({ newText, range }) => ({
                                             text: newText,
-                                            range: CFBetter_monaco.lspRangeToMonacoRange(range),
+                                            range: OJBetter_monaco.lspRangeToMonacoRange(range),
                                         }))
                                         : [],
                                     documentation: documentation ? documentation.value : "",
@@ -10076,8 +10042,8 @@ async function createMonacoEditor(language, form, support) {
                                     sortText,
                                     range: textEdit
                                         ? textEdit.range
-                                            ? CFBetter_monaco.lspRangeToMonacoRange(textEdit.range)
-                                            : CFBetter_monaco.lspRangeToMonacoRange(textEdit.insert)
+                                            ? OJBetter_monaco.lspRangeToMonacoRange(textEdit.range)
+                                            : OJBetter_monaco.lspRangeToMonacoRange(textEdit.insert)
                                         : null,
                                 })
                             ),
@@ -10100,16 +10066,16 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        range: CFBetter_monaco.MonacoRangeTolspRange(range),
+                        range: OJBetter_monaco.MonacoRangeTolspRange(range),
                         context: {
                             diagnostics: context.markers.map((item) => ({
-                                range: CFBetter_monaco.MonacoRangeTolspRange({
+                                range: OJBetter_monaco.MonacoRangeTolspRange({
                                     startLineNumber: item.startLineNumber,
                                     startColumn: item.startColumn,
                                     endLineNumber: item.endLineNumber,
                                     endColumn: item.endColumn,
                                 }),
-                                severity: CFBetter_monaco.MonacoSeverityTolspSeverity(
+                                severity: OJBetter_monaco.MonacoSeverityTolspSeverity(
                                     item.severity
                                 ),
                                 code: item.code,
@@ -10120,7 +10086,7 @@ async function createMonacoEditor(language, form, support) {
                                     ? item.relatedInformation.map((item) => ({
                                         location: {
                                             uri: item.resource.toString(),
-                                            range: CFBetter_monaco.MonacoRangeTolspRange({
+                                            range: OJBetter_monaco.MonacoRangeTolspRange({
                                                 startLineNumber: item.startLineNumber,
                                                 startColumn: item.startColumn,
                                                 endLineNumber: item.endLineNumber,
@@ -10159,19 +10125,19 @@ async function createMonacoEditor(language, form, support) {
                                     ? item.diagnostics.map((item) => ({
                                         code: item.code,
                                         message: item.message,
-                                        range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
-                                        severity: CFBetter_monaco.lspSeverityToMonacoSeverity(
+                                        range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
+                                        severity: OJBetter_monaco.lspSeverityToMonacoSeverity(
                                             item.severity
                                         ),
                                         source: item.source,
                                     }))
                                     : null,
                                 edit: item.edit
-                                    ? CFBetter_monaco.lspEditToMonacoEdit(item.edit)
+                                    ? OJBetter_monaco.lspEditToMonacoEdit(item.edit)
                                     : item.arguments
                                         ? {
                                             edits: item.arguments.flatMap(
-                                                (item1) => CFBetter_monaco.lspEditToMonacoEdit(item1).edits
+                                                (item1) => OJBetter_monaco.lspEditToMonacoEdit(item1).edits
                                             ),
                                         }
                                         : null,
@@ -10197,7 +10163,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                     },
                 };
 
@@ -10209,7 +10175,7 @@ async function createMonacoEditor(language, form, support) {
                         if (!result) return resolve(null);
                         const Hover = {
                             range: result.range
-                                ? CFBetter_monaco.lspRangeToMonacoRange(result.range)
+                                ? OJBetter_monaco.lspRangeToMonacoRange(result.range)
                                 : new monaco.Range(
                                     position.lineNumber,
                                     position.column,
@@ -10246,7 +10212,7 @@ async function createMonacoEditor(language, form, support) {
                                 textDocument: {
                                     uri: model.uri.toString(),
                                 },
-                                range: CFBetter_monaco.MonacoRangeTolspRange(range),
+                                range: OJBetter_monaco.MonacoRangeTolspRange(range),
                             },
                         };
 
@@ -10289,7 +10255,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                     },
                 };
 
@@ -10300,7 +10266,7 @@ async function createMonacoEditor(language, form, support) {
 
                         if (result.length == 0) return resolve(null);
                         const definition = result.map((item) => ({
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             uri: monaco.Uri.parse(item.uri), //
                         }));
                         pushLSPLogMessage("info", `definition 传递给monaco的数据↓`, definition);
@@ -10325,7 +10291,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                     },
                 };
 
@@ -10337,7 +10303,7 @@ async function createMonacoEditor(language, form, support) {
                         if (result.length == 0) return resolve([]);
 
                         const references = result.map((item) => ({
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             uri: monaco.Uri.parse(item.uri), //
                         }));
                         pushLSPLogMessage("info", `references 传递给monaco的数据↓`, references);
@@ -10359,7 +10325,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                     },
                 };
 
@@ -10370,7 +10336,7 @@ async function createMonacoEditor(language, form, support) {
 
                         if (!result || result.length == 0) return resolve([]);
                         const highlights = result.map((item) => ({
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             kind: item.kind,
                         }));
                         pushLSPLogMessage("info",
@@ -10408,7 +10374,7 @@ async function createMonacoEditor(language, form, support) {
                             if (!result) return resolve(null);
                             const links = {
                                 links: result.map((item) => ({
-                                    range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                                    range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                                     url: item.target.toString(),
                                     tooltip: item.tooltip ? item.tooltip : null,
                                 })),
@@ -10441,7 +10407,7 @@ async function createMonacoEditor(language, form, support) {
                         pushLSPLogMessage("info", `formatting 当前收到的数据↓`, response);
 
                         const TextEdit = result.map((edit) => ({
-                            range: CFBetter_monaco.lspRangeToMonacoRange(edit.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(edit.range),
                             text: edit.newText,
                         }));
                         pushLSPLogMessage("info", `formatting 传递给monaco的数据↓`, TextEdit);
@@ -10462,7 +10428,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        range: CFBetter_monaco.MonacoRangeTolspRange(range),
+                        range: OJBetter_monaco.MonacoRangeTolspRange(range),
                         options,
                     },
                 };
@@ -10474,7 +10440,7 @@ async function createMonacoEditor(language, form, support) {
 
                         if (!result || result.length == 0) return resolve([]);
                         const edits = result.map((item) => ({
-                            range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                            range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             text: item.newText,
                         }));
                         pushLSPLogMessage("info", `rangeFormatting 传递给monaco的数据↓`, edits);
@@ -10495,7 +10461,7 @@ async function createMonacoEditor(language, form, support) {
                         textDocument: {
                             uri: model.uri.toString(),
                         },
-                        position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                        position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                         newName: newName,
                     },
                 };
@@ -10505,7 +10471,7 @@ async function createMonacoEditor(language, form, support) {
                         const result = response.result;
                         pushLSPLogMessage("info", `rename 当前收到的数据↓`, response);
 
-                        const rename = CFBetter_monaco.lspEditToMonacoEdit(result);
+                        const rename = OJBetter_monaco.lspEditToMonacoEdit(result);
                         pushLSPLogMessage("info", `rename 传递给monaco的数据↓`, rename);
                         resolve(rename);
                     });
@@ -10613,7 +10579,7 @@ async function createMonacoEditor(language, form, support) {
                             textDocument: {
                                 uri: model.uri.toString(),
                             },
-                            position: CFBetter_monaco.MonacoPositionTolspPosition(position),
+                            position: OJBetter_monaco.MonacoPositionTolspPosition(position),
                             ch,
                             options,
                         },
@@ -10627,7 +10593,7 @@ async function createMonacoEditor(language, form, support) {
                             if (!result || result.length == 0) return resolve([]);
 
                             const edits = result.map((item) => ({
-                                range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                                range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                                 text: item.newText,
                             }));
                             pushLSPLogMessage("info", `onTypeFormatting 传递给monaco的数据↓`, edits);
@@ -10641,10 +10607,10 @@ async function createMonacoEditor(language, form, support) {
     /**
      * 被动式接收处理
      */
-    CFBetter_monaco.PassiveReceiveHandler = () => {
+    OJBetter_monaco.PassiveReceiveHandler = () => {
 
         // "实时代码诊断"
-        CFBetter_monaco.updateMarkers = function (message) {
+        OJBetter_monaco.updateMarkers = function (message) {
             const params = message.params;
             pushLSPLogMessage("info", `Markers 当前收到的数据↓`, message);
 
@@ -10652,17 +10618,17 @@ async function createMonacoEditor(language, form, support) {
             const markers = params.diagnostics.map((item1) => ({
                 code: item1.code,
                 message: item1.message,
-                ...CFBetter_monaco.lspRangeToMonacoRange(item1.range),
+                ...OJBetter_monaco.lspRangeToMonacoRange(item1.range),
                 relatedInformation: item1.relatedInformation
                     ? item1.relatedInformation.map((item2) => ({
                         ...(item2.location.range
-                            ? CFBetter_monaco.lspRangeToMonacoRange(item2.location.range)
-                            : CFBetter_monaco.lspRangeToMonacoRange(item2.location)),
+                            ? OJBetter_monaco.lspRangeToMonacoRange(item2.location.range)
+                            : OJBetter_monaco.lspRangeToMonacoRange(item2.location)),
                         message: item2.message,
                         resource: monaco.Uri.parse(item2.location.uri),
                     }))
                     : null,
-                severity: CFBetter_monaco.lspSeverityToMonacoSeverity(item1.severity),
+                severity: OJBetter_monaco.lspSeverityToMonacoSeverity(item1.severity),
                 source: item1.source,
             }));
 
@@ -10680,11 +10646,11 @@ async function createMonacoEditor(language, form, support) {
                     errorCount++;
                 }
             }
-            $('#CFBetter_statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
+            $('#OJBetter_statusBar').text(`Warnings: ${warningCount}, Errors: ${errorCount}`);
         };
 
         // "应用服务器推送的更改"(代码修复)
-        CFBetter_monaco.applyEdit = function (message) {
+        OJBetter_monaco.applyEdit = function (message) {
             const params = message.params;
             pushLSPLogMessage("info", `applyEdit 当前收到的数据↓`, message);
 
@@ -10692,7 +10658,7 @@ async function createMonacoEditor(language, form, support) {
             const operations = Object.values(params.edit.changes)
                 .flat()
                 .map((item) => ({
-                    range: CFBetter_monaco.lspRangeToMonacoRange(item.range),
+                    range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                     text: item.newText,
                 }));
 
@@ -10702,7 +10668,7 @@ async function createMonacoEditor(language, form, support) {
     }
 
     if (!languageSocketState) await waitForLanguageSocketState();
-    CFBetter_monaco.Initialize();
+    OJBetter_monaco.Initialize();
 }
 
 // 语言更改
@@ -10723,7 +10689,7 @@ function changeMonacoLanguage(form) {
     // 移除相关元素
     form.topRightDiv.empty();
     $('#LSPLog').remove();
-    $('#CFBetter_statusBar').remove();
+    $('#OJBetter_statusBar').remove();
     // 创建新的编辑器
     if (nowSelect in value_monacoLanguageMap) {
         let language = value_monacoLanguageMap[nowSelect];
@@ -11543,8 +11509,8 @@ async function addProblemPageCodeEditor() {
                 ]
             ); //提交确认
             if (submit) {
-                submitButton.after(`<img class="CFBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
-                $('#CFBetter_SubmitForm').submit();
+                submitButton.after(`<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
+                $('#OJBetter_SubmitForm').submit();
             } else {
                 submitButton.addClass('disabled');
                 setTimeout(function () {
@@ -11552,7 +11518,7 @@ async function addProblemPageCodeEditor() {
                 }, 300);
             }
         } else {
-            $('#CFBetter_SubmitForm').submit();
+            $('#OJBetter_SubmitForm').submit();
         }
     });
 }
