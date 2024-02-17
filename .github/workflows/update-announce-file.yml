@@ -20,6 +20,13 @@ jobs:
       - name: Convert Markdown to JSON
         run: python .github/scripts/update-announce.py
 
+      - name: Sync with remote main branch
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git fetch origin main
+          git rebase origin/main
+          
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
