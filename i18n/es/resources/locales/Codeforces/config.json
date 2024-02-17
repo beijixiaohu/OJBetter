@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "alto nivel",
+            "title": "高级",
             "header": {
                 "label": "Cabecera personalizada",
                 "placeholder": "(Opcional) Aquí puede rellenar pares clave-valor adicionales para añadirlos a la cabecera de la solicitud.",
@@ -55,7 +55,7 @@
                 "placeholder": "Por favor, dé un nombre a esta configuración"
             },
             "key": {
-                "label": "CLAVE.",
+                "label": "KEY:",
                 "placeholder": "Por favor, introduzca la CLAVE",
                 "tipText": "<p>Necesita introducir su propia clave DeepL,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">sitio web oficial</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>Déjelo en blanco para que aparezca por defecto：gpt-3.5-turbo</p><p>Para obtener una lista de modelos, consulte<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentación oficial de OpenAI</a></p><p><strong>Además, si está utilizando la API proxy proporcionada por el proveedor de servicios, compruebe si el proveedor de servicios admite el modelo correspondiente</strong></p>"
             },
             "key": {
-                "label": "CLAVE.",
+                "label": "KEY:",
                 "placeholder": "Por favor, introduzca la CLAVE",
                 "tipText": "<p>Debe introducir su propia clave OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">sitio web oficial</a></p><p><b>Si está utilizando la API proxy proporcionada por el proveedor de servicios, debe rellenar la clave proporcionada por el proveedor de servicios</b></p>."
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "alto nivel",
+            "title": "高级",
             "header": {
                 "label": "Cabecera personalizada",
                 "placeholder": "(Opcional) Aquí puede rellenar pares clave-valor adicionales para añadirlos a la cabecera de la solicitud.",
