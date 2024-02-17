@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "Advanced",
+            "title": "高级",
             "header": {
                 "label": "Custom header",
                 "placeholder": "(optional) You can fill in additional key pairs to request head",
@@ -55,7 +55,7 @@
                 "placeholder": "Please enter a name for this configuration"
             },
             "key": {
-                "label": "KEY.",
+                "label": "KEY:",
                 "placeholder": "Please enter KEY",
                 "tipText": "<p>You need to enter your own DeepL key,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">official website</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>Leave empty for：gpt-3.5-turbo</p><p>Model list check<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI Official Document</a></p><p><strong>Also, if you are using Proxy API, please confirm that the service provider supports Model</strong></p>"
             },
             "key": {
-                "label": "KEY.",
+                "label": "KEY:",
                 "placeholder": "Please enter KEY",
                 "tipText": "<p>You need to enter your own OpenAI key,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">Web</a></p><p><b>If you are using the Proxy API, you should fill in the Service Provider's Key</b></p>"
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "Advanced",
+            "title": "高级",
             "header": {
                 "label": "Custom header",
                 "placeholder": "(optional) You can fill in additional key pairs to request head",
