@@ -5,6 +5,7 @@
         "translation": "翻译",
         "clist": "Clist",
         "monaco": "Monaco",
+        "preference": "偏好",
         "dev": "维护",
         "about": "关于"
     },
@@ -15,7 +16,7 @@
             "input": "当前设置要求必须填写内容"
         }
     },
-    "basicSettings": {
+    "basic": {
         "title": "基本设置",
         "darkMode": {
             "name": "黑暗模式",
@@ -24,14 +25,6 @@
                 "light": "白天",
                 "system": "跟随系统"
             }
-        },
-        "loadingInfo": {
-            "label": "显示加载提示信息",
-            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
-        },
-        "targetArea": {
-            "label": "显示目标区域范围",
-            "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
         },
         "expandBlocks": "自动展开折叠块",
         "renderOptimization": {
@@ -51,7 +44,7 @@
             "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
         }
     },
-    "localizationSettings": {
+    "localization": {
         "title": "本地化设置",
         "scriptLanguageLabel": "脚本语言",
         "websiteLanguageLabel": "网站语言",
@@ -60,7 +53,7 @@
             "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
         }
     },
-    "translationSettings": {
+    "translation": {
         "title": "翻译设置",
         "options": {
             "title": "首选项",
@@ -106,15 +99,17 @@
                 "title": "目标语言",
                 "helpText": "注意：对于不同的目标语言，可用的翻译服务有所不同，具体请阅读脚本页的介绍"
             },
-            "comment_translation_choice": "评论区翻译",
-            "services": {
-                "follow": "跟随首选项",
-                "deepl": "DeepL翻译",
-                "iflyrec": "讯飞听见翻译",
-                "youdao": "有道翻译",
-                "google": "谷歌翻译",
-                "caiyun": "彩云小译",
-                "openai": "ChatGPT翻译"
+            "comment_translation_choice": {
+                "title": "评论区翻译",
+                "services": {
+                    "follow": "跟随首选项",
+                    "deepl": "DeepL翻译",
+                    "iflyrec": "讯飞听见翻译",
+                    "youdao": "有道翻译",
+                    "google": "谷歌翻译",
+                    "caiyun": "彩云小译",
+                    "openai": "ChatGPT翻译"
+                }
             }
         },
         "autoTranslation": {
@@ -124,7 +119,8 @@
             "shortTextLength": {
                 "name": "短文本长度",
                 "helpText": "<p>当文本长度小于该值时，视为短文本</p>",
-                "end": "字符"
+                "end": "字符",
+                "placeholder": "请输入长度"
             },
             "allowMixTrans": {
                 "name": "评论区混合翻译",
@@ -164,7 +160,8 @@
             "transWaitTime": {
                 "name": "等待间隔",
                 "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
-                "end": "毫秒"
+                "end": "毫秒",
+                "placeholder": "请输入间隔"
             },
             "replaceSymbol": {
                 "name": "LaTeX替换符",
@@ -181,7 +178,7 @@
             }
         }
     },
-    "clistSettings": {
+    "clist": {
         "title": "Clist 设置",
         "basics": {
             "name": "基本",
@@ -215,7 +212,7 @@
             "helpText": "<p>只有当鼠标移动到Rating分展示区域上时才显示</p>"
         }
     },
-    "codeEditorSettings": {
+    "codeEditor": {
         "title": "Monaco 编辑器设置",
         "basics": "基本",
         "problemPageCodeEditor": {
@@ -249,7 +246,7 @@
                 "rextester": "rextester"
             }
         },
-        "lspSettings": {
+        "lsp": {
             "title": "LSP 设置",
             "useLSP": {
                 "label": "使用 LSP",
@@ -274,7 +271,7 @@
             "performanceWarning": "注意：过多的静态补全规则会影响性能"
         }
     },
-    "devSettings": {
+    "dev": {
         "title": "维护",
         "notice": "<p>注意：通常情况下你不需要使用这些功能。</p><p>如果你不清楚各项功能的意义，请勿操作！</p>",
         "load": {
@@ -319,6 +316,22 @@
                 "export": "导出",
                 "import": "导入"
             }
+        }
+    },
+    "preference":{
+        "title": "偏好",
+        "loadingInfo": {
+            "label": "显示加载提示信息",
+            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
+        },
+        "targetArea": {
+            "label": "显示目标区域范围",
+            "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
+        },
+        "iconButtonSize": {
+            "title": "图标按钮大小",
+            "helpText": "<p>设置翻译按钮的大小</p>",
+            "placeholder": "请输入按钮大小"
         }
     },
     "about": {

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.39
+// @version      1.72.40
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -109,10 +109,6 @@ OJBetter.common = {
 OJBetter.basic = {
     /** @type {string} 黑暗模式设置 */
     darkMode: undefined,
-    /** @type {boolean?} 是否显示加载动画 */
-    showLoading: undefined,
-    /** @type {boolean?} 是否显示悬停目标区域 */
-    hoverTargetAreaDisplay: undefined,
     /** @type {boolean?} 是否展开折叠块 */
     expandFoldingblocks: undefined,
     /** @type {boolean?} 是否开启折叠块渲染性能优化 */
@@ -357,6 +353,20 @@ OJBetter.chatgpt = {
     },
     /** @type {boolean?} 是否为流式传输 */
     isStream: undefined
+};
+
+/**
+ * @namespace preference
+ * @desc 偏好设置
+ * @memberof OJBetter
+ */
+OJBetter.preference = {
+    /** @type {boolean?} 是否显示加载动画 */
+    showLoading: undefined,
+    /** @type {boolean?} 是否显示悬停目标区域 */
+    hoverTargetAreaDisplay: undefined,
+    /** @type {string?} 按钮图标大小 */
+    iconButtonSize: undefined,
 };
 
 /**
@@ -606,9 +616,6 @@ async function initVar() {
             .every(score => /^[0-9]+$/.test(score));
     OJBetter.localization.websiteLang = getGMValue("localizationLanguage", "zh");
     OJBetter.localization.scriptLang = getGMValue("scriptL10nLanguage", "zh");
-    OJBetter.basic.showLoading = getGMValue("showLoading", true);
-    OJBetter.basic.hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-    OJBetter.basic.expandFoldingblocks = getGMValue("expandFoldingblocks", true);
     OJBetter.basic.renderPerfOpt = getGMValue("renderPerfOpt", false);
     OJBetter.basic.commentPaging = getGMValue("commentPaging", true);
     OJBetter.basic.showJumpToLuogu = getGMValue("showJumpToLuogu", true);
@@ -726,6 +733,10 @@ async function initVar() {
             });
         }
     }
+    OJBetter.preference.showLoading = getGMValue("showLoading", true);
+    OJBetter.preference.hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
+    OJBetter.basic.expandFoldingblocks = getGMValue("expandFoldingblocks", true);
+    OJBetter.preference.iconButtonSize = getGMValue("iconButtonSize", "16");
     OJBetter.about.updateChannel = getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = getGMValue("updateSource", "greasyfork");
 }
@@ -773,23 +784,23 @@ async function showAnnounce() {
 function showWarnMessage() {
     if (OJBetter.typeOfPage.is_oldLatex) {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.typeOfPage.is_acmsguru) {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.translation.comment.transMode == "1") {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.translation.comment.transMode == "2") {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.typeOfPage.is_submitPage && OJBetter.monaco.enableOnProblemPage) {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
+        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
     }
 }
 
@@ -3240,14 +3251,20 @@ input[type="radio"]:checked+.CFBetter_contextmenu_label_text {
 `);
 
 /**
- * 添加一些依赖库的样式
+ * 添加一些依赖库和条件加载的css样式
  */
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
+    // 自定义图标大小
+    GM_addStyle(`
+        .iconfont {
+            font-size: ${OJBetter.preference.iconButtonSize}px;
+        }
+    `);
 }
 
 /**
- * 添加包含i18n内容的样式
+ * 添加包含i18n内容的css样式
  */
 function addI18nStyles() {
     GM_addStyle(`
@@ -4588,6 +4605,7 @@ const CFBetter_setting_sidebar_HTML = `
         <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="settings:sidebar.translation"></a></li>
         <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
         <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
+        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#dev-settings" id="sidebar-dev-settings" data-i18n="settings:sidebar.dev"></a></li>
         <li><a href="#about-settings" id="sidebar-about-settings" data-i18n="settings:sidebar.about"></a></li>
     </ul>
@@ -4596,80 +4614,64 @@ const CFBetter_setting_sidebar_HTML = `
 
 const basic_settings_HTML = `
 <div id="basic-settings" class="settings-page active">
-    <h3 data-i18n="settings:basicSettings.title"></h3>
+    <h3 data-i18n="settings:basic.title"></h3>
     <hr>
     <div class='CFBetter_setting_list' style="padding: 0px 10px;">
-        <span id="darkMode_span" data-i18n="settings:basicSettings.darkMode.name"></span>
+        <span id="darkMode_span" data-i18n="settings:basic.darkMode.name"></span>
         <div class="dark-mode-selection">
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="dark" />
                 <span class="CFBetter_setting_menu_label_text"
-                    data-i18n="settings:basicSettings.darkMode.options.dark"></span>
+                    data-i18n="settings:basic.darkMode.options.dark"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input checked="" class="radio-input" type="radio" name="darkMode" value="light" />
                 <span class="CFBetter_setting_menu_label_text"
-                    data-i18n="settings:basicSettings.darkMode.options.light"></span>
+                    data-i18n="settings:basic.darkMode.options.light"></span>
                 <span class="radio-icon"> </span>
             </label>
             <label>
                 <input class="radio-input" type="radio" name="darkMode" value="follow" />
                 <span class="CFBetter_setting_menu_label_text"
-                    data-i18n="settings:basicSettings.darkMode.options.system"></span>
+                    data-i18n="settings:basic.darkMode.options.system"></span>
                 <span class="radio-icon"> </span>
             </label>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showLoading" data-i18n="settings:basicSettings.loadingInfo.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basicSettings.loadingInfo.helpText"></div>
-        </div>
-        <input type="checkbox" id="showLoading" name="showLoading">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="hoverTargetAreaDisplay" data-i18n="settings:basicSettings.targetArea.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basicSettings.targetArea.helpText"></div>
-        </div>
-        <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
-    </div>
-    <div class='CFBetter_setting_list'>
-        <label for="expandFoldingblocks" data-i18n="settings:basicSettings.expandBlocks"></label>
+        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
         <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="renderPerfOpt" data-i18n="settings:basicSettings.renderOptimization.label"></label>
+        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basicSettings.renderOptimization.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
         </div>
         <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="commentPaging" data-i18n="settings:basicSettings.paging.label"></label>
+        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basicSettings.paging.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
         </div>
         <input type="checkbox" id="commentPaging" name="commentPaging">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showJumpToLuogu" data-i18n="settings:basicSettings.luoguJump.label"></label>
+        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basicSettings.luoguJump.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
         </div>
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="standingsRecolor" data-i18n="settings:basicSettings.recolor.label"></label>
+        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basicSettings.recolor.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
         </div>
         <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
     </div>
@@ -4678,10 +4680,10 @@ const basic_settings_HTML = `
 
 const l10n_settings_HTML = `
 <div id="l10n_settings" class="settings-page">
-    <h3 data-i18n="settings:localizationSettings.title"></h3>
+    <h3 data-i18n="settings:localization.title"></h3>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localizationSettings.scriptLanguageLabel"></label>
+        <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localization.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
             <option value="zh">简体中文</option>
             <option value="zh-Hant">繁體中文</option>
@@ -4697,7 +4699,7 @@ const l10n_settings_HTML = `
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="localizationLanguage" style="display: flex;" data-i18n="settings:localizationSettings.websiteLanguageLabel"></label>
+        <label for="localizationLanguage" style="display: flex;" data-i18n="settings:localization.websiteLanguageLabel"></label>
         <select id="localizationLanguage" name="localizationLanguage">
             <option value="initial">不改变</option>
             <option value="zh">简体中文</option>
@@ -4713,24 +4715,24 @@ const l10n_settings_HTML = `
         </select>
     </div>
     <div class='CFBetter_setting_list alert_tip'>
-        <div data-i18n="[html]settings:localizationSettings.notice.1"></div>
+        <div data-i18n="[html]settings:localization.notice.1"></div>
     </div>
     <div class='CFBetter_setting_list alert_tip'>
-        <div data-i18n="[html]settings:localizationSettings.notice.2"></div>
+        <div data-i18n="[html]settings:localization.notice.2"></div>
     </div>
 </div>
 `;
 
 const translation_settings_HTML = `
 <div id="translation-settings" class="settings-page">
-    <h3 data-i18n="settings:translationSettings.title"></h3>
+    <h3 data-i18n="settings:translation.title"></h3>
     <hr>
-    <h4 data-i18n="settings:translationSettings.options.title"></h4>
+    <h4 data-i18n="settings:translation.options.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="transTargetLang" style="display: flex;" data-i18n="settings:translationSettings.preference.target.title"></label>
+        <label for="transTargetLang" style="display: flex;" data-i18n="settings:translation.preference.target.title"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.preference.target.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.preference.target.helpText"></div>
         </div>
         <select id="transTargetLang" name="transTargetLang">
             <option value="zh">简体中文</option>
@@ -4749,36 +4751,36 @@ const translation_settings_HTML = `
         <label>
             <input type='radio' name='translation' value='deepl'>
             <span class='CFBetter_setting_menu_label_text'
-                data-i18n="settings:translationSettings.options.services.deepl"></span>
+                data-i18n="settings:translation.options.services.deepl"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='iflyrec'>
             <span class='CFBetter_setting_menu_label_text'
-                data-i18n="settings:translationSettings.options.services.iflyrec"></span>
+                data-i18n="settings:translation.options.services.iflyrec"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='youdao'>
             <span class='CFBetter_setting_menu_label_text'
-                data-i18n="settings:translationSettings.options.services.youdao"></span>
+                data-i18n="settings:translation.options.services.youdao"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='google'>
             <span class='CFBetter_setting_menu_label_text'
-                data-i18n="settings:translationSettings.options.services.google"></span>
+                data-i18n="settings:translation.options.services.google"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='caiyun'>
             <span class='CFBetter_setting_menu_label_text'
-                data-i18n="settings:translationSettings.options.services.caiyun"></span>
+                data-i18n="settings:translation.options.services.caiyun"></span>
         </label>
         <label>
             <input type='radio' name='translation' value='openai'>
             <span class='CFBetter_setting_menu_label_text'
-                data-i18n="settings:translationSettings.options.services.openai.name">
+                data-i18n="settings:translation.options.services.openai.name">
                 <div class="help_tip">
                     ${helpCircleHTML}
                     <div class="tip_text"
-                        data-i18n="[html]settings:translationSettings.options.services.openai.helpText"></div>
+                        data-i18n="[html]settings:translation.options.services.openai.helpText"></div>
                 </div>
             </span>
         </label>
@@ -4786,31 +4788,31 @@ const translation_settings_HTML = `
     <hr>
     <h4>DeepL</h4>
     <div class='CFBetter_setting_list'>
-        <label for="deepl_type" style="display: flex;" data-i18n="settings:translationSettings.deepl.mode.title"></label>
+        <label for="deepl_type" style="display: flex;" data-i18n="settings:translation.deepl.mode.title"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.deepl.mode.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.deepl.mode.helpText"></div>
         </div>
         <select id="deepl_type" name="deepl_type">
-            <option value="free" data-i18n="settings:translationSettings.deepl.mode.select.free"></option>
-            <option value="api" data-i18n="settings:translationSettings.deepl.mode.select.api"></option>
+            <option value="free" data-i18n="settings:translation.deepl.mode.select.free"></option>
+            <option value="api" data-i18n="settings:translation.deepl.mode.select.api"></option>
         </select>
     </div>
     <div id="deepl_config" class="config"></div>
     <div class='CFBetter_setting_list'>
-        <label for="enableEmphasisProtection" data-i18n="settings:translationSettings.deepl.enableEmphasisProtection.title"></label>
+        <label for="enableEmphasisProtection" data-i18n="settings:translation.deepl.enableEmphasisProtection.title"></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.deepl.enableEmphasisProtection.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.deepl.enableEmphasisProtection.helpText"></div>
         </div>
         <div class="badge">Official API Only</div>
         <input type="checkbox" id="enableEmphasisProtection" name="enableEmphasisProtection">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="enableLinkProtection" data-i18n="settings:translationSettings.deepl.enableLinkProtection.title"></label>
+        <label for="enableLinkProtection" data-i18n="settings:translation.deepl.enableLinkProtection.title"></label>
         <div class="help_tip" style="margin-right: initial;">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.deepl.enableLinkProtection.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.deepl.enableLinkProtection.helpText"></div>
         </div>
         <div class="badge">Official API Only</div>
         <input type="checkbox" id="enableLinkProtection" name="enableLinkProtection">
@@ -4819,133 +4821,134 @@ const translation_settings_HTML = `
     <h4>ChatGPT</h4>
     <div id="chatgpt_config" class="config"></div>
     <div class='CFBetter_setting_list'>
-        <label for="openai_isStream" data-i18n="settings:translationSettings.chatgpt.isStream.name"></label>
+        <label for="openai_isStream" data-i18n="settings:translation.chatgpt.isStream.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.chatgpt.isStream.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.isStream.helpText"></div>
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
     <hr>
-    <h4 data-i18n="settings:translationSettings.preference.title"></h4>
+    <h4 data-i18n="settings:translation.preference.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="comment_translation_choice" style="display: flex;"
-            data-i18n="settings:translationSettings.preference.comment_translation_choice"></label>
+            data-i18n="settings:translation.preference.comment_translation_choice.title">
+        </label>
         <select id="comment_translation_choice" name="comment_translation_choice">
-            <option value="0" data-i18n="settings:translationSettings.preference.services.follow"></option>
-            <option value="deepl" data-i18n="settings:translationSettings.preference.services.deepl"></option>
-            <option value="iflyrec" data-i18n="settings:translationSettings.preference.services.iflyrec"></option>
-            <option value="youdao" data-i18n="settings:translationSettings.preference.services.youdao"></option>
-            <option value="google" data-i18n="settings:translationSettings.preference.services.google"></option>
-            <option value="caiyun" data-i18n="settings:translationSettings.preference.services.caiyun"></option>
-            <option value="openai" data-i18n="settings:translationSettings.preference.services.openai"></option>
+            <option value="0" data-i18n="settings:translation.preference.comment_translation_choice.services.follow"></option>
+            <option value="deepl" data-i18n="settings:translation.preference.comment_translation_choice.services.deepl"></option>
+            <option value="iflyrec" data-i18n="settings:translation.preference.comment_translation_choice.services.iflyrec"></option>
+            <option value="youdao" data-i18n="settings:translation.preference.comment_translation_choice.services.youdao"></option>
+            <option value="google" data-i18n="settings:translation.preference.comment_translation_choice.services.google"></option>
+            <option value="caiyun" data-i18n="settings:translation.preference.comment_translation_choice.services.caiyun"></option>
+            <option value="openai" data-i18n="settings:translation.preference.comment_translation_choice.services.openai"></option>
         </select>
     </div>
     <hr>
-    <h4 data-i18n="settings:translationSettings.autoTranslation.title"></h4>
+    <h4 data-i18n="settings:translation.autoTranslation.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="autoTranslation" data-i18n="settings:translationSettings.autoTranslation.enable"></label>
+        <label for="autoTranslation" data-i18n="settings:translation.autoTranslation.enable"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.autoTranslation.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.autoTranslation.helpText"></div>
         </div>
         <input type="checkbox" id="autoTranslation" name="autoTranslation">
     </div>
     <div class='CFBetter_setting_list'>
         <label for='shortTextLength'>
             <div style="display: flex;align-items: center;"
-                data-i18n="settings:translationSettings.autoTranslation.shortTextLength.name"></div>
+                data-i18n="settings:translation.autoTranslation.shortTextLength.name"></div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.autoTranslation.shortTextLength.helpText">
+            <div class="tip_text" data-i18n="[html]settings:translation.autoTranslation.shortTextLength.helpText">
             </div>
         </div>
-        <input type='number' id='shortTextLength' class='no_default' placeholder='请输入' require=true>
-        <span data-i18n="settings:translationSettings.autoTranslation.shortTextLength.end"></span>
+        <input type='number' id='shortTextLength' class='no_default' require=true data-i18n="[placeholder]settings:translation.autoTranslation.shortTextLength.placeholder">
+        <span data-i18n="settings:translation.autoTranslation.shortTextLength.end"></span>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="allowMixTrans" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.name"></label>
+        <label for="allowMixTrans" data-i18n="settings:translation.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.autoTranslation.allowMixTrans.helpText">
+            <div class="tip_text" data-i18n="[html]settings:translation.autoTranslation.allowMixTrans.helpText">
             </div>
         </div>
         <input type="checkbox" id="allowMixTrans" name="allowMixTrans">
         <div class='CFBetter_checkboxs'>
             <input type="checkbox" id="deepl" name="mixedTranslation" value="deepl">
-            <label for="deepl" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.deepl"></label>
+            <label for="deepl" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.deepl"></label>
             <input type="checkbox" id="iflyrec" name="mixedTranslation" value="iflyrec">
-            <label for="iflyrec" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.iflyrec"></label>
+            <label for="iflyrec" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.iflyrec"></label>
             <input type="checkbox" id="youdao" name="mixedTranslation" value="youdao">
-            <label for="youdao" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.youdao"></label>
+            <label for="youdao" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.youdao"></label>
             <input type="checkbox" id="google" name="mixedTranslation" value="google">
-            <label for="google" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
+            <label for="google" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
-            <label for="caiyun" data-i18n="settings:translationSettings.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
         </div>
     </div>
     <hr>
-    <h4 data-i18n="settings:translationSettings.advanced.name"></h4>
+    <h4 data-i18n="settings:translation.advanced.name"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="comment_translation_mode" style="display: flex;" data-i18n="settings:translationSettings.advanced.mode.name"></label>
+        <label for="comment_translation_mode" style="display: flex;" data-i18n="settings:translation.advanced.mode.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.mode.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.mode.helpText"></div>
         </div>
         <select id="comment_translation_mode" name="comment_translation_mode">
-            <option value="0" data-i18n="settings:translationSettings.advanced.mode.options.0"></option>
-            <option value="1" data-i18n="settings:translationSettings.advanced.mode.options.1"></option>
-            <option value="2" data-i18n="settings:translationSettings.advanced.mode.options.2"></option>
+            <option value="0" data-i18n="settings:translation.advanced.mode.options.0"></option>
+            <option value="1" data-i18n="settings:translation.advanced.mode.options.1"></option>
+            <option value="2" data-i18n="settings:translation.advanced.mode.options.2"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="memoryTranslateHistory" data-i18n="settings:translationSettings.advanced.memory.name"></label>
+        <label for="memoryTranslateHistory" data-i18n="settings:translation.advanced.memory.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.memory.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.memory.helpText"></div>
         </div>
         <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="translation_retransAction" style="display: flex;" data-i18n="settings:translationSettings.advanced.retrans.name"></label>
+        <label for="translation_retransAction" style="display: flex;" data-i18n="settings:translation.advanced.retrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.retrans.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.retrans.helpText"></div>
         </div>
         <select id="translation_retransAction" name="translation_retransAction">
-            <option value=0 data-i18n="settings:translationSettings.advanced.retrans.options.0"></option>
-            <option value=1 data-i18n="settings:translationSettings.advanced.retrans.options.1"></option>
+            <option value=0 data-i18n="settings:translation.advanced.retrans.options.0"></option>
+            <option value=1 data-i18n="settings:translation.advanced.retrans.options.1"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='transWaitTime'>
-            <div style="display: flex;align-items: center;" data-i18n="settings:translationSettings.advanced.transWaitTime.name"></div>
+            <div style="display: flex;align-items: center;" data-i18n="settings:translation.advanced.transWaitTime.name"></div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.transWaitTime.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.transWaitTime.helpText"></div>
         </div>
-        <input type='number' id='transWaitTime' class='no_default' placeholder='请输入' require=true>
-        <span data-i18n="settings:translationSettings.advanced.transWaitTime.end"></span>
+        <input type='number' id='transWaitTime' class='no_default' require=true data-i18n="[placeholder]settings:translation.advanced.transWaitTime.placeholder">
+        <span data-i18n="settings:translation.advanced.transWaitTime.end"></span>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="translation_replaceSymbol" style="display: flex;" data-i18n="settings:translationSettings.advanced.replaceSymbol.name"></label>
+        <label for="translation_replaceSymbol" style="display: flex;" data-i18n="settings:translation.advanced.replaceSymbol.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.replaceSymbol.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.replaceSymbol.helpText"></div>
         </div>
         <select id="translation_replaceSymbol" name="translation_replaceSymbol">
-            <option value=2 data-i18n="settings:translationSettings.advanced.replaceSymbol.options.2"></option>
-            <option value=1 data-i18n="settings:translationSettings.advanced.replaceSymbol.options.1"></option>
-            <option value=3 data-i18n="settings:translationSettings.advanced.replaceSymbol.options.3"></option>
+            <option value=2 data-i18n="settings:translation.advanced.replaceSymbol.options.2"></option>
+            <option value=1 data-i18n="settings:translation.advanced.replaceSymbol.options.1"></option>
+            <option value=3 data-i18n="settings:translation.advanced.replaceSymbol.options.3"></option>
         </select>
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="filterTextWithoutEmphasis" data-i18n="settings:translationSettings.advanced.filterTextWithoutEmphasis.name"></label>
+        <label for="filterTextWithoutEmphasis" data-i18n="settings:translation.advanced.filterTextWithoutEmphasis.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:translationSettings.advanced.filterTextWithoutEmphasis.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.filterTextWithoutEmphasis.helpText"></div>
         </div>
         <input type="checkbox" id="filterTextWithoutEmphasis" name="filterTextWithoutEmphasis">
     </div>
@@ -4954,47 +4957,47 @@ const translation_settings_HTML = `
 
 const clist_rating_settings_HTML = `
 <div id="clist_rating-settings" class="settings-page">
-    <h3 data-i18n="settings:clistSettings.title"></h3>
+    <h3 data-i18n="settings:clist.title"></h3>
     <hr>
-    <h4 data-i18n="settings:clistSettings.basics.name"></h4>
+    <h4 data-i18n="settings:clist.basics.name"></h4>
     <div class='CFBetter_setting_list alert_tip'>
         <div>
-            <p data-i18n="[html]settings:clistSettings.basics.notice"></p>
+            <p data-i18n="[html]settings:clist.basics.notice"></p>
         </div>
     </div>
     <div class='CFBetter_setting_list'>
         <label for='clist_Authorization'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="settings:clistSettings.basics.key.title"></span>
+                <span class="input_label" data-i18n="settings:clist.basics.key.title"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:clistSettings.basics.key.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:clist.basics.key.helpText"></div>
         </div>
         <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' required="true"
-            data-i18n="[placeholder]settings:clistSettings.basics.key.keyPlaceholder">
+            data-i18n="[placeholder]settings:clist.basics.key.keyPlaceholder">
     </div>
     <hr>
-    <h4 data-i18n="settings:clistSettings.displayRating.title"></h4>
+    <h4 data-i18n="settings:clist.displayRating.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_contest"><span data-i18n="settings:clistSettings.displayRating.contest.name"></span></label>
+        <label for="showClistRating_contest"><span data-i18n="settings:clist.displayRating.contest.name"></span></label>
         <input type="checkbox" id="showClistRating_contest" name="showClistRating_contest">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_problem"><span data-i18n="settings:clistSettings.displayRating.problem.name"></span></label>
+        <label for="showClistRating_problem"><span data-i18n="settings:clist.displayRating.problem.name"></span></label>
         <input type="checkbox" id="showClistRating_problem" name="showClistRating_problem">
     </div>
     <div class='CFBetter_setting_list'>
-        <label for="showClistRating_problemset"><span data-i18n="settings:clistSettings.displayRating.problemset.name"></span></label>
+        <label for="showClistRating_problemset"><span data-i18n="settings:clist.displayRating.problemset.name"></span></label>
         <input type="checkbox" id="showClistRating_problemset" name="showClistRating_problemset">
     </div>
     <hr>
     <div class='CFBetter_setting_list'>
-        <label for="RatingHidden"><span data-i18n="settings:clistSettings.spoilerProtection.title"></span></label>
+        <label for="RatingHidden"><span data-i18n="settings:clist.spoilerProtection.title"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:clistSettings.spoilerProtection.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:clist.spoilerProtection.helpText"></div>
         </div>
         <input type="checkbox" id="RatingHidden" name="RatingHidden">
     </div>
@@ -5003,86 +5006,86 @@ const clist_rating_settings_HTML = `
 
 const code_editor_settings_HTML = `
 <div id="code_editor-settings" class="settings-page">
-    <h3 data-i18n="settings:codeEditorSettings.title"></h3>
+    <h3 data-i18n="settings:codeEditor.title"></h3>
     <hr>
-    <h4 data-i18n="settings:codeEditorSettings.basics"></h4>
+    <h4 data-i18n="settings:codeEditor.basics"></h4>
     <div class='CFBetter_setting_list'>
         <label for="problemPageCodeEditor"><span
-                data-i18n="settings:codeEditorSettings.problemPageCodeEditor.label"></span></label>
+                data-i18n="settings:codeEditor.problemPageCodeEditor.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="settings:codeEditorSettings.problemPageCodeEditor.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditor.problemPageCodeEditor.helpText"></div>
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
     <hr>
-    <h4 data-i18n="settings:codeEditorSettings.preferences.title"></h4>
+    <h4 data-i18n="settings:codeEditor.preferences.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="isCodeSubmitConfirm"><span
-                data-i18n="settings:codeEditorSettings.preferences.isCodeSubmitConfirm.label"></span></label>
+                data-i18n="settings:codeEditor.preferences.isCodeSubmitConfirm.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="settings:codeEditorSettings.preferences.isCodeSubmitConfirm.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.isCodeSubmitConfirm.helpText"></div>
         </div>
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
-                data-i18n="settings:codeEditorSettings.preferences.alwaysConsumeMouseWheel.label"></span></label>
+                data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="settings:codeEditorSettings.preferences.alwaysConsumeMouseWheel.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
     </div>
     <div class='CFBetter_setting_list'>
         <label for="submitButtonPosition"><span
-                data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.label"></span></label>
+                data-i18n="settings:codeEditor.preferences.submitButtonPosition.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.helpText"></div>
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.submitButtonPosition.helpText"></div>
         </div>
         <select id="submitButtonPosition" name="submitButtonPosition">
-            <option value="bottom" data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.options.bottom"></option>
-            <option value="top" data-i18n="settings:codeEditorSettings.preferences.submitButtonPosition.options.top"></option>
+            <option value="bottom" data-i18n="settings:codeEditor.preferences.submitButtonPosition.options.bottom"></option>
+            <option value="top" data-i18n="settings:codeEditor.preferences.submitButtonPosition.options.top"></option>
         </select>
     </div>
     <hr>
-    <h4 data-i18n="settings:codeEditorSettings.onlineCodeExecution.title"></h4>
+    <h4 data-i18n="settings:codeEditor.onlineCodeExecution.title"></h4>
     <label>
         <input type='radio' name='compiler' value='official'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:codeEditorSettings.onlineCodeExecution.compilerOptions.codeforces"></span>
+            data-i18n="settings:codeEditor.onlineCodeExecution.compilerOptions.codeforces"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='wandbox'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:codeEditorSettings.onlineCodeExecution.compilerOptions.wandbox"></span>
+            data-i18n="settings:codeEditor.onlineCodeExecution.compilerOptions.wandbox"></span>
     </label>
     <label>
         <input type='radio' name='compiler' value='rextester'>
         <span class='CFBetter_setting_menu_label_text'
-            data-i18n="settings:codeEditorSettings.onlineCodeExecution.compilerOptions.rextester"></span>
+            data-i18n="settings:codeEditor.onlineCodeExecution.compilerOptions.rextester"></span>
     </label>
     <hr>
-    <h4 data-i18n="settings:codeEditorSettings.lspSettings.title"></h4>
+    <h4 data-i18n="settings:codeEditor.lsp.title"></h4>
     <div class='CFBetter_setting_list'>
-        <label for="useLSP"><span data-i18n="settings:codeEditorSettings.lspSettings.useLSP.label"></span></label>
+        <label for="useLSP"><span data-i18n="settings:codeEditor.lsp.useLSP.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.lspSettings.useLSP.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.useLSP.helpText"></div>
         </div>
         <input type="checkbox" id="useLSP" name="useLSP">
     </div>
     <div class='CFBetter_setting_list'>
         <label for='OJBetter_Bridge_WorkUri'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="settings:codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.label"></span>
+                <span class="input_label" data-i18n="settings:codeEditor.lsp.OJBetter_Bridge_WorkUri.label"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.lspSettings.OJBetter_Bridge_WorkUri.helpText">
+            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.OJBetter_Bridge_WorkUri.helpText">
                 
             </div>
         </div>
@@ -5093,12 +5096,12 @@ const code_editor_settings_HTML = `
         <label for='OJBetter_Bridge_SocketUrl'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label"
-                    data-i18n="settings:codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.label"></span>
+                    data-i18n="settings:codeEditor.lsp.OJBetter_Bridge_SocketUrl.label"></span>
             </div>
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.lspSettings.OJBetter_Bridge_SocketUrl.helpText">
+            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.OJBetter_Bridge_SocketUrl.helpText">
                 
             </div>
         </div>
@@ -5106,93 +5109,127 @@ const code_editor_settings_HTML = `
             require=true>
     </div>
     <hr>
-    <h4 data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.title"></h4>
+    <h4 data-i18n="settings:codeEditor.staticCompletionEnhancement.title"></h4>
     <div class='CFBetter_setting_list'>
         <label for="cppCodeTemplateComplete"><span
-                data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.label"></span></label>
+                data-i18n="settings:codeEditor.staticCompletionEnhancement.cppCodeTemplateComplete.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:codeEditorSettings.staticCompletionEnhancement.cppCodeTemplateComplete.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:codeEditor.staticCompletionEnhancement.cppCodeTemplateComplete.helpText"></div>
         </div>
         <input type="checkbox" id="cppCodeTemplateComplete" name="cppCodeTemplateComplete">
     </div>
     <hr>
-    <h5 data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.customization"></h5>
+    <h5 data-i18n="settings:codeEditor.staticCompletionEnhancement.customization"></h5>
     <div class='CFBetter_setting_list alert_warn'>
         <div>
-            <p data-i18n="settings:codeEditorSettings.staticCompletionEnhancement.performanceWarning"></p>
+            <p data-i18n="settings:codeEditor.staticCompletionEnhancement.performanceWarning"></p>
         </div>
     </div>
     <div id="Complet_config" class="config"></div>
 </div>
 `;
 
+const preference_settings_HTML = `
+<div id="preference-settings" class="settings-page active">
+    <h3 data-i18n="settings:preference.title"></h3>
+    <hr>
+    <div class='CFBetter_setting_list'>
+        <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.loadingInfo.helpText"></div>
+        </div>
+        <input type="checkbox" id="showLoading" name="showLoading">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for="hoverTargetAreaDisplay" data-i18n="settings:preference.targetArea.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.targetArea.helpText"></div>
+        </div>
+        <input type="checkbox" id="hoverTargetAreaDisplay" name="hoverTargetAreaDisplay">
+    </div>
+    <div class='CFBetter_setting_list'>
+        <label for='iconButtonSize'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.iconButtonSize.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.iconButtonSize.helpText"></div>
+        </div>
+        <input type='number' id='iconButtonSize' class='no_default' require=true data-i18n="[placeholder]settings:preference.iconButtonSize.placeholder">
+        <span>px</span>
+    </div>
+</div>
+`;
+
 const dev_settings_HTML = `
 <div id="dev-settings" class="settings-page">
-    <h3 data-i18n="settings:devSettings.title"></h3>
+    <h3 data-i18n="settings:dev.title"></h3>
     <hr>
     <div class='CFBetter_setting_list alert_danger'>
         <div>
-            <p data-i18n="[html]settings:devSettings.notice"></p>
+            <p data-i18n="[html]settings:dev.notice"></p>
         </div>
     </div>
     <hr>
-    <h5 data-i18n="settings:devSettings.load.title"></h5>
+    <h5 data-i18n="settings:dev.load.title"></h5>
     <div class='CFBetter_setting_list'>
-        <label for="notWaiteLoaded"><span data-i18n="settings:devSettings.load.notWaiteLoaded.label"></span></label>
+        <label for="notWaiteLoaded"><span data-i18n="settings:dev.load.notWaiteLoaded.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:devSettings.load.notWaiteLoaded.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:dev.load.notWaiteLoaded.helpText"></div>
         </div>
         <input type="checkbox" id="notWaiteLoaded" name="notWaiteLoaded">
     </div>
     <hr>
-    <h5 data-i18n="settings:devSettings.l10n.title"></h5>
+    <h5 data-i18n="settings:dev.l10n.title"></h5>
     <div class='CFBetter_setting_list'>
-        <label><span data-i18n="settings:devSettings.l10n.refreshScrpitCache.label"></span></label>
+        <label><span data-i18n="settings:dev.l10n.refreshScrpitCache.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:devSettings.l10n.refreshScrpitCache.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:dev.l10n.refreshScrpitCache.helpText"></div>
         </div>
-        <button type="button" id="l10n_refreshScrpitCacheButton" name="l10n_refreshScrpitCacheButton" data-i18n="settings:devSettings.l10n.refreshScrpitCache.button"></button>
+        <button type="button" id="l10n_refreshScrpitCacheButton" name="l10n_refreshScrpitCacheButton" data-i18n="settings:dev.l10n.refreshScrpitCache.button"></button>
     </div>
     <hr>
-    <h5 data-i18n="settings:devSettings.indexedDB.title"></h5>
+    <h5 data-i18n="settings:dev.indexedDB.title"></h5>
     <div class='CFBetter_setting_list'>
-        <label><span data-i18n="settings:devSettings.indexedDB.clear.label"></span></label>
+        <label><span data-i18n="settings:dev.indexedDB.clear.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:devSettings.indexedDB.clear.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:dev.indexedDB.clear.helpText"></div>
         </div>
-        <button type="button" id="indexedDB_clearButton" name="indexedDB_clearButton" data-i18n="settings:devSettings.indexedDB.clear.button"></button>
+        <button type="button" id="indexedDB_clearButton" name="indexedDB_clearButton" data-i18n="settings:dev.indexedDB.clear.button"></button>
     </div>
     <div class='CFBetter_setting_list'>
-        <label><span data-i18n="settings:devSettings.indexedDB.inputOrExport.label"></span></label>
+        <label><span data-i18n="settings:dev.indexedDB.inputOrExport.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:devSettings.indexedDB.inputOrExport.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:dev.indexedDB.inputOrExport.helpText"></div>
         </div>
-        <button type="button" id="indexedDB_exportButton" name="indexedDB_exportButton" data-i18n="settings:devSettings.indexedDB.inputOrExport.export"></button>
-        <button type="button" id="indexedDB_importButton" name="indexedDB_importButton" data-i18n="settings:devSettings.indexedDB.inputOrExport.import"></button>
+        <button type="button" id="indexedDB_exportButton" name="indexedDB_exportButton" data-i18n="settings:dev.indexedDB.inputOrExport.export"></button>
+        <button type="button" id="indexedDB_importButton" name="indexedDB_importButton" data-i18n="settings:dev.indexedDB.inputOrExport.import"></button>
     </div>
     <hr>
-    <h5 data-i18n="settings:devSettings.configuration.title"></h5>
+    <h5 data-i18n="settings:dev.configuration.title"></h5>
     <div class='CFBetter_setting_list'>
-        <label><span data-i18n="settings:devSettings.configuration.clear.label"></span></label>
+        <label><span data-i18n="settings:dev.configuration.clear.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:devSettings.configuration.clear.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:dev.configuration.clear.helpText"></div>
         </div>
-        <button type="button" id="configuration_clearButton" name="configuration_clearButton" data-i18n="settings:devSettings.configuration.clear.button"></button>
+        <button type="button" id="configuration_clearButton" name="configuration_clearButton" data-i18n="settings:dev.configuration.clear.button"></button>
     </div>
     <div class='CFBetter_setting_list'>
-        <label><span data-i18n="settings:devSettings.configuration.inputOrExport.label"></span></label>
+        <label><span data-i18n="settings:dev.configuration.inputOrExport.label"></span></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:devSettings.configuration.inputOrExport.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:dev.configuration.inputOrExport.helpText"></div>
         </div>
-        <button type="button" id="configuration_exportButton" name="configuration_exportButton" data-i18n="settings:devSettings.configuration.inputOrExport.export"></button>
-        <button type="button" id="configuration_importButton" name="configuration_importButton" data-i18n="settings:devSettings.configuration.inputOrExport.import"></button>
+        <button type="button" id="configuration_exportButton" name="configuration_exportButton" data-i18n="settings:dev.configuration.inputOrExport.export"></button>
+        <button type="button" id="configuration_importButton" name="configuration_importButton" data-i18n="settings:dev.configuration.inputOrExport.import"></button>
     </div>
 </div>
 `;
@@ -5246,6 +5283,7 @@ const CFBetter_setting_content_HTML = `
     ${translation_settings_HTML}
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
+    ${preference_settings_HTML}
     ${dev_settings_HTML}
     ${about_settings_HTML}
 </div>
@@ -5747,6 +5785,7 @@ async function initSettingsPanel() {
         $("#chatgpt_config_config_bar_ul").find(`input[name='chatgpt_config_config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
+        $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
@@ -5825,6 +5864,7 @@ async function initSettingsPanel() {
                 enableLinkProtection: $("#enableLinkProtection").prop("checked"),
                 openai_isStream: $("#openai_isStream").prop("checked"),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
+                iconButtonSize: $('#iconButtonSize').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -6540,7 +6580,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }));
 
-    if (OJBetter.basic.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+    if (OJBetter.preference.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
         button.addHoverOverlay($(element));
     }
 }
@@ -6602,7 +6642,7 @@ async function addButtonWithCopy(button, element, suffix, type) {
         }, 2000);
     }));
 
-    if (OJBetter.basic.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+    if (OJBetter.preference.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
         button.addHoverOverlay($(element));
     }
 }
@@ -6681,7 +6721,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     });
 
     // 目标区域指示
-    if (OJBetter.basic.hoverTargetAreaDisplay) {
+    if (OJBetter.preference.hoverTargetAreaDisplay) {
         button.addHoverOverlay($(element));
     }
 
@@ -6699,12 +6739,12 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         var menu = $('<div class="CFBetter_contextmenu"></div>');
         var translations = [
-            { value: 'deepl', name: i18next.t('translationSettings.options.services.deepl', { ns: 'settings' }) },
-            { value: 'iflyrec', name: i18next.t('translationSettings.options.services.iflyrec', { ns: 'settings' }) },
-            { value: 'youdao', name: i18next.t('translationSettings.options.services.youdao', { ns: 'settings' }) },
-            { value: 'google', name: i18next.t('translationSettings.options.services.google', { ns: 'settings' }) },
-            { value: 'caiyun', name: i18next.t('translationSettings.options.services.caiyun', { ns: 'settings' }) },
-            { value: 'openai', name: i18next.t('translationSettings.options.services.openai.name', { ns: 'settings' }) }
+            { value: 'deepl', name: i18next.t('translation.options.services.deepl', { ns: 'settings' }) },
+            { value: 'iflyrec', name: i18next.t('translation.options.services.iflyrec', { ns: 'settings' }) },
+            { value: 'youdao', name: i18next.t('translation.options.services.youdao', { ns: 'settings' }) },
+            { value: 'google', name: i18next.t('translation.options.services.google', { ns: 'settings' }) },
+            { value: 'caiyun', name: i18next.t('translation.options.services.caiyun', { ns: 'settings' }) },
+            { value: 'openai', name: i18next.t('translation.options.services.openai.name', { ns: 'settings' }) }
         ];
 
         // Function to check if the service supports the target language
@@ -12228,7 +12268,7 @@ async function initializeSequentially(loadingMessage) {
     if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
 }
 
 /**
@@ -12239,7 +12279,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingMessage = new LoadingMessage();
     await loadRequiredFunctions(); // 加载必须的函数
     initOnDOMReady(); // DOM加载后即可执行的函数
-    if (OJBetter.basic.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
+    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
 
     // 检查页面资源是否已经完全加载
     if (OJBetter.state.notWaiteLoaded) {
