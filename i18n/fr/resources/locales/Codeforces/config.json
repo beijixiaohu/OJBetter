@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "高级",
+            "title": "niveau élevé",
             "header": {
                 "label": "En-tête personnalisé",
                 "placeholder": "(Facultatif) Vous pouvez indiquer ici des paires clé-valeur supplémentaires à ajouter à l'en-tête de la requête.",
@@ -55,7 +55,7 @@
                 "placeholder": "Veuillez donner un nom à cette configuration"
             },
             "key": {
-                "label": "KEY:",
+                "label": "CLÉ.",
                 "placeholder": "Veuillez saisir la CLÉ",
                 "tipText": "<p>Vous devez saisir votre propre clé DeepL,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">site officiel</a></p>"
             },
@@ -78,7 +78,7 @@
                 "tipText": "<p>Laissez le champ vide pour utiliser par défaut：gpt-3.5-turbo</p><p>Pour une liste de modèles, veuillez consulter<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentation officielle d'OpenAI</a></p><p><strong>En outre, si vous utilisez l'API proxy fournie par le fournisseur de services, veuillez vérifier si le fournisseur de services prend en charge le modèle correspondant</strong></p>"
             },
             "key": {
-                "label": "KEY:",
+                "label": "CLÉ.",
                 "placeholder": "Veuillez saisir la CLÉ",
                 "tipText": "<p>Vous devez saisir votre propre clé OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">site officiel</a></p><p><b>Si vous utilisez l'API proxy fournie par le fournisseur de services, vous devez saisir la clé fournie par le fournisseur de services</b></p>."
             },
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "高级",
+            "title": "niveau élevé",
             "header": {
                 "label": "En-tête personnalisé",
                 "placeholder": "(Facultatif) Vous pouvez indiquer ici des paires clé-valeur supplémentaires à ajouter à l'en-tête de la requête.",
