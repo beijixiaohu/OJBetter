@@ -33,5 +33,14 @@
         "waitingAnswer": "アスタリスク…… の初期化を待っています",
         "connected": "接続済みLSP:",
         "error": "LSPコネクションの切断"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "codeforcesサーバーへのコード送信中にエラーが発生しました！",
+            "getResultError": "実行結果のリクエスト中にエラーが発生しました！"
+        },
+        "common": {
+            "error": "不明なエラーが発生しました。 もう一度お試しください。"
+        }
     }
 }
