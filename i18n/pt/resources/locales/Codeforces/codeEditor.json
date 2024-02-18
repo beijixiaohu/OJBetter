@@ -33,5 +33,14 @@
         "waitingAnswer": "A aguardar confirmação de inicialização……",
         "connected": "LSP ligado",
         "error": "Ligação LSP desligada"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "Ocorreu um erro ao submeter o código ao servidor codeforces, por favor tente novamente!",
+            "getResultError": "Ocorreu um erro ao solicitar um resultado de execução, tente novamente!"
+        },
+        "common": {
+            "error": "Ocorreu um erro desconhecido. Tente novamente."
+        }
     }
 }

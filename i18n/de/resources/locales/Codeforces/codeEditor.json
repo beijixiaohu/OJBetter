@@ -33,5 +33,14 @@
         "waitingAnswer": "Warten auf Initialisierungsbestätigung……",
         "connected": "LSP verbunden",
         "error": "LSP-Verbindung unterbrochen"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "Bei der Übermittlung des Codes an den codeforces-Server ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!",
+            "getResultError": "Bei der Abfrage eines Laufergebnisses ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!"
+        },
+        "common": {
+            "error": "Es ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut."
+        }
     }
 }

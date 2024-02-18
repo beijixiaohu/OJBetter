@@ -33,5 +33,14 @@
         "waitingAnswer": "Waiting for initialization back to……",
         "connected": "LSP connected",
         "error": "LSP connection disconnected"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "An error occurred while submitting the code to the codeforces server, please try again!",
+            "getResultError": "An error occurred while requesting a run result, please try again!"
+        },
+        "common": {
+            "error": "An unknown error has occurred. Please try again."
+        }
     }
 }

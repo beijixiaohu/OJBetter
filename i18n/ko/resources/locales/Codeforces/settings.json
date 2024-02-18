@@ -14,6 +14,9 @@
         "missing": {
             "radio": "현재 설정에서는 구성을 추가하고 확인해야 합니다.",
             "input": "현재 설정에는 필수 입력란이 필요합니다."
+        },
+        "unValid": {
+            "format": "일관성 없는 서식 또는 잘못된 문자"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "작업 경로.",
-                "helpText": "<p>OJBetter_Bridge가 위치한 경로를 입력해야 합니다</p><p>슬래시 또는 백슬래시 사용</p><p>기본 경로：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>OJBetter_Bridge가 위치한 경로를 입력해야 합니다</p><p>슬래시 또는 백슬래시 사용</p><p>기본 경로：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "경로를 입력하고 구분 기호는 /입니다."
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "서버.",
-                "helpText": "<p>로컬 머신에 OJBetter_Bridge의 서버 URL을 입력해야 합니다</p><p>기본 URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>일반적으로는 여기서 변경할 필요가 없으며, 변경해야 하는 경우 기본 URL 형식(</p>)과 일치하도록 하세요."
+                "helpText": "<p>로컬 머신에 OJBetter_Bridge의 서버 URL을 입력해야 합니다</p><p>기본 URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>일반적으로는 여기서 변경할 필요가 없으며, 변경해야 하는 경우 기본 URL 형식(</p>)과 일치하도록 하세요.",
+                "placeholder": "경로를 입력하고 형식에 따라 엄격하게 입력하도록 주의하세요."
             }
         },
         "staticCompletionEnhancement": {

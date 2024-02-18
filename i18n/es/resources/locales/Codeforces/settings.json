@@ -14,6 +14,9 @@
         "missing": {
             "radio": "La configuración actual requiere que se añada y compruebe una configuración.",
             "input": "La configuración actual requiere campos obligatorios"
+        },
+        "unValid": {
+            "format": "格式不符或存在非法字符"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Trayectoria laboral.",
-                "helpText": "<p>Debe rellenar la ruta donde se encuentra OJBetter_Bridge</p><p>Utilice la barra diagonal o la barra invertida</p><p>Ruta por defecto：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>Debe rellenar la ruta donde se encuentra OJBetter_Bridge</p><p>Utilice la barra diagonal o la barra invertida</p><p>Ruta por defecto：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "请输入路径，注意分隔符为为/"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Servidor.",
-                "helpText": "<p>Necesita rellenar la URL del servidor de OJBetter_Bridge en su máquina local</p><p>URL por defecto: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Tenga en cuenta que normalmente no necesita cambiar aquí, si necesita cambiarlo, por favor hágalo consistente con el formato de URL por defecto</p>"
+                "helpText": "<p>Necesita rellenar la URL del servidor de OJBetter_Bridge en su máquina local</p><p>URL por defecto: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Tenga en cuenta que normalmente no necesita cambiar aquí, si necesita cambiarlo, por favor hágalo consistente con el formato de URL por defecto</p>",
+                "placeholder": "请输入路径，注意严格按照格式填写"
             }
         },
         "staticCompletionEnhancement": {

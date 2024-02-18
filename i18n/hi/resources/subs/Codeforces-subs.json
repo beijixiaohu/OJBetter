@@ -165,7 +165,10 @@
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "यदि आपने ये प्रश्न पहले ही देख लिए हैं, तो वर्चुअल इवेंट आपके लिए नहीं है - इन प्रश्नों को प्रश्न बैंक में हल किया जाना चाहिए।",
                 "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "यदि आप प्रतियोगिता में किसी समस्या का समाधान करना चाहते हैं, तो वर्चुअल इवेंट आपके लिए नहीं है - उस समस्या को प्रश्न बैंक में हल किया जाना चाहिए।",
                 "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "वर्चुअल प्रतियोगिता के दौरान कभी भी अन्य लोगों के कोड का उपयोग न करें, ट्यूटोरियल न पढ़ें या दूसरों के साथ संवाद न करें।",
-                "You can clone this contest to a mashup.": "आप इस मैच को मैशअप मैच में क्लोन कर सकते हैं।"
+                "You can clone this contest to a mashup.": "आप इस मैच को मैशअप मैच में क्लोन कर सकते हैं।",
+                "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "मैशअप एक विशेष प्रकार की प्रशिक्षण प्रतियोगिता है जिसमें पिछले कोडफोर्स प्रतियोगिताओं के खुले प्रश्न शामिल होते हैं। आप भी जोड़ सकते हैं",
+                "problems to mashup contest.": "मिक्स मैच के लिए प्रश्न.",
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "ऐसी प्रतियोगिताओं को सार्वजनिक नहीं किया जा सकता है और इनका उपयोग केवल व्यक्तिगत प्रशिक्षण उद्देश्यों के लिए किया जाता है। मिक्स-एंड-मैच को भी समूहों में जोड़ा जा सकता है। मैशअप मैच के बारे में अतिरिक्त जानकारी निर्दिष्ट करने के लिए, कैंप मैच संपादन फॉर्म का उपयोग करें।"
             }
         },
         ".icon-eye-close.icon-large": {

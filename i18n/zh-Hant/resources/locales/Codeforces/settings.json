@@ -14,6 +14,9 @@
         "missing": {
             "radio": "目前設定要求必須新增並選取一項配置",
             "input": "目前設定要求必須填寫內容"
+        },
+        "unValid": {
+            "format": "格式不符或存在非法字符"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "工作路徑:",
-                "helpText": "<p>你需要填寫OJBetter_Bridge 所在的路徑</p><p>使用正斜線或反斜線均可</p><p>預設路徑：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>你需要填寫OJBetter_Bridge 所在的路徑</p><p>使用正斜線或反斜線均可</p><p>預設路徑：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "請輸入路徑，注意分隔符號為為/"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Server:",
-                "helpText": "<p>你需要填寫你本機中OJBetter_Bridge 的Server URL</p><p>預設的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127. .0.1:2323/</p></div><p>注意，你通常不需要更改這裡，如需更改，請與預設URL格式一致</p>"
+                "helpText": "<p>你需要填寫你本機中OJBetter_Bridge 的Server URL</p><p>預設的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127. .0.1:2323/</p></div><p>注意，你通常不需要更改這裡，如需更改，請與預設URL格式一致</p>",
+                "placeholder": "請輸入路徑，注意嚴格按照格式填寫"
             }
         },
         "staticCompletionEnhancement": {
