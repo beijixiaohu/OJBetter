@@ -166,9 +166,9 @@
                 "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "Si sólo quiere resolver un problema en un torneo, los torneos virtuales tampoco son para usted: debe resolverlo en el banco de preguntas.",
                 "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "No utilice el código de otras personas, no lea tutoriales ni se comunique con otras personas durante la competición virtual.",
                 "You can clone this contest to a mashup.": "Puede clonar este concurso para convertirlo en un concurso de mashups.",
-                "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一种特殊类型的训练比赛，由过去Codeforces比赛的公开问题组成。还可以添加",
-                "problems to mashup contest.": "问题到混搭比赛。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "这样的比赛不能公开，只用于个人训练目的。还可以将混搭添加到团体中。要指定有关混搭比赛的其他信息，请使用训练营比赛编辑表单。"
+                "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup es un tipo especial de concurso de formación que consiste en preguntas abiertas de concursos anteriores de Codeforces. También es posible añadir",
+                "problems to mashup contest.": "Pregunta para el concurso de mashups.",
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estas competiciones no pueden hacerse públicas y sólo se utilizan con fines de entrenamiento personal. Los concursos mashup también pueden añadirse a los grupos. Para especificar información adicional sobre un concurso de mashups, utilice el formulario Editar concurso de campo de entrenamiento."
             }
         },
         ".icon-eye-close.icon-large": {
