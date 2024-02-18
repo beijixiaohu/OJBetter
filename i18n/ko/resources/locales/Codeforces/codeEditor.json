@@ -33,5 +33,14 @@
         "waitingAnswer": "초기화 확인을 기다리는 중……",
         "connected": "LSP 연결",
         "error": "LSP 연결이 끊어짐"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "코드를 코드포스 서버에 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요!",
+            "getResultError": "실행 결과를 요청하는 동안 오류가 발생했습니다. 다시 시도해 주세요!"
+        },
+        "common": {
+            "error": "알 수 없는 오류가 발생했습니다. 다시 시도하세요."
+        }
     }
 }
