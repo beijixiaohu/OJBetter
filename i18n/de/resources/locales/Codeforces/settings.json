@@ -16,7 +16,7 @@
             "input": "Aktuelle Einstellungen erfordern Pflichtfelder"
         },
         "unValid": {
-            "format": "格式不符或存在非法字符"
+            "format": "Inkonsistente Formatierung oder unzulässige Zeichen"
         }
     },
     "basic": {
@@ -258,12 +258,12 @@
             "OJBetter_Bridge_WorkUri": {
                 "label": "Arbeitsweg.",
                 "helpText": "<p>Sie müssen den Pfad angeben, in dem sich OJBetter_Bridge befindet</p><p>Verwenden Sie entweder einen Schrägstrich oder einen Backslash</p><p>Standardpfad：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
-                "placeholder": "请输入路径，注意分隔符为为/"
+                "placeholder": "Bitte geben Sie den Pfad ein, und beachten Sie, dass das Trennzeichen / ist."
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Server.",
                 "helpText": "<p>Sie müssen die Server-URL von OJBetter_Bridge auf Ihrem lokalen Rechner eingeben</p><p>Standard-URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Beachten Sie, dass Sie hier in der Regel keine Änderungen vornehmen müssen. Wenn Sie sie ändern müssen, passen Sie sie bitte an das Standard-URL-Format an</p>",
-                "placeholder": "请输入路径，注意严格按照格式填写"
+                "placeholder": "Bitte geben Sie den Pfad ein. Achten Sie darauf, dass Sie das Format genau einhalten."
             }
         },
         "staticCompletionEnhancement": {
