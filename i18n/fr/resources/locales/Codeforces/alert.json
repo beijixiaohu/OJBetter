@@ -28,6 +28,10 @@
             "404": "L'accès à Clist.by est actuellement saturé, la requête a été interrompue, veuillez réessayer plus tard !",
             "cookie": "Le cookie de connexion de votre navigateur Clist.by peut ne plus fonctionner, veuillez ouvrir<a target='_blank' href='https://clist.by/'>Clist.by</a>pour vous reconnecter<br>Description：L'implémentation par le script de l'affichage du score de Clist Rating repose sur les informations du cookie de l'utilisateur connecté à Clist.by,<br>Le script n'obtiendra pas vos informations de cookie spécifiques sur le site Clist.by, veuillez lire les instructions de la page du script. Pour plus de détails, veuillez lire les instructions de la page du script.",
             "other": "Une erreur inconnue s'est produite lors de l'accès à Clist.by, la requête a été interrompue, veuillez réessayer plus tard !"
+        },
+        "codeEditor": {
+            "load": "无法加载编辑器必要的数据，可能当前未登录/未报名/非题目页/比赛结束冻结期间/该比赛禁止结束后练习",
+            "submit": "代码编辑器提交失败，请稍后再重试"
         }
     }
 }
