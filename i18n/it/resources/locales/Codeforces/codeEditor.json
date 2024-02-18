@@ -33,5 +33,14 @@
         "waitingAnswer": "Attesa per la conferma dell'inizializzazione……",
         "connected": "LSP collegato",
         "error": "Connessione LSP scollegata"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "Si è verificato un errore durante l'invio del codice al server di codeforces, la preghiamo di riprovare!",
+            "getResultError": "Si è verificato un errore durante la richiesta di un risultato di corsa, la preghiamo di riprovare!"
+        },
+        "common": {
+            "error": "Si è verificato un errore sconosciuto. La preghiamo di riprovare."
+        }
     }
 }
