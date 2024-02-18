@@ -344,10 +344,10 @@
         "version": "Version：",
         "update": {
             "title": "update",
-            "thanksforDevChannelNotice": "<p>Thank you for joining the test channel and helping Codeforces Better! get better.</p><p>For feedback on issues go to<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>Thank you for joining the beta channel and helping Codeforces Better! get better.</p><p>For feedback on issues go to<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "Update Channel",
-                "helpText": "<p>You can choose the update channel for the script</p><p>Note that the beta version of：is automatically pushed after every commit on Github, so it has not been extensively tested and may have various unknown issues.</p><p>Please raise issues on Github and add Beta tags for issues with the beta version</p>",
+                "helpText": "<p>You can choose the update channel of the script</p><p>Note：The test version will be automatically pushed after every commit on Github, so it has not been extensively tested and verified. It may There are various unknown issues.</p><p>For questions about the test version, please raise issues on Github and add the Beta tag</p>",
                 "options": {
                     "release": "stable version",
                     "dev": "beta version"
