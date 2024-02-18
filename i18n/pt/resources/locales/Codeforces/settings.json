@@ -14,6 +14,9 @@
         "missing": {
             "radio": "A configuração atual requer que uma configuração seja adicionada e verificada.",
             "input": "As definições actuais requerem campos obrigatórios"
+        },
+        "unValid": {
+            "format": "Formatação inconsistente ou caracteres ilegais"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Percurso profissional.",
-                "helpText": "<p>Tem de preencher o caminho onde se encontra o OJBetter_Bridge</p><p>Utilize uma barra invertida ou uma barra invertida</p><p>Caminho predefinido：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>Tem de preencher o caminho onde se encontra o OJBetter_Bridge</p><p>Utilize uma barra invertida ou uma barra invertida</p><p>Caminho predefinido：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "Introduza o caminho e tenha em atenção que o separador é /."
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Servidor.",
-                "helpText": "<p>Tem de preencher o URL do servidor do OJBetter_Bridge na sua máquina local</p><p>URL predefinido: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Note que, normalmente, não precisa de alterar este ponto; se precisar de o alterar, faça-o de forma consistente com o formato de URL predefinido</p>"
+                "helpText": "<p>Tem de preencher o URL do servidor do OJBetter_Bridge na sua máquina local</p><p>URL predefinido: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Note que, normalmente, não precisa de alterar este ponto; se precisar de o alterar, faça-o de forma consistente com o formato de URL predefinido</p>",
+                "placeholder": "Por favor, introduza o caminho, prestando atenção para preencher estritamente de acordo com o formato"
             }
         },
         "staticCompletionEnhancement": {
