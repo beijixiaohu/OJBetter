@@ -5,33 +5,33 @@
         "translation": "Translation",
         "clist": "Clist",
         "monaco": "Monaco",
-        "preference": "preferences",
+        "preference": "Preferences",
         "dev": "Safeguard",
         "about": "About"
     },
     "common": {
-        "configManageTitle": "configuration management",
+        "configManageTitle": "Configurations Management",
         "missing": {
-            "radio": "The current setup requires that a configuration must be added and checked.",
-            "input": "Current settings require mandatory fields"
+            "radio": "This setting requires adding and selecting a configuration option.",
+            "input": "The current setting requires that you fill in the content"
         },
         "unValid": {
-            "format": "Inconsistent formatting or presence of illegal characters"
+            "format": "The format does not match or there are illegal characters"
         }
     },
     "basic": {
         "title": "Basic settings",
         "darkMode": {
-            "name": "dark mode",
+            "name": "Dark Theme",
             "options": {
-                "dark": "darkly",
-                "light": "daytime",
-                "system": "follow-up system"
+                "dark": "Dark",
+                "light": "Light",
+                "system": "Follow System"
             }
         },
-        "expandBlocks": "Automatic unfolding of folding blocks",
+        "expandBlocks": "Auto-expand folding blocks",
         "renderOptimization": {
-            "label": "Folded block rendering optimization",
+            "label": "Optimization of foldable block render",
             "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser is laggy when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
         },
         "paging": {
@@ -97,7 +97,7 @@
             }
         },
         "preference": {
-            "title": "preferences",
+            "title": "Preferences",
             "target": {
                 "title": "target language",
                 "helpText": "Note：The available translation services vary for different target languages, please read the script page for details."
@@ -223,7 +223,7 @@
             "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
         },
         "preferences": {
-            "title": "preferences",
+            "title": "Preferences",
             "isCodeSubmitConfirm": {
                 "label": "Secondary confirmation of code submission",
                 "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
@@ -324,7 +324,7 @@
         }
     },
     "preference": {
-        "title": "preferences",
+        "title": "Preferences",
         "loadingInfo": {
             "label": "Show load alert message",
             "helpText": "<p>When you turn on Show loading info, a loading info prompt will be displayed at the top every time the page loads：\"CodeforcesBetter -- xxx\"</p><p>This is used to see how the script is currently working<strong>If you don't want to see it, you can choose to Off</strong></p><p><u>It is important to note that if you need feedback on any loading issues with the script, please turn this option on before taking a screenshot to make it easier to analyze the issue</u></p>"
