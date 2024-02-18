@@ -33,5 +33,14 @@
         "waitingAnswer": "Esperando acuse de recibo de inicialización……",
         "connected": "LSP conectado",
         "error": "Conexión LSP desconectada"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "提交代码到 codeforces 服务器时发生了错误，请重试",
+            "getResultError": "请求运行结果时发生了错误，请重试"
+        },
+        "common": {
+            "error": "发生了未知的错误，请重试"
+        }
     }
 }
