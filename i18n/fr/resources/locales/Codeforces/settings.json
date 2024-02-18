@@ -14,6 +14,9 @@
         "missing": {
             "radio": "La configuration actuelle exige qu'une configuration soit ajoutée et vérifiée.",
             "input": "Les paramètres actuels requièrent des champs obligatoires"
+        },
+        "unValid": {
+            "format": "格式不符或存在非法字符"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Parcours de travail.",
-                "helpText": "<p>Vous devez indiquer le chemin d'accès à OJBetter_Bridge</p><p>Utilisez la barre oblique ou la barre oblique inverse</p><p>Chemin d'accès par défaut：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>Vous devez indiquer le chemin d'accès à OJBetter_Bridge</p><p>Utilisez la barre oblique ou la barre oblique inverse</p><p>Chemin d'accès par défaut：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "请输入路径，注意分隔符为为/"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Serveur.",
-                "helpText": "<p>Vous devez indiquer l'URL du serveur de OJBetter_Bridge sur votre machine locale</p><p>URL par défaut : </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Notez qu'il n'est généralement pas nécessaire de modifier cette URL. Si vous devez la modifier, veillez à ce qu'elle corresponde au format de l'URL par défaut :</p>"
+                "helpText": "<p>Vous devez indiquer l'URL du serveur de OJBetter_Bridge sur votre machine locale</p><p>URL par défaut : </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Notez qu'il n'est généralement pas nécessaire de modifier cette URL. Si vous devez la modifier, veillez à ce qu'elle corresponde au format de l'URL par défaut :</p>",
+                "placeholder": "请输入路径，注意严格按照格式填写"
             }
         },
         "staticCompletionEnhancement": {
