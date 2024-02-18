@@ -1,7 +1,7 @@
 {
     "common": {
         "advanced": {
-            "title": "high level",
+            "title": "Advanced",
             "header": {
                 "label": "Custom header",
                 "placeholder": "(optional) You can fill in additional key pairs to request head",
@@ -88,7 +88,7 @@
             }
         },
         "advanced": {
-            "title": "high level",
+            "title": "Advanced",
             "header": {
                 "label": "Custom header",
                 "placeholder": "(optional) You can fill in additional key pairs to request head",
