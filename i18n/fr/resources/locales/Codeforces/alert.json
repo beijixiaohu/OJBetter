@@ -30,8 +30,8 @@
             "other": "Une erreur inconnue s'est produite lors de l'accès à Clist.by, la requête a été interrompue, veuillez réessayer plus tard !"
         },
         "codeEditor": {
-            "load": "无法加载编辑器必要的数据，可能当前未登录/未报名/非题目页/比赛结束冻结期间/该比赛禁止结束后练习",
-            "submit": "代码编辑器提交失败，请稍后再重试"
+            "load": "Impossible de charger les données nécessaires à l'éditeur, il se peut que vous ne soyez pas connecté, que vous ne soyez pas enregistré, que vous n'ayez pas de page de titre, que vous soyez bloqué à la fin du tournoi ou que vous vous entraîniez après la fin de l'interdiction pour ce tournoi.",
+            "submit": "La soumission de l'éditeur de code a échoué, veuillez réessayer plus tard !"
         }
     }
 }
