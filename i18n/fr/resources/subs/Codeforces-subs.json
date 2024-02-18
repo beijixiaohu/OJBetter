@@ -165,7 +165,10 @@
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "Si vous avez déjà abordé ces sujets, les tournois virtuels ne sont pas faits pour vous - ils doivent être résolus dans la banque de questions.",
                 "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "Si vous souhaitez simplement résoudre un problème dans un tournoi, les tournois virtuels ne sont pas non plus faits pour vous - le problème doit être résolu dans la banque de questions.",
                 "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "N'utilisez pas le code d'autres personnes, ne lisez pas de tutoriels et ne communiquez pas avec d'autres personnes pendant le concours virtuel.",
-                "You can clone this contest to a mashup.": "Vous pouvez transformer ce concours en un concours de mashup."
+                "You can clone this contest to a mashup.": "Vous pouvez transformer ce concours en un concours de mashup.",
+                "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一种特殊类型的训练比赛，由过去Codeforces比赛的公开问题组成。还可以添加",
+                "problems to mashup contest.": "问题到混搭比赛。",
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "这样的比赛不能公开，只用于个人训练目的。还可以将混搭添加到团体中。要指定有关混搭比赛的其他信息，请使用训练营比赛编辑表单。"
             }
         },
         ".icon-eye-close.icon-large": {
