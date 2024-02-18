@@ -1,0 +1,19 @@
+{
+    "lsp": {
+        "socket": {
+            "open": "연결 설정",
+            "close": "연결이 닫힘",
+            "error": "연결 오류"
+        },
+        "state": {
+            "finished": "이행",
+            "running": "실행 중",
+            "error": "오류 발생"
+        },
+        "server": {
+            "regist": "등록된 주문 ↓",
+            "receive": "수신 데이터 ↓",
+            "transmit": "모나코로 전달된 데이터↓"
+        }
+    }
+}
