@@ -14,6 +14,9 @@
         "missing": {
             "radio": "現在の設定では、コンフィギュレーションを追加してチェックする必要がある。",
             "input": "現在の設定では必須フィールドが必要"
+        },
+        "unValid": {
+            "format": "一貫性のない書式や不正な文字"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "仕事の道",
-                "helpText": "<p>OJBetter_Bridgeが配置されているパスを記入する必要があります</p><p>フォワードまたはバックスラッシュのいずれかを使用</p><p>デフォルトパス：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>OJBetter_Bridgeが配置されているパスを記入する必要があります</p><p>フォワードまたはバックスラッシュのいずれかを使用</p><p>デフォルトパス：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "パスを入力してください。セパレーターは / です。"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "サーバー",
-                "helpText": "<p>ローカルマシンのOJBetter_BridgeのサーバーURLを記入する必要があります</p><p>デフォルトURL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>なお、通常はここを変更する必要はありません。変更する必要がある場合は、デフォルトのURL形式と一致させてください</p>"
+                "helpText": "<p>ローカルマシンのOJBetter_BridgeのサーバーURLを記入する必要があります</p><p>デフォルトURL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>なお、通常はここを変更する必要はありません。変更する必要がある場合は、デフォルトのURL形式と一致させてください</p>",
+                "placeholder": "パスを入力してください。形式に従って厳密に記入することに注意してください。"
             }
         },
         "staticCompletionEnhancement": {
