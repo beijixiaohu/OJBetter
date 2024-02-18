@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.44
+// @version      1.72.45
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -135,7 +135,7 @@ OJBetter.typeOfPage = {
     is_oldLatex: undefined,
     /** @type {boolean?} 是否是比赛页面 */
     is_contest: undefined,
-    /** @type {boolean?} 是否是问题页面 */
+    /** @type {boolean?} 是否是题目页面 */
     is_problem: undefined,
     /** @type {boolean?} 是否是完整的问题集页面 */
     is_completeProblemset: undefined,
@@ -425,7 +425,7 @@ OJBetter.supportList = {
  * @returns {number} 解析结果
  * @throws {Error} 如果解析失败，则抛出错误
  */
-const parseNumber = (val, strict = false) => {
+const OJB_parseNumber = (val, strict = false) => {
     const num = Number(val);
     if (isNaN(num) || (strict && val.toString() !== num.toString())) {
         throw new Error('Invalid number');
@@ -440,7 +440,7 @@ const parseNumber = (val, strict = false) => {
  * @returns {boolean} - 解析结果
  * @throws {Error} - 如果解析失败，则抛出错误
  */
-const parseBoolean = (val, strict) => {
+const OJB_parseBoolean = (val, strict) => {
     if (strict) {
         if (val === true || val === false) return val;
         throw new Error('Invalid boolean');
@@ -454,7 +454,7 @@ const parseBoolean = (val, strict) => {
  * @returns {Object} - 解析结果
  * @throws {Error} - 如果解析失败，则抛出错误
  */
-const parseObject = val => {
+const OJB_parseObject = val => {
     try {
         return JSON.parse(val);
     } catch {
@@ -468,7 +468,7 @@ const parseObject = val => {
  * @returns {Object[]} - 解析结果
  * @throws {Error} - 如果解析失败，则抛出错误
  */
-const parseLinePairArray = val => {
+const OJB_parseLinePairArray = val => {
     if (typeof val !== 'string' || val.trim() === '') return [];
     return val.split("\n").filter(line => line.trim() !== '').map(line => {
         const indexOfFirstColon = line.indexOf(":");
@@ -495,7 +495,7 @@ const parseLinePairArray = val => {
  * evaluatePathOrExpression(obj, "a.b + c"); // 3
  * evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
  */
-function evaluatePathOrExpression(obj, pathOrExpression) {
+function OJB_evaluatePathOrExpression(obj, pathOrExpression) {
     const hasOperator = /[\+\-\*\/]/.test(pathOrExpression);
     const getPathValue = (obj, path) => {
         return path.split('.').reduce((acc, part) => {
@@ -533,7 +533,7 @@ function evaluatePathOrExpression(obj, pathOrExpression) {
  * @param {string} [options.pathOrExpression=''] - 用于对象或数组类型，表示路径表达式或获取元素的索引。
  * @returns {any} - 检索到的值。
  */
-const getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOrExpression = '' } = {}) => {
+const OJB_getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOrExpression = '' } = {}) => {
     let value = GM_getValue(key);
     if (value === undefined || value === null || value === "") {
         GM_setValue?.(key, defaultValue);
@@ -542,11 +542,11 @@ const getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOr
 
     const parsers = {
         string: val => val,
-        number: (val) => parseNumber(val, strict),
-        boolean: (val) => parseBoolean(val, strict),
-        object: parseObject,
-        array: parseObject,
-        linePairArray: parseLinePairArray
+        number: (val) => OJB_parseNumber(val, strict),
+        boolean: (val) => OJB_parseBoolean(val, strict),
+        object: OJB_parseObject,
+        array: OJB_parseObject,
+        linePairArray: OJB_parseLinePairArray
     };
 
     if (!(type in parsers)) {
@@ -563,7 +563,7 @@ const getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOr
 
     // The pathOrExpression processing is not applicable to linePairArray type
     if ((type === 'object' || type === 'array') && pathOrExpression) {
-        const evaluated = evaluatePathOrExpression(value, pathOrExpression);
+        const evaluated = OJB_evaluatePathOrExpression(value, pathOrExpression);
         if (evaluated === undefined) {
             console.error('Path or expression evaluation returned undefined');
             return defaultValue;
@@ -580,7 +580,7 @@ const getGMValue = (key, defaultValue, { type = 'string', strict = false, pathOr
  * @param {string} version2 版本号2
  * @returns {number} -1: version1 < version2, 0: version1 = version2, 1: version1 > version2
  */
-const compareVersions = function (version1 = "0", version2 = "0") {
+const OJB_compareVersions = function (version1 = "0", version2 = "0") {
     const v1Array = version1.split(".").map(Number);
     const v2Array = version2.split(".").map(Number);
     const length = Math.max(v1Array.length, v2Array.length);
@@ -596,8 +596,8 @@ const compareVersions = function (version1 = "0", version2 = "0") {
  */
 async function initVar() {
     const { hostname, href } = window.location;
-    OJBetter.state.lastAnnounceVer = getGMValue("lastAnnounceVer", "0");
-    OJBetter.state.lastReadAnnounceVer = getGMValue("lastReadAnnounceVer", "0");
+    OJBetter.state.lastAnnounceVer = OJB_getGMValue("lastAnnounceVer", "0");
+    OJBetter.state.lastReadAnnounceVer = OJB_getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
     OJBetter.typeOfPage.is_oldLatex = $('.tex-span').length;
     OJBetter.typeOfPage.is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
@@ -614,35 +614,35 @@ async function initVar() {
             })
             .get()
             .every(score => /^[0-9]+$/.test(score));
-    OJBetter.localization.websiteLang = getGMValue("localizationLanguage", "zh");
-    OJBetter.localization.scriptLang = getGMValue("scriptL10nLanguage", "zh");
-    OJBetter.basic.renderPerfOpt = getGMValue("renderPerfOpt", false);
-    OJBetter.basic.commentPaging = getGMValue("commentPaging", true);
-    OJBetter.basic.showJumpToLuogu = getGMValue("showJumpToLuogu", true);
-    OJBetter.basic.standingsRecolor = getGMValue("standingsRecolor", true);
-    OJBetter.state.notWaiteLoaded = getGMValue("notWaiteLoaded", false);
-    OJBetter.translation.targetLang = getGMValue("transTargetLang", "zh");
-    OJBetter.translation.choice = getGMValue("translation", "deepl");
-    OJBetter.translation.comment.transMode = getGMValue("commentTranslationMode", "0");
-    OJBetter.translation.comment.choice = getGMValue("commentTranslationChoice", "0");
-    OJBetter.translation.memory.enabled = getGMValue("memoryTranslateHistory", true);
-    OJBetter.translation.auto.enabled = getGMValue("autoTranslation", false);
-    OJBetter.translation.auto.shortTextLength = getGMValue("shortTextLength", "2000");
-    OJBetter.translation.retransAction = getGMValue("retransAction", "0");
-    OJBetter.translation.waitTime = getGMValue("transWaitTime", "200");
-    OJBetter.translation.auto.mixTrans.enabled = getGMValue("allowMixTrans", true);
-    OJBetter.translation.auto.mixTrans.servers = getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun']);
+    OJBetter.localization.websiteLang = OJB_getGMValue("localizationLanguage", "zh");
+    OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
+    OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
+    OJBetter.basic.commentPaging = OJB_getGMValue("commentPaging", true);
+    OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
+    OJBetter.basic.standingsRecolor = OJB_getGMValue("standingsRecolor", true);
+    OJBetter.state.notWaiteLoaded = OJB_getGMValue("notWaiteLoaded", false);
+    OJBetter.translation.targetLang = OJB_getGMValue("transTargetLang", "zh");
+    OJBetter.translation.choice = OJB_getGMValue("translation", "deepl");
+    OJBetter.translation.comment.transMode = OJB_getGMValue("commentTranslationMode", "0");
+    OJBetter.translation.comment.choice = OJB_getGMValue("commentTranslationChoice", "0");
+    OJBetter.translation.memory.enabled = OJB_getGMValue("memoryTranslateHistory", true);
+    OJBetter.translation.auto.enabled = OJB_getGMValue("autoTranslation", false);
+    OJBetter.translation.auto.shortTextLength = OJB_getGMValue("shortTextLength", "2000");
+    OJBetter.translation.retransAction = OJB_getGMValue("retransAction", "0");
+    OJBetter.translation.waitTime = OJB_getGMValue("transWaitTime", "200");
+    OJBetter.translation.auto.mixTrans.enabled = OJB_getGMValue("allowMixTrans", true);
+    OJBetter.translation.auto.mixTrans.servers = OJB_getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun']);
     OJBetter.common.taskQueue = new TaskQueue();
-    OJBetter.translation.replaceSymbol = getGMValue("replaceSymbol", "2");
-    OJBetter.translation.filterTextWithoutEmphasis = getGMValue("filterTextWithoutEmphasis", false);
-    OJBetter.clist.enabled.contest = getGMValue("showClistRating_contest", false);
-    OJBetter.clist.enabled.problem = getGMValue("showClistRating_problem", false);
-    OJBetter.clist.enabled.problemset = getGMValue("showClistRating_problemset", false);
-    OJBetter.clist.ratingHidden = getGMValue("RatingHidden", false);
-    OJBetter.clist.authorization = getGMValue("clist_Authorization", "");
+    OJBetter.translation.replaceSymbol = OJB_getGMValue("replaceSymbol", "2");
+    OJBetter.translation.filterTextWithoutEmphasis = OJB_getGMValue("filterTextWithoutEmphasis", false);
+    OJBetter.clist.enabled.contest = OJB_getGMValue("showClistRating_contest", false);
+    OJBetter.clist.enabled.problem = OJB_getGMValue("showClistRating_problem", false);
+    OJBetter.clist.enabled.problemset = OJB_getGMValue("showClistRating_problemset", false);
+    OJBetter.clist.ratingHidden = OJB_getGMValue("RatingHidden", false);
+    OJBetter.clist.authorization = OJB_getGMValue("clist_Authorization", "");
     //deepl
-    OJBetter.deepl.config.type = getGMValue("deepl_type", "free");
-    OJBetter.deepl.configs = getGMValue("deepl_config", {
+    OJBetter.deepl.config.type = OJB_getGMValue("deepl_type", "free");
+    OJBetter.deepl.configs = OJB_getGMValue("deepl_config", {
         "choice": "",
         "configurations": []
     });
@@ -659,19 +659,19 @@ async function initVar() {
         OJBetter.deepl.config.apiGenre = configuration.apiGenre;
         OJBetter.deepl.config.key = configuration.key;
         OJBetter.deepl.config.proxy = configuration.proxy;
-        OJBetter.deepl.config.header = parseLinePairArray(configuration._header);
-        OJBetter.deepl.config.data = parseLinePairArray(configuration._data);
+        OJBetter.deepl.config.header = OJB_parseLinePairArray(configuration._header);
+        OJBetter.deepl.config.data = OJB_parseLinePairArray(configuration._data);
         OJBetter.deepl.config.quota.url = configuration.quota_url;
         OJBetter.deepl.config.quota.method = configuration.quota_method;
-        OJBetter.deepl.config.quota.header = parseLinePairArray(configuration.quota_header);
-        OJBetter.deepl.config.quota.data = parseLinePairArray(configuration.quota_data);
+        OJBetter.deepl.config.quota.header = OJB_parseLinePairArray(configuration.quota_header);
+        OJBetter.deepl.config.quota.data = OJB_parseLinePairArray(configuration.quota_data);
         OJBetter.deepl.config.quota.surplus = configuration.quota_surplus;
     }
-    OJBetter.deepl.enableEmphasisProtection = getGMValue("enableEmphasisProtection", true);
-    OJBetter.deepl.enableLinkProtection = getGMValue("enableLinkProtection", true);
+    OJBetter.deepl.enableEmphasisProtection = OJB_getGMValue("enableEmphasisProtection", true);
+    OJBetter.deepl.enableLinkProtection = OJB_getGMValue("enableLinkProtection", true);
     //openai
-    OJBetter.chatgpt.isStream = getGMValue("openai_isStream", true);
-    OJBetter.chatgpt.configs = getGMValue("chatgpt_config", {
+    OJBetter.chatgpt.isStream = OJB_getGMValue("openai_isStream", true);
+    OJBetter.chatgpt.configs = OJB_getGMValue("chatgpt_config", {
         "choice": "",
         "configurations": []
     });
@@ -688,37 +688,37 @@ async function initVar() {
         OJBetter.chatgpt.config.model = configuration.model;
         OJBetter.chatgpt.config.key = configuration.key;
         OJBetter.chatgpt.config.proxy = configuration.proxy;
-        OJBetter.chatgpt.config.header = parseLinePairArray(configuration._header);
-        OJBetter.chatgpt.config.data = parseLinePairArray(configuration._data);
+        OJBetter.chatgpt.config.header = OJB_parseLinePairArray(configuration._header);
+        OJBetter.chatgpt.config.data = OJB_parseLinePairArray(configuration._data);
         OJBetter.chatgpt.config.quota.url = configuration.quota_url;
         OJBetter.chatgpt.config.quota.method = configuration.quota_method;
-        OJBetter.chatgpt.config.quota.header = parseLinePairArray(configuration.quota_header);
-        OJBetter.chatgpt.config.quota.data = parseLinePairArray(configuration.quota_data);
+        OJBetter.chatgpt.config.quota.header = OJB_parseLinePairArray(configuration.quota_header);
+        OJBetter.chatgpt.config.quota.data = OJB_parseLinePairArray(configuration.quota_data);
         OJBetter.chatgpt.config.quota.surplus = configuration.quota_surplus;
     }
     // 编辑器
     if (!OJBetter.typeOfPage.is_mSite) OJBetter.common.cf_csrf_token = Codeforces.getCsrfToken();
     else OJBetter.common.cf_csrf_token = "";
-    OJBetter.monaco.compilerSelection = getGMValue("compilerSelection", "61");
-    OJBetter.monaco.setting.fontsize = getGMValue("editorFontSize", "15");
-    OJBetter.monaco.enableOnProblemPage = getGMValue("problemPageCodeEditor", true);
-    OJBetter.monaco.complet.cppCodeTemplate = getGMValue("cppCodeTemplateComplete", true);
-    OJBetter.monaco.onlineCompilerChoice = getGMValue("onlineCompilerChoice", "official");
-    OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = getGMValue("isCodeSubmitConfirm", true);
-    OJBetter.monaco.setting.alwaysConsumeMouseWheel = getGMValue("alwaysConsumeMouseWheel", true);
-    OJBetter.monaco.setting.submitButtonPosition = getGMValue("submitButtonPosition", "bottom");
+    OJBetter.monaco.compilerSelection = OJB_getGMValue("compilerSelection", "61");
+    OJBetter.monaco.setting.fontsize = OJB_getGMValue("editorFontSize", "15");
+    OJBetter.monaco.enableOnProblemPage = OJB_getGMValue("problemPageCodeEditor", true);
+    OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
+    OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
+    OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
+    OJBetter.monaco.setting.alwaysConsumeMouseWheel = OJB_getGMValue("alwaysConsumeMouseWheel", true);
+    OJBetter.monaco.setting.submitButtonPosition = OJB_getGMValue("submitButtonPosition", "bottom");
     //自定义补全
-    OJBetter.monaco.complet.customConfig = getGMValue("Complet_config", {
+    OJBetter.monaco.complet.customConfig = OJB_getGMValue("Complet_config", {
         "choice": -1,
         "configurations": []
     });
     /**
     * 加载monaco编辑器资源
     */
-    OJBetter.monaco.lsp.enabled = getGMValue("useLSP", false);
-    OJBetter.monaco.setting.position = getGMValue("monacoEditor_position", "initial");
-    OJBetter.monaco.lsp.workUri = getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
-    OJBetter.monaco.lsp.socketUrl = getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
+    OJBetter.monaco.lsp.enabled = OJB_getGMValue("useLSP", false);
+    OJBetter.monaco.setting.position = OJB_getGMValue("monacoEditor_position", "initial");
+    OJBetter.monaco.lsp.workUri = OJB_getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
+    OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
     if (OJBetter.monaco.enableOnProblemPage) {
         let monacoLoader = document.createElement("script");
         monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
@@ -733,12 +733,12 @@ async function initVar() {
             });
         }
     }
-    OJBetter.preference.showLoading = getGMValue("showLoading", true);
-    OJBetter.preference.hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
-    OJBetter.basic.expandFoldingblocks = getGMValue("expandFoldingblocks", true);
-    OJBetter.preference.iconButtonSize = getGMValue("iconButtonSize", "16");
-    OJBetter.about.updateChannel = getGMValue("updateChannel", "release");
-    OJBetter.about.updateSource = getGMValue("updateSource", "greasyfork");
+    OJBetter.preference.showLoading = OJB_getGMValue("showLoading", true);
+    OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
+    OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
+    OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
+    OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
 }
 
 /**
@@ -747,12 +747,12 @@ async function initVar() {
 async function showAnnounce() {
     /** @type {string} 最新公告版本*/
     const lastAnnounceVer = i18next.t('lastVersion', { ns: 'announce' });
-    if (compareVersions(OJBetter.state.version, OJBetter.state.lastAnnounceVer) === 1) {
+    if (OJB_compareVersions(OJBetter.state.version, OJBetter.state.lastAnnounceVer) === 1) {
         const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${OJBetter.state.version}`;
         /** @type {Boolean} 是否是新的公告 */
-        const isNewAnnounceVer = compareVersions(lastAnnounceVer, OJBetter.state.lastReadAnnounceVer) === 1;
+        const isNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.lastReadAnnounceVer) === 1;
         /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
-        const showNewAnnounceVer = compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
+        const showNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
         const content = (() => {
             if (isNewAnnounceVer && showNewAnnounceVer) {
                 return i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
@@ -760,7 +760,7 @@ async function showAnnounce() {
                 return i18next.t('announce.divContent', { ns: 'dialog' });
             }
         })();
-        const ok = await createDialog(
+        const ok = await OJB_createDialog(
             title,
             content,
             [
@@ -784,29 +784,27 @@ async function showAnnounce() {
 function showWarnMessage() {
     if (OJBetter.typeOfPage.is_oldLatex) {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.is_oldLatex', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.typeOfPage.is_acmsguru) {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.is_acmsguru', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.translation.comment.transMode == "1") {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.trans_segment', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.translation.comment.transMode == "2") {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.trans_select', { ns: 'alert' })}`, 'warning');
     }
     if (OJBetter.typeOfPage.is_submitPage && OJBetter.monaco.enableOnProblemPage) {
         const loadingMessage = new LoadingMessage();
-        if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
     }
 }
 
 // 常量
-const OJBetterName = 'Codeforces Better!';
-const findHelpText1 = '\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/465777/feedback 或者 https://github.com/beijixiaohu/OJBetter/issues 寻求帮助\n\n';
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
 const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
@@ -814,7 +812,6 @@ m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 153.31 7.21 C 161.99 7.21 170.67 7.21 179.34 7.21 C 179.41 9.30 179.45 11.40 179.48 13.50 C 176.35 13.50 173.22 13.50 170.09 13.50 C 170.05 21.99 170.12 30.48 170.05 38.98 C 167.61 39.00 165.18 39.00 162.74 39.00 C 162.64 30.52 162.73 22.04 162.69 13.55 C 159.57 13.49 156.44 13.49 153.32 13.50 C 153.32 11.40 153.31 9.31 153.31 7.21 Z" /></g><g id="#ffd700ff"><path fill="#ffd700" opacity="1.00" d=" M 12.02 29.98 C 14.02 27.98 16.02 25.98 18.02 23.98 C 22.01 27.99 26.03 31.97 30.00 35.99 C 34.01 31.99 38.01 27.98 42.02 23.99 C 44.02 25.98 46.02 27.98 48.01 29.98 C 42.29 36.06 35.80 41.46 30.59 48.00 L 29.39 48.00 C 24.26 41.42 17.71 36.08 12.02 29.98 Z" /></g></svg>`;
-
 
 /**
  * 连接数据库
@@ -836,7 +833,7 @@ async function initDB() {
  * 清空数据库
  */
 async function clearDatabase() {
-    const isConfirmed = await createDialog(
+    const isConfirmed = await OJB_createDialog(
         i18next.t('isClearDatabase.title', { ns: 'dialog' }),
         i18next.t('isClearDatabase.content', { ns: 'dialog' }),
         [
@@ -892,7 +889,7 @@ async function exportDatabase() {
  * @param {string} jsonData 数据库的JSON字符串
  */
 async function importDatabase(jsonData) {
-    const isConfirmed = await createDialog(
+    const isConfirmed = await OJB_createDialog(
         i18next.t('isImportDatabase.title', { ns: 'dialog' }),
         i18next.t('isImportDatabase.content', { ns: 'dialog' }),
         [
@@ -983,7 +980,7 @@ function readFileInput(callback) {
  * 删除所有设置
  */
 async function deleteAllConfigSettings() {
-    const isConfirmed = await createDialog(
+    const isConfirmed = await OJB_createDialog(
         i18next.t('isDeleteAllConfigSettings.title', { ns: 'dialog' }),
         i18next.t('isDeleteAllConfigSettings.content', { ns: 'dialog' }),
         [
@@ -1024,7 +1021,7 @@ function exportSettingsToJSON() {
  * @returns {void}
  */
 async function importSettingsFromJSON(jsonData) {
-    const isConfirmed = await createDialog(
+    const isConfirmed = await OJB_createDialog(
         i18next.t('isImportSettings.title', { ns: 'dialog' }),
         i18next.t('isImportSettings.content', { ns: 'dialog' }),
         [
@@ -1052,17 +1049,17 @@ async function importSettingsFromJSON(jsonData) {
 
 /**
  * 加载元素本地化语言数据
- * @param {JQuery} $element jQuery元素
+ * @param {JQuery} element jQuery元素
  * @param {number} [retries=10] 重试次数
  * @param {number} [interval=50] 重试间隔
  */
-function elementLocalize($element, retries = 10, interval = 50) {
-    if ($.isFunction($element.localize)) {
-        $element.localize();
+function elementLocalize(element, retries = 10, interval = 50) {
+    if ($.isFunction(element.localize)) {
+        element.localize();
     } else if (retries > 0) {
-        setTimeout(elementLocalize, interval, $element, retries - 1, interval);
+        setTimeout(elementLocalize, interval, element, retries - 1, interval);
     } else {
-        console.error(`Unable to localize ${element}`);
+        console.error('Unable to localize', element);
     }
 }
 
@@ -1099,7 +1096,7 @@ function handleColorSchemeChange(event) {
             setTimeout(setDarkTheme, 100);
         }
     }
-    OJBetter.basic.darkMode = getGMValue("darkMode", "follow")
+    OJBetter.basic.darkMode = OJB_getGMValue("darkMode", "follow")
     if (OJBetter.basic.darkMode == "dark") {
         setDarkTheme();
     } else if (OJBetter.basic.darkMode == "follow") {
@@ -3287,7 +3284,7 @@ function addI18nStyles() {
  * @param {number} ms 延迟时间（毫秒） 
  * @returns {Promise<void>}
  */
-function delay(ms) {
+function OJB_delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -3297,7 +3294,7 @@ function delay(ms) {
  * @param {any} b - 第二个比较对象。
  * @returns {boolean} - 如果两个对象或数组深度相等，则返回true，否则返回false。
  */
-function deepEquals(a, b) {
+function OJB_deepEquals(a, b) {
     if (a === b) return true;
     if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) return false;
     const keysA = Object.keys(a);
@@ -3305,7 +3302,7 @@ function deepEquals(a, b) {
     if (keysA.length !== keysB.length) return false;
     for (let key of keysA) {
         if (!b.hasOwnProperty(key)) return false;
-        if (!deepEquals(a[key], b[key])) return false;
+        if (!OJB_deepEquals(a[key], b[key])) return false;
     }
     return true;
 }
@@ -3320,7 +3317,7 @@ function deepEquals(a, b) {
  * @param {...any} args task 函数的参数
  * @returns {Promise} 返回 Promise
  */
-async function promiseRetryWrapper(task, {
+async function OJB_promiseRetryWrapper(task, {
     maxRetries = 5,
     retryInterval = 0,
     errorHandler = (err) => { throw err }
@@ -3334,7 +3331,7 @@ async function promiseRetryWrapper(task, {
                 return errorHandler(err, maxRetries, attemptsLeft);
             }
             if (retryInterval > 0) {
-                await delay(retryInterval);
+                await OJB_delay(retryInterval);
             }
         }
     }
@@ -3359,7 +3356,7 @@ class GMError extends Error {
  * @param {Boolean} isStream 是否为流式请求
  * @returns {Promise} 返回 Promise
  */
-function GMRequest(options, isStream = false) {
+function OJB_GMRequest(options, isStream = false) {
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
             ...options,
@@ -3380,7 +3377,7 @@ function GMRequest(options, isStream = false) {
  * @param {string} name cookie名称
  * @returns {string} cookie值
  */
-function getCookie(name) {
+function OJB_getCookie(name) {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
         const cookie = cookies[i].trim();
@@ -3398,7 +3395,7 @@ function getCookie(name) {
  * @param {number} numDigits 位数
  * @returns {number}
  */
-function getRandomNumber(numDigits) {
+function OJB_getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -3409,7 +3406,7 @@ function getRandomNumber(numDigits) {
  * @param {Function} callback 回调函数
  * @returns {Function}
  */
-function debounce(callback) {
+function OJB_debounce(callback) {
     let timer;
     let immediateExecuted = false;
     const delay = 500;
@@ -3476,7 +3473,7 @@ function OJB_addDraggable(element) {
  * 切换元素的折叠/展开过渡动画
  * @param {HTMLElement} element
  */
-function toggleCollapseExpand(element) {
+function OJB_toggleCollapseExpand(element) {
     // 设置transitionend事件监听器的函数
     const setTransitionListener = (listener) => {
         const listenerName = `transitionEndListener${Date.now()}`;
@@ -3537,8 +3534,8 @@ function toggleCollapseExpand(element) {
  * @param {string} url JSON Url
  * @returns {Promise<Object>} JSON Object
  */
-async function getExternalJSON(url) {
-    const response = await GMRequest({
+async function OJB_getExternalJSON(url) {
+    const response = await OJB_GMRequest({
         method: "GET",
         url: url
     });
@@ -3557,7 +3554,7 @@ async function getExternalJSON(url) {
  * @param {boolean} renderMarkdown 是否使用markdown渲染文本
  * @returns {Promise<boolean>} 用户点击了确定按钮返回true, 否则返回false
  */
-function createDialog(title, content, buttons, renderMarkdown = false) {
+function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
     return new Promise(resolve => {
         let contentHtml = content;
 
@@ -3673,7 +3670,7 @@ function clearI18nextCache() {
  */
 async function checkScriptVersion() {
     try {
-        const versionResponse = await GMRequest({
+        const versionResponse = await OJB_GMRequest({
             method: "GET",
             url: "https://aowuucdn.oss-accelerate.aliyuncs.com/script/versions.json",
             timeout: 10 * 1e3,
@@ -3689,11 +3686,11 @@ async function checkScriptVersion() {
         /** @type {string} 更新跳转url */
         const updateUrl = baseUrls[OJBetter.about.updateSource];
         /** @type {string} 是否暂时跳过cookie */
-        const skipUpdate = getCookie("skipUpdate");
+        const skipUpdate = OJB_getCookie("skipUpdate");
         /** @type {string} 当前更新频道的最新版本 */
         const version = OJBetter.about.updateChannel == "release" ? version_release : version_dev;
-        if (compareVersions(version, OJBetter.state.version) === 1 && skipUpdate !== "true") {
-            const updateConfirmed = await createDialog(
+        if (OJB_compareVersions(version, OJBetter.state.version) === 1 && skipUpdate !== "true") {
+            const updateConfirmed = await OJB_createDialog(
                 i18next.t('update.title', { ns: 'dialog', scriptName: OJBetter.state.name }),
                 i18next.t('update.content', { ns: 'dialog', oldVersion: OJBetter.state.version, newVersion: version }),
                 [
@@ -3710,7 +3707,7 @@ async function checkScriptVersion() {
             }
         }
     } catch (error) {
-        console.error("更新检查失败：", error);
+        console.error("Update check failed: ", error);
     }
 }
 
@@ -3780,7 +3777,7 @@ class LoadingMessage {
     /**
      * 更新提示信息
      * @param {string} text 提示信息文本
-     * @param {string} type 提示信息类型，可选值：info, success, warning, danger
+     * @param {string} type 提示信息类型，可选值：info, success, warning, error
      * @param {number} timeout 提示信息显示的持续时间（毫秒）, 默认为无限长
      */
     updateStatus(text, type = 'info', timeout = Infinity, isMarkdown = false) {
@@ -3790,7 +3787,7 @@ class LoadingMessage {
             });
             text = md.render(text);
         }
-        this._statusElement.html(text).removeClass("alert-info alert-success alert-warning alert-danger").addClass(`alert-${type}`);
+        this._statusElement.html(text).removeClass("alert-info alert-success alert-warning alert-error").addClass(`alert-${type}`);
         if (!this._isDisplayed) {
             this.showStatus();
         }
@@ -3815,13 +3812,13 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
     if (data) data = data.data;
     if (!data) {
         // 如果本地没有数据，从远端获取并保存
-        data = await getExternalJSON(url);
+        data = await OJB_getExternalJSON(url);
         await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: data });
     } else {
         // 如果本地有数据，先返回旧数据，然后在后台更新
         (async () => {
             try {
-                const newData = await getExternalJSON(url);
+                const newData = await OJB_getExternalJSON(url);
                 await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
             } catch (error) {
                 console.error('Failed to update localization data:', error);
@@ -4020,7 +4017,8 @@ async function initI18next() {
             .use(i18nextChainedBackend)
             .init({
                 lng: OJBetter.localization.scriptLang,
-                ns: ['common', 'settings', 'config', 'dialog', 'alert', 'translator', 'button', 'codeEditor', 'comments', 'announce'], // 命名空间列表
+                ns: ['common', 'settings', 'config', 'dialog', 'alert', 'translator',
+                    'button', 'codeEditor', 'comments', 'announce', 'logMessage'], // 命名空间列表
                 defaultNS: 'settings',
                 fallbackLng: ['zh', OJBetter.translation.targetLang],
                 load: 'currentOnly',
@@ -4252,7 +4250,7 @@ class Validator {
      * @param {boolean} isValid - 字段值是否有效
      */
     static toggleErrorDisplay(key, isValid) {
-        const errorMessage = '格式不符或存在非法字符';
+        const errorMessage = i18next.t('common.unValid', { ns: 'settings' });
         const $errorSpan = $(key).prev('span.text-error');
         if (!isValid) {
             if (!$errorSpan.length) {
@@ -4380,7 +4378,7 @@ class ConfigManager {
      * @returns {HTMLElement} - 列表项
      */
     createListItemElement(text) {
-        const id = getRandomNumber(4);
+        const id = OJB_getRandomNumber(4);
         const li = $("<li></li>");
         const radio = $(`<input type='radio' name='${this.prefix}config_item'></input>`)
             .attr("value", text)
@@ -4668,7 +4666,7 @@ const l10n_settings_HTML = `
     <div class='OJBetter_setting_list'>
         <label for="localizationLanguage" style="display: flex;" data-i18n="settings:localization.websiteLanguageLabel"></label>
         <select id="localizationLanguage" name="localizationLanguage">
-            <option value="initial">不改变</option>
+            <option value="initial">——</option>
             <option value="zh">简体中文</option>
             <option value="zh-Hant">繁體中文</option>
             <option value="de">Deutsch</option>
@@ -4942,7 +4940,7 @@ const clist_rating_settings_HTML = `
             ${helpCircleHTML}
             <div class="tip_text" data-i18n="[html]settings:clist.basics.key.helpText"></div>
         </div>
-        <input type='text' id='clist_Authorization' class='no_default' placeholder='请输入KEY' required="true"
+        <input type='text' id='clist_Authorization' class='no_default' required="true"
             data-i18n="[placeholder]settings:clist.basics.key.keyPlaceholder">
     </div>
     <hr>
@@ -5052,12 +5050,10 @@ const code_editor_settings_HTML = `
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.OJBetter_Bridge_WorkUri.helpText">
-                
-            </div>
+            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.OJBetter_Bridge_WorkUri.helpText"></div>
         </div>
-        <input type='text' id='OJBetter_Bridge_WorkUri' class='no_default' placeholder='请输入路径，注意分隔符为为/'
-            require=true>
+        <input type='text' id='OJBetter_Bridge_WorkUri' class='no_default'
+            require=true data-i18n="[placeholder]settings:codeEditor.lsp.OJBetter_Bridge_WorkUri.placeholder">
     </div>
     <div class='OJBetter_setting_list'>
         <label for='OJBetter_Bridge_SocketUrl'>
@@ -5068,12 +5064,10 @@ const code_editor_settings_HTML = `
         </label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.OJBetter_Bridge_SocketUrl.helpText">
-                
-            </div>
+            <div class="tip_text" data-i18n="[html]settings:codeEditor.lsp.OJBetter_Bridge_SocketUrl.helpText"></div>
         </div>
-        <input type='text' id='OJBetter_Bridge_SocketUrl' class='no_default' placeholder='请输入路径，注意严格按照格式填写'
-            require=true>
+        <input type='text' id='OJBetter_Bridge_SocketUrl' class='no_default'
+            require=true data-i18n="[placeholder]settings:codeEditor.lsp.OJBetter_Bridge_SocketUrl.placeholder">
     </div>
     <hr>
     <h4 data-i18n="settings:codeEditor.staticCompletionEnhancement.title"></h4>
@@ -5880,7 +5874,7 @@ async function initSettingsPanel() {
             const combinedConfigs = Object.assign({}, settings, tempConfigs); // 合并settings和tempConfigs对象
             for (const [key, value] of Object.entries(combinedConfigs)) {
                 const storedValue = GM_getValue(key);
-                if (!deepEquals(value, storedValue)) {
+                if (!OJB_deepEquals(value, storedValue)) {
                     changes[key] = { oldValue: storedValue, newValue: value };
                 }
             }
@@ -5888,7 +5882,7 @@ async function initSettingsPanel() {
             // 如果changes对象不为空，则有变化
             if (Object.keys(changes).length > 0) {
                 console.log("Changes detected:", changes);
-                const shouldSave = await createDialog(
+                const shouldSave = await OJB_createDialog(
                     i18next.t('saveSetting.title', { ns: 'dialog' }),
                     i18next.t('saveSetting.content', { ns: 'dialog' }),
                     [
@@ -6225,7 +6219,7 @@ function isLikelyCodeSnippet(text) {
     const hasPythonIndentation = cleanedText.includes('\n    ') || cleanedText.includes('\n\t');
 
     // 如果代码关键字数量或者特殊代码字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
-    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2||hasPythonIndentation) {
+    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2 || hasPythonIndentation) {
         return true;
     }
 
@@ -6501,7 +6495,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         changeButtonState("loaded");
     }
 
-    button.click(debounce(function () {
+    button.click(OJB_debounce(function () {
         var target = $(element).get(0);
 
         /**
@@ -6587,7 +6581,7 @@ async function addButtonWithCopy(button, element, suffix, type) {
         changeButtonState("loaded");
     }
 
-    button.click(debounce(function () {
+    button.click(OJB_debounce(function () {
         var target = $(element).get(0);
 
         var markdown = $(element).getMarkdown();
@@ -6640,7 +6634,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         // button.after(`<span>${length}</span>`); // 显示字符数
     }
 
-    button.click(debounce(async function () {
+    button.click(OJB_debounce(async function () {
         // 重新翻译
         let resultStack = $(this).getResultFromTransButton();
         if (resultStack) {
@@ -6716,7 +6710,10 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
 
         if (is_comment) {
-            var label = $('<label><input type="radio" name="translation" value="0"><span class="OJBetter_contextmenu_label_text">跟随首选项</span></label>');
+            var label = $(`<label><input type="radio" name="translation" value="0">
+            <span class="OJBetter_contextmenu_label_text">
+            ${i18next.t('translation.preference.comment_translation_choice.services.follow', { ns: 'settings' })}
+            </span></label>`);
             menu.append(label);
         }
         translations.forEach(function (translation) {
@@ -6823,7 +6820,7 @@ async function process(button, target, element_node, type, is_comment, count, tr
 
     //是否跳过折叠块
     if ($(target).find('.spoiler').length > 0) {
-        const shouldSkip = await createDialog(
+        const shouldSkip = await OJB_createDialog(
             i18next.t('skipFold.title', { ns: 'dialog' }),
             i18next.t('skipFold.content', { ns: 'dialog' }),
             [
@@ -6889,7 +6886,7 @@ async function multiChoiceTranslation() {
             // 移除对应的按钮 
             $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('OJBetter_p_id'));
         } else {
-            let id = getRandomNumber(8);
+            let id = OJB_getRandomNumber(8);
             $this.attr('OJBetter_p_id', id);
             $this.addClass('block_selected');
             // 添加按钮 
@@ -6964,7 +6961,7 @@ async function addConversionButton() {
         $('.problem-statement').children('div').each((i, e) => {
             var className = $(e).attr('class');
             if (!exContentsPageClasses.includes(className)) {
-                var id = "_problem_" + getRandomNumber(8);
+                var id = "_problem_" + OJB_getRandomNumber(8);
                 let panel = addButtonPanel(e, id, "this_level");
                 addButtonWithHTML2MD(panel.viewButton, e, id, "this_level");
                 addButtonWithCopy(panel.copyButton, e, id, "this_level");
@@ -6980,7 +6977,7 @@ async function addConversionButton() {
         if ($(this).parents('.comments').length > 0) is_comment = true;
         // 题目页不添加
         if (!OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_acmsguru) {
-            let id = "_ttypography_" + getRandomNumber(8);
+            let id = "_ttypography_" + OJB_getRandomNumber(8);
             let panel = addButtonPanel(this, id, "this_level");
             addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
             addButtonWithCopy(panel.copyButton, this, id, "this_level");
@@ -6995,7 +6992,7 @@ async function addConversionButton() {
             $(this).children('div').each(function (i, e) {
                 var className = $(e).attr('class');
                 if (!exContentsPageClasses.includes(className)) {
-                    var id = "_problem_" + getRandomNumber(8);
+                    var id = "_problem_" + OJB_getRandomNumber(8);
                     let panel = addButtonPanel(e, id, "this_level");
                     addButtonWithHTML2MD(panel.viewButton, e, id, "this_level");
                     addButtonWithCopy(panel.copyButton, e, id, "this_level");
@@ -7009,7 +7006,7 @@ async function addConversionButton() {
     // 添加按钮到spoiler部分
     $('.spoiler-content').each(function () {
         if ($(this).find('.html2md-panel').length === 0) {
-            let id = "_spoiler_" + getRandomNumber(8);
+            let id = "_spoiler_" + OJB_getRandomNumber(8);
             let panel = addButtonPanel(this, id, "child_level");
             addButtonWithHTML2MD(panel.viewButton, this, id, "child_level");
             addButtonWithCopy(panel.copyButton, this, id, "child_level");
@@ -7022,7 +7019,7 @@ async function addConversionButton() {
         var elements = [".Virtual.participation", ".Attention", ".Practice"];//只为部分titled添加
         $.each(elements, (i, e) => {
             $(e).each(function () {
-                let id = "_titled_" + getRandomNumber(8);
+                let id = "_titled_" + OJB_getRandomNumber(8);
                 let nextDiv = $(this).next().children().get(0);
                 if (!nextDiv) return;
                 let panel = addButtonPanel(nextDiv, id, "child_level", true);
@@ -7032,7 +7029,7 @@ async function addConversionButton() {
     })();
     if (OJBetter.typeOfPage.is_mSite) {
         $("div[class='_IndexPage_notice']").each(function () {
-            let id = "_titled_" + getRandomNumber(8);
+            let id = "_titled_" + OJB_getRandomNumber(8);
             let panel = addButtonPanel(this, id, "this_level", true);
             addButtonWithTranslation(panel.translateButton, this, id, "this_level");
         });
@@ -7040,14 +7037,14 @@ async function addConversionButton() {
 
     // 添加按钮到比赛QA部分
     $(".question-response").each(function () {
-        let id = "_question_" + getRandomNumber(8);
+        let id = "_question_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(this, id, "this_level", true);
         addButtonWithTranslation(panel.translateButton, this, id, "this_level");
     });
     if (OJBetter.typeOfPage.is_mSite) {
         $("div._ProblemsPage_announcements table tbody tr:gt(0)").each(function () {
             var $nextDiv = $(this).find("td:first");
-            let id = "_question_" + getRandomNumber(8);
+            let id = "_question_" + OJB_getRandomNumber(8);
             let panel = addButtonPanel($nextDiv, id, "this_level", true);
             addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level");
         });
@@ -7055,7 +7052,7 @@ async function addConversionButton() {
 
     // 添加按钮到弹窗confirm-proto部分
     $(".confirm-proto").each(function () {
-        let id = "_titled_" + getRandomNumber(8);
+        let id = "_titled_" + OJB_getRandomNumber(8);
         var $nextDiv = $(this).children().get(0);
         let panel = addButtonPanel($nextDiv, id, "this_level", true);
         addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level");
@@ -7063,14 +7060,14 @@ async function addConversionButton() {
 
     // 添加按钮到_CatalogHistorySidebarFrame_item部分
     $("._CatalogHistorySidebarFrame_item").each(function () {
-        let id = "_history_sidebar_" + getRandomNumber(8);
+        let id = "_history_sidebar_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(this, id, "this_level", true);
         addButtonWithTranslation(panel.translateButton, this, id, "this_level");
     });
 
     $(".problem-lock-link").on("click", function () {
         $(".popup .content div").each(function () {
-            let id = "_popup_" + getRandomNumber(8);
+            let id = "_popup_" + OJB_getRandomNumber(8);
             let panel = addButtonPanel(this, id, "this_level", true);
             addButtonWithTranslation(panel.translateButton, this, id, "this_level");
         });
@@ -7078,14 +7075,14 @@ async function addConversionButton() {
 
     // 添加按钮到弹窗alert部分
     $(".alert:not(.OJBetter_alert)").each(function () {
-        let id = "_alert_" + getRandomNumber(8);
+        let id = "_alert_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(this, id, "child_level", true);
         addButtonWithTranslation(panel.translateButton, this, id, "child_level");
     });
 
     // 添加按钮到talk-text部分
     $(".talk-text").each(function () {
-        let id = "_talk-text_" + getRandomNumber(8);
+        let id = "_talk-text_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(this, id, "child_level", true);
         addButtonWithTranslation(panel.translateButton, this, id, "child_level");
     });
@@ -7293,12 +7290,12 @@ class TranslateDiv {
                 // 执行收起操作
                 this.upButton.addClass("reverse");
                 this.upButton.setButtonState('initial', i18next.t('fold.unfold', { ns: 'button' }));
-                toggleCollapseExpand(this.mainDiv.get(0));
+                OJB_toggleCollapseExpand(this.mainDiv.get(0));
             } else {
                 // 执行展开操作
                 this.upButton.removeClass("reverse");
                 this.upButton.setButtonState('initial', i18next.t('fold.normal', { ns: 'button' }));
-                toggleCollapseExpand(this.mainDiv.get(0));
+                OJB_toggleCollapseExpand(this.mainDiv.get(0));
             }
         });
     }
@@ -7703,7 +7700,7 @@ async function initTransWhenViewable() {
 // 翻译主方法
 async function translateProblemStatement(button, text, element_node, is_comment, translation_) {
     let status = "ok";
-    let id = getRandomNumber(8);
+    let id = OJB_getRandomNumber(8);
     let matches = [];
     let replacements = {};
     let translatedText = "";
@@ -7836,7 +7833,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
 
     // 翻译内容是否可能为代码片段
     if (isLikelyCodeSnippet(text)) {
-        const shouldContinue = await createDialog(
+        const shouldContinue = await OJB_createDialog(
             i18next.t('isLikelyCodeSnippet.title', { ns: 'dialog' }),
             i18next.t('isLikelyCodeSnippet.content', { ns: 'dialog' }),
             [
@@ -7873,7 +7870,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     if (translationLimits.hasOwnProperty(realTranlate) && text.length > translationLimits[realTranlate]) {
         let textLength = translationLimits[realTranlate];
         let realTextLength = text.length;
-        const shouldContinue = await createDialog(
+        const shouldContinue = await OJB_createDialog(
             i18next.t('transTextLimits.title', { ns: 'dialog' }),
             i18next.t('transTextLimits.content', { ns: 'dialog', textLength: textLength, realTextLength: realTextLength }),
             [
@@ -8372,7 +8369,7 @@ async function validateClistConnection(onlyCookie = false) {
     // 尝试发送请求
     async function tryRequest(options) {
         try {
-            const response = await GMRequest(options);
+            const response = await OJB_GMRequest(options);
             if (response.status === 200) {
                 return { ok: true };
             } else if (response.status === 401) {
@@ -8383,7 +8380,7 @@ async function validateClistConnection(onlyCookie = false) {
                 throw new Error('other_error');
             }
         } catch (error) {
-            console.warn(`访问clist.by出错: ${error.message}`);
+            console.warn(`Error accessing clist.by: ${error.message}`);
             return { ok: false, error: error.message };
         }
     }
@@ -8407,7 +8404,7 @@ async function validateClistConnection(onlyCookie = false) {
         } else {
             state = i18next.t('error.clist.other', { ns: 'alert' });
         }
-        loadingMessage.updateStatus(`${OJBetterName} —— ${state}`, 'error');
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${state}`, 'error');
     }
     return result.ok;
 }
@@ -8491,10 +8488,10 @@ async function getRating(problem, problem_url, contest = null) {
                         }
                     }
                 }
-                reject('\n' + problem + '未找到该题目的数据\n');
+                reject(`No data found for the question of ${problem} .`);
             },
             onerror: function (response) {
-                reject(problem + '发生了错误！');
+                reject(`An error occurred while handling the ${problem} problem.`);
             }
         });
     });
@@ -8515,7 +8512,7 @@ async function getRatingFromApi_problem(problem, problem_url) {
                 "Authorization": OJBetter.clist.authorization
             },
             onload: function (response) {
-                if (!response) reject('发生了未知错误！');
+                if (!response) reject('An unknown error occurred!');
                 let data = JSON.parse(response.responseText);
                 let objects = data.objects;
                 let problemsMap = new Map();
@@ -8544,7 +8541,7 @@ async function getRatingFromApi_contest(event) {
             "Authorization": OJBetter.clist.authorization
         }
     }
-    let response = await GMRequest(options);
+    let response = await OJB_GMRequest(options);
     let data = JSON.parse(response.responseText);
     let objects = data.objects;
     let problemsMap = new Map();
@@ -8763,8 +8760,11 @@ async function recolorStandings() {
     });
 }
 
-// 语言切换选项value与monaco_language的对应关系
-var value_monacoLanguageMap = {
+/**
+ * 存放编辑器语言select的值与Monaco语言对应关系的map.
+ * @type {Object.<string, string>}
+ */
+const value_monacoLanguageMap = {
     "4": "pascal", "6": "php", "7": "python", "9": "csharp", "13": "perl", "20": "scala", "31": "python",
     "32": "go", "34": "javascript", "36": "java", "40": "python", "41": "python", "43": "cpp",
     "50": "cpp", "51": "pascal", "52": "cpp", "54": "cpp", "55": "javascript", "59": "cpp", "60": "java",
@@ -8772,7 +8772,12 @@ var value_monacoLanguageMap = {
     "77": "kotlin", "79": "csharp", "80": "cpp", "83": "kotlin", "87": "java"
 };
 
-// 更新代码提交页的HTML元素
+/**
+ * 更新代码提交页的HTML
+ * @param {string} submitUrl 
+ * @param {string} cacheKey 
+ * @returns {Promise<jQuery>}
+ */
 async function CloneOriginalHTML(submitUrl, cacheKey) {
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({
@@ -8786,17 +8791,21 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
                 resolve(cloneHTML);
             },
             onerror: function (response) {
-                reject('网络错误');
+                reject('A network error occurred while retrieving the HTML for the code submission page.');
             }
         });
     });
 }
 
-// 获取代码提交页的HTML元素
+/**
+ * 获取代码提交页的HTML元素
+ * @param {string} submitUrl 
+ * @returns {Promise<jQuery>}
+ */
 async function getSubmitHTML(submitUrl) {
     const cacheKey = 'OJBetter_CloneOriginalHTML';
     const cookieKey = 'OJBetter_CloneOriginalHTML_time';
-    if (getCookie(cookieKey) === '1') {
+    if (OJB_getCookie(cookieKey) === '1') {
         // 存在缓存
         CloneOriginalHTML(submitUrl, cacheKey);
         // 校验
@@ -8805,9 +8814,7 @@ async function getSubmitHTML(submitUrl) {
             return cloneHTML;
         } else {
             // 存在错误，更新缓存
-            console.log("%c缓存存在错误，尝试更新", "color:red;");
-            console.log(`缓存目标submitUrl: ${submitUrl}`);
-            console.log("%c如果下面有新的相关报错，请先确认是否是网络问题，如果不是，请前往讨论区反馈", "color:red;");
+            console.warn(`Cache error detected!\nattempting to update, cache destination submitUrl:\n${submitUrl}`);
             return await CloneOriginalHTML(submitUrl, cacheKey);
         }
 
@@ -9025,7 +9032,7 @@ async function createMonacoEditor(language, form, support) {
     var workspace = language + "_workspace";
     var rootUri = OJBetter.monaco.lsp.workUri + "/" + workspace;
     // 文件名
-    var InstanceID = getRandomNumber(8).toString();
+    var InstanceID = OJB_getRandomNumber(8).toString();
     var filename = language == "java" ? "hello/src/" + InstanceID : InstanceID;
     // 后缀名
     var fileExtension =
@@ -9474,7 +9481,7 @@ async function createMonacoEditor(language, form, support) {
             for (let i = 0; i < complet_length; i++) {
                 let item = OJBetter.monaco.complet.customConfig.configurations[i];
                 if (item.isChoose && item.language == language) {
-                    registMyCompletionItemProvider(item.language, item.genre, await getExternalJSON(item.jsonUrl));
+                    registMyCompletionItemProvider(item.language, item.genre, await OJB_getExternalJSON(item.jsonUrl));
                 }
             }
         }
@@ -9554,14 +9561,14 @@ async function createMonacoEditor(language, form, support) {
     languageSocket.onopen = () => {
         languageSocketState = true;
         lspStateButton.setButtonPopover(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
-        pushLSPLogMessage("info", "languageSocket 连接已建立");
+        pushLSPLogMessage("info", `languageSocket ${i18next.t('lsp.socket.open', { ns: 'logMessage' })}`);
     };
     languageSocket.onmessage = (event) => {
         const message = JSON.parse(event.data);
         if (message.id === 0 && message.result) {
             // 初始化完成
             lspStateButton.setButtonState('success', i18next.t('lsp.connected', { ns: 'codeEditor' }));
-            pushLSPLogMessage("info", "Initialization 完成");
+            pushLSPLogMessage("info", `Initialization ${i18next.t('lsp.state.finished', { ns: 'logMessage' })}`);
             serverInfo = message.result; // 存下服务器支持信息
             OJBetter_monaco.openDocRequest(); // 打开文档
             if (!OJBetter.monaco.setting.language.includes(language)) {
@@ -9572,7 +9579,7 @@ async function createMonacoEditor(language, form, support) {
             }
             OJBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
         } else if (message.id === 0 && message.error) {
-            pushLSPLogMessage("warn", "Initialization 失败");
+            pushLSPLogMessage("warn", `Initialization ${i18next.t('lsp.state.error', { ns: 'logMessage' })}`);
         } else if (message.id !== undefined && responseHandlers[message.id]) {
             // 如果收到带有id字段的消息，则回传给对应的事件触发函数
             responseHandlers[message.id](message);
@@ -9586,13 +9593,13 @@ async function createMonacoEditor(language, form, support) {
         }
     };
     languageSocket.onerror = (error) => {
-        pushLSPLogMessage("error", `languageSocket 发生错误`, error);
-        console.warn(`连接languageSocket错误: ${error}`)
+        pushLSPLogMessage("error", `languageSocket ${i18next.t('lsp.state.error', { ns: 'logMessage' })}`, error);
+        console.warn(`Error connecting to languageSocket: ${error}`)
     };
     languageSocket.onclose = (event) => {
         languageSocketState = false;
         lspStateButton.setButtonState('error', i18next.t('lsp.error', { ns: 'codeEditor' }));
-        pushLSPLogMessage("warn", "languageSocket 连接已关闭");
+        pushLSPLogMessage("warn", `languageSocket ${i18next.t('lsp.socket.close', { ns: 'logMessage' })}`);
     };
 
     /**
@@ -9655,11 +9662,11 @@ async function createMonacoEditor(language, form, support) {
     OJBetter.monaco.lsp.socket.push(fileWebSocket);
     fileWebSocket.onopen = () => {
         fileWebSocketState = true;
-        pushLSPLogMessage("info", "fileWebSocket 连接已建立");
+        pushLSPLogMessage("info", `fileWebSocket ${i18next.t('lsp.socket.open', { ns: 'logMessage' })}`);
     };
     fileWebSocket.onclose = (ev) => {
         fileWebSocketState = false;
-        pushLSPLogMessage("warn", "fileWebSocket 连接已关闭", ev);
+        pushLSPLogMessage("warn", `fileWebSocket ${i18next.t('lsp.socket.close', { ns: 'logMessage' })}`, ev);
     };
     fileWebSocket.onmessage = (ev) => {
         let message = JSON.parse(ev.data);
@@ -9667,7 +9674,7 @@ async function createMonacoEditor(language, form, support) {
             pushLSPLogMessage("error", `update file failed: ${ev}`);
     };
     fileWebSocket.onerror = (error) => {
-        console.warn(`连接fileWebSocket错误: ${error}`);
+        console.warn(`Error connecting to fileWebSocket: ${error}`);
     };
     async function updateFile(workspace, filename, fileExtension, code) {
         async function waitForfileWebSocketState() {
@@ -9948,7 +9955,7 @@ async function createMonacoEditor(language, form, support) {
         (function registerCommand() {
             serverInfo.capabilities.executeCommandProvider.commands.forEach(
                 (item) => {
-                    pushLSPLogMessage("info", `已注册命令↓`, item);
+                    pushLSPLogMessage("info", `${i18next.t('lsp.server.regist', { ns: 'logMessage' })}`, item);
                     monaco.editor.registerCommand(item, (accessor, ...args) => {
                         sendData({
                             jsonrpc: "2.0",
@@ -10006,7 +10013,7 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `completion 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `completion ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
                         if (!result) return resolve(null);
                         const CompletionItems = {
                             suggestions: result.items.map(
@@ -10047,7 +10054,7 @@ async function createMonacoEditor(language, form, support) {
                                 })
                             ),
                         };
-                        pushLSPLogMessage("info", `completion 传递给monaco的数据↓`, CompletionItems);
+                        pushLSPLogMessage("info", `completion ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, CompletionItems);
                         resolve(CompletionItems);
                     });
                 });
@@ -10105,7 +10112,7 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `codeAction 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `codeAction ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
                         if (!result) return resolve(null);
                         const codeAction = {
                             actions: result.map((item) => ({
@@ -10143,7 +10150,7 @@ async function createMonacoEditor(language, form, support) {
                             })),
                             dispose: () => { },
                         };
-                        pushLSPLogMessage("info", `codeAction 传递给monaco的数据↓`, codeAction);
+                        pushLSPLogMessage("info", `codeAction ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, codeAction);
 
                         resolve(codeAction);
                     });
@@ -10168,7 +10175,7 @@ async function createMonacoEditor(language, form, support) {
 
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
-                        pushLSPLogMessage("info", `Hover 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `Hover ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
                         const result = response.result;
 
                         if (!result) return resolve(null);
@@ -10191,7 +10198,7 @@ async function createMonacoEditor(language, form, support) {
                                     },
                                 ],
                         };
-                        pushLSPLogMessage("info", `Hover 传递给monaco的数据↓`, Hover);
+                        pushLSPLogMessage("info", `Hover ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, Hover);
                         resolve(Hover);
                     });
                 });
@@ -10217,7 +10224,7 @@ async function createMonacoEditor(language, form, support) {
 
                         fetchData(request, (response) => {
                             const result = response.result;
-                            pushLSPLogMessage("info", `Inlay Hints 当前收到的数据↓`, response);
+                            pushLSPLogMessage("info", `Inlay Hints ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                             if (!result) return resolve(null);
 
@@ -10235,7 +10242,7 @@ async function createMonacoEditor(language, form, support) {
                                     };
                                 }),
                             };
-                            pushLSPLogMessage("info", `Inlay Hints 传递给monaco的数据↓`, inlayHints);
+                            pushLSPLogMessage("info", `Inlay Hints ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, inlayHints);
 
                             resolve(inlayHints);
                         });
@@ -10261,14 +10268,14 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `definition 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `definition ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         if (result.length == 0) return resolve(null);
                         const definition = result.map((item) => ({
                             range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             uri: monaco.Uri.parse(item.uri), //
                         }));
-                        pushLSPLogMessage("info", `definition 传递给monaco的数据↓`, definition);
+                        pushLSPLogMessage("info", `definition ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, definition);
 
                         resolve(definition);
                     });
@@ -10297,7 +10304,7 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `references 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `references ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         if (result.length == 0) return resolve([]);
 
@@ -10305,7 +10312,7 @@ async function createMonacoEditor(language, form, support) {
                             range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             uri: monaco.Uri.parse(item.uri), //
                         }));
-                        pushLSPLogMessage("info", `references 传递给monaco的数据↓`, references);
+                        pushLSPLogMessage("info", `references ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, references);
                         resolve(references);
                     });
                 });
@@ -10331,7 +10338,7 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `documentHighlight 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `documentHighlight ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         if (!result || result.length == 0) return resolve([]);
                         const highlights = result.map((item) => ({
@@ -10339,7 +10346,7 @@ async function createMonacoEditor(language, form, support) {
                             kind: item.kind,
                         }));
                         pushLSPLogMessage("info",
-                            `documentHighlight 传递给monaco的数据↓`,
+                            `documentHighlight ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`,
                             highlights
                         );
 
@@ -10368,7 +10375,7 @@ async function createMonacoEditor(language, form, support) {
                     return new Promise((resolve, reject) => {
                         fetchData(request, (response) => {
                             const result = response.result;
-                            pushLSPLogMessage("info", `DocumentLink 当前收到的数据↓`, response);
+                            pushLSPLogMessage("info", `DocumentLink ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                             if (!result) return resolve(null);
                             const links = {
@@ -10378,7 +10385,7 @@ async function createMonacoEditor(language, form, support) {
                                     tooltip: item.tooltip ? item.tooltip : null,
                                 })),
                             };
-                            pushLSPLogMessage("info", `DocumentLink 传递给monaco的数据↓`, links);
+                            pushLSPLogMessage("info", `DocumentLink ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, links);
                             resolve(links);
                         });
                     });
@@ -10403,13 +10410,13 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `formatting 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `formatting ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         const TextEdit = result.map((edit) => ({
                             range: OJBetter_monaco.lspRangeToMonacoRange(edit.range),
                             text: edit.newText,
                         }));
-                        pushLSPLogMessage("info", `formatting 传递给monaco的数据↓`, TextEdit);
+                        pushLSPLogMessage("info", `formatting ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, TextEdit);
                         resolve(TextEdit);
                     });
                 });
@@ -10435,14 +10442,14 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `rangeFormatting 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `rangeFormatting ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         if (!result || result.length == 0) return resolve([]);
                         const edits = result.map((item) => ({
                             range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                             text: item.newText,
                         }));
-                        pushLSPLogMessage("info", `rangeFormatting 传递给monaco的数据↓`, edits);
+                        pushLSPLogMessage("info", `rangeFormatting ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, edits);
                         resolve(edits);
                     });
                 });
@@ -10468,10 +10475,10 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `rename 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `rename ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         const rename = OJBetter_monaco.lspEditToMonacoEdit(result);
-                        pushLSPLogMessage("info", `rename 传递给monaco的数据↓`, rename);
+                        pushLSPLogMessage("info", `rename ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, rename);
                         resolve(rename);
                     });
                 });
@@ -10495,7 +10502,7 @@ async function createMonacoEditor(language, form, support) {
                 return new Promise((resolve, reject) => {
                     fetchData(request, (response) => {
                         const result = response.result;
-                        pushLSPLogMessage("info", `FoldingRange 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `FoldingRange ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         if (!result) return resolve([]);
                         const foldingRanges = result.map((item) => ({
@@ -10503,7 +10510,7 @@ async function createMonacoEditor(language, form, support) {
                             end: item.endLine + 1,
                             kind: monaco.languages.FoldingRangeKind.fromValue(item.kind),
                         }));
-                        pushLSPLogMessage("info", `FoldingRange 传递给monaco的数据↓`, foldingRanges);
+                        pushLSPLogMessage("info", `FoldingRange ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, foldingRanges);
                         resolve(foldingRanges);
                     });
                 });
@@ -10540,7 +10547,7 @@ async function createMonacoEditor(language, form, support) {
                     fetchData(request, (response) => {
                         const result = response.result;
 
-                        pushLSPLogMessage("info", `方法签名提示 当前收到的数据↓`, response);
+                        pushLSPLogMessage("info", `signatureHelp ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                         if (!result) return resolve(null);
                         const SignatureHelpResult = {
@@ -10553,7 +10560,7 @@ async function createMonacoEditor(language, form, support) {
                         };
 
                         pushLSPLogMessage("info",
-                            `方法签名提示 传递给monaco的数据↓`,
+                            `signatureHelp ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`,
                             SignatureHelpResult
                         );
                         resolve(SignatureHelpResult);
@@ -10587,7 +10594,7 @@ async function createMonacoEditor(language, form, support) {
                     return new Promise((resolve, reject) => {
                         fetchData(request, (response) => {
                             const result = response.result;
-                            pushLSPLogMessage("info", `onTypeFormatting 当前收到的数据↓`, response);
+                            pushLSPLogMessage("info", `onTypeFormatting ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, response);
 
                             if (!result || result.length == 0) return resolve([]);
 
@@ -10595,7 +10602,7 @@ async function createMonacoEditor(language, form, support) {
                                 range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
                                 text: item.newText,
                             }));
-                            pushLSPLogMessage("info", `onTypeFormatting 传递给monaco的数据↓`, edits);
+                            pushLSPLogMessage("info", `onTypeFormatting ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, edits);
                             resolve(edits);
                         });
                     });
@@ -10611,7 +10618,7 @@ async function createMonacoEditor(language, form, support) {
         // "实时代码诊断"
         OJBetter_monaco.updateMarkers = function (message) {
             const params = message.params;
-            pushLSPLogMessage("info", `Markers 当前收到的数据↓`, message);
+            pushLSPLogMessage("info", `Markers ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, message);
 
             if (!params) return;
             const markers = params.diagnostics.map((item1) => ({
@@ -10631,7 +10638,7 @@ async function createMonacoEditor(language, form, support) {
                 source: item1.source,
             }));
 
-            pushLSPLogMessage("info", `Markers 传递给monaco的数据↓`, markers);
+            pushLSPLogMessage("info", `Markers ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, markers);
             monaco.editor.setModelMarkers(model, "eslint", markers);
 
             // 更新状态底栏信息
@@ -10651,7 +10658,7 @@ async function createMonacoEditor(language, form, support) {
         // "应用服务器推送的更改"(代码修复)
         OJBetter_monaco.applyEdit = function (message) {
             const params = message.params;
-            pushLSPLogMessage("info", `applyEdit 当前收到的数据↓`, message);
+            pushLSPLogMessage("info", `applyEdit ${i18next.t('lsp.server.receive', { ns: 'logMessage' })}`, message);
 
             if (!params) return;
             const operations = Object.values(params.edit.changes)
@@ -10661,7 +10668,7 @@ async function createMonacoEditor(language, form, support) {
                     text: item.newText,
                 }));
 
-            pushLSPLogMessage("info", `applyEdit 传递给monaco的数据↓`, operations);
+            pushLSPLogMessage("info", `applyEdit ${i18next.t('lsp.server.transmit', { ns: 'logMessage' })}`, operations);
             model.pushEditOperations([], operations, () => null); // 入栈编辑操作
         };
     }
@@ -10679,7 +10686,7 @@ function changeMonacoLanguage(form) {
     try {
         if (OJBetter.monaco.editor) OJBetter.monaco.editor.dispose();
     } catch (error) {
-        console.warn("销毁旧的编辑器时遇到了错误，这大概不会影响你的正常使用", error)
+        console.warn("Encountered an error while attempting to delete the old editor, but it should not affect your regular usage.", error)
     }
     // 关闭旧的socket
     OJBetter.monaco.lsp.socket.forEach(socket => {
@@ -10897,16 +10904,16 @@ async function officialCompiler(code, input) {
     };
 
     try {
-        const submitResponse = await GMRequest(requestOptions);
+        const submitResponse = await OJB_GMRequest(requestOptions);
         if (submitResponse.status !== 200 || !submitResponse.response) {
-            result.Errors = `提交代码到 codeforces 服务器时发生了错误，请重试 ${findHelpText1}`;
+            result.Errors = `${i18next.t('compiler.official.pushError', { ns: 'codeEditor' })}`;
             return result;
         }
 
         const submitResult = JSON.parse(submitResponse.response);
         const customTestSubmitId = submitResult.customTestSubmitId;
 
-        const verdictResponse = await promiseRetryWrapper(
+        const verdictResponse = await OJB_promiseRetryWrapper(
             getOfficialCompilerVerdict,
             {
                 maxRetries: 10,
@@ -10937,9 +10944,9 @@ async function getOfficialCompilerVerdict(customTestSubmitId) {
         }
     };
 
-    const responseDetails = await GMRequest(requestOptions);
+    const responseDetails = await OJB_GMRequest(requestOptions);
     if (responseDetails.status !== 200 || !responseDetails.response) {
-        throw new Error(`请求运行结果时发生了错误，请重试 ${findHelpText1}`);
+        throw new Error(`${i18next.t('compiler.official.getResultError', { ns: 'codeEditor' })}`);
     }
 
     const response = JSON.parse(responseDetails.response);
@@ -10986,7 +10993,7 @@ function rextesterCompilerArgsChange(nowSelect) {
 // rextester编译器通信
 async function rextesterCompiler(code, input) {
     try {
-        const result = await promiseRetryWrapper(rextesterCompilerRequest, {
+        const result = await OJB_promiseRetryWrapper(rextesterCompilerRequest, {
             maxRetries: 5,
             retryInterval: 500,
             errorHandler: (err) => ({ Errors: err.message, Result: '', Stats: '' })
@@ -11010,14 +11017,14 @@ async function rextesterCompilerRequest(code, input) {
     data.append('IsInEditMode', 'false');
     data.append('IsLive', 'false');
 
-    const responseDetails = await GMRequest({
+    const responseDetails = await OJB_GMRequest({
         method: 'POST',
         url: 'https://rextester.com/rundotnet/Run',
         data: data
     });
 
     if (responseDetails.status !== 200 || !responseDetails.response) {
-        throw new Error(`发生了未知的错误，请重试 ${findHelpText1}`);
+        throw new Error(`${i18next.t('compiler.common.error', { ns: 'codeEditor' })}`);
     }
 
     const response = JSON.parse(responseDetails.response);
@@ -11148,7 +11155,7 @@ function wandboxCompilerArgsChange(nowSelect) {
 // wandbox编译器通信
 async function wandboxCompiler(code, input) {
     try {
-        const result = await promiseRetryWrapper(wandboxCompilerRequest, {
+        const result = await OJB_promiseRetryWrapper(wandboxCompilerRequest, {
             maxRetries: 5,
             retryInterval: 500,
             errorHandler: (err) => ({ Errors: err.message, Result: '', Stats: '' })
@@ -11173,7 +11180,7 @@ async function wandboxCompilerRequest(code, input) {
         title: ''
     };
 
-    const responseDetails = await GMRequest({
+    const responseDetails = await OJB_GMRequest({
         method: 'POST',
         url: 'https://wandbox.org/api/compile.json',
         data: JSON.stringify(data),
@@ -11183,7 +11190,7 @@ async function wandboxCompilerRequest(code, input) {
     });
 
     if (responseDetails.status !== 200 || !responseDetails.response) {
-        throw new Error(`发生了未知的错误，请重试 ${findHelpText1}`);
+        throw new Error(`${i18next.t('compiler.common.error', { ns: 'codeEditor' })}`);
     }
 
     const response = JSON.parse(responseDetails.response);
@@ -11337,7 +11344,7 @@ class TestCaseStatus {
                     appendDiffNote();
                     break;
                 default:
-                    throw new Error("不支持的内容类型");
+                    throw new Error("Unsupported content type.");
             }
             return contentElement;
         };
@@ -11426,7 +11433,7 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
         const judgeStats = `${i18next.t('resultBlock.state', { ns: 'codeEditor' })}${result.Stats}`;
         testCase.setJudge(judgeStats);
 
-        await delay(500); // 等待500毫秒
+        await OJB_delay(500); // 等待500毫秒
     };
 
     // 对队列中的对象进行测试
@@ -11451,7 +11458,8 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
  */
 async function addProblemPageCodeEditor() {
     if (typeof ace === 'undefined') {
-        console.log("%c无法加载编辑器必要的数据，可能当前未登录/未报名/非题目页/比赛结束冻结期间/该比赛禁止结束后练习", "border:1px solid #000;padding:10px;");
+        const loadingMessage = new LoadingMessage();
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('error.codeEditor.load', { ns: 'alert' })}`, 'error');
         return; // 因为Codeforces设定的是未登录时不能访问提交页，也不会加载ace库
     }
 
@@ -11499,7 +11507,7 @@ async function addProblemPageCodeEditor() {
     submitButton.on('click', async function (event) {
         event.preventDefault();
         if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
-            const submit = await createDialog(
+            const submit = await OJB_createDialog(
                 i18next.t('submitCode.title', { ns: 'dialog' }),
                 i18next.t('submitCode.content', { ns: 'dialog' }),
                 [
@@ -11826,7 +11834,7 @@ async function translate_caiyun_startup() {
         },
         data: JSON.stringify({ browser_id }),
     }
-    const res = await GMRequest(options);
+    const res = await OJB_GMRequest(options);
     sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
 }
 
@@ -11969,7 +11977,7 @@ async function* openai_stream(raw) {
             ...Object.assign({}, ...OJBetter.chatgpt.config.header)
         }
     }
-    const response = await GMRequest(options, true);
+    const response = await OJB_GMRequest(options, true);
     const reader = response.response.getReader();
     const decoder = new TextDecoder();
     let buffer = ''; // 用于累积数据片段的缓冲区
@@ -12049,7 +12057,7 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
     const helpText = i18next.t('error.basic', { ns: 'translator' }); // 基本帮助提示信息
     const toDo = async () => {
         try {
-            result.response = await GMRequest(options);
+            result.response = await OJB_GMRequest(options);
             result.responseText = result.response.responseText;
             result.text = getResponseText(result.response);
         } catch (err) {
@@ -12094,7 +12102,7 @@ async function BaseTranslate(options, processer, checkResponse = () => { return 
         }
     };
 
-    return await promiseRetryWrapper(toDo, {
+    return await OJB_promiseRetryWrapper(toDo, {
         maxRetries: 3,
         errorHandler: (err, maxRetries, attemptsLeft) => {
             const detailedError = {
@@ -12129,12 +12137,12 @@ async function queryServerBalance(quotaConfig) {
     };
 
     // 发送请求并返回 Promise
-    return GMRequest(requestOptions).then(response => {
+    return OJB_GMRequest(requestOptions).then(response => {
         try {
             const responseData = JSON.parse(response.responseText);
             // 从响应数据中提取余额
             const surplusPath = quotaConfig.surplus;
-            const surplusValue = evaluatePathOrExpression(responseData, surplusPath);
+            const surplusValue = OJB_evaluatePathOrExpression(responseData, surplusPath);
             return surplusValue;
         } catch (error) {
             return Promise.reject(new Error('Failed to parse balance response.'));
@@ -12153,7 +12161,7 @@ async function queryServerBalance(quotaConfig) {
 async function ensureJQueryIsLoaded(retryDelay = 50) {
     while (typeof jQuery === 'undefined') {
         console.warn(`JQuery is not loaded. Retry after ${retryDelay} ms.`);
-        await delay(retryDelay);
+        await OJB_delay(retryDelay);
         retryDelay = Math.min(retryDelay * 2, 2000);
     }
 }
@@ -12205,7 +12213,7 @@ function initOnDOMReady() {
  * 需要在页面资源完全加载后执行的函数
  */
 function onResourcesReady(loadingMessage) {
-    loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadFunc', { ns: 'alert' })}`);
+    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadFunc', { ns: 'alert' })}`);
     initializeInParallel(loadingMessage);
     initializeSequentially(loadingMessage);
 }
@@ -12233,7 +12241,7 @@ async function initializeSequentially(loadingMessage) {
     if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
 }
 
 /**
@@ -12244,7 +12252,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const loadingMessage = new LoadingMessage();
     await loadRequiredFunctions(); // 加载必须的函数
     initOnDOMReady(); // DOM加载后即可执行的函数
-    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetterName} —— ${i18next.t('onload', { ns: 'alert' })}`);
+    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('onload', { ns: 'alert' })}`);
 
     // 检查页面资源是否已经完全加载
     if (OJBetter.state.notWaiteLoaded) {

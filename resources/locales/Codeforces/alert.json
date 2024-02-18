@@ -28,6 +28,10 @@
             "404":"当前访问Clist.by网络拥堵，请求已中断，请稍后再重试",
             "cookie":"当前浏览器的Clist.by登录Cookie可能已失效，请打开<a target='_blank' href='https://clist.by/'>Clist.by</a>重新登录<br>说明：脚本的Clist Rating分显示实现依赖于Clist.by的登录用户Cookie信息，<br>脚本不会获取你在Clist.by站点上的具体Cookie信息，具体请阅读脚本页的说明",
             "other":"当前访问Clist.by时发生未知错误，请求已中断，请稍后再重试"
+        },
+        "codeEditor":{
+            "load":"无法加载编辑器必要的数据，可能当前未登录/未报名/非题目页/比赛结束冻结期间/该比赛禁止结束后练习",
+            "submit":"代码编辑器提交失败，请稍后再重试"
         }
     }
 }
