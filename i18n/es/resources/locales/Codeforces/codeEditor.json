@@ -36,11 +36,11 @@
     },
     "compiler": {
         "official": {
-            "pushError": "提交代码到 codeforces 服务器时发生了错误，请重试",
-            "getResultError": "请求运行结果时发生了错误，请重试"
+            "pushError": "Se ha producido un error al enviar el código al servidor de codeforces, ¡por favor, inténtelo de nuevo!",
+            "getResultError": "Se ha producido un error al solicitar un resultado de ejecución, ¡por favor, inténtelo de nuevo!"
         },
         "common": {
-            "error": "发生了未知的错误，请重试"
+            "error": "Se ha producido un error desconocido. Por favor, inténtelo de nuevo."
         }
     }
 }

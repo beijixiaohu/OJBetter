@@ -166,9 +166,9 @@
                 "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "토너먼트에서 문제만 풀고 싶다면 가상 토너먼트는 적합하지 않으며, 문제은행에서 문제를 풀어야 합니다.",
                 "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "가상 대회 중에는 다른 사람의 코드를 사용하거나 튜토리얼을 읽거나 다른 사람과 소통해서는 안 됩니다.",
                 "You can clone this contest to a mashup.": "이 콘테스트를 매시업 콘테스트로 복제할 수 있습니다.",
-                "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一种特殊类型的训练比赛，由过去Codeforces比赛的公开问题组成。还可以添加",
-                "problems to mashup contest.": "问题到混搭比赛。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "这样的比赛不能公开，只用于个人训练目的。还可以将混搭添加到团体中。要指定有关混搭比赛的其他信息，请使用训练营比赛编辑表单。"
+                "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "매시업은 과거 코드포스 콘테스트의 공개 문제로 구성된 특별한 유형의 교육 콘테스트입니다. 또한",
+                "problems to mashup contest.": "매시업 콘테스트에 대한 질문입니다.",
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "이러한 대회는 공개할 수 없으며 개인 트레이닝 목적으로만 사용됩니다. 매시업은 그룹에 추가할 수도 있습니다. 매시업 경연대회에 대한 추가 정보를 지정하려면 합숙 경연대회 수정 양식을 사용하세요."
             }
         },
         ".icon-eye-close.icon-large": {
