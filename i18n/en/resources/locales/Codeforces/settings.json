@@ -14,6 +14,9 @@
         "missing": {
             "radio": "The current setup requires that a configuration must be added and checked.",
             "input": "Current settings require mandatory fields"
+        },
+        "unValid": {
+            "format": "Inconsistent formatting or presence of illegal characters"
         }
     },
     "basic": {
@@ -254,11 +257,13 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Work path.",
-                "helpText": "<p>You need to fill in the path where OJBetter_Bridge is located</p><p>Use either forward slash or backslash</p><p>Default path：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>"
+                "helpText": "<p>You need to fill in the path where OJBetter_Bridge is located</p><p>Use either forward slash or backslash</p><p>Default path：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "Please enter the path, and note that the separator is /."
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Server.",
-                "helpText": "<p>You need to fill in the Server URL of OJBetter_Bridge in your local machine</p><p>Default URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Note that you usually don't need to change it here, if you need to change it, please be consistent with the default URL format</p>"
+                "helpText": "<p>You need to fill in the Server URL of OJBetter_Bridge in your local machine</p><p>Default URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Note that you usually don't need to change it here, if you need to change it, please be consistent with the default URL format</p>",
+                "placeholder": "Please enter the path, pay attention to fill in strictly according to the format"
             }
         },
         "staticCompletionEnhancement": {
