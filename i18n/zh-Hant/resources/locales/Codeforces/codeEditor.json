@@ -33,5 +33,14 @@
         "waitingAnswer": "等待初始化回執……",
         "connected": "LSP已連接",
         "error": "LSP連線已斷開"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "提交程式碼到codeforces 伺服器時發生了錯誤，請重試",
+            "getResultError": "請求運行結果時發生了錯誤，請重試"
+        },
+        "common": {
+            "error": "發生了未知的錯誤，請重試"
+        }
     }
 }
