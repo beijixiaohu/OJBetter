@@ -1,0 +1,19 @@
+{
+    "lsp": {
+        "socket": {
+            "open": "連線已建立",
+            "close": "連線已關閉",
+            "error": "連線錯誤"
+        },
+        "state": {
+            "finished": "完成",
+            "running": "運作中",
+            "error": "發生錯誤"
+        },
+        "server": {
+            "regist": "已註冊命令↓",
+            "receive": "收到的資料↓",
+            "transmit": "傳遞給monaco的資料↓"
+        }
+    }
+}
