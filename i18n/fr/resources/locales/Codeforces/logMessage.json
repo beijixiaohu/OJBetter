@@ -1,0 +1,19 @@
+{
+    "lsp": {
+        "socket": {
+            "open": "Connexion établie",
+            "close": "Connexion fermée",
+            "error": "erreur de connexion"
+        },
+        "state": {
+            "finished": "remplir",
+            "running": "en cours d'exécution",
+            "error": "une erreur se produit"
+        },
+        "server": {
+            "regist": "Commandes enregistrées ↓",
+            "receive": "Données reçues ↓",
+            "transmit": "Données transmises à monaco↓"
+        }
+    }
+}
