@@ -12,7 +12,7 @@ OJBetterはTampermonkeyスクリプトプロジェクトで、様々なオンラ
 
 ## 取り付け
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [公式バージョン](https://github.com/beijixiaohu/)OJBetter/blob/main/script/release/codeforces-better.user.js) | [Beta](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+Codeforces の改善：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https://github.com/beijixiaohu/OJBetter/blob) /main/script/release/codeforces-better.user.js) | [ベータ版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
 ## キー機能
 

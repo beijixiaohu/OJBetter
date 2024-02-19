@@ -12,7 +12,7 @@ Durch die Hinzufügung einer Reihe nützlicher Funktionen und die Verbesserung d
 
 ## Montage
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https://github.com/beijixiaohu/OJBetter/blob/main/script/release/codeforces-better.user.js) | [测试版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Offizielle Version](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [Betaversion](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
 ## Tastenfunktion
 
