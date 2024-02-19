@@ -6,13 +6,13 @@ Aggiungendo una serie di funzioni utili e migliorando l'interfaccia del sito web
 
 ***
 
-[Cinese semplificato](README.md) | [Cinese tradizionale](i18n/zh-Hant/README.md) | [Inglese](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [Français](i18n/fr/README.md) | [한국어](i18n/ko/README.md). README.md) | [한국어](i18n/ko/README.md) | [Português](i18n/pt/README.md) | [Japanese](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italiano Español](i18n/es/README.md) | [Italiano](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[Cinese semplificato](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [Cinese tradizionale](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/ zh-Hant/README.md) | [Inglese](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Tedesco](https\://github.com/ beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/) blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https\://github. com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README. md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ***
 
 ## montaggio
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Official](script/release/codeforces-better .user.js) | [Beta](script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Versione ufficiale](https\://github.com/beijixiaohu/ OJBetter/blob/main/script/release/codeforces-better.user.js) | [Beta](https\://github.com/beijixiaohu/OJBetter/blob/main/script/dev/ codeforces-better.user.js)
 
 ## funzione dei tasti
 
@@ -25,32 +25,32 @@ Installando lo script si ottiene：
 - Visualizzazione del punteggio di valutazione Clist：ottiene i dati del punteggio di valutazione di un argomento dal sito web clist.by e li visualizza sulla pagina dell'argomento.
 - Editor di codice e supporto LSP：Editor di codice integrato in fondo alla pagina dell'argomento, che supporta il salvataggio automatico, il commit rapido, l'esecuzione di test online, ecc.
 - Rocky Valley Quick Jump：Un clic per saltare alla pagina corrispondente a questa domanda in Rocky Valley
-- 评论区分页显示：改进评论区显示方式，支持翻页、跳转，可选择每页显示的主楼数。
-- 榜单重新着色：根据“得分/总分”比例，对 Codeforces 赛制的比赛榜单进行颜色渐变着色。
-- 一些其他小功能……
+- Visualizzazione della pagina dell'area commenti：Migliora la visualizzazione dell'area commenti, supporta il salto di pagina, può scegliere il numero di piani principali visualizzati in ogni pagina.
+- Ricolorazione della classifica：Colorazione a gradiente della classifica del torneo Codeforces in base al rapporto "punteggio/totale".
+- Alcune altre piccole caratteristiche……
 
-> [!NOTE]
+> [!NOTA]
 >
-> 点击 **整个页面右上角** 的 **`CodeforcesBetter设置`** 按钮，即可打开设置面板，
+> Clicchi sul pulsante **`CodeforcesBetter Settings`** nell'angolo superiore destro della **pagina intera** per aprire il pannello delle impostazioni.
 >
-> 绝大部分功能均提供了帮助文本，鼠标悬浮在旁边的 问号图标 上即可查看。
+> Il testo di aiuto è disponibile per la maggior parte delle funzioni e può essere visualizzato passando il mouse sull'icona del punto interrogativo accanto ad esse.
 
-## 使用文档
+## Utilizzo dei documenti
 
-了解更多详细信息和使用指南，请访问 [Wiki 页面](https://github.com/beijixiaohu/OJBetter/wiki)。
+Per informazioni e istruzioni più dettagliate, visiti la [pagina Wiki](https://github.com/beijixiaohu/OJBetter/wiki).
 
-## 如何贡献
+## Come contribuire
 
-如果你有任何想法或功能请求，欢迎通过 Pull Requests 或 Issues 与我们分享。
+Se ha delle idee o delle richieste di funzionalità, si senta libero di condividerle con noi tramite le Richieste di Pull o i Problemi.
 
-### 改善翻译质量
+### Migliorare la qualità delle traduzioni
 
-项目的非中文版本主要通过机器翻译（Deepl & Google）完成，托管在 Crowdin 上。
+La versione non cinese del progetto è realizzata principalmente attraverso la traduzione automatica (Deepl e Google) ed è ospitata su Crowdin.
 
-如果你愿意帮助改进翻译，使其更准确、自然，请访问 [Crowdin 项目页面](https://zh.crowdin.com/project/codeforcesbetter) 贡献你的力量。
+Se desidera contribuire a migliorare la traduzione per renderla più accurata e naturale, visiti la pagina [Crowdin project page](https://zh.crowdin.com/project/codeforcesbetter) per contribuire.
 
-## 支持其他OJ?
+## Sostenere altri OJ?
 
-由于作者精力有限，并不会维护太多的类似脚本，
+Dal momento che l'autore ha un'energia limitata e non mantiene troppi script simili, il
 
-如果你有兴趣将此脚本适配到其他在线评测系统，非常欢迎，你只需要遵守 GPL-3.0 license 许可即可。
+Se è interessato ad adattare questo script ad altri sistemi di recensioni online, è più che benvenuto a farlo, ma deve solo rispettare la licenza GPL-3.0.
