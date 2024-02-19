@@ -12,7 +12,7 @@ OJBetter는 다양한 온라인 리뷰 시스템(OJ) 웹사이트의 경험을 �
 
 ## 마운팅
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [공식 버전](https://github.com/beijixiaohu/OJBetter/blob) /main/script/release/codeforces-better.user.js) | [베타 버전](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+코드포스 베터：[그리시포크](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [공식 버전](https://github.com/beijixiaohu/) OJBetter/raw/main/script/release/codeforces-better.user.js) [베타](https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/ codeforces-better.user.js)
 
 ## 주요 기능
 
