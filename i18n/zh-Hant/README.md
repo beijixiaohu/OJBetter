@@ -12,7 +12,7 @@ OJBetter 是一個Tampermonkey 腳本項目，旨在提升你在各個線上評�
 
 ## 安裝
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [測試版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [正式版](https\://github.com/beijixiaohu/OJBetter/raw/ main/script/release/codeforces-better.user.js) [測試版](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js)
 
 ## 主要功能
 

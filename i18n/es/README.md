@@ -12,7 +12,7 @@ Al añadir una serie de funciones útiles y mejorar la interfaz del sitio web y 
 
 ## montaje
 
-Codeforces mejor：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Versión oficial](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [Versión Beta](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [Versión oficial](https\://github.com/beijixiaohu/ OJBetter/raw/main/script/release/codeforces-better.user.js) [Beta](https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/ codeforces-better.user.js)
 
 ## función clave
 
