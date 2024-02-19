@@ -6,13 +6,13 @@ Ao adicionar uma série de funcionalidades úteis e ao melhorar a interface do s
 
 ***
 
-[Chinês simplificado](README.md) | [Chinês tradicional](i18n/zh-Hant/README.md) | [Inglês](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [Français](i18n/fr/ README.md) | [한국어](i18n/ko/README.md) | [Português](i18n/pt/README.md) | [Japanese](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italiano Español](i18n/es/README.md) | [Italiano](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[Chinês simplificado](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [Chinês tradicional](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/ zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https\://github.com/ beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https\://github.com/beijixiaohu/OJBetter/ blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https\://github. com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README. md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ***
 
 ## montagem
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Official](script/release/codeforces-better .user.js) | [Beta](script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Versão oficial](https\://github.com/beijixiaohu/ OJBetter/blob/main/script/release/codeforces-better.user.js) | [Beta](https\://github.com/beijixiaohu/OJBetter/blob/main/script/dev/ codeforces-better.user.js)
 
 ## função-chave
 

@@ -6,13 +6,13 @@ Durch die Hinzufügung einer Reihe nützlicher Funktionen und die Verbesserung d
 
 ***
 
-[Vereinfachtes Chinesisch](README.md) | [Traditionelles Chinesisch](i18n/zh-Hant/README.md) | [Englisch](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [Französisch](i18n/fr/ README.md) | [한국어](i18n/ko/README.md) | [Português](i18n/pt/README.md) | [Japanese](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italiano Español](i18n/es/README.md) | [Italiano](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[简体中文](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [繁體中文](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ***
 
 ## Montage
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Official](script/release/codeforces-better .user.js) | [Beta](script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https://github.com/beijixiaohu/OJBetter/blob/main/script/release/codeforces-better.user.js) | [测试版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
 ## Tastenfunktion
 
@@ -25,32 +25,32 @@ Wenn Sie das Skript installieren, erhalten Sie：
 - Clist Rating Score Display：ruft die Rating Score-Daten für ein Thema von der clist.by-Website ab und zeigt sie auf der Themenseite an.
 - Code-Editor & LSP-Unterstützung：Integrierter Code-Editor am unteren Rand der Themenseite, mit Unterstützung für automatisches Speichern, schnelles Commit, Online-Testlauf usw.
 - Rocky Valley Quick Jump：Ein Klick, um zur entsprechenden Seite dieser Frage in Rocky Valley zu springen
-- 评论区分页显示：改进评论区显示方式，支持翻页、跳转，可选择每页显示的主楼数。
-- 榜单重新着色：根据“得分/总分”比例，对 Codeforces 赛制的比赛榜单进行颜色渐变着色。
-- 一些其他小功能……
+- Anzeige der Kommentarbereichsseite：Verbessern Sie die Anzeige des Kommentarbereichs, unterstützen Sie das Blättern und Springen, und wählen Sie die Anzahl der auf jeder Seite angezeigten Hauptebenen.
+- Umfärbung der Rangliste：Farbverlauf der Codeforces-Turnierrangliste auf der Grundlage des Verhältnisses "Punkte/Gesamt".
+- Einige andere kleine Funktionen……
 
 > [!NOTE]
 >
-> 点击 **整个页面右上角** 的 **`CodeforcesBetter设置`** 按钮，即可打开设置面板，
+> Klicken Sie auf die Schaltfläche **CodeforcesBessere Einstellungen**\*\* in der oberen rechten Ecke der **gesamten Seite**, um das Einstellungsfenster zu öffnen.
 >
-> 绝大部分功能均提供了帮助文本，鼠标悬浮在旁边的 问号图标 上即可查看。
+> Für die meisten Funktionen steht ein Hilfetext zur Verfügung, den Sie anzeigen können, indem Sie mit dem Mauszeiger auf das Fragezeichen-Symbol neben der Funktion fahren.
 
-## 使用文档
+## Dokumente verwenden
 
-了解更多详细信息和使用指南，请访问 [Wiki 页面](https://github.com/beijixiaohu/OJBetter/wiki)。
+Ausführlichere Informationen und Anweisungen finden Sie auf der [Wiki-Seite](https://github.com/beijixiaohu/OJBetter/wiki).
 
-## 如何贡献
+## Wie Sie beitragen können
 
-如果你有任何想法或功能请求，欢迎通过 Pull Requests 或 Issues 与我们分享。
+Wenn Sie Ideen oder Funktionswünsche haben, können Sie uns diese gerne über Pull Requests oder Issues mitteilen.
 
-### 改善翻译质量
+### Verbesserung der Qualität von Übersetzungen
 
-项目的非中文版本主要通过机器翻译（Deepl & Google）完成，托管在 Crowdin 上。
+Die nicht-chinesische Version des Projekts wird hauptsächlich durch maschinelle Übersetzung (Deepl & Google) erstellt und ist auf Crowdin gehostet.
 
-如果你愿意帮助改进翻译，使其更准确、自然，请访问 [Crowdin 项目页面](https://zh.crowdin.com/project/codeforcesbetter) 贡献你的力量。
+Wenn Sie helfen möchten, die Übersetzung zu verbessern, damit sie genauer und natürlicher wird, besuchen Sie bitte die [Crowdin-Projektseite](https://zh.crowdin.com/project/codeforcesbetter), um einen Beitrag zu leisten.
 
-## 支持其他OJ?
+## Unterstützen Sie andere OJ?
 
-由于作者精力有限，并不会维护太多的类似脚本，
+Da der Autor nur über begrenzte Energie verfügt und nicht allzu viele ähnliche Skripte unterhält, ist die
 
-如果你有兴趣将此脚本适配到其他在线评测系统，非常欢迎，你只需要遵守 GPL-3.0 license 许可即可。
+Wenn Sie daran interessiert sind, dieses Skript an andere Online-Bewertungssysteme anzupassen, können Sie das gerne tun, Sie müssen sich nur an die GPL-3.0-Lizenz halten.

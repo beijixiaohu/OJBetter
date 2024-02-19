@@ -6,13 +6,13 @@ OJBetterはTampermonkeyスクリプトプロジェクトで、様々なオンラ
 
 ***
 
-[簡体字中国語](README.md) | [繁体字中国語](i18n/zh-Hant/README.md) | [英語](i18n/en/README.md) | [ドイツ語](i18n/de/README.md) | [フランス語](i18n/fr/README.md)README.md) | [한국어](i18n/ko/README.md) | [Português](i18n/pt/README.md) | [Japanese](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italianoスペイン語](i18n/es/README.md) | [イタリア語](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[簡体字中国語](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [繁体字中国語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/)zh-Hant/README.md) | [英語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [ドイツ語](https://github.com/)beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md)[한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/)blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ***
 
 ## 取り付け
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Official](script/release/codeforces-better.user.js) | [Beta](script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [公式バージョン](https://github.com/beijixiaohu/)OJBetter/blob/main/script/release/codeforces-better.user.js) | [Beta](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
 ## キー機能
 

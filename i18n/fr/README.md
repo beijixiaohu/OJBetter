@@ -1,56 +1,56 @@
 # OJBetter
 
-OJBetter 是一个 Tampermonkey 脚本项目，旨在提升你在各个在线评测系统（OJ）网站的使用体验。
+OJBetter est un projet de script Tampermonkey conçu pour améliorer votre expérience avec divers sites Web de systèmes d'évaluation en ligne (OJ).
 
-通过增加多项实用功能，改善网站界面和用户交互，使你的编程竞赛之路更加高效、便捷。
-
-***
-
-[简体中文](README.md) | [繁體中文](i18n/zh-Hant/README.md) | [English](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [Français](i18n/fr/README.md) | [한국어](i18n/ko/README.md) | [Português](i18n/pt/README.md) | [日本語](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italiano](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+En ajoutant un certain nombre de fonctionnalités utiles et en améliorant l'interface du site web et l'interaction avec l'utilisateur, il rendra votre parcours vers les concours de programmation plus efficace et plus pratique.
 
 ***
 
-## 安装
+[简体中文](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [繁體中文](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](script/release/codeforces-better.user.js) | [测试版](script/dev/codeforces-better.user.js)
+***
 
-## 主要功能
+## montage
 
-安装该脚本，你可以获得：
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https://github.com/beijixiaohu/OJBetter/blob/main/script/release/codeforces-better.user.js) | [测试版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
-- 黑暗模式支持：为网站添加黑暗模式，夜晚刷题不伤眼
-- 多语言网站翻译：将网站的主要文本替换成你选择的语言
-- 便捷按钮：在页面中添加 `MrakDown` 、 `复制` 、`翻译` 按钮
-- 题目翻译功能：点击 `翻译` 按钮，一键即可翻译为目标语言，同时确保不破坏Latex公式。
-- Clist Rating 分数显示：从 clist.by 网站获取题目的 Rating 分数数据，并在题目页面中显示。
-- 代码编辑器与 LSP 支持：在题目页的下方集成代码编辑器，支持自动保存、快捷提交、在线测试运行等功能。
-- 洛谷快捷跳转：一键跳转到该题在洛谷对应的页面
-- 评论区分页显示：改进评论区显示方式，支持翻页、跳转，可选择每页显示的主楼数。
-- 榜单重新着色：根据“得分/总分”比例，对 Codeforces 赛制的比赛榜单进行颜色渐变着色。
-- 一些其他小功能……
+## fonction des touches
+
+L'installation du script vous donne：
+
+- Prise en charge du mode sombre：Ajoutez le mode sombre à votre site web, afin que vous puissiez balayer les questions le soir sans vous faire mal aux yeux.
+- Traduction multilingue de sites web：remplace le texte principal du site web par la langue de votre choix.
+- Boutons pratiques：Ajouter les boutons `MrakDown`, `Copy`, `Translate` aux pages
+- Titre Fonction de traduction：Cliquez sur le bouton "Traduire" pour traduire dans la langue cible en un seul clic, tout en veillant à ne pas briser les formules Latex.
+- Clist Rating Score Display：récupère les données du Rating Score d'un sujet sur le site clist.by et les affiche sur la page du sujet.
+- Éditeur de code et support LSP：Éditeur de code intégré au bas de la page de la rubrique, prenant en charge la sauvegarde automatique, la validation rapide, l'exécution de tests en ligne, etc.
+- Rocky Valley Quick Jump：Un clic pour accéder à la page correspondante de cette question dans Rocky Valley
+- Affichage de la page de la zone de commentaires：Améliorez l'affichage de la zone de commentaires, prenez en charge les changements de page et les sauts, et choisissez le nombre d'étages principaux affichés sur chaque page.
+- Recoloration du tableau de classement：Coloration en dégradé du tableau de classement du tournoi Codeforces basé sur le ratio "score/total".
+- Quelques autres petites fonctionnalités……
 
 > [!NOTE]
 >
-> 点击 **整个页面右上角** 的 **`CodeforcesBetter设置`** 按钮，即可打开设置面板，
+> Cliquez sur le bouton **`CodeforcesBetter Settings`** dans le coin supérieur droit de la **page entière** pour ouvrir le panneau de configuration.
 >
-> 绝大部分功能均提供了帮助文本，鼠标悬浮在旁边的 问号图标 上即可查看。
+> Un texte d'aide est fourni pour la plupart des fonctions et peut être consulté en survolant l'icône du point d'interrogation qui se trouve à côté.
 
-## 使用文档
+## Utilisation des documents
 
-了解更多详细信息和使用指南，请访问 [Wiki 页面](https://github.com/beijixiaohu/OJBetter/wiki)。
+Pour obtenir des informations et des instructions plus détaillées, consultez la [page Wiki] (https\://github.com/beijixiaohu/OJBetter/wiki).
 
-## 如何贡献
+## Comment contribuer
 
-如果你有任何想法或功能请求，欢迎通过 Pull Requests 或 Issues 与我们分享。
+Si vous avez des idées ou des demandes de fonctionnalités, n'hésitez pas à les partager avec nous via les Pull Requests ou les Issues.
 
-### 改善翻译质量
+### Améliorer la qualité des traductions
 
-项目的非中文版本主要通过机器翻译（Deepl & Google）完成，托管在 Crowdin 上。
+La version non chinoise du projet est principalement réalisée par traduction automatique (Deepl & Google) et est hébergée sur Crowdin.
 
-如果你愿意帮助改进翻译，使其更准确、自然，请访问 [Crowdin 项目页面](https://zh.crowdin.com/project/codeforcesbetter) 贡献你的力量。
+Si vous souhaitez contribuer à l'amélioration de la traduction pour la rendre plus précise et plus naturelle, rendez-vous sur la [page du projet Crowdin] (https\://zh.crowdin.com/project/codeforcesbetter) pour apporter votre contribution.
 
-## 支持其他OJ?
+## Soutenir d'autres JO ?
 
-由于作者精力有限，并不会维护太多的类似脚本，
+Étant donné que l'auteur dispose d'une énergie limitée et qu'il n'entretient pas un trop grand nombre de scripts similaires, l'outil de gestion des scripts a été mis en place.
 
-如果你有兴趣将此脚本适配到其他在线评测系统，非常欢迎，你只需要遵守 GPL-3.0 license 许可即可。
+Si vous souhaitez adapter ce script à d'autres systèmes d'évaluation en ligne, vous êtes les bienvenus, il vous suffit de respecter la licence GPL-3.0.
