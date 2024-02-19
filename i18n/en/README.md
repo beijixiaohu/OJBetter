@@ -12,7 +12,7 @@ By adding a number of useful features and improving the website interface and us
 
 ## mounting
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Official version](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [Beta version](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [Official version](https\://github.com/beijixiaohu/ OJBetter/raw/main/script/release/codeforces-better.user.js) [Beta](https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/ codeforces-better.user.js)
 
 ## Key Features
 
