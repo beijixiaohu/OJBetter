@@ -6,13 +6,13 @@ OJBetter는 다양한 온라인 리뷰 시스템(OJ) 웹사이트의 경험을 �
 
 ***
 
-[중국어 간체](README.md) | [중국어 번체](i18n/zh-Hant/README.md) | [영어](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [프랑스어](i18n/fr/) README.md) | [한국어](i18n/ko/README.md) | [포르투갈어](i18n/pt/README.md) | [일본어](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italiano Español](i18n/es/README.md) | [Italiano](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[중국어 간체](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [중국어 번체](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/) zh-Hant/README.md) | [영어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [독일어](https\://github.com/ beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [프랑스어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [영어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [포르투갈어](https\://github.com/beijixiaohu/OJBetter/ blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https\://github. com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README. md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ***
 
 ## 마운팅
 
-코드포스 베터：[그리시포크](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [공식](스크립트/릴리즈/코드포스 베터 .user.js) | [베타](스크립트/dev/codeforces-better.user.js)
+코드포스 베터：[그리시포크](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [공식 버전](https://github.com/beijixiaohu/) OJBetter/blob/main/script/release/codeforces-better.user.js) | [베타](https\://github.com/beijixiaohu/OJBetter/blob/main/script/dev/ codeforces-better.user.js)
 
 ## 주요 기능
 
