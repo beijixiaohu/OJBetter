@@ -6,13 +6,13 @@ OJBetter 是一个 Tampermonkey 脚本项目，旨在提升你在各个在线评
 
 ------
 
-[简体中文](README.md) | [繁體中文](i18n/zh-Hant/README.md) | [English](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [Français](i18n/fr/README.md) | [한국어](i18n/ko/README.md) | [Português](i18n/pt/README.md) | [日本語](i18n/ja/README.md) | [Español](i18n/es/README.md) | [Italiano](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[简体中文](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [繁體中文](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ------
 
 ## 安装
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](script/release/codeforces-better.user.js) | [测试版](script/dev/codeforces-better.user.js) 
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https://github.com/beijixiaohu/OJBetter/blob/main/script/release/codeforces-better.user.js) | [测试版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js) 
 
 ## 主要功能
 
