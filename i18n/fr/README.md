@@ -12,7 +12,7 @@ En ajoutant un certain nombre de fonctionnalités utiles et en améliorant l'int
 
 ## montage
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [正式版](https://github.com/beijixiaohu/OJBetter/blob/main/script/release/codeforces-better.user.js) | [测试版](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [Version officielle](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [Version bêta](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
 ## fonction des touches
 
