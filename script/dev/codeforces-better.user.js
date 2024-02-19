@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.45
+// @version      1.72.46
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -46,8 +46,8 @@
 // @require      https://cdn.staticfile.org/i18next/23.5.1/i18next.min.js
 // @require      https://cdn.staticfile.org/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
 // @require      https://cdn.staticfile.org/jquery-i18next/1.2.1/jquery-i18next.min.js
-// @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/js/i18nextChainedBackend.min.js
-// @require      https://aowuucdn.oss-cn-beijing.aliyuncs.com/js/i18nextLocalStorageBackend.min.js
+// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
+// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
@@ -57,6 +57,8 @@
 // @compatible	 Edge
 // @incompatible safari
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
+// @downloadURL  https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
+// @updateURL    https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
 // ==/UserScript==
 
 /**
@@ -1483,8 +1485,8 @@ GM_addStyle(`
 }
 @font-face {
   font-family: 'iconfont';  /* Project id 4284341 */
-  src: url('//at.alicdn.com/t/c/font_4284341_a8harv4inf8.woff2?t=1707293059995') format('woff2'),
-       url('//at.alicdn.com/t/c/font_4284341_a8harv4inf8.ttf?t=1707293059995') format('truetype');
+  src: url('//aowuucdn.oss-accelerate.aliyuncs.com/iconfont/iconfont.woff2') format('woff2'),
+       url('//aowuucdn.oss-accelerate.aliyuncs.com/iconfont/iconfont.woff2.ttf') format('truetype');
 }
 html {
     scroll-behavior: smooth;
