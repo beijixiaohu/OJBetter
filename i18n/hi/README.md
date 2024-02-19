@@ -12,7 +12,7 @@ OJBetter एक टैम्परमॉन्की स्क्रिप्ट
 
 ## स्थापित करना
 
-कोडफोर्स बेहतर：[ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [आधिकारिक संस्करण](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [बीटा संस्करण](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
+कोडफोर्स बेहतर：[ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [आधिकारिक संस्करण](https\://github.com/beijixiaohu/OJBetter/raw/ मुख्य/स्क्रिप्ट/रिलीज/कोडफोर्स-बेटर.यूजर.जेएस) [बीटा संस्करण](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js)
 
 ## मुख्य कार्य
 
