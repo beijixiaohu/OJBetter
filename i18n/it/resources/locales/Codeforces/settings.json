@@ -68,7 +68,7 @@
                 "caiyun": "illuminato. nuvole colorate e piccole traduzioni",
                 "openai": {
                     "name": "Traduzione ChatGPT",
-                    "helpText": "<p><b>Deve aggiungere e selezionare le informazioni di configurazione che desidera utilizzare nella Configurazione ChatGPT qui sotto, fare clic con il tasto destro del mouse per modificare ed eliminare la configurazione</b></p><p>Per maggiori dettagli, legga la pagina dello script</p>"
+                    "helpText": "<p>需要在下方ChatGPT配置中添加并选定你想使用的配置信息，右键可以修改和删除配置，具体请阅读 Github wiki</p>"
                 }
             }
         },
@@ -100,7 +100,7 @@
             "title": "preferenze",
             "target": {
                 "title": "lingua di destinazione",
-                "helpText": "Nota：I servizi di traduzione disponibili differiscono per le diverse lingue di destinazione, legga la pagina dello script per i dettagli."
+                "helpText": "注意：对于不同的目标语言，可用的翻译服务有所不同"
             },
             "comment_translation_choice": {
                 "title": "Traduzione della sezione commenti",
@@ -168,7 +168,7 @@
             },
             "replaceSymbol": {
                 "name": "Sostituzione di LaTeX",
-                "helpText": "<p>Lo script assicura che le formule non vengano corrotte dall'interfaccia di traduzione, eliminando prima tutte le formule LaTeX e utilizzando dei segnaposto per esse</p><p>La probabilità che le sostituzioni stesse vengano corrotte varia da servizio di traduzione a servizio di traduzione, si prega di leggere le istruzioni sulla pagina dello script per i dettagli</p><p>Si noti che：La traduzione con ChatGPT non richiede quanto sopra e quindi non è influenzata da questa opzione</p><p>Per i dettagli, può andare alla pagina dello script per le istruzioni</p>",
+                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读Github wiki</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>",
                 "options": {
                     "1": "Utilizzi [ ]",
                     "2": "Utilizzi {}",
@@ -253,7 +253,7 @@
             "title": "Impostazioni LSP",
             "useLSP": {
                 "label": "Utilizzo dell'LSP",
-                "helpText": "<p>Si connetta al server LSP per abilitare il completamento del codice, la diagnostica del codice, la formattazione, il passaggio alle definizioni, ecc.</p><p>Supporto per i linguaggi C++, Python</p><p>È necessario avviare OJBetter_Bridge, vedere la pagina dello script per le istruzioni</p>"
+                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请阅读 Github wiki</p>"
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Percorso lavorativo.",
