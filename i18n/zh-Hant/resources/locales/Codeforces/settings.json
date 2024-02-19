@@ -68,7 +68,7 @@
                 "caiyun": "彩雲小譯",
                 "openai": {
                     "name": "ChatGPT翻譯",
-                    "helpText": "<p><b>需要在下方ChatGPT配置中添加並選定你想使用的配置信息，右鍵可以修改和刪除配置</b></p><p>具體請閱讀腳本頁的介紹</p>"
+                    "helpText": "<p>需要在下方ChatGPT配置中添加並選定你想使用的配置信息，右鍵可以修改和刪除配置，具體請閱讀Github wiki</p>"
                 }
             }
         },
@@ -100,7 +100,7 @@
             "title": "偏好",
             "target": {
                 "title": "目標語言",
-                "helpText": "注意：對於不同的目標語言，可用的翻譯服務有所不同，請閱讀腳本頁的介紹"
+                "helpText": "注意：對於不同的目標語言，可用的翻譯服務有所不同"
             },
             "comment_translation_choice": {
                 "title": "評論區翻譯",
@@ -168,7 +168,7 @@
             },
             "replaceSymbol": {
                 "name": "LaTeX替換符",
-                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读脚本页的说明</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p><p>具体你可以前往阅读脚本页的说明</p>",
+                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读Github wiki</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>",
                 "options": {
                     "1": "使用【】",
                     "2": "使用{}",
@@ -253,7 +253,7 @@
             "title": "LSP 設定",
             "useLSP": {
                 "label": "使用LSP",
-                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请查看脚本页的说明</p>"
+                "helpText": "<p>连接 LSP Server，以启用代码补全、代码诊断、格式化、转到定义等功能</p><p>支持C++、Python语言</p><p>你需要启动 OJBetter_Bridge ，具体请阅读 Github wiki</p>"
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "工作路徑:",

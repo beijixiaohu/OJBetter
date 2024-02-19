@@ -68,7 +68,7 @@
                 "caiyun": "Caiyun Translation",
                 "openai": {
                     "name": "ChatGPT Translation",
-                    "helpText": "<p><b>You need to add and select the configuration information you want to use in the ChatGPT configuration below. You can modify and delete the configuration by right-clicking</b></p><p>Please read the introduction on the script page</p>"
+                    "helpText": "<p>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right-click to modify and delete the configuration, read the Github wiki at</p>"
                 }
             }
         },
@@ -100,7 +100,7 @@
             "title": "Preferences",
             "target": {
                 "title": "Target language",
-                "helpText": "Note：The available translation services vary for different target languages, please read the script page for details."
+                "helpText": "Note：The available translation services vary for different target languages"
             },
             "comment_translation_choice": {
                 "title": "Translate comments section",
@@ -168,7 +168,7 @@
             },
             "replaceSymbol": {
                 "name": "LaTeX Replacement",
-                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and placing them with substitutions</p><p>The probability of the substitutions themselves being corrupted varies from translation service to translation service, please read the instructions on the script page for more information</p><p>Note that：Translating with ChatGPT does not require the above actions, and is therefore not affected by this option</p><p>For more information, you can go to the script page for more information</p>",
+                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them</p><p>The probability of the substitutions themselves being corrupted varies between translation services, read the Github wiki for details</p><p>Note that：Translating with ChatGPT does not require the above, and is therefore not affected by this option</p>",
                 "options": {
                     "1": "use【】",
                     "2": "use{}",
@@ -253,7 +253,7 @@
             "title": "LSP Settings",
             "useLSP": {
                 "label": "Using the LSP",
-                "helpText": "<p>Connect to LSP Server to enable code completion, code diagnostics, formatting, go to definitions, etc.</p><p>Support for C++, Python languages</p><p>You will need to start OJBetter_Bridge, as described on the scripts page</p>"
+                "helpText": "<p>Connect to LSP Server to enable code completion, code diagnostics, formatting, go to definitions, etc.</p><p>Support for C++, Python languages</p><p>You need to start OJBetter_Bridge, read the Github wiki for details</p>"
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "Work path.",
