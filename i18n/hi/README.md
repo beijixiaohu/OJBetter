@@ -6,13 +6,13 @@ OJBetter एक टैम्परमॉन्की स्क्रिप्ट
 
 ***
 
-[सरलीकृत चीनी](README.md) | [पारंपरिक चीनी](i18n/zh-Hant/README.md) | [अंग्रेजी](i18n/en/README.md) | [Deutsch](i18n/de/README.md) | [फ़्रांसीसी](i18n/fr/README.md) | [한국어](i18n/ko/README.md) | [पुर्तगाली](i18n/pt/README.md) | [日本语](i18n/ja/ README.md) | [एस्पेनॉल](i18n/es/README.md) | [इतालवी](i18n/it/README.md) | [हिन्दी](i18n/hi/README.md)
+[सरलीकृत चीनी](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [पारंपरिक चीनी](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh -Hant/README.md) | [अंग्रेजी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https\://github.com/beijixiaohu /OJBetter/blob/main/i18n/de/README.md) | [फ़्रांसीसी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https ://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [पुर्तगाली](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README। एमडी) | [日本语](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https\://github.com/beijixiaohu/OJBetter/blob /main/i18n/es/README.md) | [इटालियानो](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिंदी](https\://github .com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
 ***
 
 ## स्थापित करना
 
-कोडफोर्स बेहतर：[ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [आधिकारिक संस्करण](script/release/codeforces-better.user.js) | [बीटा संस्करण](स्क्रिप्ट/dev/codeforces-better.user.js)
+कोडफोर्स बेहतर：[ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) | [आधिकारिक संस्करण](https\://github.com/beijixiaohu/OJBetter/blob /main/script/release/codeforces-better.user.js) | [बीटा संस्करण](https://github.com/beijixiaohu/OJBetter/blob/main/script/dev/codeforces-better.user.js)
 
 ## मुख्य कार्य
 
