@@ -17,6 +17,7 @@
     },
     "announce": {
         "title": "को अद्यतन किया गया",
+        "prefix": "नवीनतम अपडेट लॉग：",
         "noContent": "\n\nवर्तमान संस्करण के लिए कोई अद्यतन लॉग नहीं है",
         "divContent": "\n\nबीटा संस्करण के लिए कोई अपडेट लॉग नहीं है, [अपडेट कमिट](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
