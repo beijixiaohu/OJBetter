@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.72.46
+// @version      1.72.47
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
@@ -594,6 +594,26 @@ const OJB_compareVersions = function (version1 = "0", version2 = "0") {
 }
 
 /**
+ * 获取上一个主版本号
+ * @param {string} currentVersion 当前版本号
+ * @returns {string} 上一个主版本号
+ */
+const OJB_getPreviousVersion = function (currentVersion) {
+    const versionArray = currentVersion.split(".").map(Number);
+    let lastNonZeroIndex = versionArray.length - 1;
+    while (lastNonZeroIndex >= 0 && versionArray[lastNonZeroIndex] === 0) {
+        lastNonZeroIndex--;
+    }
+    if (lastNonZeroIndex >= 0) {
+        versionArray[lastNonZeroIndex]--;
+        for (let i = lastNonZeroIndex + 1; i < versionArray.length; i++) {
+            versionArray[i] = 0;
+        }
+    }
+    return versionArray.join(".");
+};
+
+/**
  * 初始化全局变量
  */
 async function initVar() {
@@ -742,43 +762,6 @@ async function initVar() {
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
 }
-
-/**
- * 公告
- */
-async function showAnnounce() {
-    /** @type {string} 最新公告版本*/
-    const lastAnnounceVer = i18next.t('lastVersion', { ns: 'announce' });
-    if (OJB_compareVersions(OJBetter.state.version, OJBetter.state.lastAnnounceVer) === 1) {
-        const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${OJBetter.state.version}`;
-        /** @type {Boolean} 是否是新的公告 */
-        const isNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.lastReadAnnounceVer) === 1;
-        /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
-        const showNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
-        const content = (() => {
-            if (isNewAnnounceVer && showNewAnnounceVer) {
-                return i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
-            } else {
-                return i18next.t('announce.divContent', { ns: 'dialog' });
-            }
-        })();
-        const ok = await OJB_createDialog(
-            title,
-            content,
-            [
-                null,
-                i18next.t('announce.buttons.0', { ns: 'dialog' })
-            ],
-            true
-        ); //跳过折叠块确认
-        if (ok) {
-            if (isNewAnnounceVer && showNewAnnounceVer) {
-                GM_setValue('lastReadAnnounceVer', lastAnnounceVer);
-            }
-            GM_setValue('lastAnnounceVer', OJBetter.state.version);
-        }
-    }
-};
 
 /**
  * 显示警告消息
@@ -2050,16 +2033,19 @@ header .enter-or-register-box, header .languages {
     margin: 0;
 }
 /*设置面板-滚动条*/
-.OJBetter_setting_menu::-webkit-scrollbar, .OJBetter_setting_content::-webkit-scrollbar {
+.OJBetter_setting_menu::-webkit-scrollbar, .OJBetter_setting_content::-webkit-scrollbar,
+.OJBetter_modal .content::-webkit-scrollbar {
     width: 5px;
     height: 7px;
     background-color: #aaa;
 }
-.OJBetter_setting_menu::-webkit-scrollbar-thumb, .OJBetter_setting_content::-webkit-scrollbar-thumb {
+.OJBetter_setting_menu::-webkit-scrollbar-thumb, .OJBetter_setting_content::-webkit-scrollbar-thumb,
+.OJBetter_modal .content::-webkit-scrollbar-thumb {
     background-clip: padding-box;
     background-color: #d7d9e4;
 }
-.OJBetter_setting_menu::-webkit-scrollbar-track, .OJBetter_setting_content::-webkit-scrollbar-track {
+.OJBetter_setting_menu::-webkit-scrollbar-track, .OJBetter_setting_content::-webkit-scrollbar-track,
+.OJBetter_modal .content::-webkit-scrollbar-track {
     background-color: #f1f1f1;
 }
 /*设置面板-关闭按钮*/
@@ -2656,6 +2642,7 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     transform: translate(-50%, -50%);
     font-size: 12px;
     font-family: var(--vp-font-family-base);
+    width: max-content;
     padding: 10px 20px;
     box-shadow: 0px 0px 0px 4px #ffffff;
     border-radius: 6px;
@@ -2663,6 +2650,11 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     border-collapse: collapse;
     border: 1px solid #ffffff;
     color: #697e91;
+}
+.OJBetter_modal .content{
+    white-space: nowrap;
+    max-height: 500px;
+    overflow-y: auto;
 }
 .OJBetter_modal .buttons{
     display: flex;
@@ -3712,6 +3704,59 @@ async function checkScriptVersion() {
         console.error("Update check failed: ", error);
     }
 }
+
+/**
+ * 公告
+ */
+async function showAnnounce() {
+    /** @type {string} 最新公告版本*/
+    const lastAnnounceVer = i18next.t('lastVersion', { ns: 'announce' });
+    if (OJB_compareVersions(OJBetter.state.version, OJBetter.state.lastAnnounceVer) === 1) {
+        const title = `🎉${i18next.t('announce.title', { ns: 'dialog' })} ${OJBetter.state.version}`;
+        /** @type {Boolean} 是否是新的公告 */
+        const isNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.lastReadAnnounceVer) === 1;
+        /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
+        const showNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
+        /**
+         * 获取最后三个公告的内容
+         * @param {string} lastAnnounceVer 
+         * @returns {string} 公告内容
+         */
+        const getLastThreeAnnounceContent = function (lastAnnounceVer) {
+            let content = "";
+            for (let i = 0; i < 3; i++) {
+                content += `### ${lastAnnounceVer}\n\n`;
+                content += i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
+                content += "\n\n";
+                lastAnnounceVer = OJB_getPreviousVersion(lastAnnounceVer);
+            }
+            return content;
+        };
+
+        const content = (() => {
+            if (isNewAnnounceVer && showNewAnnounceVer) {
+                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getLastThreeAnnounceContent(lastAnnounceVer)}`;
+            } else {
+                return i18next.t('announce.divContent', { ns: 'dialog' });
+            }
+        })();
+        const ok = await OJB_createDialog(
+            title,
+            content,
+            [
+                null,
+                i18next.t('announce.buttons.0', { ns: 'dialog' })
+            ],
+            true
+        ); //跳过折叠块确认
+        if (ok) {
+            if (isNewAnnounceVer && showNewAnnounceVer) {
+                GM_setValue('lastReadAnnounceVer', lastAnnounceVer);
+            }
+            GM_setValue('lastAnnounceVer', OJBetter.state.version);
+        }
+    }
+};
 
 /**
  * 提示信息类
