@@ -17,6 +17,7 @@
     },
     "announce": {
         "title": "Updated to",
+        "prefix": "Recently Updated Log：",
         "noContent": "\n\nThere is no changelog for the current version",
         "divContent": "\n\nThe beta version has no changelog, [Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
