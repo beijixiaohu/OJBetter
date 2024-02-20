@@ -12,7 +12,17 @@
 // @name:hi      Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
 // @version      1.73.0
-// @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
+// @description         一个适用于 Codeforces 的 Tampermonkey 脚本，增强功能与界面。
+// @description:zh-TW   一個適用於 Codeforces 的 Tampermonkey 腳本，增強功能與界面。
+// @description:en      A Tampermonkey script for Codeforces that enhances functionality and interface.
+// @description:de      Ein Tampermonkey-Skript für Codeforces, das Funktionalität und Benutzeroberfläche verbessert.
+// @description:fr      Un script Tampermonkey pour Codeforces qui améliore les fonctionnalités et l'interface.
+// @description:ko      Codeforces를 위한 Tampermonkey 스크립트로 기능과 인터페이스를 개선합니다.
+// @description:pt      Um script Tampermonkey para Codeforces que aprimora a funcionalidade e a interface.
+// @description:ja      Codeforces用のTampermonkeyスクリプトで機能とインターフェースを強化します。
+// @description:es      Un script Tampermonkey para Codeforces que mejora la funcionalidad y la interfaz.
+// @description:it      Uno script Tampermonkey per Codeforces che migliora la funzionalità e l'interfaccia.
+// @description:hi      Codeforces के लिए एक Tampermonkey स्क्रिप्ट जो कार्यक्षमता और इंटरफ़ेस को बेहतर बनाता है।
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
