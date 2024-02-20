@@ -1,5 +1,15 @@
 // ==UserScript==
 // @name         Codeforces Better!
+// @name:zh-TW   Codeforces Better!
+// @name:en      Codeforces Better!
+// @name:de      Codeforces Better!
+// @name:fr      Codeforces Better!
+// @name:ko      Codeforces Better!
+// @name:pt      Codeforces Better!
+// @name:ja      Codeforces Better!
+// @name:es      Codeforces Better!
+// @name:it      Codeforces Better!
+// @name:hi      Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
 // @version      1.73.0
 // @description  Codeforces界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷、评论区分页、ClistRating分显示、榜单重新着色、题目页代码编辑器、快捷提交，在线测试运行，自定义样例测试、LSP服务，编辑器自定义代码补全
