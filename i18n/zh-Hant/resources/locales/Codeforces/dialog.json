@@ -17,6 +17,7 @@
     },
     "announce": {
         "title": "已更新至",
+        "prefix": "最近更新日誌：",
         "noContent": "\n\n目前版本沒有更新日誌",
         "divContent": "\n\n測試版沒有更新日誌，[更新Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [

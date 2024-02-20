@@ -17,6 +17,7 @@
     },
     "announce": {
         "title": "Aggiornato a",
+        "prefix": "Ultimo registro aggiornato：",
         "noContent": "\n\nNon c'è un changelog per la versione attuale.",
         "divContent": "\n\nLa versione beta non ha un changelog, [Commesse di aggiornamento](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [

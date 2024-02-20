@@ -17,6 +17,7 @@
     },
     "announce": {
         "title": "다음으로 업데이트되었습니다.",
+        "prefix": "최근 업데이트 로그：",
         "noContent": "\n\n현재 버전에 대한 변경 로그가 없습니다.",
         "divContent": "\n\n베타 버전에는 변경 로그가 없으며, [업데이트 커밋](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
