@@ -17,6 +17,7 @@
     },
     "announce": {
         "title": "次に更新",
+        "prefix": "最終更新ログ：",
         "noContent": "\n\n現在のバージョンの変更履歴はありません。",
         "divContent": "\n\nベータ版には変更履歴がありません。[Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
         "buttons": [
