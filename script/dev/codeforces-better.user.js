@@ -1,28 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
-// @name:zh-TW   Codeforces Better!
-// @name:en      Codeforces Better!
-// @name:de      Codeforces Better!
-// @name:fr      Codeforces Better!
-// @name:ko      Codeforces Better!
-// @name:pt      Codeforces Better!
-// @name:ja      Codeforces Better!
-// @name:es      Codeforces Better!
-// @name:it      Codeforces Better!
-// @name:hi      Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.0
-// @description         一个适用于 Codeforces 的 Tampermonkey 脚本，增强功能与界面。
-// @description:zh-TW   一個適用於 Codeforces 的 Tampermonkey 腳本，增強功能與界面。
-// @description:en      A Tampermonkey script for Codeforces that enhances functionality and interface.
-// @description:de      Ein Tampermonkey-Skript für Codeforces, das Funktionalität und Benutzeroberfläche verbessert.
-// @description:fr      Un script Tampermonkey pour Codeforces qui améliore les fonctionnalités et l'interface.
-// @description:ko      Codeforces를 위한 Tampermonkey 스크립트로 기능과 인터페이스를 개선합니다.
-// @description:pt      Um script Tampermonkey para Codeforces que aprimora a funcionalidade e a interface.
-// @description:ja      Codeforces用のTampermonkeyスクリプトで機能とインターフェースを強化します。
-// @description:es      Un script Tampermonkey para Codeforces que mejora la funcionalidad y la interfaz.
-// @description:it      Uno script Tampermonkey per Codeforces che migliora la funzionalità e l'interfaccia.
-// @description:hi      Codeforces के लिए एक Tampermonkey स्क्रिप्ट जो कार्यक्षमता और इंटरफ़ेस को बेहतर बनाता है।
+// @version      1.73.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -79,6 +58,27 @@
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
 // @downloadURL  https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
 // @updateURL    https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
+// @name:zh-TW   Codeforces Better!
+// @name:en      Codeforces Better!
+// @name:de      Codeforces Better!
+// @name:fr      Codeforces Better!
+// @name:ko      Codeforces Better!
+// @name:pt      Codeforces Better!
+// @name:ja      Codeforces Better!
+// @name:es      Codeforces Better!
+// @name:it      Codeforces Better!
+// @name:hi      Codeforces Better!
+// @description         一个适用于 Codeforces 的 Tampermonkey 脚本，增强功能与界面。
+// @description:zh-TW   一個適用於 Codeforces 的 Tampermonkey 腳本，增強功能與界面。
+// @description:en      A Tampermonkey script for Codeforces that enhances functionality and interface.
+// @description:de      Ein Tampermonkey-Skript für Codeforces, das Funktionalität und Benutzeroberfläche verbessert.
+// @description:fr      Un script Tampermonkey pour Codeforces qui améliore les fonctionnalités et l'interface.
+// @description:ko      Codeforces를 위한 Tampermonkey 스크립트로 기능과 인터페이스를 개선합니다.
+// @description:pt      Um script Tampermonkey para Codeforces que aprimora a funcionalidade e a interface.
+// @description:ja      Codeforces用のTampermonkeyスクリプトで機能とインターフェースを強化します。
+// @description:es      Un script Tampermonkey para Codeforces que mejora la funcionalidad y la interfaz.
+// @description:it      Uno script Tampermonkey per Codeforces che migliora la funzionalità e l'interfaccia.
+// @description:hi      Codeforces के लिए एक Tampermonkey स्क्रिप्ट जो कार्यक्षमता और इंटरफ़ेस को बेहतर बनाता है।
 // ==/UserScript==
 
 /**
@@ -500,6 +500,15 @@ const OJB_parseLinePairArray = val => {
         return { [key]: value };
     });
 };
+
+/**
+ * 移除文本中的HTML标签
+ * @param {string} text - 包含HTML标签的文本
+ * @returns {string} - 移除HTML标签后的文本
+ */
+const OJB_removeHTMLTags = function (text) {
+    return text.replace(/<\/?[a-zA-Z]+("[^"]*"|'[^']*'|[^'">])*>/g, '');
+}
 
 /**
  * 获取对象中指定路径表达式的值
@@ -1201,7 +1210,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
-        html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover{
+        html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover,
+        html[data-theme=dark] .OJBetter_setting_menu select{
             background-color: #22272e !important;
             background-image: none;
         }
@@ -2024,6 +2034,7 @@ header .enter-or-register-box, header .languages {
     border-style: solid;
     border: 1px solid #ced4da;
     color: #009688;
+    background: #ffffff;
     font-size: 15px;
 }
 .OJBetter_setting_menu select:focus-visible {
@@ -3290,6 +3301,23 @@ function addI18nStyles() {
 }
 
 // ------------------------------
+// 一些工具类
+// ------------------------------
+
+/**
+ * 自定义错误类，以区分不同的错误类型
+ */
+class OJB_GMError extends Error {
+    constructor(type, message, originalError) {
+        super(message);
+        this.name = 'GMError';
+        this.type = type;
+        this.stack = originalError.stack;
+        Object.assign(this, originalError);
+    }
+}
+
+// ------------------------------
 // 一些工具函数
 // ------------------------------
 
@@ -3352,19 +3380,6 @@ async function OJB_promiseRetryWrapper(task, {
 }
 
 /**
- * 自定义错误类，以区分不同的错误类型
- */
-class GMError extends Error {
-    constructor(type, message, originalError) {
-        super(message);
-        this.name = 'GMError';
-        this.type = type;
-        this.stack = originalError.stack;
-        Object.assign(this, originalError);
-    }
-}
-
-/**
  * GM_xmlhttpRequest 的 Promise 封装
  * @param {Object} options GM_xmlhttpRequest 的参数
  * @param {Boolean} isStream 是否为流式请求
@@ -3379,9 +3394,9 @@ function OJB_GMRequest(options, isStream = false) {
             } : {
                 onload: resolve
             }),
-            onerror: (error) => reject(new GMError('error', 'An error occurred during the request.', error)),
-            ontimeout: (error) => reject(new GMError('timeout', 'The request timed out.', error)),
-            onabort: (error) => reject(new GMError('abort', 'The request was aborted.', error)),
+            onerror: (error) => reject(new OJB_GMError('error', 'An error occurred during the request.', error)),
+            ontimeout: (error) => reject(new OJB_GMError('timeout', 'The request timed out.', error)),
+            onabort: (error) => reject(new OJB_GMError('abort', 'The request was aborted.', error)),
         });
     });
 }
@@ -6247,6 +6262,9 @@ class TaskQueue {
  * @returns {boolean} 是否可能为代码片段
  */
 function isLikelyCodeSnippet(text) {
+    // 过滤文本中可能的HTML标签
+    text = OJB_removeHTMLTags(text);
+
     // 移除LaTeX公式部分
     const cleanedText = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
 
@@ -6258,7 +6276,7 @@ function isLikelyCodeSnippet(text) {
         'raise', 'with', 'lambda', 'print'
     ];
     // 代码的特殊字符
-    const codeChars = [';', '{', '}', '<', '>', '=', '+', '-',
+    const codeChars = [';', '{', '}', '>', '<', '<<', '>>', '=', '+', '-',
         '&', '|', '#', ':', '\'\'\'', '\"\"\"', '->'];
 
     // 普通文本的标点符号
@@ -6691,9 +6709,14 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     await waitForMathJaxIdle();
     button.setButtonLoaded();
 
-    // 标记目标文本是短字符文本
+    // 标记目标文本区域不自动翻译
     {
-        let text = $(element).getMarkdown();
+        let text;
+        if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+            text = $(element).html();
+        } else {
+            text = $(element).getMarkdown();
+        }
         let length = text.length;
         if (length > OJBetter.translation.auto.shortTextLength || isLikelyCodeSnippet(text)) {
             button.setNotAutoTranslate();
@@ -6834,14 +6857,21 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
  * @param {boolean} is_comment 是否是评论
  */
 async function transTask(button, element, type, is_comment, translation) {
-    var target, element;
-    var count = {
+    /** @type {HTMLElement} 目标元素 */
+    let target;
+    /**
+     * 错误计数数据结构
+     * @typedef {Object} count
+     * @property {number} errerNum 错误数量
+     * @property {number} skipNum 跳过数量
+     */
+    const count = {
         errerNum: 0,
         skipNum: 0
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        var pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
+        let pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
@@ -6849,7 +6879,7 @@ async function transTask(button, element, type, is_comment, translation) {
         }
     } else if (OJBetter.translation.comment.transMode == "2") {
         // 选段翻译
-        var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru");
+        let pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
@@ -6921,7 +6951,7 @@ async function blockProcessing(button, target, element_node, is_comment, transla
     } else if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
     }
-    var result = await translateProblemStatement(button, target.markdown, element_node, is_comment, translation);
+    var result = await translateProblemStatement(target.markdown, element_node, is_comment, translation);
     if (result.status == "skip") {
         button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
         result.translateDiv.close();
@@ -7764,13 +7794,22 @@ async function initTransWhenViewable() {
     observers.push(observer);
 }
 
-// 翻译主方法
-async function translateProblemStatement(button, text, element_node, is_comment, translation_) {
+/**
+ * 翻译主方法
+ * @param {string} text 待翻译文本
+ * @param {HTMLElement} element_node 元素节点
+ * @param {*} is_comment 是否为评论区文本
+ * @param {*} translation_ 
+ * @returns 
+ */
+async function translateProblemStatement(text, element_node, is_comment, translation_) {
     let status = "ok";
     let id = OJB_getRandomNumber(8);
     let matches = [];
     let replacements = {};
     let translatedText = "";
+    /** @type {string} 当前实际应用的翻译服务 */
+    let realTransServer;
     let rawData = {
         done: false
     };
@@ -7790,7 +7829,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
             matches = matches.concat(text.match(regex));
             text = replaceBlock(text, matches, replacements);
-        } else if (realTranlate != "openai") {
+        } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
             let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
             matches = matches.concat(text.match(regex));
@@ -7813,7 +7852,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             translatedText = recoverBlock(translatedText, matches, replacements);
         } else if (OJBetter.typeOfPage.is_acmsguru) {
             translatedText = recoverBlock(translatedText, matches, replacements);
-        } else if (realTranlate != "openai") {
+        } else if (realTransServer != "openai") {
             translatedText = recoverBlock(translatedText, matches, replacements);
         }
         return translatedText;
@@ -7879,23 +7918,22 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     $(element_node).after(translateDiv.getDiv());
 
     // 当前实际翻译服务
-    let realTranlate;
     if (translation_) {
-        realTranlate = translation_;
+        realTransServer = translation_;
     } else {
-        if (is_comment && OJBetter.translation.comment.choice != "0") realTranlate = OJBetter.translation.comment.choice;
-        else realTranlate = OJBetter.translation.choice;
+        if (is_comment && OJBetter.translation.comment.choice != "0") realTransServer = OJBetter.translation.comment.choice;
+        else realTransServer = OJBetter.translation.choice;
     }
 
-    // 信息
-    translateDiv.setTopText(i18next.t('servers.' + realTranlate, { ns: 'translator' }) +
+    // 顶栏左侧信息
+    translateDiv.setTopText(i18next.t('servers.' + realTransServer, { ns: 'translator' }) +
         i18next.t('translateDiv.topTextSuffix', { ns: 'translator' }));
 
     // 注册按钮
     translateDiv.registerUpButtonEvent();
     translateDiv.registerCloseButtonEvent();
     if (OJBetter.translation.choice == 'openai' || OJBetter.translation.choice == 'deepl') {
-        translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 额度查询
+        translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 显示额度查询
     }
 
     // 翻译内容是否可能为代码片段
@@ -7934,8 +7972,8 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         google: 5000,
         caiyun: 5000
     };
-    if (translationLimits.hasOwnProperty(realTranlate) && text.length > translationLimits[realTranlate]) {
-        let textLength = translationLimits[realTranlate];
+    if (translationLimits.hasOwnProperty(realTransServer) && text.length > translationLimits[realTransServer]) {
+        let textLength = translationLimits[realTransServer];
         let realTextLength = text.length;
         const shouldContinue = await OJB_createDialog(
             i18next.t('transTextLimits.title', { ns: 'dialog' }),
@@ -7958,7 +7996,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     // 翻译
     async function translate(translation) {
         const is_renderLaTeX = !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru);
-        const servername = i18next.t('servers.' + realTranlate, { ns: 'translator' });
+        const servername = i18next.t('servers.' + realTransServer, { ns: 'translator' });
         let rawData = {};
         try {
             if (translation == "deepl") {
@@ -8017,7 +8055,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         }
         return rawData;
     }
-    rawData = await translate(realTranlate);
+    rawData = await translate(realTransServer);
 
     if (status == "error") {
         translateDiv.updateTranslateDiv(rawData.message);
@@ -8564,6 +8602,7 @@ async function getRating(problem, problem_url, contest = null) {
     });
 }
 
+// TODO 7
 /**
  * 从clist API获取题目的rating
  * @param {string} problem 题目名
@@ -8596,7 +8635,7 @@ async function getRatingFromApi_problem(problem, problem_url) {
 }
 
 /**
- * 从clist API获取比赛的题目rating
+ * 从clist API获取比赛题目集的rating
  * @param {string} event 比赛名
  * @returns {Promise<Map<string, number>>} 题目rating
  */
@@ -11871,7 +11910,7 @@ async function translate_youdao_mobile(raw) {
 }
 
 /**
- * 谷歌翻译
+ * google翻译
  * @param {string} raw 原文
  * @returns {Promise<TranslateResult>} 翻译结果对象
  */
