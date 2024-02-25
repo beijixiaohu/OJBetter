@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.1
+// @version      1.73.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -3383,7 +3383,7 @@ async function OJB_promiseRetryWrapper(task, {
  * GM_xmlhttpRequest 的 Promise 封装
  * @param {Object} options GM_xmlhttpRequest 的参数
  * @param {Boolean} isStream 是否为流式请求
- * @returns {Promise} 返回 Promise
+ * @returns {Promise<OJB_GMError>} 返回 Promise
  */
 function OJB_GMRequest(options, isStream = false) {
     return new Promise((resolve, reject) => {
@@ -5277,7 +5277,6 @@ const dev_settings_HTML = `
 </div>
 `;
 
-// TODO 2
 const about_settings_HTML = `
 <div id="about-settings" class="settings-page">
     <h3 data-i18n="settings:about.title"></h3>
@@ -5866,7 +5865,6 @@ async function initSettingsPanel() {
         $("input[name='compiler']").css("color", "gray");
         // 调试
         $("#notWaiteLoaded").prop("checked", GM_getValue("notWaiteLoaded") === true);
-        // TODO 3
         $('#l10n_refreshScrpitCacheButton').click(clearI18nextCache);
         $('#indexedDB_clearButton').click(async () => { await clearDatabase(); });
         $('#indexedDB_exportButton').click(async () => { downloadDataAsFile(await exportDatabase(), 'database_export.json') });
@@ -6855,8 +6853,9 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
  * @param {HTMLElement} element 目标元素
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
-async function transTask(button, element, type, is_comment, translation) {
+async function transTask(button, element, type, is_comment, overrideTrans) {
     /** @type {HTMLElement} 目标元素 */
     let target;
     /**
@@ -6875,7 +6874,7 @@ async function transTask(button, element, type, is_comment, translation) {
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, is_comment, count, translation);
+            await process(button, target, element_node, type, is_comment, count, overrideTrans);
         }
     } else if (OJBetter.translation.comment.transMode == "2") {
         // 选段翻译
@@ -6883,7 +6882,7 @@ async function transTask(button, element, type, is_comment, translation) {
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, is_comment, count, translation);
+            await process(button, target, element_node, type, is_comment, count, overrideTrans);
         }
         $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
     } else {
@@ -6891,7 +6890,7 @@ async function transTask(button, element, type, is_comment, translation) {
         target = $(element).eq(0).clone();
         if (type === "child_level") $(target).children(':first').remove();
         element_node = $($(element)).get(0);
-        await process(button, target, element_node, type, is_comment, count, translation);
+        await process(button, target, element_node, type, is_comment, count, overrideTrans);
     }
 
     // 翻译完成
@@ -6907,8 +6906,9 @@ async function transTask(button, element, type, is_comment, translation) {
  * @param {HTMLElement} element_node 目标节点
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
-async function process(button, target, element_node, type, is_comment, count, translation) {
+async function process(button, target, element_node, type, is_comment, count, overrideTrans) {
     if (type === "child_level") {
         let div = $("<div>");
         $(element_node).append(div);
@@ -6933,10 +6933,9 @@ async function process(button, target, element_node, type, is_comment, count, tr
         }
     }
 
-    // 等待结果
-    let result;
+    // 等待并获取结果
     button.setTransButtonState('running');
-    result = await blockProcessing(button, target, element_node, is_comment, translation);
+    const result = await blockProcessing(button, target, element_node, is_comment, overrideTrans);
     button.pushResultToTransButton(result);
 
     if (result.status == "error") count.errerNum += 1;
@@ -6944,14 +6943,23 @@ async function process(button, target, element_node, type, is_comment, count, tr
     $(target).remove();
 }
 
-// 块处理
-async function blockProcessing(button, target, element_node, is_comment, translation) {
+/**
+ * 块处理
+ * @param {JQuery<HTMLElement>} button 
+ * @param {HTMLElement} target 目标元素
+ * @param {HTMLElement} element_node 目标节点
+ * @param {boolean} is_comment 是否是评论
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @returns {TranslateResult} 翻译结果对象
+ */
+async function blockProcessing(button, target, element_node, is_comment, overrideTrans) {
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = turndownService.turndown($(target).html());
     }
-    var result = await translateProblemStatement(target.markdown, element_node, is_comment, translation);
+
+    const result = await translateProblemStatement(target.markdown, element_node, is_comment, overrideTrans);
     if (result.status == "skip") {
         button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
         result.translateDiv.close();
@@ -7199,63 +7207,6 @@ function waitForMathJaxIdle() {
             }
         }, 100);
     });
-}
-
-// 块替换
-function replaceBlock(text, matches, replacements) {
-    try {
-        for (let i = 0; i < matches.length; i++) {
-            let match = matches[i];
-            let replacement = '';
-            if (OJBetter.translation.replaceSymbol === "1") {
-                replacement = `【${i + 1}】`;
-            } else if (OJBetter.translation.replaceSymbol === "2") {
-                replacement = `{${i + 1}}`;
-            } else if (OJBetter.translation.replaceSymbol === "3") {
-                replacement = `[${i + 1}]`;
-            }
-            text = text.replace(match, replacement);
-            replacements[replacement] = match;
-        }
-    } catch (e) { }
-    return text;
-}
-
-// 块还原
-function recoverBlock(translatedText, matches, replacements) {
-    for (let i = 0; i < matches.length; i++) {
-        let match = matches[i];
-        let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
-
-        let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
-
-        let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, ...args) {
-            // LaTeX中的不替换
-            const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
-            if (groups.latex_block || groups.latex_inline) return match;
-            // 没有空格则加一个
-            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
-            let leftSpace = "", rightSpace = "";
-            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
-            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
-            return leftSpace + replacement + rightSpace;
-        });
-
-        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, ...args) {
-            // LaTeX中的不替换
-            const groups = args[args.length - 1];
-            if (groups.latex_block || groups.latex_inline) return match;
-            // 没有空格则加一个
-            const offset = args[args.length - 3];
-            let leftSpace = "", rightSpace = "";
-            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
-            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
-            return leftSpace + replacement + rightSpace;
-        });
-    }
-    return translatedText;
 }
 
 /**
@@ -7794,76 +7745,162 @@ async function initTransWhenViewable() {
     observers.push(observer);
 }
 
+/** 
+ * 翻译返回结果结构体
+ * @typedef {Object} TranslateResult
+ * @property {string} status 翻译状态
+ * @property {TranslateDiv} translateDiv 翻译结果面板
+ * @property {TransRawData} rawData 原始翻译数据
+ */
+
 /**
  * 翻译主方法
  * @param {string} text 待翻译文本
  * @param {HTMLElement} element_node 元素节点
- * @param {*} is_comment 是否为评论区文本
- * @param {*} translation_ 
- * @returns 
+ * @param {Boolean} is_comment 是否为评论区文本
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @returns {TranslateResult} 翻译结果对象
  */
-async function translateProblemStatement(text, element_node, is_comment, translation_) {
-    let status = "ok";
-    let id = OJB_getRandomNumber(8);
+async function translateProblemStatement(text, element_node, is_comment, overrideTrans) {
+    /** @type {number} 翻译结果的ID*/
+    const id = OJB_getRandomNumber(8);
+    /** @type {Array<string>} 替换时匹配到的内容块*/
     let matches = [];
-    let replacements = {};
+    /** @type {Object<string, string>} 内容块与替换符号的对应关系*/
+    const replacements = {};
+    /** @type {string} 翻译结果文本*/
     let translatedText = "";
+
     /** @type {string} 当前实际应用的翻译服务 */
-    let realTransServer;
-    let rawData = {
-        done: false
-    };
+    const realTransServer = overrideTrans ||
+        (is_comment && OJBetter.translation.comment.choice != "0" ?
+            OJBetter.translation.comment.choice :
+            OJBetter.translation.choice);
+
+    /** @type {TranslateResult} 翻译结果对象 */
+    const translateResult = {
+        status: "ok",
+        rawData: {
+            done: false
+        }
+    }
+
+    /**
+     * 块替换方法
+     * @param {string} text 文本
+     * @returns 
+     */
+    const replaceBlock = function (text) {
+        try {
+            for (let i = 0; i < matches.length; i++) {
+                let match = matches[i];
+                let replacement = '';
+                if (OJBetter.translation.replaceSymbol === "1") {
+                    replacement = `【${i + 1}】`;
+                } else if (OJBetter.translation.replaceSymbol === "2") {
+                    replacement = `{${i + 1}}`;
+                } else if (OJBetter.translation.replaceSymbol === "3") {
+                    replacement = `[${i + 1}]`;
+                }
+                text = text.replace(match, replacement);
+                replacements[replacement] = match;
+            }
+        } catch (e) { }
+        return text;
+    }
+
+    /**
+     * 块还原方法
+     * @param {string} text 翻译后的文本
+     * @returns 
+     */
+    const recoverBlock = function (text) {
+        for (let i = 0; i < matches.length; i++) {
+            let match = matches[i];
+            let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
+
+            let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+
+            let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
+            text = text.replace(regex, function (match, ...args) {
+                // LaTeX中的不替换
+                const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
+                if (groups.latex_block || groups.latex_inline) return match;
+                // 没有空格则加一个
+                const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
+                let leftSpace = "", rightSpace = "";
+                if (!/\s/.test(text[offset - 1])) leftSpace = " ";
+                if (!/\s/.test(text[offset + match.length])) rightSpace = " ";
+                return leftSpace + replacement + rightSpace;
+            });
+
+            regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
+            text = text.replace(regex, function (match, ...args) {
+                // LaTeX中的不替换
+                const groups = args[args.length - 1];
+                if (groups.latex_block || groups.latex_inline) return match;
+                // 没有空格则加一个
+                const offset = args[args.length - 3];
+                let leftSpace = "", rightSpace = "";
+                if (!/\s/.test(text[offset - 1])) leftSpace = " ";
+                if (!/\s/.test(text[offset + match.length])) rightSpace = " ";
+                return leftSpace + replacement + rightSpace;
+            });
+        }
+        return text;
+    }
 
     /**
      * LaTeX替换
-     * @param {string} text 
-     * @returns {string}
+     * @param {string} text 待翻译文本
+     * @returns {string} 处理后的文本
      */
-    function replaceLatex(text) {
+    const replaceLatex = function (text) {
         if (OJBetter.typeOfPage.is_oldLatex) {
             let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
             matches = matches.concat(text.match(regex));
-            text = replaceBlock(text, matches, replacements);
+            text = replaceBlock(text);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
             let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
             matches = matches.concat(text.match(regex));
-            text = replaceBlock(text, matches, replacements);
+            text = replaceBlock(text);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
             let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
             matches = matches.concat(text.match(regex));
-            text = replaceBlock(text, matches, replacements);
+            text = replaceBlock(text);
         }
         return text;
     }
 
     /**
      * LaTeX恢复
-     * @param {*} translatedText 
-     * @returns {string}
+     * @param {string} text 已翻译的文本
+     * @returns {string} 恢复后的文本
      */
-    function recoverLatex(translatedText) {
-        translatedText = translatedText.replace(/】\s*【/g, '】 【');
-        translatedText = translatedText.replace(/\]\s*\[/g, '] [');
-        translatedText = translatedText.replace(/\}\s*\{/g, '} {');
+    const recoverLatex = function (text) {
+        let result = text
+            .replace(/】\s*【/g, '】 【')
+            .replace(/\]\s*\[/g, '] [')
+            .replace(/\}\s*\{/g, '} {');
         if (OJBetter.typeOfPage.is_oldLatex) {
-            translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
-            translatedText = recoverBlock(translatedText, matches, replacements);
+            result = result.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
+            result = recoverBlock(result);
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            translatedText = recoverBlock(translatedText, matches, replacements);
+            result = recoverBlock(result);
         } else if (realTransServer != "openai") {
-            translatedText = recoverBlock(translatedText, matches, replacements);
+            result = recoverBlock(result);
         }
-        return translatedText;
+        return result;
     }
 
     /**
      * 格式化翻译结果
-     * @param {string} translatedText 
+     * @param {string} text 
      * @returns {string} 处理后的翻译结果
      */
-    function formatText(translatedText) {
+    const formatText = function (text) {
         // 转义LaTex中的特殊符号
         if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
             const escapeRules = [
@@ -7875,7 +7912,7 @@ async function translateProblemStatement(text, element_node, is_comment, transla
                 { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
             ];
 
-            let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
+            let latexMatches = [...text.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
 
             for (const match of latexMatches) {
                 const matchedText = match[0];
@@ -7884,8 +7921,8 @@ async function translateProblemStatement(text, element_node, is_comment, transla
                 for (const rule of escapeRules) {
                     escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
                 }
-                escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
-                translatedText = translatedText.replace(matchedText, escapedText);
+                escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement，双倍消耗）
+                text = text.replace(matchedText, escapedText);
             }
         }
 
@@ -7894,7 +7931,7 @@ async function translateProblemStatement(text, element_node, is_comment, transla
             { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
         ];
         mathjaxRuleMap.forEach(({ pattern, replacement }) => {
-            translatedText = translatedText.replace(pattern, replacement);
+            text = text.replace(pattern, replacement);
         });
 
         // markdown修正
@@ -7907,33 +7944,25 @@ async function translateProblemStatement(text, element_node, is_comment, transla
             { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
         ];
         mdRuleMap.forEach(({ pattern, replacement }) => {
-            translatedText = translatedText.replace(pattern, replacement);
+            text = text.replace(pattern, replacement);
         });
 
-        return translatedText;
+        return text;
     }
 
     // 创建翻译结果元素并放在element_node的后面
-    const translateDiv = new TranslateDiv(id);
-    $(element_node).after(translateDiv.getDiv());
-
-    // 当前实际翻译服务
-    if (translation_) {
-        realTransServer = translation_;
-    } else {
-        if (is_comment && OJBetter.translation.comment.choice != "0") realTransServer = OJBetter.translation.comment.choice;
-        else realTransServer = OJBetter.translation.choice;
-    }
+    translateResult.translateDiv = new TranslateDiv(id);
+    $(element_node).after(translateResult.translateDiv.getDiv());
 
     // 顶栏左侧信息
-    translateDiv.setTopText(i18next.t('servers.' + realTransServer, { ns: 'translator' }) +
+    translateResult.translateDiv.setTopText(i18next.t('servers.' + realTransServer, { ns: 'translator' }) +
         i18next.t('translateDiv.topTextSuffix', { ns: 'translator' }));
 
     // 注册按钮
-    translateDiv.registerUpButtonEvent();
-    translateDiv.registerCloseButtonEvent();
+    translateResult.translateDiv.registerUpButtonEvent();
+    translateResult.translateDiv.registerCloseButtonEvent();
     if (OJBetter.translation.choice == 'openai' || OJBetter.translation.choice == 'deepl') {
-        translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 显示额度查询
+        translateResult.translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 显示额度查询
     }
 
     // 翻译内容是否可能为代码片段
@@ -7948,11 +7977,8 @@ async function translateProblemStatement(text, element_node, is_comment, transla
             true
         );
         if (shouldContinue) {
-            return {
-                translateDiv: translateDiv,
-                status: "skip",
-                rawData: rawData
-            };
+            translateResult.status = "skip";
+            return translateResult;
         }
     }
 
@@ -7985,26 +8011,28 @@ async function translateProblemStatement(text, element_node, is_comment, transla
             true
         ); // 字数超限确认
         if (shouldContinue) {
-            return {
-                translateDiv: translateDiv,
-                status: "skip",
-                rawData: rawData
-            };
+            translateResult.status = "skip";
+            return translateResult;
         }
     }
 
-    // 翻译
-    async function translate(translation) {
+    /**
+     * 调用各个翻译服务
+     * @param {string} transServer 翻译服务
+     * @returns {TransRawData} 原始翻译数据
+     */
+    async function translate(transServer) {
         const is_renderLaTeX = !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru);
         const servername = i18next.t('servers.' + realTransServer, { ns: 'translator' });
+        /** @type {TransRawData} 原始翻译数据*/
         let rawData = {};
         try {
-            if (translation == "deepl") {
+            if (transServer == "deepl") {
                 if (OJBetter.deepl.config.type == 'free') {
                     rawData = await translate_deepl(text);
-                    translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+                    translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 } else if (OJBetter.deepl.config.type == 'api') {
-                    translateDiv.updateTranslateDiv(`${i18next.t('transingTip.deeplApi', { ns: 'translator', deepl_configName: OJBetter.deepl.config.name })}`, is_renderLaTeX);
+                    translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.deeplApi', { ns: 'translator', deepl_configName: OJBetter.deepl.config.name })}`, is_renderLaTeX);
                     if (OJBetter.deepl.config.apiGenre == 'deeplx') {
                         rawData = await translate_deeplx(text);
                     } else {
@@ -8019,26 +8047,26 @@ async function translateProblemStatement(text, element_node, is_comment, transla
                         if (OJBetter.deepl.enableLinkProtection) rawData.text = convertLinksHTMLToMarkdown(rawData.text);
                     }
                 }
-            } else if (translation == "iflyrec") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "iflyrec") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_iflyrec(text);
-            } else if (translation == "youdao") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "youdao") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_youdao_mobile(text);
-            } else if (translation == "google") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "google") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_gg(text);
-            } else if (translation == "caiyun") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "caiyun") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 await translate_caiyun_startup();
                 rawData = await translate_caiyun(text);
-            } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
+            } else if (transServer == "openai") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
                     ? i18next.t('transingTip.openai_isStream', { ns: 'translator' }) : ""}`,
                     is_renderLaTeX);
                 if (OJBetter.chatgpt.isStream) {
                     // 流式传输
-                    rawData = await translate_openai_stream(text, translateDiv);
+                    rawData = await translate_openai_stream(text, translateResult.translateDiv);
                 } else {
                     // 普通模式
                     rawData = await translate_openai(text);
@@ -8046,24 +8074,20 @@ async function translateProblemStatement(text, element_node, is_comment, transla
             }
             translatedText = rawData.text;
             if (!rawData.done) {
-                status = "error";
+                translateResult.status = "error";
             }
         } catch (e) {
-            status = "error";
+            translateResult.status = "error";
             rawData.message = i18next.t('error.unexpected', { ns: 'translator' });
             console.warn(e);
         }
         return rawData;
     }
-    rawData = await translate(realTransServer);
+    translateResult.rawData = await translate(realTransServer);
 
-    if (status == "error") {
-        translateDiv.updateTranslateDiv(rawData.message);
-        return {
-            status: status,
-            translateDiv: translateDiv,
-            rawData: rawData
-        };
+    if (translateResult.status == "error") {
+        translateResult.translateDiv.updateTranslateDiv(translateResult.rawData.message);
+        return translateResult;
     }
 
     // 还原latex公式
@@ -8071,9 +8095,9 @@ async function translateProblemStatement(text, element_node, is_comment, transla
 
     // 注册结果复制按钮
     if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-        translateDiv.registerCopyButtonEvent(translatedText);
+        translateResult.translateDiv.registerCopyButtonEvent(translatedText);
     } else {
-        translateDiv.disableCopyButton();
+        translateResult.translateDiv.disableCopyButton();
     }
 
     // 翻译结果格式化
@@ -8087,13 +8111,9 @@ async function translateProblemStatement(text, element_node, is_comment, transla
     }
 
     // 翻译结果面板更新
-    translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+    translateResult.translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
 
-    return {
-        status: status,
-        translateDiv: translateDiv,
-        rawData: rawData
-    };
+    return translateResult;
 }
 
 //弹窗翻译
@@ -8546,63 +8566,51 @@ function creatRatingCss(hasBorder = true) {
  * @param {string} contest 比赛名称
  * @returns {Promise<{rating: number, problem: string}>} 题目难度
  */
-async function getRating(problem, problem_url, contest = null) {
-    problem = problem.replace(/\([\s\S]*?\)/g, '').replace(/^\s+|\s+$/g, '');
-    return new Promise((resolve, reject) => {
-        const queryString = `search=${problem}&resource=1`;
-        GM_xmlhttpRequest({
+async function getRatingFromHTML(problem, problem_url, contest = null) {
+    // 去除题目名称中的括号，以及首尾的空白符
+    problem = problem.replace(/\([\s\S]*?\)/g, '').trim();
+
+    return OJB_promiseRetryWrapper(async () => {
+        const queryString = `search=${encodeURIComponent(problem)}&resource=1`;
+        const response = await OJB_GMRequest({
             method: 'GET',
             url: `https://clist.by/problems/?${queryString}`,
-            responseType: 'html',
-            onload: function (response) {
-                const html = response.responseText;
-                var cleanedHtml = html.replace(/src=(.|\s)*?"/g, '');
-                const trs = $(cleanedHtml).find('table').find('tbody tr');
-                let records = [];
-                trs.each(function (index) {
-                    const rating = $(this).find('.problem-rating-column').text().trim();
-                    const link = $(this).find('.problem-name-column').find('a').eq(1).attr('href');
-                    var contests = [];
-                    $(this).find('.problem-name-column').find('.pull-right a[title], .pull-right span[title]').each(function () {
-                        var value = $(this).attr('title');
-                        if (value) {
-                            value = value.replace(/<br\/?><\/a>/g, '');
-                            contests.push(value);
-                        }
-                    });
-                    records.push({ rating: rating, link: link, contests: contests });
-                });
-                for (let record of records) {
-                    let link;
-                    if (typeof record.link !== 'undefined') link = record.link.replace(/http:/g, 'https:');
-                    if (link == problem_url || link == problem_url + '/') {
-                        resolve({
-                            rating: parseInt(record.rating),
-                            problem: problem
-                        });
-                        return;
-                    } else if (contest != null) {
-                        for (let item of record.contests) {
-                            if (contest == item) {
-                                resolve({
-                                    rating: parseInt(record.rating),
-                                    problem: problem
-                                });
-                                return;
-                            }
-                        }
-                    }
-                }
-                reject(`No data found for the question of ${problem} .`);
-            },
-            onerror: function (response) {
-                reject(`An error occurred while handling the ${problem} problem.`);
-            }
         });
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+        const html = response.responseText;
+        const cleanedHtml = html.replace(/src=(.|\s)*?"/g, '');
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(cleanedHtml, 'text/html');
+        const trs = doc.querySelectorAll('table tbody tr');
+
+        for (let tr of trs) {
+            const rating = tr.querySelector('.problem-rating-column').textContent.trim();
+            const linkElement = tr.querySelector('.problem-name-column a:nth-of-type(2)');
+            let link = linkElement ? linkElement.href.replace(/http:/g, 'https:') : null;
+
+            if (link === problem_url || link === problem_url + '/') {
+                return {
+                    rating: parseInt(rating),
+                    problem: problem
+                };
+            } else if (contest !== null) {
+                const contestTitles = [...tr.querySelectorAll('.problem-name-column .pull-right a[title], .problem-name-column .pull-right span[title]')].map(el => el.title);
+                if (contestTitles.includes(contest)) {
+                    return {
+                        rating: parseInt(rating),
+                        problem: problem
+                    };
+                }
+            }
+        }
+        console.warn(`No data found for the question: ${problem}`);
+    }, {
+        maxRetries: 3,
+        retryInterval: 500
     });
 }
 
-// TODO 7
 /**
  * 从clist API获取题目的rating
  * @param {string} problem 题目名
@@ -8610,27 +8618,25 @@ async function getRating(problem, problem_url, contest = null) {
  * @returns {Promise<number>} 题目rating
  */
 async function getRatingFromApi_problem(problem, problem_url) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
+    return OJB_promiseRetryWrapper(async () => {
+        const response = await OJB_GMRequest({
             method: "GET",
-            url: `https://clist.by:443/api/v4/problem/?name=${problem}&resource__regex=codeforces.com`,
-            headers: {
-                "Authorization": OJBetter.clist.authorization
-            },
-            onload: function (response) {
-                if (!response) reject('An unknown error occurred!');
-                let data = JSON.parse(response.responseText);
-                let objects = data.objects;
-                let problemsMap = new Map();
-                if (objects.length > 0) {
-                    for (let i = 0; i < objects.length; i++) {
-                        let problem = objects[i];
-                        problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
-                    }
-                    resolve(problemsMap.get(problem_url));
-                }
-            }
+            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem)}&resource__regex=codeforces.com`,
+            headers: { "Authorization": OJBetter.clist.authorization }
         });
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+        let data = JSON.parse(response.responseText);
+        let problemsMap = new Map(data.objects.map(problem => [problem.url, problem.rating ? problem.rating : NaN]));
+
+        if (problemsMap.has(problem_url)) {
+            return problemsMap.get(problem_url);
+        } else {
+            console.warn('Problem not found in the response');
+        }
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000
     });
 }
 
@@ -8640,25 +8646,34 @@ async function getRatingFromApi_problem(problem, problem_url) {
  * @returns {Promise<Map<string, number>>} 题目rating
  */
 async function getRatingFromApi_contest(event) {
-    const options = {
-        method: "GET",
-        url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${event}`,
-        headers: {
-            "Authorization": OJBetter.clist.authorization
+    return OJB_promiseRetryWrapper(async () => {
+        const options = {
+            method: "GET",
+            url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${encodeURIComponent(event)}`,
+            headers: {
+                "Authorization": OJBetter.clist.authorization
+            }
+        };
+
+        let response = await OJB_GMRequest(options);
+        
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+
+        let data = JSON.parse(response.responseText);
+        let objects = data.objects;
+        let problemsMap = new Map();
+        
+        if (objects.length > 0 && objects[0].problems) {
+            objects[0].problems.forEach(problem => {
+                problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
+            });
         }
-    }
-    let response = await OJB_GMRequest(options);
-    let data = JSON.parse(response.responseText);
-    let objects = data.objects;
-    let problemsMap = new Map();
-    if (objects.length > 0) {
-        var problems = objects[0].problems;
-        for (var i = 0; i < problems.length; i++) {
-            var problem = problems[i];
-            problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
-        }
-    }
-    return problemsMap;
+        
+        return problemsMap;
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000
+    });
 }
 
 /**
@@ -8792,8 +8807,9 @@ async function showRatingByClist_problemset() {
     // 先创建Rating显示框，并将关系存进数组ratingBadges
     for (let i = 0; i < $trs.length; i++) {
         const $tds = $($trs[i]).find('td');
-        let problem = $($tds[0]).text();
-        let problem_url = $($tds[0]).find('a').attr('href');
+        const $firstDiv = $($tds[1]).find('div:first');
+        let problem = $firstDiv.text();
+        let problem_url = $firstDiv.find('a').attr('href');
         problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
 
         const ratingBadge = $(`<a id="clistButton" class="ratingBadge"></a>`);
@@ -8820,7 +8836,7 @@ async function showRatingByClist_problemset() {
             const ratingBadge = ratingBadges[j];
             // 显示请求中
             ratingBadge.rating.text(i18next.t('state.loading', { ns: 'button' }));
-            promises.push(getRating(ratingBadge.problem, ratingBadge.problem_url).catch(error => console.warn(error)));
+            promises.push(getRatingFromHTML(ratingBadge.problem, ratingBadge.problem_url).catch(error => console.warn(error)));
         }
 
         const results = await Promise.all(promises);
@@ -8880,26 +8896,28 @@ const value_monacoLanguageMap = {
 
 /**
  * 更新代码提交页的HTML
- * @param {string} submitUrl 
- * @param {string} cacheKey 
- * @returns {Promise<jQuery>}
+ * @param {string} submitUrl 提交页面的URL
+ * @param {string} cacheKey 本地缓存的键名
+ * @returns {Promise<jQuery<HTMLElement>>} 返回 jQuery 包装的 HTML 元素
  */
 async function CloneOriginalHTML(submitUrl, cacheKey) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
+    return OJB_promiseRetryWrapper(async () => {
+        const response = await OJB_GMRequest({
             method: 'GET',
-            url: submitUrl,
-            responseType: 'html',
-            onload: function (response) {
-                const html = response.responseText;
-                const cloneHTML = $(html);
-                localStorage.setItem(cacheKey, html);
-                resolve(cloneHTML);
-            },
-            onerror: function (response) {
-                reject('A network error occurred while retrieving the HTML for the code submission page.');
-            }
+            url: submitUrl
         });
+        const html = response.responseText;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const cloneHTML = $(doc.body).html();
+        localStorage.setItem(cacheKey, html);
+        return $(cloneHTML);
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000,
+        errorHandler: (err) => {
+            console.error('A network error occurred while retrieving the HTML for the code submission page.', submitUrl);
+        }
     });
 }
 
@@ -11686,7 +11704,7 @@ function convertLinksHTMLToMarkdown(html) {
 /**
  * DeepL翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl(raw) {
     const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
@@ -11743,7 +11761,7 @@ async function translate_deepl(raw) {
 /**
  * 使用 DeepL Free API 进行翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl_api_free(raw) {
     const data = JSON.stringify({
@@ -11773,7 +11791,7 @@ async function translate_deepl_api_free(raw) {
 /**
  * 使用 DeepL Pro API 进行翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl_api_pro(raw) {
     const data = JSON.stringify({
@@ -11803,7 +11821,7 @@ async function translate_deepl_api_pro(raw) {
 /**
  * 使用 DeepLX 进行翻译
  * @param {String} text 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deeplx(text) {
     const options = {
@@ -11844,7 +11862,7 @@ function getTimeStamp(iCount) {
 /**
  * 讯飞听见翻译
  * @param {String} text 要翻译的文本
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_iflyrec(text) {
     const options = {
@@ -11871,7 +11889,7 @@ async function translate_iflyrec(text) {
 /**
  * 有道翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_youdao_mobile(raw) {
     const options = {
@@ -11912,7 +11930,7 @@ async function translate_youdao_mobile(raw) {
 /**
  * google翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_gg(raw) {
     const params = `tl=${getTargetLanguage('google')}&q=${encodeURIComponent(raw)}`;
@@ -11947,7 +11965,7 @@ async function translate_caiyun_startup() {
 /**
  * 彩云翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_caiyun(raw) {
     const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
@@ -11979,7 +11997,7 @@ async function translate_caiyun(raw) {
 /**
  * ChatGPT
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
@@ -12017,7 +12035,7 @@ async function translate_openai(raw) {
  * ChatGPT 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_openai_stream(raw, translateDiv) {
     const result = {
@@ -12133,7 +12151,7 @@ async function* openai_stream(raw) {
  */
 
 /**
- * @typedef {Object} TranslateResult
+ * @typedef {Object} TransRawData
  * @property {boolean} done 操作是否完成
  * @property {CheckResponseResult|null} checkPassed 检查是否通过的结果
  * @property {Object|null} response 响应对象
@@ -12148,7 +12166,7 @@ async function* openai_stream(raw) {
  * @param {Function} processer 响应再处理函数，它接收响应文本，并应返回处理后的文本。
  * @param {Function} checkResponse 检查文本是否符合预期的函数，它接收文本，并返回一个Object，包含状态和信息。默认为返回 { status: true, message: 'ok' }
  * @param {Function} getResponseText 重写响应文本获取函数，它接收response，并返回响应文本。 默认为 response.responseText
- * @returns {Promise<TranslateResult>} 返回 Promise，其解析值为翻译结果对象
+ * @returns {Promise<TransRawData>} 返回 Promise，其解析值为翻译结果对象
  */
 async function BaseTranslate(options, processer, checkResponse = () => { return { status: true, message: 'ok' } }, getResponseText = (response) => response.responseText) {
     const result = {
