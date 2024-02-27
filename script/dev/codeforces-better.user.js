@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.2
+// @version      1.73.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -25,6 +25,7 @@
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
+// @connect      8.130.66.249
 // @connect      *
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -3152,15 +3153,12 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 .output_diff .added {
     background-color: #c8f7c5;
     user-select: none;
-    padding-left: 3px;
 }
 .output_diff .removed {
-    background-color: #f7c5c5;
-    padding-left: 3px;
+    background-color: #f7c5c5; 
 }
 .output_diff .diffLine {
     display: flex;
-
 }
 .output_diff .diffLine:nth-child(odd) {
     background-color: #f5f5f5;
@@ -3181,6 +3179,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 }
 .lineContent>span {
     height: 16px;
+    padding-left: 3px;
 }
 .output_no_diff {
     padding: 5px;
@@ -4032,6 +4031,99 @@ async function localizeWebsite() {
             traverseValueNodes($(`${classSelector}`), value.rules);
         });
     });
+
+    /**
+     * 右下角弹窗本地化
+     */
+    (function () {
+        // 判断是否已经存在#jGrowl元素
+        const jGrowlNode = document.querySelector('#jGrowl');
+        if (jGrowlNode) {
+            observeJGrowl(jGrowlNode);
+            reportExistingContent(jGrowlNode);
+        } else {
+            // 全局监听是否在body内有了jGrowl
+            const bodyObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE && node.id === 'jGrowl') {
+                            observeJGrowl(node);
+                            reportExistingContent(node);
+                            bodyObserver.disconnect();
+                        }
+                    });
+                });
+            });
+
+            // 配置观察选项
+            const bodyConfig = { childList: true, subtree: true };
+
+            // 传入目标节点和观察选项
+            bodyObserver.observe(document.body, bodyConfig);
+        }
+
+        // 监听#jGrowl内部并上报弹窗内容
+        function observeJGrowl(jGrowlNode) {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE && node.id === 'jGrowl') {
+                            // 获取弹窗内容
+                            let popupContent = node.textContent;
+                            reportPopupContent(popupContent);
+                        }
+                    });
+                });
+            });
+
+            const config = { childList: true, subtree: true };
+            observer.observe(jGrowlNode, config);
+        }
+
+        /**
+         * ===========================================================================
+         * 由于作者不清楚右下角弹窗中大致有哪些文本，因此使用该段代码，
+         * 以收集上报弹窗出现的文本以便制作对应的翻译规则，
+         * 这是一段临时代码，将在信息足够时移除并更换为实际的本地化代码
+         * ===========================================================================
+         */
+
+        // 上报已存在的弹窗内容
+        function reportExistingContent(jGrowlNode) {
+            Array.from(jGrowlNode.childNodes).forEach((node) => {
+                let popupContent = node.textContent; 
+                popupContent = popupContent.replace(/^×/, '');// 去除开头多余的 '×' 字符
+                reportPopupContent(popupContent);
+            });
+        }
+
+        // 上报弹窗内容
+        function reportPopupContent(popupContent) {
+            /**
+             * 数据上报收集
+             */
+            OJB_GMRequest({
+                method: "POST",
+                url: 'http://8.130.66.249:2345/report-popup',
+                data: JSON.stringify({ content: popupContent }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => {
+                    console.log('Popup content reported:', popupContent);
+                })
+                .catch(error => {
+                    console.error('Error reporting popup content:', error);
+                });
+        }
+
+        /**
+         * ===========================================================================
+         * End
+         * ===========================================================================
+         */
+    })();
 
     // 杂项
     (function () {
@@ -8656,19 +8748,19 @@ async function getRatingFromApi_contest(event) {
         };
 
         let response = await OJB_GMRequest(options);
-        
+
         if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
 
         let data = JSON.parse(response.responseText);
         let objects = data.objects;
         let problemsMap = new Map();
-        
+
         if (objects.length > 0 && objects[0].problems) {
             objects[0].problems.forEach(problem => {
                 problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
             });
         }
-        
+
         return problemsMap;
     }, {
         maxRetries: 5,
@@ -8779,7 +8871,7 @@ async function showRatingByClist_contest() {
     }
 
     // 获取Rating
-    let event = encodeURIComponent($('#sidebar').children().first().find('.rtable th').first().text());
+    let event = $('#sidebar').children().first().find('.rtable th').first().text();
     let problemsMap = await getRatingFromApi_contest(event);
 
     // 填充数据
@@ -11374,7 +11466,9 @@ function codeDiff(expectedText, actualText) {
         contentDiv.className = 'lineContent';
 
         if (isEquals) {
-            contentDiv.textContent = expected;
+            const span = document.createElement('span');
+            span.textContent = expected;
+            contentDiv.appendChild(span);
         } else {
             if (removed != null) {
                 const removedSpan = document.createElement('span');
