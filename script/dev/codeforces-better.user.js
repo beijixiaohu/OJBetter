@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.3
+// @version      1.73.4
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -4091,7 +4091,7 @@ async function localizeWebsite() {
         // 上报已存在的弹窗内容
         function reportExistingContent(jGrowlNode) {
             Array.from(jGrowlNode.childNodes).forEach((node) => {
-                let popupContent = node.textContent; 
+                let popupContent = node.textContent;
                 popupContent = popupContent.replace(/^×/, '');// 去除开头多余的 '×' 字符
                 reportPopupContent(popupContent);
             });
@@ -11838,12 +11838,13 @@ async function translate_deepl(raw) {
         anonymous: true,
         nocache: true,
     }
-    return await BaseTranslate(options, res => JSON.parse(res).result.texts[0].text, res => {
+
+    return await BaseTranslate(options, res => JSON.parse(res)?.result?.texts?.[0]?.text || res, res => {
         const resObj = {
             status: true,
             message: 'ok'
         };
-        if (res.includes('"error":{"code":1042912,"message":"Too many requests"}')) {
+        if (res.includes('"message":"Too many requests"')) {
             resObj.status = false;
             resObj.message = i18next.t('error.deepl429', { ns: 'translator' }); // Too many requests 提示
             return resObj;
