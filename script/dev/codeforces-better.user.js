@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.5
+// @version      1.73.6
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -8511,24 +8511,27 @@ async function CF2luogu(problemToolbar) {
         i18next.t('state.loading', { ns: 'button' }),
         $("<img>").attr("src", "https://cdn.luogu.com.cn/fe/logo.png")
     );
-    const checkLinkExistence = (url) => {
-        return new Promise((resolve, reject) => {
-            GM.xmlHttpRequest({
+
+    const checkLinkExistence = async (url) => {
+        try {
+            const response = await OJB_promiseRetryWrapper(OJB_GMRequest, {
+                maxRetries: 3,
+                retryInterval: 1000,
+                errorHandler: (err, maxRetries, attemptsLeft) => {
+                    console.error(`Request failed, has retried ${maxRetries - attemptsLeft} times.`, err);
+                    return false; // 在所有重试失败后返回 false
+                }
+            }, {
                 method: "GET",
                 url,
                 headers: { "Range": "bytes=0-9999" }, // 获取前10KB数据
-                onload(response) {
-                    if (response.responseText.match(/题目未找到/g)) {
-                        resolve(false);
-                    } else {
-                        resolve(true);
-                    }
-                },
-                onerror(error) {
-                    reject(error);
-                }
             });
-        });
+
+            return !response.responseText.match(/题目未找到/g);
+        } catch (error) {
+            console.error("An error occurred while checking the existence of the link:", error);
+            return false;
+        }
     };
 
     const LuoguUrl = `https://www.luogu.com.cn/problem/CF${problemId}`;
