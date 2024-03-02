@@ -40,11 +40,11 @@
         },
         "luoguJump": {
             "label": "Mostrar salto a Rock Valley",
-            "helpText": "<p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p><p>开启显示后，会在题目页的右上角显示洛谷标志，</p><p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>"
+            "helpText": "<p>Algunos de los títulos de Codeforces están incluidos en Logu OJ, y algunos títulos tienen traducciones y explicaciones</p><p>Cuando se encienda la pantalla, aparecerá el logotipo de Logu en la esquina superior derecha de la página del título.</p><p>Al hacer clic en él, accederá a la página de Logu correspondiente a ese título con un solo clic.</strong></p>"
         },
         "vjudgeJump": {
-            "label": "显示跳转到VJudge",
-            "helpText": "<p>Virtual Judge上提供了一些题目的 GPT 翻译和一些贡献者的翻译版本，以及一些题解评论</p><p>开启显示后，会在题目页的右上角显示VJudge标志，</p><p>点击即可一键跳转到该题VJudge的对应页面。</strong></p>"
+            "label": "Mostrar Saltar a VJudge",
+            "helpText": "<p>Virtual Judge proporciona traducciones GPT de algunas preguntas y traducciones de algunos colaboradores, así como algunos comentarios sobre las preguntas.</p><p>Cuando la pantalla esté encendida, aparecerá el logotipo de VJudge en la esquina superior derecha de la página de la pregunta.</p><p>Si hace clic en él, accederá con un solo clic a la página VJudge correspondiente a esa pregunta.</strong></p>"
         },
         "recolor": {
             "label": "Recolorear la lista",
