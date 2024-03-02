@@ -61,7 +61,7 @@
             },
             "proxy": {
                 "label": "Proxy API:",
-                "tipText": "<p>DeepLでAPIへのアクセスをプロキシするために、指定されたAPIを記入することができます</p><strong>カスタムAPIを指定しているため、Tampermonkeyはクロスドメインリクエストについて警告し、自分で認証する必要があります</strong></p>"
+                "tipText": "<p></strong></p><p>：：</p>指定した API を入力して、DeepL の API へのアクセスをプロキシできます。</p><strong>カスタム API を指定したため、Tampermonkey はクロスドメインリクエストについて警告し、自分で承認する必要があります。"
             }
         }
     },
