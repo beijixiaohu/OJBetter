@@ -43,8 +43,8 @@
             "helpText": "<p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p><p>开启显示后，会在题目页的右上角显示洛谷标志，</p><p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>"
         },
         "vjudgeJump": {
-            "label": "显示跳转到VJudge",
-            "helpText": "<p>Virtual Judge上提供了一些题目的 GPT 翻译和一些贡献者的翻译版本，以及一些题解评论</p><p>开启显示后，会在题目页的右上角显示VJudge标志，</p><p>点击即可一键跳转到该题VJudge的对应页面。</strong></p>"
+            "label": "顯示跳到VJudge",
+            "helpText": "<p>Virtual Judge上提供了一些題目的GPT 翻譯和一些貢獻者的翻譯版本，以及一些題解評論</p><p>開啟顯示後，會在題目頁的右上角顯示VJudge標誌，</p><p>點擊即可一鍵跳到主題VJudge的對應頁面。</strong></p>"
         },
         "recolor": {
             "label": "重新著色榜單",
