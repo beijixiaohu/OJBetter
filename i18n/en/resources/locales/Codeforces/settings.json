@@ -40,11 +40,11 @@
         },
         "luoguJump": {
             "label": "Show jump to Luogu",
-            "helpText": "<p>洛谷OJ上收录了Codeforces的部分题目，一些题目有翻译和题解</p><p>开启显示后，会在题目页的右上角显示洛谷标志，</p><p>点击即可一键跳转到该题洛谷的对应页面。</strong></p>"
+            "helpText": "<p>Some of the Codeforces titles are included on Logu OJ, and some titles have translations and explanations</p><p>When the display is turned on, the Logu logo will be displayed in the upper right corner of the title page.</p><p>Clicking on it will allow you to jump to the Logu counterpart of that title with one click.</strong></p>"
         },
         "vjudgeJump": {
-            "label": "显示跳转到VJudge",
-            "helpText": "<p>Virtual Judge上提供了一些题目的 GPT 翻译和一些贡献者的翻译版本，以及一些题解评论</p><p>开启显示后，会在题目页的右上角显示VJudge标志，</p><p>点击即可一键跳转到该题VJudge的对应页面。</strong></p>"
+            "label": "Show Jump to VJudge",
+            "helpText": "<p>Virtual Judge provides GPT translations of some questions and some contributors' translations, as well as comments on some questions.</p><p>When the display is turned on, the VJudge logo will be displayed in the upper right corner of the question page.</p><p>Clicking on it will take you to the corresponding VJudge page for that question with one click.</strong></p>"
         },
         "recolor": {
             "label": "Recolor list",
