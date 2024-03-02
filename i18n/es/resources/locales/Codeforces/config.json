@@ -61,7 +61,7 @@
             },
             "proxy": {
                 "label": "API de proxy.",
-                "tipText": "<p>Puede rellenar la API especificada para proxy de acceso a la API en DeepL</p><strong>Dado que ha especificado una API personalizada, Tampermonkey le advertirá sobre las solicitudes entre dominios y deberá autorizarlas usted mismo</strong></p>."
+                "tipText": "<p>Puede rellenar la API especificada para delegar el acceso a la API en DeepL</p><strong>Como ha especificado una API personalizada, Tampermonkey le advertirá sobre las solicitudes entre dominios y tendrá que autorizarlas usted mismo</strong></p><p>Consejo：Para DeepLX, si lo deja en blanco, se utilizará por defecto la API pública：https://api.deeplx.org/translate</p>"
             }
         }
     },
