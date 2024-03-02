@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.6
+// @version      1.73.7
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -17,6 +17,7 @@
 // @connect      openai.api2d.net
 // @connect      api.openai.com
 // @connect      www.luogu.com.cn
+// @connect      vjudge.net
 // @connect      clist.by
 // @connect      greasyfork.org
 // @connect      rextester.com
@@ -140,6 +141,8 @@ OJBetter.basic = {
     commentPaging: undefined,
     /** @type {boolean?} 显示跳转到Luogu按钮 */
     showJumpToLuogu: undefined,
+    /** @type {boolean?} 显示跳转到Virtual Judge按钮 */
+    showCF2vjudge: undefined,
     /** @type {boolean?} 比赛排行榜重新着色 */
     standingsRecolor: undefined
 };
@@ -671,6 +674,7 @@ async function initVar() {
     OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
     OJBetter.basic.commentPaging = OJB_getGMValue("commentPaging", true);
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
+    OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);
     OJBetter.basic.standingsRecolor = OJB_getGMValue("standingsRecolor", true);
     OJBetter.state.notWaiteLoaded = OJB_getGMValue("notWaiteLoaded", false);
     OJBetter.translation.targetLang = OJB_getGMValue("transTargetLang", "zh");
@@ -4807,6 +4811,14 @@ const basic_settings_HTML = `
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5903,6 +5915,7 @@ async function initSettingsPanel() {
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
+        $("#showCF2vjudge").prop("checked", GM_getValue("showCF2vjudge") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
         $("#showClistRating_contest").prop("checked", GM_getValue("showClistRating_contest") === true);
         $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
@@ -5988,6 +6001,7 @@ async function initSettingsPanel() {
                 commentPaging: $("#commentPaging").prop("checked"),
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
+                showCF2vjudge: $("#showCF2vjudge").prop("checked"),
                 scriptL10nLanguage: $('#scriptL10nLanguage').val(),
                 localizationLanguage: $('#localizationLanguage').val(),
                 transTargetLang: $('#transTargetLang').val(),
@@ -8513,35 +8527,80 @@ async function CF2luogu(problemToolbar) {
     );
 
     const checkLinkExistence = async (url) => {
-        try {
-            const response = await OJB_promiseRetryWrapper(OJB_GMRequest, {
-                maxRetries: 3,
-                retryInterval: 1000,
-                errorHandler: (err, maxRetries, attemptsLeft) => {
-                    console.error(`Request failed, has retried ${maxRetries - attemptsLeft} times.`, err);
-                    return false; // 在所有重试失败后返回 false
-                }
-            }, {
+        return OJB_promiseRetryWrapper(async () => {
+            const response = await OJB_GMRequest({
                 method: "GET",
-                url,
-                headers: { "Range": "bytes=0-9999" }, // 获取前10KB数据
+                url
             });
-
-            return !response.responseText.match(/题目未找到/g);
-        } catch (error) {
-            console.error("An error occurred while checking the existence of the link:", error);
-            return false;
-        }
+            return !response.responseText.match(/出错了/g);
+        }, {
+            maxRetries: 3,
+            retryInterval: 1000
+        });
     };
 
     const LuoguUrl = `https://www.luogu.com.cn/problem/CF${problemId}`;
-    const result = await checkLinkExistence(LuoguUrl);
-    if (problemId && result) {
-        problemToolbar.updateText(luoguButton, "");
-        problemToolbar.updateUrl(luoguButton, LuoguUrl);
-    } else {
-        problemToolbar.updateText(luoguButton, i18next.t('state.404', { ns: 'button' }));
-        problemToolbar.disableButton(luoguButton);
+    try {
+        const result = await checkLinkExistence(LuoguUrl);
+        if (problemId && result) {
+            problemToolbar.updateText(luoguButton, "");
+            problemToolbar.updateUrl(luoguButton, LuoguUrl);
+        } else {
+            problemToolbar.updateText(luoguButton, i18next.t('state.404', { ns: 'button' }));
+            problemToolbar.disableButton(luoguButton);
+        }
+    } catch (error) {
+        if (error instanceof OJB_GMError && error.type == "error") {
+            problemToolbar.updateText(luoguButton, i18next.t('state.netError', { ns: 'button' }));
+            problemToolbar.disableButton(luoguButton);
+        }
+    }
+}
+
+/**
+ * 跳转到 Virtual Judge
+ * @param {ProblemPageLinkbar} problemToolbar 
+ */
+async function CF2vjudge(problemToolbar) {
+    const url = window.location.href;
+    const problemId = getProblemId(url);
+    const vjudgeButton = problemToolbar.addLinkButton(
+        "vjudgeButton",
+        "https://vjudge.net/",
+        i18next.t('state.loading', { ns: 'button' }),
+        $("<img>").attr("src", "https://aowuucdn.oss-accelerate.aliyuncs.com/vjudge.ico")
+    );
+
+    const checkLinkExistence = async (url) => {
+        return OJB_promiseRetryWrapper(async () => {
+            const response = await OJB_GMRequest({
+                method: "HEAD",
+                url: url,
+            });
+            if (response.status >= 200 && response.status < 300) return true;
+            else if (response.status == 404) return false;
+            else throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+        }, {
+            maxRetries: 3,
+            retryInterval: 1000
+        });
+    };
+
+    const VjudgeUrl = `https://vjudge.net/problem/CodeForces-${problemId}`;
+    try {
+        const result = await checkLinkExistence(VjudgeUrl);
+        if (problemId && result) {
+            problemToolbar.updateText(vjudgeButton, "VJudge");
+            problemToolbar.updateUrl(vjudgeButton, VjudgeUrl);
+        } else {
+            problemToolbar.updateText(vjudgeButton, i18next.t('state.404', { ns: 'button' }));
+            problemToolbar.disableButton(vjudgeButton);
+        }
+    } catch (error) {
+        if (error instanceof OJB_GMError && error.type == "error") {
+            problemToolbar.updateText(vjudgeButton, i18next.t('state.netError', { ns: 'button' }));
+            problemToolbar.disableButton(vjudgeButton);
+        }
     }
 }
 
@@ -8572,7 +8631,7 @@ const cssMap = {
     "rating_by_clist_color8": "#ff3333",
     "rating_by_clist_color9": "#aa0000"
 };
-
+// TODO 7
 /**
  * clist 访问有效性检查
  * @param {boolean} onlyCookie 是否只检查Cookie
@@ -12459,6 +12518,7 @@ function initOnDOMReady() {
     if (OJBetter.basic.renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
     if (OJBetter.typeOfPage.is_problem) {
         const problemPageLinkbar = new ProblemPageLinkbar(); // 创建题目页相关链接栏
+        if (OJBetter.basic.showCF2vjudge) CF2vjudge(problemPageLinkbar); // 跳转到Vjudge按钮
         if (OJBetter.basic.showJumpToLuogu) CF2luogu(problemPageLinkbar); // 跳转到洛谷按钮
         if (OJBetter.clist.enabled.problem) showRatingByClist_problem(problemPageLinkbar); // problem页显示Rating
     }
