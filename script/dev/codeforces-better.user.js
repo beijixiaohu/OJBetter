@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.4
+// @version      1.73.5
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -5374,7 +5374,7 @@ const about_settings_HTML = `
     <h3 data-i18n="settings:about.title"></h3>
     <hr>
     <div class='versionInfo'>
-        <p>Codeforces Better!</p>
+        <p>${OJBetter.state.name}</p>
         <p><span data-i18n="settings:about.version"></span><span id="nowVersion">${OJBetter.state.version}</span></p>
         <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a> 
         <a target="_blank" href="https://greasyfork.org/zh-CN/scripts/465777">GreasyFork</a></p>
@@ -8705,24 +8705,57 @@ async function getRatingFromHTML(problem, problem_url, contest = null) {
 
 /**
  * 从clist API获取题目的rating
- * @param {string} problem 题目名
+ * @param {string} problem_name 题目名
  * @param {string} problem_url 题目链接
  * @returns {Promise<number>} 题目rating
+ * 
+ * 使用两个Map对象来存储和快速访问题目信息：
+ * - problemsMap: 通过题目的URL作为键来存储题目信息。
+ * - nameMap: 通过题目的名称作为键来存储题目信息。
+ * 
+ * 每个题目信息是一个对象，包含以下属性：
+ * @typedef {Object} ProblemInfo
+ * @property {string} name 题目名称
+ * @property {string} url 题目URL
+ * @property {number} rating 题目评分，如果没有评分信息则为NaN
  */
-async function getRatingFromApi_problem(problem, problem_url) {
+async function getRatingFromApi_problem(problem_name, problem_url) {
     return OJB_promiseRetryWrapper(async () => {
         const response = await OJB_GMRequest({
             method: "GET",
-            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem)}&resource__regex=codeforces.com`,
+            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces.com`,
             headers: { "Authorization": OJBetter.clist.authorization }
         });
 
         if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
         let data = JSON.parse(response.responseText);
-        let problemsMap = new Map(data.objects.map(problem => [problem.url, problem.rating ? problem.rating : NaN]));
+        /** 
+         * 使用题目的URL作为键来存储题目信息。
+         * @type {Map<string, ProblemInfo>}
+         */
+        let problemsMap = new Map();
+
+        /** 
+         * 使用题目的名称作为键来存储题目信息。
+         * @type {Map<string, ProblemInfo>}
+         */
+        let nameMap = new Map();
+
+        data.objects.forEach(problem => {
+            /** @type {ProblemInfo} 题目信息*/
+            let problemInfo = {
+                name: problem.name,
+                url: problem.url,
+                rating: problem.rating ? problem.rating : NaN
+            };
+            problemsMap.set(problem.url, problemInfo);
+            nameMap.set(problem.name, problemInfo);
+        });
 
         if (problemsMap.has(problem_url)) {
-            return problemsMap.get(problem_url);
+            return problemsMap.get(problem_url).rating;
+        } else if (nameMap.has(problem_name)) {
+            return nameMap.get(problem_name).rating;
         } else {
             console.warn('Problem not found in the response');
         }
@@ -9687,8 +9720,12 @@ async function createMonacoEditor(language, form, support) {
 
         // 注册acwing cpp 模板
         if (language == "cpp" && OJBetter.monaco.complet.cppCodeTemplate) {
-            var acwing_cpp_code_completer = JSON.parse(GM_getResourceText("acwing_cpp_code_completer"));
-            registMyCompletionItemProvider('cpp', 'ace', acwing_cpp_code_completer);
+            try {
+                var acwing_cpp_code_completer = JSON.parse(GM_getResourceText("acwing_cpp_code_completer"));
+                registMyCompletionItemProvider('cpp', 'ace', acwing_cpp_code_completer);
+            } catch (error) {
+                console.error("Error registering acwing cpp template:", error);
+            }
         }
 
         // 注册自定义的补全
@@ -9697,7 +9734,12 @@ async function createMonacoEditor(language, form, support) {
             for (let i = 0; i < complet_length; i++) {
                 let item = OJBetter.monaco.complet.customConfig.configurations[i];
                 if (item.isChoose && item.language == language) {
-                    registMyCompletionItemProvider(item.language, item.genre, await OJB_getExternalJSON(item.jsonUrl));
+                    try {
+                        let rule = await OJB_getExternalJSON(item.jsonUrl);
+                        registMyCompletionItemProvider(item.language, item.genre, rule);
+                    } catch (error) {
+                        console.error(`Error registering custom completer for ${item.language}:`, error);
+                    }
                 }
             }
         }
