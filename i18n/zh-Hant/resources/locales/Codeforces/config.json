@@ -61,7 +61,7 @@
             },
             "proxy": {
                 "label": "Proxy API:",
-                "tipText": "<p>可以填寫指定的API來代理訪問DeepL的API，</p><strong>由於你指定了自訂的API，Tampermonkey會對你的跨域請求進行警告，你需要自行授權</strong></p>"
+                "tipText": "<p>可以填寫指定的API來代理訪問DeepL的API，</p><strong>由於你指定了自訂的API，Tampermonkey會對你的跨域請求進行警告，你需要自行授權</strong></p><p>提示：對於DeepLX，如果留空，則預設使用公共API：https://api.deeplx.org/translate</p>"
             }
         }
     },
