@@ -61,7 +61,7 @@
             },
             "proxy": {
                 "label": "프록시 API.",
-                "tipText": "<p>DeepL</p><strong>사용자 지정 API를 지정하면 Tampermonkey가 도메인 간 요청에 대해 경고하므로 직접 승인해야 합니다</strong></p><p>팁：DeepLX의 경우 비워두면 기본적으로 공용 API가 사용됩니다：https://api.deeplx.org/translate</p>"
+                "tipText": "<p>DeepL 에서 API에 대한 프록시 액세스를 위해 지정된 API를 입력하거나, DeepLX의 경우 자체 배포 인터페이스를 입력할 수 있습니다</p><strong>사용자 지정 API를 지정하면 Tampermonkey가 도메인 간 요청에 대해 경고하므로 직접 승인해야 합니다</strong></p><p>설명：DeepLX의 경우 비워두면 기본적으로 공용 API가 사용됨：https:// api.deeplx.org/translate</p>"
             }
         }
     },

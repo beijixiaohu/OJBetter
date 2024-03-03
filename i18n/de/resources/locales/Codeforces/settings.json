@@ -40,7 +40,11 @@
         },
         "luoguJump": {
             "label": "Sprung nach Rock Valley anzeigen",
-            "helpText": "<p>Einige der Codeforces-Titel sind in LOGU OJ enthalten, und für einige Titel gibt es Übersetzungen und Erklärungen</p><p>. Wenn das Display eingeschaltet ist und der aktuelle Titel enthalten ist, wird das LOGU-Logo in der oberen rechten Ecke des Titels angezeigt,</p><p>. Wenn Sie darauf klicken, können Sie mit einem Klick auf die entsprechende LOGU-Seite für diesen Titel springen.</strong></p>"
+            "helpText": "<p>Einige der Codeforces-Titel sind in Logu OJ enthalten, und zu einigen Titeln gibt es Übersetzungen und Erklärungen</p><p>Wenn das Display eingeschaltet ist, wird das Logu-Logo in der oberen rechten Ecke der Titelseite angezeigt.</p><p>Wenn Sie darauf klicken, gelangen Sie mit einem Klick auf die entsprechende Logu-Seite für diesen Titel.</strong></p>"
+        },
+        "vjudgeJump": {
+            "label": "Sprung zu VJudge anzeigen",
+            "helpText": "<p>Virtual Judge bietet GPT-Übersetzungen einiger Fragen und Übersetzungen einiger Mitwirkender sowie einige Kommentare zu den Fragen.</p><p>Wenn die Anzeige eingeschaltet ist, wird das VJudge-Logo in der oberen rechten Ecke der Frageseite angezeigt.</p><p>Wenn Sie darauf klicken, gelangen Sie mit einem Klick auf die entsprechende VJudge-Seite für diese Frage.</strong></p>"
         },
         "recolor": {
             "label": "Die Liste neu färben",

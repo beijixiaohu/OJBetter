@@ -61,7 +61,7 @@
             },
             "proxy": {
                 "label": "API proxy.",
-                "tipText": "<p>È possibile inserire l'API specificata per delegare l'accesso all'API all'indirizzo DeepL</p><strong>Poiché è stata specificata un'API personalizzata, Tampermonkey avvertirà delle richieste cross-domain e sarà necessario autorizzarle da soli</strong></p><p>Suggerimento：Per DeepLX, se si lascia vuoto, viene utilizzata l'API pubblica per impostazione predefinita：https://api.deeplx.org/translate</p>"
+                "tipText": "<p>È possibile inserire l'API specificata per proxyare l'accesso all'API DeepL oppure, per DeepLX, inserire l'interfaccia auto-impiegata</p><strong>Se si specifica un'API personalizzata, Tampermonkey avvisa delle richieste cross-domain, che devono essere autorizzate autonomamente</strong></p><p>Descrizione：Per DeepLX, se lasciata vuota, viene utilizzata un'API pubblica per impostazione predefinita：https:// api.deeplx.org/translate</p>"
             }
         }
     },

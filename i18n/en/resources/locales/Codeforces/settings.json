@@ -40,7 +40,11 @@
         },
         "luoguJump": {
             "label": "Show jump to Luogu",
-            "helpText": "<p>Some Codeforces questions are included on Luogu Oj. Some questions have translations and solutions.</p><p>After turning on the display, if the current question is included, the Luogu logo will be displayed in the upper right corner of the question.</p><p>Click to jump with one click. Go to the corresponding page of Luogu for this question.</strong></p>"
+            "helpText": "<p>Some of the Codeforces titles are included on Logu OJ, and some titles have translations and explanations</p><p>When the display is turned on, the Logu logo will be displayed in the upper right corner of the title page.</p><p>Clicking on it will allow you to jump to the Logu counterpart of that title with one click.</strong></p>"
+        },
+        "vjudgeJump": {
+            "label": "Show Jump to VJudge",
+            "helpText": "<p>Virtual Judge provides GPT translations of some questions and some contributors' translations, as well as comments on some questions.</p><p>When the display is turned on, the VJudge logo will be displayed in the upper right corner of the question page.</p><p>Clicking on it will take you to the corresponding VJudge page for that question with one click.</strong></p>"
         },
         "recolor": {
             "label": "Recolor list",
