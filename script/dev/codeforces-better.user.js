@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.7
+// @version      1.73.8
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -22,7 +22,7 @@
 // @connect      greasyfork.org
 // @connect      rextester.com
 // @connect      wandbox.org
-// @connect      staticfile.org
+// @connect      staticfile.net
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
@@ -38,20 +38,20 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
-// @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
+// @require      https://cdn.staticfile.net/turndown/7.1.2/turndown.min.js
+// @require      https://cdn.staticfile.net/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
-// @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
-// @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
-// @require      https://cdn.staticfile.org/i18next/23.5.1/i18next.min.js
-// @require      https://cdn.staticfile.org/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
-// @require      https://cdn.staticfile.org/jquery-i18next/1.2.1/jquery-i18next.min.js
+// @require      https://cdn.staticfile.net/chroma-js/2.4.2/chroma.min.js
+// @require      https://cdn.staticfile.net/xterm/3.9.2/xterm.min.js
+// @require      https://cdn.staticfile.net/dexie/3.2.4/dexie.min.js
+// @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
+// @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
+// @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
 // @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
 // @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
+// @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -420,7 +420,7 @@ OJBetter.supportList = {
         'youdao': { 'zh': 'AUTO' },
         'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
-        'openai': { 'zh': '中文', 'zh-Hant': '繁體中文', 'de': 'Deutsch', 'fr': 'Français', 'ko': '한국어', 'pt': 'Português', 'ja': '日本語', 'es': 'Español', 'it': 'Italiano', 'hi': 'हिन्दी' }
+        'openai': { 'zh': 'Chinese', 'zh-Hant': 'Traditional Chinese', 'de': 'German', 'fr': 'French', 'ko': 'Korean', 'pt': 'Portuguese', 'ja': 'Japanese', 'es': 'Spanish', 'it': 'Italian', 'hi': 'Hindi' }
     },
     /** @type {object} 更新源支持列表*/
     updateSourceSupportList: {
@@ -777,11 +777,11 @@ async function initVar() {
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
     if (OJBetter.monaco.enableOnProblemPage) {
         let monacoLoader = document.createElement("script");
-        monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
+        monacoLoader.src = "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js";
         document.head.prepend(monacoLoader);
         monacoLoader.onload = () => {
             require.config({
-                paths: { vs: "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs" },
+                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
             require(["vs/editor/editor.main"], () => {
@@ -3334,6 +3334,21 @@ function OJB_delay(ms) {
 }
 
 /**
+ * 格式化链接格式
+ * @param {string} url 链接字符串
+ * @returns {string} 清理后的链接字符串
+ */
+function OJB_cleanLink(url) {
+    // 替换'http://'为'https://'
+    let cleanUrl = url.replace(/^http:\/\//i, 'https://');
+
+    // 移除末尾的斜杠
+    cleanUrl = cleanUrl.replace(/\/$/, '');
+
+    return cleanUrl;
+}
+
+/**
  * 深度比较两个对象或数组是否完全相等。
  * @param {any} a - 第一个比较对象。
  * @param {any} b - 第二个比较对象。
@@ -3797,7 +3812,7 @@ async function showAnnounce() {
 };
 
 /**
- * 提示信息类
+ * 页面顶部提示信息alert类
  */
 class LoadingMessage {
     constructor() {
@@ -3867,7 +3882,7 @@ class LoadingMessage {
      */
     updateStatus(text, type = 'info', timeout = Infinity, isMarkdown = false) {
         if (isMarkdown) {
-            var md = window.markdownit({
+            let md = window.markdownit({
                 html: !is_escapeHTML,
             });
             text = md.render(text);
@@ -7305,13 +7320,30 @@ async function addConversionButton() {
  */
 function waitForMathJaxIdle() {
     return new Promise((resolve, reject) => {
-        var intervalId = setInterval(() => {
-            var queue = MathJax.Hub.queue;
-            if (queue.pending === 0 && queue.running === 0) {
-                clearInterval(intervalId);
-                resolve();
+        // 检查MathJax对象是否存在
+        const checkMathJaxExists = () => {
+            if (typeof MathJax === 'undefined') {
+                // 如果MathJax不存在，稍后再次检查
+                OJB_delay(100).then(checkMathJaxExists);
+            } else {
+                // MathJax存在，开始监视渲染队列
+                startMonitoringQueue();
             }
-        }, 100);
+        };
+
+        // 开始监视MathJax渲染队列
+        const startMonitoringQueue = () => {
+            const intervalId = setInterval(() => {
+                const queue = MathJax.Hub.queue;
+                if (queue.pending === 0 && queue.running === 0) {
+                    clearInterval(intervalId);
+                    resolve();
+                }
+            }, 100);
+        };
+
+        // 开始检查MathJax对象
+        checkMathJaxExists();
     });
 }
 
@@ -8135,8 +8167,8 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
         try {
             if (transServer == "deepl") {
                 if (OJBetter.deepl.config.type == 'free') {
-                    rawData = await translate_deepl(text);
                     translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+                    rawData = await translate_deepl(text);
                 } else if (OJBetter.deepl.config.type == 'api') {
                     translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.deeplApi', { ns: 'translator', deepl_configName: OJBetter.deepl.config.name })}`, is_renderLaTeX);
                     if (OJBetter.deepl.config.apiGenre == 'deeplx') {
@@ -8714,6 +8746,31 @@ function creatRatingCss(hasBorder = true) {
 }
 
 /**
+ * 获取字符串中的关键词列表
+ * @param {string} text 字符串文本
+ * @returns {array<string>} 返回关键词列表
+ */
+function getKeywords(text) {
+    // 定义要过滤掉的高频词
+    const highFrequencyWords = ['Educational', 'Codeforces', 'Round', 'Div'];
+
+    // 使用正则表达式替换掉特殊符号（保留空格以便分词）
+    const sanitizedText = text.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
+
+    // 将字符串拆分为单词数组
+    const words = sanitizedText.split(' ');
+
+    // 过滤掉高频词和空字符串
+    const filteredWords = words.filter(word => {
+        return word && highFrequencyWords.indexOf(word) === -1;
+    });
+
+    // 返回关键词列表
+    return filteredWords;
+}
+
+
+/**
  * 模拟clist网页访问获取rating
  * @param {string} problem 题目名称
  * @param {string} problem_url 题目链接
@@ -8741,7 +8798,7 @@ async function getRatingFromHTML(problem, problem_url, contest = null) {
         for (let tr of trs) {
             const rating = tr.querySelector('.problem-rating-column').textContent.trim();
             const linkElement = tr.querySelector('.problem-name-column a:nth-of-type(2)');
-            let link = linkElement ? linkElement.href.replace(/http:/g, 'https:') : null;
+            let link = linkElement ? OJB_cleanLink(linkElement) : null;
 
             if (link === problem_url || link === problem_url + '/') {
                 return {
@@ -8810,7 +8867,7 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
                 url: problem.url,
                 rating: problem.rating ? problem.rating : NaN
             };
-            problemsMap.set(problem.url, problemInfo);
+            problemsMap.set(OJB_cleanLink(problem.url), problemInfo);
             nameMap.set(problem.name, problemInfo);
         });
 
@@ -8828,15 +8885,81 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
 }
 
 /**
- * 从clist API获取比赛题目集的rating
- * @param {string} event 比赛名
- * @returns {Promise<Map<string, number>>} 题目rating
+ * 根据关键词从 Clist API 中获取实际比赛名称
+ * @param {string} contestName 比赛名
+ * @param {string} contestUrl 比赛链接
+ * @returns {string|null} 该比赛在Clist中的实际名字
  */
-async function getRatingFromApi_contest(event) {
+async function getContestNameFromApi(contestName, contestUrl) {
     return OJB_promiseRetryWrapper(async () => {
         const options = {
             method: "GET",
-            url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${encodeURIComponent(event)}`,
+            url: `https://clist.by:443/api/v4/contest/?resource_id=1&event__regex=${encodeURIComponent(contestName)}`,
+            headers: {
+                "Authorization": OJBetter.clist.authorization
+            }
+        };
+
+        let response = await OJB_GMRequest(options);
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+
+        let data = JSON.parse(response.responseText);
+        let objects = data.objects;
+
+        if (objects.length > 0) {
+            for (const contest of objects) {
+                const href = contest.href.replace(/\/contests\//i, '/contest/'); // 链接可能是contests而不是contest，换回来
+                if (OJB_cleanLink(href) == contestUrl) {
+                    return contest.event;
+                }
+            }
+        }
+        return null;
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000
+    });
+}
+
+/**
+ * 获取在clist中的实际比赛名称
+ * @param {string} contestName 待搜索的比赛名称
+ * @param {string} contestUrl 比赛的url
+ * @returns {Promise<string|null>} 在clist中的实际比赛名称，如果没有找到，则返回null
+ */
+async function getActualContestName(contestName, contestUrl) {
+    // 首先尝试使用完整的比赛名称进行搜索
+    let actualContestName = await getContestNameFromApi(contestName, contestUrl);
+    if (actualContestName) {
+        return actualContestName;
+    }
+
+    // 如果使用完整名称没有找到，则尝试使用关键词进行搜索
+    const keywords = getKeywords(contestName);
+    const maxKeywordAttempts = 1; // 最多尝试到第几个关键词（因为Clist API有频率限制）
+    for (let i = 0; i < Math.min(keywords.length, maxKeywordAttempts); i++) {
+        actualContestName = await getContestNameFromApi(keywords[i], contestUrl);
+        if (actualContestName) {
+            return actualContestName;
+        }
+    }
+
+    // 如果全部尝试后仍没有找到，返回null
+    return null;
+}
+
+/**
+ * 从clist API获取比赛题目集的rating
+ * @param {string} contestName 比赛名
+ * @returns {Promise<Map<string, number>>} 题目rating
+ */
+async function getRatingFromApi_contest(contestName, contestUrl) {
+    const actualContestName = await getActualContestName(contestName, contestUrl);
+    return OJB_promiseRetryWrapper(async () => {
+        const options = {
+            method: "GET",
+            url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${encodeURIComponent(actualContestName)}`,
             headers: {
                 "Authorization": OJBetter.clist.authorization
             }
@@ -8852,7 +8975,7 @@ async function getRatingFromApi_contest(event) {
 
         if (objects.length > 0 && objects[0].problems) {
             objects[0].problems.forEach(problem => {
-                problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
+                problemsMap.set(OJB_cleanLink(problem.url), problem.rating ? problem.rating : NaN);
             });
         }
 
@@ -8885,7 +9008,7 @@ function getClassNameByRating(rating) {
 }
 
 /**
- * problem页显示Rating
+ * problem题目页显示Rating
  * @param {ProblemPageLinkbar} problemToolbar 
  * @returns {Promise<void>}
  */
@@ -8966,18 +9089,27 @@ async function showRatingByClist_contest() {
     }
 
     // 获取Rating
-    let event = $('#sidebar').children().first().find('.rtable th').first().text();
-    let problemsMap = await getRatingFromApi_contest(event);
+    let contestName = $('#sidebar').children().first().find('.rtable th').first().text();
+    let contestUrl = OJB_cleanLink(window.location.href);
+    try {
+        let problemsMap = await getRatingFromApi_contest(contestName, contestUrl);
 
-    // 填充数据
-    for (let href in ratingBadges) {
-        if (problemsMap.has(href)) {
-            let rating = problemsMap.get(href);
-            let className = getClassNameByRating(rating);
-            ratingBadges[href].text(rating).addClass(className);
-        } else {
-            ratingBadges[href].text(i18next.t('state.404', { ns: 'button' })).addClass('ratingBadge_no');
+        // 填充数据
+        for (let href in ratingBadges) {
+            if (problemsMap.has(href)) {
+                let rating = problemsMap.get(href);
+                let className = getClassNameByRating(rating);
+                ratingBadges[href].text(rating).addClass(className);
+            } else {
+                ratingBadges[href].text(i18next.t('state.404', { ns: 'button' })).addClass('ratingBadge_no');
+            }
         }
+    } catch (error) {
+        // 填充数据
+        for (let href in ratingBadges) {
+            ratingBadges[href].text(i18next.t('state.netError', { ns: 'button' })).addClass('ratingBadge_no');
+        }
+        console.warn(error);
     }
 }
 
@@ -12201,14 +12333,22 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang });
+    const prompt = `
+I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
+During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+            ? "keeping the LaTeX equations unchanged."
+            : "keeping the brackets【】, HTML tags, and their content unchanged."
+        }
+After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
+"
+${raw}
+"`;
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: [{
-            role: "user",
-            content: prompt + raw
+            role: "assistant",
+            content: prompt
         }],
         temperature: 0.7,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
@@ -12276,14 +12416,22 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang });
+    const prompt = `
+I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
+During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+            ? "keeping the LaTeX equations unchanged."
+            : "keeping the brackets【】, HTML tags, and their content unchanged."
+        }
+After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
+"
+${raw}
+"`;
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: [{
-            role: "user",
-            content: prompt + raw
+            role: "assistant",
+            content: prompt
         }],
         temperature: 0.7,
         stream: true,
