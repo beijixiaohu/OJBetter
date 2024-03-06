@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.8
+// @version      1.73.9
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -6386,7 +6386,7 @@ function isLikelyCodeSnippet(text) {
 
     // 移除LaTeX公式部分
     const cleanedText = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
-
+    // TODO 9
     // 代码的关键字
     const keywords = [
         'int', 'float', 'return', 'if', 'else', 'while', 'for', 'switch', 'case', 'break', 'continue',
@@ -6407,7 +6407,7 @@ function isLikelyCodeSnippet(text) {
         return count + (cleanedText.match(regex) || []).length;
     }, 0);
 
-    // 特殊字符的数量
+    // 代码的特殊字符的数量
     const codeCharCount = codeChars.reduce((count, char) => {
         const regex = new RegExp("\\" + char, 'g');
         return count + (cleanedText.match(regex) || []).length;
@@ -6422,8 +6422,9 @@ function isLikelyCodeSnippet(text) {
     // 检查Python的缩进特征
     const hasPythonIndentation = cleanedText.includes('\n    ') || cleanedText.includes('\n\t');
 
-    // 如果代码关键字数量或者特殊代码字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
+    // 如果代码关键字数量或者代码的特殊字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
     if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2 || hasPythonIndentation) {
+        console.log("keywordCount:", keywordCount, "codeCharCount:", codeCharCount, "textCharCount:", textCharCount, "hasPythonIndentation:", hasPythonIndentation);
         return true;
     }
 
@@ -7667,7 +7668,7 @@ class ElementsTree {
 
     // 向树中添加一个节点
     addNode(i_, prev, e) {
-        var node = this.node[i_];
+        let node = this.node[i_];
         node[this.index] = {
             prev: prev,
             next: null,
@@ -7748,9 +7749,8 @@ class ElementsTree {
                     return;
                 }
             }
-            if (pElement.prop("tagName") !== ttTreeNode[index].type) {
-                // console.warn(`类型不同, 元素结构可能已经发生了变化: \nindex: ${index}`);
-                // console.warn(pElement);
+            if (!ttTreeNode[index] || pElement.prop("tagName") !== ttTreeNode[index].type) {
+                // console.warn(`元素不存在或类型不同, 元素结构可能已经发生了变化: \nindex: ${index}`, pElement);
                 return;
             } else {
                 // recursively child element
@@ -7765,6 +7765,7 @@ class ElementsTree {
                 // check if next node is translateDiv
                 if (node.next !== null) {
                     index = node.next;
+
                     var ne_node = ttTreeNode[index];
                     if (ne_node.isTranslateDiv) {
                         var id = ne_node.id;
@@ -8746,31 +8747,6 @@ function creatRatingCss(hasBorder = true) {
 }
 
 /**
- * 获取字符串中的关键词列表
- * @param {string} text 字符串文本
- * @returns {array<string>} 返回关键词列表
- */
-function getKeywords(text) {
-    // 定义要过滤掉的高频词
-    const highFrequencyWords = ['Educational', 'Codeforces', 'Round', 'Div'];
-
-    // 使用正则表达式替换掉特殊符号（保留空格以便分词）
-    const sanitizedText = text.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
-
-    // 将字符串拆分为单词数组
-    const words = sanitizedText.split(' ');
-
-    // 过滤掉高频词和空字符串
-    const filteredWords = words.filter(word => {
-        return word && highFrequencyWords.indexOf(word) === -1;
-    });
-
-    // 返回关键词列表
-    return filteredWords;
-}
-
-
-/**
  * 模拟clist网页访问获取rating
  * @param {string} problem 题目名称
  * @param {string} problem_url 题目链接
@@ -8882,6 +8858,30 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
         maxRetries: 5,
         retryInterval: 1000
     });
+}
+
+/**
+ * 获取字符串中的关键词列表
+ * @param {string} text 字符串文本
+ * @returns {array<string>} 返回关键词列表
+ */
+function getKeywords(text) {
+    // 定义要过滤掉的高频词
+    const highFrequencyWords = ['Educational', 'Codeforces', 'Round', 'Div'];
+
+    // 使用正则表达式替换掉特殊符号（保留空格以便分词）
+    const sanitizedText = text.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
+
+    // 将字符串拆分为单词数组
+    const words = sanitizedText.split(' ');
+
+    // 过滤掉高频词和空字符串
+    const filteredWords = words.filter(word => {
+        return word && highFrequencyWords.indexOf(word) === -1;
+    });
+
+    // 返回关键词列表
+    return filteredWords;
 }
 
 /**
@@ -12334,14 +12334,13 @@ async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     const prompt = `
-I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
-During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
+The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
             : "keeping the brackets【】, HTML tags, and their content unchanged."
         }
-After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
-"
+After translation, please ensure that the ${lang} version conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment, The segment to be translated is as follows: "
 ${raw}
 "`;
     const data = {
