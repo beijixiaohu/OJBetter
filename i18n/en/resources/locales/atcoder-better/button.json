@@ -1,0 +1,52 @@
+{
+    "trans": {
+        "normal": "Translation",
+        "segment": "Segment Translations",
+        "select": "Translations selected",
+        "running": "in translation",
+        "wait": "Waiting for translation",
+        "success": "retranslation",
+        "error": "Translation error",
+        "redo": "retranslation",
+        "tooLong": "Word Out Of Tolerance",
+        "waitMathJax": "Waiting for MathJax"
+    },
+    "md": {
+        "normal": "MarkDownview",
+        "reduction": "Restore",
+        "disabled": "Viewing the MarkDown view is not supported"
+    },
+    "rawData": {
+        "normal": "raw data",
+        "disabled": "Viewing raw data is not supported"
+    },
+    "queryBalance": {
+        "normal": "Check Balance",
+        "disabled": "Balance inquiry is not supported",
+        "loading": "In the query…",
+        "success": "Balance：",
+        "error": "Inquiry Failure"
+    },
+    "fold": {
+        "normal": "collapse",
+        "unfold": "commencement",
+        "disabled": "Does not support folding"
+    },
+    "close": {
+        "normal": "Close",
+        "disabled": "No support for closure"
+    },
+    "copy": {
+        "normal": "Copy",
+        "copied": "Copied",
+        "disabled": "Copying is not supported"
+    },
+    "state": {
+        "wait": "… waiting",
+        "waitMathJax": "Waiting for MathJax",
+        "loading": "Loading…",
+        "404": "not found",
+        "error": "Something went wrong",
+        "netError": "Network Error"
+    }
+}
