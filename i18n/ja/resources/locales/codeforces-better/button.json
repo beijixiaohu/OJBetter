@@ -1,0 +1,52 @@
+{
+    "trans": {
+        "normal": "翻訳",
+        "segment": "マルチ翻訳",
+        "select": "選択範囲を翻訳",
+        "running": "翻訳中",
+        "wait": "翻訳待ち",
+        "success": "改訳",
+        "error": "翻訳エラー",
+        "redo": "改訳",
+        "tooLong": "語数制限を超え",
+        "waitMathJax": "MathJax 待機中..."
+    },
+    "md": {
+        "normal": "MarkDownで開く",
+        "reduction": "復元",
+        "disabled": "MarkDown ビューの表示には対応していません。"
+    },
+    "rawData": {
+        "normal": "生データ",
+        "disabled": "生データの表示はサポートされていません"
+    },
+    "queryBalance": {
+        "normal": "残高照会",
+        "disabled": "残高照会はサポートされていません",
+        "loading": "クエリー…",
+        "success": "バランス：",
+        "error": "問い合わせの失敗"
+    },
+    "fold": {
+        "normal": "崩壊",
+        "unfold": "開始",
+        "disabled": "折りたたみには対応していない"
+    },
+    "close": {
+        "normal": "閉じる",
+        "disabled": "クロージングはサポートされていません"
+    },
+    "copy": {
+        "normal": "コピー",
+        "copied": "コピーしました",
+        "disabled": "コピーはサポートされていません"
+    },
+    "state": {
+        "wait": "待機…",
+        "waitMathJax": "MathJax 待機中...",
+        "loading": "読み込み…",
+        "404": "見つかりません",
+        "error": "問題が発生しました",
+        "netError": "ネットワークエラー"
+    }
+}
