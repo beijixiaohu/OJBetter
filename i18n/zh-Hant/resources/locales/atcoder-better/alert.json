@@ -1,0 +1,37 @@
+{
+    "onload": "正在等待頁面資源載入……",
+    "loadFunc": "正在載入腳本功能……",
+    "waiteLatex": "正在等待LaTeX 渲染佇列全部完成……",
+    "linkDB": "正在連接資料庫……",
+    "expandFoldingblocks": "正在展開折疊塊……",
+    "commentPaging": "正在對評論區分頁……",
+    "acmsguruRebuild": "正在為acmsguru題面重新劃分div……",
+    "initTranslateButtonFunc": "正在初始化翻譯按鈕功能……",
+    "addConversionButton": "正在載入按鈕……",
+    "multiChoiceTranslation": "正在載入選段翻譯……",
+    "RenderPerfOpt": "正在優化折疊塊渲染性能……",
+    "initTransResultsRecover": "正在恢復上一次翻譯結果……",
+    "initTransWhenViewable": "正在初始化短文本自動翻譯……",
+    "recolorStandings": "正在為榜單重新著色……",
+    "addProblemPageCodeEditor": "正在為題面頁新增程式碼編輯器……",
+    "showRatingByClist": "正在載入Clist Rating資料……",
+    "loadSuccess": "載入已完成",
+    "warning": {
+        "is_oldLatex": "注意：目前頁面存在未儲存原LaTeX 程式碼的LaTeX 公式（這通常是一道古老的題目），這導致腳本無法將其還原回LaTeX，因此目前頁面部分功能不適用。<br>此外目前頁面的翻譯功能採用了特別的實現方式，因此可能會出現排版錯位的情況。",
+        "is_acmsguru": "注意：目前頁面為acmsguru 題目（這是一道非常古老的題目），部分功能不適用。<br>此外目前頁面的翻譯功能採用了特別的實現方式，因此可能會出現排版錯位的情況。",
+        "trans_segment": "注意！目前為分段翻譯模式，這會造成負面效果，<p>除非你現在需要翻譯超長篇的部落格或題目，否則請前往設定切換為普通模式</p>",
+        "trans_select": "注意！目前為選段翻譯模式，只會翻譯目標區域內已選中的部分，點擊段落以選中（橙色框）<br><p>如果你現在不需要翻譯超長篇的博客或題目，建議你請前往設定切換為普通模式</p>",
+        "is_submitPage": "你已開啟「題目頁新增編輯器」 選項，在問題頁下方即可快速提交哦"
+    },
+    "error": {
+        "clist": {
+            "404": "目前存取Clist.by網路擁堵，請求已中斷，請稍後再重試",
+            "cookie": "目前瀏覽器的Clist.by登入Cookie可能已失效，請開啟<a target='_blank' href='https://clist.by/'>Clist.by</a>重新登入<br>說明：腳本的Clist Rating分顯示實現依賴於Clist.by的登入使用者Cookie訊息，<br>腳本不會取得你在Clist.by網站上的具體Cookie訊息，請閱讀腳本頁的說明",
+            "other": "目前存取Clist.by時發生未知錯誤，請求已中斷，請稍後再重試"
+        },
+        "codeEditor": {
+            "load": "無法載入編輯器必要的數據，可能目前未登入/未報名/非題目頁/比賽結束凍結期間/該比賽禁止結束後練習",
+            "submit": "程式碼編輯器提交失敗，請稍後再重試"
+        }
+    }
+}
