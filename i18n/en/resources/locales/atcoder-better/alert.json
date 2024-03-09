@@ -1,0 +1,37 @@
+{
+    "onload": "Waiting for page resources to load……",
+    "loadFunc": "Loading script feature……",
+    "waiteLatex": "Waiting for LaTeX rendering queue to complete……",
+    "linkDB": "Connecting to database……",
+    "expandFoldingblocks": "Expanding folding block……",
+    "commentPaging": "Pagination in progress for the comments section...",
+    "acmsguruRebuild": "Redistributing div blocks for acmsguru problem descriptions...",
+    "initTranslateButtonFunc": "Initializing translation button function……",
+    "addConversionButton": "Loading buttons……",
+    "multiChoiceTranslation": "Loading selection translation……",
+    "RenderPerfOpt": "Optimizing folding block rendering performance……",
+    "initTransResultsRecover": "Restoring last translation……",
+    "initTransWhenViewable": "Initializing automatic translation of short texts……",
+    "recolorStandings": "Recoloring list……",
+    "addProblemPageCodeEditor": "Adding code editor for the problem page……",
+    "showRatingByClist": "Loading Clist Rating data……",
+    "loadSuccess": "Loading completed",
+    "warning": {
+        "is_oldLatex": "Note：There are LaTeX formulas on the current page that do not save the original LaTeX code (this is usually an old topic), which makes it impossible for the script to restore them back to LaTeX, so some of the functionality of the current page is not available.<br>In addition, the translation function on the current page is implemented in a special way, so it may be misaligned.",
+        "is_acmsguru": "Note：The current page is an acmsguru question (this is a very old question), and some functions are not applicable.<br>In addition, the translation function of the current page adopts a special implementation method, so typography misalignment may occur.",
+        "trans_segment": "Notice! It is currently in segmented translation mode, which will cause negative effects.<p>Unless you need to translate a very long blog or question now, please go to the settings to switch to normal mode</p>",
+        "trans_select": "Notice! Currently in the selected translation mode, only the selected part in the target area will be translated. Click the paragraph to select it (orange box)<br><p>If you do not need to translate very long blogs or questions now, it is recommended that you go to the settings and switch to the normal mode</p>",
+        "is_submitPage": "You have turned on the \"Add Editor to Question Page\" option, and you can quickly submit it at the bottom of the question page."
+    },
+    "error": {
+        "clist": {
+            "404": "Currently accessing Clist.by is congested, the request has been interrupted, please try again later!",
+            "cookie": "The Clist.by login cookie of the current browser may have expired, please open<a target='_blank' href='https://clist.by/'>Clist.by</a>Log in again<br>Description：The Clist Rating sub-display implementation of the script relies on the login user cookie information of Clist.by,<br>The script will not obtain your login information For specific cookie information on the Clist.by site, please read the instructions on the script page.",
+            "other": "An unknown error occurred while accessing Clist.by, request interrupted, please try again later"
+        },
+        "codeEditor": {
+            "load": "Unable to load the necessary data for the editor, may not be currently logged in/not enrolled/non-title page/during end-of-contest freeze/practicing after the end of the ban for that contest",
+            "submit": "Code editor failed to submit, please try again later"
+        }
+    }
+}
