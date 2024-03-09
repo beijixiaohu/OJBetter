@@ -1,0 +1,91 @@
+{
+    "saveSetting": {
+        "title": "La configurazione è stata modificata, salvata o no?",
+        "content": "",
+        "buttons": [
+            "non salvato",
+            "salvare (un file, ecc.) (informatica)"
+        ]
+    },
+    "update": {
+        "title": "{{scriptName}} C'è una nuova versione!",
+        "content": "** Informazioni sulla versione：{{oldVersion}} → {{newVersion}}**\n\nNota：A causa della politica di aggiornamento della cache della piattaforma, quando viene rilasciata per la prima volta una nuova versione, l'aggiornamento potrebbe ancora puntare alla vecchia versione.\n\nDi solito può semplicemente cliccare su Sospendi aggiornamento e non le verrà più richiesto un aggiornamento per la durata di questa sessione del browser fino alla prossima riapertura del browser.\n\nOppure vada al Pannello impostazioni - Informazioni su per attivare la fonte di aggiornamento.",
+        "buttons": [
+            "Nessun aggiornamento per ora.",
+            "aggiornamento"
+        ]
+    },
+    "announce": {
+        "title": "Aggiornato a",
+        "prefix": "Ultimo registro aggiornato：",
+        "noContent": "\n\nNon c'è un changelog per la versione attuale.",
+        "divContent": "\n\nLa versione beta non ha un changelog, [Commesse di aggiornamento](https://github.com/beijixiaohu/OJBetter/commits/main/)",
+        "buttons": [
+            "Lo so."
+        ]
+    },
+    "skipFold": {
+        "title": "Salta il blocco pieghevole?",
+        "content": "L'area da tradurre contiene blocchi ripiegati, che possono essere codici e di solito non devono essere tradotti; ora deve scegliere se saltare o meno questi blocchi ripiegati：\n\nSe ci sono blocchi ripiegati che deve tradurre, può tradurli in seguito cliccando sui pulsanti di traduzione all'interno di questi blocchi ripiegati individualmente\n\nVuole saltare i blocchi ripiegati? (saltare è consigliato)",
+        "buttons": [
+            "intasato",
+            "saltare"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Il conteggio dei personaggi è stato superato! ",
+        "content": "Il contenuto da tradurre ha un totale di **{{realTextLength}}** caratteri\n\nQuesto supera il **{{textLength}}** limite di caratteri del servizio di traduzione attuale, la preghiamo di cambiare il servizio di traduzione o di attivare la \"Traduzione segmentata\" nel pannello Impostazioni\n\nSi noti che potrebbe aver selezionato il pulsante di traduzione sbagliato\n\nA causa del modo in cui è realizzato, ci sarà più di un pulsante di traduzione nel campo, la preghiamo di cliccare sul pulsante Traduci nel sottocampo più piccolo\n\nÈ sicuro di voler continuare la traduzione?",
+        "buttons": [
+            "Deve ancora tradurre",
+            "cancellazioni"
+        ]
+    },
+    "submitCode": {
+        "title": "Conferma dell'invio del codice?",
+        "content": "",
+        "buttons": [
+            "cancellazioni",
+            "presentare (un rapporto, ecc.)"
+        ]
+    },
+    "isLikelyCodeSnippet": {
+        "title": "La traduzione continuerà?",
+        "content": "La traduzione in arrivo sembra essere un **codice snippet** e tradurlo potrebbe essere inutile, è sicuro di continuare?",
+        "buttons": [
+            "essere",
+            "intasato"
+        ]
+    },
+    "isClearDatabase": {
+        "title": "Il database è stato svuotato?",
+        "content": "È sicuro di voler svuotare il database? Non è recuperabile.",
+        "buttons": [
+            "chiaro",
+            "cancellazioni"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Azzera tutte le configurazioni?",
+        "content": "È sicuro di voler resettare tutte le configurazioni? Non è recuperabile.",
+        "buttons": [
+            "riproposizione",
+            "cancellazioni"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "Il database è importato?",
+        "content": "È sicuro di voler importare il database? Ciò comporterà la sovrascrittura dei dati del database esistente, il che è irrecuperabile.",
+        "buttons": [
+            "importare (dati)",
+            "cancellazioni"
+        ]
+    },
+    "isImportSettings": {
+        "title": "Le impostazioni sono importate?",
+        "content": "È sicuro di voler importare le impostazioni? Questo causerà la sovrascrittura dei dati delle impostazioni esistenti, il che è irrecuperabile.",
+        "buttons": [
+            "importare (dati)",
+            "cancellazioni"
+        ]
+    }
+}
