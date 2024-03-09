@@ -1,0 +1,36 @@
+{
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "Xunfei sente",
+        "youdao": "aderire ai principi della verità e del diritto",
+        "google": "google",
+        "caiyun": "illuminato. nuvole colorate e piccole traduzioni",
+        "openai": "ChatGPT"
+    },
+    "transingTip": {
+        "basic": "In uso {{server}} Traduzione in corso……Attendere prego.",
+        "deeplApi": "In corso DeepL Traduzione API in corso……Attendere\n\nConfigurazione dell'applicazione： {{deepl_configName}}\n\n",
+        "openai": "Traduzione ChatGPT in corso……Attendere\n\nConfigurazione dell'applicazione： {{openai_name}}\n\n",
+        "openai_isStream": "Lo streaming non è attualmente abilitato, dovrà attendere a lungo per vedere i risultati, la preghiamo di essere paziente!"
+    },
+    "error": {
+        "basic": "\n\nLa preghiamo di riprovare o di cambiare l'interfaccia di traduzione.\n\nClicchi sul pulsante Dati grezzi nella barra degli strumenti in alto a destra per visualizzare ulteriori informazioni.",
+        "unexpected": "**:( Si è verificato un problema con la traduzione：** Si è verificato un errore inatteso\n\nRiprovi o cambi l'interfaccia di traduzione.",
+        "youdao413": "413 Entità della richiesta troppo grande\n\nLa lunghezza del testo della richiesta ha superato i limiti dell'interfaccia di traduzione, passi ad un'altra interfaccia di traduzione.",
+        "deepl429": "Le richieste sono troppo frequenti, la preghiamo di riprovare più tardi\n\nDi solito questo è dovuto al fatto che ha tradotto troppo spesso in un breve periodo di tempo, o che ha tradotto più di 5000 caratteri di testo in una sola volta.\n\nDeepL Ci sono dei limiti al numero di parole e alla frequenza delle traduzioni.\n\nQuesto è temporaneo e tornerà alla normalità dopo un certo periodo di tempo.",
+        "GMRequest": "**:( C'è stato un problema con la traduzione：** Si è verificato un errore durante il recupero dei dati dall'interfaccia.",
+        "processer": "**:( C'è stato un problema con la traduzione：** Si è verificato un errore durante il recupero dei dati di destinazione \n\nPotrebbe esserci un errore nei dati di risposta.",
+        "checkResponse": "**:( Si è verificato un problema con la traduzione：** Si è verificato un errore inatteso durante la verifica dei dati di risposta."
+    },
+    "chatgpt_prompt": {
+        "common": "La preghiamo di tradurre il seguente testo in{{transTargetLang}}, questo fa parte della descrizione di una domanda di un concorso di programmazione, presti attenzione alla traduzione della terminologia, faccia attenzione a mantenere le formule LaTeX in esso contenute non tradotte, deve rispondere solo al contenuto tradotto, non risponda a nient'altro：\n\n",
+        "notLaTeX": "La preghiamo di tradurre il seguente testo a{{transTargetLang}}, che fa parte della descrizione di una domanda di un concorso di programmazione, prestando attenzione alla traduzione dei termini, facendo attenzione a mantenere i [ ], i tag HTML stessi e il contenuto non tradotto e invariato, deve rispondere solo al contenuto tradotto, non rispondere a nient'altro：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " rendering"
+    },
+    "contextMenu": {
+        "edit": "compilatore",
+        "delete": "rimozione"
+    }
+}
