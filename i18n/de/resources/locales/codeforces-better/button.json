@@ -1,0 +1,52 @@
+{
+    "trans": {
+        "normal": "Rendering",
+        "segment": "Segmentale Übersetzung",
+        "select": "Ausgewählt für die Übersetzung",
+        "running": "in Übersetzung",
+        "wait": "Warten auf die Übersetzung",
+        "success": "Rückübersetzung",
+        "error": "Fehler in der Übersetzung",
+        "redo": "Rückübersetzung",
+        "tooLong": "das Wortlimit überschreiten",
+        "waitMathJax": "Warten auf MathJax"
+    },
+    "md": {
+        "normal": "MarkDown-Ansicht",
+        "reduction": "den ursprünglichen Zustand wiederherstellen",
+        "disabled": "Die Ansicht \"MarkDown\" wird nicht unterstützt"
+    },
+    "rawData": {
+        "normal": "Rohdaten",
+        "disabled": "Die Anzeige von Rohdaten wird nicht unterstützt"
+    },
+    "queryBalance": {
+        "normal": "Saldo-Anfrage",
+        "disabled": "Saldoabfrage wird nicht unterstützt",
+        "loading": "In der Abfrage…",
+        "success": "Balance：",
+        "error": "Anfrage Fehlschlag"
+    },
+    "fold": {
+        "normal": "zusammenbrechen",
+        "unfold": "Eröffnungsfeier",
+        "disabled": "Unterstützt kein Falten"
+    },
+    "close": {
+        "normal": "Gerüchteküche",
+        "disabled": "Schließen wird nicht unterstützt"
+    },
+    "copy": {
+        "normal": "eine Kopie machen von",
+        "copied": "Reproduziert",
+        "disabled": "Kopieren wird nicht unterstützt"
+    },
+    "state": {
+        "wait": "Warten…",
+        "waitMathJax": "Warten auf MathJax",
+        "loading": "Laden…",
+        "404": "nicht gefunden",
+        "error": "Etwas ist schief gelaufen.",
+        "netError": "Netzwerkfehler"
+    }
+}
