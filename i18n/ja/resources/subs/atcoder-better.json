@@ -1,0 +1,702 @@
+{
+    "version": "1.0.2",
+    "commonReplacements": {
+        ".header-inner": {
+            "class": [
+                ".header-inner"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト": "競技",
+                "Jobs": "仕事",
+                "検定": "試験",
+                "CareerDesign": "キャリアプラン",
+                "マイプロフィール": "プロフィール",
+                "基本設定": "基本設定",
+                "アイコン設定": "アバター設定",
+                "パスワードの変更": "パスワードを変更する",
+                "お気に入り管理": "お気に入り管理",
+                "ログアウト": "キャンセル"
+            }
+        },
+        ".a-title_ttl": {
+            "class": [
+                ".a-title_ttl"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト": "競技",
+                "最新コンテスト": "最新のコンペティション",
+                "ランキング": "ランキング",
+                "お知らせ": "会報",
+                "AtCoderJobs": "AtCoderの仕事",
+                "検定": "試験",
+                "アルゴリズム実技検定についてはこちらから！": "アルゴリズム実技試験については、こちらをクリックしてください！",
+                "過去問公開中": "パブリックドメインの過去の問題"
+            }
+        },
+        ".a-btnarea": {
+            "class": [
+                ".a-btnarea"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "詳細を見る": "詳細を見る",
+                "求人情報を見る": "求人情報を見る",
+                "採用担当者の方へ": "採用責任者へ",
+                "詳細ページ": "詳細ページ",
+                "マイページ": "マイページ",
+                "コンテスト一覧": "大会リスト",
+                "すべて表示": "すべて表示",
+                "殿堂入り": "名声殿堂",
+                "お知らせ一覧": "発表リスト"
+            }
+        },
+        ".keyvisual-grid": {
+            "class": [
+                ".keyvisual-grid"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "解けた！を": "解決済み！",
+                "世界に届けたい。": "世界に向けて。",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoderは、世界最高レベルの競技プログラミングのウェブサイトです。",
+                "リアルタイムのオンラインコンテストで競い合うことや、": "以下のようなリアルタイムのオンライン・コンペティションに参加できます。",
+                "5,000以上の過去問にいつでもチャレンジすることができます。": "5,000問以上の過去問にいつでもチャレンジ。"
+            }
+        },
+        "strictTraverseTextNodes": {
+            "class": [
+                "パネルタイトル",
+                "h3",
+                ".h3",
+                "h4"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト": "競技",
+                "開催中のコンテスト": "レース",
+                "常設中のコンテスト": "長続きする競技",
+                "予定されたコンテスト": "試合予定",
+                "終了後のコンテスト(最新 10 件)": "完了した試合（最新10試合）",
+                "終了後のコンテスト(最新 50 件)": "完了した試合（最新10試合）",
+                "ランキング": "ランキング",
+                "インフォメーション": "インフォメーション",
+                "過去のコンテスト": "過去の試合",
+                "過去のコンテストを検索": "過去の試合を検索"
+            }
+        },
+        "traverseTextNodes": {
+            "class": [
+                ".header-sub_nav",
+                ".h3"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ホーム": "ホームページ",
+                "コンテスト一覧": "大会リスト",
+                "ランキング": "ランキング",
+                "便利リンク集": "リンク"
+            }
+        },
+        "traverseTextNodes2": {
+            "class": [
+                "ナビ"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "現在のコンテスト": "さて、試合だ。",
+                "過去のコンテスト": "過去の試合",
+                "Algorithm": "算術",
+                "Heuristic": "ヒューリスティック",
+                "アクティブユーザのみ": "アクティブユーザーのみ",
+                "全ユーザ": "全ユーザー",
+                "新エディタテストコンテスト": "新人編集者テストコンテスト",
+                "日本語": "日本語",
+                "English": "英語",
+                "bjxh (Guest)": "bjxh (訪問者)",
+                "マイプロフィール": "自己紹介",
+                "基本設定": "基本設定",
+                "アイコン設定": "アバター設定",
+                "パスワードの変更": "パスワードを変更する",
+                "お気に入り管理": "コレクション管理",
+                "ログアウト": "載る",
+                "トップ": "図頭",
+                "問題": "課題",
+                "質問": "質問をする",
+                "提出": "だす",
+                "提出結果": "結果の提出",
+                "すべての提出": "すべての投稿",
+                "自分の提出": "私の投稿",
+                "自分の得点状況": "得点は？",
+                "バーチャル順位表": "バーチャル・リーグテーブル",
+                "順位表": "リーグテーブル",
+                "チーム戦排名表": "団体戦ランキング一覧",
+                "コードテスト": "コードテスト",
+                "解説": "備考",
+                "すべての提交": "すべての投稿",
+                "自分の提交": "私の投稿",
+                "プロフィール": "自己紹介",
+                "コンテスト成績表": "大会結果表",
+                "設定": "セットアップ",
+                "メールアドレスの更新・認証": "メールアドレスの更新/認証",
+                "收藏管理": "コレクション管理",
+                "ユーザ名照会": "ユーザー名検索",
+                "ユーザ名の変更": "ユーザー名の変更",
+                "退会": "キャンセル",
+                "その他": "その他"
+            }
+        },
+        "#collapse-search": {
+            "class": [
+                "#collapse-search"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rated対象": "制限範囲",
+                "ABCクラス": "ABCカテゴリー",
+                "(Rated上限: 1999)": "(最高視聴率：1999年）",
+                "ARCクラス": "ARCカテゴリー",
+                "(Rated上限: 2799)": "(定格天井：2799）",
+                "AGCクラス": "AGCカテゴリー",
+                "(Rated上限なし)": "(定格キャップなし）",
+                "AHCクラス": "AHCカテゴリー",
+                "カテゴリ": "分類",
+                "全て": "フル",
+                "AtCoder Typical Contest": "AtCoderクラシック・コンペティション",
+                "PAST過去問": "過去の暦年問題",
+                "非公式コンテスト(unrated)": "非公式競技会（ノン・レーティング）",
+                "JOI過去問": "今年のJOIの質問",
+                "企業コンテスト決勝": "企業対抗戦ファイナル",
+                "企業オープンコンテスト(rated)": "企業オープンコンペ（格付け）",
+                "企業オープンコンテスト(unrated)": "企業オープン・コンペティション（格付けなし）",
+                "企業ABC": "ビジネスのABC",
+                "企業ARC": "エンタープライズ・アーク",
+                "ヒューリスティック": "ヒューリスティック",
+                "企業ヒューリスティック": "エンタープライズ・ヒューリスティック",
+                "検索": "ものを探す。",
+                "リセット": "リビジョン",
+                "コンテスト名": "大会名"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-text"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "もっと見る": "もっと見る",
+                "自分の得点状況": "得点は？",
+                "印刷用問題文": "問題セットを印刷する",
+                "記事アーカイブ": "記事アーカイブ",
+                "詳細": "しょうさい",
+                "すべて表示": "すべて表示",
+                "殿堂入り": "名声殿堂"
+            }
+        },
+        "#footer": {
+            "class": [
+                "#フッター",
+                "フッター"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ホーム": "ホームページ",
+                "コンテスト一覧": "大会リスト",
+                "コンテスト": "競技",
+                "ランキング": "ランキング",
+                "便利リンク集": "リンク",
+                "AtCoderJobs": "AtCoderの求人",
+                "AtCoderJobsトップ": "AtCoderジョブズホーム",
+                "2024年新卒採用求人一覧": "2024 新卒採用情報",
+                "2025年新卒採用求人一覧": "2025 新卒採用情報",
+                "中途採用求人一覧": "ソーシャルワーカー求人情報",
+                "インターン求人一覧": "インターンシップ",
+                "アルバイト求人一覧": "パートタイム求人情報",
+                "その他求人一覧": "その他の求人情報",
+                "AtCoder社による職業紹介求人一覧": "株式会社アットコーダーの職業紹介求人情報です。",
+                "採用担当者の方へ": "採用責任者へのメッセージ",
+                "検定": "認定試験",
+                "検定トップ": "認定試験ホーム",
+                "マイページ": "個人ホームページ",
+                "AtCoderCareerDesign": "AtCoderキャリアデザイン",
+                "キャリアデザイントップ": "キャリアデザインホーム",
+                "About": "に対して",
+                "企業情報": "会社情報",
+                "よくある質問": "一般的な問題",
+                "お問い合わせ": "お問い合わせ",
+                "資料請求": "資料請求",
+                "利用規約": "使用標準",
+                "ルール": "規則",
+                "用語集": "用語集",
+                "プライバシーポリシー": "プライバシーポリシー",
+                "個人情報保護方針": "個人情報保護方針",
+                "Copyright Since 2012 (C) AtCoder Inc. All rights reserved.": "著作権 © 2012 onwards AtCoder Inc.無断複写・転載を禁じます。"
+            }
+        },
+        ".editor-buttons-jp": {
+            "class": [
+                "エディタ・ボタン"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ファイルを開く": "ファイルを開く",
+                "カスタマイズ": "カスタマイズ",
+                "エディタ切り替え": "トグルエディター",
+                "高さ自動調節": "自動高さ調整"
+            }
+        },
+        ".control-label-jp": {
+            "class": [
+                "コントロール・ラベル"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "問題": "課題",
+                "言語": "多言語主義",
+                "ソースコード": "ソースコード",
+                "標準入力": "マーカー入力",
+                "標準出力": "標準出力",
+                "標準エラー出力": "標準エラー出力"
+            }
+        },
+        ".h2, h2": {
+            "class": [
+                ".h2",
+                "h2"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "トップ": "図頭",
+                "問題": "課題",
+                "質問": "質問をする",
+                "提出": "だす",
+                "提出結果": "結果の提出",
+                "すべての提交": "すべての投稿",
+                "自分の提交": "私の投稿",
+                "自分の得点状況": "得点は？",
+                "バーチャル順位表": "バーチャル・リーグテーブル",
+                "順位表": "リーグテーブル",
+                "コードテスト": "コードテスト",
+                "解説": "備考"
+            }
+        },
+        ".panel-heading": {
+            "class": [
+                "パネル見出し"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "トップ": "図頭",
+                "問題": "課題",
+                "質問": "質問をする",
+                "提出": "だす",
+                "提出結果": "結果の提出",
+                "すべての提交": "すべての投稿",
+                "自分の提交": "私の投稿",
+                "自分の得点状況": "得点は？",
+                "バーチャル順位表": "バーチャル・リーグテーブル",
+                "順位表": "リーグテーブル",
+                "コードテスト": "コードテスト",
+                "解説": "備考"
+            }
+        },
+        ".status": {
+            "class": [
+                "ステータス"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "開催中": "に対して",
+                "予定": "来たる",
+                "終了": "クローズド"
+            }
+        },
+        "th.text-center": {
+            "class": [
+                "th.テキストセンター"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト名": "大会名",
+                "Rated対象": "採点方法",
+                "時間": "年限",
+                "開始時刻": "開始時間"
+            }
+        },
+        ".table-responsive tr th": {
+            "class": [
+                ".table-responsive tr th"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト名": "大会名",
+                "開始時刻": "開始時間",
+                "ユーザ": "ユーザー"
+            }
+        },
+        ".table-bordered tr th": {
+            "class": [
+                ".table-bordered tr th"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "問題名": "銘柄名",
+                "実行時間制限": "実施期限",
+                "メモリ制限": "メモリ制限"
+            }
+        },
+        "#scroll-page-top": {
+            "class": [
+                "#scroll-page-top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ページトップ": "トップに戻る"
+            }
+        },
+        ".back-to-home": {
+            "class": [
+                "バック・トゥ・ホーム"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "AtCoderホームへ戻る": "AtCoderホームに戻る"
+            }
+        },
+        ".btn-jp": {
+            "class": [
+                ".btn"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "参加登録": "名前を書く",
+                "バーチャル参加": "バーチャル参加"
+            }
+        },
+        ".nav": {
+            "class": [
+                "ナビ"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Present Contests": "現在の試合",
+                "Past Contests": "過去の試合",
+                "Top": "図頭",
+                "Tasks": "アンケート",
+                "Clarifications": "Q&A",
+                "Submit": "だす",
+                "Results": "結局",
+                "All Submissions": "すべての投稿",
+                "My Submissions": "私の投稿",
+                "My Score": "私のスコアだ。",
+                "Virtual Standings": "バーチャルランキング",
+                "Standings": "ランキング",
+                "Custom Test": "カスタムテスト",
+                "Editorial": "備考",
+                "Discuss": "計らう",
+                "Algorithm": "算術",
+                "Heuristic": "ヒューリスティック",
+                "Active Users": "アクティブユーザー",
+                "All Users": "全ユーザー",
+                "Profile": "自己紹介",
+                "Competition History": "試合記録",
+                "General Settings": "一般設定",
+                "Settings": "セットアップ",
+                "Change/Verify Email address": "メールアドレスの変更/確認",
+                "Remind Username": "アラート・ユーザー名",
+                "Change Username": "ユーザー名の変更",
+                "Delete Account": "アカウント削除",
+                "Change Photo": "アバターの変更",
+                "Change Password": "パスワードを変更する",
+                "Manage Fav": "コレクションの管理",
+                "Other": "その他"
+            }
+        },
+        ".dropdown-menu": {
+            "class": [
+                "ドロップダウンメニュー"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "My 个人资料": "プロフィール",
+                "General Settings": "一般設定",
+                "Change Photo": "写真を変更する",
+                "Change Password": "パスワードを変更する",
+                "Manage Fav": "コレクションの管理",
+                "Sign Out": "ログアウト"
+            }
+        },
+        ".panel-title, .h3": {
+            "class": [
+                "パネルタイトル",
+                ".h3"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Search in Archive": "検索アーカイブ",
+                "Permanent Contests": "長続きする競技",
+                "Upcoming Contests": "今後のコンペティション",
+                "Recent Contests": "最近の試合",
+                "Ranking": "あね",
+                "Contest Archive": "競技アーカイブ",
+                "Information": "インフォメーション",
+                "About the situation where it is difficult to access the contest site": "コンペティションサイトへのアクセス障害について"
+            }
+        },
+        "h3": {
+            "class": [
+                "h3"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Search in Archive": "検索アーカイブ",
+                "Permanent Contests": "長続きする競技",
+                "Upcoming Contests": "今後のコンペティション",
+                "Recent Contests": "最近の試合",
+                "Ranking": "あね",
+                "Contest Archive": "競技アーカイブ",
+                "Information": "インフォメーション",
+                "About the situation where it is difficult to access the contest site": "コンペティションサイトへのアクセス障害について"
+            }
+        },
+        ".filter-body-heading": {
+            "class": [
+                ".filter-body-heading"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rated Range": "制限範囲",
+                "Category": "フォーム",
+                "Search": "ものを探す。"
+            }
+        },
+        ".form-group": {
+            "class": [
+                "フォームグループ"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Current Password": "現在のパスワード",
+                "New Password": "新しいパスワード",
+                "Confirm Password": "パスワードの確認",
+                "Update": "更新",
+                "Contest Name": "大会名",
+                "Username": "利用者ID",
+                "Password": "暗号化",
+                "Sign In": "サインイン",
+                "Sign Up": "在籍",
+                "Nickname": "愛称",
+                "Country/Region": "国・地域",
+                "Birth Year": "生年",
+                "Affiliation": "メカニズム",
+                "Email Notifications": "メール通知",
+                "New Email address": "新しいメールアドレス",
+                "Request Email address verify": "メールアドレスの確認を依頼する",
+                "I agree.": "私もそう思う。",
+                "Do you live in Japan?": "日本にお住まいですか？",
+                "Family Name": "ラストネーム",
+                "First Name": "な",
+                "Category": "分類",
+                "College Students (Master or Doctor cource)": "大学生（修士課程または博士課程）",
+                "College Students": "大学生",
+                "Technical college/Vocational school/Short-term university": "高等専門学校／専門学校／短期大学",
+                "High school": "おめでとう",
+                "Junior high school": "中学校",
+                "Office worker": "サラリーマン",
+                "Other": "その他",
+                "Organization Name (Company Name or School Name)": "団体名（会社名または学校名）",
+                "Depertment (For Students)": "学科（学生向け）",
+                "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "2023年または2024年に就職活動や転職活動をするつもり、またはする予定がありますか？",
+                "Graduation Schedule": "卒業式タイムテーブル",
+                "I'm already employed.": "私はもう雇われている。",
+                "Later years": "これから数年。",
+                "I am interested in going into the digital area of Toyota Motor Corporation's operations.": "トヨタ自動車のデジタル領域への参画に興味があります。",
+                "Toyota is currently actively recruiting engineers. Would you like to be considered?": "トヨタは現在、エンジニアを積極的に募集しています。ご興味のある方はぜひご応募ください。",
+                "I'd like to talk to you first.": "まずあなたと話したい。",
+                "Department name": "部署名",
+                "What kind of work do you currently do?": "現在、どのような仕事をしていますか？",
+                "How can the Algorithms Group of the Digital Transformation Office help?": "デジタルトランスフォーメーション・オフィスのアルゴリズム・グループはどのようにお役に立てるでしょうか？"
+            }
+        },
+        "#category-btn-group": {
+            "class": [
+                "#category-btn-group"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unofficial(unrated)": "非公式（未評価）",
+                "Sponsored Parallel(rated)": "スポンサー・パラレル（格付け）",
+                "Sponsored Parallel(unrated)": "スポンサー・パラレル（未評価）",
+                "Sponsored Heuristic Contest": "インスピレーション・スポンサーシップ・コンテスト",
+                "All": "フル",
+                "AtCoder Typical Contest": "AtCoderクラシック・コンペティション",
+                "PAST Archive": "過去の大会アーカイブ",
+                "JOI Archive": "JOIコンペティション・アーカイブ",
+                "Sponsored Tournament": "スポンサーシップ",
+                "Sponsored ABC": "スポンサー ABC",
+                "Sponsored ARC": "ARCのスポンサー",
+                "Heuristic Contest": "ヒューリスティックな競争"
+            }
+        },
+        ".control-label": {
+            "class": [
+                "コントロール・ラベル"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Task": "マンデート",
+                "Language": "多言語主義",
+                "Source Code": "ソースコード",
+                "Standard Input": "標準入力",
+                "Standard Output": "標準出力",
+                "Standard Error": "標準誤差"
+            }
+        },
+        "h4": {
+            "class": [
+                "h4"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Permanent Contests": "パーマネント・マッチ",
+                "Upcoming Contests": "今後のコンペティション",
+                "Recent Contests": "最近の試合"
+            }
+        },
+        ".editor-buttons": {
+            "class": [
+                "エディタ・ボタン"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Open File": "ファイルを開く",
+                "Customize": "パーソナル",
+                "Toggle Editor": "トグルエディター",
+                "Auto Height": "自動高さ調整"
+            }
+        },
+        ".btn": {
+            "class": [
+                ".btn"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Register": "名前を書く",
+                "Virtual Participation": "バーチャル参加",
+                "Editorial": "備考"
+            }
+        },
+        "#navbar-collapse": {
+            "class": [
+                "#navbar-collapse"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Home": "ホームページ",
+                "Contest": "競技",
+                "Ranking": "ランキング",
+                "Sign Up": "在籍",
+                "Sign In": "サインイン"
+            }
+        },
+        ".label": {
+            "class": [
+                "ラベル"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Official": "かんにん"
+            }
+        },
+        ".contest-duration": {
+            "class": [
+                "コンテスト期間"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest Duration": "競技時間",
+                "local time": "現地時間"
+            }
+        }
+    },
+    "InputValueReplacements": {
+        "InputSubmit": {
+            "class": [
+                "input[type='submit']"
+            ],
+            "description": "中国語を投稿する",
+            "isStrict": false,
+            "rules": {
+                "Register for virtual participation": "バーチャルエントリー登録",
+                "Register for practice": "ログインして練習を開始する",
+                "Apply": "アプライアンス",
+                "Register": "名前を書く",
+                "Login": "サインイン",
+                "Run": "うごきだす",
+                "Start virtual contest": "バーチャルエントリー開始",
+                "Manage invitations": "経営陣の招待",
+                "Disable manager mode": "管理モードの一時閉鎖",
+                "Enable manager mode": "オープン管理モード",
+                "Clone Contest": "クローン・コンペティション",
+                "Submit": "だす",
+                "Save changes": "設定の保存",
+                "Filter": "ろ過",
+                "Find": "見つける",
+                "Save": "セーブ",
+                "Create Mashup Contest": "マッシュアップコンテストを開催",
+                "Delete problem": "質問を削除する",
+                "Restore problem": "リカバリーの問題",
+                "Generate": "生成",
+                "Send": "送信"
+            }
+        },
+        "InputButton": {
+            "class": [
+                "input[type='button']"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "リビジョン",
+                "Delete contest": "マッチ削除",
+                "Preview": "プレビュー"
+            }
+        }
+    }
+}
