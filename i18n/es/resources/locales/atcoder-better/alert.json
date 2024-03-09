@@ -1,0 +1,37 @@
+{
+    "onload": "Esperando a que se carguen los recursos de la página……",
+    "loadFunc": "Carga de funciones de script……",
+    "waiteLatex": "Esperando a que la cola de renderizado de LaTeX se complete por completo……",
+    "linkDB": "Conexión a la base de datos……",
+    "expandFoldingblocks": "Despliegue el bloque plegable……",
+    "commentPaging": "Estar en la página de la sección de comentarios……",
+    "acmsguruRebuild": "Redistribución div para el cuestionario acmsguru en curso……",
+    "initTranslateButtonFunc": "Inicialización de la función del botón de traducción……",
+    "addConversionButton": "Botón de carga……",
+    "multiChoiceTranslation": "Carga de las traducciones de las selecciones……",
+    "RenderPerfOpt": "Se está optimizando el rendimiento del renderizado de bloques colapsados……",
+    "initTransResultsRecover": "El último resultado de la traducción se está recuperando……",
+    "initTransWhenViewable": "Inicio de la traducción automática de textos breves……",
+    "recolorStandings": "Recoloración de la lista en curso……",
+    "addProblemPageCodeEditor": "Editor de código que se añade a la página de título……",
+    "showRatingByClist": "Carga de los datos de Clist Rating……",
+    "loadSuccess": "Carga completada",
+    "warning": {
+        "is_oldLatex": "Nota：Hay fórmulas LaTeX en la página actual que no guardan el código LaTeX original (suele tratarse de un tema antiguo), lo que impide que el script las revierta de nuevo a LaTeX, por lo que algunas de las funciones de la página actual no están disponibles.<br>Además, la función de traducción en la página actual se implementa de una manera especial, por lo que puede estar mal colocada.",
+        "is_acmsguru": "Nota：La página actual es un título de acmsguru (que es un título muy antiguo) y algunas de las funciones no están disponibles.<br>Además, la función de traducción de la página actual está implementada de una manera especial, por lo que puede estar mal colocada.",
+        "trans_segment": "¡Precaución! Actualmente en Modo de Traducción Segmentada, lo que puede causar efectos negativos<p>A menos que necesite traducir blogs o temas super largos ahora mismo, vaya a Ajustes y cambie al Modo Normal</p>",
+        "trans_select": "¡Atención! Actualmente en el Modo de Traducción de Segmento Seleccionado, sólo traducirá la porción seleccionada del área de destino, haga clic en el párrafo para seleccionarlo (recuadro naranja)<br><p>Si no necesita traducir blogs o temas super largos en este momento, le sugerimos que por favor vaya a Configuración para cambiar al Modo Normal</p>",
+        "is_submitPage": "Ha activado la opción \"Añadir editor a la página del título\", para poder enviar rápidamente en la parte inferior de la página de preguntas."
+    },
+    "error": {
+        "clist": {
+            "404": "Actualmente el acceso a Clist.by está congestionado, la solicitud ha sido interrumpida, ¡por favor inténtelo de nuevo más tarde!",
+            "cookie": "Es posible que la cookie de inicio de sesión de Clist.by de su navegador actual ya no funcione, por favor, abra<a target='_blank' href='https://clist.by/'>Clist.by</a>para volver a iniciar sesión<br>Descripción：La implementación del script de visualización de la puntuación de Clist Rating se basa en la información de la cookie del usuario registrado de Clist.by,<br>script no obtendrá su información específica de la cookie del sitio de Clist.by, por favor, lea la página del script de Para más detalles, por favor lea las instrucciones de la página del script.",
+            "other": "Se ha producido un error desconocido al acceder a Clist.by, la solicitud se ha interrumpido, ¡inténtelo de nuevo más tarde!"
+        },
+        "codeEditor": {
+            "load": "No se pueden cargar los datos necesarios para el editor, puede que no esté conectado en ese momento/no está registrado/no es una página de título/durante el final de la congelación del torneo/práctica después del final de la prohibición para ese torneo",
+            "submit": "El envío del editor de código ha fallado, ¡por favor inténtelo de nuevo más tarde!"
+        }
+    }
+}
