@@ -1,0 +1,37 @@
+{
+    "onload": "Warten auf das Laden von Seitenressourcen……",
+    "loadFunc": "Laden von Skriptfunktionen……",
+    "waiteLatex": "Warten auf die vollständige Fertigstellung der LaTeX-Warteschlange……",
+    "linkDB": "Verbinden mit der Datenbank……",
+    "expandFoldingblocks": "Entfalten des Faltblocks……",
+    "commentPaging": "Auf der Seite mit den Kommentaren zu sein……",
+    "acmsguruRebuild": "Redistricting div für acmsguru Fragebogen in Arbeit……",
+    "initTranslateButtonFunc": "Initialisierung der Funktion der Übersetzungstaste……",
+    "addConversionButton": "Schaltfläche Laden……",
+    "multiChoiceTranslation": "Laden von Übersetzungen von Auswahlen……",
+    "RenderPerfOpt": "Die Rendering-Leistung bei zusammengeklappten Blöcken wird optimiert……",
+    "initTransResultsRecover": "Das letzte Übersetzungsergebnis wird wiederhergestellt……",
+    "initTransWhenViewable": "Initialisierung der automatischen Übersetzung von kurzen Texten……",
+    "recolorStandings": "Neueinfärbung der Liste in Bearbeitung……",
+    "addProblemPageCodeEditor": "Code-Editor wird zur Titelseite hinzugefügt……",
+    "showRatingByClist": "Laden von Clist Rating Daten……",
+    "loadSuccess": "Laden abgeschlossen",
+    "warning": {
+        "is_oldLatex": "Hinweis：Es gibt LaTeX-Formeln auf der aktuellen Seite, bei denen der ursprüngliche LaTeX-Code nicht gespeichert wird (dies ist in der Regel ein altes Thema). Dadurch kann das Skript sie nicht in LaTeX zurückverwandeln, so dass einige Funktionen auf der aktuellen Seite nicht verfügbar sind.<br>Außerdem ist die Übersetzungsfunktion auf der aktuellen Seite auf besondere Weise implementiert, so dass sie möglicherweise falsch platziert ist.",
+        "is_acmsguru": "Hinweis：Die aktuelle Seite ist ein acmsguru-Titel (ein sehr alter Titel) und einige der Funktionen sind nicht verfügbar.<br>Außerdem ist die Übersetzungsfunktion auf der aktuellen Seite auf besondere Weise implementiert, so dass sie möglicherweise falsch platziert ist.",
+        "trans_segment": "Vorsicht! Derzeit im segmentierten Übersetzungsmodus, der negative Auswirkungen haben kann<p>Wenn Sie nicht gerade superlange Blogs oder Themen übersetzen müssen, gehen Sie zu den Einstellungen und wechseln Sie zum normalen Modus</p>",
+        "trans_select": "Achtung! Im Übersetzungsmodus \"Ausgewählte Segmente\" wird nur der ausgewählte Teil des Zielbereichs übersetzt. Klicken Sie auf den Absatz, um ihn auszuwählen (orangefarbenes Feld)<br><p>Wenn Sie im Moment keine superlangen Blogs oder Themen übersetzen müssen, empfehlen wir Ihnen, in den Einstellungen in den normalen Modus zu wechseln</p>",
+        "is_submitPage": "Sie haben die Option \"Editor zur Titelseite hinzufügen\" aktiviert, so dass Sie die Frage am Ende der Seite schnell abschicken können."
+    },
+    "error": {
+        "clist": {
+            "404": "Der Zugriff auf Clist.by ist derzeit überlastet, die Anfrage wurde unterbrochen. Bitte versuchen Sie es später noch einmal!",
+            "cookie": "Das Login-Cookie Ihres aktuellen Browsers funktioniert möglicherweise nicht mehr. Bitte öffnen Sie<a target='_blank' href='https://clist.by/'>Clist.by</a>, um sich wieder anzumelden<br>Beschreibung：Die Implementierung des Skripts für die Anzeige der Clist-Bewertungspunkte beruht auf den Cookie-Informationen des angemeldeten Benutzers von Clist.by.<br>Das Skript erhält nicht Ihre spezifischen Cookie-Informationen auf der Clist.by-Website, bitte lesen Sie die Für Details lesen Sie bitte die Anweisungen auf der Skriptseite.",
+            "other": "Beim Zugriff auf Clist.by ist ein unbekannter Fehler aufgetreten. Die Anfrage wurde unterbrochen, bitte versuchen Sie es später noch einmal!"
+        },
+        "codeEditor": {
+            "load": "Kann die erforderlichen Daten für den Editor nicht laden, ist möglicherweise nicht angemeldet/nicht registriert/keine Titelseite/nach Ende der Turniersperre/nach Ende der Sperre für dieses Turnier",
+            "submit": "Code-Editor-Eingabe fehlgeschlagen, bitte versuchen Sie es später noch einmal!"
+        }
+    }
+}
