@@ -1,0 +1,52 @@
+{
+    "trans": {
+        "normal": "l'équarrissage",
+        "segment": "Traduction segmentaire",
+        "select": "Sélectionnés pour la traduction",
+        "running": "en traduction",
+        "wait": "En attente de traduction",
+        "success": "retraduction",
+        "error": "erreur de traduction",
+        "redo": "retraduction",
+        "tooLong": "dépasser la limite de mots",
+        "waitMathJax": "En attendant MathJax"
+    },
+    "md": {
+        "normal": "Vue MarkDown",
+        "reduction": "rétablir l'état initial",
+        "disabled": "L'affichage de la vue MarkDown n'est pas pris en charge"
+    },
+    "rawData": {
+        "normal": "données brutes",
+        "disabled": "L'affichage des données brutes n'est pas possible"
+    },
+    "queryBalance": {
+        "normal": "Demande de solde",
+        "disabled": "La demande de solde n'est pas prise en charge",
+        "loading": "Dans la requête…",
+        "success": "Solde：",
+        "error": "Échec de la demande"
+    },
+    "fold": {
+        "normal": "effondrement",
+        "unfold": "commencement",
+        "disabled": "Ne permet pas le pliage"
+    },
+    "close": {
+        "normal": "coagulation",
+        "disabled": "La fermeture n'est pas prise en charge"
+    },
+    "copy": {
+        "normal": "faire une copie de",
+        "copied": "Reproduit",
+        "disabled": "La copie n'est pas possible"
+    },
+    "state": {
+        "wait": "Attente…",
+        "waitMathJax": "En attendant MathJax",
+        "loading": "Chargement de…",
+        "404": "introuvable",
+        "error": "Quelque chose n'a pas fonctionné.",
+        "netError": "erreur de réseau"
+    }
+}
