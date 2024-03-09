@@ -1,0 +1,36 @@
+{
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "Hearings",
+        "youdao": "Youdao",
+        "google": "Google",
+        "caiyun": "Caiyun Translation",
+        "openai": "ChatGPT"
+    },
+    "transingTip": {
+        "basic": "In use {{server}} Translation in progress……Please wait.",
+        "deeplApi": "In progress DeepL API translation in progress……Please wait\n\nConfiguration of the application： {{deepl_configName}}\n\n",
+        "openai": "ChatGPT translation in progress……Please wait\n\nConfiguration of the application： {{openai_name}}\n\n",
+        "openai_isStream": "Current stream transfer is not enabled. You will have to wait a long time before you can see the result, please be patient."
+    },
+    "error": {
+        "basic": "\n\nPlease retry or change the translation interface.\n\nClick on the Raw Data button in the upper right toolbar for more information",
+        "unexpected": "**:( Translation encountered problem：** unexpected error\n\nPlease try again or replace the translation interface",
+        "youdao413": "413 Request Entity Too Large\n\nText length exceeds the limit of the channel translation interface, please replace other translation interfaces",
+        "deepl429": "Requests are too frequent, please try again later and try again\n\nthat is usually due to frequent translations within a short time, or to a one-time translation of more than 5,000 characters.\n\nDeepL limits the number and frequency of translations,\n\nthis is temporary, returning to normal after some time",
+        "GMRequest": "**:( Translation encountered a problem：** error while retrieving data from the interface",
+        "processer": "**:( There was a problem with the translation：** There was an error getting the target data \n\nThere may be an error in the response data.",
+        "checkResponse": "**:( Translation encountered a problem：** unexpected error while checking for response data"
+    },
+    "chatgpt_prompt": {
+        "common": "Please translate the following text to{{transTargetLang}}, which is part of the description of a programming contest question, pay attention to the translation of the terminology, be careful to keep the LaTeX formulas in it untranslated, you only need to reply to the translated content, do not reply to anything else：\n\n",
+        "notLaTeX": "Please translate the following text to{{transTargetLang}}, which is part of the description of a programming contest question, pay attention to the translation of terminology, and be careful to keep the [ ], the HTML tags themselves, and the content therein untranslated and unchanged, you only need to reply to the translated content, and do not reply to anything else：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " Translate"
+    },
+    "contextMenu": {
+        "edit": "compiler",
+        "delete": "Delete"
+    }
+}
