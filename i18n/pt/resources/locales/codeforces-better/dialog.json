@@ -1,0 +1,91 @@
+{
+    "saveSetting": {
+        "title": "A configuração foi alterada, guardada ou não?",
+        "content": "",
+        "buttons": [
+            "não salvo",
+            "guardar (um ficheiro, etc.) (informática)"
+        ]
+    },
+    "update": {
+        "title": "{{scriptName}} Existe uma nova versão!",
+        "content": "** Informações sobre a versão：{{oldVersion}} → {{newVersion}}**\n\nNota：Devido à política de atualização da cache da plataforma, quando uma nova versão é lançada pela primeira vez, a atualização pode ainda apontar para a versão antiga.\n\nNormalmente, pode clicar em Suspender atualização e não lhe será solicitada uma atualização novamente durante esta sessão do navegador até à próxima vez que reabrir o navegador.\n\nOu vá ao Painel de Definições - Acerca de para alternar a fonte de atualização.",
+        "buttons": [
+            "Por enquanto, não há atualização.",
+            "atualização"
+        ]
+    },
+    "announce": {
+        "title": "Atualizado para",
+        "prefix": "Último registo atualizado：",
+        "noContent": "\n\nNão existe um registo de alterações para a versão atual",
+        "divContent": "\n\nA versão beta não tem registo de alterações, [Atualizar Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
+        "buttons": [
+            "Eu sei."
+        ]
+    },
+    "skipFold": {
+        "title": "Salta o bloco de dobragem?",
+        "content": "A área a traduzir contém blocos dobrados, que podem ser código e normalmente não precisam de ser traduzidos. Agora, tem de escolher se quer ou não saltar estes blocos dobrados：\n\nSe houver blocos dobrados que precise de traduzir, pode traduzi-los mais tarde, clicando nos botões de tradução dentro desses blocos dobrados individualmente\n\nQuer saltar os blocos dobrados? (recomenda-se que salte)",
+        "buttons": [
+            "entupido",
+            "saltar"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Contagem de caracteres ultrapassada! ",
+        "content": "O conteúdo a traduzir tem um total de **{{realTextLength}}** caracteres\n\nIsto excede o limite de **{{textLength}}** caracteres do serviço de tradução atual. Por favor, mude de serviço de tradução ou active a \"Tradução segmentada\" no painel de Definições\n\nNote que pode ter selecionado o botão de tradução errado\n\nDevido à forma como é realizado, haverá mais do que um botão de tradução no campo. Por favor, clique no botão Traduzir no subcampo mais pequeno botão\n\nTem a certeza de que quer continuar a traduzir?",
+        "buttons": [
+            "Ainda precisa de traduzir",
+            "cancelamentos"
+        ]
+    },
+    "submitCode": {
+        "title": "Confirmação da submissão do código?",
+        "content": "",
+        "buttons": [
+            "cancelamentos",
+            "apresentar (um relatório, etc.)"
+        ]
+    },
+    "isLikelyCodeSnippet": {
+        "title": "A tradução vai continuar?",
+        "content": "A próxima tradução parece ser um **código snippet** e traduzi-lo pode ser inútil, tem a certeza de continuar?",
+        "buttons": [
+            "ser",
+            "entupido"
+        ]
+    },
+    "isClearDatabase": {
+        "title": "A base de dados foi esvaziada?",
+        "content": "Tem a certeza que quer esvaziar a base de dados? É irrecuperável.",
+        "buttons": [
+            "claro",
+            "cancelamentos"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Reinicia todas as configurações?",
+        "content": "Tem a certeza de que quer repor todas as configurações? É irrecuperável.",
+        "buttons": [
+            "reprovisão",
+            "cancelamentos"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "A base de dados foi importada?",
+        "content": "Tem a certeza de que pretende importar a base de dados? Se o fizer, os dados existentes na base de dados serão substituídos, o que é irrecuperável.",
+        "buttons": [
+            "importação (dados)",
+            "cancelamentos"
+        ]
+    },
+    "isImportSettings": {
+        "title": "As definições são importadas?",
+        "content": "Tem a certeza de que pretende importar as definições? Isso fará com que os dados das definições existentes sejam substituídos, o que é irrecuperável.",
+        "buttons": [
+            "importação (dados)",
+            "cancelamentos"
+        ]
+    }
+}
