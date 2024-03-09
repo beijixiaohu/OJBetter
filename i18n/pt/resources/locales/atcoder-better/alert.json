@@ -1,0 +1,37 @@
+{
+    "onload": "À espera que os recursos da página sejam carregados……",
+    "loadFunc": "Carregamento de funções de script……",
+    "waiteLatex": "Está a aguardar que a fila de renderização do LaTeX seja totalmente concluída……",
+    "linkDB": "Ligação à base de dados……",
+    "expandFoldingblocks": "Desdobramento do bloco dobrável……",
+    "commentPaging": "Estar na página da secção de comentários……",
+    "acmsguruRebuild": "Redistricting div para o questionário acmsguru em curso……",
+    "initTranslateButtonFunc": "Inicialização da função do botão de tradução……",
+    "addConversionButton": "Botão de carregamento……",
+    "multiChoiceTranslation": "Carregamento de traduções de selecções……",
+    "RenderPerfOpt": "Desempenho de renderização de blocos recolhidos a ser optimizado……",
+    "initTransResultsRecover": "O último resultado da tradução está a ser restaurado……",
+    "initTransWhenViewable": "Inicialização da tradução automática de textos curtos……",
+    "recolorStandings": "Recolha de cor da lista em curso……",
+    "addProblemPageCodeEditor": "O editor de código está a ser adicionado à página de título……",
+    "showRatingByClist": "Carregando os dados do Clist Rating……",
+    "loadSuccess": "Carregamento concluído",
+    "warning": {
+        "is_oldLatex": "Nota：Existem fórmulas LaTeX na página atual que não guardam o código LaTeX original (trata-se normalmente de um tópico antigo), o que impede o script de as reverter para LaTeX, pelo que algumas das funcionalidades da página atual não estão disponíveis.<br>Além disso, a função de tradução na página atual é implementada de uma forma especial, pelo que pode estar mal posicionada.",
+        "is_acmsguru": "Nota：A página atual é um título acmsguru (que é um título muito antigo) e algumas das funcionalidades não estão disponíveis.<br>Além disso, a função de tradução na página atual é implementada de uma forma especial, pelo que pode estar mal posicionada.",
+        "trans_segment": "Cuidado! Atualmente no Modo de Tradução Segmentada, que pode causar efeitos negativos<p>A menos que precise de traduzir blogues ou tópicos muito longos neste momento, vá às Definições e mude para o Modo Normal</p>",
+        "trans_select": "Atenção! Atualmente, no Modo de Tradução de Segmentos Seleccionados, só traduzirá a parte selecionada da área de destino, clique no parágrafo para o selecionar (caixa cor de laranja)<br><p>Se não precisar de traduzir blogues ou tópicos muito longos neste momento, sugerimos que vá às Definições para mudar para o Modo Normal</p>",
+        "is_submitPage": "Activou a opção \"Adicionar editor à página de título\", para que possa enviar rapidamente na parte inferior da página da pergunta."
+    },
+    "error": {
+        "clist": {
+            "404": "Atualmente o acesso a Clist.by está congestionado, o pedido foi interrompido, tente novamente mais tarde!",
+            "cookie": "O cookie de início de sessão do seu browser atual do Clist.by pode já não funcionar, por favor abra<a target='_blank' href='https://clist.by/'>Clist.by</a>para voltar a iniciar sessão<br>Descrição A implementação do script：da apresentação da pontuação do Clist Rating baseia-se nas informações do cookie do utilizador com sessão iniciada do Clist.by, o script<br>não obterá as suas informações específicas do cookie no sítio Clist.by, por favor leia as instruções da página do script Para mais pormenores, leia as instruções na página do script.",
+            "other": "Ocorreu um erro desconhecido ao aceder a Clist.by, o pedido foi interrompido, tente novamente mais tarde!"
+        },
+        "codeEditor": {
+            "load": "Não é possível carregar os dados necessários para o editor, pode não estar atualmente com sessão iniciada/não estar registado/não ter uma página de título/durante o fim do congelamento do torneio/praticar após o fim da proibição para esse torneio",
+            "submit": "A submissão do editor de código falhou, tente novamente mais tarde!"
+        }
+    }
+}

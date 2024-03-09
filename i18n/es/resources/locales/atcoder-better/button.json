@@ -1,0 +1,52 @@
+{
+    "trans": {
+        "normal": "renderizado",
+        "segment": "Traducción segmentaria",
+        "select": "Seleccionado para la traducción",
+        "running": "en traducción",
+        "wait": "A la espera de la traducción",
+        "success": "retraducción",
+        "error": "error en la traducción",
+        "redo": "retraducción",
+        "tooLong": "superar el límite de palabras",
+        "waitMathJax": "A la espera de MathJax"
+    },
+    "md": {
+        "normal": "Vista MarkDown",
+        "reduction": "restaurar al estado original",
+        "disabled": "No se admite la visualización de la vista MarkDown"
+    },
+    "rawData": {
+        "normal": "datos brutos",
+        "disabled": "No se admite la visualización de datos sin procesar"
+    },
+    "queryBalance": {
+        "normal": "Consulta de saldo",
+        "disabled": "No se admite la consulta de saldo",
+        "loading": "En la consulta…",
+        "success": "Equilibrio：",
+        "error": "Fallo en la consulta"
+    },
+    "fold": {
+        "normal": "colapso",
+        "unfold": "comienzo",
+        "disabled": "No admite plegado"
+    },
+    "close": {
+        "normal": "cloture",
+        "disabled": "No se admite el cierre"
+    },
+    "copy": {
+        "normal": "haga una copia de",
+        "copied": "Reproducido",
+        "disabled": "No se admite la copia"
+    },
+    "state": {
+        "wait": "Esperando…",
+        "waitMathJax": "A la espera de MathJax",
+        "loading": "Cargando…",
+        "404": "no encontrado",
+        "error": "Algo salió mal.",
+        "netError": "error de red"
+    }
+}

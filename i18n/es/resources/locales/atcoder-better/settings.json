@@ -1,0 +1,371 @@
+{
+    "sidebar": {
+        "basic": "fundamental",
+        "localization": "localización",
+        "translation": "renderizado",
+        "clist": "Clist",
+        "monaco": "Mónaco",
+        "preference": "preferencias",
+        "dev": "salvaguardar",
+        "about": "con respecto a"
+    },
+    "common": {
+        "configManageTitle": "gestión de la configuración",
+        "missing": {
+            "radio": "La configuración actual requiere que se añada y compruebe una configuración.",
+            "input": "La configuración actual requiere campos obligatorios"
+        },
+        "unValid": {
+            "format": "Formato incoherente o caracteres ilegales"
+        }
+    },
+    "basic": {
+        "title": "Ajustes básicos",
+        "darkMode": {
+            "name": "modo oscuro",
+            "options": {
+                "dark": "oscuramente",
+                "light": "durante el día",
+                "system": "sistema de seguimiento"
+            }
+        },
+        "expandBlocks": "Despliegue automático de los bloques plegables",
+        "renderOptimization": {
+            "label": "Optimización del renderizado de bloques plegables",
+            "helpText": "<p>Añada restricciones de contención a los elementos de bloque plegados</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Si su navegador se ralentiza al visualizar un gran número de bloques plegados, activarla<strong>puede</strong>mejorarlo algo</p>"
+        },
+        "paging": {
+            "label": "Comentarios Distinción Página",
+            "helpText": "Los comentarios se muestran en páginas separadas, con un número determinado de<strong>piso principal</strong>por página."
+        },
+        "luoguJump": {
+            "label": "Mostrar salto a Rock Valley",
+            "helpText": "<p>Hay algunas preguntas incluidas en Loyalist OJ, y algunas preguntas tienen traducciones y explicaciones.</p><p>Cuando la pantalla está encendida, el logo de Loyalist aparecerá en la esquina superior derecha de la página de la pregunta.</p><p>Haciendo clic en él te llevará a la página correspondiente de Loyalist para esa pregunta con un solo clic.</strong></p>"
+        },
+        "vjudgeJump": {
+            "label": "Mostrar Saltar a VJudge",
+            "helpText": "<p>Virtual Judge proporciona traducciones GPT de algunas preguntas y traducciones de algunos colaboradores, así como algunos comentarios sobre las preguntas.</p><p>Cuando la pantalla esté encendida, aparecerá el logotipo de VJudge en la esquina superior derecha de la página de la pregunta.</p><p>Si hace clic en él, accederá con un solo clic a la página VJudge correspondiente a esa pregunta.</strong></p>"
+        },
+        "recolor": {
+            "label": "Recolorear la lista",
+            "helpText": "<p>Para la lista de carreras que utilizan el sistema Codeforces</p><p>Recoloree las puntuaciones según el rango de \"Puntuación/Total\"</p><p>Rango：1~0.7~0.45~0 Verde oscuro→Naranja claro→Naranja oscuro→Rojo</p>"
+        }
+    },
+    "localization": {
+        "title": "localización",
+        "scriptLanguageLabel": "lenguaje de programación",
+        "websiteLanguageLabel": "Idioma del sitio web",
+        "notice": {
+            "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si le apetece ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,</p><p>le invitamos a<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>ir a</a>para ayudar a mejorarlo, ¡y su contribución es muy apreciada!</p>",
+            "2": "<strong>Ayudar a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en algún lugar de su sitio web y que sustituirla no causará graves problemas de rendimiento, le invitamos a<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ir a Mejorar las reglas de localización</a>.</p><p>Si desea añadir una nueva regla, deberá añadir la versión en chino simplificado de la regla：bifurque y modifique el archivo de la regla y, a continuación, lance un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más tarde para mejorar la calidad de la traducción también para los demás idiomas.</p>"
+        }
+    },
+    "translation": {
+        "title": "Ajustes de traducción",
+        "options": {
+            "title": "preferencias",
+            "services": {
+                "deepl": "Traducción de DeepL",
+                "iflyrec": "Xunfei Hear Traducir",
+                "youdao": "Traducción de Youtube",
+                "google": "Google Translate",
+                "caiyun": "lit. nubes de colores y pequeñas traducciones",
+                "openai": {
+                    "name": "ChatGPT Traducción",
+                    "helpText": "<p>Es necesario añadir y seleccionar la información de configuración que desea utilizar en la configuración ChatGPT a continuación, y haga clic derecho para modificar y eliminar la configuración, lea el wiki de Github en</p>."
+                }
+            }
+        },
+        "deepl": {
+            "mode": {
+                "title": "paradigma",
+                "select": {
+                    "free": "freeware",
+                    "api": "API"
+                },
+                "helpText": "Seleccione el modo de DeepL servicio, el valor predeterminado es el modo libre, no es necesario proporcionar la API, pero por el oficial más restricciones de frecuencia. modo de API, es necesario añadir la configuración, puede elegir la API oficial：API libre, API Pro, así como la no oficial deeplx"
+            },
+            "enableEmphasisProtection": {
+                "title": "Protección** No.",
+                "helpText": "<strong>Esta opción sólo funciona si se utiliza la API oficial en modo API</strong><p>DeepL puede manejar incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que el resultado de la traducción pierda su contenido envuelto.</p><p>Cuando esta opción está activada, el énfasis en el texto <strong>**</strong> se sustituye por etiquetas HTML y<code>tag_handling: html</code>se añade automáticamente a la cabecera de la solicitud de traducción para que DeepL no rompa el énfasis y su contenido</p>"
+            },
+            "enableLinkProtection": {
+                "title": "Proteger los enlaces",
+                "helpText": "<strong>Esta opción sólo funciona si se utiliza la API oficial en modo API</strong><p>DeepL puede manejar incorrectamente los enlaces en MarkDown,</p><p>Cuando esta opción está activada, sustituye los símbolos de enlace en el texto <strong>[]()</strong> por etiquetas HTML y añade automáticamente<code>tag_handling: html</code>a la cabecera de la solicitud de traducción para evitar que DeepL rompa los enlaces y su contenido</p>"
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "streaming",
+                "helpText": "<p>Habilitación del flujo de datos, efecto máquina de escribir</p>"
+            }
+        },
+        "preference": {
+            "title": "preferencias",
+            "target": {
+                "title": "lengua meta",
+                "helpText": "Nota：Los servicios de traducción disponibles varían para las distintas lenguas de destino"
+            },
+            "comment_translation_choice": {
+                "title": "Traducción de la sección de comentarios",
+                "services": {
+                    "follow": "Siga las preferencias",
+                    "deepl": "Traducción de DeepL",
+                    "iflyrec": "Xunfei Hear Traducir",
+                    "youdao": "Traducción de Youtube",
+                    "google": "Google Translate",
+                    "caiyun": "lit. nubes de colores y pequeñas traducciones",
+                    "openai": "ChatGPT Traducción"
+                }
+            }
+        },
+        "autoTranslation": {
+            "title": "traducción automática",
+            "enable": "Activar la traducción automática",
+            "helpText": "<p>Los textos breves de la zona<strong>.ttypography, .comments</strong></p><p>se traducen automáticamente cuando entran en la zona visible de la ventana del navegador</p>.",
+            "shortTextLength": {
+                "name": "Longitud del texto",
+                "helpText": "<p>Cuando la longitud del texto es inferior a este valor, se considera un texto corto</p>",
+                "end": "carácter",
+                "placeholder": "Introduzca la longitud"
+            },
+            "allowMixTrans": {
+                "name": "Traducción mixta de la sección de comentarios",
+                "helpText": "<p>Al traducir automáticamente, para cada área de texto breve en la sección de comentarios, seleccione de forma independiente y aleatoria uno de los servicios marcados a continuación</p><p>Traducir en paralelo</p>",
+                "checkboxs": {
+                    "deepl": "DeepL",
+                    "iflyrec": "Xunfei (empresa de telecomunicaciones)",
+                    "youdao": "adherirse a los principios de la verdad y lo correcto",
+                    "google": "google",
+                    "caiyun": "nubes rosadas"
+                }
+            }
+        },
+        "advanced": {
+            "name": "alto nivel",
+            "mode": {
+                "name": "modo de funcionamiento",
+                "helpText": "<p>Puede elegir cómo funciona el script</p><p>○ Modo Normal：traducirá toda el área a la vez</p><p>○ Modo Segmentado：traducirá cada etiqueta&#60;&#112;&#47;&#62;y&#60;&#105;&#47;&#62;dentro del área a su vez</p><p>○ Modo Segmentado Seleccionado：Puede hacer clic libremente en cualquier etiqueta&#60;&#112;&#47;&#62;y&#60;&#105;&#47;&#62;de la página para traducirlas</p><div style='color:#f44336;'><p><u>NOTA：El Modo Segmentado/Seleccionado crea los siguientes problemas：</u></p><p>- hace imposible que la interfaz de traducción conozca todo el contexto del texto, lo que reduce la calidad de la traducción.</p><p>- Habrá secciones<strong>que no se traducirán/no se podrán seleccionar</strong>porque no son elementos&#60;&#112;&#47;&#62;o&#60;&#105;&#47;&#62;</p></div>",
+                "options": {
+                    "0": "modo normal",
+                    "1": "modelo de segmentación",
+                    "2": "modelo de segmentación"
+                }
+            },
+            "memory": {
+                "name": "Recuperación automática de traducciones históricas",
+                "helpText": "<p>Guarda automáticamente la información de traducción de la página de título<strong></strong>en el indexDB local</p><p>Refresca / restaura automáticamente la información de traducción la próxima vez que se acceda a la página</p>"
+            },
+            "retrans": {
+                "name": "Tras la retraducción",
+                "helpText": "<p>Elija si desea \"cerrar los resultados antiguos\" o \"guardar los resultados antiguos\" en la retraducción</p>",
+                "options": {
+                    "0": "Cerrar resultados antiguos",
+                    "1": "Guardar los resultados antiguos"
+                }
+            },
+            "transWaitTime": {
+                "name": "Intervalo de espera",
+                "helpText": "<p>Establezca el intervalo de espera entre dos solicitudes de traducción, este ajuste tendrá efecto globalmente y se calcula de forma independiente para cada servicio de traducción</p><p>Recomendación 200 + milisegundos</p><p>Descripción：Las traducciones ChatGPT ignoran este ajuste y no esperan</p>",
+                "end": "milisegundo",
+                "placeholder": "Introduzca el intervalo"
+            },
+            "replaceSymbol": {
+                "name": "Sustitución de LaTeX",
+                "helpText": "<p>El script se asegura de que las fórmulas no sean corrompidas por la interfaz de traducción sacando primero todas las fórmulas LaTeX y utilizando marcadores de posición para ellas</p><p>La probabilidad de que las propias sustituciones sean corrompidas varía de un servicio de traducción a otro, lea la wiki de Github para más detalles</p><p>Tenga en cuenta que：Traducir con ChatGPT no requiere lo anterior, y por lo tanto no se ve afectado por esta opción</p>",
+                "options": {
+                    "1": "Utilice [ ]",
+                    "2": "Utilice {}",
+                    "3": "Utilice []"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "Filtrado de signos ** en el texto",
+                "helpText": " <p>Algunos servicios de traducción (por ejemplo, DeepL) manejan incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que la traducción pierda su envoltorio, puede optar por eliminar el énfasis (el uso de ChatGPT lo ignora) </p>"
+            }
+        }
+    },
+    "clist": {
+        "title": "Ajustes Clist",
+        "basics": {
+            "name": "fundamental",
+            "notice": "<p>Nota：El acceso a los datos de Clist requiere unas credenciales de inicio de sesión válidas, tiene dos opciones：</p><p>Rellene la<a href='https://clist.by/' target='_blank'> clist.by </a>clave API oficial que aparece a continuación,</p><p>o mantenga la página web clist.by en su navegador con la sesión iniciada (es decir, la cookie es válida)</p>",
+            "key": {
+                "title": "CLAVE.",
+                "helpText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "Por favor, introduzca la CLAVE"
+            }
+        },
+        "displayRating": {
+            "title": "Mostrar puntuación",
+            "contest": {
+                "name": "Página del juego de preguntas del concurso",
+                "helpText": "<p>Fuente de datos clist.by</p><p>Debe proporcionar la clave oficial de la API</p><p>o mantener la sesión iniciada en clist.by en su navegador (es decir, la cookie es válida)</p>",
+                "badge": "Cookie/API CLAVE"
+            },
+            "problem": {
+                "name": "portada",
+                "helpText": "<p>Fuente de datos clist.by</p><p>Debe proporcionar la clave oficial de la API</p><p>o mantener la sesión iniciada en clist.by en su navegador (es decir, la cookie es válida)</p>",
+                "badge": "Cookie/API CLAVE"
+            },
+            "problemset": {
+                "name": "portada",
+                "helpText": "<p>Fuente de datos clist.by</p><p>Debe proporcionar la clave oficial de la API</p><p>o mantener la sesión iniciada en clist.by en su navegador (es decir, la cookie es válida)</p>",
+                "badge": "Cookie/API CLAVE"
+            }
+        },
+        "spoilerProtection": {
+            "title": "a prueba de spoilers",
+            "helpText": "<p>Sólo se muestra cuando el ratón se desplaza sobre la subárea de visualización de la clasificación</p>"
+        }
+    },
+    "codeEditor": {
+        "title": "Ajustes del editor de Mónaco",
+        "basics": "fundamental",
+        "problemPageCodeEditor": {
+            "label": "Añadir editor a la portada",
+            "helpText": "Añada el editor Monaco debajo de la portada y el código se guardará automáticamente, proporcionando código en línea en funcionamiento"
+        },
+        "preferences": {
+            "title": "preferencias",
+            "isCodeSubmitConfirm": {
+                "label": "Confirmación secundaria de la presentación del código",
+                "helpText": "Al hacer clic en la portada del editor de Mónaco aparecerá una segunda ventana emergente cuando se envíe el código para evitar falsos envíos."
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "Bloqueo de desplazamiento del ratón",
+                "helpText": "Cuando está activado, cuando el puntero del ratón está dentro del editor de monaco, el desplazamiento del ratón sólo se desplazará por el contenido del editor"
+            },
+            "submitButtonPosition": {
+                "label": "Ubicación del botón Enviar",
+                "helpText": "Elija la ubicación de los botones de prueba de código y envío",
+                "options": {
+                    "bottom": "fondos",
+                    "top": "parapeto"
+                }
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "Código de ejecución en línea",
+            "compilerOptions": {
+                "codeforces": "AtCoder",
+                "wandbox": "wandbox",
+                "rextester": "rextester"
+            }
+        },
+        "lsp": {
+            "title": "Ajustes LSP",
+            "useLSP": {
+                "label": "Utilización del LSP",
+                "helpText": "<p>Conéctese al servidor LSP para permitir la finalización de código, diagnóstico de código, formateo, ir a definiciones, etc.</p><p>Soporte para lenguajes C++, Python</p><p>Necesita iniciar OJBetter_Bridge, lea la wiki de Github para más detalles</p>"
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "Trayectoria laboral.",
+                "helpText": "<p>Debe rellenar la ruta donde se encuentra OJBetter_Bridge</p><p>Utilice la barra diagonal o la barra invertida</p><p>Ruta por defecto：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "Introduzca la ruta y tenga en cuenta que el separador es /."
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "Servidor.",
+                "helpText": "<p>Necesita rellenar la URL del servidor de OJBetter_Bridge en su máquina local</p><p>URL por defecto: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>Tenga en cuenta que normalmente no necesita cambiar aquí, si necesita cambiarlo, por favor hágalo consistente con el formato de URL por defecto</p>",
+                "placeholder": "Por favor, introduzca la ruta, preste atención a rellenar estrictamente según el formato"
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "Mejora de la finalización estática",
+            "cppCodeTemplateComplete": {
+                "label": "Plantillas complementarias AcWing CPP",
+                "helpText": "<p>Plantilla de<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
+            },
+            "customization": "personalización",
+            "performanceWarning": "Nota：Demasiadas reglas complementarias estáticas pueden afectar al rendimiento"
+        }
+    },
+    "dev": {
+        "title": "salvaguardar",
+        "notice": "<p>Nota：Normalmente no necesitará utilizar estas funciones.</p><p>Si no está seguro del significado de las funciones, ¡no las utilice!</p>",
+        "load": {
+            "title": "(de carga, etc.) carga",
+            "notWaiteLoaded": {
+                "label": "No hay que esperar a que los recursos de la página se carguen por completo",
+                "helpText": "<p>Si el mensaje de aviso de carga se queda siempre en：\"Esperando a que se carguen los recursos de la página\" aunque la página esté completamente cargada</p><p>debería confirmar primero si se trata de un problema de red,</p><p>si no es así, entonces intente activar la opción e ir a Github para informar del error, incluyendo la información de la versión del navegador y del sistema operativo, para que pueda ser analizado y reproducido.</p>"
+            }
+        },
+        "l10n": {
+            "title": "Localización de guiones",
+            "refreshScrpitCache": {
+                "label": "Actualizar caché",
+                "helpText": "<p>Los datos localizados del script se almacenan en caché local para acelerar la carga, con un ciclo de actualización automática de una semana, y puede forzar una actualización inmediata de los datos pulsando en Actualizar</p>.",
+                "button": "refrescar (ventana del ordenador)"
+            }
+        },
+        "indexedDB": {
+            "title": "Base de datos IndexedDB",
+            "clear": {
+                "label": "Borrar datos",
+                "helpText": "<p>Borrar los datos locales de IndexedDB borrará todos los datos de la base de datos CFBetter, por favor tenga cuidado</p>",
+                "button": "liquidación"
+            },
+            "inputOrExport": {
+                "label": "Importar/exportar datos",
+                "helpText": "<p>Puede exportar los datos actuales de IndexedDB o importar los datos exportados por otros</p>",
+                "export": "derivar",
+                "import": "importar (datos)"
+            }
+        },
+        "configuration": {
+            "title": "Configuración del script",
+            "clear": {
+                "label": "Borrar configuración",
+                "helpText": "<p>Borrar los datos de configuración del script local restablecerá la configuración del script a su estado inicial, así que proceda con precaución</p>",
+                "button": "liquidación"
+            },
+            "inputOrExport": {
+                "label": "Importar/exportar datos",
+                "helpText": "<p>Puede exportar la configuración actual del script, o importar una configuración ya exportada</p>",
+                "export": "derivar",
+                "import": "importar (datos)"
+            }
+        }
+    },
+    "preference": {
+        "title": "preferencias",
+        "loadingInfo": {
+            "label": "Visualización de un mensaje de alerta de carga",
+            "helpText": "<p>Cuando active Mostrar información de carga, se mostrará un aviso de información de carga en la parte superior cada vez que se cargue la página：\"CodeforcesBetter -- xxx\"</p><p>Esto se utiliza para ver cómo está funcionando actualmente el script<strong>Si no desea verlo, puede optar por Desactivar</strong></p><p><u>Cabe señalar que si necesita información sobre cualquier problema de carga del script, active esta opción antes de realizar una captura de pantalla para que se pueda analizar el problema</u></p>"
+        },
+        "targetArea": {
+            "label": "Visualizar el alcance de la zona objetivo",
+            "helpText": "Cuando está activada, se muestra el alcance de su área de destino al pasar el ratón por encima del botón Ver/Copiar/Traducir de MD."
+        },
+        "iconButtonSize": {
+            "title": "Icono Tamaño del botón",
+            "helpText": "<p>Ajuste del tamaño del botón de traducción</p>",
+            "placeholder": "Introduzca el tamaño del botón"
+        }
+    },
+    "about": {
+        "title": "con respecto a",
+        "version": "Versión：",
+        "update": {
+            "title": "actualización",
+            "thanksforDevChannelNotice": "<p>Gracias por unirse al canal de pruebas y ayudar a Codeforces Better! a mejorar.</p><p>Para preguntas vaya a<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "channel": {
+                "label": "canal de actualización",
+                "helpText": "<p>Puede elegir el canal de actualización para el script</p><p>Tenga en cuenta que la versión beta de：se empuja automáticamente después de cada confirmación en Github, por lo que no ha sido ampliamente probado y puede tener varios problemas desconocidos.</p><p>Por favor, plantee problemas en Github y añada etiquetas Beta para los problemas con la versión beta</p>",
+                "options": {
+                    "release": "versión estable",
+                    "dev": "versión beta"
+                }
+            },
+            "source": {
+                "label": "fuente de actualización",
+                "helpText": "<p>Puede elegir la fuente de descarga de sus scripts y todos se actualizarán simultáneamente.</p><p>El canal beta no está soportado por GreasyFork.</p>",
+                "options": {
+                    "greasyfork": "GreasyFork",
+                    "github": "Github",
+                    "aliyunoss": "Aliyun OSS"
+                }
+            }
+        }
+    }
+}

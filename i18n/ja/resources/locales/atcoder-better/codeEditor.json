@@ -1,0 +1,46 @@
+{
+    "customTestBlock": {
+        "title": "カスタムテストデータ（自動保存）",
+        "onlyCustom": "カスタムデータのみをテスト",
+        "DontShowDiff": "違いを非表示",
+        "add": "新規"
+    },
+    "runTestButton": {
+        "initial": "サンプルテスト",
+        "running": "テスト中",
+        "success": "すべて合格",
+        "error": "すべて不合格",
+        "partial": "一部採用"
+    },
+    "resultBlock": {
+        "diff": "相違点の比較：",
+        "diffNote": "Explanation：質問に複数の答えがある場合、あなたの答えは間違っていないかもしれません。",
+        "state": "ステータス：",
+        "title": {
+            "custom": "カスタムサンプル",
+            "sample": "サンプル・タイトル"
+        }
+    },
+    "submitButton": "だす",
+    "fontSizeInput": "フォントサイズ",
+    "fullscreenButton": "フルスクリーン",
+    "exitFullscreenButton": "全画面表示を終了",
+    "fixToBottomButton": "下部に配置",
+    "fixToRightButton": "右側を固定します。",
+    "cancelFixButton": "ピン留めを解除",
+    "lsp": {
+        "connect": "LSPコネクションの作成……",
+        "waitingAnswer": "アスタリスク…… の初期化を待っています",
+        "connected": "接続済みLSP:",
+        "error": "LSPコネクションの切断"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "codeforcesサーバーへのコード送信中にエラーが発生しました！",
+            "getResultError": "実行結果のリクエスト中にエラーが発生しました！"
+        },
+        "common": {
+            "error": "不明なエラーが発生しました。 もう一度お試しください。"
+        }
+    }
+}

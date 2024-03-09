@@ -1,0 +1,46 @@
+{
+    "customTestBlock": {
+        "title": "Benutzerdefinierte Testdaten (automatische Speicherung)",
+        "onlyCustom": "Nur benutzerdefinierte Daten testen",
+        "DontShowDiff": "Unstimmigkeiten nicht angezeigt",
+        "add": "neu gebaut"
+    },
+    "runTestButton": {
+        "initial": "Beispieltest",
+        "running": "im Test",
+        "success": "Alle bestanden",
+        "error": "Alle durchgefallen",
+        "partial": "Teilweise angenommen"
+    },
+    "resultBlock": {
+        "diff": "Vergleich von Unterschieden：",
+        "diffNote": "Erläuterung：Wenn es mehr als eine mögliche Antwort auf die Frage gibt, kann Ihre Antwort nicht falsch sein.",
+        "state": "Status：",
+        "title": {
+            "custom": "Benutzerdefinierte Muster",
+            "sample": "Beispiel Titel"
+        }
+    },
+    "submitButton": "einreichen (einen Bericht usw.)",
+    "fontSizeInput": "Schriftgröße",
+    "fullscreenButton": "Vollbild",
+    "exitFullscreenButton": "Vollbild verlassen",
+    "fixToBottomButton": "Am Boden befestigt",
+    "fixToRightButton": "An der rechten Seite befestigt",
+    "cancelFixButton": "Aufhebung der Fixierung",
+    "lsp": {
+        "connect": "Erstellen einer LSP-Verbindung……",
+        "waitingAnswer": "Warten auf Initialisierungsbestätigung……",
+        "connected": "LSP verbunden",
+        "error": "LSP-Verbindung unterbrochen"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "Bei der Übermittlung des Codes an den codeforces-Server ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!",
+            "getResultError": "Bei der Abfrage eines Laufergebnisses ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut!"
+        },
+        "common": {
+            "error": "Es ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut."
+        }
+    }
+}

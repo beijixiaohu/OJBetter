@@ -1,0 +1,36 @@
+{
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "Xunfei Oiga",
+        "youdao": "adherirse a los principios de la verdad y lo correcto",
+        "google": "google",
+        "caiyun": "lit. nubes de colores y pequeñas traducciones",
+        "openai": "ChatGPT"
+    },
+    "transingTip": {
+        "basic": "En uso {{server}} Traducción en curso……Por favor, espere.",
+        "deeplApi": "En curso DeepL Traducción de la API en curso……Por favor, espere\n\nConfiguración de la aplicación： {{deepl_configName}}\n\n",
+        "openai": "Traducción de ChatGPT en curso……Por favor, espere\n\nConfiguración de la aplicación： {{openai_name}}\n\n",
+        "openai_isStream": "El streaming no está habilitado actualmente, tendrá que esperar mucho tiempo para ver los resultados, ¡tenga paciencia!"
+    },
+    "error": {
+        "basic": "\n\nVuelva a intentarlo o cambie la interfaz de traducción.\n\nHaga clic en el botón Datos brutos de la barra de herramientas superior derecha para ver más información",
+        "unexpected": "**:( Hubo un problema con la traducción：** Se produjo un error inesperado\n\nPor favor, vuelva a intentarlo o cambie la interfaz de traducción.",
+        "youdao413": "413 Entidad de solicitud demasiado grande\n\nLa longitud del texto de la solicitud ha superado las limitaciones de la interfaz de traducción, por favor, cambie a otra interfaz de traducción.",
+        "deepl429": "Las solicitudes son demasiado frecuentes, vuelva a intentarlo más tarde\n\nEsto suele deberse a que ha traducido con demasiada frecuencia en un corto periodo de tiempo, o ha traducido más de 5000 caracteres de texto de una vez.\n\nDeepL Hay límites en el número de palabras y la frecuencia de traducción.\n\nEsto es temporal, y volverá a la normalidad después de un periodo de tiempo.",
+        "GMRequest": "**:( Hubo un problema con la traducción：** Se produjo un error al obtener datos de la interfaz.",
+        "processer": "**:( Hubo un problema con la traducción：** Se produjo un error al obtener los datos de destino \n\nPuede haber un error en los datos de respuesta.",
+        "checkResponse": "**:( Se ha encontrado un problema con la traducción：** Se ha producido un error inesperado al comprobar los datos de respuesta."
+    },
+    "chatgpt_prompt": {
+        "common": "Por favor, traduzca el siguiente texto a{{transTargetLang}}, esto es parte de la descripción de una pregunta de un concurso de programación, preste atención a la traducción de la terminología, tenga cuidado de mantener las fórmulas LaTeX en ella sin traducir, sólo tiene que responder al contenido traducido, no responda a nada más：\n\n",
+        "notLaTeX": "Por favor, traduzca el siguiente texto a{{transTargetLang}}, que forma parte de la descripción de una pregunta de un concurso de programación, preste atención a la traducción de los términos, tenga cuidado de mantener los [ ], las propias etiquetas HTML, y el contenido de las mismas sin traducir y sin cambios, sólo tiene que responder al contenido traducido, no responda a nada más：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " renderizado"
+    },
+    "contextMenu": {
+        "edit": "compilador",
+        "delete": "eliminando"
+    }
+}

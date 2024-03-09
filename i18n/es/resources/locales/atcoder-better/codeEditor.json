@@ -1,0 +1,46 @@
+{
+    "customTestBlock": {
+        "title": "Datos de prueba personalizados (autoguardado)",
+        "onlyCustom": "Probar sólo datos personalizados",
+        "DontShowDiff": "Discrepancias no mostradas",
+        "add": "de nueva construcción"
+    },
+    "runTestButton": {
+        "initial": "prueba de muestra",
+        "running": "a prueba",
+        "success": "Todos aprobados",
+        "error": "Falló todo",
+        "partial": "Adoptado parcialmente"
+    },
+    "resultBlock": {
+        "diff": "Comparación de diferencias：",
+        "diffNote": "Explicación：Si hay más de una respuesta posible a la pregunta, su respuesta puede no ser incorrecta.",
+        "state": "Estado：",
+        "title": {
+            "custom": "Muestras personalizadas",
+            "sample": "Título de la muestra"
+        }
+    },
+    "submitButton": "presentar (un informe, etc.)",
+    "fontSizeInput": "tamaño de letra",
+    "fullscreenButton": "pantalla completa",
+    "exitFullscreenButton": "Salir de la pantalla completa",
+    "fixToBottomButton": "Fijado al fondo",
+    "fixToRightButton": "Fijado a la derecha",
+    "cancelFixButton": "Anulación de la fijación",
+    "lsp": {
+        "connect": "Creación de una conexión LSP……",
+        "waitingAnswer": "Esperando acuse de recibo de inicialización……",
+        "connected": "LSP conectado",
+        "error": "Conexión LSP desconectada"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "Se ha producido un error al enviar el código al servidor de codeforces, ¡por favor, inténtelo de nuevo!",
+            "getResultError": "Se ha producido un error al solicitar un resultado de ejecución, ¡por favor, inténtelo de nuevo!"
+        },
+        "common": {
+            "error": "Se ha producido un error desconocido. Por favor, inténtelo de nuevo."
+        }
+    }
+}

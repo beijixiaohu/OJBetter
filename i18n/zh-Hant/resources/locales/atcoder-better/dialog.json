@@ -1,0 +1,91 @@
+{
+    "saveSetting": {
+        "title": "配置已更改，是否儲存？",
+        "content": "",
+        "buttons": [
+            "不保存",
+            "儲存"
+        ]
+    },
+    "update": {
+        "title": "{{scriptName}} 有新版本！",
+        "content": "**版本資訊：{{oldVersion}} → {{newVersion}}**\n\n注意：由於平台的快取刷新策略，當新版本剛發佈時，更新可能會仍然指向舊的版本，\n\n通常你只需要點擊暫不更新，在本次瀏覽器會話期間將不再提示更新，直到下次重新開啟瀏覽器。\n\n或前往設定面板- 關於切換更新來源。",
+        "buttons": [
+            "暫不更新",
+            "更新"
+        ]
+    },
+    "announce": {
+        "title": "已更新至",
+        "prefix": "最近更新日誌：",
+        "noContent": "\n\n目前版本沒有更新日誌",
+        "divContent": "\n\n測試版沒有更新日誌，[更新Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
+        "buttons": [
+            "我知道了"
+        ]
+    },
+    "skipFold": {
+        "title": "是否跳過折疊塊？",
+        "content": "即將翻譯的區域中包含折疊塊，折疊塊可能是代碼，通常不需要翻譯，現在你需要選擇是否跳過這些折疊塊：\n\n如果其中有你需要翻譯的折疊塊，可以稍後再單獨點擊這些折疊塊內的翻譯按鈕進行翻譯\n\n要跳過折疊塊嗎？ （建議選擇跳過）",
+        "buttons": [
+            "否",
+            "跳過"
+        ]
+    },
+    "transTextLimits": {
+        "title": "字元數超限! ",
+        "content": "即將翻譯的內容共**{{realTextLength}}** 字元\n\n這超出了目前翻譯服務的**{{textLength}}** 字元上限，請更換翻譯服務，或在設定面板中開啟「分段翻譯」\n\n注意，可能你選擇了錯誤的翻譯按鈕\n\n由於實現方式，區域中會出現多個翻譯按鈕，請點擊更小的子區域中的翻譯按鈕\n\n你確定要繼續翻譯嗎？",
+        "buttons": [
+            "仍要翻譯",
+            "取消"
+        ]
+    },
+    "submitCode": {
+        "title": "確認提交代碼嗎",
+        "content": "",
+        "buttons": [
+            "取消",
+            "提交"
+        ]
+    },
+    "isLikelyCodeSnippet": {
+        "title": "是否繼續翻譯？",
+        "content": "即將翻譯的內容似乎為**程式碼片段**，翻譯它可能是無意義的，你確定繼續嗎？",
+        "buttons": [
+            "是",
+            "否"
+        ]
+    },
+    "isClearDatabase": {
+        "title": "是否清空資料庫？",
+        "content": "你確定要清空資料庫嗎？這是不可恢復的。",
+        "buttons": [
+            "清空",
+            "取消"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "是否重置所有配置？",
+        "content": "你確定要重置所有配置嗎？這是不可恢復的。",
+        "buttons": [
+            "重置",
+            "取消"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "是否導入資料庫？",
+        "content": "你確定要匯入資料庫嗎？這將導致現有資料庫資料被覆蓋，這是不可恢復的。",
+        "buttons": [
+            "導入",
+            "取消"
+        ]
+    },
+    "isImportSettings": {
+        "title": "是否導入設定？",
+        "content": "你確定要匯入設定嗎？這將導致現有設定資料被覆蓋，這是不可恢復的。",
+        "buttons": [
+            "導入",
+            "取消"
+        ]
+    }
+}

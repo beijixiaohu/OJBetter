@@ -1,0 +1,91 @@
+{
+    "saveSetting": {
+        "title": "Configuration changed, saved or not?",
+        "content": "",
+        "buttons": [
+            "Do not save",
+            "Save"
+        ]
+    },
+    "update": {
+        "title": "{{scriptName}} There is a new version!",
+        "content": "** Version Information：{{oldVersion}} → {{newVersion}}**\n\nNote：Due to the platform's cache refresh policy, when a new version is first released, the update may still point to the old version.\n\nUsually you can just click on Suspend Update and you will not be prompted for an update again for the duration of this browser session until the next time you reopen the browser.\n\nOr go to Settings Panel - About to toggle the update source.",
+        "buttons": [
+            "No update for now.",
+            "update"
+        ]
+    },
+    "announce": {
+        "title": "Updated to",
+        "prefix": "Recently Updated Log：",
+        "noContent": "\n\nThere is no changelog for the current version",
+        "divContent": "\n\nThe beta version has no changelog, [Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
+        "buttons": [
+            "I know"
+        ]
+    },
+    "skipFold": {
+        "title": "Skip folder?",
+        "content": "The upcoming translation area contains folded blocks. Collapses may be code and do not usually need to be translated. Now you need to choose whether to skip these folded blocks：\n\nif they contain folded blocks you need to translate, then click the translation button in these folded blocks to proceed with the\n\ntranslation blocks? (selection is recommended)",
+        "buttons": [
+            "No",
+            "Skip"
+        ]
+    },
+    "transTextLimits": {
+        "title": "The number of characters is out of limit! ",
+        "content": "The content to be translated has a total of **{{realTextLength}}** characters\n\nThis exceeds the **{{textLength}}** character limit of the current translation service, please change the translation service or turn on \"Segmented Translation\" in the Settings panel\n\nNote that you may have selected the wrong translation button\n\nDue to the way it is implemented, there will be multiple translation buttons in the area, so please click on the translation button in the smaller sub area button\n\nAre you sure you want to continue translating?",
+        "buttons": [
+            "Still to translate",
+            "Cancel"
+        ]
+    },
+    "submitCode": {
+        "title": "Confirm submission code?",
+        "content": "",
+        "buttons": [
+            "Cancel",
+            "Commit"
+        ]
+    },
+    "isLikelyCodeSnippet": {
+        "title": "Does it continue to be translated?",
+        "content": "The upcoming translation appears to be **code snippet** and translating it may be pointless, are you sure to continue?",
+        "buttons": [
+            "be",
+            "clogged"
+        ]
+    },
+    "isClearDatabase": {
+        "title": "Is the database emptied?",
+        "content": "Are you sure you want to empty the database? It's unrecoverable.",
+        "buttons": [
+            "empty",
+            "Cancel"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Does it reset all configurations?",
+        "content": "Are you sure you want to reset all configurations? It's not recoverable.",
+        "buttons": [
+            "reprovision",
+            "Cancel"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "Is the database imported?",
+        "content": "Are you sure you want to import the database? This will cause the existing database data to be overwritten, which is unrecoverable.",
+        "buttons": [
+            "import (data)",
+            "Cancel"
+        ]
+    },
+    "isImportSettings": {
+        "title": "Are the settings imported?",
+        "content": "Are you sure you want to import the settings? This will cause the existing settings data to be overwritten, which is unrecoverable.",
+        "buttons": [
+            "import (data)",
+            "Cancel"
+        ]
+    }
+}

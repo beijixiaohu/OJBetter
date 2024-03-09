@@ -1,0 +1,126 @@
+{
+    "common": {
+        "advanced": {
+            "title": "alto nivel",
+            "header": {
+                "label": "Cabecera personalizada",
+                "placeholder": "(Opcional) Aquí puede rellenar pares clave-valor adicionales para añadirlos a la cabecera de la solicitud.",
+                "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Datos personalizados",
+                "placeholder": "(Opcional) Aquí puede rellenar pares clave-valor adicionales que se añadirán a los datos de la solicitud.",
+                "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
+            }
+        },
+        "quota": {
+            "title": "Consulta de límites",
+            "alert": "<p>Si utiliza un servicio que admite consultas de cuotas, puede configurarlo aquí</p>.",
+            "url": {
+                "label": "Dirección API.",
+                "placeholder": "Introduzca la dirección API",
+                "tipText": "<p>Rellene la dirección API del importe de la consulta y el script enviará automáticamente una solicitud a esa dirección</p>."
+            },
+            "method": {
+                "label": "Tipo de solicitud.",
+                "tipText": "<p>Seleccione el tipo de solicitud de importe de consulta</p>"
+            },
+            "header": {
+                "label": "encabezado",
+                "placeholder": "Rellene aquí los pares clave-valor añadidos a la cabecera de la solicitud.",
+                "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "datos",
+                "placeholder": "Rellene aquí los pares clave-valor añadidos a los datos de la solicitud",
+                "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
+            },
+            "surplus": {
+                "label": "Ruta de datos.",
+                "placeholder": "Introduzca la ruta JSON, utilizando el separador de puntos.",
+                "tipText": "<p>Rellene el valor de equilibrio en la interfaz para devolver la ruta en el JSON, la secuencia de comandos obtendrá automáticamente el valor bajo la ruta, el apoyo a cada otras cuatro operaciones</p><p>Formato de muestra：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+            }
+        }
+    },
+    "deepl": {
+        "title": "configure",
+        "genre": {
+            "label": "Tipo de API",
+            "tipText": "<strong>Descripción:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL Membresía</a> se divide en Membresía Individual y Membresía API, necesita ser Miembro API,</p><p>donde Membresía API se divide en Plan Gratuito (api-free) y Plan Pro (api-pro), tienen diferente dirección de solicitud, por favor no elija la incorrecta.</p><p>Si necesita utilizar la dirección proxy para acceder, rellene el campo API Proxy.</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> es un proyecto de API no oficial al que se accede simulando el lado IOS, por lo que no soporta todos los parámetros de la API oficial, y puede desplegarla usted mismo o utilizar la API pública. Rellene el campo API Proxy con la dirección de su servicio.</p><p>Si no lo rellena, se utilizará por defecto la interfaz pública：https://api.deeplx.org/translate</p><p>Si no activa la autenticación mediante token, puede dejar vacío el campo Clave.</p>"
+        },
+        "basic": {
+            "title": "fundamental",
+            "name": {
+                "label": "Nombre.",
+                "placeholder": "Por favor, dé un nombre a esta configuración"
+            },
+            "key": {
+                "label": "CLAVE.",
+                "placeholder": "Por favor, introduzca la CLAVE",
+                "tipText": "<p>Necesita introducir su propia clave DeepL,<a target=\"_blank\" href=\"https://www.deepl.com/zh/pro-api\">sitio web oficial</a></p>"
+            },
+            "proxy": {
+                "label": "API de proxy.",
+                "tipText": "<p>Puede rellenar la API especificada para delegar el acceso a la API en DeepL o, para DeepLX, rellenar su interfaz autodesplegable</p><strong>Al especificar una API personalizada, Tampermonkey le advertirá sobre las solicitudes entre dominios, que deberá autorizar por su cuenta</strong></p><p>Descripción：Para DeepLX, si se deja en blanco, se utiliza por defecto una API pública：https:// api.deeplx.org/translate</p>"
+            }
+        }
+    },
+    "chatgpt": {
+        "title": "configure",
+        "basic": {
+            "title": "fundamental",
+            "name": {
+                "label": "Nombre.",
+                "placeholder": "Por favor, dé un nombre a esta configuración"
+            },
+            "model": {
+                "label": "Modelos.",
+                "tipText": "<p>Déjelo en blanco para que aparezca por defecto：gpt-3.5-turbo</p><p>Para obtener una lista de modelos, consulte<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentación oficial de OpenAI</a></p><p><strong>Además, si está utilizando la API proxy proporcionada por el proveedor de servicios, compruebe si el proveedor de servicios admite el modelo correspondiente</strong></p>"
+            },
+            "key": {
+                "label": "CLAVE.",
+                "placeholder": "Por favor, introduzca la CLAVE",
+                "tipText": "<p>Debe introducir su propia clave OpenAI,<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">sitio web oficial</a></p><p><b>Si está utilizando la API proxy proporcionada por el proveedor de servicios, debe rellenar la clave proporcionada por el proveedor de servicios</b></p>."
+            },
+            "proxy": {
+                "label": "API de proxy.",
+                "tipText": "<p>Déjelo en blanco para utilizar por defecto la API oficial de OpenAI</p><p>También puede rellenar la API especificada para acceder por proxy a la API de OpenAI</p><p>Si está utilizando una API proxy y una CLAVE proporcionada por su proveedor de servicios, deberá rellenar<strong>completa</strong>dirección de la API proporcionada por su proveedor de servicios, lea las instrucciones del script para más detalles</p><p><strong>Dado que está especificando una API personalizada, Tampermonkey le advertirá sobre las solicitudes entre dominios. Deberá autorizarlo usted mismo</strong></p>"
+            }
+        },
+        "advanced": {
+            "title": "alto nivel",
+            "header": {
+                "label": "Cabecera personalizada",
+                "placeholder": "(Opcional) Aquí puede rellenar pares clave-valor adicionales para añadirlos a la cabecera de la solicitud.",
+                "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
+            },
+            "data": {
+                "label": "Datos personalizados",
+                "placeholder": "(Opcional) Aquí puede rellenar pares clave-valor adicionales que se añadirán a los datos de la solicitud.",
+                "tipText": "<p>Ejemplo de formato：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>nombre1 : 123<br>nombre2 : cccc</p></div>"
+            }
+        }
+    },
+    "complet": {
+        "title": "Finalización personalizada",
+        "name": {
+            "label": "Observaciones.",
+            "placeholder": "Indique un nombre de nota para esta configuración personalizada"
+        },
+        "choose": {
+            "label": "¿Permitir?"
+        },
+        "genre": {
+            "label": "Formato de la plantilla",
+            "tipText": "<p>El formato mónaco soporta casi todos los atributos del <a target=\"_blank\" href=\"https://microsoft.github.io/monaco-editor/docs.html#interfaces/languages.CompletionItem.html\">CompletionItem</a> en mónaco, (nota: el atributo rango no es necesario, el script lo calcula y añade automáticamente)</p><p>El formato ace sólo soporta un número limitado de atributos de los completadores en ace: <code>caption</code>,<code>value</code>, que son convertidos automáticamente por el script al formato mónaco</p><p>specifics. Puede leer las instrucciones en la página del script</p>"
+        },
+        "language": {
+            "label": "Lenguas aplicables"
+        },
+        "jsonurl": {
+            "tipText": "<p>Cuando OJBetter_Bridge está activado, responde a una petición GET<code>/mycomplet/*</code>, y devuelve el contenido de un archivo con el mismo nombre que se encuentra en la carpeta<code>mycomplet</code></p><p>Así que sólo tiene que colocar su archivo JSON en la carpeta <code>/mycomplet</code> para acceder a él localmente,</p><p>En la configuración debe rellenar el formulario URL: </p><p><code>http:/ / /127.0.0.1:2323/mycomplet/xxx.json</code></p>",
+            "alert": "<p>El script confiará plenamente en sus datos JSON sin comprobaciones ni verificaciones adicionales, así que no añada URLs JSON de fuentes desconocidas,</p><p>datos especialmente construidos pueden romper el funcionamiento normal del script o incluso ejecutar otro código malicioso</p>",
+            "placeholder": "Con forma de http://127.0.0.1:2323/mycomplet/xxx.json"
+        }
+    }
+}

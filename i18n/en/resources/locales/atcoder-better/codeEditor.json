@@ -1,0 +1,46 @@
+{
+    "customTestBlock": {
+        "title": "Custom test data (auto-saving)",
+        "onlyCustom": "Only test custom data",
+        "DontShowDiff": "Do not show differences",
+        "add": "Create New"
+    },
+    "runTestButton": {
+        "initial": "sample test",
+        "running": "under test",
+        "success": "All passed",
+        "error": "Failed all",
+        "partial": "Passed in part"
+    },
+    "resultBlock": {
+        "diff": "Comparison of Differences：",
+        "diffNote": "Explanation：If there is more than one possible answer to the question, your answer may not be incorrect.",
+        "state": "Status：",
+        "title": {
+            "custom": "Customized Samples",
+            "sample": "Sample Title"
+        }
+    },
+    "submitButton": "Submit",
+    "fontSizeInput": "Font size",
+    "fullscreenButton": "Fullscreen",
+    "exitFullscreenButton": "Exit fullscreen",
+    "fixToBottomButton": "Pin to bottom",
+    "fixToRightButton": "Pin to right",
+    "cancelFixButton": "Unpin",
+    "lsp": {
+        "connect": "Create LSP connection……",
+        "waitingAnswer": "Waiting for initialization back to……",
+        "connected": "LSP connected",
+        "error": "LSP connection disconnected"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "An error occurred while submitting the code to the codeforces server, please try again!",
+            "getResultError": "An error occurred while requesting a run result, please try again!"
+        },
+        "common": {
+            "error": "An unknown error has occurred. Please try again."
+        }
+    }
+}

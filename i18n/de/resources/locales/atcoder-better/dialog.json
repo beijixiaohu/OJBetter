@@ -1,0 +1,91 @@
+{
+    "saveSetting": {
+        "title": "Konfiguration geändert, gespeichert oder nicht?",
+        "content": "",
+        "buttons": [
+            "nicht gerettet",
+            "(eine Datei etc.) speichern (Informatik)"
+        ]
+    },
+    "update": {
+        "title": "{{scriptName}} Es gibt eine neue Version!",
+        "content": "** Versionsinformationen：{{oldVersion}} → {{newVersion}}**\n\nHinweis：Aufgrund der Cache-Aktualisierungspolitik der Plattform kann es vorkommen, dass das Update bei der ersten Veröffentlichung einer neuen Version noch auf die alte Version verweist.\n\nNormalerweise können Sie einfach auf Update aussetzen klicken und Sie werden für die Dauer dieser Browser-Sitzung bis zum nächsten Öffnen des Browsers nicht mehr zu einem Update aufgefordert.\n\nOder gehen Sie zu Einstellungen - Info, um die Update-Quelle umzuschalten.",
+        "buttons": [
+            "Vorläufig kein Update.",
+            "Update"
+        ]
+    },
+    "announce": {
+        "title": "Aktualisiert auf",
+        "prefix": "Zuletzt aktualisiertes Protokoll：",
+        "noContent": "\n\nEs gibt kein Changelog für die aktuelle Version",
+        "divContent": "\n\nDie Beta-Version hat keinen Changelog, [Update Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
+        "buttons": [
+            "Ich weiß."
+        ]
+    },
+    "skipFold": {
+        "title": "Wird der Faltblock übersprungen?",
+        "content": "Der zu übersetzende Bereich enthält gefaltete Blöcke, bei denen es sich um Code handeln kann und die in der Regel nicht übersetzt werden müssen. Jetzt müssen Sie entscheiden, ob Sie diese gefalteten Blöcke überspringen möchten oder nicht：\n\nWenn es gefaltete Blöcke gibt, die Sie übersetzen müssen, können Sie sie später übersetzen, indem Sie auf die Schaltflächen zum Übersetzen innerhalb dieser gefalteten Blöcke klicken\n\nMöchten Sie die gefalteten Blöcke überspringen? (Überspringen wird empfohlen)",
+        "buttons": [
+            "Verstopft",
+            "Überspringen"
+        ]
+    },
+    "transTextLimits": {
+        "title": "Zeichenanzahl überschritten! ",
+        "content": "Der zu übersetzende Inhalt hat insgesamt **{{realTextLength}}** Zeichen\n\nDies überschreitet die **{{textLength}}** Zeichengrenze des aktuellen Übersetzungsdienstes, bitte wechseln Sie den Übersetzungsdienst oder aktivieren Sie \"Segmentierte Übersetzung\" im Einstellungsbereich\n\nBeachten Sie, dass Sie möglicherweise die falsche Übersetzungsschaltfläche ausgewählt haben\n\nAufgrund der Art der Realisierung gibt es mehr als eine Übersetzungsschaltfläche im Feld, bitte klicken Sie auf die Schaltfläche Übersetzen im kleineren Unterfeld\n\nSind Sie sicher, dass Sie mit der Übersetzung fortfahren möchten?",
+        "buttons": [
+            "Muss noch übersetzt werden",
+            "Stornierungen"
+        ]
+    },
+    "submitCode": {
+        "title": "Bestätigung der Übermittlung des Codes?",
+        "content": "",
+        "buttons": [
+            "Stornierungen",
+            "einreichen (einen Bericht usw.)"
+        ]
+    },
+    "isLikelyCodeSnippet": {
+        "title": "Wird die Übersetzung fortgesetzt?",
+        "content": "Die anstehende Übersetzung scheint ein **Codeschnipsel** zu sein und es könnte sinnlos sein, ihn zu übersetzen. Sind Sie sicher, dass Sie fortfahren wollen?",
+        "buttons": [
+            "sein",
+            "Verstopft"
+        ]
+    },
+    "isClearDatabase": {
+        "title": "Ist die Datenbank geleert?",
+        "content": "Sind Sie sicher, dass Sie die Datenbank leeren wollen? Sie ist nicht wiederherstellbar.",
+        "buttons": [
+            "löschen",
+            "Stornierungen"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "Werden dabei alle Konfigurationen zurückgesetzt?",
+        "content": "Sind Sie sicher, dass Sie alle Konfigurationen zurücksetzen möchten? Es ist nicht wiederherstellbar.",
+        "buttons": [
+            "Reprovision",
+            "Stornierungen"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "Ist die Datenbank importiert?",
+        "content": "Sind Sie sicher, dass Sie die Datenbank importieren möchten? Dies führt dazu, dass bestehende Datenbankdaten überschrieben werden, was nicht wiederherstellbar ist.",
+        "buttons": [
+            "importieren (Daten)",
+            "Stornierungen"
+        ]
+    },
+    "isImportSettings": {
+        "title": "Werden die Einstellungen importiert?",
+        "content": "Sind Sie sicher, dass Sie die Einstellungen importieren möchten? Dadurch werden die vorhandenen Einstellungsdaten überschrieben, was nicht wiederherstellbar ist.",
+        "buttons": [
+            "importieren (Daten)",
+            "Stornierungen"
+        ]
+    }
+}

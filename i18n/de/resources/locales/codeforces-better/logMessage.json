@@ -1,0 +1,19 @@
+{
+    "lsp": {
+        "socket": {
+            "open": "Verbindung hergestellt",
+            "close": "Verbindung geschlossen",
+            "error": "Verbindungsfehler"
+        },
+        "state": {
+            "finished": "erfüllen",
+            "running": "Laufen",
+            "error": "Fehler tritt auf"
+        },
+        "server": {
+            "regist": "Registrierte Bestellungen ↓",
+            "receive": "Empfangene Daten ↓",
+            "transmit": "An monaco↓ übergebene Daten"
+        }
+    }
+}
