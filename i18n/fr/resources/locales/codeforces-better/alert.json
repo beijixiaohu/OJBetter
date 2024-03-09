@@ -1,0 +1,37 @@
+{
+    "onload": "Attente du chargement des ressources de la page……",
+    "loadFunc": "Chargement des fonctions de script……",
+    "waiteLatex": "Attendre que la file d'attente de rendu LaTeX soit entièrement complétée……",
+    "linkDB": "Connexion à la base de données……",
+    "expandFoldingblocks": "Déplier le bloc de pliage……",
+    "commentPaging": "Être sur la page de la section des commentaires……",
+    "acmsguruRebuild": "Redistricting div pour le questionnaire acmsguru en cours……",
+    "initTranslateButtonFunc": "Initialisation de la fonction du bouton de traduction……",
+    "addConversionButton": "Bouton de chargement……",
+    "multiChoiceTranslation": "Chargement des traductions des sélections……",
+    "RenderPerfOpt": "Optimisation des performances de rendu des blocs effondrés……",
+    "initTransResultsRecover": "Le dernier résultat de la traduction est récupéré……",
+    "initTransWhenViewable": "Initialisation de la traduction automatique de textes courts……",
+    "recolorStandings": "Recoloration de la liste en cours……",
+    "addProblemPageCodeEditor": "L'éditeur de code est ajouté à la page de titre……",
+    "showRatingByClist": "Chargement des données d'évaluation de Clist……",
+    "loadSuccess": "Chargement terminé",
+    "warning": {
+        "is_oldLatex": "Note：Certaines formules LaTeX de la page actuelle ne sauvegardent pas le code LaTeX original (il s'agit généralement d'un ancien sujet), ce qui empêche le script de les rétablir en LaTeX, de sorte que certaines fonctionnalités de la page actuelle ne sont pas disponibles.<br>En outre, la fonction de traduction de la page actuelle est implémentée d'une manière spéciale, de sorte qu'elle peut être mal placée.",
+        "is_acmsguru": "Note：La page actuelle est un titre acmsguru (qui est un titre très ancien) et certaines des fonctionnalités ne sont pas disponibles.<br>En outre, la fonction de traduction sur la page actuelle est mise en œuvre d'une manière spéciale, de sorte qu'elle peut être mal placée.",
+        "trans_segment": "Attention ! Actuellement en mode de traduction segmentée, ce qui peut avoir des effets négatifs<p>À moins que vous n'ayez besoin de traduire des blogs ou des sujets très longs maintenant, allez dans Paramètres et passez en mode normal</p>",
+        "trans_select": "Attention ! Actuellement, en mode de traduction par segment sélectionné, seule la partie sélectionnée de la zone cible sera traduite, cliquez sur le paragraphe pour le sélectionner (boîte orange)<br><p>Si vous n'avez pas besoin de traduire des blogs ou des sujets très longs pour le moment, nous vous suggérons d'aller dans les paramètres pour passer en mode normal</p>.",
+        "is_submitPage": "Vous avez activé l'option \"Ajouter un éditeur à la page de titre\", ce qui vous permet de soumettre rapidement votre question au bas de la page."
+    },
+    "error": {
+        "clist": {
+            "404": "L'accès à Clist.by est actuellement saturé, la requête a été interrompue, veuillez réessayer plus tard !",
+            "cookie": "Le cookie de connexion de votre navigateur Clist.by peut ne plus fonctionner, veuillez ouvrir<a target='_blank' href='https://clist.by/'>Clist.by</a>pour vous reconnecter<br>Description：L'implémentation par le script de l'affichage du score de Clist Rating repose sur les informations du cookie de l'utilisateur connecté à Clist.by,<br>Le script n'obtiendra pas vos informations de cookie spécifiques sur le site Clist.by, veuillez lire les instructions de la page du script. Pour plus de détails, veuillez lire les instructions de la page du script.",
+            "other": "Une erreur inconnue s'est produite lors de l'accès à Clist.by, la requête a été interrompue, veuillez réessayer plus tard !"
+        },
+        "codeEditor": {
+            "load": "Impossible de charger les données nécessaires à l'éditeur, il se peut que vous ne soyez pas connecté, que vous ne soyez pas enregistré, que vous n'ayez pas de page de titre, que vous soyez bloqué à la fin du tournoi ou que vous vous entraîniez après la fin de l'interdiction pour ce tournoi.",
+            "submit": "La soumission de l'éditeur de code a échoué, veuillez réessayer plus tard !"
+        }
+    }
+}
