@@ -1,0 +1,371 @@
+{
+    "sidebar": {
+        "basic": "基本的",
+        "localization": "ローカリゼーション",
+        "translation": "レンダリング",
+        "clist": "クライスト",
+        "monaco": "モナコ",
+        "preference": "プリファレンス",
+        "dev": "セーフガード",
+        "about": "に対して"
+    },
+    "common": {
+        "configManageTitle": "構成管理",
+        "missing": {
+            "radio": "現在の設定では、コンフィギュレーションを追加してチェックする必要がある。",
+            "input": "現在の設定では必須フィールドが必要"
+        },
+        "unValid": {
+            "format": "一貫性のない書式や不正な文字"
+        }
+    },
+    "basic": {
+        "title": "基本設定",
+        "darkMode": {
+            "name": "ダークモード",
+            "options": {
+                "dark": "ほのぼの",
+                "light": "昼間",
+                "system": "フォローアップシステム"
+            }
+        },
+        "expandBlocks": "折りたたみブロックの自動展開",
+        "renderOptimization": {
+            "label": "折りたたみブロックレンダリングの最適化",
+            "helpText": "<p>折りたたまれたブロック要素にcontain制約を追加する</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>大量の折りたたまれたブロックを表示する際にブラウザの動作が重くなる場合は、<strong>これをオンにすると</strong>多少改善されるかもしれない</p>"
+        },
+        "paging": {
+            "label": "コメント区別ページ",
+            "helpText": "コメントは別ページに表示され、1ページあたり指定された数の<strong>メインフロア</strong>。"
+        },
+        "luoguJump": {
+            "label": "ロックバレーへのジャンプを表示",
+            "helpText": "<p>Loyalist OJに収録されている問題には、翻訳や解説があるものもあります。</p><p>ディスプレイをオンにすると、問題ページの右上にLoyalistのロゴが表示されます。</p><p>これをクリックすると、その問題に対応するLoyalistのページにワンクリックで移動できます。</strong></p>"
+        },
+        "vjudgeJump": {
+            "label": "Vジャッジへのジャンプを表示",
+            "helpText": "<p>バーチャルジャッジは、いくつかの質問のGPT翻訳と投稿者の翻訳、そして質問に対するコメントを提供しています。</p><p>表示をオンにすると、質問ページの右上にVJudgeのロゴが表示されます。</p><p>これをクリックすると、その質問に対応するVJudgeのページにワンクリックで移動できます。</strong></p>"
+        },
+        "recolor": {
+            "label": "リストの再カラー化",
+            "helpText": "<p>Codeforces システムを使用したレースリストについて</p><p>「スコア/合計」の範囲に従ってスコアを再カラー化</p><p>範囲：1~0.7~0.45~0 ダークグリーン→ライトオレンジ→ダークオレンジ→レッド</p>"
+        }
+    },
+    "localization": {
+        "title": "ローカリゼーション",
+        "scriptLanguageLabel": "スクリプト言語",
+        "websiteLanguageLabel": "ウェブサイト言語",
+        "notice": {
+            "1": "<strong>翻訳の品質向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。他のすべての言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl＆Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズされた翻訳の質を向上させるために、</p><p>、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>、</a>、あなたの貢献を歓迎します！</p>",
+            "2": "<strong>ウェブサイト言語ローカライゼーションの改善支援</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、それを置き換えることで深刻なパフォーマンス問題が発生しないとお考えの方は、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ローカライゼーションルールの改善</a>にぜひアクセスしてください。</p><p>新しいルールを追加したい場合は、簡体字中国語版のルールを追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを立ち上げてください。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。後でcrowdinにアクセスして、他の言語の翻訳の品質も向上させることができます。</p>"
+        }
+    },
+    "translation": {
+        "title": "翻訳設定",
+        "options": {
+            "title": "プリファレンス",
+            "services": {
+                "deepl": "DeepLの翻訳",
+                "iflyrec": "宣飛翻訳を聞く",
+                "youdao": "Youtube翻訳",
+                "google": "グーグル翻訳",
+                "caiyun": "カラフルな雲と小さな翻訳",
+                "openai": {
+                    "name": "ChatGPT翻訳",
+                    "helpText": "<p>以下のChatGPTコンフィギュレーションで使用したいコンフィギュレーション情報を追加・選択し、右クリックでコンフィギュレーションを修正・削除する必要があります。Github wikiの</p>。"
+                }
+            }
+        },
+        "deepl": {
+            "mode": {
+                "title": "パラダイム",
+                "select": {
+                    "free": "フリーウェア",
+                    "api": "API"
+                },
+                "helpText": "DeepLサービスのモードを選択し、デフォルトは無料モードですが、APIを提供する必要はありませんが、公式のより多くの周波数の制限によって。 APIモードでは、設定を追加する必要があり、公式のAPIを選択することができます：API無料、API Proだけでなく、非公式のdeeplx"
+            },
+            "enableEmphasisProtection": {
+                "title": "プロテクション** No.",
+                "helpText": "<strong>このオプションは、公式 API を API モードで使用する場合にのみ機能します。</strong><p>DeepL は、MarkDown <strong>**</strong> </p><p>内の強調を誤って処理することがあります。このため、翻訳結果で折り返されたコンテンツが欠落することがあります。</p><p> <strong></strong></p>このオプションをオンにすると、テキスト内の強調が HTML タグに置き換えられ、<code>tag_handling: html</code>が翻訳要求ヘッダに自動的に追加されます。"
+            },
+            "enableLinkProtection": {
+                "title": "リンクの保護",
+                "helpText": "<strong>このオプションは、公式 API を API モードで使用する場合にのみ機能します。</strong><p>DeepL は、MarkDown のリンクを誤って処理することがあります。</p><p>このオプションをオンにすると、テキスト内のリンク記号 <strong>[]()</strong> が HTML タグに置き換えられ、<code>tag_handling: html</code>が翻訳要求ヘッダに自動的に追加され、DeepL がリンクとそのコンテンツを破壊しないようにします。</p>"
+            }
+        },
+        "chatgpt": {
+            "isStream": {
+                "name": "ストリーミング",
+                "helpText": "<p>データストリーミングの有効化、タイプライター効果</p>"
+            }
+        },
+        "preference": {
+            "title": "プリファレンス",
+            "target": {
+                "title": "目標言語",
+                "helpText": "注：利用可能な翻訳サービスは、ターゲット言語によって異なります。"
+            },
+            "comment_translation_choice": {
+                "title": "コメント欄の翻訳",
+                "services": {
+                    "follow": "プリファレンスに従う",
+                    "deepl": "DeepLの翻訳",
+                    "iflyrec": "宣飛翻訳を聞く",
+                    "youdao": "Youtube翻訳",
+                    "google": "グーグル翻訳",
+                    "caiyun": "カラフルな雲と小さな翻訳",
+                    "openai": "ChatGPT翻訳"
+                }
+            }
+        },
+        "autoTranslation": {
+            "title": "自動翻訳",
+            "enable": "自動翻訳を有効にする",
+            "helpText": "<p><strong>.ttypography、.comments領域</strong></p><p>の短いテキストは、ブラウザウィンドウ</p>の可視領域に入ると自動的に翻訳されます。",
+            "shortTextLength": {
+                "name": "テキストの長さ",
+                "helpText": "<p>テキストの長さがこの値より短い場合、短いテキストとみなされる</p>",
+                "end": "性格",
+                "placeholder": "長さを入力してください"
+            },
+            "allowMixTrans": {
+                "name": "コメント欄の混訳",
+                "helpText": "<p>自動翻訳を行う場合、コメント欄の短いテキストエリアごとに、以下にチェックしたサービスのいずれかを独立してランダムに選択する</p><p>並列翻訳</p>",
+                "checkboxs": {
+                    "deepl": "ディープエル",
+                    "iflyrec": "迅飛",
+                    "youdao": "真理と正義の原則を守る",
+                    "google": "グーグル",
+                    "caiyun": "ばらぐも"
+                }
+            }
+        },
+        "advanced": {
+            "name": "ハイレベル",
+            "mode": {
+                "name": "動作モード",
+                "helpText": "<p>スクリプトがどのように動作するか選択することができます</p><p>○通常モード：一度に全領域を翻訳します</p><p>○分割モード：領域内の各&#60;&#112;&#47;&#62;と&#60;&#105;&#47;&#62;タグを順番に翻訳します</p><p>○選択分割モード：ページ上の任意の&#60;&#112;&#47;&#62;と&#60;&#105;&#47;&#62;タグを自由にクリックして翻訳することができます</p><div style='color:#f44336;'><p><u>注意：分割/選択分割モードは次の問題を生じます：</u></p><p>- 翻訳インターフェースがテキストの文脈全体を知ることができなくなり、翻訳の質が低下します。</p><p></strong></p></div>-&#60;&#112;&#47;&#62;、&#60;&#105;&#47;&#62;要素ではないため、翻訳されない/選択できない<strong>セクションが存在する。",
+                "options": {
+                    "0": "ノーマルモード",
+                    "1": "セグメンテーションモデル",
+                    "2": "セグメンテーションモデル"
+                }
+            },
+            "memory": {
+                "name": "過去の翻訳の自動復元",
+                "helpText": "<p><strong>タイトルページ</strong>の翻訳情報をローカルの indexDB に自動保存</p><p>次回アクセス時に翻訳情報をリフレッシュ／自動復元</p>"
+            },
+            "retrans": {
+                "name": "再翻訳にあたって",
+                "helpText": "<p>再翻訳時に「古い結果を閉じる」か「古い結果を片付ける」かを選択する</p>",
+                "options": {
+                    "0": "古い結果を閉じる",
+                    "1": "古い結果を片付ける"
+                }
+            },
+            "transWaitTime": {
+                "name": "待機時間",
+                "helpText": "<p>2つの翻訳リクエスト間の待機間隔を設定します。この設定はグローバルに適用され、各翻訳サービスごとに独立して計算されます</p><p>推奨 200 + ミリ秒</p><p>説明：ChatGPT翻訳はこの設定を無視し、待機しません</p>",
+                "end": "ミリ秒",
+                "placeholder": "間隔を入力してください"
+            },
+            "replaceSymbol": {
+                "name": "LaTeXの置き換え",
+                "helpText": "<p>このスクリプトは、最初にLaTeXの数式をすべて取り出し、プレースホルダを使うことで、数式が翻訳インターフェイスによって壊されないようにします</p><p>置換自体が壊される確率は翻訳サービスによって異なります。詳細はGithub wikiを読んでください</p><p>なお、：ChatGPTで翻訳する場合は、上記の必要はないので、このオプションの影響は受けません</p>",
+                "options": {
+                    "1": "を使用する。",
+                    "2": "を使う。",
+                    "3": "を使用する。"
+                }
+            },
+            "filterTextWithoutEmphasis": {
+                "name": "テキスト中の**記号のフィルタリング",
+                "helpText": " <p>一部の翻訳サービス(DeepLなど)では、MarkDownでの強調の扱いが間違っています <strong>**</strong> </p><p>このため、翻訳がラッパーを見逃すことがあります。強調を削除することもできます(ChatGPTを使用すると無視されます) </p>"
+            }
+        }
+    },
+    "clist": {
+        "title": "クライスト・セッティング",
+        "basics": {
+            "name": "基本的",
+            "notice": "<p>注意：Clistのデータにアクセスするには、有効なログイン認証情報が必要です。：</p><p>以下の<a href='https://clist.by/' target='_blank'> clist.by </a>公式APIキーを入力するか、</p><p>ブラウザでclist.byのウェブサイトにログインしたまま（つまりクッキーが有効な状態）にしておくか、2つの選択肢があります</p>",
+            "key": {
+                "title": "キー",
+                "helpText": "<p>サンプルフォーマット：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ApiKey XXXXXXXXXXXXX</p></div>",
+                "keyPlaceholder": "キーを入力してください"
+            }
+        },
+        "displayRating": {
+            "title": "ショーの評価スコア",
+            "contest": {
+                "name": "コンテスト問題セットページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
+            },
+            "problem": {
+                "name": "タイトルページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
+            },
+            "problemset": {
+                "name": "タイトルページ",
+                "helpText": "<p>データソース clist.by</p><p>公式APIキー</p><p>を提供するか、ブラウザでclist.byにログインしておく必要がある（つまりクッキーが有効）</p>",
+                "badge": "クッキー/APIキー"
+            }
+        },
+        "spoilerProtection": {
+            "title": "ネタバレ防止",
+            "helpText": "<p>評価サブ表示エリアにマウスを移動したときのみ表示</p>"
+        }
+    },
+    "codeEditor": {
+        "title": "モナコ・エディターの設定",
+        "basics": "基本的",
+        "problemPageCodeEditor": {
+            "label": "タイトルページにエディターを追加",
+            "helpText": "タイトルページの下にMonacoエディタを追加すると、コードが自動的に保存され、オンラインコードが実行される。"
+        },
+        "preferences": {
+            "title": "プリファレンス",
+            "isCodeSubmitConfirm": {
+                "label": "コード提出の二次確認",
+                "helpText": "Monacoエディターのタイトルページをクリックすると、誤送信を防ぐためにコード送信時に2度目のポップアップが表示されます。"
+            },
+            "alwaysConsumeMouseWheel": {
+                "label": "マウスのスクロールロック",
+                "helpText": "オンにすると、マウス・ポインタがモナコ・エディタ内にあるとき、マウス・スクロールはエディタの内容のみをスクロールします。"
+            },
+            "submitButtonPosition": {
+                "label": "送信ボタンの位置",
+                "helpText": "コード・テストの場所と送信ボタンを選択する。",
+                "options": {
+                    "bottom": "ボトムス",
+                    "top": "欄干"
+                }
+            }
+        },
+        "onlineCodeExecution": {
+            "title": "オンライン・コード・ラン",
+            "compilerOptions": {
+                "codeforces": "アットコーダー",
+                "wandbox": "ワンドボックス",
+                "rextester": "再試験者"
+            }
+        },
+        "lsp": {
+            "title": "LSP設定",
+            "useLSP": {
+                "label": "LSPの使用",
+                "helpText": "<p>コード補完、コード診断、書式設定、定義への移動などを有効にするためにLSPサーバーに接続</p><p>C++、Python言語をサポート</p><p>OJBetter_Bridgeを起動する必要があります。詳細はGithub wikiをお読みください</p>"
+            },
+            "OJBetter_Bridge_WorkUri": {
+                "label": "仕事の道",
+                "helpText": "<p>OJBetter_Bridgeが配置されているパスを記入する必要があります</p><p>フォワードまたはバックスラッシュのいずれかを使用</p><p>デフォルトパス：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "placeholder": "パスを入力してください。セパレーターは / です。"
+            },
+            "OJBetter_Bridge_SocketUrl": {
+                "label": "サーバー",
+                "helpText": "<p>ローカルマシンのOJBetter_BridgeのサーバーURLを記入する必要があります</p><p>デフォルトURL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>なお、通常はここを変更する必要はありません。変更する必要がある場合は、デフォルトのURL形式と一致させてください</p>",
+                "placeholder": "パスを入力してください。形式に従って厳密に記入することに注意してください。"
+            }
+        },
+        "staticCompletionEnhancement": {
+            "title": "スタティック・コンプリートの強化",
+            "cppCodeTemplateComplete": {
+                "label": "AcWing CPP補完テンプレート",
+                "helpText": "<p><a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>のテンプレート"
+            },
+            "customization": "カスタマイズ",
+            "performanceWarning": "注：静的補完ルールが多すぎるとパフォーマンスに影響することがある"
+        }
+    },
+    "dev": {
+        "title": "セーフガード",
+        "notice": "<p>注：通常、これらの機能を使用する必要はありません。</p><p>関数の意味がよくわからない場合は、操作しないでください！</p>",
+        "load": {
+            "title": "に",
+            "notWaiteLoaded": {
+                "label": "ページのリソースが完全にロードされるのを待つ必要がない",
+                "helpText": "<p></p><p>ページが完全にロードされているにもかかわらず、ローディングのプロンプトメッセージが常に：\"Waiting for page resources to load\" のままである場合は、まずネットワークの問題かどうかを確認する必要があります。</p><p>そうでない場合は、オプションをオンにしてGithubにアクセスして、ブラウザのバージョン情報とオペレーティングシステムの情報を含めてエラーを報告し、分析して再現できるようにしてみてください。</p>"
+            }
+        },
+        "l10n": {
+            "title": "スクリプトのローカライズ",
+            "refreshScrpitCache": {
+                "label": "キャッシュのリフレッシュ",
+                "helpText": "<p></p>スクリプトのローカライズされたデータは、読み込みを高速化するためにローカルにキャッシュされ、自動更新サイクルは1週間です。",
+                "button": "リフレッシュ"
+            }
+        },
+        "indexedDB": {
+            "title": "IndexedDBデータベース",
+            "clear": {
+                "label": "クリアデータ",
+                "helpText": "<p>ローカルのIndexedDBのデータをクリアすると、CFBetterデータベースのすべてのデータがクリアされます。</p>、ご注意ください。",
+                "button": "クリアランス"
+            },
+            "inputOrExport": {
+                "label": "データのインポート/エクスポート",
+                "helpText": "<p>現在の IndexedDB デー タ を エ ク ス ポー ト し た り 、 他の人がエ ク ス ポー ト し たデー タ を イ ン ポー ト し た り す る こ と がで き ます</p>",
+                "export": "導く",
+                "import": "インポート"
+            }
+        },
+        "configuration": {
+            "title": "スクリプト構成",
+            "clear": {
+                "label": "クリアコンフィギュレーション",
+                "helpText": "<p>ローカルのスクリプト構成データをクリアすると、スクリプト構成が初期状態にリセットされるため、注意して行ってください。</p>",
+                "button": "クリアランス"
+            },
+            "inputOrExport": {
+                "label": "データのインポート/エクスポート",
+                "helpText": "<p>現在のスクリプト構成をエクスポートしたり、すでにエクスポートされた構成をインポートすることができます</p>",
+                "export": "導く",
+                "import": "インポート"
+            }
+        }
+    },
+    "preference": {
+        "title": "プリファレンス",
+        "loadingInfo": {
+            "label": "ローディング警告メッセージの表示",
+            "helpText": "<p>ロード情報を表示するをオンにすると、ページがロードされるたびに、ロード情報のプロンプトが上部に表示されます：\"CodeforcesBetter -- xxx\"</p><p>これは、スクリプトが現在どのように動作しているかを確認するために使用されます<strong>もし表示したくない場合は、以下を選択できます。オフ</strong></p><p><u>なお、スクリプトの読み込みに関する問題のフィードバックが必要な場合は、スクリーンショットを撮る前にこのオプションをオンにして、問題を分析できるようにしてください</u></p>"
+        },
+        "targetArea": {
+            "label": "ターゲットエリアの範囲を表示",
+            "helpText": "オンの場合、MD表示/コピー/変換ボタン上にマウスを置くと、そのターゲット領域の範囲が表示されます。"
+        },
+        "iconButtonSize": {
+            "title": "アイコン ボタンのサイズ",
+            "helpText": "<p>翻訳ボタンのサイズ設定</p>",
+            "placeholder": "ボタンサイズを入力してください。"
+        }
+    },
+    "about": {
+        "title": "に対して",
+        "version": "バージョン：",
+        "update": {
+            "title": "更新",
+            "thanksforDevChannelNotice": "<p>テストチャンネルにご参加いただき、Codeforces Better!</p><p>ご質問は<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>まで。",
+            "channel": {
+                "label": "更新チャネル",
+                "helpText": "<p>スクリプトの更新チャンネルを選択できます</p><p>なお、：のベータ版は、Github 上でコミットされるたびに自動的にプッシュされるため、広範なテストが行われておらず、さまざまな未知の問題がある可能性があります。</p><p>Github で問題を提起し、ベータ版</p>の問題についてはベータ版タグを追加してください。",
+                "options": {
+                    "release": "安定版",
+                    "dev": "ベータ版"
+                }
+            },
+            "source": {
+                "label": "更新元",
+                "helpText": "<p>スクリプトのダウンロードソースを選択することができ、それらはすべて同時に更新されます。</p><p>ベータチャンネルはGreasyForkではサポートされていません。</p>",
+                "options": {
+                    "greasyfork": "グレイシーフォーク",
+                    "github": "ギズブ",
+                    "aliyunoss": "アリユンOSS"
+                }
+            }
+        }
+    }
+}
