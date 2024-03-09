@@ -1,0 +1,46 @@
+{
+    "customTestBlock": {
+        "title": "사용자 지정 테스트 데이터(자동 저장)",
+        "onlyCustom": "사용자 지정 데이터만 테스트",
+        "DontShowDiff": "표시되지 않은 불일치",
+        "add": "새로 구축"
+    },
+    "runTestButton": {
+        "initial": "샘플 테스트",
+        "running": "테스트 중",
+        "success": "모두 통과",
+        "error": "모두 실패",
+        "partial": "부분적으로 채택됨"
+    },
+    "resultBlock": {
+        "diff": "차이점 비교：",
+        "diffNote": "설명：질문에 가능한 답이 두 개 이상 있는 경우 정답이 아닐 수 있습니다.",
+        "state": "상태：",
+        "title": {
+            "custom": "사용자 지정 샘플",
+            "sample": "샘플 제목"
+        }
+    },
+    "submitButton": "제출(보고서 등)",
+    "fontSizeInput": "글꼴 크기",
+    "fullscreenButton": "전체 화면",
+    "exitFullscreenButton": "전체 화면 종료",
+    "fixToBottomButton": "하단에 고정",
+    "fixToRightButton": "오른쪽으로 고정",
+    "cancelFixButton": "고정 취소",
+    "lsp": {
+        "connect": "LSP 연결 만들기……",
+        "waitingAnswer": "초기화 확인을 기다리는 중……",
+        "connected": "LSP 연결",
+        "error": "LSP 연결이 끊어짐"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "코드를 코드포스 서버에 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요!",
+            "getResultError": "실행 결과를 요청하는 동안 오류가 발생했습니다. 다시 시도해 주세요!"
+        },
+        "common": {
+            "error": "알 수 없는 오류가 발생했습니다. 다시 시도하세요."
+        }
+    }
+}
