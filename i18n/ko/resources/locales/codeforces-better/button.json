@@ -1,0 +1,52 @@
+{
+    "trans": {
+        "normal": "렌더링",
+        "segment": "세그먼트별 번역",
+        "select": "번역을 위해 선택됨",
+        "running": "번역 중",
+        "wait": "번역 대기 중",
+        "success": "재번역",
+        "error": "번역 오류",
+        "redo": "재번역",
+        "tooLong": "단어 수 제한 초과",
+        "waitMathJax": "MathJax 대기 중"
+    },
+    "md": {
+        "normal": "마크다운 보기",
+        "reduction": "원래 상태로 복원",
+        "disabled": "마크다운 보기는 지원되지 않습니다."
+    },
+    "rawData": {
+        "normal": "원시 데이터",
+        "disabled": "원시 데이터 보기는 지원되지 않습니다."
+    },
+    "queryBalance": {
+        "normal": "잔액 조회",
+        "disabled": "잔액 조회는 지원되지 않습니다.",
+        "loading": "…쿼리에서",
+        "success": "잔액：",
+        "error": "문의 실패"
+    },
+    "fold": {
+        "normal": "접기",
+        "unfold": "시작",
+        "disabled": "접기를 지원하지 않습니다."
+    },
+    "close": {
+        "normal": "응고",
+        "disabled": "마감은 지원되지 않습니다."
+    },
+    "copy": {
+        "normal": "사본 만들기",
+        "copied": "복제",
+        "disabled": "복사는 지원되지 않습니다."
+    },
+    "state": {
+        "wait": "대기 중…",
+        "waitMathJax": "MathJax 대기 중",
+        "loading": "로드 중…",
+        "404": "찾을 수 없음",
+        "error": "뭔가 잘못되었습니다.",
+        "netError": "네트워크 오류"
+    }
+}
