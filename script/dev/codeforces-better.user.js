@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.9
+// @version      1.73.10
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -97,6 +97,8 @@ const OJBetter = {};
 OJBetter.state = {
     /** @type {string} 脚本名*/
     name: GM_info.script.name,
+    /** @type {string} 格式化后的脚本名*/
+    formatName: undefined,
     /** @type {string} 版本号*/
     version: GM_info.script.version,
     /** @type {boolean?} 是否跳过页面加载等待 */
@@ -121,7 +123,7 @@ OJBetter.common = {
     cf_csrf_token: undefined,
     /** @type {Array?} 任务队列 */
     taskQueue: undefined,
-    /** @type {object} CFBetter数据库连接实例*/
+    /** @type {object} OJBetter数据库连接实例*/
     database: undefined
 };
 
@@ -159,7 +161,7 @@ OJBetter.typeOfPage = {
     is_acmsguru: undefined,
     /** @type {boolean?} 是否是旧版LaTeX页面 */
     is_oldLatex: undefined,
-    /** @type {boolean?} 是否是比赛页面 */
+    /** @type {boolean?} 是否是题目集页面 */
     is_contest: undefined,
     /** @type {boolean?} 是否是题目页面 */
     is_problem: undefined,
@@ -444,6 +446,16 @@ OJBetter.supportList = {
 // ------------------------------
 
 /**
+ * 安全地创建jQuery元素
+ * @description 通过jQuery创建HTML字符串时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
+ * @param {string} htmlString - HTML字符串。
+ * @returns jQuery对象
+ */
+const OJB_safeCreateJQElement = function (htmlString) {
+    return $(htmlString.replace(/^\s+/, ""));
+}
+
+/**
  * 将数字或者字符串解析为数字。
  * @memberof OJBetter.common
  * @param {string} val 要解析的字符串
@@ -651,6 +663,10 @@ const OJB_getPreviousVersion = function (currentVersion) {
  */
 async function initVar() {
     const { hostname, href } = window.location;
+    OJBetter.state.formatName = (() => OJBetter.state.name
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, ''))();
     OJBetter.state.lastAnnounceVer = OJB_getGMValue("lastAnnounceVer", "0");
     OJBetter.state.lastReadAnnounceVer = OJB_getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
@@ -1799,6 +1815,10 @@ html:not([data-theme='dark']) .translateDiv {
     box-sizing: border-box;
     font-size: 13px;
 }
+.translate-problem-statement h3 {
+    font-size: 1.3em;
+    font-weight: 700;
+}
 .translate-problem-statement-panel{
     display: flex;
     justify-content: space-between;
@@ -1827,6 +1847,7 @@ html:not([data-theme='dark']) .translateDiv {
     margin-inline-start: 0.8em;
     margin-block-start: 0em;
     margin: 0.5em 0 0 3em;
+    padding-inline-start: 0px;
 }
 .translate-problem-statement li {
     display: list-item;
@@ -1877,6 +1898,7 @@ html:not([data-theme='dark']) .translateDiv {
 .translate-problem-statement p {
     line-height: 20px !important;
     word-wrap: break-word;
+    font-size: 13px !important
 }
 .problem-statement p:last-child {
     margin-bottom: 0px !important;
@@ -1921,6 +1943,8 @@ header .enter-or-register-box, header .languages {
 }
 .OJBetter_setting_menu h3 {
     margin-top: 10px;
+    font-size: 1.4em;
+    font-weight: 700;
 }
 .OJBetter_setting_menu h4 {
     margin: 15px 0px 10px 0px;
@@ -1945,10 +1969,12 @@ header .enter-or-register-box, header .languages {
     border-radius: 4px;
     border: 1px solid #009688;
     color: #009688;
-    font-size: 12px;
+    background-color: #fff;
     padding: 0.5px 4px;
     margin-left: 5px;
     margin-right: auto;
+    line-height: initial;
+    font-weight: initial;
 }
 .OJBetter_setting_menu .missing {
     box-shadow: inset 0px 0px 1px 1px red;
@@ -2093,7 +2119,6 @@ header .enter-or-register-box, header .languages {
     right: 3px;
 }
 .OJBetter_setting_menu .btn-close {
-    cursor: pointer;
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -2105,7 +2130,10 @@ header .enter-or-register-box, header .languages {
     box-sizing: border-box;
     text-align: center;
     color: transparent;
-    font-size: 17px;
+}
+.OJBetter_setting_menu .iconfont {
+    font-size: 10px;
+    font-weight: bolder;
 }
 .OJBetter_setting_menu .btn-close:hover {
     color: #ffffff;
@@ -2277,6 +2305,8 @@ header .enter-or-register-box, header .languages {
 }
 /*设置面板-radio*/
 .OJBetter_setting_menu label {
+    display: block;
+    font-weight: initial;
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
@@ -2687,6 +2717,10 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     border: 1px solid #ffffff;
     color: #697e91;
 }
+.OJBetter_modal h2 {
+    font-size: 1.6em;
+    font-weight: 700;
+}
 .OJBetter_modal .content{
     white-space: nowrap;
     max-height: 500px;
@@ -2758,6 +2792,9 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     box-sizing: content-box;
     box-shadow: 0px 0px 0px 2px #eddbdb4d;
 }
+.OJBetter_contextmenu label {
+    margin: 0px;
+}
 input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     background: #41e49930;
     border: 1px solid green;
@@ -2771,6 +2808,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     width: 100%;
     color: gray;
     font-size: 13px;
+    font-weight: initial;
     padding: 4px;
     align-items: center;
     -webkit-box-sizing: border-box;
@@ -2841,11 +2879,12 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     outline: none;
 }
 #OJBetter_SubmitForm .topDiv {
-    height: 28px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 0px;
+    box-sizing: border-box;
 }
 #OJBetter_SubmitForm .topDiv .topRightDiv {
     height: 100%;
@@ -2867,6 +2906,10 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     flex-wrap: wrap;
     gap: 0px;
     align-items: center;
+}
+#OJBetter_SubmitForm input[type="checkbox"], #OJBetter_SubmitForm label {
+    margin: 0px;
+    font-weight: initial;
 }
 
 /* LSP连接Log */
@@ -2917,7 +2960,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 100;
+    z-index: 2000;
 }
 #OJBetter_editor.bottom{
     position: fixed;
@@ -2925,13 +2968,13 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     left: 0;
     width: 100%;
     height: 50vh;
-    z-index: 100;
+    z-index: 2000;
 }
 .ojb_btn.exit_button_bottom {
     position: fixed;
     bottom: 30px;
     right: 15px;
-    z-index: 100;
+    z-index: 2000;
     height: 28px;
 }
 
@@ -2964,7 +3007,8 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 #OJBetter_submitDiv{
     display: flex;
     padding-top: 15px;
-    height: 35px;
+    height: 50px;
+    box-sizing: border-box;
 }
 #OJBetter_submitDiv >* {
     border-radius: 6px;
@@ -3193,11 +3237,6 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     font-size: 10px;
 }
 
-/* 覆盖网站原本的样式 */
-#footer > div:nth-child(7) {
-    left: 0px !important;
-}
-
 /* 移动设备 */
 @media (max-device-width: 450px) {
     .ojb_btn{
@@ -3239,6 +3278,11 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
         height: 3em;
         font-size: 1em;
     }
+}
+
+/* 覆盖网站原本的样式 */
+#footer > div:nth-child(7) {
+    left: 0px !important;
 }
 `);
 
@@ -3293,6 +3337,7 @@ function addI18nStyles() {
         line-height: 20px;
         padding: 2px 10px;
         border-radius: 8px 8px 0px 0px;
+        box-sizing: content-box;
     }
     .config.missing::before {
         content: "${i18next.t('common.missing.radio', { ns: 'settings' })}";
@@ -3610,16 +3655,16 @@ function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
             contentHtml = md.render(content);
         }
 
-        const dialog = $(`
+        const dialog = OJB_safeCreateJQElement(`
         <dialog class="OJBetter_modal">
             <h2>${title}</h2>
             <div class="content">${contentHtml}</div>
         </dialog>
         `);
-        const buttonbox = $(`<div class="buttons"></div>`);
-        const cancelButton = $(`<button class="cancelButton">${buttons[0]}</button>`)
+        const buttonbox = OJB_safeCreateJQElement(`<div class="buttons"></div>`);
+        const cancelButton = OJB_safeCreateJQElement(`<button class="cancelButton">${buttons[0]}</button>`)
             .addClass("secondary");
-        const continueButton = $(`<button class="continueButton">${buttons[1]}</button>`);
+        const continueButton = OJB_safeCreateJQElement(`<button class="continueButton">${buttons[1]}</button>`);
         if (buttons[0] !== null) buttonbox.append(cancelButton);
         if (buttons[1] !== null) buttonbox.append(continueButton);
         dialog.append(buttonbox);
@@ -3724,11 +3769,11 @@ async function checkScriptVersion() {
             nocache: true
         });
         const versionData = JSON.parse(versionResponse.responseText);
-        const { 'codeforces-better': { dev: version_dev, release: version_release } } = versionData;
+        const { [OJBetter.state.formatName]: { dev: version_dev, release: version_release } } = versionData;
         const baseUrls = {
             greasyfork: 'https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js',
-            github: `https://github.com/beijixiaohu/OJBetter/raw/main/script/${OJBetter.about.updateChannel}/codeforces-better.user.js`,
-            aliyunoss: `https://aowuucdn.oss-accelerate.aliyuncs.com/script/${OJBetter.about.updateChannel}/codeforces-better.user.js`
+            github: `https://github.com/beijixiaohu/OJBetter/raw/main/script/${OJBetter.about.updateChannel}/${OJBetter.state.formatName}.user.js`,
+            aliyunoss: `https://aowuucdn.oss-accelerate.aliyuncs.com/script/${OJBetter.about.updateChannel}/${OJBetter.state.formatName}.user.js`
         };
         /** @type {string} 更新跳转url */
         const updateUrl = baseUrls[OJBetter.about.updateSource];
@@ -3907,8 +3952,8 @@ class LoadingMessage {
 async function getLocalizeWebsiteJson(localizationLanguage) {
     let data = await OJBetter.common.database.localizeSubsData.get(localizationLanguage);
     let url = localizationLanguage === "zh" ?
-        "https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/Codeforces-subs.json" :
-        `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
+        `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/${OJBetter.state.formatName}.json` :
+        `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/${OJBetter.state.formatName}.json`;
     if (data) data = data.data;
     if (!data) {
         // 如果本地没有数据，从远端获取并保存
@@ -4025,9 +4070,9 @@ async function localizeWebsite() {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
         classSelectors.forEach(classSelector => {
             if (value.isStrict) {
-                strictTraverseTextNodes($(`${classSelector}`), value.rules);
+                strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules);
             } else {
-                traverseTextNodes($(`${classSelector}`), value.rules);
+                traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules);
             }
         });
     });
@@ -4047,7 +4092,7 @@ async function localizeWebsite() {
     Object.entries(InputValueReplacements).forEach(([key, value]) => {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class];
         classSelectors.forEach(classSelector => {
-            traverseValueNodes($(`${classSelector}`), value.rules);
+            traverseValueNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules);
         });
     });
 
@@ -4230,9 +4275,9 @@ async function initI18next() {
                         /* options for secondary backend */
                         loadPath: (lng, ns) => {
                             if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
-                                return `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                                return `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/locales/${OJBetter.state.formatName}/${ns}.json`;
                             }
-                            return `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
+                            return `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${lng}/resources/locales/${OJBetter.state.formatName}/${ns}.json`;
                         }
                     }]
                 }
@@ -4529,9 +4574,9 @@ class ConfigManager {
      * 创建控制栏
      */
     createControlBar() {
-        this.controlTip = $(`<div id='${this.prefix}configControlTip' style='color:red;'></div>`);
-        this.config_bar_list = $(`<div class='config_bar_list' id='${this.prefix}config_bar_list'></div>`);
-        this.config_bar_ul = $(`<ul class='config_bar_ul' id='${this.prefix}config_bar_ul'></ul>`);
+        this.controlTip = OJB_safeCreateJQElement(`<div id='${this.prefix}configControlTip' style='color:red;'></div>`);
+        this.config_bar_list = OJB_safeCreateJQElement(`<div class='config_bar_list' id='${this.prefix}config_bar_list'></div>`);
+        this.config_bar_ul = OJB_safeCreateJQElement(`<ul class='config_bar_ul' id='${this.prefix}config_bar_ul'></ul>`);
         this.element.append(this.controlTip);
         this.element.append(this.config_bar_list);
         this.config_bar_list.append(this.config_bar_ul);
@@ -4541,12 +4586,12 @@ class ConfigManager {
      * 创建右键菜单
      */
     createContextMenu() {
-        const menu = $(`<div id='config_bar_menu' style='display: none;'></div>`);
-        const editItem = $(`
+        const menu = OJB_safeCreateJQElement(`<div id='config_bar_menu' style='display: none;'></div>`);
+        const editItem = OJB_safeCreateJQElement(`
         <div class='config_bar_menu_item' id='config_bar_menu_edit'>
             ${i18next.t('contextMenu.edit', { ns: 'translator' })}
         </div>`);
-        const deleteItem = $(`
+        const deleteItem = OJB_safeCreateJQElement(`
         <div class='config_bar_menu_item' id='config_bar_menu_delete'>
             ${i18next.t('contextMenu.delete', { ns: 'translator' })}
         </div>`);
@@ -4573,7 +4618,7 @@ class ConfigManager {
     createListItemElement(text) {
         const id = OJB_getRandomNumber(4);
         const li = $("<li></li>");
-        const radio = $(`<input type='radio' name='${this.prefix}config_item'></input>`)
+        const radio = OJB_safeCreateJQElement(`<input type='radio' name='${this.prefix}config_item'></input>`)
             .attr("value", text)
             .attr("id", id)
             .attr("prev_id", this.lastItemId)
@@ -4581,7 +4626,7 @@ class ConfigManager {
         if (!this.allowChoice) {
             radio.prop("disabled", true);
         }
-        const label = $(`<label for='${id}' class='config_bar_ul_li_text'>${text}</label>`).appendTo(li);
+        const label = OJB_safeCreateJQElement(`<label for='${id}' class='config_bar_ul_li_text'>${text}</label>`).appendTo(li);
 
 
         this.lastItemId = id;
@@ -4630,7 +4675,7 @@ class ConfigManager {
         });
 
         // 添加按钮
-        let addButton = $(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
+        let addButton = OJB_safeCreateJQElement(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
             <span>+ ${i18next.t('add', { ns: 'common' })}</span>
         </li>`);
         this.config_add_button = addButton;
@@ -5451,10 +5496,12 @@ const OJBetter_setting_content_HTML = `
 `;
 
 // 设置界面HTML
-const CFBetterSettingMenu_HTML = `
+const OJBetterSettingMenu_HTML = `
     <dialog class='OJBetter_setting_menu' id='OJBetter_setting_menu'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <div class="OJBetter_setting_container">
             ${OJBetter_setting_sidebar_HTML}
@@ -5559,7 +5606,9 @@ const deeplConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <h4 data-i18n="config:deepl.title"></h4>
         <h5 data-i18n="config:deepl.basic.title"></h5>
@@ -5624,7 +5673,9 @@ const chatgptConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <h4 data-i18n="config:chatgpt.title"></h4>
         <h5 data-i18n="config:chatgpt.basic.title"></h5>
@@ -5689,7 +5740,9 @@ const CompletConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <h4 data-i18n="config:complet.title"></h4>
         <hr>
@@ -5745,22 +5798,33 @@ const CompletConfigEditHTML = `
  * 加载设置按钮面板
  */
 async function initSettingsPanel() {
-    // 添加右上角设置按钮
-    function insertCFBetterSettingButton(location, method) {
+    /**
+     * 添加右上角设置按钮
+     * @param {string} location 位置选择器
+     * @param {string} method 插入方法
+     */
+    function insertOJBetterSettingButton(location, method) {
         $(location)[method](`<button class='ojb_btn OJBetter_setting'>
-        Codeforces Better ${i18next.t('settings', { ns: 'common' })}</button>`);
+        ${OJBetter.state.name} ${i18next.t('settings', { ns: 'common' })}</button>`);
     }
 
-    insertCFBetterSettingButton(".lang-chooser", "before");
-    insertCFBetterSettingButton(".enter-or-register-box", "after");
-    if (OJBetter.typeOfPage.is_completeProblemset) insertCFBetterSettingButton(".lang", "before");
+    /**
+     * ============================================
+     * 该网站插入设置按钮的位置和方式
+     */
+    insertOJBetterSettingButton(".lang-chooser", "before");
+    insertOJBetterSettingButton(".enter-or-register-box", "after");
+    if (OJBetter.typeOfPage.is_completeProblemset) insertOJBetterSettingButton(".lang", "before");
+    /**
+     * ============================================
+     */
 
     const $settingBtns = $(".OJBetter_setting");
     $settingBtns.click(() => {
         $settingBtns.prop("disabled", true).addClass("open");
 
         // 设置面板div
-        const settingMenu = $(CFBetterSettingMenu_HTML)
+        const settingMenu = OJB_safeCreateJQElement(OJBetterSettingMenu_HTML);
         $("body").append(settingMenu);
 
         elementLocalize(settingMenu); // 加载i18n
@@ -6467,7 +6531,7 @@ async function initButtonFunc() {
         if (i.length != 0 && i.hasClass("iconfont")) {
             i.html(icon);
         } else {
-            i = $(`<i>${icon}</i>`);
+            i = OJB_safeCreateJQElement(`<i>${icon}</i>`);
             this.prepend(i);
         }
         return this;
@@ -6502,7 +6566,7 @@ async function initButtonFunc() {
         if (popover_content.length != 0) {
             popover_content.text(text);
         } else {
-            popover_content = $(`<span class="popover_content">${text}</span>`);
+            popover_content = OJB_safeCreateJQElement(`<span class="popover_content">${text}</span>`);
             this.append(popover_content);
         }
         return this;
@@ -6626,18 +6690,18 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     else if (OJBetter.translation.comment.transMode == "2") text = i18next.t('trans.select', { ns: 'button' });
     else text = i18next.t('trans.normal', { ns: 'button' });
 
-    let panel = $(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
-    let viewButton = $(`
+    let panel = OJB_safeCreateJQElement(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
+    let viewButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
             <i class="iconfont">&#xe7e5;</i>
             <span class="popover_content">${i18next.t('md.normal', { ns: 'button' })}</span>
         </button>`);
-    let copyButton = $(`
+    let copyButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
         </button>`);
-    let translateButton = $(`
+    let translateButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
             <i class="iconfont">&#xe6be;</i>
             <span class="popover_content">${text}</span>
@@ -6736,7 +6800,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         } else {
             setViewmd(true);
             var markdown = $(element).getMarkdown();
-            var mdViewContent = $(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            var mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
             $(element).after(mdViewContent);
             $(element).hide();
         }
@@ -6920,7 +6984,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
 
         if (is_comment) {
-            var label = $(`<label><input type="radio" name="translation" value="0">
+            var label = OJB_safeCreateJQElement(`<label><input type="radio" name="translation" value="0">
             <span class="OJBetter_contextmenu_label_text">
             ${i18next.t('translation.preference.comment_translation_choice.services.follow', { ns: 'settings' })}
             </span></label>`);
@@ -6928,7 +6992,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
         translations.forEach(function (translation) {
             if (supportsTargetLanguage(translation.value, OJBetter.translation.targetLang)) {
-                var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
+                var label = OJB_safeCreateJQElement(`<label><input type="radio" name="translation" value="${translation.value}">
                 <span class="OJBetter_contextmenu_label_text">${translation.name}</span></label>`);
                 menu.append(label);
             }
@@ -7117,7 +7181,7 @@ async function multiChoiceTranslation() {
             $this.attr('OJBetter_p_id', id);
             $this.addClass('block_selected');
             // 添加按钮 
-            let menu = $(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
+            let menu = OJB_safeCreateJQElement(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
                 });
@@ -7383,31 +7447,31 @@ class TranslateDiv {
         // 右侧
         this.rightDiv = $('<div>').css('display', 'flex');
         this.panelDiv.append(this.rightDiv);
-        this.debugButton = $(`
+        this.debugButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe641;</i>
             <span class="popover_content">${i18next.t('rawData.normal', { ns: 'button' })}</span>
         </button>`).hide();
         this.rightDiv.append(this.debugButton);
-        this.queryBalanceButton = $(`
+        this.queryBalanceButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe6ae;</i>
             <span class="popover_content">${i18next.t('queryBalance.normal', { ns: 'button' })}</span>
         </button>`).hide();
         this.rightDiv.append(this.queryBalanceButton);
-        this.copyButton = $(`
+        this.copyButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
         </button>`);
         this.rightDiv.append(this.copyButton);
-        this.upButton = $(`
+        this.upButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe601;</i>
             <span class="popover_content">${i18next.t('fold.normal', { ns: 'button' })}</span>
         </button>`);
         this.rightDiv.append(this.upButton);
-        this.closeButton = $(`
+        this.closeButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe614;</i>
             <span class="popover_content">${i18next.t('close.normal', { ns: 'button' })}</span>
@@ -8959,7 +9023,7 @@ async function getRatingFromApi_contest(contestName, contestUrl) {
     return OJB_promiseRetryWrapper(async () => {
         const options = {
             method: "GET",
-            url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${encodeURIComponent(actualContestName)}`,
+            url: `https://clist.by:443/api/v4/contest/?resource_id=1&with_problems=true&event=${encodeURIComponent(actualContestName)}`,
             headers: {
                 "Authorization": OJBetter.clist.authorization
             }
@@ -9014,7 +9078,7 @@ function getClassNameByRating(rating) {
  */
 async function showRatingByClist_problem(problemToolbar) {
     // 题目名
-    let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    const problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
     if (OJBetter.typeOfPage.is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
 
     // 创建Rating按钮元素
@@ -9070,7 +9134,7 @@ async function showRatingByClist_contest() {
     let ratingBadges = {};
     $('.datatable .id.left').each(function () {
         let href = 'https://codeforces.com' + $(this).find('a').attr('href');
-        let badge = $(`<a id="clistButton" class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
+        let badge = OJB_safeCreateJQElement(`<a id="clistButton" class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
         $(this).find('a').after(badge);
         ratingBadges[href] = badge;
     });
@@ -9131,8 +9195,8 @@ async function showRatingByClist_problemset() {
         let problem_url = $firstDiv.find('a').attr('href');
         problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
 
-        const ratingBadge = $(`<a id="clistButton" class="ratingBadge"></a>`);
-        const rating = $(`<span class="rating">${i18next.t('state.wait', { ns: 'button' })}</span>`);
+        const ratingBadge = OJB_safeCreateJQElement(`<a id="clistButton" class="ratingBadge"></a>`);
+        const rating = OJB_safeCreateJQElement(`<span class="rating">${i18next.t('state.wait', { ns: 'button' })}</span>`);
         ratingBadge.append(rating);
         $($tds[0]).find('a').after(ratingBadge);
         ratingBadges.push({ ratingBadge, rating, problem, problem_url });
@@ -9295,11 +9359,11 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.cf_csrf_token);
 
     // 顶部区域
-    let topDiv = $(`<div class="topDiv"></div>`);
+    let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
     let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 语言选择
     selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
     topDiv.append(selectLang);
-    let topRightDiv = $(`<div class="topRightDiv"></div>`);
+    let topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
     topDiv.append(topRightDiv);
     formDiv.append(topDiv);
 
@@ -9335,7 +9399,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     editorDiv.append(monaco);
 
     // 自定义调试
-    let customTestDiv = $(`
+    let customTestDiv = OJB_safeCreateJQElement(`
         <details id="customTestBlock">
             <summary >${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
             <div id="customTests" style="min-height: 30px;"></div>
@@ -9362,13 +9426,13 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
     submitDiv.append(CompilerArgsInput);
 
-    let runButton = $(`
+    let runButton = OJB_safeCreateJQElement(`
         <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe6c1;</i>
             <span class="popover_content">${i18next.t('runTestButton.initial', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    let submitButton = $(`
+    let submitButton = OJB_safeCreateJQElement(`
         <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
             <i class="iconfont">&#xe633;</i>
             <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
@@ -9381,11 +9445,11 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     }
 
     formDiv.append(submitDiv);
-    let CompilerSetting = $(`
+    let CompilerSetting = OJB_safeCreateJQElement(`
         <div id="CompilerSetting"></div>
     `);
     formDiv.append(CompilerSetting);
-    let statePanel = $(`
+    let statePanel = OJB_safeCreateJQElement(`
         <div id="statePanel"></div>
     `);
     formDiv.append(statePanel);
@@ -9666,7 +9730,7 @@ async function createMonacoEditor(language, form, support) {
         OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
         // 调整字体大小
-        let changeSize = $(`
+        let changeSize = OJB_safeCreateJQElement(`
         <div class="ojb_btn ojb_btn_popover top">
             <input type="number" id="fontSizeInput" value="${OJBetter.monaco.setting.fontsize}">
             <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
@@ -9679,7 +9743,7 @@ async function createMonacoEditor(language, form, support) {
         });
 
         // 全屏按钮
-        let fullscreenButton = $(`
+        let fullscreenButton = OJB_safeCreateJQElement(`
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe606;</i>
             <span class="popover_content">${i18next.t('fullscreenButton', { ns: 'codeEditor' })}</span>
@@ -9689,7 +9753,7 @@ async function createMonacoEditor(language, form, support) {
         fullscreenButton.on('click', enterFullscreen);
 
         // 固定到底部按钮
-        let fixToBottomButton = $(`
+        let fixToBottomButton = OJB_safeCreateJQElement(`
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe607;</i>
             <span class="popover_content">${i18next.t('fixToBottomButton', { ns: 'codeEditor' })}</span>
@@ -9699,7 +9763,7 @@ async function createMonacoEditor(language, form, support) {
         fixToBottomButton.on('click', fixToBottom);
 
         // 固定到右侧按钮
-        let fixToRightButton = $(`
+        let fixToRightButton = OJB_safeCreateJQElement(`
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe605;</i>
             <span class="popover_content">${i18next.t('fixToRightButton', { ns: 'codeEditor' })}</span>
@@ -9746,7 +9810,7 @@ async function createMonacoEditor(language, form, support) {
             editor.addClass('fullscreen');
 
             // 取消按钮
-            let cancelButton = $(`
+            let cancelButton = OJB_safeCreateJQElement(`
                 <button type="button" class="ojb_btn ojb_btn_popover top primary exit_button_bottom">
                     <i class="iconfont">&#xe60b;</i>
                     <span class="popover_content">${i18next.t('exitFullscreenButton', { ns: 'codeEditor' })}</span>
@@ -9779,7 +9843,7 @@ async function createMonacoEditor(language, form, support) {
             });
             $('body').append(blankSpace);
 
-            let cancelButton = $(`
+            let cancelButton = OJB_safeCreateJQElement(`
                 <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
                     <i class="iconfont">&#xe625;</i>
                     <span class="popover_content">${i18next.t('cancelFixButton', { ns: 'codeEditor' })}</span>
@@ -9842,7 +9906,7 @@ async function createMonacoEditor(language, form, support) {
             const editor = $('#OJBetter_editor').prependTo(blankSpace).addClass('right-side');
 
             // 取消按钮
-            const cancelButton = $(`
+            const cancelButton = OJB_safeCreateJQElement(`
                 <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
                     <i class="iconfont">&#xe625;</i>
                     <span class="popover_content">${i18next.t('cancelFixButton', { ns: 'codeEditor' })}</span>
@@ -9864,7 +9928,7 @@ async function createMonacoEditor(language, form, support) {
         const cancelFixingToRight = (sidebar, styleElement, editor, cancelButton) => {
             sidebar.show();
             // 移回来
-            editor.insertAfter('#sourceCodeTextarea').removeClass('right-side');
+            editor.insertAfter(form.sourceDiv).removeClass('right-side');
 
             // 移除包装
             $('#body').unwrap();
@@ -9881,12 +9945,12 @@ async function createMonacoEditor(language, form, support) {
         const code = await getCode(nowUrl);
         if (code) {
             OJBetter.monaco.editor.setValue(code); // 恢复代码
-            $('#sourceCodeTextarea').val(code);
+            form.sourceDiv.val(code);
         }
         OJBetter.monaco.editor.onDidChangeModelContent(async () => {
-            // 将monaco editor的内容同步到sourceCodeTextarea
+            // 将monaco editor的内容同步到sourceDiv
             const code = OJBetter.monaco.editor.getValue();
-            $('#sourceCodeTextarea').val(code);
+            form.sourceDiv.val(code);
             await saveCode(nowUrl, code);
         });
     })();
@@ -9944,7 +10008,7 @@ async function createMonacoEditor(language, form, support) {
     /**
      * LSP连接状态指示
      */
-    const lspStateButton = $(`
+    const lspStateButton = OJB_safeCreateJQElement(`
     <div id="lspStateDiv" class="ojb_btn ojb_btn_popover top loading">
         <i class="iconfont">&#xe658;</i>
         <span class="popover_content">${i18next.t('lsp.connect', { ns: 'codeEditor' })}</span>
@@ -9955,7 +10019,7 @@ async function createMonacoEditor(language, form, support) {
     });
     form.topRightDiv.prepend(lspStateButton);
 
-    const LSPLogDiv = $(`
+    const LSPLogDiv = OJB_safeCreateJQElement(`
     <dialog id="LSPLog" style="display: none;">
         <button class="ojb_btn">${i18next.t('close', { ns: 'common' })}</button>
         <div id="LSPLogList" style="overflow: auto;"></div>
@@ -10009,7 +10073,8 @@ async function createMonacoEditor(language, form, support) {
     var languageSocket = new WebSocket(url + language);
     OJBetter.monaco.lsp.socket.push(languageSocket);
     var languageSocketState = false;
-    var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
+    var responseHandlers = new Map(); // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
+
     languageSocket.onopen = () => {
         languageSocketState = true;
         lspStateButton.setButtonPopover(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
@@ -10032,10 +10097,13 @@ async function createMonacoEditor(language, form, support) {
             OJBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
         } else if (message.id === 0 && message.error) {
             pushLSPLogMessage("warn", `Initialization ${i18next.t('lsp.state.error', { ns: 'logMessage' })}`);
-        } else if (message.id !== undefined && responseHandlers[message.id]) {
+        } else if (message.id !== undefined && responseHandlers.has(message.id)) {
             // 如果收到带有id字段的消息，则回传给对应的事件触发函数
-            responseHandlers[message.id](message);
-            delete responseHandlers[message.id]; // 删除已处理的事件触发函数
+            const handler = responseHandlers.get(message.id);
+            if (handler) {
+                handler(message);
+                responseHandlers.delete(message.id); // 删除已处理的事件触发函数
+            }
         } else if (message.method == "textDocument/publishDiagnostics") {
             // 接收代码诊断推送
             OJBetter_monaco.updateMarkers(message);
@@ -10092,7 +10160,7 @@ async function createMonacoEditor(language, form, support) {
             await waitForInitialized(); // 等待initialized为真
         }
         if (requiresResponse) {
-            responseHandlers[data.id] = callback; // 将事件触发函数与id关联起来
+            responseHandlers.set(data.id, callback) // 将事件触发函数与id关联起来
         }
         if (!languageSocketState) await waitForLanguageSocketState();
         languageSocket.send(JSON.stringify(data));
@@ -11165,9 +11233,13 @@ function changeMonacoLanguage(form) {
 
 // 收集样例数据
 function getTestData() {
-    var testData = {};
+    let testData = {};
 
-    // 从pre中获取文本信息
+    /**
+     * 从pre中获取文本信息
+     * @param {JQuery<HTMLElement>} node 元素
+     * @returns {string} 文本信息
+     */
     function getTextFromPre(node) {
         let text;
         if (node.find("br").length > 0) {
@@ -11215,7 +11287,7 @@ function CustomTestInit() {
         var sampleDiv = $('<div class="sampleDiv">');
         var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
         var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
-        var deleteCustomTest = $(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
+        var deleteCustomTest = OJB_safeCreateJQElement(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
         sampleDiv.append(deleteCustomTest);
         sampleDiv.append(inputTextarea);
         sampleDiv.append(outputTextarea);
@@ -11278,9 +11350,9 @@ function CustomTestInit() {
             if (data.samples && data.samples.length > 0) {
                 data.samples.forEach(function (item, index) {
                     var sampleDiv = $('<div class="sampleDiv">');
-                    var inputTextarea = $(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
-                    var outputTextarea = $(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
-                    var deleteCustomTest = $(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
+                    var inputTextarea = OJB_safeCreateJQElement(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
+                    var outputTextarea = OJB_safeCreateJQElement(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
+                    var deleteCustomTest = OJB_safeCreateJQElement(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
 
                     inputTextarea.val(item.input);
                     outputTextarea.val(item.output);
@@ -11544,7 +11616,7 @@ function wandboxCompilerArgsChange(nowSelect) {
             $("#CompilerBox").remove();
             let div = $("<div id='CompilerBox'></div>");
 
-            let display_compile_command = $(`<input id='${Compiler.name}' value='${Compiler['display-compile-command']}' style="display:none;"}></input>`);
+            let display_compile_command = OJB_safeCreateJQElement(`<input id='${Compiler.name}' value='${Compiler['display-compile-command']}' style="display:none;"}></input>`);
             div.append(display_compile_command);
 
             let switches = Compiler.switches;
@@ -11552,7 +11624,7 @@ function wandboxCompilerArgsChange(nowSelect) {
                 let switche = switches[i];
 
                 if (switche.type == "single") {
-                    let single = $(`
+                    let single = OJB_safeCreateJQElement(`
                     <div>
                         <input type='checkbox' id='${switche.name}' value='${switche['display-flags']}' ${switche.default ? 'checked' : ''}></input>
                         <label for='${switche.name}'>${switche['display-name']}</label>
@@ -11563,7 +11635,7 @@ function wandboxCompilerArgsChange(nowSelect) {
                         refreshCompilerArgs();
                     });
                 } else if (switche.type == "select") {
-                    let select = $(`<select id='${switche.name}'></select>`);
+                    let select = OJB_safeCreateJQElement(`<select id='${switche.name}'></select>`);
                     select.data('previousValue', switche.options[0]['display-flags']);
                     div.append(select);
                     for (let i = 0; i < switche.options.length; i++) {
@@ -11580,14 +11652,14 @@ function wandboxCompilerArgsChange(nowSelect) {
             }
 
             if (Compiler['compiler-option-raw'] == true) {
-                let textarea = $(`<textarea id="compiler_option_raw" placeholder="Raw compiler options" style="resize: vertical;"></textarea>`);
+                let textarea = OJB_safeCreateJQElement(`<textarea id="compiler_option_raw" placeholder="Raw compiler options" style="resize: vertical;"></textarea>`);
                 div.append(textarea);
                 textarea.on('input', function () {
                     refreshCompilerArgs();
                 });
             }
             if (Compiler['runtime-option-raw'] == true) {
-                let textarea = $(`<textarea id="runtime_option_raw" placeholder="Raw runtime options" style="resize: vertical;"></textarea>`);
+                let textarea = OJB_safeCreateJQElement(`<textarea id="runtime_option_raw" placeholder="Raw runtime options" style="resize: vertical;"></textarea>`);
                 div.append(textarea);
                 textarea.on('input', function () {
                     refreshCompilerArgs();
@@ -11755,13 +11827,13 @@ const TestCaseContentType = {
 // 样例测试状态类
 class TestCaseStatus {
     constructor(item, prefix) {
-        this.testCase = $(`<div class="test-case"></div>`);
+        this.testCase = OJB_safeCreateJQElement(`<div class="test-case"></div>`);
         this.item = item;
         this.prefix = prefix;
-        this.titleElement = $(`<div class="test-case-title">${this.prefix} ${this.item}</div>`);
-        this.statusElement = $(`<div class="test-case-status"></div>`);
-        this.contentElement = $(`<div class="test-case-content"></div>`);
-        this.judgeElement = $(`<div class="test-case-judge"></div>`);
+        this.titleElement = OJB_safeCreateJQElement(`<div class="test-case-title">${this.prefix} ${this.item}</div>`);
+        this.statusElement = OJB_safeCreateJQElement(`<div class="test-case-status"></div>`);
+        this.contentElement = OJB_safeCreateJQElement(`<div class="test-case-content"></div>`);
+        this.judgeElement = OJB_safeCreateJQElement(`<div class="test-case-judge"></div>`);
         this.testCase.append(this.titleElement, this.statusElement, this.contentElement, this.judgeElement);
         $('#statePanel').append(this.testCase);
         this.setStatus('Queued', 'queued');
@@ -11788,13 +11860,13 @@ class TestCaseStatus {
             switch (type) {
                 case TestCaseContentType.TERMINAL:
                     // 为TERMINAL类型创建一个新的终端容器
-                    contentElement = $(`<div class="terminal-container" style="overflow: auto;"></div>`);
+                    contentElement = OJB_safeCreateJQElement(`<div class="terminal-container" style="overflow: auto;"></div>`);
                     break;
                 case TestCaseContentType.DIFF:
                 case TestCaseContentType.NO_DIFF:
                     // 为DIFF和NO_DIFF类型创建相应的内容元素，并添加差异说明
                     const className = type === TestCaseContentType.DIFF ? "output_diff" : "output_no_diff";
-                    contentElement = $(`<pre class="${className}">${content}</pre>`);
+                    contentElement = OJB_safeCreateJQElement(`<pre class="${className}">${content}</pre>`);
                     appendDiffNote();
                     break;
                 default:
@@ -11814,7 +11886,7 @@ class TestCaseStatus {
 
         // 添加差异说明
         const appendDiffNote = () => {
-            const diffNote = $(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
+            const diffNote = OJB_safeCreateJQElement(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
             this.testCase.append(diffNote);
         };
 
@@ -12638,7 +12710,7 @@ async function ensureJQueryIsLoaded(retryDelay = 50) {
 
 /**
  * 加载必须的函数
- * @returns {Promise<LoadingMessage>} 加载提示信息
+ * @returns {Promise} 加载提示信息
  */
 async function loadRequiredFunctions() {
     await initVar();// 初始化全局变量
