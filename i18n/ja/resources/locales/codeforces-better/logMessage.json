@@ -1,0 +1,19 @@
+{
+    "lsp": {
+        "socket": {
+            "open": "接続確立",
+            "close": "接続クローズ",
+            "error": "接続エラー"
+        },
+        "state": {
+            "finished": "果たす",
+            "running": "ランニング",
+            "error": "エラー発生"
+        },
+        "server": {
+            "regist": "登録オーダー",
+            "receive": "受信データ",
+            "transmit": "モナコに渡されたデータ↓。"
+        }
+    }
+}
