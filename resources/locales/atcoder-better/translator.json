@@ -1,0 +1,36 @@
+{
+    "servers": {
+        "deepl": "DeepL",
+        "iflyrec": "讯飞听见",
+        "youdao": "有道",
+        "google": "谷歌",
+        "caiyun": "彩云小译",
+        "openai": "ChatGPT"
+    },
+    "transingTip": {
+        "basic": "正在使用 {{server}} 翻译中……请稍等",
+        "deeplApi":"正在使用 DeepL API 翻译中……请稍等\n\n应用的配置： {{deepl_configName}}\n\n",
+        "openai": "正在使用 ChatGPT 翻译中……请稍等\n\n应用的配置： {{openai_name}}\n\n",
+        "openai_isStream": "当前未开启流式传输，你需要等待很长时间才能看到结果，请耐心等待"
+    },
+    "error": {
+        "basic": "\n\n请重试或更换翻译接口。\n\n点击右上角工具栏的原始数据按钮以查看更多信息",
+        "unexpected": "**:( 翻译遇到了问题：** 发生了意外的错误\n\n请重试或更换翻译接口",
+        "youdao413": "413 Request Entity Too Large\n\n请求文本长度超出了有道翻译接口的限制，请更换其他翻译接口",
+        "deepl429": "请求过于频繁，请稍后再试\n\n这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，\n\nDeepL对翻译字数和频率是有限制的，\n\n这是暂时的，一段时间后就恢复正常了",
+        "GMRequest": "**:( 翻译遇到了问题：** 从接口获取数据时发生了错误",
+        "processer": "**:( 翻译遇到了问题：** 获取目标数据时发生了错误 \n\n响应数据可能存在错误",
+        "checkResponse": "**:( 翻译遇到了问题：** 检查响应数据时发生了意外的错误"
+    },
+    "chatgpt_prompt": {
+        "common": "请将下面的文本翻译为{{transTargetLang}}，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的LaTeX公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n",
+        "notLaTeX": "请将下面的文本翻译为{{transTargetLang}}，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的【】、HTML标签本身以及其中的内容不翻译不变动，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n"
+    },
+    "translateDiv": {
+        "topTextSuffix": " 翻译"
+    },
+    "contextMenu": {
+        "edit": "编辑",
+        "delete": "删除"
+    }
+}

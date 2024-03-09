@@ -1,0 +1,702 @@
+{
+    "version": "1.0.2",
+    "commonReplacements": {
+        ".header-inner": {
+            "class": [
+                ".header-inner"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト": "比赛",
+                "Jobs": "工作",
+                "検定": "考试",
+                "CareerDesign": "职业规划",
+                "マイプロフィール": "我的个人资料",
+                "基本設定": "基本设置",
+                "アイコン設定": "头像设置",
+                "パスワードの変更": "修改密码",
+                "お気に入り管理": "收藏夹管理",
+                "ログアウト": "注销"
+            }
+        },
+        ".a-title_ttl": {
+            "class": [
+                ".a-title_ttl"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト": "比赛",
+                "最新コンテスト": "最新比赛",
+                "ランキング": "排名",
+                "お知らせ": "公告",
+                "AtCoderJobs": "AtCoder工作",
+                "検定": "考试",
+                "アルゴリズム実技検定についてはこちらから！": "有关算法实际技能考试，请点击此处！",
+                "過去問公開中": "过去问题公开中"
+            }
+        },
+        ".a-btnarea": {
+            "class": [
+                ".a-btnarea"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "詳細を見る": "查看详情",
+                "求人情報を見る": "查看职位信息",
+                "採用担当者の方へ": "致招聘负责人",
+                "詳細ページ": "详细页面",
+                "マイページ": "我的页面",
+                "コンテスト一覧": "比赛列表",
+                "すべて表示": "显示全部",
+                "殿堂入り": "名人堂",
+                "お知らせ一覧": "公告列表"
+            }
+        },
+        ".keyvisual-grid": {
+            "class": [
+                ".keyvisual-grid"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "解けた！を": "解决了！",
+                "世界に届けたい。": "给全世界。",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder是世界最高水平的竞技编程网站。",
+                "リアルタイムのオンラインコンテストで競い合うことや、": "您可以参加实时在线比赛，",
+                "5,000以上の過去問にいつでもチャレンジすることができます。": "随时挑战超过5,000道历年题目。"
+            }
+        },
+        "strictTraverseTextNodes": {
+            "class": [
+                ".panel-title",
+                "h3",
+                ".h3",
+                "h4"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト": "比赛",
+                "開催中のコンテスト": "进行中的比赛",
+                "常設中のコンテスト": "长期持续的比赛",
+                "予定されたコンテスト": "计划中的比赛",
+                "終了後のコンテスト(最新 10 件)": "已结束的比赛（最新10场）",
+                "終了後のコンテスト(最新 50 件)": "已结束的比赛（最新10场）",
+                "ランキング": "排名",
+                "インフォメーション": "信息",
+                "過去のコンテスト": "过去的比赛",
+                "過去のコンテストを検索": "搜索过去的比赛"
+            }
+        },
+        "traverseTextNodes": {
+            "class": [
+                ".header-sub_nav",
+                ".h3"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ホーム": "主页",
+                "コンテスト一覧": "比赛列表",
+                "ランキング": "排名",
+                "便利リンク集": "实用链接"
+            }
+        },
+        "traverseTextNodes2": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "現在のコンテスト": "现在的比赛",
+                "過去のコンテスト": "过去的比赛",
+                "Algorithm": "算法",
+                "Heuristic": "启发式",
+                "アクティブユーザのみ": "仅活跃用户",
+                "全ユーザ": "所有用户",
+                "新エディタテストコンテスト": "新编辑器测试比赛",
+                "日本語": "日语",
+                "English": "英语",
+                "bjxh (Guest)": "bjxh（游客）",
+                "マイプロフィール": "个人资料",
+                "基本設定": "基本设置",
+                "アイコン設定": "头像设置",
+                "パスワードの変更": "修改密码",
+                "お気に入り管理": "收藏管理",
+                "ログアウト": "登出",
+                "トップ": "首页",
+                "問題": "问题",
+                "質問": "提问",
+                "提出": "提交",
+                "提出結果": "提交结果",
+                "すべての提出": "所有提交",
+                "自分の提出": "我的提交",
+                "自分の得点状況": "我的得分情况",
+                "バーチャル順位表": "虚拟排名表",
+                "順位表": "排名表",
+                "チーム戦排名表": "团队比赛排名表",
+                "コードテスト": "代码测试",
+                "解説": "题解",
+                "すべての提交": "所有提交",
+                "自分の提交": "我的提交",
+                "プロフィール": "个人资料",
+                "コンテスト成績表": "比赛成绩表",
+                "設定": "设置",
+                "メールアドレスの更新・認証": "更新/认证电子邮件地址",
+                "收藏管理": "收藏管理",
+                "ユーザ名照会": "用户名查询",
+                "ユーザ名の変更": "更改用户名",
+                "退会": "注销",
+                "その他": "其他"
+            }
+        },
+        "#collapse-search": {
+            "class": [
+                "#collapse-search"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rated対象": "限定范围",
+                "ABCクラス": "ABC类别",
+                "(Rated上限: 1999)": "(Rated上限: 1999)",
+                "ARCクラス": "ARC类别",
+                "(Rated上限: 2799)": "(Rated上限: 2799)",
+                "AGCクラス": "AGC类别",
+                "(Rated上限なし)": "(无Rated上限)",
+                "AHCクラス": "AHC类别",
+                "カテゴリ": "分类",
+                "全て": "全部",
+                "AtCoder Typical Contest": "AtCoder经典比赛",
+                "PAST過去問": "PAST历年问题",
+                "非公式コンテスト(unrated)": "非官方比赛（未评级）",
+                "JOI過去問": "JOI历年问题",
+                "企業コンテスト決勝": "企业比赛决赛",
+                "企業オープンコンテスト(rated)": "企业公开比赛（已评级）",
+                "企業オープンコンテスト(unrated)": "企业公开比赛（未评级）",
+                "企業ABC": "企业ABC",
+                "企業ARC": "企业ARC",
+                "ヒューリスティック": "启发式",
+                "企業ヒューリスティック": "企业启发式",
+                "検索": "搜索",
+                "リセット": "重置",
+                "コンテスト名": "比赛名称"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-text"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "もっと見る": "查看更多",
+                "自分の得点状況": "我的得分情况",
+                "印刷用問題文": "打印问题集",
+                "記事アーカイブ": "文章存档",
+                "詳細": "详情",
+                "すべて表示": "显示全部",
+                "殿堂入り": "名人堂"
+            }
+        },
+        "#footer": {
+            "class": [
+                "#footer",
+                ".footer"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ホーム": "主页",
+                "コンテスト一覧": "比赛列表",
+                "コンテスト": "比赛",
+                "ランキング": "排名",
+                "便利リンク集": "实用链接",
+                "AtCoderJobs": "AtCoder职位",
+                "AtCoderJobsトップ": "AtCoder职位首页",
+                "2024年新卒採用求人一覧": "2024年应届毕业生招聘职位列表",
+                "2025年新卒採用求人一覧": "2025年应届毕业生招聘职位列表",
+                "中途採用求人一覧": "社会人招聘职位列表",
+                "インターン求人一覧": "实习职位列表",
+                "アルバイト求人一覧": "兼职职位列表",
+                "その他求人一覧": "其他职位列表",
+                "AtCoder社による職業紹介求人一覧": "由AtCoder公司提供的职业介绍职位列表",
+                "採用担当者の方へ": "给招聘负责人的信息",
+                "検定": "认证考试",
+                "検定トップ": "认证考试首页",
+                "マイページ": "个人主页",
+                "AtCoderCareerDesign": "AtCoder职业设计",
+                "キャリアデザイントップ": "职业设计首页",
+                "About": "关于",
+                "企業情報": "企业信息",
+                "よくある質問": "常见问题",
+                "お問い合わせ": "联系我们",
+                "資料請求": "索取资料",
+                "利用規約": "使用规范",
+                "ルール": "规则",
+                "用語集": "术语表",
+                "プライバシーポリシー": "隐私政策",
+                "個人情報保護方針": "个人信息保护政策",
+                "Copyright Since 2012 (C) AtCoder Inc. All rights reserved.": "版权所有 © 2012年起 AtCoder公司。保留所有权利。"
+            }
+        },
+        ".editor-buttons-jp": {
+            "class": [
+                ".editor-buttons"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ファイルを開く": "打开文件",
+                "カスタマイズ": "自定义",
+                "エディタ切り替え": "切换编辑器",
+                "高さ自動調節": "自动调整高度"
+            }
+        },
+        ".control-label-jp": {
+            "class": [
+                ".control-label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "問題": "问题",
+                "言語": "语言",
+                "ソースコード": "源代码",
+                "標準入力": "标注输入",
+                "標準出力": "标准输出",
+                "標準エラー出力": "标准错误输出"
+            }
+        },
+        ".h2, h2": {
+            "class": [
+                ".h2",
+                "h2"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "トップ": "首页",
+                "問題": "问题",
+                "質問": "提问",
+                "提出": "提交",
+                "提出結果": "提交结果",
+                "すべての提交": "所有提交",
+                "自分の提交": "我的提交",
+                "自分の得点状況": "我的得分情况",
+                "バーチャル順位表": "虚拟排名表",
+                "順位表": "排名表",
+                "コードテスト": "代码测试",
+                "解説": "题解"
+            }
+        },
+        ".panel-heading": {
+            "class": [
+                ".panel-heading"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "トップ": "首页",
+                "問題": "问题",
+                "質問": "提问",
+                "提出": "提交",
+                "提出結果": "提交结果",
+                "すべての提交": "所有提交",
+                "自分の提交": "我的提交",
+                "自分の得点状況": "我的得分情况",
+                "バーチャル順位表": "虚拟排名表",
+                "順位表": "排名表",
+                "コードテスト": "代码测试",
+                "解説": "题解"
+            }
+        },
+        ".status": {
+            "class": [
+                ".status"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "開催中": "进行中",
+                "予定": "即将举行",
+                "終了": "已结束"
+            }
+        },
+        "th.text-center": {
+            "class": [
+                "th.text-center"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト名": "比赛名称",
+                "Rated対象": "计分对象",
+                "時間": "时长",
+                "開始時刻": "开始时间"
+            }
+        },
+        ".table-responsive tr th": {
+            "class": [
+                ".table-responsive tr th"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "コンテスト名": "比赛名称",
+                "開始時刻": "开始时间",
+                "ユーザ": "用户"
+            }
+        },
+        ".table-bordered tr th": {
+            "class": [
+                ".table-bordered tr th"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "問題名": "问题名称",
+                "実行時間制限": "执行时间限制",
+                "メモリ制限": "内存限制"
+            }
+        },
+        "#scroll-page-top": {
+            "class": [
+                "#scroll-page-top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ページトップ": "返回顶部"
+            }
+        },
+        ".back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "AtCoderホームへ戻る": "返回 AtCoder 主页"
+            }
+        },
+        ".btn-jp": {
+            "class": [
+                ".btn"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "参加登録": "报名",
+                "バーチャル参加": "虚拟参与"
+            }
+        },
+        ".nav": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Present Contests": "目前的比赛",
+                "Past Contests": "过去的比赛",
+                "Top": "首页",
+                "Tasks": "问题集",
+                "Clarifications": "问题答疑",
+                "Submit": "提交",
+                "Results": "结果",
+                "All Submissions": "所有提交",
+                "My Submissions": "我的提交",
+                "My Score": "我的得分",
+                "Virtual Standings": "虚拟排名",
+                "Standings": "排名",
+                "Custom Test": "自定义测试",
+                "Editorial": "题解",
+                "Discuss": "讨论",
+                "Algorithm": "算法",
+                "Heuristic": "启发式",
+                "Active Users": "活跃用户",
+                "All Users": "所有用户",
+                "Profile": "个人资料",
+                "Competition History": "比赛记录",
+                "General Settings": "常规设置",
+                "Settings": "设置",
+                "Change/Verify Email address": "更改/验证电子邮件地址",
+                "Remind Username": "提醒用户名",
+                "Change Username": "更改用户名",
+                "Delete Account": "删除账户",
+                "Change Photo": "更改头像",
+                "Change Password": "更改密码",
+                "Manage Fav": "管理收藏",
+                "Other": "其他"
+            }
+        },
+        ".dropdown-menu": {
+            "class": [
+                ".dropdown-menu"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "My 个人资料": "我的个人资料",
+                "General Settings": "常规设置",
+                "Change Photo": "更改照片",
+                "Change Password": "更改密码",
+                "Manage Fav": "管理收藏",
+                "Sign Out": "退出登录"
+            }
+        },
+        ".panel-title, .h3": {
+            "class": [
+                ".panel-title",
+                ".h3"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Search in Archive": "搜索存档",
+                "Permanent Contests": "长期持续的比赛",
+                "Upcoming Contests": "即将举行的比赛",
+                "Recent Contests": "最近的比赛",
+                "Ranking": "排行",
+                "Contest Archive": "比赛档案",
+                "Information": "信息",
+                "About the situation where it is difficult to access the contest site": "关于难以访问比赛网站的情况"
+            }
+        },
+        "h3": {
+            "class": [
+                "h3"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Search in Archive": "搜索存档",
+                "Permanent Contests": "长期持续的比赛",
+                "Upcoming Contests": "即将举行的比赛",
+                "Recent Contests": "最近的比赛",
+                "Ranking": "排行",
+                "Contest Archive": "比赛档案",
+                "Information": "信息",
+                "About the situation where it is difficult to access the contest site": "关于难以访问比赛网站的情况"
+            }
+        },
+        ".filter-body-heading": {
+            "class": [
+                ".filter-body-heading"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Rated Range": "限定范围",
+                "Category": "类别",
+                "Search": "搜索"
+            }
+        },
+        ".form-group": {
+            "class": [
+                ".form-group"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Current Password": "当前密码",
+                "New Password": "新密码",
+                "Confirm Password": "确认密码",
+                "Update": "更新",
+                "Contest Name": "比赛名称",
+                "Username": "用户名",
+                "Password": "密码",
+                "Sign In": "登录",
+                "Sign Up": "注册",
+                "Nickname": "昵称",
+                "Country/Region": "国家/地区",
+                "Birth Year": "出生年份",
+                "Affiliation": "机构",
+                "Email Notifications": "邮件通知",
+                "New Email address": "新电子邮件地址",
+                "Request Email address verify": "请求电子邮件地址验证",
+                "I agree.": "我同意。",
+                "Do you live in Japan?": "您是否居住在日本？",
+                "Family Name": "姓氏",
+                "First Name": "名字",
+                "Category": "分类",
+                "College Students (Master or Doctor cource)": "大学生（硕士或博士课程）",
+                "College Students": "大学生",
+                "Technical college/Vocational school/Short-term university": "技术学院/职业学校/短期大学",
+                "High school": "高中",
+                "Junior high school": "初中",
+                "Office worker": "上班族",
+                "Other": "其他",
+                "Organization Name (Company Name or School Name)": "组织名称（公司名称或学校名称）",
+                "Depertment (For Students)": "部门（适用于学生）",
+                "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "您是否有意向或计划在2023年或2024年找工作或换工作？",
+                "Graduation Schedule": "毕业时间表",
+                "I'm already employed.": "我已经就业了。",
+                "Later years": "以后的几年",
+                "I am interested in going into the digital area of Toyota Motor Corporation's operations.": "我对加入丰田汽车公司的数字领域感兴趣。",
+                "Toyota is currently actively recruiting engineers. Would you like to be considered?": "丰田目前正在积极招聘工程师。您有兴趣被考虑吗？",
+                "I'd like to talk to you first.": "我想先和您交谈。",
+                "Department name": "部门名称",
+                "What kind of work do you currently do?": "您目前从事什么样的工作？",
+                "How can the Algorithms Group of the Digital Transformation Office help?": "数字转型办公室的算法组可以如何帮助您？"
+            }
+        },
+        "#category-btn-group": {
+            "class": [
+                "#category-btn-group"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unofficial(unrated)": "非官方（无评级）",
+                "Sponsored Parallel(rated)": "赞助平行（有评级）",
+                "Sponsored Parallel(unrated)": "赞助平行（无评级）",
+                "Sponsored Heuristic Contest": "启发式赞助比赛",
+                "All": "全部",
+                "AtCoder Typical Contest": "AtCoder 经典比赛",
+                "PAST Archive": "PAST 比赛归档",
+                "JOI Archive": "JOI 比赛归档",
+                "Sponsored Tournament": "赞助比赛",
+                "Sponsored ABC": "赞助 ABC",
+                "Sponsored ARC": "赞助 ARC",
+                "Heuristic Contest": "启发式比赛"
+            }
+        },
+        ".control-label": {
+            "class": [
+                ".control-label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Task": "任务",
+                "Language": "语言",
+                "Source Code": "源代码",
+                "Standard Input": "标准输入",
+                "Standard Output": "标准输出",
+                "Standard Error": "标准错误"
+            }
+        },
+        "h4": {
+            "class": [
+                "h4"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Permanent Contests": "永久比赛",
+                "Upcoming Contests": "即将举行的比赛",
+                "Recent Contests": "最近的比赛"
+            }
+        },
+        ".editor-buttons": {
+            "class": [
+                ".editor-buttons"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Open File": "打开文件",
+                "Customize": "个性化",
+                "Toggle Editor": "切换编辑器",
+                "Auto Height": "自动调整高度"
+            }
+        },
+        ".btn": {
+            "class": [
+                ".btn"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Register": "报名",
+                "Virtual Participation": "虚拟参加",
+                "Editorial": "题解"
+            }
+        },
+        "#navbar-collapse": {
+            "class": [
+                "#navbar-collapse"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Home": "主页",
+                "Contest": "比赛",
+                "Ranking": "排名",
+                "Sign Up": "注册",
+                "Sign In": "登录"
+            }
+        },
+        ".label": {
+            "class": [
+                ".label"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Official": "官方"
+            }
+        },
+        ".contest-duration": {
+            "class": [
+                ".contest-duration"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest Duration": "比赛时间",
+                "local time": "当地时间"
+            }
+        }
+    },
+    "InputValueReplacements": {
+        "InputSubmit": {
+            "class": [
+                "input[type='submit']"
+            ],
+            "description": "submit type input",
+            "isStrict": false,
+            "rules": {
+                "Register for virtual participation": "报名虚拟参赛",
+                "Register for practice": "登录以开始练习",
+                "Apply": "应用",
+                "Register": "报名",
+                "Login": "登录",
+                "Run": "运行",
+                "Start virtual contest": "开始虚拟参赛",
+                "Manage invitations": "管理邀请",
+                "Disable manager mode": "临时关闭管理模式",
+                "Enable manager mode": "开启管理模式",
+                "Clone Contest": "克隆比赛",
+                "Submit": "提交",
+                "Save changes": "保存设置",
+                "Filter": "过滤",
+                "Find": "查找",
+                "Save": "保存",
+                "Create Mashup Contest": "创建混搭比赛",
+                "Delete problem": "删除问题",
+                "Restore problem": "恢复问题",
+                "Generate": "生成",
+                "Send": "发送"
+            }
+        },
+        "InputButton": {
+            "class": [
+                "input[type='button']"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Reset": "重置",
+                "Delete contest": "删除比赛",
+                "Preview": "预览"
+            }
+        }
+    }
+}

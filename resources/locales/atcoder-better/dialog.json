@@ -1,0 +1,91 @@
+{
+    "saveSetting": {
+        "title": "配置已更改，是否保存？",
+        "content": "",
+        "buttons": [
+            "不保存",
+            "保存"
+        ]
+    },
+    "update": {
+        "title": "{{scriptName}} 有新版本！",
+        "content": "**版本信息：{{oldVersion}} → {{newVersion}}**\n\n注意：由于缓存刷新和推送延迟，当新版本刚发布时，更新可能会仍然指向旧的版本，\n\n此时你可以选择暂不更新，在本次浏览器会话期间将不再提示更新，直到下一次重新打开浏览器。\n\n或者前往 设置面板 - 关于 切换更新源。",
+        "buttons": [
+            "暂不更新",
+            "更新"
+        ]
+    },
+    "announce": {
+        "title": "已更新至",
+        "prefix": "最近更新日志：",
+        "noContent": "\n\n当前版本没有更新日志",
+        "divContent": "\n\n测试版没有更新日志，[更新 Commits](https://github.com/beijixiaohu/OJBetter/commits/main/)",
+        "buttons": [
+            "我知道了"
+        ]
+    },
+    "skipFold": {
+        "title": "是否跳过折叠块？",
+        "content": "即将翻译的区域中包含折叠块，折叠块可能是代码，通常不需要翻译，现在你需要选择是否跳过这些折叠块：\n\n如果其中有你需要翻译的折叠块，可以稍后再单独点击这些折叠块内的翻译按钮进行翻译\n\n要跳过折叠块吗？（建议选择跳过）",
+        "buttons": [
+            "否",
+            "跳过"
+        ]
+    },
+    "transTextLimits": {
+        "title": "字符数超限! ",
+        "content": "即将翻译的内容共 **{{realTextLength}}** 字符\n\n这超出了当前翻译服务的 **{{textLength}}** 字符上限，请更换翻译服务，或在设置面板中开启“分段翻译”\n\n注意，可能你选择了错误的翻译按钮\n\n由于实现方式，区域中会出现多个翻译按钮，请点击更小的子区域中的翻译按钮\n\n你确定要继续翻译吗？",
+        "buttons": [
+            "仍要翻译",
+            "取消"
+        ]
+    },
+    "submitCode": {
+        "title": "确认提交代码吗",
+        "content": "",
+        "buttons": [
+            "取消",
+            "提交"
+        ]
+    },
+    "isLikelyCodeSnippet": {
+        "title": "是否继续翻译？",
+        "content": "即将翻译的内容似乎为**代码片段**，翻译它可能是无意义的，你确定继续吗？",
+        "buttons": [
+            "是",
+            "否"
+        ]
+    },
+    "isClearDatabase": {
+        "title": "是否清空数据库？",
+        "content": "你确定要清空数据库吗？这是不可恢复的。",
+        "buttons": [
+            "清空",
+            "取消"
+        ]
+    },
+    "isDeleteAllConfigSettings": {
+        "title": "是否重置所有配置？",
+        "content": "你确定要重置所有配置吗？这是不可恢复的。",
+        "buttons": [
+            "重置",
+            "取消"
+        ]
+    },
+    "isImportDatabase": {
+        "title": "是否导入数据库？",
+        "content": "你确定要导入数据库吗？这将导致现有数据库数据被覆盖，这是不可恢复的。",
+        "buttons": [
+            "导入",
+            "取消"
+        ]
+    },
+    "isImportSettings": {
+        "title": "是否导入设置？",
+        "content": "你确定要导入设置吗？这将导致现有设置数据被覆盖，这是不可恢复的。",
+        "buttons": [
+            "导入",
+            "取消"
+        ]
+    }
+}

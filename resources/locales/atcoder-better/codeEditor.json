@@ -1,0 +1,46 @@
+{
+    "customTestBlock": {
+        "title": "自定义测试数据(自动保存)",
+        "onlyCustom": "只测试自定义数据",
+        "DontShowDiff": "不显示差异",
+        "add": "新建"
+    },
+    "runTestButton": {
+        "initial": "样例测试",
+        "running": "测试中",
+        "success": "全部通过",
+        "error": "全部未通过",
+        "partial": "部分通过"
+    },
+    "resultBlock": {
+        "diff": "差异对比：",
+        "diffNote": "说明：如果该题有多个可能的答案，你的答案也可能并不是错误的",
+        "state": "状态：",
+        "title": {
+            "custom": "自定义样例",
+            "sample": "题目样例"
+        }
+    },
+    "submitButton": "提交",
+    "fontSizeInput": "字体大小",
+    "fullscreenButton": "全屏",
+    "exitFullscreenButton": "退出全屏",
+    "fixToBottomButton": "固定到底部",
+    "fixToRightButton": "固定到右侧",
+    "cancelFixButton": "取消固定",
+    "lsp": {
+        "connect": "创建LSP连接……",
+        "waitingAnswer": "等待初始化回执……",
+        "connected": "LSP已连接",
+        "error": "LSP连接已断开"
+    },
+    "compiler": {
+        "official": {
+            "pushError": "提交代码到 codeforces 服务器时发生了错误，请重试",
+            "getResultError": "请求运行结果时发生了错误，请重试"
+        },
+        "common": {
+            "error": "发生了未知的错误，请重试"
+        }
+    }
+}
