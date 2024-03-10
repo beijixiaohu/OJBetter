@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "commonReplacements": {
         ".header-inner": {
             "class": [
@@ -624,7 +624,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "página de inicio",
                 "Contest": "competición (deportes, etc.)",
