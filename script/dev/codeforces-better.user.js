@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.10
+// @version      1.73.11
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1142,114 +1142,123 @@ function handleColorSchemeChange(event) {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) setDarkTheme();
     }
 
+    // 定义全局变量
     GM_addStyle(`
         /* 黑暗支持 */
         html[data-theme=dark]:root {
             color-scheme: light dark;
         }
-        /* 文字颜色1 */
-        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement,
-        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
-        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
-        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
+        /* 颜色 */
+        :root {
+            /* 文字颜色 */
+            --ojb-color-text-primary: #a0adb9; /* 主要文字颜色 */
+            --ojb-color-text-secondary: #9AA4B1; /* 次要文字颜色 */
+            --ojb-color-text-tertiary: #9BA5B2; /* 第三级文字颜色 */
+            --ojb-color-text-success: #43A047; /* 成功状态文字颜色 */
+            --ojb-color-text-highlight: #cbd6e2; /* 高亮文字颜色 */
+            --ojb-color-text-disabled: #506778; /* 禁用状态文字颜色 */
+            --ojb-color-text-icon-success: #2e7d32; /* 成功状态图标颜色 */
+            --ojb-color-text-link: #4b8eda; /* 链接颜色 */
+
+            /* 背景颜色 */
+            --ojb-color-bg-primary: #22272e; /* 主背景颜色 */
+            --ojb-color-bg-secondary: #2d333b; /* 次级背景颜色 */
+            --ojb-color-bg-disabled: #24292e; /* 禁用元素背景颜色 */
+
+            /* 边框颜色 */
+            --ojb-color-border-primary: #48535F; /* 主要边框颜色 */
+            --ojb-color-border-disabled: #404950; /* 禁用状态边框颜色 */
+            --ojb-color-border-dashed-hover: #03A9F4; /* 虚线边框悬浮颜色 */
+            --ojb-color-border-radio-checked: #326154; /* 选中的单选框边框颜色 */
+
+            /* 阴影颜色 */
+            --ojb-shadow-standard: 0px 0px 0.5px 0.5px #3A4048; /* 标准阴影 */
+            --ojb-shadow-menu-modal: 0px 0px 0px 4px #2d333b; /* 菜单和模态框阴影 */
+
+            /* 区域遮罩颜色 */
+            --ojb-overlay-background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px); /* 区域遮罩背景 */
+
+            /* 文字阴影 */
+            --ojb-text-shadow-icon: 1px 1px 0px #2d333b, 1px -1px 0px #2d333b, -1px -1px 0px #2d333b, -1px 1px 0px #2d333b; /* 图标文字阴影 */
+        }
+        /* 边框样式 */
+        :root {
+            /* 边框样式 */
+            --ojb-border-width: 1px; /* 边框宽度 */
+            --ojb-border-style-solid: solid; /* 实线样式 */
+            --ojb-border-style-dashed: dashed; /* 虚线样式 */
+            --ojb-border-radius-small: 4px; /* 小圆角 */
+            --ojb-border-radius-medium: 8px; /* 中圆角 */
+            --ojb-border-radius-large: 12px; /* 大圆角 */
+            
+            /* 组合边框样式 */
+            --ojb-border-solid-primary: var(--ojb-border-width) var(--ojb-border-style-solid) var(--ojb-color-border-primary); /* 主要实线边框 */
+            --ojb-border-dashed: var(--ojb-border-width) var(--ojb-border-style-dashed) var(--ojb-color-border-primary); /* 主要虚线边框 */
+            --ojb-border-dashed-hover: var(--ojb-border-width) var(--ojb-border-style-dashed) var(--ojb-color-border-dashed-hover); /* 悬浮虚线边框 */
+            --ojb-border-solid-disabled: var(--ojb-border-width) var(--ojb-border-style-solid) var(--ojb-color-border-disabled); /* 禁用状态实线边框 */
+        }
+    `);
+
+    // OJBetter界面样式
+    GM_addStyle(`
+        /* 主要文字颜色 */
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, html[data-theme=dark] #pageContent,
-        html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] .setting-name, html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
-        html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
-        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, 
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .OJBetter_setting_menu, 
+        html[data-theme=dark] .help_tip .tip_text,
+        html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
+        html[data-theme=dark] #OJBetter_SubmitForm input, html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select,
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, 
+        html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
         html[data-theme=dark] .popup .content{
-            color: #a0adb9 !important;
+            color: var(--ojb-color-text-primary);
         }
-        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
-            color: #adbac7;
-        }
-        /* 文字颜色2 */
-        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
-        html[data-theme=dark] .lang-chooser,
-        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
-        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
-        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
-        html[data-theme=dark] .user-admin, html[data-theme=dark] .ojb_btn:hover,
-        html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_statusBar,
+        /* 次要文字颜色 */
+        html[data-theme=dark] .ojb_btn:hover, html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest,
         html[data-theme=dark] #customTestBlock, html[data-theme=dark] .OJBetter_setting_list.alert_info{
-            color: #9099a3 !important;
+            color: var(--ojb-color-text-secondary);
         }
         /* 文字颜色3 */
-        html[data-theme=dark] .ojb_btn, html[data-theme=dark] #program-source-text-copy{
-            color: #6385a6;
-        }
-        html[data-theme=dark] input{
-            color: #6385a6 !important;
-        }
-        /* 文字颜色4 */
-        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
-            color: #cbd6e2 !important;
+        html[data-theme=dark] .ojb_btn{
+            color: var(--ojb-color-text-tertiary);
         }
         /* 文字颜色 浅绿 */
         html[data-theme=dark] #SubmitButton{
-            color: #43A047;
+            color: var(--ojb-color-text-success);
         }
-        /* 链接颜色 */
-        html[data-theme=dark] a:link {
-            color: #3989c9;
+        /* 禁止文字颜色 */
+        html[data-theme=dark] .ojb_btn[disabled]{
+            color: var(--ojb-color-text-disabled);
         }
-        html[data-theme=dark] a:visited {
-            color: #8590a6;
-        }
-        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
-            color: #9099a3 !important;
-        }
-        /* 按钮 */
-        html[data-theme=dark] .second-level-menu-list li.backLava {
-            border-radius: 6px;
-            overflow: hidden;
-            filter: invert(1) hue-rotate(.5turn);
-        }
-        html[data-theme=dark] input:hover{
-            background-color: #22272e !important;
-        }
-        /* 背景层次1 */
-        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
-        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
-        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
-        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
+        /* 主要背景层次 */
         html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
-        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
-        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
-        html[data-theme=dark] .ojb_btn:hover,
+        html[data-theme=dark] .ojb_btn:hover, 
+        html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
+        html[data-theme=dark] #OJBetter_SubmitForm input, 
+        html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"], html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"]:checked,
+        html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select, 
         html[data-theme=dark] .OJBetter_setting_sidebar li a.active, html[data-theme=dark] .OJBetter_setting_sidebar li,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
-        html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
-        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
-        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
+        html[data-theme=dark] .popup .content, 
+        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog, html[data-theme=dark] #OJBetter_SubmitForm,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
         html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover,
         html[data-theme=dark] .OJBetter_setting_menu select{
-            background-color: #22272e !important;
+            background-color: var(--ojb-color-bg-primary);
             background-image: none;
         }
-        /* 背景层次2 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
-        html[data-theme=dark] .ojb_btn, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
-        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
-        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        /* 次要背景层次 */
+        html[data-theme=dark] .ojb_btn, 
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
         html[data-theme=dark] .translate-problem-statement-panel,
-        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
-        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
+        html[data-theme=dark] .translate-problem-statement, 
         html[data-theme=dark] .OJBetter_setting_list,
         html[data-theme=dark] .OJBetter_setting_menu hr, 
-        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
-        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .OJBetter_setting_sidebar li a,
+        html[data-theme=dark] .OJBetter_setting_sidebar li a,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] .test-for-popup pre,
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
@@ -1259,63 +1268,208 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::before,
         html[data-theme=dark] .config::before, html[data-theme=dark] .config li.tempConfig_add_button:hover,
         html[data-theme=dark] .OJBetter_setting_menu details, html[data-theme=dark] #config_bar_menu,
-        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button{
-            background-color: #2d333b !important;
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button, 
+        html[data-theme=dark] .OJBetter_setting_menu .badge, html[data-theme=dark] #OJBetter_SubmitForm #SubmitButton{
+            background-color: var(--ojb-color-bg-secondary);
+        }
+        /* 禁止背景层次 */
+        html[data-theme=dark] .ojb_btn[disabled]{
+            background-color: var(--ojb-color-bg-disabled);
         }
         /* 实线边框颜色-圆角 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
-        html[data-theme=dark] .ojb_btn, html[data-theme=dark] .sidebar-menu ul li,
-        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
-        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
-            border: 1px solid #424b56 !important;
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement{
+            border: var(--ojb-border-solid-primary);
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
+        html[data-theme=dark] .ojb_btn, 
         html[data-theme=dark] .OJBetter_setting_list, html[data-theme=dark] .config_bar_list,
-        html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
-        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
+        html[data-theme=dark] label.config_bar_ul_li_text, 
         html[data-theme=dark] .OJBetter_setting_sidebar li, html[data-theme=dark] .OJBetter_setting_menu select,
-        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button,
-        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
-        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
-        html[data-theme=dark] #addCustomTest, 
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_SubmitForm select,
+        html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
+        html[data-theme=dark] #OJBetter_SubmitForm #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
+        html[data-theme=dark] #OJBetter_SubmitForm #addCustomTest, html[data-theme=dark] #OJBetter_SubmitForm #SubmitButton,
+        html[data-theme=dark] .OJBetter_setting_menu input,
+        html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"], html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"]:checked,
+        html[data-theme=dark] .OJBetter_setting_menu textarea,
+        html[data-theme=dark] #OJBetter_SubmitForm input, html[data-theme=dark] #OJBetter_SubmitForm textarea,
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
-        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs, html[data-theme=dark] .OJBetter_setting_menu a,
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] .config::before,
-        html[data-theme=dark] #statePanel, html[data-theme=dark] .test-case{
-            border: 1px solid #424b56 !important;
+        html[data-theme=dark] #statePanel, html[data-theme=dark] .test-case, html[data-theme=dark] .OJBetter_setting_menu .badge{
+            border: var(--ojb-border-solid-primary);
         }
-        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
-            border-bottom: 1px solid #424b56 !important;
-        }
-        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer, html[data-theme=dark] #customTestBlock #customTests{
-            border-top: 1px solid #424b56 !important;
-        }
-        html[data-theme=dark] .topic .content {
-            border-left: 4px solid #424b56 !important;
+        html[data-theme=dark] #customTestBlock #customTests{
+            border-top: var(--ojb-border-solid-primary);
         }
         html[data-theme=dark] .OJBetter_setting_sidebar {
-            border-right: 1px solid #424b56 !important;
+            border-right: var(--ojb-border-solid-primary);
         }
-        html[data-theme=dark] hr {
-            border-color: #424b56 !important;
+        /* 实线边框-禁止 */
+        html[data-theme=dark] .ojb_btn[disabled]{
+            border: var(--ojb-border-solid-disabled);
         }
-        /* 虚线边框颜色 */
-        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
+        /* 虚线边框 */
+        html[data-theme=dark] li#add_button,
         html[data-theme=dark] .OJBetter_setting_menu_label_text{
-            border: 1px dashed #424b56 !important;
+            border: var(--ojb-border-dashed);
         }
+        /* 虚线边框-悬浮 */
         html[data-theme=dark] li#add_button:hover{
-            border: 1px dashed #03A9F4 !important;
-            background-color: #2d333b !important;
-            color: #03A9F4 !important;
+            border: var(--ojb-border-dashed-hover);
+            background-color: var(--ojb-color-bg-secondary);
+            color: var(--ojb-color-border-dashed-hover);
         }
         /* 无边框 */
         html[data-theme=dark] .translate-problem-statement-panel .ojb_btn{
-            border: none !important;
+            border: none;
+        }
+        /* 区域遮罩 */
+        html[data-theme=dark] .overlay::before {
+            background: var(--ojb-overlay-background);
+            color: var(--ojb-color-text-secondary);
+            text-shadow: 0px 0px 2px #000000;
+        }
+        /* 阴影 */
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
+            box-shadow: var(--ojb-shadow-standard);
+        }
+        /* 图标按钮状态样式 */
+        html[data-theme=dark] .ojb_btn_popover.success i:before, html[data-theme=dark] .ojb_btn_popover.success i {
+            color: var(--ojb-color-text-icon-success);
+        }
+        html[data-theme=dark] .ojb_btn_popover i:before {
+            text-shadow: var(--ojb-text-shadow-icon);
+        }
+        /* 其他样式 */
+        html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .OJBetter_modal{
+            box-shadow: var(--ojb-shadow-menu-modal);
+            border: 1px solid var(--ojb-color-bg-secondary);
+        }
+        html[data-theme=dark] input[type="radio"]:checked+.OJBetter_setting_menu_label_text {
+            color: var(--ojb-color-text-primary);
+            border: 1px solid var(--ojb-color-border-radio-checked);
+        }
+        html[data-theme=dark] .alert{
+            text-shadow: none;
+        }
+    `);
+
+    // 网站界面样式
+    GM_addStyle(`
+        /* 文字颜色1 */
+        html[data-theme=dark] body, html[data-theme=dark] .title,
+        html[data-theme=dark] .problem-statement, html[data-theme=dark] #pageContent,
+        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
+        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
+        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
+        html[data-theme=dark] .ace-chrome .ace_gutter, 
+        html[data-theme=dark] .setting-name, 
+        html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
+        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table{
+            color: var(--ojb-color-text-primary) !important;
+        }
+        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
+            color: var(--ojb-color-text-secondary);
+        }
+        /* 文字颜色2 */
+        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
+        html[data-theme=dark] .lang-chooser,
+        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
+        html[data-theme=dark] .user-admin{
+            color: var(--ojb-color-text-secondary) !important;
+        }
+        /* 文字颜色3 */
+        html[data-theme=dark] #program-source-text-copy{
+            color: var(--ojb-color-text-secondary);
+        }
+        html[data-theme=dark] input{
+            color: var(--ojb-color-text-secondary) !important;
+        }
+        /* 文字颜色4 */
+        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
+            color: var(--ojb-color-text-highlight) !important;
+        }
+        /* 链接颜色 */
+        html[data-theme=dark] a:link {
+            color: var(--ojb-color-text-link);
+        }
+        html[data-theme=dark] a:visited {
+            color: var(--ojb-color-text-secondary);
+        }
+        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
+            color: var(--ojb-color-text-secondary) !important;
+        }
+        /* 按钮 */
+        html[data-theme=dark] .second-level-menu-list li.backLava {
+            border-radius: 6px;
+            overflow: hidden;
+            filter: invert(1) hue-rotate(.5turn);
+        }
+        html[data-theme=dark] input:hover{
+            background-color: var(--ojb-color-bg-primary) !important;
+        }
+        /* 背景层次1 */
+        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
+        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
+        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
+        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
+        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
+        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
+        html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
+        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text{
+            background-color: var(--ojb-color-bg-primary) !important;
+            background-image: none;
+        }
+        /* 背景层次2 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
+        html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
+        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
+        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
+        html[data-theme=dark] .datatable,
+        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
+        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .test-for-popup pre{
+            background-color: var(--ojb-color-bg-secondary) !important;
+        }
+        /* 实线边框颜色-圆角 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
+        html[data-theme=dark] .sidebar-menu ul li,
+        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
+        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
+        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
+            border: var(--ojb-border-solid-primary) !important;
+            border-radius: 2px;
+        }
+        /* 实线边框颜色-无圆角 */
+         html[data-theme=dark] .problem-statement .sample-tests .input,
+        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
+        html[data-theme=dark] .test-for-popup pre{
+            border: var(--ojb-border-solid-primary) !important;
+        }
+        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
+            border-bottom: var(--ojb-border-solid-primary) !important;
+        }
+        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer{
+            border-top: var(--ojb-border-solid-primary) !important;
+        }
+        html[data-theme=dark] .topic .content {
+            border-left: 4px solid var(--ojb-color-border-primary) !important;
+        }
+        html[data-theme=dark] hr {
+            border-color: var(--ojb-color-border-primary) !important;
+        }
+        /* 虚线边框 */
+        html[data-theme=dark] .comment-table{
+            border: var(--ojb-border-dashed);
         }
         /* input-output-copier特殊处理 */
         html[data-theme=dark] .html2md-panel.input-output-copier,
@@ -1342,22 +1496,34 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .popup .content pre code{
             filter: invert(1) hue-rotate(.5turn);
         }
-        /* 区域遮罩 */
-        html[data-theme=dark] .overlay::before {
-            background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
-            color: #9099a3;
-            text-shadow: 0px 0px 2px #000000;
-        }
         /* 阴影 */
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
-            box-shadow: 0px 0px 0.5px 0.5px #30353b;
+            box-shadow: var(--ojb-shadow-standard);
         }
         /* 图标按钮状态样式 */
         html[data-theme=dark] .ojb_btn_popover.success i:before, html[data-theme=dark] .ojb_btn_popover.success i {
-            color: #2e7d32;
+            color: var(--ojb-color-text-icon-success);
         }
         html[data-theme=dark] .ojb_btn_popover i:before {
-            text-shadow: 1px 1px 0px #2d333b, 1px -1px 0px #2d333b, -1px -1px 0px #2d333b, -1px 1px 0px #2d333b;
+            text-shadow: var(--ojb-text-shadow-icon);
+        }
+        /* 评测状态文字颜色 */
+        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
+        html[data-theme=dark] .verdict-successful-challenge{
+            color: #0a0 !important;
+        }
+        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
+            color: red !important;
+        }
+        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
+            color: #673ab7 !important;
+        }
+        html[data-theme=dark] .verdict-waiting {
+            color: gray !important;
+        }
+        /* 样例hover样式 */
+        html[data-theme=dark] .problem-statement .darkhighlight {
+          background-color: #455a64 !important;
         }
         /* 其他样式 */
         html[data-theme=dark] .rated-user{
@@ -1383,37 +1549,8 @@ function handleColorSchemeChange(event) {
             background-color: #ef9a9a !important;
             border-radius: 0px;
         }
-        html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .OJBetter_modal{
-            box-shadow: 0px 0px 0px 4px #2d333b;
-            border: 1px solid #2d333b;
-        }
         html[data-theme=dark] .collapsible-topic.collapsed .content .collapsible-topic-options:before{
             background-image: linear-gradient(#22272e00, #22272e);
-        }
-        html[data-theme=dark] .alert{
-            text-shadow: none;
-        }
-        html[data-theme=dark] input[type="radio"]:checked+.OJBetter_setting_menu_label_text {
-            color: #a0adb9 !important;
-            border: 1px solid #326154 !important;
-        }
-        /* 评测状态文字颜色 */
-        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
-        html[data-theme=dark] .verdict-successful-challenge{
-            color: #0a0 !important;
-        }
-        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
-            color: red !important;
-        }
-        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
-            color: #673ab7 !important;
-        }
-        html[data-theme=dark] .verdict-waiting {
-            color: gray !important;
-        }
-        /* 样例hover样式 */
-        html[data-theme=dark] .problem-statement .darkhighlight {
-          background-color: #455a64 !important;
         }
     `);
 })()
@@ -1601,8 +1738,8 @@ dialog::backdrop {
 .ojb_btn[disabled] {
     cursor: not-allowed !important;
     color: rgb(168, 171, 178) !important;
-    border: 1px solid rgb(228, 231, 237) !important;
-    background-color: rgb(255, 255, 255) !important;
+    border: 1px solid #e4e7ed;
+    background-color: #ffffff;
 }
 .ojb_btn:hover {
     color: #409eff;
@@ -2892,6 +3029,14 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     flex-wrap: wrap;
     gap: 0px;
 }
+#OJBetter_SubmitForm input[type="checkbox"], #OJBetter_SubmitForm label {
+    margin: 0px;
+    font-weight: initial;
+}
+#OJBetter_SubmitForm #fontSizeInput {
+    border: none;
+    background-color: #ffffff00;
+}
 
 /* 顶部区域 */
 #OJBetter_SubmitForm .topRightDiv>* {
@@ -3696,32 +3841,32 @@ function OJB_showModal(element) {
 
     if (OJBetter.state.openDialogCount === 1) {
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        // 获取原始的body marginRight，考虑到可能的非数字值，比如auto
-        const originalMarginRight = window.getComputedStyle(document.body).marginRight;
+        // 获取原始的html marginRight，考虑到可能的非数字值，比如auto
+        const originalMarginRight = window.getComputedStyle(document.documentElement).marginRight;
         const marginRightValue = parseFloat(originalMarginRight) || 0; // 将非数字值转换为0
 
         if (scrollbarWidth > 0) {
             // 保存原始的marginRight，并设置新的值以补偿滚动条宽度
-            document.body.style.setProperty('--original-margin-right', originalMarginRight);
-            document.body.style.marginRight = `${marginRightValue + scrollbarWidth}px`;
+            document.documentElement.style.setProperty('--original-margin-right', originalMarginRight);
+            document.documentElement.style.marginRight = `${marginRightValue + scrollbarWidth}px`;
         }
 
         // 保存原始的overflow样式
-        document.body.setAttribute('data-original-overflow', document.body.style.overflow);
-        document.body.style.overflow = 'hidden';
+        document.documentElement.setAttribute('data-original-overflow', document.documentElement.style.overflow);
+        document.documentElement.style.overflow = 'hidden';
     }
 
     const allowScrollIfNeeded = () => {
         OJBetter.state.openDialogCount--;
         if (OJBetter.state.openDialogCount === 0) {
-            // 恢复原始的body marginRight和overflow样式
-            const originalMarginRight = document.body.style.getPropertyValue('--original-margin-right');
-            document.body.style.marginRight = originalMarginRight;
-            document.body.style.removeProperty('--original-margin-right');
+            // 恢复原始的html marginRight和overflow样式
+            const originalMarginRight = document.documentElement.style.getPropertyValue('--original-margin-right');
+            document.documentElement.style.marginRight = originalMarginRight;
+            document.documentElement.style.removeProperty('--original-margin-right');
 
-            const originalOverflow = document.body.getAttribute('data-original-overflow');
-            document.body.style.overflow = originalOverflow;
-            document.body.removeAttribute('data-original-overflow');
+            const originalOverflow = document.documentElement.getAttribute('data-original-overflow');
+            document.documentElement.style.overflow = originalOverflow;
+            document.documentElement.removeAttribute('data-original-overflow');
         }
     };
 
@@ -4773,7 +4918,7 @@ class ConfigManager {
      * @returns {JQuery<HTMLElement>} 返回配置编辑页面
      */
     createConfigHTML() {
-        const configMenu = $(this.configHTML);
+        const configMenu = OJB_safeCreateJQElement(this.configHTML);
         this.settingMenuDiv.after(configMenu);
         OJB_showModal(configMenu);
         OJB_addDraggable(configMenu);
@@ -8797,7 +8942,6 @@ function creatRatingCss(hasBorder = true) {
         dynamicCss += `a.${cssClass}${hoverSelector}, a.${cssClass}${hoverSelector}:link {\n`;
         let borderColor = hasBorder ? cssMap[cssClass] : defaultBorderColor;
         dynamicCss += `    color: ${cssMap[cssClass]} ${OJBetter.clist.ratingHidden ? "!important" : ""};\n`;
-        dynamicCss += `    border: 1px solid ${borderColor} ${OJBetter.clist.ratingHidden ? "!important" : ""};\n`;
         dynamicCss += `}\n`;
     }
     GM_addStyle(dynamicCss);
