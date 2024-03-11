@@ -820,14 +820,18 @@
                 "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Sie können auf eine Zelle doppelklicken (oder die Strg-Taste gedrückt halten und klicken), um den Übertragungsverlauf anzuzeigen oder die Lösung anzugreifen."
             }
         },
-        "demo": {
+        "choose-order": {
             "class": [
-                "Class"
+                ".choose-order"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "SourceText": "TargetText"
+                "Default order": "Standardauftrag",
+                "Submission time": "Zeitpunkt der Einreichung",
+                "Judging Time": "Fragestunde",
+                "Solution Size": "Lösung Größe",
+                "Execution Time": "Ausführungszeit"
             }
         }
     },
