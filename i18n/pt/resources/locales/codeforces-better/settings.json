@@ -226,6 +226,10 @@
             "label": "Adicione o editor à página de título",
             "helpText": "Adicione o editor Monaco por baixo da página de título e o código será guardado automaticamente, permitindo a execução do código em linha"
         },
+        "beautifyPreBlocks": {
+            "label": "Embelezar bloco de código",
+            "helpText": "Embelezando blocos de código em uma página com o Editor Monaco"
+        },
         "preferences": {
             "title": "preferências",
             "isCodeSubmitConfirm": {
