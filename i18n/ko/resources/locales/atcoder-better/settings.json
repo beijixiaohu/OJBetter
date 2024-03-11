@@ -226,6 +226,10 @@
             "label": "제목 페이지에 편집기 추가",
             "helpText": "제목 페이지 아래에 모나코 편집기를 추가하면 코드가 자동으로 저장되어 온라인 코드 실행을 제공합니다."
         },
+        "beautifyPreBlocks": {
+            "label": "코드 블록 미화",
+            "helpText": "모나코 편집기로 페이지의 코드 블록을 아름답게 꾸미기"
+        },
         "preferences": {
             "title": "환경설정",
             "isCodeSubmitConfirm": {
