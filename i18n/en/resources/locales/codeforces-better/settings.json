@@ -226,6 +226,10 @@
             "label": "Add editor to title page",
             "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
         },
+        "beautifyPreBlocks": {
+            "label": "Beautify Code Blocks",
+            "helpText": "Beautifying Code Blocks on a Page with the Monaco Editor"
+        },
         "preferences": {
             "title": "Preferences",
             "isCodeSubmitConfirm": {
