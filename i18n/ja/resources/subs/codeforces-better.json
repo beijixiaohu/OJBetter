@@ -820,14 +820,18 @@
                 "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "一度セルをダブルクリックするか、Ctrlを押したままクリックして提出するか、組み合わせで攻撃することができます。"
             }
         },
-        "demo": {
+        "choose-order": {
             "class": [
-                "Class"
+                ".choose-order"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "SourceText": "TargetText"
+                "Default order": "デフォルトオーダー",
+                "Submission time": "提出時期",
+                "Judging Time": "質問時間",
+                "Solution Size": "ソリューションサイズ",
+                "Execution Time": "実行時間"
             }
         }
     },
