@@ -820,14 +820,18 @@
                 "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "आप प्रतिबद्ध इतिहास देखने या समाधान पर हमला करने के लिए किसी सेल पर डबल-क्लिक कर सकते हैं (या Ctrl-क्लिक कर सकते हैं)।"
             }
         },
-        "demo": {
+        "choose-order": {
             "class": [
-                "Class"
+                ".चुनें-आदेश"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "SourceText": "TargetText"
+                "Default order": "डिफ़ॉल्ट आदेश",
+                "Submission time": "सबमिशन का समय",
+                "Judging Time": "निर्णय करने का समय",
+                "Solution Size": "समाधान का आकार",
+                "Execution Time": "निष्पादन समय"
             }
         }
     },
