@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.4
+// @version      1.12.5
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -57,6 +57,29 @@
 // @compatible	 Edge
 // @incompatible safari
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
+// @downloadURL  https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.user.js
+// @updateURL    https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.meta.js
+// @name:zh-TW   Atcoder Better!
+// @name:en      Atcoder Better!
+// @name:de      Atcoder Better!
+// @name:fr      Atcoder Better!
+// @name:ko      Atcoder Better!
+// @name:pt      Atcoder Better!
+// @name:ja      Atcoder Better!
+// @name:es      Atcoder Better!
+// @name:it      Atcoder Better!
+// @name:hi      Atcoder Better!
+// @description         一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
+// @description:zh-TW   一個適用於 AtCoder 的 Tampermonkey 腳本，增強功能與界面。
+// @description:en      A Tampermonkey script for AtCoder that enhances functionality and interface.
+// @description:de      Ein Tampermonkey-Skript für AtCoder, das Funktionalität und Benutzeroberfläche verbessert.
+// @description:fr      Un script Tampermonkey pour AtCoder qui améliore les fonctionnalités et l'interface.
+// @description:ko      AtCoder를 위한 Tampermonkey 스크립트로 기능과 인터페이스를 개선합니다.
+// @description:pt      Um script Tampermonkey para AtCoder que aprimora a funcionalidade e a interface.
+// @description:ja      AtCoder用のTampermonkeyスクリプトで機能とインターフェースを強化します。
+// @description:es      Un script Tampermonkey para AtCoder que mejora la funcionalidad y la interfaz.
+// @description:it      Uno script Tampermonkey per AtCoder che migliora la funzionalità e l'interfaccia.
+// @description:hi      AtCoder के लिए एक Tampermonkey स्क्रिप्ट जो कार्यक्षमता और इंटरफ़ेस को बेहतर बनाता है।
 // ==/UserScript==
 
 /**
@@ -8093,20 +8116,21 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
      */
     const replaceLatex = function (text) {
         if (OJBetter.typeOfPage.is_oldLatex) {
-            let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
+            const regex = /<span\s+class="tex-span">.*?<\/span>/gi;
             matches = matches.concat(text.match(regex));
             text = replaceBlock(text);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
             matches = matches.concat(text.match(regex));
             text = replaceBlock(text);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
             matches = matches.concat(text.match(regex));
             text = replaceBlock(text);
         }
+
         return text;
     }
 
@@ -9241,6 +9265,7 @@ async function createCodeEditorForm(submitUrl) {
     $('#task-statement').after(formDiv);
     // formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.at_csrf_token);
     formDiv.attr('action', submitUrl);
+    formDiv.attr('method', 'POST');
 
     // 顶部区域
     let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
@@ -9275,6 +9300,10 @@ async function createCodeEditorForm(submitUrl) {
     // let sourceDiv = $('<textarea id="sourceCodeTextarea" name="source" style="display: none;"></textarea>');
     let sourceDiv = $('<textarea id="plain-textarea" name="sourceCode" style="display: none;"></textarea>');
     formDiv.append(sourceDiv);
+
+    // 隐藏的crsf token
+    let csrfDiv = $(`<input type="hidden" name="csrf_token" value=${OJBetter.common.at_csrf_token}>`);
+    formDiv.append(csrfDiv);
 
     // 代码编辑器
     let editorDiv = $('<div id="OJBetter_editor"></div>');
@@ -11945,6 +11974,7 @@ async function addProblemPageCodeEditor() {
     // 获取提交页链接
     const href = window.location.href;
     let submitUrl = OJBetter.common.hostAddress + $('.form-code-submit').attr('action');
+    console.log(submitUrl);
     // if (/\/problemset\//.test(href)) {
     //     // problemset
     //     submitUrl = OJBetter.common.hostAddress + '/problemset/submit';
