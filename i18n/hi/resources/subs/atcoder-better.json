@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "commonReplacements": {
         ".header-inner": {
             "class": [
@@ -624,7 +624,7 @@
                 "#नेवबार-पतन"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "होम पेज",
                 "Contest": "प्रतियोगिता",
