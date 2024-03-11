@@ -1,8 +1,8 @@
 # OJBetter
 
-OJBetterはTampermonkeyスクリプトプロジェクトで、様々なオンラインレビューシステム(OJ)ウェブサイトでの体験を向上させるように設計されています。
+OJBetterはTampermonkeyのスクリプトプロジェクトで、様々なOnline Judge (OJ)のウェブサイトでの体験を向上させるために設計されています。
 
-数多くの便利な機能を追加し、ウェブサイトのインターフェースとユーザー・インタラクションを改善することで、プログラミング競技への道をより効率的で便利なものにする。
+プログラミング・コンペティションへの旅をより効率的かつ便利にするために、多くの便利な機能を追加することで、ウェブサイトのインターフェースとユーザーとのインタラクションを改善する。
 
 ***
 
@@ -12,28 +12,29 @@ OJBetterはTampermonkeyスクリプトプロジェクトで、様々なオンラ
 
 ## 取り付け
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [正式版](https://github.com/beijixiaohu/)OJBetter/raw/main/script/release/codeforces-better.user.js) [ベータ版](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/)codeforces-better.user.js)
+| スクリプト       | ダウンロード                                                                                                                                                                             | ベータ版ダウンロード                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| コードフォース・ベター | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/)main/script/release/codeforces-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| より良いAtCoder | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main)/script/release/atcoder-better.user.js)       | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## キー機能
 
-スクリプトをインストールすると、：
+インストール・スクリプトについては、：。
 
-- ダークモード対応：ウェブサイトにダークモードを追加することで、夜間でも目を痛めることなく問題を解くことができます。
-- 多言語ウェブサイト翻訳：ウェブサイトのメインテキストをご希望の言語に置き換えます。
+- ダークモード対応：ウェブサイトにダークモードを追加することで、夜間でも目を痛めることなくブラッシングできます。
+- 多言語ウェブサイト翻訳：は、ウェブサイトのメインテキストをご希望の言語に置き換えます。
 - 便利なボタン：`MrakDown`、`Copy`、`Translate`ボタンをページに追加する。
-- タイトル翻訳機能：`Translate`ボタンをクリックすると、Latexの数式を壊さないようにしながら、ワンクリックでターゲット言語に翻訳します。
-- Clist Rating Score Display：clist.by ウェブサイトからトピックの評価スコアデータを取得し、トピックページに表示します。
-- コードエディター＆LSPサポート：トピックページの下部にコードエディターを統合し、自動保存、クイックコミット、オンラインテスト実行などをサポート。
-- ロッキーバレー クイックジャンプ：ワンクリックでロッキーバレーのこの質問の該当ページにジャンプします。
-- コメントエリアのページ表示：コメントエリアの表示を改善し、ページめくり、ジャンプをサポートし、各ページに表示されるメインフロアの数を選択できます。
-- リーダーボードの再カラーリング：Codeforcesトーナメントのリーダーボードのカラーグラデーションは、「スコア/合計」の比率に基づいています。
+- タイトル翻訳：LaTeXの数式が壊れないようにしながら、タイトルをターゲット言語にワンクリックで翻訳。
+- クライスト評価スコア表示：トピックのクライスト評価スコアデータを表示します。
+- クイックジャンプ：Logu, VJudgeのこの質問に対応するページにワンクリックでジャンプできます。
+- コードエディターとLSPサポート：統合コードエディター、自動保存、クイック投稿、オンラインテスト実行などの機能をサポート。
 - ……
 
 > 注意
 >
-> ページ全体**の右上にある**CodeforcesBetter Settings\`\*\*ボタンをクリックすると、設定パネルが開きます。
+> ウェブページ**の右上にある**xxxBetter Settings\`\*\*ボタンをクリックすると、設定パネルが開きます。
 >
-> ほとんどの機能にヘルプテキストが用意されており、その横にあるクエスチョンマークのアイコンにカーソルを合わせると表示される。
+> ほとんどの機能にヘルプテキストが用意されており、「クエスチョンマークアイコン」にカーソルを合わせると表示される。
 
 ## ドキュメントの使用
 
