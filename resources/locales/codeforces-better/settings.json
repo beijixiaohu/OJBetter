@@ -226,6 +226,10 @@
             "label": "题目页添加编辑器",
             "helpText": "在题目页下面添加 Monaco 编辑器，代码会自动保存，提供在线代码运行"
         },
+        "beautifyPreBlocks": {
+            "label": "美化代码块",
+            "helpText": "使用 Monaco 编辑器美化页面中的代码块"
+        },
         "preferences": {
             "title": "偏好",
             "isCodeSubmitConfirm": {

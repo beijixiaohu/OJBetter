@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.3
+// @version      1.12.4
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -45,6 +45,7 @@
 // @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
 // @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
 // @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
+// @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
 // @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
 // @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
@@ -240,6 +241,8 @@ OJBetter.clist = {
 OJBetter.monaco = {
     /** @type {boolean?} 在问题页面上启用Monaco编辑器 */
     enableOnProblemPage: undefined,
+    /** @type {boolean?} 美化pre代码块 */
+    beautifyPreBlocks: undefined,
     /** @type {boolean} Monaco编辑器加载完成标志 */
     loaderOnload: false,
     lsp: {
@@ -639,6 +642,71 @@ const OJB_getPreviousVersion = function (currentVersion) {
 };
 
 /**
+ * 在指定根节点下观察指定选择器的元素，当元素存在时，执行回调函数
+ * @param {Object} options - 配置对象
+ * @param {string} options.selector - CSS选择器文本
+ * @param {Function} options.callback - 回调函数，接收变动的节点作为参数
+ * @param {Boolean} [options.triggerOnExist=true] - 如果为true，元素已存在时立即触发一次回调
+ * @param {Element} [options.root=document.body] - 在哪个根节点下监听变化
+ * @param {Boolean} [options.subtree=false] - 是否监听子树变化（即非直接子元素）
+ */
+function OJB_observeElement({
+    selector,
+    callback,
+    triggerOnExist = true,
+    root = document.body,
+    subtree = false
+}) {
+    // 尝试获取选择器指定的元素
+    const targetNode = root.querySelector(selector);
+
+    if (targetNode) {
+        // 如果元素已存在，直接开始观察
+        observeAndReport(targetNode, callback);
+        // 如果triggerOnExist为true，则立即触发一次回调
+        if (triggerOnExist) {
+            callback(targetNode);
+        }
+    } else {
+        // 如果元素不存在，监听DOM变化直到该元素被添加
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE && node.matches(selector)) {
+                        observeAndReport(node, callback);
+                        if (triggerOnExist) {
+                            callback(node);
+                        }
+                        observer.disconnect(); // 停止监听
+                    }
+                });
+            });
+        });
+
+        observer.observe(root, { childList: true, subtree, attributes: false });
+    }
+
+    function observeAndReport(node, callback) {
+        const childObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (childList) {
+                    mutation.addedNodes.forEach((addedNode) => {
+                        if (addedNode.nodeType === Node.ELEMENT_NODE) {
+                            callback(addedNode); // 执行回调函数
+                        }
+                    });
+                }
+                if (attributes && mutation.type === 'attributes') {
+                    callback(mutation.target); // 执行回调函数
+                }
+            });
+        });
+
+        childObserver.observe(node, { childList: true, subtree: true, attributes: false });
+    }
+}
+
+/**
  * 初始化全局变量
  */
 async function initVar() {
@@ -742,6 +810,7 @@ async function initVar() {
     OJBetter.monaco.compilerSelection = OJB_getGMValue("compilerSelection", "61");
     OJBetter.monaco.setting.fontsize = OJB_getGMValue("editorFontSize", "15");
     OJBetter.monaco.enableOnProblemPage = OJB_getGMValue("problemPageCodeEditor", true);
+    OJBetter.monaco.beautifyPreBlocks = OJB_getGMValue("beautifyPreBlocks", true);
     OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
     OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
     OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
@@ -759,7 +828,7 @@ async function initVar() {
     OJBetter.monaco.setting.position = OJB_getGMValue("monacoEditor_position", "initial");
     OJBetter.monaco.lsp.workUri = OJB_getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
-    if (OJBetter.monaco.enableOnProblemPage) {
+    if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         let monacoLoader = document.createElement("script");
         monacoLoader.src = "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js";
         document.head.prepend(monacoLoader);
@@ -1476,6 +1545,73 @@ function handleColorSchemeChange(event) {
  */
 function darkModeStyleAdjustment() {
 
+}
+
+/**
+ * 美化Pre代码块
+ */
+async function beautifyPreBlocksWithMonaco() {
+    // 用于替换 <pre> 标签为 Monaco 编辑器的函数
+    function replacePreWithMonaco(preElement) {
+        const pre = $(preElement);
+        if (pre.hasClass('source-code-for-copy')) return; // 跳过复制块
+        const code = OJB_getCodeFromPre(pre.get(0));
+        if (!code) return;
+        const language = OJB_codeLangDetect(code);
+
+        // 创建一个用于 Monaco 编辑器的容器
+        const container = $('<div></div>');
+        const lineCount = code.split('\n').length; // 代码的行数
+
+        // 计算容器的高度
+        const calculateContainerHeight = (lineCount) => {
+            const lineHeight = 20; // 每行代码的高度
+            const minHeight = 100; // 最小高度
+            const maxHeight = 1000; // 最大高度
+            const dynamicHeight = lineCount * lineHeight;
+            return Math.min(Math.max(dynamicHeight, minHeight), maxHeight) + 'px';
+        };
+
+        // 应用样式
+        container.css({
+            height: calculateContainerHeight(lineCount),
+            width: '100%'
+        });
+        pre.replaceWith(container);
+
+        // 初始化 Monaco 编辑器
+        monaco.editor.create(container[0], {
+            value: code,
+            language: language,
+            readOnly: true,
+            tabSize: 4,
+            theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
+            scrollbar: {
+                verticalScrollbarSize: 10,
+                horizontalScrollbarSize: 10,
+                alwaysConsumeMouseWheel: false
+            },
+            automaticLayout: true,
+            scrollBeyondLastLine: false
+        });
+    }
+    // 全局替换页面上所有的 <pre> 元素
+    $('pre').each(function () {
+        replacePreWithMonaco(this);
+    });
+    // 监听页面上的提交状态页面窗口的 <pre> 元素
+    if (OJBetter.typeOfPage.is_statePage) {
+        OJB_observeElement({
+            selector: '#facebox',
+            callback: (node) => {
+                // 如果 facebox 中存在 pre 元素，则替换它们
+                const preElements = $(node).find('pre');
+                preElements.each(function () {
+                    replacePreWithMonaco(this);
+                });
+            }
+        });
+    }
 }
 
 // 样式
@@ -3498,6 +3634,21 @@ function OJB_getCookie(name) {
 }
 
 /**
+ * 检查是否仍在同一浏览器会话中
+ * @param {string} sessionKey - 会话键名，用于标识会话
+ * @returns {boolean} - 如果在当前会话中之前已经设置过这个键，则返回true，否则返回false
+ */
+function OJB_isSameBrowserSession(sessionKey) {
+    const fullCookieName = `OJB_Session_${sessionKey}`;
+    const sessionValue = OJB_getCookie(fullCookieName);
+    if (sessionValue === "") {
+        document.cookie = `${fullCookieName}=true; path=/`;
+        return false;
+    }
+    return true;
+}
+
+/**
  * 随机数生成
  * @param {number} numDigits 位数
  * @returns {number}
@@ -3639,12 +3790,14 @@ function OJB_toggleCollapseExpand(element) {
 /**
  * 获取外部JSON并转换为Object
  * @param {string} url JSON Url
+ * @param {boolean} [nacache=true] 是否不使用缓存
  * @returns {Promise<Object>} JSON Object
  */
-async function OJB_getExternalJSON(url) {
+async function OJB_getExternalJSON(url, nacache = true) {
     const response = await OJB_GMRequest({
         method: "GET",
-        url: url
+        url: url,
+        nocache: nacache
     });
     try {
         return JSON.parse(response.responseText);
@@ -3773,6 +3926,70 @@ function clearI18nextCache() {
 }
 
 /**
+ * 从Pre代码块中获取原始代码
+ * @param {HTMLElement} element pre代码块元素
+ * @returns {string|null} 代码文本
+ */
+function OJB_getCodeFromPre(element) {
+    /**
+     * 从Ace格式化的代码块中获取原始代码
+     * @param {HTMLElement} element pre代码块元素
+     * @returns {string} 代码文本
+     */
+    const getCodeFromAcePre = function (element) {
+        const editor = ace.edit(element);
+        return editor.getValue();
+    }
+
+    /**
+     * 从Pretty格式化的代码块中获取原始代码-1
+     * 代码直接存放在 pre 元素中
+     * @param {HTMLElement} element pre代码块元素
+     * @returns {string} 代码文本
+     */
+    const getCodeFromPrettyPre = function (element) {
+        return Array.from(element.querySelectorAll('li')).map(function (li) {
+            return li.textContent;
+        }).join('\n');
+    }
+
+    /**
+     * 从Pretty格式化的代码块中获取原始代码-2
+     * 代码存放在子元素 code 中
+     * @param {HTMLElement} element pre代码块元素
+     * @returns {string} 代码文本
+     */
+    const getCodeFromPreChild = function (element) {
+        const code = element.querySelector("code.prettyprint");
+        if (code.classList.contains("linenums")) {
+            return getCodeFromPrettyPre(element);
+        } else {
+            return element.querySelector("code.prettyprint").textContent;
+        }
+    }
+
+    if (element.id === "submission-code") {
+        return getCodeFromAcePre(element);
+    } else if (element.classList.contains("prettyprint")) {
+        return getCodeFromPrettyPre(element);
+    } else if (element.querySelector("code.prettyprint")) {
+        return getCodeFromPreChild(element);
+    } else {
+        return null;
+    }
+}
+
+/**
+ * 判断代码的语言
+ * @param {string} code 代码文本
+ * @returns {string} 可能的语言
+ */
+function OJB_codeLangDetect(code) {
+    result = hljs.highlightAuto(code);
+    return result.language;
+}
+
+/**
  * 更新检查
  */
 async function checkScriptVersion() {
@@ -3810,7 +4027,7 @@ async function checkScriptVersion() {
             if (updateConfirmed) {
                 window.location.href = updateUrl;
             } else {
-                document.cookie = "skipUpdate=true; expires=session; path=/";
+                document.cookie = "skipUpdate=true; path=/";
             }
         }
     } catch (error) {
@@ -3976,15 +4193,19 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
         data = await OJB_getExternalJSON(url);
         await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: data });
     } else {
-        // 如果本地有数据，先返回旧数据，然后在后台更新
-        (async () => {
-            try {
-                const newData = await OJB_getExternalJSON(url);
-                await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
-            } catch (error) {
-                console.error('Failed to update localization data:', error);
-            }
-        })();
+        // 如果本地有数据，检查是否已经在当前会话中尝试过更新
+        const sessionKey = `ojb_updateL10nWebsiteJson_${localizationLanguage}`;
+        if (!OJB_isSameBrowserSession(sessionKey)) {
+            // 如果尚未更新，则在后台更新
+            (async () => {
+                try {
+                    const newData = await OJB_getExternalJSON(url);
+                    await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
+                } catch (error) {
+                    console.error('Failed to update localization data:', error);
+                }
+            })();
+        }
     }
     return data;
 }
@@ -5156,6 +5377,15 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="beautifyPreBlocks"><span
+                data-i18n="settings:codeEditor.beautifyPreBlocks.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.beautifyPreBlocks.helpText"></div>
+        </div>
+        <input type="checkbox" id="beautifyPreBlocks" name="beautifyPreBlocks">
+    </div>
     <hr>
     <h4 data-i18n="settings:codeEditor.preferences.title"></h4>
     <div class='OJBetter_setting_list'>
@@ -5968,6 +6198,7 @@ async function initSettingsPanel() {
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
+        $("#beautifyPreBlocks").prop("checked", GM_getValue("beautifyPreBlocks") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
@@ -6045,6 +6276,7 @@ async function initSettingsPanel() {
                 RatingHidden: $('#RatingHidden').prop("checked"),
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
+                beautifyPreBlocks: $("#beautifyPreBlocks").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
@@ -6337,7 +6569,7 @@ class TaskQueue {
 function isLikelyCodeSnippet(text) {
     // 过滤文本中可能的HTML标签
     text = OJB_removeHTMLTags(text);
-    
+
     // 移除LaTeX公式部分
     const cleanedText = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
 
@@ -12501,6 +12733,7 @@ function initializeInParallel(loadingMessage) {
     if (OJBetter.basic.darkMode == "dark") darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
     // if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
+    if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
 }
 
 /**
