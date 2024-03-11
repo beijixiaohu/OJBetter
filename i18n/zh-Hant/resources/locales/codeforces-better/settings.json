@@ -226,6 +226,10 @@
             "label": "題目頁新增編輯器",
             "helpText": "在題目頁下方新增Monaco 編輯器，程式碼會自動儲存，提供線上程式碼運行"
         },
+        "beautifyPreBlocks": {
+            "label": "美化程式碼區塊",
+            "helpText": "使用Monaco 編輯器美化頁面中的程式碼區塊"
+        },
         "preferences": {
             "title": "偏好",
             "isCodeSubmitConfirm": {

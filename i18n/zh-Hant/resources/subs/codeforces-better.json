@@ -820,14 +820,18 @@
                 "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以雙擊單元格（或按住Ctrl並點擊）來查看提交歷史記錄或對解決方案進行攻擊。"
             }
         },
-        "demo": {
+        "choose-order": {
             "class": [
-                "Class"
+                ".choose-order"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "SourceText": "TargetText"
+                "Default order": "預設順序",
+                "Submission time": "提交時間",
+                "Judging Time": "判題時間",
+                "Solution Size": "解答大小",
+                "Execution Time": "執行時間"
             }
         }
     },

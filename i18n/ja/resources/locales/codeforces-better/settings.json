@@ -226,6 +226,10 @@
             "label": "タイトルページにエディターを追加",
             "helpText": "タイトルページの下にMonacoエディタを追加すると、コードが自動的に保存され、オンラインコードが実行される。"
         },
+        "beautifyPreBlocks": {
+            "label": "コードブロックの美化",
+            "helpText": "モナコエディターでページ上のコードブロックを美しくする"
+        },
         "preferences": {
             "title": "プリファレンス",
             "isCodeSubmitConfirm": {

@@ -820,14 +820,18 @@
                 "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "You can double click on a cell (or hold to Ctrl and click) to view submissions or attack a solution."
             }
         },
-        "demo": {
+        "choose-order": {
             "class": [
-                "Class"
+                ".choose-order"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "SourceText": "TargetText"
+                "Default order": "Default order",
+                "Submission time": "Submission time",
+                "Judging Time": "Question time",
+                "Solution Size": "Solution Size",
+                "Execution Time": "execution time"
             }
         }
     },

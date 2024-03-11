@@ -226,6 +226,10 @@
             "label": "Ajouter un éditeur à la page de titre",
             "helpText": "Ajoutez l'éditeur Monaco sous la page de titre et le code sera sauvegardé automatiquement, fournissant un code en ligne."
         },
+        "beautifyPreBlocks": {
+            "label": "Embellir le bloc de code",
+            "helpText": "Embellir les blocs de code sur une page avec l'éditeur Monaco"
+        },
         "preferences": {
             "title": "préférences",
             "isCodeSubmitConfirm": {
