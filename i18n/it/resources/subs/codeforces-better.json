@@ -820,14 +820,18 @@
                 "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Può fare doppio clic su una cella (o tenere premuto Ctrl e cliccare) per visualizzare la cronologia degli impegni o attaccare la soluzione."
             }
         },
-        "demo": {
+        "choose-order": {
             "class": [
-                "Class"
+                ".scegliere l'ordine"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "SourceText": "TargetText"
+                "Default order": "Ordine predefinito",
+                "Submission time": "Ora di invio",
+                "Judging Time": "Tempo di domande",
+                "Solution Size": "Dimensione della soluzione",
+                "Execution Time": "tempo di esecuzione"
             }
         }
     },
