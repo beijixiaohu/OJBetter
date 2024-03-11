@@ -226,6 +226,10 @@
             "label": "Editor zur Titelseite hinzufügen",
             "helpText": "Fügen Sie den Monaco-Editor unterhalb der Titelseite hinzu und der Code wird automatisch gespeichert, so dass der Code online ausgeführt werden kann."
         },
+        "beautifyPreBlocks": {
+            "label": "Codeblock verschönern",
+            "helpText": "Verschönern von Codeblöcken auf einer Seite mit dem Monaco-Editor"
+        },
         "preferences": {
             "title": "Einstellungen",
             "isCodeSubmitConfirm": {
