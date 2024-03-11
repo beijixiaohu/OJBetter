@@ -1,8 +1,8 @@
 # OJBetter
 
-OJBetter è un progetto di scripting di Tampermonkey progettato per migliorare la sua esperienza con vari siti web di sistemi di recensioni online (OJ).
+OJBetter è un progetto di scripting di Tampermonkey progettato per migliorare la vostra esperienza con vari siti web del Giudice Online (OJ).
 
-Aggiungendo una serie di funzioni utili e migliorando l'interfaccia del sito web e l'interazione con l'utente, renderà il suo percorso verso i concorsi di programmazione più efficiente e conveniente.
+Migliorare l'interfaccia del sito web e l'interazione con l'utente, aggiungendo una serie di funzioni utili per rendere più efficiente e comodo il viaggio verso i concorsi di programmazione.
 
 ***
 
@@ -12,28 +12,29 @@ Aggiungendo una serie di funzioni utili e migliorando l'interfaccia del sito web
 
 ## montaggio
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [Versione ufficiale](https\://github.com/beijixiaohu/ OJBetter/raw/main/script/release/codeforces-better.user.js) [Beta](https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/ codeforces-better.user.js)
+| copioni               | Scaricare                                                                                                                                                                                                                                            | Scarica la versione beta                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Codice Forze Migliori | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/) main/script/release/codeforces-better.user.js)                                                                  | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| AtCoder Meglio        | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## funzione dei tasti
 
-Installando lo script si ottiene：
+Per lo script di installazione, è possibile ottenere：.
 
-- Supporto della modalità scura：Aggiunga la modalità scura al suo sito web, in modo da poter sfogliare le domande di notte senza danneggiare gli occhi.
-- Traduzione multilingue del sito web：sostituisce il testo principale del sito web con la lingua di sua scelta.
-- Pulsanti di utilità：Aggiunga alle pagine i pulsanti `MrakDown`, `Copy`, `Translate`.
-- Funzione di traduzione del titolo：Clicchi sul pulsante `Translate` per tradurre nella lingua di destinazione in un solo clic, facendo attenzione a non rompere le formule Latex.
-- Visualizzazione del punteggio di valutazione Clist：ottiene i dati del punteggio di valutazione di un argomento dal sito web clist.by e li visualizza sulla pagina dell'argomento.
-- Editor di codice e supporto LSP：Editor di codice integrato in fondo alla pagina dell'argomento, che supporta il salvataggio automatico, il commit rapido, l'esecuzione di test online, ecc.
-- Rocky Valley Quick Jump：Un clic per saltare alla pagina corrispondente a questa domanda in Rocky Valley
-- Visualizzazione della pagina dell'area commenti：Migliora la visualizzazione dell'area commenti, supporta il salto di pagina, può scegliere il numero di piani principali visualizzati in ogni pagina.
-- Ricolorazione della classifica：Colorazione a gradiente della classifica del torneo Codeforces in base al rapporto "punteggio/totale".
+- Supporto per la modalità scura：Aggiungete la modalità scura al vostro sito web e sfogliatelo di notte, senza danneggiare gli occhi.
+- Traduzione di siti web multilingue：sostituisce il testo principale del vostro sito web con la lingua di vostra scelta.
+- Pulsanti di utilità：Aggiungere alla pagina i pulsanti `MrakDown`, `Copy`, `Translate`.
+- Traduzione dei titoli：Traduzione in un solo clic dei titoli nella lingua di destinazione, garantendo al contempo che le formule LaTeX non vengano danneggiate.
+- Visualizzazione del punteggio di valutazione Clist：visualizza i dati del punteggio di valutazione Clist per l'argomento.
+- Salto rapido：Salto con un solo clic alla pagina corrispondente a questa domanda in Logu, VJudge.
+- Editor di codice e supporto LSP：Editor di codice integrato, supporto di salvataggio automatico, invio rapido, esecuzione di test online e altre funzioni.
 - Alcune altre piccole caratteristiche……
 
 > [!NOTA]
 >
-> Clicchi sul pulsante **`CodeforcesBetter Settings`** nell'angolo superiore destro della **pagina intera** per aprire il pannello delle impostazioni.
+> Fare clic sul pulsante **`xxxBetter Settings`** nell'angolo superiore destro della **pagina web** per aprire il pannello delle impostazioni.
 >
-> Il testo di aiuto è disponibile per la maggior parte delle funzioni e può essere visualizzato passando il mouse sull'icona del punto interrogativo accanto ad esse.
+> Per la maggior parte delle funzioni è disponibile un testo di aiuto che può essere visualizzato passando il mouse sull'icona del "punto interrogativo".
 
 ## Utilizzo dei documenti
 

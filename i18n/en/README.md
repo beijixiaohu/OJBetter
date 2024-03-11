@@ -1,8 +1,8 @@
 # OJBetter
 
-OJBetter is a Tampermonkey scripting project designed to enhance your experience with various online review system (OJ) websites.
+OJBetter is a Tampermonkey scripting project designed to enhance your experience with various Online Judge (OJ) sites.
 
-By adding a number of useful features and improving the website interface and user interaction, it will make your path to programming competitions more efficient and convenient.
+Improve the website interface and user interaction by adding a number of useful features to make your programming competition journey more efficient and convenient.
 
 ***
 
@@ -12,28 +12,29 @@ By adding a number of useful features and improving the website interface and us
 
 ## mounting
 
-Codeforces Better：[GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) [Official version](https\://github.com/beijixiaohu/ OJBetter/raw/main/script/release/codeforces-better.user.js) [Beta](https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/ codeforces-better.user.js)
+| scripts           | Download                                                                                                                                                                                                                                                   | Beta Download                                                                                   |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Codeforces Better | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/ main/script/release/codeforces-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| AtCoder Better    | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js)       | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## Key Features
 
-Installing the script gives you：
+To install the script, you can get：
 
-- Dark Mode Support：Add Dark Mode to your website, so you don't hurt your eyes at night.
-- Multilingual Website Translation：Replace the main text of your website with the language of your choice!
-- Convenience buttons：Add `MrakDown`, `Copy`, `Translate` buttons to the page
-- Topic Translation Function：Click the `Translate` button to translate to the target language in one click, while making sure not to break the Latex formulas.
-- Clist Rating Score Display：gets the Rating score data for a topic from the clist.by website and displays it on the topic page.
-- Code Editor & LSP Support：Integrated code editor at the bottom of the topic page, supporting auto-save, quick commit, online test run, etc.
-- Rocky Valley Quick Jump：One click to jump to the corresponding page of this question in Rocky Valley
-- Comment section page display：Improve the display of comment section, support page flip, jump, can choose the number of main floor displayed on each page.
-- Recoloring of the leaderboard：Color gradient coloring of the Codeforces tournament leaderboard based on the "score/total" ratio.
+- Dark Mode Support：Add dark mode to your website and brush up at night without hurting your eyes.
+- Multilingual Website Translation：replaces the main text of your website with the language of your choice.
+- Convenience Buttons：Add `MrakDown`, `Copy`, `Translate` buttons to the page.
+- Title Translation：One-click translation of titles into the target language while ensuring that LaTeX formulas are not corrupted.
+- Clist Rating Score Display：displays the Clist Rating score data for the topic.
+- Quick Jump：One-click jump to the corresponding page for this question in Rock Valley, VJudge.
+- Code editor with LSP support：Integrated code editor, support auto-save, quick submit, online test run and other functions.
 - Some other small features……
 
 > [!NOTE]
 >
-> Click on the **`CodeforcesBetter Settings`** button in the upper right corner of the **entire page** to open the settings panel.
+> Click on the **`xxxBetter Settings`** button in the upper right corner of the **web page** to open the settings panel.
 >
-> Help text is provided for most functions and can be viewed by hovering over the question mark icon next to it.
+> Help text is provided for most of the functions and can be viewed by hovering over the "question mark icon".
 
 ## Using Documents
 
