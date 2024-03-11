@@ -226,6 +226,10 @@
             "label": "Añadir editor a la portada",
             "helpText": "Añada el editor Monaco debajo de la portada y el código se guardará automáticamente, proporcionando código en línea en funcionamiento"
         },
+        "beautifyPreBlocks": {
+            "label": "Embellecer el bloque de código",
+            "helpText": "Embellecimiento de bloques de código en una página con el editor Monaco"
+        },
         "preferences": {
             "title": "preferencias",
             "isCodeSubmitConfirm": {
