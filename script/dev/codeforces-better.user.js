@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.12
+// @version      1.73.13
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -3646,6 +3646,131 @@ class OJB_GMError extends Error {
         this.type = type;
         this.stack = originalError.stack;
         Object.assign(this, originalError);
+    }
+}
+
+/**
+ * 文本块替换/恢复类
+ */
+class TextBlockReplacer {
+    constructor() {
+        /** @type {string[]} 匹配项 */
+        this.matches = [];
+        /** @type {Map<string, string>} 待还原项 */
+        this.replacements = new Map();
+        /** @type {Map<string, string>} 暂时未找到的待还原项 */
+        this.tempReplacements = new Map();
+        /** @type {string} 替换符号 */
+        this.replaceSymbol = OJBetter.translation.replaceSymbol;
+    }
+
+    /**
+     * 替换文本
+     * @param {string} text 原文本
+     * @param {RegExp} regex 匹配规则
+     * @returns {string} 替换后的文本
+     */
+    replace(text, regex) {
+        this.matches = text.match(regex) || [];
+        try {
+            for (let i = 0; i < this.matches.length; i++) {
+                const match = this.matches[i];
+                const id = OJB_getRandomNumber(8);
+                let replacement = '';
+                switch (this.replaceSymbol) {
+                    case "1":
+                        replacement = `【${id}】`;
+                        break;
+                    case "2":
+                        replacement = `{${id}}`;
+                        break;
+                    case "3":
+                        replacement = `[${id}]`;
+                        break;
+                    default:
+                        replacement = `【${id}】`;
+                        break;
+                }
+                text = text.replace(match, replacement);
+                this.replacements.set(id, match);
+            }
+        } catch (e) { }
+        return text;
+    }
+
+
+    /**
+     * 恢复替换的文本
+     * @param {string} text 还原前的文本
+     * @returns {string} 还原后的文本
+     */
+    recover(text) {
+        let textCopy = text;
+
+        /**
+         * 替换文本
+         * @param {string} replacement 替换的文本
+         * @param {string} regexPattern 匹配规则
+         * @returns {void}
+         */
+        const replaceText = (replacement, regexPattern) => {
+            const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+            const regex = new RegExp(latexMatch + regexPattern, 'g');
+            textCopy = textCopy.replace(regex, (match, ...args) => {
+                const groups = args[args.length - 1];
+                if (groups.latex_block || groups.latex_inline) return match;
+                const offset = args[args.length - 3];
+                let leftSpace = "", rightSpace = "";
+                if (!/\s/.test(textCopy[offset - 1])) leftSpace = " ";
+                if (!/\s/.test(textCopy[offset + match.length])) rightSpace = " ";
+                return leftSpace + replacement + rightSpace;
+            });
+        };
+
+        /**
+         * 尝试还原
+         * @param {string} replacement 替换的文本
+         * @param {string} id 替换的 id
+         * @returns {boolean} 是否替换成功
+         */
+        const tryRecover = (replacement, id) => {
+            // 尝试还原，如果还原成功，则从 replacements 中删除
+            const originalText = textCopy;
+            replaceText(replacement, `【\\s*${id}\\s*】|\\[\\s*${id}\\s*\\]|{\\s*${id}\\s*}`); // 替换符完整匹配（考虑了多出空格的情况）
+            replaceText(replacement, `【\\s*${id}(?![】\\d])|(?<![【\\d])${id}\\s*】|\\[\\s*${id}(?![\\]\\d])|(?<![\\[\\d])${id}\\s*\\]|{\\s*${id}(?![}\\d])|(?<![{\\d])${id}\\s*}`); // 替换符部分匹配
+
+            if (textCopy === originalText) {
+                // 如果文本没有变化，说明没有找到，加入到 tempReplacements
+                this.tempReplacements.set(id, replacement);
+                return false;
+            } else {
+                // 如果文本变化了，说明找到并成功替换，则删除
+                this.replacements.delete(id);
+                this.tempReplacements.delete(id);
+                return true;
+            }
+        }
+
+        // 处理 replacements 中的项
+        this.replacements.forEach((replacement, id) => {
+            tryRecover(replacement, id);
+        });
+
+        // 处理 tempReplacements 中的项
+        while (this.tempReplacements.size > 0) {
+            let found = false;
+            this.tempReplacements.forEach((replacement, id) => {
+                found = tryRecover(replacement, id) || found;
+            });
+            if (!found) break; // 如果这一轮没有找到任何项，终止循环
+        }
+
+        // 如果 tempReplacements 还有未找到的项
+        if (this.tempReplacements.size > 0) {
+            console.warn("There are still some replacements not found:", this.tempReplacements);
+        }
+
+        return textCopy;
     }
 }
 
@@ -7829,6 +7954,14 @@ class TranslateDiv {
     getTopText() {
         return this.topText.text();
     }
+    
+    /**
+     * 渲染一个元素内的LaTeX公式
+     * @param {HTMLElement} element 元素
+     */
+    renderLaTeX(element){
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+    }
 
     /**
      * 更新翻译框内容
@@ -7846,8 +7979,17 @@ class TranslateDiv {
         this.mainDiv.html(html);
         // 渲染Latex
         if (is_renderLaTeX) {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+            // MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+            this.renderLaTeX(this.mainDiv.get(0));
         }
+        // // 渲染代码块中的公式 (AtCoder)
+        // this.mainDiv.find('pre code').each((index, element) => {
+        //     const codeText = $(element).text();
+        //     const latexPattern = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/;
+        //     if (latexPattern.test(codeText)) {
+        //         this.renderLaTeX(element);
+        //     }
+        // });
     }
 
     /**
@@ -8293,10 +8435,8 @@ async function initTransWhenViewable() {
 async function translateProblemStatement(text, element_node, is_comment, overrideTrans) {
     /** @type {number} 翻译结果的ID*/
     const id = OJB_getRandomNumber(8);
-    /** @type {Array<string>} 替换时匹配到的内容块*/
-    let matches = [];
-    /** @type {Object<string, string>} 内容块与替换符号的对应关系*/
-    const replacements = {};
+    /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
+    const textBlockReplacer = new TextBlockReplacer();
     /** @type {string} 翻译结果文本*/
     let translatedText = "";
 
@@ -8315,90 +8455,26 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     }
 
     /**
-     * 块替换方法
-     * @param {string} text 文本
-     * @returns 
-     */
-    const replaceBlock = function (text) {
-        try {
-            for (let i = 0; i < matches.length; i++) {
-                let match = matches[i];
-                let replacement = '';
-                if (OJBetter.translation.replaceSymbol === "1") {
-                    replacement = `【${i + 1}】`;
-                } else if (OJBetter.translation.replaceSymbol === "2") {
-                    replacement = `{${i + 1}}`;
-                } else if (OJBetter.translation.replaceSymbol === "3") {
-                    replacement = `[${i + 1}]`;
-                }
-                text = text.replace(match, replacement);
-                replacements[replacement] = match;
-            }
-        } catch (e) { }
-        return text;
-    }
-
-    /**
-     * 块还原方法
-     * @param {string} text 翻译后的文本
-     * @returns 
-     */
-    const recoverBlock = function (text) {
-        for (let i = 0; i < matches.length; i++) {
-            let match = matches[i];
-            let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
-
-            let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
-
-            let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-            text = text.replace(regex, function (match, ...args) {
-                // LaTeX中的不替换
-                const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
-                if (groups.latex_block || groups.latex_inline) return match;
-                // 没有空格则加一个
-                const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
-                let leftSpace = "", rightSpace = "";
-                if (!/\s/.test(text[offset - 1])) leftSpace = " ";
-                if (!/\s/.test(text[offset + match.length])) rightSpace = " ";
-                return leftSpace + replacement + rightSpace;
-            });
-
-            regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-            text = text.replace(regex, function (match, ...args) {
-                // LaTeX中的不替换
-                const groups = args[args.length - 1];
-                if (groups.latex_block || groups.latex_inline) return match;
-                // 没有空格则加一个
-                const offset = args[args.length - 3];
-                let leftSpace = "", rightSpace = "";
-                if (!/\s/.test(text[offset - 1])) leftSpace = " ";
-                if (!/\s/.test(text[offset + match.length])) rightSpace = " ";
-                return leftSpace + replacement + rightSpace;
-            });
-        }
-        return text;
-    }
-
-    /**
      * LaTeX替换
      * @param {string} text 待翻译文本
      * @returns {string} 处理后的文本
      */
     const replaceLatex = function (text) {
         if (OJBetter.typeOfPage.is_oldLatex) {
-            let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-            matches = matches.concat(text.match(regex));
-            text = replaceBlock(text);
+            const regex = /<span\s+class="tex-span">.*?<\/span>/gi;
+            text = textBlockReplacer.replace(text, regex);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
-            matches = matches.concat(text.match(regex));
-            text = replaceBlock(text);
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
-            matches = matches.concat(text.match(regex));
-            text = replaceBlock(text);
+            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            text = textBlockReplacer.replace(text, regex);
+
+            // 替换行间代码块```
+            const regex2 = /```[\s\S]*?```/g;
+            text = textBlockReplacer.replace(text, regex2);
         }
         return text;
     }
@@ -8409,19 +8485,21 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
      * @returns {string} 恢复后的文本
      */
     const recoverLatex = function (text) {
-        let result = text
+        // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
+        let resultText = text
             .replace(/】\s*【/g, '】 【')
             .replace(/\]\s*\[/g, '] [')
             .replace(/\}\s*\{/g, '} {');
+
         if (OJBetter.typeOfPage.is_oldLatex) {
-            result = result.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
-            result = recoverBlock(result);
+            resultText = resultText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
+            resultText = textBlockReplacer.recover(resultText);
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            result = recoverBlock(result);
+            resultText = textBlockReplacer.recover(resultText);
         } else if (realTransServer != "openai") {
-            result = recoverBlock(result);
+            resultText = textBlockReplacer.recover(resultText);
         }
-        return result;
+        return resultText;
     }
 
     /**
@@ -8432,6 +8510,11 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     const formatText = function (text) {
         // 转义LaTex中的特殊符号
         if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+            // 先替换掉行间代码块
+            const replacer = new TextBlockReplacer();
+            text = replacer.replace(text, /```[\s\S]*?```/g);
+
+            // 处理LaTeX公式
             const escapeRules = [
                 { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
                 { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
@@ -8442,7 +8525,6 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             ];
 
             let latexMatches = [...text.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
-
             for (const match of latexMatches) {
                 const matchedText = match[0];
                 let escapedText = matchedText;
@@ -8453,6 +8535,9 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
                 escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement，双倍消耗）
                 text = text.replace(matchedText, escapedText);
             }
+            
+            // 恢复行间代码块
+            text = replacer.recover(text);
         }
 
         // 使符合mathjx的转换语法
