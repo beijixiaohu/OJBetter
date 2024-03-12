@@ -320,7 +320,8 @@
             "rules": {
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "前回のレーティング変更は一時的に戻されました。まもなく元に戻ります。",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "備考：技術的な問題が発生した場合は、軽量サイトをご利用ください。",
-                "Please subscribe to the official Codeforces channel in Telegram via the link ": "リンクからCodeforcesの公式テレグラムチャンネルを購読してください！"
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "リンクからCodeforcesの公式テレグラムチャンネルを購読してください！",
+                "When submitting a solution in C++, please select either C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler.": "C++の回答を提出する場合は、コンパイラとしてC++14（GCC 6-32）またはC++17（GCC 7-32）を選択してください。"
             }
         },
         ".lang-chooser": {
