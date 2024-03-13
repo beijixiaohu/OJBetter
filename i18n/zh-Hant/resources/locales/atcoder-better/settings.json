@@ -335,7 +335,7 @@
         "title": "偏好",
         "loadingInfo": {
             "label": "顯示載入提示訊息",
-            "helpText": "<p>當你開啟顯示載入資訊時，每次載入頁面時會在上方顯示載入資訊提示：“CodeforcesBetter —— xxx”</p><p>這用於了解腳本目前的工作情況，<strong>如果你不想看到，可以選擇關閉</strong></p><p><u>需要說明的是，如果你需要反饋腳本的任何載入問題，請開啟該選項後再截圖，以便於分析問題</u></p>"
+            "helpText": "<p>當你開啟顯示載入資訊時，每次載入頁面時會在上方顯示載入資訊提示：“{{scriptName}} —— xxx”</p><p>這用於了解腳本當前的工作情況，<strong>如果你不想看到，可以選擇關閉</strong></p><p><u>需要說明的是，如果你需要任何回饋腳本的載入問題，請開啟該選項後再截圖，以便於分析問題</u></p>"
         },
         "targetArea": {
             "label": "顯示目標區域範圍",
@@ -352,7 +352,7 @@
         "version": "版本：",
         "update": {
             "title": "更新",
-            "thanksforDevChannelNotice": "<p>感謝你加入測試通道，幫助Codeforces Better! 變得更好。</p><p>問題回饋請前往<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>感謝你加入測試通道，幫助 {{scriptName}} 變得更好。</p><p>問題回饋請前往<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "更新頻道",
                 "helpText": "<p>你可以選擇腳本的更新通道</p><p>注意：測試版本會在Github 上每一次commit 後自動推送，因此其未經過廣泛測試驗證，可能存在各種未知問題。</p><p>有關測試版本的問題請在Github 上提issues，並加上Beta 標籤</p>",
