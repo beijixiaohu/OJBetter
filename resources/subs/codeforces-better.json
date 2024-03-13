@@ -321,7 +321,7 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "上一轮的评级变化暂时回滚。它们将很快恢复。",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "提醒：如果出现任何技术问题，您可以使用轻量网站",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "请通过链接订阅Codeforces的官方Telegram频道",
-                "When submitting a solution in C++, please select either C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler.": "在提交C++解答时，请选择C++14（GCC 6-32）或C++17（GCC 7-32）作为您的编译器。"
+                "When submitting a solution in C++, please select either C++14 \\(GCC 6-32\\) or C++17 \\(GCC 7-32\\) as your compiler.": "在提交C++解答时，请选择C++14（GCC 6-32）或C++17（GCC 7-32）作为您的编译器。"
             }
         },
         ".lang-chooser": {
