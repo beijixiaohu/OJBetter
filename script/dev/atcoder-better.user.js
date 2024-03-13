@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.7
+// @version      1.12.8
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -3607,9 +3607,11 @@ class TextBlockReplacer {
             const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
             const regex = new RegExp(latexMatch + regexPattern, 'g');
             textCopy = textCopy.replace(regex, (match, ...args) => {
-                const groups = args[args.length - 1];
+                // LaTeX中的不替换
+                const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
                 if (groups.latex_block || groups.latex_inline) return match;
-                const offset = args[args.length - 3];
+                // 没有空格则加一个
+                const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
                 let leftSpace = "", rightSpace = "";
                 if (!/\s/.test(textCopy[offset - 1])) leftSpace = " ";
                 if (!/\s/.test(textCopy[offset + match.length])) rightSpace = " ";
@@ -4577,7 +4579,9 @@ async function initI18next() {
                 if (err) {
                     reject(err);
                 } else {
-                    jqueryI18next.init(i18next, $);
+                    jqueryI18next.init(i18next, $, {
+                        useOptionsAttr: true
+                    });
                     resolve(t);
                 }
             });
@@ -5650,7 +5654,7 @@ const preference_settings_HTML = `
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:preference.loadingInfo.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:preference.loadingInfo.helpText" data-i18n-options='{ "scriptName": "${OJBetter.state.name}" }'></div>
         </div>
         <input type="checkbox" id="showLoading" name="showLoading">
     </div>
@@ -5759,7 +5763,7 @@ const about_settings_HTML = `
     <hr>
     <h5 data-i18n="settings:about.update.title"></h5>
     <div id="thanksforDevChannelNotice" class='OJBetter_setting_list alert_info'>
-        <div data-i18n="[html]settings:about.update.thanksforDevChannelNotice"></div>
+        <div data-i18n="[html]settings:about.update.thanksforDevChannelNotice"} data-i18n-options='{ "scriptName": "${OJBetter.state.name}" }' ></div>
     </div>
     <div class='OJBetter_setting_list'>
         <label for="updateChannel"><span data-i18n="settings:about.update.channel.label"></span></label>
@@ -8216,9 +8220,9 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     const recoverLatex = function (text) {
         // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
         let resultText = text
-            .replace(/】\s*【/g, '】 【')
-            .replace(/\]\s*\[/g, '] [')
-            .replace(/\}\s*\{/g, '} {');
+            .replace(/】【/g, '】 【')
+            .replace(/\]\[/g, '] [')
+            .replace(/\}\{/g, '} {');
 
         if (OJBetter.typeOfPage.is_oldLatex) {
             resultText = resultText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签

@@ -335,7 +335,7 @@
         "title": "偏好",
         "loadingInfo": {
             "label": "显示加载提示信息",
-            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“CodeforcesBetter —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
+            "helpText": "<p>当你开启 显示加载信息 时，每次加载页面时会在上方显示加载信息提示：“{{scriptName}} —— xxx”</p><p>这用于了解脚本当前的工作情况，<strong>如果你不想看到，可以选择关闭</strong></p><p><u>需要说明的是，如果你需要反馈脚本的任何加载问题，请开启该选项后再截图，以便于分析问题</u></p>"
         },
         "targetArea": {
             "label": "显示目标区域范围",
@@ -352,7 +352,7 @@
         "version": "版本：",
         "update": {
             "title": "更新",
-            "thanksforDevChannelNotice": "<p>感谢你加入测试通道，帮助 Codeforces Better! 变得更好。</p><p>问题反馈请前往<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>感谢你加入测试通道，帮助 {{scriptName}} 变得更好。</p><p>问题反馈请前往<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "更新通道",
                 "helpText": "<p>你可以选择脚本的更新通道</p><p>注意：测试版本会在 Github 上每一次 commit 后自动推送，因此其未经过广泛测试验证，可能存在各种未知问题。</p><p>有关测试版本的问题请在 Github 上提 issues，并添加 Beta 标签</p>",
