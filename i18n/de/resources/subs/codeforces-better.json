@@ -320,7 +320,8 @@
             "rules": {
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "Die Bewertungsänderungen aus der letzten Runde wurden vorübergehend zurückgenommen. Sie werden in Kürze wiederhergestellt.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Zur Erinnerung:：Bei technischen Problemen können Sie die leichtgewichtige Website nutzen",
-                "Please subscribe to the official Codeforces channel in Telegram via the link ": "Bitte abonnieren Sie den offiziellen Telegram-Kanal von Codeforces über den Link!"
+                "Please subscribe to the official Codeforces channel in Telegram via the link ": "Bitte abonnieren Sie den offiziellen Telegram-Kanal von Codeforces über den Link!",
+                "When submitting a solution in C++, please select either C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler.": "Wenn Sie eine C++-Antwort einreichen, wählen Sie bitte C++14 (GCC 6-32) oder C++17 (GCC 7-32) als Ihren Compiler."
             }
         },
         ".lang-chooser": {

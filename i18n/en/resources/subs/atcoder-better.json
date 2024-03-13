@@ -79,7 +79,6 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "コンテスト": "competition (sports etc)",
                 "開催中のコンテスト": "race",
                 "常設中のコンテスト": "Long lasting matches",
                 "予定されたコンテスト": "Planned matches",
@@ -88,7 +87,8 @@
                 "ランキング": "rankings",
                 "インフォメーション": "text",
                 "過去のコンテスト": "Past matches",
-                "過去のコンテストを検索": "Search past matches"
+                "過去のコンテストを検索": "Search past matches",
+                "コンテスト": "competition (sports etc)"
             }
         },
         "traverseTextNodes": {
@@ -173,6 +173,7 @@
                 "全て": "full",
                 "AtCoder Typical Contest": "AtCoder Classic Competition",
                 "PAST過去問": "PAST Calendar Year Issues",
+                "AtCoder Daily Training": "AtCoder Daily Training",
                 "非公式コンテスト(unrated)": "Unofficial competitions (not rated)",
                 "JOI過去問": "JOI Calendar Year Questions",
                 "企業コンテスト決勝": "Corporate Competition Final",
@@ -182,6 +183,7 @@
                 "企業ARC": "Enterprise ARC",
                 "ヒューリスティック": "heuristic",
                 "企業ヒューリスティック": "Enterprise Heuristics",
+                "企業启发式": "Enterprise Heuristics",
                 "検索": "look for sth.",
                 "リセット": "reprovision",
                 "コンテスト名": "Name of the competition"
@@ -624,7 +626,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": true,
+            "isStrict": false,
             "rules": {
                 "Home": "homepage",
                 "Contest": "competition (sports etc)",
