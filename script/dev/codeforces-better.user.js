@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.14
+// @version      1.73.15
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -8676,7 +8676,6 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
                 rawData = await translate_gg(text);
             } else if (transServer == "caiyun") {
                 translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
-                await translate_caiyun_startup();
                 rawData = await translate_caiyun(text);
             } else if (transServer == "openai") {
                 translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
@@ -12760,26 +12759,6 @@ async function translate_gg(raw) {
 }
 
 /**
- * 彩云翻译预处理
- */
-async function translate_caiyun_startup() {
-    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
-    sessionStorage.setItem('caiyun_id', browser_id);
-    const options = {
-        method: "POST",
-        url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
-        headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
-            "Origin": "https://fanyi.caiyunapp.com",
-        },
-        data: JSON.stringify({ browser_id }),
-    }
-    const res = await OJB_GMRequest(options);
-    sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
-}
-
-/**
  * 彩云翻译
  * @param {string} raw 原文
  * @returns {Promise<TransRawData>} 翻译结果对象
@@ -12787,6 +12766,22 @@ async function translate_caiyun_startup() {
 async function translate_caiyun(raw) {
     const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
     const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
+    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
+    const caiyun_jwt = await (async () => {
+        const options = {
+            method: "POST",
+            url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
+            headers: {
+                "content-type": "application/json",
+                "x-authorization": "token:qgemv4jr1y38jyq6vhvi",
+                "origin": "https://fanyi.caiyunapp.com",
+            },
+            data: JSON.stringify({ browser_id }),
+        }
+        const res = await OJB_GMRequest(options);
+        return JSON.parse(res.responseText).jwt;
+    })();
+
     // 解码
     const decodeUnicode = str => {
         const decoder = new TextDecoder();
@@ -12794,18 +12789,28 @@ async function translate_caiyun(raw) {
         return decoder.decode(data);
     };
     const decoder = line => decodeUnicode([...line].map(i => dic[i] || i).join(""));
+
     const options = {
         method: "POST",
         url: 'https://api.interpreter.caiyunai.com/v1/translator',
         data: JSON.stringify({
             "source": raw.split('\n'),
+            "browser_id": browser_id,
             "trans_type": getTargetLanguage('caiyun'),
+            "request_id": "web_fanyi",
+            "media": "text",
+            "os_type": "web",
+            "dict": true,
+            "cached": true,
+            "replaced": true,
+            "style": "formal",
+            "model": "",
             "detect": true,
-            "browser_id": sessionStorage.getItem('caiyun_id')
         }),
         headers: {
-            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
-            "T-Authorization": sessionStorage.getItem('caiyun_jwt')
+            "content-type": "application/json;charset=UTF-8",
+            "x-authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "t-authorization": caiyun_jwt
         }
     }
     return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
