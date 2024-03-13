@@ -335,7 +335,7 @@
         "title": "Einstellungen",
         "loadingInfo": {
             "label": "Anzeige einer Warnmeldung beim Laden",
-            "helpText": "<p>Wenn Sie die Option Ladeinformationen anzeigen aktivieren, wird jedes Mal, wenn die Seite geladen wird, oben eine Ladeinformationsabfrage angezeigt：\"CodeforcesBetter -- xxx\"</p><p>Dies dient dazu, zu sehen, wie das Skript derzeit funktioniert<strong>Wenn Sie dies nicht sehen möchten, können Sie die Option Aus</strong></p><p><u>Wenn Sie Feedback zu Ladeproblemen mit dem Skript benötigen, schalten Sie diese Option bitte ein, bevor Sie einen Screenshot machen, damit das Problem analysiert werden kann</u></p>"
+            "helpText": "<p>Wenn Sie die Option \"Ladeinformationen anzeigen\" aktivieren, wird bei jedem Laden der Seite：\"{{scriptName}} -- xxx\" oben eine Ladeinformationsabfrage angezeigt.</p><p> Dies wird verwendet, um zu sehen, wie das Skript derzeit funktioniert, und <strong>kann ausgeschaltet werden, wenn Sie es nicht sehen</strong> wollen!</p><p><u> Bitte beachten Sie, dass Sie bei Problemen mit dem Laden des Skripts einen Screenshot mit aktivierter Option machen sollten, um die Analyse des Problems zu erleichtern!</u></p>"
         },
         "targetArea": {
             "label": "Anzeige der Reichweite des Zielgebiets",
@@ -352,7 +352,7 @@
         "version": "Version：",
         "update": {
             "title": "Update",
-            "thanksforDevChannelNotice": "<p>Vielen Dank, dass Sie dem Testkanal beitreten und Codeforces Better! helfen, besser zu werden.</p><p>Bei Fragen wenden Sie sich an<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>Danke, dass Sie dem Testkanal beitreten und {{scriptName}} helfen, besser zu werden.</p><p> Für Feedback zu Problemen gehen Sie zu <a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "Update-Kanal",
                 "helpText": "<p>Sie können den Update-Kanal für das Skript</p><p>wählen. Beachten Sie, dass die Beta-Version von：automatisch nach jedem Commit auf Github gepusht wird, daher wurde sie nicht ausgiebig getestet und kann verschiedene unbekannte Probleme aufweisen.</p><p>Bitte melden Sie Probleme auf Github und fügen Sie Beta-Tags für Probleme mit der Beta-Version hinzu</p>",

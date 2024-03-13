@@ -335,7 +335,7 @@
         "title": "환경설정",
         "loadingInfo": {
             "label": "로딩 경고 메시지 표시",
-            "helpText": "<p>로딩 정보 표시를 켜면 페이지가 로드될 때마다 상단에 로딩 정보 프롬프트가 표시됩니다：\"CodeforcesBetter -- xxx\"</p><p>이것은 스크립트가 현재 어떻게 작동하는지 확인하는 데 사용됩니다<strong>보고 싶지 않다면 다음을 선택할 수 있습니다. 끄기</strong></p><p><u>스크립트의 로딩 문제에 대한 피드백이 필요한 경우 스크린샷을 찍기 전에 이 옵션을 켜서 문제를 분석할 수 있도록 하세요</u></p>"
+            "helpText": "<p>로딩 정보 표시를 켜면 페이지가 로드될 때마다 상단에 로딩 정보 프롬프트가：\"{{scriptName}} -- xxx\"로 표시됩니다.</p><p> 이 메시지는 현재 스크립트가 어떻게 작동하는지 확인하는 데 사용되며, <strong>보고 싶지 않다면</strong> 끄면 됩니다!</p><p><u> 스크립트 로딩 문제에 대한 피드백을 제공해야 하는 경우 이 옵션을 켠 상태에서 스크린샷을 찍어두면 문제를 분석하기 쉽다는 점에 유의하세요!</u></p>"
         },
         "targetArea": {
             "label": "대상 영역의 범위 표시",
@@ -352,7 +352,7 @@
         "version": "버전：",
         "update": {
             "title": "업데이트",
-            "thanksforDevChannelNotice": "<p>테스트 채널에 참여하여 Codeforces Better! 가 개선될 수 있도록 도와주셔서 감사합니다.</p><p>질문이 있으시면<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>테스트 채널에 참여하여 {{scriptName}} 개선에 도움을 주셔서 감사합니다.</p><p> 문제에 대한 피드백을 보내려면 <a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github로</a> 이동하세요. </p>",
             "channel": {
                 "label": "채널 업데이트",
                 "helpText": "<p>스크립트의 업데이트 채널을 선택할 수 있습니다</p><p>베타 버전(：)은 Github에서 커밋할 때마다 자동으로 푸시되므로 광범위한 테스트를 거치지 않았으며 알려지지 않은 여러 가지 문제가 있을 수 있습니다.</p><p>베타 버전에 문제가 있는 경우 Github에서 이슈를 제기하고 베타 태그를 추가하세요(</p>).",

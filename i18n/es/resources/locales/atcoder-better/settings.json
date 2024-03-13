@@ -335,7 +335,7 @@
         "title": "preferencias",
         "loadingInfo": {
             "label": "Visualización de un mensaje de alerta de carga",
-            "helpText": "<p>Cuando active Mostrar información de carga, se mostrará un aviso de información de carga en la parte superior cada vez que se cargue la página：\"CodeforcesBetter -- xxx\"</p><p>Esto se utiliza para ver cómo está funcionando actualmente el script<strong>Si no desea verlo, puede optar por Desactivar</strong></p><p><u>Cabe señalar que si necesita información sobre cualquier problema de carga del script, active esta opción antes de realizar una captura de pantalla para que se pueda analizar el problema</u></p>"
+            "helpText": "<p>Al activar Mostrar información de carga, se mostrará un aviso de información de carga en la parte superior cada vez que se cargue la página：\"{{scriptName}} -- xxx\"</p><p> Esto se utiliza para ver cómo está funcionando el script en ese momento, y <strong>puede desactivarse si no</strong> quieres verlo.</p><p><u> Tenga en cuenta que si necesita dar su opinión sobre cualquier problema de carga con el script, por favor haga una captura de pantalla con esta opción activada para que sea más fácil analizar el problema.</u></p>"
         },
         "targetArea": {
             "label": "Visualizar el alcance de la zona objetivo",
@@ -352,7 +352,7 @@
         "version": "Versión：",
         "update": {
             "title": "actualización",
-            "thanksforDevChannelNotice": "<p>Gracias por unirse al canal de pruebas y ayudar a Codeforces Better! a mejorar.</p><p>Para preguntas vaya a<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>Gracias por unirte al canal de pruebas y ayudar a mejorar {{scriptName}} .</p><p> Para comentarios sobre temas ir a <a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "canal de actualización",
                 "helpText": "<p>Puede elegir el canal de actualización para el script</p><p>Tenga en cuenta que la versión beta de：se empuja automáticamente después de cada confirmación en Github, por lo que no ha sido ampliamente probado y puede tener varios problemas desconocidos.</p><p>Por favor, plantee problemas en Github y añada etiquetas Beta para los problemas con la versión beta</p>",

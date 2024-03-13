@@ -335,7 +335,7 @@
         "title": "preferenze",
         "loadingInfo": {
             "label": "Visualizzazione di un messaggio di avviso di caricamento",
-            "helpText": "<p>Quando attiva l'opzione Mostra informazioni sul caricamento, un messaggio di informazioni sul caricamento verrà visualizzato nella parte superiore ogni volta che la pagina viene caricata：\"CodeforcesBetter -- xxx\"</p><p>Questo viene utilizzato per vedere come lo script sta attualmente lavorando<strong>Se non desidera vederlo, può scegliere di Off</strong></p><p><u>Si noti che se ha bisogno di un feedback su eventuali problemi di caricamento dello script, la preghiamo di attivare questa opzione prima di scattare uno screenshot, in modo che il problema possa essere analizzato</u></p>"
+            "helpText": "<p>Quando si attiva la funzione Mostra informazioni sul caricamento, ogni volta che la pagina viene caricata viene visualizzata una richiesta di informazioni sul caricamento：\"{{scriptName}} -- xxx\".</p><p> Questo viene utilizzato per vedere come funziona attualmente lo script e <strong>può essere disattivato se non lo si vuole vedere</strong>!</p><p><u> Si noti che se si deve fornire un feedback su eventuali problemi di caricamento dello script, si prega di fare uno screenshot con questa opzione attivata per rendere più facile l'analisi del problema!</u></p>"
         },
         "targetArea": {
             "label": "Visualizzare il raggio d'azione dell'area di destinazione",
@@ -352,7 +352,7 @@
         "version": "Versione：",
         "update": {
             "title": "aggiornamento",
-            "thanksforDevChannelNotice": "<p>Grazie per essersi unito al canale di test e per aver aiutato Codeforces Better! a migliorare.</p><p>Per domande vada su<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
+            "thanksforDevChannelNotice": "<p>Grazie per esservi uniti al canale di test e per aver aiutato {{scriptName}} a migliorare.</p><p> Per avere un riscontro sui problemi vai su <a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>",
             "channel": {
                 "label": "canale di aggiornamento",
                 "helpText": "<p>Può scegliere il canale di aggiornamento per lo script</p><p>Si noti che la versione beta di：viene automaticamente inviata dopo ogni commit su Github, pertanto non è stata testata in modo approfondito e potrebbe presentare vari problemi sconosciuti.</p><p>Si prega di sollevare problemi su Github e di aggiungere i tag Beta per i problemi con la versione beta</p>",
