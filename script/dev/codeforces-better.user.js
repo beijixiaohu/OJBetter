@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.13
+// @version      1.73.14
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -13199,9 +13199,9 @@ async function initializeSequentially(loadingMessage) {
 }
 
 /**
- * 脚本开始加载
+ * 主方法
  */
-document.addEventListener("DOMContentLoaded", async () => {
+async function main() {
     await ensureJQueryIsLoaded(); // 等待jQuery加载
     const loadingMessage = new LoadingMessage();
     await loadRequiredFunctions(); // 加载必须的函数
@@ -13218,7 +13218,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.addEventListener('load', () => onResourcesReady(loadingMessage));
         }
     }
-});
+};
+
+// ------------------------------
+// 脚本加载入口
+if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", main);
+} else {
+    main(); // 如果DOMContentLoaded已经触发，立即执行
+}
+// ------------------------------
 
 // ------------------------------
 // 配置自动迁移代码（将在10个小版本后移除-1.83）

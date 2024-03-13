@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.6
+// @version      1.12.7
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -7674,7 +7674,7 @@ class TranslateDiv {
 
     /**
      * 渲染一个元素内的LaTeX公式
-     * @param {HTMLElement} element 元素
+     * @param {*} element 
      */
     renderLaTeX(element){
         const latexRenderOptions = {
@@ -12868,9 +12868,9 @@ async function initializeSequentially(loadingMessage) {
 }
 
 /**
- * 脚本开始加载
+ * 主方法
  */
-document.addEventListener("DOMContentLoaded", async () => {
+async function main() {
     await ensureJQueryIsLoaded(); // 等待jQuery加载
     const loadingMessage = new LoadingMessage();
     await loadRequiredFunctions(); // 加载必须的函数
@@ -12887,7 +12887,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.addEventListener('load', () => onResourcesReady(loadingMessage));
         }
     }
-});
+};
+
+// ------------------------------
+// 脚本加载入口
+if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", main);
+} else {
+    main(); // 如果DOMContentLoaded已经触发，立即执行
+}
+// ------------------------------
 
 // ------------------------------
 // 配置自动迁移代码（将在10个小版本后移除-1.19）
