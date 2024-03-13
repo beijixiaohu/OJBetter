@@ -335,7 +335,7 @@
         "title": "プリファレンス",
         "loadingInfo": {
             "label": "ローディング警告メッセージの表示",
-            "helpText": "<p>ロード情報を表示するをオンにすると、ページがロードされるたびに、ロード情報のプロンプトが上部に表示されます：\"CodeforcesBetter -- xxx\"</p><p>これは、スクリプトが現在どのように動作しているかを確認するために使用されます<strong>もし表示したくない場合は、以下を選択できます。オフ</strong></p><p><u>なお、スクリプトの読み込みに関する問題のフィードバックが必要な場合は、スクリーンショットを撮る前にこのオプションをオンにして、問題を分析できるようにしてください</u></p>"
+            "helpText": "<p>ロード情報を表示するをオンにすると、ページがロードされるたびに、ロード情報のプロンプトが上部に表示されます：\"{{scriptName}} -- xxx\"</p><p>これはスクリプトが現在どのように動作しているかを確認するためのもので、表示させたくない<strong>場合はオフに</strong>することができます！</p><p><u>スクリプトの読み込みに関する問題についてフィードバックが必要な場合は、このオプションをオンにしてスクリーンショットを撮ってください！</u></p>"
         },
         "targetArea": {
             "label": "ターゲットエリアの範囲を表示",
@@ -352,7 +352,7 @@
         "version": "バージョン：",
         "update": {
             "title": "更新",
-            "thanksforDevChannelNotice": "<p>テストチャンネルにご参加いただき、Codeforces Better!</p><p>ご質問は<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Github</a> </p>まで。",
+            "thanksforDevChannelNotice": "<p>テストチャンネルに参加し、 {{scriptName}} をより良くする手助けをしてくれてありがとう。</p><p>問題に対するフィードバックは<a target='_blank' href='https://github.com/beijixiaohu/OJBetter/issues'>Githubへ</a> </p>",
             "channel": {
                 "label": "更新チャネル",
                 "helpText": "<p>スクリプトの更新チャンネルを選択できます</p><p>なお、：のベータ版は、Github 上でコミットされるたびに自動的にプッシュされるため、広範なテストが行われておらず、さまざまな未知の問題がある可能性があります。</p><p>Github で問題を提起し、ベータ版</p>の問題についてはベータ版タグを追加してください。",
