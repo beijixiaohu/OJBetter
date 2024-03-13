@@ -320,7 +320,7 @@
             "rules": {
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "रेटिंग परिवर्तन के पिछले दौर को अस्थायी रूप से वापस ले लिया गया है। वे जल्द ही ठीक हो जायेंगे.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "अनुस्मारक：यदि कोई तकनीकी समस्या आती है, तो आप एक हल्की वेबसाइट का उपयोग कर सकते हैं",
-                "Please subscribe to the official Codeforces channel in Telegram via the link ": "कृपया लिंक के माध्यम से कोडफोर्स के आधिकारिक टेलीग्राम चैनल की सदस्यता लें",
+                "Please subscribe to the official Codeforces channel in Telegram via the link": "कृपया लिंक के माध्यम से कोडफोर्स के आधिकारिक टेलीग्राम चैनल की सदस्यता लें",
                 "When submitting a solution in C++, please select either C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler.": "C++ उत्तर सबमिट करते समय, कृपया अपने कंपाइलर के रूप में C++14 (GCC 6-32) या C++17 (GCC 7-32) चुनें।"
             }
         },
