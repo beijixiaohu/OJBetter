@@ -36,7 +36,7 @@
 
 - Corrige um problema em que a tipografia entre fórmulas LaTeX vizinhas podia ser quebrada
 
-- Alguns outros ajustamentos e melhorias
+- Alguns outros ajustes e melhorias
 
 ## 1.73.0
 
@@ -66,7 +66,7 @@
 - Uma vez que a opção "Não esperar que os recursos da página sejam totalmente carregados" é teoricamente sem sentido, foi renomeada para desmarcar o estado anteriormente possível
 - Adaptação de um grande número de estruturas de código
 - **muitas renomeações de classes css, pelo que poderá ter de as ajustar se estiver a utilizar estilos personalizados do stylus**
-- Alguns outros ajustes e melhorias
+- Alguns outros ajustamentos e melhorias
 
 ## 1.72.0
 
