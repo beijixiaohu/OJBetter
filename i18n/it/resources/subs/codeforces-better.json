@@ -321,7 +321,7 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "Le modifiche alle valutazioni del turno precedente sono state temporaneamente annullate. Saranno ripristinate a breve.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Promemoria：Se si verificano problemi tecnici, può utilizzare il sito leggero",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "Iscrivetevi al canale Telegram ufficiale di Codeforces tramite il link!",
-                "When submitting a solution in C++, please select either C++14 \\(GCC 6-32\\) or C++17 \\(GCC 7-32\\) as your compiler.": "Quando si invia una risposta in C++, selezionare C++14 (GCC 6-32) o C++17 (GCC 7-32) come compilatore."
+                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "Quando si invia una risposta in C++, selezionare C++14 (GCC 6-32) o C++17 (GCC 7-32) come compilatore."
             }
         },
         ".lang-chooser": {
