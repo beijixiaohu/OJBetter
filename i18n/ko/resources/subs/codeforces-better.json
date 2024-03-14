@@ -321,7 +321,7 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "이전 라운드의 등급 변경 사항이 일시적으로 롤백되었습니다. 곧 복구될 예정입니다.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "알림：기술적인 문제가 발생하면 라이트웨이트 사이트를 이용할 수 있습니다.",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "링크를 통해 코드포스의 공식 텔레그램 채널을 구독해 주세요!",
-                "When submitting a solution in C++, please select either C++14 \\(GCC 6-32\\) or C++17 \\(GCC 7-32\\) as your compiler.": "C++ 답안을 제출할 때는 컴파일러로 C++14(GCC 6-32) 또는 C++17(GCC 7-32)을 선택해 주세요."
+                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ 답안을 제출할 때는 컴파일러로 C++14(GCC 6-32) 또는 C++17(GCC 7-32)을 선택해 주세요."
             }
         },
         ".lang-chooser": {
