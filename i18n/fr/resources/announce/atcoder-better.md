@@ -38,7 +38,7 @@
 
 - Corrige un problème de typographie entre des formules LaTeX voisines.
 
-- Autres ajustements et améliorations
+- Quelques autres ajustements et améliorations
 
 ***
 
@@ -68,7 +68,7 @@
 - L'option "Ne pas attendre le chargement complet des ressources de la page" n'ayant théoriquement aucun sens, elle a été renommée pour décocher l'état précédemment possible.
 - Adaptation d'un grand nombre de structures de code
 - **beaucoup de renommage de classes css, donc vous aurez peut-être besoin de modifier cela si vous utilisez les styles personnalisés de stylus**.
-- Quelques autres ajustements et améliorations
+- Autres ajustements et améliorations
 
 ***
 
