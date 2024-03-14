@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.9
+// @version      1.12.10
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -4351,6 +4351,7 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
                 try {
                     const newData = await OJB_getExternalJSON(url);
                     await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
+                    console.log("Website local data has been refreshed!");
                 } catch (error) {
                     console.error('Failed to update localization data:', error);
                 }
@@ -4386,9 +4387,13 @@ async function localizeWebsite() {
             let node = this;
             if (node.nodeType === Node.TEXT_NODE) {
                 Object.keys(textReplaceRules).forEach(match => {
-                    const replace = textReplaceRules[match];
-                    const regex = new RegExp(match, 'g');
-                    node.textContent = node.textContent.replace(regex, replace);
+                    try {
+                        const replace = textReplaceRules[match];
+                        const regex = new RegExp(match, 'g');
+                        node.textContent = node.textContent.replace(regex, replace);
+                    } catch (error) {
+                        console.error(`Error processing text replacement for match: ${match}`, error);
+                    }
                 });
             } else {
                 $(node).contents().each(function () {
@@ -6757,12 +6762,9 @@ function isLikelyCodeSnippet(text) {
         return count + (cleanedText.match(regex) || []).length;
     }, 0);
 
-    // 检查Python的缩进特征
-    const hasPythonIndentation = cleanedText.includes('\n    ') || cleanedText.includes('\n\t');
-
     // 如果代码关键字数量或者代码的特殊字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
-    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2 || hasPythonIndentation) {
-        console.log("keywordCount:", keywordCount, "codeCharCount:", codeCharCount, "textCharCount:", textCharCount, "hasPythonIndentation:", hasPythonIndentation);
+    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2) {
+        console.log("keywordCount:", keywordCount, "codeCharCount:", codeCharCount, "textCharCount:", textCharCount);
         return true;
     }
 
@@ -7762,7 +7764,7 @@ class TranslateDiv {
             if (OJBetter.typeOfPage.is_problem && OJBetter.translation.memory.enabled) {
                 OJBetter.translation.memory.ttTree.rmTransResultMap(this.id); // 移除ttTree中的数据
                 OJBetter.translation.memory.ttTree.refreshNode("#task-statement");
-                updateTransDBData(OJBetter.translation.memory.ttTree.getNodeDate(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新DB中的数据
+                updateTransDBData(OJBetter.translation.memory.ttTree.getNodeData(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新DB中的数据
             }
         });
     }
@@ -7894,7 +7896,8 @@ class ElementsTree {
         this.node = [];
         this.transResultMap = {};
         this.index = 0;
-        this.tagNames = ["DIV", "P", "UL", "LI"]
+        // this.tagNames = ["DIV", "P", "UL", "LI"]
+        this.tagNames = ["DIV", "P", "UL", "LI", "SECTION", "SPAN"]
         this.init($(elements));
     }
 
@@ -7954,11 +7957,11 @@ class ElementsTree {
         return prev;
     }
 
-    getNodeDate() {
+    getNodeData() {
         return this.node;
     }
 
-    setNodeDate(node) {
+    setNodeData(node) {
         this.node = node;
     }
 
@@ -8102,7 +8105,7 @@ async function initTransResultsRecover() {
     OJBetter.translation.memory.ttTree = new ElementsTree("#task-statement"); // 初始化当前页面#task-statement元素的结构树
     let result = await getTransDBData();
     if (!result) return;
-    OJBetter.translation.memory.ttTree.setNodeDate(result.nodeDate);
+    OJBetter.translation.memory.ttTree.setNodeData(result.nodeDate);
     OJBetter.translation.memory.ttTree.setTransResultMap(result.transResultMap);
     OJBetter.translation.memory.ttTree.recover($("#task-statement"));
 }
@@ -8113,7 +8116,8 @@ async function initTransResultsRecover() {
 async function initTransWhenViewable() {
     await waitForMathJaxIdle();
 
-    const elements = $('.ttypography, .comments').find('.translateButton');
+    // const elements = $('.ttypography, .comments').find('.translateButton');
+    const elements = $('#task-statement, .comments').find('.translateButton');
     const observers = [];
 
     // Use a single Intersection Observer for all elements
@@ -8452,9 +8456,10 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
 
     // 保存翻译结果
     if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
-        OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
+        // OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
+        OJBetter.translation.memory.ttTree.refreshNode("#task-statement"); // 刷新当前页面.ttypography元素的结构树实例
         OJBetter.translation.memory.ttTree.addTransResultMap(id, translatedText);
-        updateTransDBData(OJBetter.translation.memory.ttTree.getNodeDate(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新翻译结果到transDB
+        updateTransDBData(OJBetter.translation.memory.ttTree.getNodeData(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新翻译结果到transDB
     }
 
     // 翻译结果面板更新
