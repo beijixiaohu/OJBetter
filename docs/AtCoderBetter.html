@@ -1,89 +1,40 @@
 <h1 id="AtCoder-better🎈">AtCoder Better!🎈</h1>
-<p>AtCoder界面汉化、黑暗模式支持、题目翻译、markdown视图、一键复制题目、跳转到洛谷</p>
-<h2 id="功能">功能</h2>
-<p>tip：脚本的部分功能提供了配置项，您可以点击<strong>整个页面右上角</strong> 的 <strong><code>AtCoderBetter设置</code></strong> 按钮打开设置面板。</p>
-<h3 id="界面汉化">界面汉化</h3>
-<p>将网站的主要元素汉化为中文，如果某处翻译有误或者不佳，欢迎反馈。</p>
-<p>您可以在右上角的 <code>AtCoderBetter设置</code> 面板中选择开启或关闭汉化</p>
-<h3 id="题目翻译">题目翻译</h3>
-<p>在题目、blog、评论等的右上角添加翻译按钮，一键即可翻译为中文，同时确保不破坏Latex公式</p>
-<p>您可以在右上角的 <code>AtCoderBetter设置</code> 面板中选择您想使用的翻译服务（默认为Deepl）</p>
-<p style="color:#009688">tip：右键点击<strong>翻译</strong>按钮，可以快速切换翻译服务哦</p>
-<p>提供了如下翻译接口可供选择：</p>
-<table style="border: 1px solid #bcaaa4;">
-  <thead>
-    <tr>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">&nbsp;
-      </th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">KEY
-      </th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">翻译质量</th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">可靠性</th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">字符数上限
-      </th>
-      <th style="text-align: left; background-color: #f2f2f2; border-bottom: 1px solid #bcaaa4; color: black;">耗时</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left; background-color: #1976D2; color: #E3F2FD;">Deepl翻译（✨推荐）</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">部分地区可能无法访问或较慢</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">5000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
-    </tr>
-    <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">讯飞听见翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">通常可靠</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">2000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
-    </tr>
-    <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">有道翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">通常可靠</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">600</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
-    </tr>
-    <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">Google翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">需要当前网络能顺利访问Google</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">5000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
-    </tr>
-    <tr>
-      <td style="text-align: left; background-color: #f9f9f9; color:black;">彩云翻译</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">不需要</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">通常可靠</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">5000</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">快</td>
-    </tr>
-    <tr>
-      <td style="text-align: left; background-color: #1976D2; color: #E3F2FD;">使用ChatGPT翻译（✨推荐）</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">需要API Key</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">⭐️⭐️⭐️⭐️⭐️</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">取决于服务商质量以及 OpenAI 的拥挤程度</td>
-      <td style="text-align: left; background-color: #f9f9f9; color: black;">取决于模型</td>
-      <td style="text-align: left; background-color: #FFC107; color: #795548;">较慢</td>
-    </tr>
-  </tbody>
-</table>
-<h2 id="其他功能">其他功能</h2>
-<p>部分功能可在右上角的 <code>AtCoderBetter设置</code> 面板中更改/开关</p>
+<p>这是一个 Tampermonkey 脚本，旨在提升你在 AtCoder 网站的使用体验，</p>
+<p>通过增加多项实用功能，改善网站界面和用户交互，使你的编程竞赛之路更加高效、便捷。</p>
+<div style="background-color: #FFF3E0;color: #FF5722;border: 1px solid #FF5722;">
+  <div style="border: 8px solid #ffffff00;">
+    <center>
+      <h3>写在前面：反馈须知</h3>
+    </center>
+    <p>如遇问题，请前往 <a style="color:#F44336"
+        href="https://github.com/beijixiaohu/OJBetter/issues">Github issues</a> 或者 <a style="color:#F44336"
+        href="https://greasyfork.org/zh-CN/scripts/465777/feedback">反馈页</a> 反馈，</p>
+    <p>请提供关于问题的详细描述，比如：链接，截图，期望的结果、实际的结果，复现方式……</p>
+    <p>欢迎友善的讨论以及功能建议，但维护脚本以及提供帮助并不是作者的义务，感谢你的理解。</p>
+  </div>
+</div>
+<h2>主要功能</h2>
+<p>安装该脚本，你可以获得：</p>
 <ul>
-  <li>在题目、blog、回复等的右上角添加 <code>MrakDown视图</code> 按钮以及 <code>复制</code> 按钮</li>
-  <li>让 AtCoder 支持黑暗模式，默认跟随系统</li>
-  <li>展开折叠块，自动展开所有的折叠块</li>
-  <li>洛谷跳转，一键跳转到该题在洛谷对应的页面</li>
+  <li>黑暗模式支持：为网站添加黑暗模式，夜晚刷题不伤眼</li>
+  <li>多语言网站翻译：将网站的主要文本替换成你选择的语言</li>
+  <li>便捷按钮：在页面中添加 <code>MrakDown</code> 、 <code>复制</code> 、<code>翻译</code> 按钮</li>
+  <li>题目翻译功能：点击 <code>翻译</code> 按钮，一键即可翻译为目标语言，同时确保不破坏 LaTeX 公式。</li>
+  <li>Clist Rating 分数显示：从 clist.by 网站获取题目的 Rating 分数数据，并在题目页面中显示。</li>
+  <li>代码编辑器与 LSP 支持：在题目页的下方集成代码编辑器，支持自动保存、快捷提交、在线测试运行等功能。</li>
+  <li>洛谷快捷跳转：一键跳转到该题在洛谷对应的页面</li>
+  <li>一些其他小功能……</li>
 </ul>
-<h2 id="兼容性">兼容性</h2>
+<div style="background-color: #E3F2FD;color: #1565C0;border: 1px solid #1565c0;">
+  <div style="border: 8px solid #ffffff00;">
+    <strong>提示：</strong>
+    <p>点击 整个页面右上角 的"AtCoder Better!"设置按钮，即可打开设置面板，</p>
+    <p>绝大部分功能均提供了帮助文本，鼠标悬浮在旁边的 问号图标 上即可查看。</p>
+  </div>
+</div>
+<h2>使用文档</h2>
+<p>了解更多详细信息和使用指南，请访问 <a href="https://github.com/beijixiaohu/OJBetter/wiki">Github Wiki 页面</a>。</p>
+<h2>兼容性</h2>
 <p><strong>浏览器</strong></p>
 <table style="border: 1px solid #bcaaa4;">
   <thead>
@@ -100,14 +51,14 @@
       <td style="background-color: #f9f9f9;">96</td>
     </tr>
     <tr style="background-color: white;">
-      <td style="background-color: #009688; color: #ffffff;">Egde</td>
+      <td style="background-color: #009688; color: #ffffff;">Edge</td>
       <td style="background-color: #009688; color: #ffffff;">支持</td>
       <td style="background-color: #f9f9f9;">96</td>
     </tr>
     <tr style="background-color: white;">
-      <td style="background-color: #f9f9f9;">国产Chromium套壳</td>
-      <td style="background-color: #FFC107; color: #795548;">基本兼容，但可能出现意外的错误</td>
-      <td style="background-color: #FFC107; color: #795548;">Chromium 内核版本≥96</td>
+      <td style="background-color: #f9f9f9;">基于Chromium的</td>
+      <td style="background-color: #FFC107; color: #3e2723;">基本兼容，但可能出现意外的错误</td>
+      <td style="background-color: #FFC107; color: #3e2723;">Chromium 内核版本≥96</td>
     </tr>
     <tr style="background-color: white;">
       <td style="background-color: #009688; color: #ffffff;">FireFox（包括移动端）</td>
@@ -121,122 +72,31 @@
     </tr>
   </tbody>
 </table>
-
 <p><strong>脚本管理器</strong></p>
-<p>仅在Tampermonkey（篡改猴）脚本管理器中进行测试，不保证在Greasemonkey，Violentmonkey，ScriptCat等中的兼容性</p>
-<p><strong>其他插件</strong></p>
-<p>与主流CF相关插件不存在兼容性问题，如果您遇到了兼容性问题，欢迎反馈。</p>
-<h2 id="常见问题">常见问题</h2>
-<ul>
-  <p><strong>Q. 如何开始？</strong></p>
-  <ul>
-    <li>A. 您需要先安装<a href="https://www.tampermonkey.net/">Tampermonkey</a>，然后再安装该脚本
-    </li>
-  </ul>
-  <p><strong>Q. 更新错误？</strong></p>
-  <ul>
-    <li>A. 由于 Greasyfork 平台的原因，当新版本刚发布时，可能会出现实际更新/安装的却是上一个版本的情况，通常您只需要稍等几分钟，然后再次前往更新/安装即可。
-      您也可以将鼠标移动到脚本的更新提示框中的红色问号上，然后点击弹出信息底部的 “暂不更新” 按钮。</li>
-  </ul>
-  <p><strong>Q. 一直显示加载中？</strong></p>
-  <ul>
-    <li>A. 请开启设置面板中的 ”兼容选项-不等待页面资源加载“ 选项</li>
-  </ul>
-  <p><strong>Q. 使用deepl翻译报错Too many requests ？</strong></p>
-  <ul>
-    <li>A. 这通常是因为你短时间内频繁翻译，或者一次性翻译了超过5000字符的文本导致的，deepl对翻译字数和频率是有限制的，这是暂时的，一段时间后就恢复正常了
-    </li>
-  </ul>
-  <p><strong>Q. 翻译结果中一些公式显示为{xx}/[xx]/【xx】？</strong></p>
-  <ul>
-    <li>A. 在使用普通翻译接口（deepl/有道/google）进行翻译时，受脚本的实现方式所限，可能会出现{xx}/[xx]/【xx】</li>
-    <div style="background-color: #00BCD4; color: #ffffff;">
-      <p><strong>脚本对公式的处理方式</strong></p>
-      <p>为了保护LaTeX公式在翻译时不被破坏，脚本会先取出所有的LaTeX公式，并使用替换符{xx}/[xx]/【xx】来占位，</p>
-      <p>由于这些替换符大概率不会在翻译的过程中遭到破坏，因此可以在翻译后再根据替换符还原回LaTeX公式。</p>
-      <p>这种实现方式能如期工作的前提是替换符不被破坏，这在绝大多数情况下都是没有问题的，</p>
-      <p>但有时翻译服务会破坏替换符 ，比如 【23】 变成了 【23 / 23】 / [23]/ 【23 】/ 23 】，这些情况下脚本会通过一定的正则规则进行还原，使其仍然可以如期工作</p>
-      <p>但如果翻译服务还破坏了更多的内容，产生了歧义，比如翻译服务将【2】 313 变成了 【2312，这时就无法还原了，</p>
-      <p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，您可以在右上角的设置面板中选择不同的替换符，</p>
-      <p>经过测试，通常 <code>{}</code> 表现的效果更好，因此这也是脚本默认使用的替换符</p>
-    </div>
-    <div style="background-color: #009688; color: #ffffff;">
-      <p><strong>tip：</strong></p>
-      <p>在使用 ChatGPT 进行翻译时不会存在这个问题，因为可以通过提示词直接告诉 ChatGPT “保持其中的LaTeX公式不翻译”，</p>
-      <p>聪明的 ChatGPT 可以很好的遵守这一点，这也是脚本推荐的翻译方式。</p>
-    </div>
-  </ul>
-  <p><strong>Q. 如何使用ChatGPT翻译？</strong></p>
-  <ul>
-    <li>A. 如果您可以直接访问 OpenAI 的接口，并且拥有账号，那么非常棒，您只需要选中 “使用ChatGPT翻译(API)”，然后点击下方的 “添加” 按钮新建一个配置并填写即可。</li>
-    <p>此外，您也可以购买 api 代理服务来使用 ChatGPT，下表收集了一些 api 服务商，您可以选择使用
-    </p>
-    <table style="border: 1px solid #bcaaa4;">
-      <thead>
-        <tr style="background-color: #f2f2f2;">
-          <th style="border-bottom: 1px solid #bcaaa4;">&nbsp;</th>
-          <th style="border-bottom: 1px solid #bcaaa4;">官网</th>
-          <th style="border-bottom: 1px solid #bcaaa4;">获取方式</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">API2D</td>
-          <td style="background-color: #f9f9f9;"><a href="https://api2d.com/" target="_blank"
-              class="url">https://api2d.com/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">CloseAI</td>
-          <td style="background-color: #f9f9f9;"><a href="https://console.closeai-asia.com/" target="_blank"
-              class="url">https://console.closeai-asia.com/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">OhMyGPT</td>
-          <td style="background-color: #f9f9f9;"><a href="https://aigptx.top/" target="_blank"
-              class="url">https://aigptx.top/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">OpenAI-SB</td>
-          <td style="background-color: #f9f9f9;"><a href="https://openai-sb.com/" target="_blank"
-              class="url">https://openai-sb.com/</a></td>
-          <td style="background-color: #f9f9f9;">Telegram机器人</td>
-        </tr>
-        <tr style="background-color: white;">
-          <td style="background-color: #f9f9f9;">API2GPT</td>
-          <td style="background-color: #f9f9f9;"><a href="https://www.api2gpt.com/" target="_blank"
-              class="url">https://www.api2gpt.com/</a></td>
-          <td style="background-color: #f9f9f9;">官网</td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="background-color:antiquewhite">
-      <p><strong>免责：</strong></p>
-      <p>作者仅为收集分享，没有获得任何收益，亦不保证上述平台的稳定性，平台的任何行为均与作者无关。</p>
-      <p>建议小额充值，用完再充，这些服务商可能会跑路</p>
-    </div>
-    <p>如果您使用的是 api 代理服务商 提供的服务，配置中的 KEY 应该填写 api代理服务商提供的 key，</p>
-    <p>此外，您还需要在配置中额外填写 Proxy API，</p>
-    <p>Proxy API 需要填写完整的地址，这里以 <a href="https://console.closeai-asia.com/">CloseAI</a> 为例，其提供了API
-      Base：<code>https://api.closeai-proxy.xyz</code></p>
-    <p>那么 Proxy API 后面应该填写的就是 <code>https://api.closeai-proxy.xyz/v1/chat/completions</code>，</p>
-    <p style="color: #F44336;">注意：由于您指定了自定义的API，Tampermonkey会对您的跨域请求进行警告，请自行点击授权</p>
-  </ul>
-</ul>
-
-
-<h2 id="贡献代码">贡献代码</h2>
-<p>欢迎贡献代码，请前往 <a href="https://github.com/beijixiaohu/OJBetter">Github仓库</a> 创建PR</p>
-<h2 id="感谢">感谢</h2>
-<ul>
-  <li>该脚本是 <a href="https://greasyfork.org/zh-CN/scripts/465777">Codeforces Better!</a> 的姊妹作品，Codeforces Better! 在早期开发中参考了以下脚本：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>、<a
-      href="https://greasyfork.org/zh-CN/scripts/378277">翻译机</a></li>
-  <li>脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
-      href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a>、<a
-      href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a href="https://github.com/gka/chroma.js">chroma</a>
-  </li>
-  <li>特别感谢所有为 Codeforces Better! 和 Atcoder Better! 提供反馈和建议的朋友们。</li>
-</ul>
-<p>感谢你们，0rz</p>
+<p>仅支持 Tampermonkey（篡改猴）脚本管理器</p>
+<h2>如何贡献</h2>
+<p>如果你有任何想法或功能请求，欢迎前往 <a href="https://github.com/beijixiaohu/OJBetter">Github</a> 创建 PR 或者 Issues。</p>
+</div><div style="border: 1px solid #aaa;">
+  <div style="border: 8px solid #ffffff00;"><details><summary>感谢</summary>
+      <div style="border: 8px solid #ffffff00;">
+        <ul>
+          <li>早期开发中参考了以下脚本：<a href="https://greasyfork.org/zh-CN/scripts/441750">AcWing content to markdown</a>、<a
+              href="https://greasyfork.org/zh-CN/scripts/378277">翻译机</a></li>
+          <li>AtCoderBetter 脚本使用了以下开源库：<a href="https://github.com/mixmark-io/turndown">turndown</a>、<a
+              href="https://jquery.com/">jquery</a>、<a href="https://www.mathjax.org/">MathJax</a>、<a
+              href="https://github.com/brix/crypto-js">crypto-js</a>、<a href="">base64</a>、<a
+              href="https://github.com/gka/chroma.js">chroma</a>、<a href="http://xtermjs.org/">xterm</a>、<a
+              href="https://dexie.org/">dexie</a>、<a href="https://github.com/microsoft/monaco-editor">monaco-editor</a>、<a
+              href="https://www.i18next.com/">i18next</a>、<a href="https://github.com/i18next/i18next-chained-backend">i18next-chained-backend
+              </a>、<a href="https://github.com/i18next/i18next-localstorage-backend">i18next-localstorage-backendjs</a>、<a
+              href="https://highlightjs.org/">highlight</a>
+          </li>
+          <li>OJBetter_Bridge 参考了以下仓库<a
+              href="https://github.com/moeakwak/monaco-language-server">monaco-language-server</a>，使用了以下开源库：<a
+              href="https://github.com/zhiyiYo/PyQt-Fluent-Widgets">PyQt-Fluent-Widgets</a>、<a
+              href="https://pypi.org/project/PyYAML/">PyYAML</a>、<a href="https://pypi.org/project/tornado/">tornado</a>、<a
+              href="https://pypi.org/project/ujson/">ujson</a>
+          </li>
+          <li>特别感谢所有提供反馈和建议的朋友们。</li>
+        </ul>
+        <p>感谢你们，0rz</p></div></details></div>
