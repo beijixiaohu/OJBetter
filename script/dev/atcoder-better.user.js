@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.10
+// @version      1.13.0
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -24,7 +24,6 @@
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
-// @connect      8.130.66.249
 // @connect      *
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -8117,7 +8116,7 @@ async function initTransWhenViewable() {
     await waitForMathJaxIdle();
 
     // const elements = $('.ttypography, .comments').find('.translateButton');
-    const elements = $('#task-statement, .comments').find('.translateButton');
+    const elements = $('#task-statement').find('.translateButton');
     const observers = [];
 
     // Use a single Intersection Observer for all elements
