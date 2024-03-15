@@ -38,7 +38,7 @@
 
 - Corregge un problema per cui la tipografia tra formule LaTeX vicine poteva essere interrotta.
 
-- Altri aggiustamenti e miglioramenti
+- Altre modifiche e miglioramenti
 
 ***
 
@@ -68,7 +68,7 @@
 - Poiché l'opzione "Non attendere il caricamento completo delle risorse della pagina" è teoricamente priva di significato, è stata rinominata per deselezionare lo stato precedentemente possibile
 - Regolazione di un gran numero di strutture di codice
 - **molte rinominazioni di classi css, quindi potrebbe essere necessario modificare questo aspetto se sta usando gli stili personalizzati di Stylus**.
-- Altre modifiche e miglioramenti
+- Altri miglioramenti e correzioni
 
 ***
 
@@ -95,4 +95,4 @@
 - Modalità scura migliorata, stili hover migliorati sugli elementi campione Grazie a @SUPERLWR per il feedback!
 - Aggiungere l'opzione del pannello delle impostazioni: Traduzione - Filtrare i segni \*\*nel testo Grazie a @Dog_E, CreMicro per il loro feedback!
 - È stato risolto il problema per cui la Valutazione Clist non poteva essere visualizzata correttamente dopo aver disattivato "Mostra avvisi di caricamento", grazie al feedback di Vistarin.
-- Altri miglioramenti e correzioni
+- Altri aggiustamenti e miglioramenti

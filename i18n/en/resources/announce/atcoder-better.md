@@ -38,7 +38,7 @@
 
 - Fixes an issue where typography between neighboring LaTeX formulas could be broken
 
-- Some other adjustments and improvements
+- Some other tweaks and improvements
 
 ***
 
@@ -68,7 +68,7 @@
 - Since the "Do not wait for page resources to fully load" option is theoretically meaningless, it was renamed to uncheck the previously possible state
 - Adjustment of a large number of code structures
 - **lots of css class renaming, so you may need to tweak that if you're using stylus custom styles**
-- Some other tweaks and improvements
+- Some other adjustments and improvements
 
 ***
 

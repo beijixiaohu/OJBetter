@@ -36,7 +36,7 @@
 
 - Behebt ein Problem, bei dem die Typografie zwischen benachbarten LaTeX-Formeln unterbrochen werden konnte
 
-- Einige andere Anpassungen und Verbesserungen
+- Einige andere Optimierungen und Verbesserungen
 
 ## 1.73.0
 
@@ -66,7 +66,7 @@
 - Da die Option "Nicht warten, bis die Seitenressourcen vollständig geladen sind" theoretisch bedeutungslos ist, wurde sie umbenannt, um den zuvor möglichen Zustand zu deaktivieren
 - Anpassung einer großen Anzahl von Codestrukturen
 - **Viele Umbenennungen von CSS-Klassen, so dass Sie diese möglicherweise anpassen müssen, wenn Sie die benutzerdefinierten Stile von Stylus verwenden**.
-- Einige andere Optimierungen und Verbesserungen
+- Einige andere Anpassungen und Verbesserungen
 
 ## 1.72.0
 
