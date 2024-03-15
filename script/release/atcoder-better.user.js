@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.13.1
+// @version      1.14.0
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -11237,7 +11237,7 @@ function changeMonacoLanguage(form) {
             createMonacoEditor(language, form, false);
         }
     } else {
-        createMonacoEditor(null, false);
+        createMonacoEditor(null, form, false);
     }
     // 更新在线编译器参数
     changeCompilerArgs(nowSelect);
