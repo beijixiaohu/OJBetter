@@ -1,7 +1,6 @@
 ## 1.13
 
-> 本次更新同步了 Codeforces Better v1.68 - 1.74 的更改到 AtCoder Better
->
+> **本次更新同步了 Codeforces Better v1.68 - 1.74 的更改到 AtCoder Better**
 
 - 增加跳转到 VJudge 的按钮
 - 增加“美化代码块”功能，使用monaco编辑器替换页面上的pre代码块，这也会改善黑暗模式下的代码显示效果
