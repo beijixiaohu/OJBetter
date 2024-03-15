@@ -1,4 +1,8 @@
-## 1.13
+## 1.14.0
+
+修復在某些情況下程式碼編輯器未正確載入的問題感謝@smart_stupid 的回饋
+
+## 1.13.0
 
 > **本次更新同步了Codeforces Better v1.68 - 1.74 的變更到AtCoder Better**
 
