@@ -1,6 +1,6 @@
 ## 1.13
 
-> Questo aggiornamento sincronizza le modifiche da Codeforces Better v1.68 - 1.74 ad AtCoder Better.
+> **Questo aggiornamento sincronizza le modifiche da Codeforces Better v1.68 - 1.74 ad AtCoder Better**.
 
 - Aggiungi il pulsante per passare a VJudge
 
