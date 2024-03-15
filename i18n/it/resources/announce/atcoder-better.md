@@ -1,4 +1,8 @@
-## 1.13
+## 1.14.0
+
+Correggere l'editor di codice che non si carica correttamente in alcuni casi Grazie a @smart_stupid per il feedback!
+
+## 1.13.0
 
 > **Questo aggiornamento sincronizza le modifiche da Codeforces Better v1.68 - 1.74 ad AtCoder Better**.
 
