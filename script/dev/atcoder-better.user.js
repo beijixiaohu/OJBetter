@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.13.0
+// @version      1.13.1
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -4152,7 +4152,8 @@ async function checkScriptVersion() {
         const versionData = JSON.parse(versionResponse.responseText);
         const { [OJBetter.state.formatName]: { dev: version_dev, release: version_release } } = versionData;
         const baseUrls = {
-            greasyfork: 'https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js',
+            // greasyfork: 'https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js',
+            greasyfork: 'https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.user.js',
             github: `https://github.com/beijixiaohu/OJBetter/raw/main/script/${OJBetter.about.updateChannel}/${OJBetter.state.formatName}.user.js`,
             aliyunoss: `https://aowuucdn.oss-accelerate.aliyuncs.com/script/${OJBetter.about.updateChannel}/${OJBetter.state.formatName}.user.js`
         };
