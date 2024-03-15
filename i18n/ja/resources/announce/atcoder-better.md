@@ -1,6 +1,6 @@
 ## 1.13
 
-> このアップデートは、Codeforces Better v1.68 - 1.74からの変更をAtCoder Betterに同期します。
+> \*\*このアップデートは、Codeforces Better v1.68 - 1.74からの変更をAtCoder Betterに同期します。
 
 - VJudgeへジャンプするボタンを追加
 

@@ -1,6 +1,6 @@
 ## 1.13
 
-> 이 업데이트는 Codeforces Better v1.68 - 1.74의 변경 사항을 AtCoder Better로 동기화합니다.
+> **이 업데이트는 Codeforces Better v1.68 - 1.74의 변경 사항을 AtCoder Better**로 동기화합니다.
 
 - 추가 버튼을 눌러 VJudge로 이동
 

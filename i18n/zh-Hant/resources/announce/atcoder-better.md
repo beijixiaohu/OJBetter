@@ -1,6 +1,6 @@
 ## 1.13
 
-> 本次更新同步了Codeforces Better v1.68 - 1.74 的變更到AtCoder Better
+> **本次更新同步了Codeforces Better v1.68 - 1.74 的變更到AtCoder Better**
 
 - 增加跳到VJudge 的按鈕
 
