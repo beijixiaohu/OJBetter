@@ -4,8 +4,8 @@
         "release": "3.27"
     },
     "atcoder-better": {
-        "dev": "1.13.2",
-        "release": "1.13.1"
+        "dev": "1.14.0",
+        "release": "1.14.0"
     },
     "codeforces-better": {
         "dev": "1.73.16",
