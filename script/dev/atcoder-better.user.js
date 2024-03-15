@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.0
+// @version      1.14.1
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -1297,7 +1297,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
         html[data-theme=dark] .popup .content, 
-        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog, html[data-theme=dark] #OJBetter_SubmitForm,
+        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
         html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover,

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.16
+// @version      1.73.17
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1314,7 +1314,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
         html[data-theme=dark] .popup .content, 
-        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog, html[data-theme=dark] #OJBetter_SubmitForm,
+        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
         html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover,
@@ -4456,15 +4456,15 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
         const sessionKey = `ojb_updateL10nWebsiteJson_${localizationLanguage}`;
         if (!OJB_isSameBrowserSession(sessionKey)) {
             // 如果尚未更新，则在后台更新
-        (async () => {
-            try {
-                const newData = await OJB_getExternalJSON(url);
-                await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
-                console.log("Website local data has been refreshed!");
-            } catch (error) {
-                console.error('Failed to update localization data:', error);
-            }
-        })();
+            (async () => {
+                try {
+                    const newData = await OJB_getExternalJSON(url);
+                    await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
+                    console.log("Website local data has been refreshed!");
+                } catch (error) {
+                    console.error('Failed to update localization data:', error);
+                }
+            })();
         }
     }
     return data;
@@ -4604,37 +4604,37 @@ async function localizeWebsite() {
         selector: '#jGrowl',
         callback: (node) => {
             let popupContent = node.textContent.replace(/^×/, ''); // 去除开头多余的 '×' 字符
-        /**
-         * ===========================================================================
-         * 由于作者不清楚右下角弹窗中大致有哪些文本，因此使用该段代码，
-         * 以收集上报弹窗出现的文本以便制作对应的翻译规则，
-         * 这是一段临时代码，将在信息足够时移除并更换为实际的本地化代码
-         * ===========================================================================
-         */
-                reportPopupContent(popupContent);
+            /**
+             * ===========================================================================
+             * 由于作者不清楚右下角弹窗中大致有哪些文本，因此使用该段代码，
+             * 以收集上报弹窗出现的文本以便制作对应的翻译规则，
+             * 这是一段临时代码，将在信息足够时移除并更换为实际的本地化代码
+             * ===========================================================================
+             */
+            reportPopupContent(popupContent);
         }
     });
 
-        // 上报弹窗内容
-        function reportPopupContent(popupContent) {
-            /**
-             * 数据上报收集
-             */
-            OJB_GMRequest({
-                method: "POST",
-                url: 'http://8.130.66.249:2345/report-popup',
-                data: JSON.stringify({ content: popupContent }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
+    // 上报弹窗内容
+    function reportPopupContent(popupContent) {
+        /**
+         * 数据上报收集
+         */
+        OJB_GMRequest({
+            method: "POST",
+            url: 'http://8.130.66.249:2345/report-popup',
+            data: JSON.stringify({ content: popupContent }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                console.log('Popup content reported:', popupContent);
             })
-                .then(response => {
-                    console.log('Popup content reported:', popupContent);
-                })
-                .catch(error => {
-                    console.error('Error reporting popup content:', error);
-                });
-        }
+            .catch(error => {
+                console.error('Error reporting popup content:', error);
+            });
+    }
 
     // 杂项
     (function () {
@@ -7960,12 +7960,12 @@ class TranslateDiv {
     getTopText() {
         return this.topText.text();
     }
-    
+
     /**
      * 渲染一个元素内的LaTeX公式
      * @param {HTMLElement} element 元素
      */
-    renderLaTeX(element){
+    renderLaTeX(element) {
         MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
     }
 
@@ -8541,7 +8541,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
                 escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement，双倍消耗）
                 text = text.replace(matchedText, escapedText);
             }
-            
+
             // 恢复行间代码块
             text = replacer.recover(text);
         }
@@ -11640,7 +11640,7 @@ function changeMonacoLanguage(form) {
             createMonacoEditor(language, form, false);
         }
     } else {
-        createMonacoEditor(null, false);
+        createMonacoEditor(null, form, false);
     }
     // 更新在线编译器参数
     changeCompilerArgs(nowSelect);
