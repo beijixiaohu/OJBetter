@@ -1,6 +1,6 @@
 ## 1.13
 
-> This update synchronizes changes from Codeforces Better v1.68 - 1.74 to AtCoder Better.
+> **This update synchronizes changes from Codeforces Better v1.68 - 1.74 to AtCoder Better**.
 
 - Add button to jump to VJudge
 
