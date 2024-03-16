@@ -38,7 +38,7 @@
             "surplus": {
                 "label": "資料路徑:",
                 "placeholder": "請輸入JSON路徑，使用點分隔符",
-                "tipText": "<p>填写余额数值在接口返回JSON中的路径，脚本会自动获取该路径下的值，支持相互四则运算</p><p>格式样例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
+                "tipText": "<p>填寫餘額數值在接口返回JSON中的路徑，腳本會自動獲取該路徑下的值，支持相互四則運算</p><p>格式樣例：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>data.profile.point</p></div>"
             }
         }
     },
@@ -61,7 +61,7 @@
             },
             "proxy": {
                 "label": "Proxy API:",
-                "tipText": "<p>可以填写指定的API来代理访问DeepL的API，或者对于DeepLX，填写你自部署的接口</p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p><p>说明：对于DeepLX，如果留空，默认使用的是一个公共API：https://api.deeplx.org/translate</p>"
+                "tipText": "<p>可以填寫指定的API來代理訪問DeepL的API，或者對於DeepLX，填寫你自部署的接口</p><strong>由於你指定了自定義的API，Tampermonkey會對你的跨域請求進行警告，你需要自行授權</strong></p><p>說明：對於DeepLX，如果留空，默認使用的是一個公共API：https://api.deeplx.org/translate</p>"
             }
         }
     },
