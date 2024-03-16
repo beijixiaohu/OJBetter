@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.17
+// @version      1.73.18
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -288,8 +288,10 @@ OJBetter.monaco = {
     editor: null,
     /** @type {string?} 在线编译器选择 */
     onlineCompilerChoice: undefined,
-    /** @type {string?} 编译器选择 */
+    /** @type {string?} 记忆编译器语言选择 */
     compilerSelection: undefined,
+    /** @type {string?}  当前选择的语言 */
+    nowLangSelect: undefined,
     setting: {
         /** @type {Array?} 语言设置数组 */
         language: [],
@@ -12436,9 +12438,12 @@ async function addProblemPageCodeEditor() {
     // 初始化
     CustomTestInit(); // 自定义测试数据面板
     selectLang.val(OJBetter.monaco.compilerSelection);
+    
+    // 设置语言选择change事件监听器
+    selectLang.on('change', () => {
+        changeMonacoLanguage(form); // 编辑器语言切换监听
+    });
     changeMonacoLanguage(form);
-
-    selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
 
     // 样例测试
     runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv))
