@@ -1,6 +1,12 @@
+## 1.14.2
+
+- Fix a styling error in the editor in dark mode
+- Fix the problem that the initial value of the language selection of the code editor is wrong
+- Fix code editor initialization exception in non-chrome browsers
+
 ## 1.14.0
 
-Fix code editor not loading correctly in some cases Thanks to @smart_stupid for the feedback!
+- Fix code editor not loading correctly in some cases Thanks to @smart_stupid @acstor for the feedback!
 
 ## 1.13.0
 
