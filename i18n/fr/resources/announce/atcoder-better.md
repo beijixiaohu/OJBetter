@@ -1,6 +1,12 @@
+## 1.14.2
+
+- Correction d'une erreur de style dans l'éditeur en mode sombre
+- Correction du problème d'erreur de la valeur initiale de la sélection de la langue dans l'éditeur de code
+- Correction de l'exception d'initialisation de l'éditeur de code dans les navigateurs non-chromes
+
 ## 1.14.0
 
-Correction de l'éditeur de code qui ne se charge pas correctement dans certains cas Merci à @smart_stupid pour son feedback !
+- Correction de l'éditeur de code qui ne se charge pas correctement dans certains cas Merci à @smart_stupid @acstor pour leurs commentaires !
 
 ## 1.13.0
 

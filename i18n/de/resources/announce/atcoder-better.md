@@ -1,6 +1,12 @@
+## 1.14.2
+
+- Behebung eines Styling-Fehlers im Editor im dunklen Modus
+- Behebung des Problems, dass der Anfangswert der Sprachauswahl im Code-Editor falsch ist
+- Behebung der Ausnahme bei der Initialisierung des Code-Editors in Nicht-Chrom-Browsern
+
 ## 1.14.0
 
-Code-Editor wird in manchen Fällen nicht korrekt geladen Danke an @smart_stupid für das Feedback!
+- Code-Editor wird in manchen Fällen nicht korrekt geladen Danke an @smart_stupid @acstor für das Feedback!
 
 ## 1.13.0
 
