@@ -48,7 +48,7 @@
         },
         "recolor": {
             "label": "重新著色榜單",
-            "helpText": "<p>对于采用 Codeforces 赛制的比赛榜单</p><p>按照“得分/总分”所在的范围为分数重新渐变着色</p><p>范围：1~0.7~0.45~0 深绿色→浅橙色→深橙色→红色</p>"
+            "helpText": "<p>對於採用 Codeforces 賽制的比賽榜單</p><p>按照“得分/總分”所在的範圍為分數重新漸變著色</p><p>範圍：1~0.7~0.45~0 深綠色→淺橙色→深橙色→紅色</p>"
         }
     },
     "localization": {
@@ -57,7 +57,7 @@
         "websiteLanguageLabel": "網站語言",
         "notice": {
             "1": "<strong>幫助改進翻譯品質</strong><p>作者只熟悉簡體中文和英文，對於其他語言，腳本以及網站的語言本地化均由機器翻譯完成（Deepl&Google），翻譯工作流由crowdin託管。</p><p>如果你樂意幫忙改進某個語言的在地化翻譯質量，</p><p>歡迎<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>前往協助改進</a>，感謝你的貢獻！</p>",
-            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+            "2": "<strong>幫助完善網站語言本地化</strong><p>如果你認為網站的某處有必要進行本地化，且對其進行本地化替換並不會導致嚴重的性能問題，歡迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化規則</a>。</p><p>如果想要添加一個新的規則，你需要先添加其簡體中文版本：fork 並修改規則文件，然後發起 pull 請求，</p><p>提交被合併後，crowdin會自動完成其他語言的翻譯，並且你也可以稍後前往crowdin上改進其他語言的翻譯質量。</p>"
         }
     },
     "translation": {
@@ -87,11 +87,11 @@
             },
             "enableEmphasisProtection": {
                 "title": "保護**號",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容。</p><p>开启该选项后，会将文本中的着重号 <strong>**</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏着重号以及其中的内容</p>"
+                "helpText": "<strong>僅當API模式下使用官方API時，該選項才會生效</strong><p>DeepL 可能會錯誤處理 MarkDown 中的著重號 <strong>**</strong> </p><p>這可能會導致翻譯結果漏掉其包裹的內容。</p><p>開啟該選項後，會將文本中的著重號 <strong>**</strong> 替換為HTML標籤，並在翻譯請求頭中自動添加<code>tag_handling: html</code>來使得DeepL不破壞著重號以及其中的內容</p>"
             },
             "enableLinkProtection": {
                 "title": "保護連結",
-                "helpText": "<strong>仅当API模式下使用官方API时，该选项才会生效</strong><p>DeepL 可能会错误处理 MarkDown 中的链接，</p><p>开启该选项后，会将文本中的链接符号 <strong>[]()</strong> 替换为HTML标签，并在翻译请求头中自动添加<code>tag_handling: html</code>来使得DeepL不破坏链接以及其中的内容</p>"
+                "helpText": "<strong>僅當API模式下使用官方API時，該選項才會生效</strong><p>DeepL 可能會錯誤處理 MarkDown 中的連結，</p><p>開啟該選項後，會將文本中的連結符號 <strong>[]()</strong> 替換為HTML標籤，並在翻譯請求頭中自動添加<code>tag_handling: html</code>來使得DeepL不破壞連結以及其中的內容</p>"
             }
         },
         "chatgpt": {
@@ -131,7 +131,7 @@
             },
             "allowMixTrans": {
                 "name": "評論區混合翻譯",
-                "helpText": "<p>自动翻译时，对于评论区中的每一个短文本区域，独立的在下方勾选的服务中随机选择一个，</p><p>并行地进行翻译</p>",
+                "helpText": "<p>自動翻譯時，對於評論區中的每一個短文本區域，獨立的在下方勾選的服務中隨機選擇一個，</p><p>並行地進行翻譯</p>",
                 "checkboxs": {
                     "deepl": "DeepL",
                     "iflyrec": "訊飛",
@@ -166,7 +166,7 @@
             },
             "transWaitTime": {
                 "name": "等待間隔",
-                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：ChatGPT 翻译时会忽略该设置，不等待</p>",
+                "helpText": "<p>設置兩次翻譯請求間的等待間隔，該設置會全局生效，各個翻譯服務之間獨立計算</p><p>建議 200 + 毫秒</p><p>說明：ChatGPT 翻譯時會忽略該設置，不等待</p>",
                 "end": "毫秒",
                 "placeholder": "請輸入間隔"
             },
