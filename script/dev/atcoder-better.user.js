@@ -4142,6 +4142,30 @@ function OJB_codeLangDetect(code) {
 }
 
 /**
+ * 获取指定命名空间下的所有i18n翻译键值对。
+ * 
+ * @param {string} namespace - 要获取键值对的i18next命名空间。
+ * @returns {Map<string, string>} 一个包含命名空间下所有键值对的Map对象。
+ */
+function OJB_getAllI18nKeysForNamespace(namespace) {
+    const language = i18next.language; // 获取当前语言
+    const resources = i18next.store.data[language]; // 获取当前语言的所有资源
+    const nsResources = resources[namespace]; // 获取特定命名空间的资源
+    const resultMap = new Map();
+
+    if (nsResources) {
+        // 遍历命名空间下的所有键值对，并添加到Map中
+        Object.keys(nsResources).forEach(key => {
+            resultMap.set(key, nsResources[key]);
+        });
+    } else {
+        console.log(`No resources found for namespace "${namespace}"`);
+    }
+
+    return resultMap;
+}
+
+/**
  * 更新检查
  */
 async function checkScriptVersion() {
@@ -4201,24 +4225,29 @@ async function showAnnounce() {
         /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
         const showNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
         /**
-         * 获取最后三个公告的内容
-         * @param {string} lastAnnounceVer 
+         * 获取公告的内容
          * @returns {string} 公告内容
          */
-        const getLastThreeAnnounceContent = function (lastAnnounceVer) {
+        const getAnnounceContent = function () {
+            // 获取公告
+            const announceMap = OJB_getAllI18nKeysForNamespace('announce');
+            // 移除 'lastVersion' 键
+            announceMap.delete('lastVersion');
+            // 将 Map 转换为数组并根据版本号排序
+            const sortedVersions = [...announceMap.keys()].sort(OJB_compareVersions).reverse();
             let content = "";
-            for (let i = 0; i < 3; i++) {
-                content += `### ${lastAnnounceVer}\n\n`;
-                content += i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
+            sortedVersions.forEach(version => {
+                content += `### ${version}\n\n`; // 使用版本号作为标题
+                content += announceMap.get(version); // 添加对应版本的公告内容
                 content += "\n\n";
-                lastAnnounceVer = OJB_getPreviousVersion(lastAnnounceVer);
-            }
+            });
+
             return content;
         };
 
         const content = (() => {
             if (isNewAnnounceVer && showNewAnnounceVer) {
-                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getLastThreeAnnounceContent(lastAnnounceVer)}`;
+                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getAnnounceContent()}`;
             } else {
                 return i18next.t('announce.divContent', { ns: 'dialog' });
             }
