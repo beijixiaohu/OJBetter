@@ -1,6 +1,12 @@
+## 1.14.2
+
+- Corrección de un error de estilo en el editor en modo oscuro
+- Solucionar el problema de que el valor inicial de la selección de idioma en el editor de código es incorrecto.
+- Corrección de la excepción de inicialización del editor de código en navegadores que no son Chrome.
+
 ## 1.14.0
 
-¡Corregir editor de código no se carga correctamente en algunos casos Gracias a @smart_stupid para la retroalimentación!
+- ¡Corregir editor de código no se carga correctamente en algunos casos Gracias a @smart_stupid @acstor para la retroalimentación!
 
 ## 1.13.0
 
