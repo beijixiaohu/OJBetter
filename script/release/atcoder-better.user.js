@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.0
+// @version      1.14.2
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -287,8 +287,10 @@ OJBetter.monaco = {
     editor: null,
     /** @type {string?} 在线编译器选择 */
     onlineCompilerChoice: undefined,
-    /** @type {string?} 编译器选择 */
+    /** @type {string?} 记忆编译器语言选择 */
     compilerSelection: undefined,
+    /** @type {string?}  当前选择的语言 */
+    nowLangSelect: undefined,
     setting: {
         /** @type {Array?} 语言设置数组 */
         language: [],
@@ -829,7 +831,8 @@ async function initVar() {
     // if (!OJBetter.typeOfPage.is_mSite) OJBetter.common.cf_csrf_token = Codeforces.getCsrfToken();
     // else OJBetter.common.cf_csrf_token = "";
     OJBetter.common.at_csrf_token = csrfToken;
-    OJBetter.monaco.compilerSelection = OJB_getGMValue("compilerSelection", "61");
+    // OJBetter.monaco.compilerSelection = OJB_getGMValue("compilerSelection", "61");
+    OJBetter.monaco.compilerSelection = OJB_getGMValue("compilerSelection", "5001");
     OJBetter.monaco.setting.fontsize = OJB_getGMValue("editorFontSize", "15");
     OJBetter.monaco.enableOnProblemPage = OJB_getGMValue("problemPageCodeEditor", true);
     OJBetter.monaco.beautifyPreBlocks = OJB_getGMValue("beautifyPreBlocks", true);
@@ -1297,7 +1300,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
         html[data-theme=dark] .popup .content, 
-        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog, html[data-theme=dark] #OJBetter_SubmitForm,
+        html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
         html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover,
@@ -4139,6 +4142,30 @@ function OJB_codeLangDetect(code) {
 }
 
 /**
+ * 获取指定命名空间下的所有i18n翻译键值对。
+ * 
+ * @param {string} namespace - 要获取键值对的i18next命名空间。
+ * @returns {Map<string, string>} 一个包含命名空间下所有键值对的Map对象。
+ */
+function OJB_getAllI18nKeysForNamespace(namespace) {
+    const language = i18next.language; // 获取当前语言
+    const resources = i18next.store.data[language]; // 获取当前语言的所有资源
+    const nsResources = resources[namespace]; // 获取特定命名空间的资源
+    const resultMap = new Map();
+
+    if (nsResources) {
+        // 遍历命名空间下的所有键值对，并添加到Map中
+        Object.keys(nsResources).forEach(key => {
+            resultMap.set(key, nsResources[key]);
+        });
+    } else {
+        console.log(`No resources found for namespace "${namespace}"`);
+    }
+
+    return resultMap;
+}
+
+/**
  * 更新检查
  */
 async function checkScriptVersion() {
@@ -4198,24 +4225,29 @@ async function showAnnounce() {
         /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
         const showNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
         /**
-         * 获取最后三个公告的内容
-         * @param {string} lastAnnounceVer 
+         * 获取公告的内容
          * @returns {string} 公告内容
          */
-        const getLastThreeAnnounceContent = function (lastAnnounceVer) {
+        const getAnnounceContent = function () {
+            // 获取公告
+            const announceMap = OJB_getAllI18nKeysForNamespace('announce');
+            // 移除 'lastVersion' 键
+            announceMap.delete('lastVersion');
+            // 将 Map 转换为数组并根据版本号排序
+            const sortedVersions = [...announceMap.keys()].sort(OJB_compareVersions).reverse();
             let content = "";
-            for (let i = 0; i < 3; i++) {
-                content += `### ${lastAnnounceVer}\n\n`;
-                content += i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
+            sortedVersions.forEach(version => {
+                content += `### ${version}\n\n`; // 使用版本号作为标题
+                content += announceMap.get(version); // 添加对应版本的公告内容
                 content += "\n\n";
-                lastAnnounceVer = OJB_getPreviousVersion(lastAnnounceVer);
-            }
+            });
+
             return content;
         };
 
         const content = (() => {
             if (isNewAnnounceVer && showNewAnnounceVer) {
-                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getLastThreeAnnounceContent(lastAnnounceVer)}`;
+                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getAnnounceContent()}`;
             } else {
                 return i18next.t('announce.divContent', { ns: 'dialog' });
             }
@@ -11212,6 +11244,11 @@ async function createMonacoEditor(language, form, support) {
 // 语言更改
 function changeMonacoLanguage(form) {
     let nowSelect = form.selectLang.val();
+
+    // 这里是因为在Chrome上Select2会莫名其妙触发一次不会改变值的change事件，而在其他浏览器中没有，所以贴个补丁
+    if (nowSelect === OJBetter.monaco.nowLangSelect) return;
+    else OJBetter.monaco.nowLangSelect = nowSelect;
+
     // 记忆更改
     GM_setValue('compilerSelection', nowSelect);
     // 销毁旧的编辑器
@@ -12066,7 +12103,6 @@ async function addProblemPageCodeEditor() {
     // 获取提交页链接
     const href = window.location.href;
     let submitUrl = OJBetter.common.hostAddress + $('.form-code-submit').attr('action');
-    console.log(submitUrl);
     // if (/\/problemset\//.test(href)) {
     //     // problemset
     //     submitUrl = OJBetter.common.hostAddress + '/problemset/submit';
@@ -12096,21 +12132,13 @@ async function addProblemPageCodeEditor() {
 
     // 初始化
     CustomTestInit(); // 自定义测试数据面板
-    selectLang.val(OJBetter.monaco.compilerSelection);
-    changeMonacoLanguage(form);
+    selectLang.val(OJBetter.monaco.compilerSelection); // 恢复上一次的语言选择
 
-    // 这里由于Atcoder使用了Select2 ，其在初始化时会触发change事件，因此需要在初始化后再绑定事件
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === "class" && $(mutation.target).hasClass("select2-hidden-accessible")) {
-                $(mutation.target).on('change', (e) => {
-                    selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
-                });
-                observer.disconnect();
-            }
-        });
+    // 设置语言选择change事件监听器
+    selectLang.on('change', () => {
+        changeMonacoLanguage(form); // 编辑器语言切换监听
     });
-    observer.observe(selectLang[0], { attributes: true });
+    changeMonacoLanguage(form);
 
     // 样例测试
     runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv))
@@ -12984,5 +13012,19 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
         GM_deleteValue("chatgpt-config");
         GM_setValue("chatgpt_config", config);
         location.reload();
+    }
+}
+
+// ------------------------------
+// 配置自动迁移代码（将在10个小版本后移除-1.24）
+// ------------------------------
+
+{
+    let config = GM_getValue("compilerSelection");
+    if (config !== undefined) {
+        if (config === "61") {
+            GM_setValue("compilerSelection", "5001");
+            location.reload();
+        }
     }
 }
