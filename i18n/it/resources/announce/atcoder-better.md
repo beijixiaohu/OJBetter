@@ -1,6 +1,12 @@
+## 1.14.2
+
+- Correzione di un errore di stile nell'editor in modalità scura
+- Risolvere il problema che il valore iniziale della selezione della lingua nell'editor di codice è errato
+- Correggere l'eccezione di inizializzazione dell'editor di codice nei browser non cromatici
+
 ## 1.14.0
 
-Correggere l'editor di codice che non si carica correttamente in alcuni casi Grazie a @smart_stupid per il feedback!
+- Correggere l'editor di codice che non si carica correttamente in alcuni casi Grazie a @smart_stupid @acstor per il feedback!
 
 ## 1.13.0
 
