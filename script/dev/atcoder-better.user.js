@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.2
+// @version      1.14.3
 // @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -6756,51 +6756,127 @@ class TaskQueue {
  * @returns {boolean} 是否可能为代码片段
  */
 function isLikelyCodeSnippet(text) {
+    /** @param {string} debug 是否输出调试信息 */
+    const debug = false;
+
+    // 代码分数
+    let score = 0;
+
     // 过滤文本中可能的HTML标签
     text = OJB_removeHTMLTags(text);
 
-    // 移除LaTeX公式部分
-    const cleanedText = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
+    // 清除文本中的 LaTeX 公式
+    text = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
 
-    // 代码的关键字
-    const keywords = [
-        'int', 'float', 'return', 'if', 'else', 'while', 'for', 'switch', 'case', 'break', 'continue',
-        'class', 'public', 'private', 'protected', 'void', 'static', 'const', 'enum', 'struct',
-        'char', 'double', 'long', 'include', 'def', 'import', 'from', 'as', 'elif', 'try', 'except',
-        'raise', 'with', 'lambda', 'print'
-    ];
-    // 代码的特殊字符
-    const codeChars = [';', '{', '}', '>', '<', '<<', '>>', '=', '+', '-',
-        '&', '|', ':', '\'\'\'', '\"\"\"', '->'];
+    // 基本数据类型关键字
+    const basicDataTypes = ["int", "float", "double", "char", "bool", "boolean", "string"];
 
-    // 普通文本的标点符号
-    const textChars = ['.', ',', '?', '!', ':', '"', "'"];
+    // boolean 的关键字
+    const booleanKeywords = ["true", "false", "True", "False"];
 
-    // 关键字的数量
-    const keywordCount = keywords.reduce((count, keyword) => {
-        const regex = new RegExp("\\b" + keyword + "\\b", 'gi');
-        return count + (cleanedText.match(regex) || []).length;
-    }, 0);
+    // 循环分支关键字
+    const loopBranchKeywords = ["if", "else", "for", "while", "switch", "case", "default"];
 
-    // 代码的特殊字符的数量
-    const codeCharCount = codeChars.reduce((count, char) => {
-        const regex = new RegExp("\\" + char, 'g');
-        return count + (cleanedText.match(regex) || []).length;
-    }, 0);
+    // 运算符
+    const operators = ["+", "*", "%", "(", ")", "++", "--", "!=", ">", "<", ">=", "<=", "&&", "!", "&", "||", "^", "~", "<<", ">>", "+=", "-=", "*=", "%=", "&=", "^=", "<<=", ">>=", "==", "===", "::"];
 
-    // 普通文本字符的数量
-    const textCharCount = textChars.reduce((count, char) => {
-        const regex = new RegExp("\\" + char, 'g');
-        return count + (cleanedText.match(regex) || []).length;
-    }, 0);
+    // JAVA 的关键字
+    const javaKeywords = ["public", "class", "void", "static", "String", "return", "break", "catch", "finally", "throw", "throws", "private", "protected", "package", "interface", "extends", "implements", "abstract", "final", "native", "strictfp", "transient", "volatile", "synchronized", "const", "goto", "enum", "assert"];
+    // Python 的关键字
+    const pythonKeywords = ["range", "None", "assert", "break", "class", "elif", "except", "finally", "global", "lambda", "nonlocal", "pass", "raise", "return", "yield"];
+    // C++ 的关键字
+    const cppKeywords = ["alignas", "alignof", "and_eq", "asm", "atomic_cancel", "atomic_commit", "atomic_noexcept", "auto", "bitand", "bitor", "break", "catch", "char8_t", "char16_t", "char32_t", "class", "compl", "concept", "const", "consteval", "constexpr", "constinit", "const_cast", "co_await", "co_return", "co_yield", "decltype", "delete", "double", "dynamic_cast", "enum", "explicit", "export", "extern", "false", "goto", "inline", "mutable", "namespace", "noexcept", "not_eq", "nullptr", "operator", "or_eq", "private", "protected", "public", "reflexpr", "reinterpret_cast", "requires", "return", "signed", "sizeof", "static", "static_assert", "static_cast", "struct", "synchronized", "template", "thread_local", "throw", "typedef", "typeid", "typename", "union", "unsigned", "virtual", "void", "volatile", "wchar_t", "xor", "xor_eq"];
+    // C 的关键字
+    const cKeywords = ["auto", "break", "const", "enum", "extern", "goto", "inline", "restrict", "return", "signed", "sizeof", "static", "struct", "typedef", "union", "unsigned", "void", "volatile", "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary", "_Noreturn", "_Static_assert", "_Thread_local"];
 
-    // 如果代码关键字数量或者代码的特殊字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
-    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2) {
-        console.log("keywordCount:", keywordCount, "codeCharCount:", codeCharCount, "textCharCount:", textCharCount);
-        return true;
+    // 检查关键字
+    const recodeLikelyFeatures = {
+        basicDataTypes: basicDataTypes,
+        booleanKeywords: booleanKeywords,
+        loopBranchKeywords: loopBranchKeywords,
+        operators: operators,
+        java: javaKeywords,
+        python: pythonKeywords,
+        cpp: cppKeywords,
+        c: cKeywords,
+    };
+    const codeLikelyFeatures = recodeLikelyFeatures;
+
+    /**
+     * 将代码分割成单词
+     * @param {string} text 文本
+     * @returns {string[]} 单词数组
+     */
+    const splitCodeIntoTokens = function (text) {
+        // 匹配字符串字面量、各种操作符、单词等
+        const regex = /(["'`].*?["'`])|([\[\]{}()$$$$.,;:+\-*/&|<>=~!?%#@^])|(\b\w+\b)/g;
+        const tokens = [];
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            // 过滤掉匹配结果中的undefined项
+            tokens.push(match.find(m => m !== undefined));
+        }
+        return tokens;
     }
 
-    return false;
+    const words = splitCodeIntoTokens(text);
+    if (debug) console.log(words);
+
+    // 检查关键字
+    words.forEach(word => {
+        Object.keys(codeLikelyFeatures).forEach(lang => {
+            codeLikelyFeatures[lang].forEach(keyword => {
+                if (word === keyword) {
+                    // 输出这个关键字
+                    if (debug) console.log(keyword);
+                    score++;
+                }
+            });
+        });
+    });
+
+    // 检查各个语言的常见特征语句
+    const javaFeatures = ["System.out", "System.in", "import", "Scanner", "Math.", "public static void main", "java.util.", "str.", "HashMap<"];
+    const pythonFeatures = ["print(", "import", "input(", "sys.", "math.", "range(", "def", "add(", "remove("];
+    const cppFeatures = ["#include", "cin", "std::", "cout", "iostream", "using namespace std;", "std::ios::sync_with_stdio(false);", "cin.tie(", "vector<", "map<", "for(int i =", "sort(", "min(", "max("];
+    const cFeatures = ["#include", "printf", "scanf", "stdio.h", "#define", "return 0;", "scanf(\"%", "int* ", "int *", "free(", "malloc(", "calloc(", "realloc(", "sizeof("];
+    const features = {
+        java: javaFeatures,
+        python: pythonFeatures,
+        cpp: cppFeatures,
+        c: cFeatures
+    };
+    Object.keys(features).forEach(lang => {
+        features[lang].forEach(feature => {
+            if (text.includes(feature)) {
+                if (debug) console.log(feature);
+                score += 3; // 权重大
+            }
+        });
+    });
+
+    // 检查是否有连续的行以分号或者括号结束
+    const lines = text.split('\n');
+    const codePattern = /(;|\{|\})\s*$/;
+    lines.forEach(line => {
+        if (codePattern.test(line.trim())) {
+            score++;
+        }
+    });
+
+    // 比率
+    const ratio = score / words.length;
+    // 放大系数
+    const magnification = 1.5;
+    // 最终分数
+    const finalScore = Math.min(ratio * magnification, 1);
+    if (debug) {
+        console.log(text);
+        console.log(score);
+        console.log(finalScore);
+    }
+    // 基于分数阈值判断是否为代码
+    return finalScore > 0.5;
 }
 
 /**
@@ -7190,7 +7266,10 @@ async function addButtonWithCopy(button, element, suffix, type) {
  * @param {boolean} is_comment 是否是评论
  */
 async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
-    // 添加可指定翻译服务的方法调用
+    /**
+     * 添加可指定翻译服务的方法调用
+     * @param {string} translation 翻译服务
+     */
     button.data("translatedItBy", function (translation) {
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
         OJBetter.common.taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
@@ -7522,14 +7601,16 @@ async function multiChoiceTranslation() {
  * 添加MD/复制/翻译按钮
  */
 async function addConversionButton() {
+    let promises = []; // 用于收集所有的 Promise
+
     // 基本添加
     if (!OJBetter.typeOfPage.is_homepage) {
-        $('section').each(function () {
+        $('section').each((i, e) => {
             let id = "_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(this, id, "this_level");
-            addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
-            addButtonWithCopy(panel.copyButton, this, id, "this_level");
-            addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+            let panel = addButtonPanel(e, id, "this_level");
+            promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
+            promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
+            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
         });
     }
 
@@ -7539,48 +7620,52 @@ async function addConversionButton() {
         let nextElement = contestNavTabs.next();
         let id = "_editorial_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(nextElement, id, "child_level");
-        addButtonWithHTML2MD(panel.viewButton, nextElement, id, "child_level");
-        addButtonWithCopy(panel.copyButton, nextElement, id, "child_level");
-        addButtonWithTranslation(panel.translateButton, nextElement, id, "child_level");
+        promises.push(addButtonWithHTML2MD(panel.viewButton, nextElement, id, "child_level"));
+        promises.push(addButtonWithCopy(panel.copyButton, nextElement, id, "child_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, nextElement, id, "child_level"));
     }
     if (window.location.href.includes("editorial")) {
         let contestNavTabs = $("#contest-nav-tabs");
         let nextElement = contestNavTabs.next().children().eq(-2);
         let id = "_editorial_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(nextElement, id, "child_level");
-        addButtonWithHTML2MD(panel.viewButton, nextElement, id, "child_level");
-        addButtonWithCopy(panel.copyButton, nextElement, id, "child_level");
-        addButtonWithTranslation(panel.translateButton, nextElement, id, "child_level");
+        promises.push(addButtonWithHTML2MD(panel.viewButton, nextElement, id, "child_level"));
+        promises.push(addButtonWithCopy(panel.copyButton, nextElement, id, "child_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, nextElement, id, "child_level"));
     }
 
     // 添加按钮到折叠块部分
-    $('details').each(function () {
+    $('details').each((i, e) => {
         // 自定义测试样例折叠块不添加
-        if ($(this).attr('id') !== "customTestBlock") {
+        if ($(e).attr('id') !== "customTestBlock") {
             let id = "_details_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(this, id, "child_level");
-            addButtonWithHTML2MD(panel.viewButton, this, id, "child_level");
-            addButtonWithCopy(panel.copyButton, this, id, "child_level");
-            addButtonWithTranslation(panel.translateButton, this, id, "child_level");
+            let panel = addButtonPanel(e, id, "child_level");
+            promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "child_level"));
+            promises.push(addButtonWithCopy(panel.copyButton, e, id, "child_level"));
+            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
         }
     });
 
     // 添加到contest-statement部分
-    $('#contest-statement').each(function () {
+    $('#contest-statement').each((i, e) => {
         let id = "_contest-statement_" + OJB_getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "this_level");
-        addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
-        addButtonWithCopy(panel.copyButton, this, id, "this_level");
-        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+        let panel = addButtonPanel(e, id, "this_level");
+        promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
+        promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
     });
 
     // 添加到blog-post部分
-    $('.blog-post').each(function () {
+    $('.blog-post').each((i, e) => {
         let id = "_blog-post_" + OJB_getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "this_level");
-        addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
-        addButtonWithCopy(panel.copyButton, this, id, "this_level");
-        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+        let panel = addButtonPanel(e, id, "this_level");
+        promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
+        promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
+    });
+
+    return Promise.all(promises).catch(error => {
+        console.error("One or more of the Add Button operations failed: ", error);
     });
 };
 
