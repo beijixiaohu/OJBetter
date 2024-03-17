@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.22
+// @version      1.73.23
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -6860,7 +6860,8 @@ async function initHTML2MarkDown() {
                 node.classList.contains('header') ||
                 node.classList.contains('overlay') ||
                 node.classList.contains('html2md-panel') ||
-                node.classList.contains('likeForm');
+                node.classList.contains('likeForm') ||
+                node.classList.contains('monaco-editor');
         },
         replacement: function (content, node) {
             return "";
@@ -6938,6 +6939,19 @@ async function initHTML2MarkDown() {
         }
     })
 
+    // pre
+    OJBetter.common.turndownService.addRule('pre', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "pre";
+        },
+        replacement: function (content, node) {
+            if (!!node.querySelector('code.prettyprint')) {
+                return "";
+            } else {
+                return "```\n" + content + "```\n";
+            }
+        }
+    });
 
     // bordertable
     OJBetter.common.turndownService.addRule('bordertable', {
