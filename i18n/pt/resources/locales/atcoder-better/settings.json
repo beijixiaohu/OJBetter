@@ -302,6 +302,22 @@
                 "button": "atualizar (janela do computador)"
             }
         },
+        "l10n_web": {
+            "title": "Localização de sítios Web",
+            "refreshScrpitCache": {
+                "label": "Atualizar a cache",
+                "helpText": "<p>Os dados localizados do sítio Web são armazenados em cache localmente para acelerar o carregamento e a estratégia de atualização consiste em utilizar os dados armazenados em cache primeiro na primeira visita durante cada sessão do navegador, enquanto actualiza os dados em segundo plano, de modo a que os novos dados sejam utilizados na segunda visita. Pode forçar uma atualização imediata clicando em Atualizar!</p>",
+                "button": "atualizar (janela do computador)"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "Mostrar sinalizadores de regras",
+                "helpText": "<p>Quando ativado, quando uma regra de substituição é aplicada, o nome da regra de substituição aplicada será marcado nas proximidades</p>"
+            },
+            "customRuleUrl": {
+                "label": "URL da regra personalizada",
+                "helpText": "<p>É possível personalizar o URL do ficheiro de regras para substituir o ficheiro de regras predefinido e testar o efeito da aplicação da nova regra</p>"
+            }
+        },
         "indexedDB": {
             "title": "Base de dados IndexedDB",
             "clear": {
