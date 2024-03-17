@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.20
+// @version      1.73.21
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -125,7 +125,9 @@ OJBetter.common = {
     /** @type {Array?} 任务队列 */
     taskQueue: undefined,
     /** @type {object} OJBetter数据库连接实例*/
-    database: undefined
+    database: undefined,
+    /** @type {object} turndownService实例*/
+    turndownService: undefined,
 };
 
 /**
@@ -405,6 +407,16 @@ OJBetter.preference = {
 };
 
 /**
+ * @namespace dev
+ * @desc 维护
+ * @memberof OJBetter
+ */
+OJBetter.dev = {
+    /** @type {boolean?} 是否显示规则标记 */
+    isRuleMarkingEnabled: undefined,
+};
+
+/**
  * @namespace about
  * @desc 关于页信息
  * @memberof OJBetter
@@ -453,13 +465,13 @@ OJBetter.supportList = {
 // ------------------------------
 
 /**
- * 安全地创建jQuery元素
- * @description 通过jQuery创建HTML字符串时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
- * @param {string} htmlString - HTML字符串。
- * @returns jQuery对象
+ * 安全地创建JQuery对象
+ * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
+ * @param {string} string - 字符串。
+ * @returns JQuery对象
  */
-const OJB_safeCreateJQElement = function (htmlString) {
-    return $(htmlString.replace(/^\s+/, ""));
+const OJB_safeCreateJQElement = function (string) {
+    return $(string.replace(/^\s+/, ""));
 }
 
 /**
@@ -883,6 +895,7 @@ async function initVar() {
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
 }
@@ -1086,7 +1099,7 @@ function readFileInput(callback) {
 }
 
 /**
- * 删除所有设置
+ * 清除所有设置
  */
 async function deleteAllConfigSettings() {
     const isConfirmed = await OJB_createDialog(
@@ -1674,6 +1687,7 @@ async function beautifyPreBlocksWithMonaco() {
         const code = OJB_getCodeFromPre(pre.get(0));
         if (!code) return;
         const language = OJB_codeLangDetect(code);
+        console.log(language);
 
         // 创建一个用于 Monaco 编辑器的容器
         const container = $('<div></div>');
@@ -2092,6 +2106,10 @@ html:not([data-theme='dark']) .translateDiv {
     width: 100%;
     box-sizing: border-box;
     font-size: 13px;
+}
+.translate-problem-statement h2 {
+    font-size: 1.6em;
+    font-weight: 700;
 }
 .translate-problem-statement h3 {
     font-size: 1.3em;
@@ -3523,6 +3541,12 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     font-size: 10px;
 }
 
+/* 网站本地化替换规则标记 */
+.markingTextReplaceRule{
+    color: #FFF3E0;
+    background-color: #FF9800;
+}
+
 /* 移动设备 */
 @media (max-device-width: 450px) {
     .ojb_btn{
@@ -4188,6 +4212,18 @@ function clearI18nextCache() {
 }
 
 /**
+ * 清除网站本地化数据
+ */
+async function clearWebsiteL10nData() {
+    OJBetter.common.database.localizeSubsData.clear().then(() => {
+        console.log('localizeSubsData table has been cleared');
+        window.location.reload();
+    }).catch((error) => {
+        console.error('Failed to clear localizeSubsData table:', error);
+    });
+}
+
+/**
  * 从Pre代码块中获取原始代码
  * @param {HTMLElement} element pre代码块元素
  * @returns {string|null} 代码文本
@@ -4519,8 +4555,9 @@ async function localizeWebsite() {
      * 文本节点遍历替换
      * @param {JQuery} $nodes jQuery对象
      * @param {Object} textReplaceRules 文本替换规则对象
+     * @param {string} key 应用的规则集的名字
      */
-    function traverseTextNodes($nodes, textReplaceRules) {
+    function traverseTextNodes($nodes, textReplaceRules, key) {
         if (!$nodes) return;
 
         $nodes.each(function () {
@@ -4530,14 +4567,20 @@ async function localizeWebsite() {
                     try {
                         const replace = textReplaceRules[match];
                         const regex = new RegExp(match, 'g');
-                        node.textContent = node.textContent.replace(regex, replace);
+                        if (OJBetter.dev.isRuleMarkingEnabled) {
+                            const before_text = node.textContent;
+                            node.textContent = node.textContent.replace(regex, replace);
+                            if (node.textContent !== before_text) $(node).after(`<span class="markingTextReplaceRule">${key}</span>`);
+                        } else {
+                            node.textContent = node.textContent.replace(regex, replace);
+                        }
                     } catch (error) {
                         console.error(`Error processing text replacement for match: ${match}`, error);
                     }
                 });
             } else {
                 $(node).contents().each(function () {
-                    traverseTextNodes($(this), textReplaceRules);
+                    traverseTextNodes($(this), textReplaceRules, key);
                 });
             }
         });
@@ -4547,8 +4590,9 @@ async function localizeWebsite() {
      * value替换
      * @param {JQuery} $nodes jQuery对象
      * @param {Object} valueReplaceRules 值替换规则对象
+     * @param {string} key 应用的规则集的名字
      */
-    function traverseValueNodes($nodes, valueReplaceRules) {
+    function traverseValueNodes($nodes, valueReplaceRules, key) {
         if (!$nodes) return;
 
         $nodes.each(function () {
@@ -4560,10 +4604,13 @@ async function localizeWebsite() {
                     let currentValue = $node.val();
                     let newValue = currentValue.replace(regex, replace);
                     $node.val(newValue);
+                    if (OJBetter.dev.isRuleMarkingEnabled) {
+                        if (newValue !== currentValue) $($node).after(`<span class="markingTextReplaceRule">${key}</span>`);
+                    }
                 });
             } else {
                 $node.children().each(function () {
-                    traverseValueNodes($(this), valueReplaceRules);
+                    traverseValueNodes($(this), valueReplaceRules, key);
                 });
             }
         });
@@ -4573,8 +4620,9 @@ async function localizeWebsite() {
      * 严格的文本节点遍历替换
      * @param {JQuery} $node jQuery对象
      * @param {Object} textReplaceRules 文本替换规则对象
+     * @param {string} key 应用的规则集的名字
      */
-    function strictTraverseTextNodes($nodes, textReplaceRules) {
+    function strictTraverseTextNodes($nodes, textReplaceRules, key) {
         if (!$nodes) return;
 
         $nodes.each(function () {
@@ -4583,12 +4631,18 @@ async function localizeWebsite() {
                 const trimmedNodeText = $node.textContent.trim();
                 Object.keys(textReplaceRules).forEach(match => {
                     if (trimmedNodeText === match) {
-                        $node.textContent = textReplaceRules[match];
+                        if (OJBetter.dev.isRuleMarkingEnabled) {
+                            const before_text = $node.textContent;
+                            $node.textContent = textReplaceRules[match];
+                            if ($node.textContent !== before_text) $($node).after(`<span class="markingTextReplaceRule">${key}</span>`);
+                        } else {
+                            $node.textContent = textReplaceRules[match];
+                        }
                     }
                 });
             } else {
                 $($node).contents().each(function () {
-                    strictTraverseTextNodes($(this), textReplaceRules);
+                    strictTraverseTextNodes($(this), textReplaceRules, key);
                 });
             }
         });
@@ -4602,9 +4656,9 @@ async function localizeWebsite() {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
         classSelectors.forEach(classSelector => {
             if (value.isStrict) {
-                strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules);
+                strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
             } else {
-                traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules);
+                traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
             }
         });
     });
@@ -4624,7 +4678,7 @@ async function localizeWebsite() {
     Object.entries(InputValueReplacements).forEach(([key, value]) => {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class];
         classSelectors.forEach(classSelector => {
-            traverseValueNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules);
+            traverseValueNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
         });
     });
 
@@ -5890,6 +5944,24 @@ const dev_settings_HTML = `
         <button type="button" id="l10n_refreshScrpitCacheButton" name="l10n_refreshScrpitCacheButton" data-i18n="settings:dev.l10n.refreshScrpitCache.button"></button>
     </div>
     <hr>
+    <h5 data-i18n="settings:dev.l10n_web.title"></h5>
+    <div class='OJBetter_setting_list'>
+        <label><span data-i18n="settings:dev.l10n_web.refreshScrpitCache.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:dev.l10n_web.refreshScrpitCache.helpText"></div>
+        </div>
+        <button type="button" id="l10n_web_refreshScrpitCacheButton" name="l10n_web_refreshScrpitCacheButton" data-i18n="settings:dev.l10n_web.refreshScrpitCache.button"></button>
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="isRuleMarkingEnabled"><span data-i18n="settings:dev.l10n_web.isRuleMarkingEnabled.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:dev.l10n_web.isRuleMarkingEnabled.helpText"></div>
+        </div>
+        <input type="checkbox" id="isRuleMarkingEnabled" name="isRuleMarkingEnabled">
+    </div>
+    <hr>
     <h5 data-i18n="settings:dev.indexedDB.title"></h5>
     <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.indexedDB.clear.label"></span></label>
@@ -6540,6 +6612,8 @@ async function initSettingsPanel() {
         // 调试
         $("#notWaiteLoaded").prop("checked", GM_getValue("notWaiteLoaded") === true);
         $('#l10n_refreshScrpitCacheButton').click(clearI18nextCache);
+        $('#l10n_web_refreshScrpitCacheButton').click(clearWebsiteL10nData);
+        $("#isRuleMarkingEnabled").prop("checked", GM_getValue("isRuleMarkingEnabled") === true);
         $('#indexedDB_clearButton').click(async () => { await clearDatabase(); });
         $('#indexedDB_exportButton').click(async () => { downloadDataAsFile(await exportDatabase(), 'database_export.json') });
         $('#indexedDB_importButton').click(() => { readFileInput(async (fileContent) => { await importDatabase(fileContent); }); });
@@ -6615,6 +6689,7 @@ async function initSettingsPanel() {
                 OJBetter_Bridge_SocketUrl: $('#OJBetter_Bridge_SocketUrl').val(),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
                 notWaiteLoaded: $("#notWaiteLoaded").prop("checked"),
+                isRuleMarkingEnabled: $("#isRuleMarkingEnabled").prop("checked"),
                 updateChannel: $('#updateChannel').val(),
                 updateSource: $('#updateSource').val()
             };
@@ -6746,127 +6821,131 @@ async function initSettingsPanel() {
     });
 };
 
-// html2markdown转换/处理规则
-const turndownService = new TurndownService({ bulletListMarker: '-' });
+/**
+ * 初始化html2markdown转换器
+ */
+async function initHTML2MarkDown() {
+    OJBetter.common.turndownService = new TurndownService({ bulletListMarker: '-' });
 
-// 保留原始
-turndownService.keep(['del']);
+    // 保留原始
+    OJBetter.common.turndownService.keep(['del']);
 
-// 丢弃
-turndownService.addRule('remove-by-class', {
-    filter: function (node) {
-        return node.classList.contains('sample-tests') ||
-            node.classList.contains('header') ||
-            node.classList.contains('overlay') ||
-            node.classList.contains('html2md-panel') ||
-            node.classList.contains('likeForm');
-    },
-    replacement: function (content, node) {
-        return "";
-    }
-});
-turndownService.addRule('remove-script', {
-    filter: function (node, options) {
-        return node.tagName.toLowerCase() == "script" && node.type.startsWith("math/tex");
-    },
-    replacement: function (content, node) {
-        return "";
-    }
-});
-
-// inline math
-turndownService.addRule('inline-math', {
-    filter: function (node, options) {
-        return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
-    },
-    replacement: function (content, node) {
-        var latex = $(node).next().text();
-        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return "$" + latex + "$";
-    }
-});
-
-// block math
-turndownService.addRule('block-math', {
-    filter: function (node, options) {
-        return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
-    },
-    replacement: function (content, node) {
-        var latex = $(node).next().text();
-        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return "\n$$\n" + latex + "\n$$\n";
-    }
-});
-
-// texFontStyle
-turndownService.addRule('texFontStyle', {
-    filter: function (node) {
-        return (
-            node.nodeName === 'SPAN' &&
-            node.classList.contains('tex-font-style-bf')
-        )
-    },
-    replacement: function (content) {
-        return '**' + content + '**'
-    }
-})
-
-// sectionTitle
-turndownService.addRule('sectionTitle', {
-    filter: function (node) {
-        return (
-            node.nodeName === 'DIV' &&
-            node.classList.contains('section-title')
-        )
-    },
-    replacement: function (content) {
-        return '**' + content + '**'
-    }
-})
-
-// property-title
-turndownService.addRule('property-title', {
-    filter: function (node) {
-        return (
-            node.nodeName === 'DIV' &&
-            node.classList.contains('property-title')
-        )
-    },
-    replacement: function (content) {
-        return content + ': '
-    }
-})
-
-
-// bordertable
-turndownService.addRule('bordertable', {
-    filter: 'table',
-    replacement: function (content, node) {
-        if (node.classList.contains('bordertable')) {
-            var output = [],
-                thead = '',
-                trs = node.querySelectorAll('tr');
-            if (trs.length > 0) {
-                var ths = trs[0].querySelectorAll('td,th');
-                if (ths.length > 0) {
-                    thead = '| ' + Array.from(ths).map(th => turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
-                        + '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
-                }
-            }
-            var rows = node.querySelectorAll('tr');
-            Array.from(rows).forEach(function (row, i) {
-                if (i > 0) {
-                    var cells = row.querySelectorAll('td,th');
-                    var trow = '| ' + Array.from(cells).map(cell => turndownService.turndown(cell.innerHTML.trim())).join(' | ') + ' |';
-                    output.push(trow);
-                }
-            });
-            return thead + output.join('\n');
-        } else {
-            return content;
+    // 丢弃
+    OJBetter.common.turndownService.addRule('remove-by-class', {
+        filter: function (node) {
+            return node.classList.contains('sample-tests') ||
+                node.classList.contains('header') ||
+                node.classList.contains('overlay') ||
+                node.classList.contains('html2md-panel') ||
+                node.classList.contains('likeForm');
+        },
+        replacement: function (content, node) {
+            return "";
         }
-    }
-});
+    });
+    OJBetter.common.turndownService.addRule('remove-script', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "script" && node.type.startsWith("math/tex");
+        },
+        replacement: function (content, node) {
+            return "";
+        }
+    });
+
+    // inline math
+    OJBetter.common.turndownService.addRule('inline-math', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
+        },
+        replacement: function (content, node) {
+            var latex = $(node).next().text();
+            latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "$" + latex + "$";
+        }
+    });
+
+    // block math
+    OJBetter.common.turndownService.addRule('block-math', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
+        },
+        replacement: function (content, node) {
+            var latex = $(node).next().text();
+            latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "\n$$\n" + latex + "\n$$\n";
+        }
+    });
+
+    // texFontStyle
+    OJBetter.common.turndownService.addRule('texFontStyle', {
+        filter: function (node) {
+            return (
+                node.nodeName === 'SPAN' &&
+                node.classList.contains('tex-font-style-bf')
+            )
+        },
+        replacement: function (content) {
+            return '**' + content + '**'
+        }
+    })
+
+    // sectionTitle
+    OJBetter.common.turndownService.addRule('sectionTitle', {
+        filter: function (node) {
+            return (
+                node.nodeName === 'DIV' &&
+                node.classList.contains('section-title')
+            )
+        },
+        replacement: function (content) {
+            return '**' + content + '**'
+        }
+    })
+
+    // property-title
+    OJBetter.common.turndownService.addRule('property-title', {
+        filter: function (node) {
+            return (
+                node.nodeName === 'DIV' &&
+                node.classList.contains('property-title')
+            )
+        },
+        replacement: function (content) {
+            return content + ': '
+        }
+    })
+
+
+    // bordertable
+    OJBetter.common.turndownService.addRule('bordertable', {
+        filter: 'table',
+        replacement: function (content, node) {
+            if (node.classList.contains('bordertable')) {
+                var output = [],
+                    thead = '',
+                    trs = node.querySelectorAll('tr');
+                if (trs.length > 0) {
+                    var ths = trs[0].querySelectorAll('td,th');
+                    if (ths.length > 0) {
+                        thead = '| ' + Array.from(ths).map(th => OJBetter.common.turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
+                            + '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
+                    }
+                }
+                var rows = node.querySelectorAll('tr');
+                Array.from(rows).forEach(function (row, i) {
+                    if (i > 0) {
+                        var cells = row.querySelectorAll('td,th');
+                        var trow = '| ' + Array.from(cells).map(cell => OJBetter.common.turndownService.turndown(cell.innerHTML.trim())).join(' | ') + ' |';
+                        output.push(trow);
+                    }
+                });
+                return thead + output.join('\n');
+            } else {
+                return content;
+            }
+        }
+    });
+};
 
 /**
  * 任务队列
@@ -7144,7 +7223,7 @@ async function initButtonFunc() {
         const markdown = this.data('markdown');
         if (markdown === undefined) {
             const htmlContent = this.html();
-            const newMarkdown = turndownService.turndown(htmlContent);
+            const newMarkdown = OJBetter.common.turndownService.turndown(htmlContent);
             this.data('markdown', newMarkdown);
             return newMarkdown;
         }
@@ -7709,7 +7788,7 @@ async function blockProcessing(button, target, element_node, is_comment, overrid
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
-        target.markdown = turndownService.turndown($(target).html());
+        target.markdown = OJBetter.common.turndownService.turndown($(target).html());
     }
 
     const result = await translateProblemStatement(target.markdown, element_node, is_comment, overrideTrans);
@@ -13258,6 +13337,7 @@ async function loadRequiredFunctions() {
         initDB(), // 连接数据库
         initI18next(), // i18next初始化
         initButtonFunc(), // 加载按钮相关函数
+        initHTML2MarkDown(), // 初始化html2markdown转换器
         checkScriptVersion(), // 更新检查
         ...(OJBetter.typeOfPage.is_acmsguru ? [acmsguruReblock()] : []) // 为acmsguru题面重新划分div
     ]);

@@ -302,6 +302,22 @@
                 "button": "刷新"
             }
         },
+        "l10n_web": {
+            "title": "网站本地化",
+            "refreshScrpitCache": {
+                "label": "刷新缓存",
+                "helpText": "<p>网站的本地化数据会缓存在本地以加快加载速度，刷新策略为在每一次浏览器会话期间第一次访问时先使用缓存数据，同时后台刷新数据，因此将在第二次访问时使用新数据。你可以点击刷新强制立即刷新数据</p>",
+                "button": "刷新"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "显示规则标记",
+                "helpText": "<p>开启后，当应用替换规则后，会在附近标注所应用的替换规则的名称</p>"
+            },
+            "customRuleUrl": {
+                "label": "自定义规则URL",
+                "helpText": "<p>你可以自定义规则文件的URL，以覆盖默认的规则文件，以测试新规则的应用效果</p>"
+            }
+        },
         "indexedDB": {
             "title": "IndexedDB数据库",
             "clear": {
