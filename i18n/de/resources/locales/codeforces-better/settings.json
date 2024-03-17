@@ -302,6 +302,22 @@
                 "button": "Aktualisieren (Computerfenster)"
             }
         },
+        "l10n_web": {
+            "title": "Lokalisierung der Website",
+            "refreshScrpitCache": {
+                "label": "Cache aktualisieren",
+                "helpText": "<p>Die lokalisierten Daten der Website werden lokal zwischengespeichert, um das Laden zu beschleunigen, und die Aktualisierungsstrategie besteht darin, die zwischengespeicherten Daten beim ersten Besuch während jeder Browsersitzung zuerst zu verwenden, während die Daten im Hintergrund aktualisiert werden, so dass beim zweiten Besuch neue Daten verwendet werden. Sie können eine sofortige Aktualisierung erzwingen, indem Sie auf Aktualisieren!</p>",
+                "button": "Aktualisieren (Computerfenster)"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "Regelflaggen anzeigen",
+                "helpText": "<p>Wenn diese Option aktiviert ist, wird bei der Anwendung einer Ersetzungsregel der Name der angewandten Ersetzungsregel in der Nähe markiert.</p>"
+            },
+            "customRuleUrl": {
+                "label": "Benutzerdefinierte Regel-URL",
+                "helpText": "<p>Sie können die URL der Regeldatei anpassen, um die Standardregeldatei zu überschreiben und die Auswirkungen der Anwendung der neuen Regel zu testen</p>"
+            }
+        },
         "indexedDB": {
             "title": "IndexedDB Datenbank",
             "clear": {

@@ -302,6 +302,22 @@
                 "button": "refrescar (ventana del ordenador)"
             }
         },
+        "l10n_web": {
+            "title": "Localización de sitios web",
+            "refreshScrpitCache": {
+                "label": "Actualizar caché",
+                "helpText": "<p>Los datos localizados del sitio web se almacenan en caché local para acelerar la carga, y la estrategia de actualización consiste en utilizar primero los datos almacenados en caché en la primera visita durante cada sesión del navegador, mientras se actualizan los datos en segundo plano, de modo que en la segunda visita se utilicen los nuevos datos. Puede forzar una actualización inmediata pulsando en ¡Refrescar!</p>",
+                "button": "refrescar (ventana del ordenador)"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "Mostrar indicadores de reglas",
+                "helpText": "<p>Si está activada, cuando se aplique una regla de sustitución, el nombre de la regla de sustitución aplicada se marcará cerca de</p>"
+            },
+            "customRuleUrl": {
+                "label": "URL de la regla personalizada",
+                "helpText": "<p>Puede personalizar la URL del archivo de reglas para anular el archivo de reglas predeterminado y probar el efecto de la aplicación de la nueva regla</p>"
+            }
+        },
         "indexedDB": {
             "title": "Base de datos IndexedDB",
             "clear": {

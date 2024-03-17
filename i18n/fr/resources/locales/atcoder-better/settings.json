@@ -302,6 +302,22 @@
                 "button": "rafraîchir (fenêtre d'ordinateur)"
             }
         },
+        "l10n_web": {
+            "title": "Localisation du site web",
+            "refreshScrpitCache": {
+                "label": "Rafraîchir le cache",
+                "helpText": "<p>Les données localisées du site web sont mises en cache localement pour accélérer le chargement, et la stratégie de rafraîchissement consiste à utiliser d'abord les données mises en cache lors de la première visite de chaque session du navigateur, tout en rafraîchissant les données en arrière-plan, de manière à ce que les nouvelles données soient utilisées lors de la deuxième visite. Vous pouvez forcer un rafraîchissement immédiat en cliquant sur Rafraîchir !</p>",
+                "button": "rafraîchir (fenêtre d'ordinateur)"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "Afficher les drapeaux de règles",
+                "helpText": "<p>Lorsque cette option est activée, lorsqu'une règle de remplacement est appliquée, le nom de la règle de remplacement appliquée est marqué à proximité.</p>"
+            },
+            "customRuleUrl": {
+                "label": "URL de la règle personnalisée",
+                "helpText": "<p>Vous pouvez personnaliser l'URL du fichier de règles pour remplacer le fichier de règles par défaut afin de tester l'effet de l'application de la nouvelle règle.</p>"
+            }
+        },
         "indexedDB": {
             "title": "Base de données IndexedDB",
             "clear": {

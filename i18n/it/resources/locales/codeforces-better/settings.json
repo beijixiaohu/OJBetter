@@ -302,6 +302,22 @@
                 "button": "Aggiorna (finestra del computer)"
             }
         },
+        "l10n_web": {
+            "title": "Localizzazione del sito web",
+            "refreshScrpitCache": {
+                "label": "Aggiorna la cache",
+                "helpText": "<p>I dati localizzati del sito web vengono memorizzati nella cache a livello locale per velocizzare il caricamento e la strategia di aggiornamento consiste nell'utilizzare i dati memorizzati nella cache alla prima visita durante ogni sessione del browser, aggiornando i dati in background, in modo da utilizzare i nuovi dati alla seconda visita. È possibile forzare un aggiornamento immediato facendo clic su Aggiorna!</p>",
+                "button": "Aggiorna (finestra del computer)"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "Mostra i flag delle regole",
+                "helpText": "<p>Se attivata, quando viene applicata una regola di sostituzione, il nome della regola di sostituzione applicata viene contrassegnato nelle vicinanze.</p>"
+            },
+            "customRuleUrl": {
+                "label": "URL regola personalizzata",
+                "helpText": "<p>È possibile personalizzare l'URL del file della regola per sovrascrivere il file della regola predefinita e testare l'effetto dell'applicazione della nuova regola.</p>"
+            }
+        },
         "indexedDB": {
             "title": "Database IndexedDB",
             "clear": {
