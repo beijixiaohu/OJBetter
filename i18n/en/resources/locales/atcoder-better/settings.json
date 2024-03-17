@@ -302,6 +302,22 @@
                 "button": "Refresh"
             }
         },
+        "l10n_web": {
+            "title": "Website Localization",
+            "refreshScrpitCache": {
+                "label": "Refresh Cache",
+                "helpText": "<p>The site's localized data is cached locally to speed up loading, and the refresh strategy is to use the cached data first on the first visit during each browser session while refreshing the data in the background, so it will be used on the second visit with the new data. You can force an immediate refresh by clicking on Refresh</p>",
+                "button": "Refresh"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "Show Rule Flags",
+                "helpText": "<p>When turned on, when a replacement rule is applied, the name of the applied replacement rule will be labeled nearby</p>"
+            },
+            "customRuleUrl": {
+                "label": "Custom Rule URLs",
+                "helpText": "<p>You can customize the URL of the rule file to override the default rule file to test the effect of applying the new rule</p>"
+            }
+        },
         "indexedDB": {
             "title": "IndexedDB database",
             "clear": {
