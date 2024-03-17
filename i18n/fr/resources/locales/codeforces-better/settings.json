@@ -315,7 +315,7 @@
             },
             "customRuleUrl": {
                 "label": "URL de la règle personnalisée",
-                "helpText": "<p>你可以自定义规则文件的URL，以覆盖默认的规则文件，以测试新规则的应用效果</p>"
+                "helpText": "<p>Vous pouvez personnaliser l'URL du fichier de règles pour remplacer le fichier de règles par défaut afin de tester l'effet de l'application de la nouvelle règle.</p>"
             }
         },
         "indexedDB": {
