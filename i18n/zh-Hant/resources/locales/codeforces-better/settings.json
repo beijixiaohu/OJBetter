@@ -302,6 +302,22 @@
                 "button": "重新整理"
             }
         },
+        "l10n_web": {
+            "title": "網站在地化",
+            "refreshScrpitCache": {
+                "label": "刷新快取",
+                "helpText": "<p>網站的本地化數據會緩存在本地以加快加載速度，刷新策略為在每一次瀏覽器會話期間第一次訪問時先使用緩存數據，同時後台刷新數據，因此將在第二次存取時使用新資料。你可以點選刷新強制立即刷新資料</p>",
+                "button": "重新整理"
+            },
+            "isRuleMarkingEnabled": {
+                "label": "顯示規則標記",
+                "helpText": "<p>開啟後，當套用替換規則後，會在附近標註所套用的替換規則的名稱</p>"
+            },
+            "customRuleUrl": {
+                "label": "自訂規則URL",
+                "helpText": "<p>你可以自訂規則文件的URL，以覆蓋預設的規則文件，以測試新規則的應用效果</p>"
+            }
+        },
         "indexedDB": {
             "title": "IndexedDB資料庫",
             "clear": {
