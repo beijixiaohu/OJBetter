@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.4
-// @description  Atcoder界面汉化、题目翻译、markdown视图、一键复制题目、跳转到洛谷
+// @version      1.14.5
+// @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
 // @run-at       document-start
@@ -464,6 +464,36 @@ OJBetter.supportList = {
 // ------------------------------
 // 一些工具函数
 // ------------------------------
+
+/**
+ * 延迟函数 
+ * @param {number} ms 延迟时间（毫秒） 
+ * @returns {Promise<void>}
+ */
+function OJB_delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 等待直到指定的条件函数返回true。
+ * 
+ * @param {() => boolean} conditionCheck 一个无参数的函数，用于检查条件是否满足。当函数返回true时，表示条件已满足。
+ * @param {number} [interval=100] 检查条件的间隔时间，单位为毫秒。默认为100毫秒。
+ * @returns {Promise<void>} 返回一个Promise，在条件满足时解决。
+ */
+async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
+    return new Promise((resolve) => {
+        const checkCondition = async () => {
+            if (conditionCheck()) {
+                resolve();
+            } else {
+                await OJB_delay(interval);
+                checkCondition();
+            }
+        };
+        checkCondition();
+    });
+}
 
 /**
  * 安全地创建JQuery对象
@@ -1593,6 +1623,9 @@ function darkModeStyleAdjustment() {
  * 美化Pre代码块
  */
 async function beautifyPreBlocksWithMonaco() {
+    // 判断monacoLoader是否加载完毕
+    await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
+
     // 用于替换 <pre> 标签为 Monaco 编辑器的函数
     function replacePreWithMonaco(preElement) {
         const pre = $(preElement);
@@ -3698,15 +3731,6 @@ class TextBlockReplacer {
 // ------------------------------
 // 一些工具函数
 // ------------------------------
-
-/**
- * 延迟函数 
- * @param {number} ms 延迟时间（毫秒） 
- * @returns {Promise<void>}
- */
-function OJB_delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 /**
  * 格式化链接格式
@@ -9727,19 +9751,7 @@ function parseMonacoCompleter(rules, range) {
  */
 async function createMonacoEditor(language, form, support) {
     // 判断monacoLoader是否加载完毕
-    async function waitForMonacoLoaderOnload() {
-        return new Promise((resolve) => {
-            const checkInitialized = () => {
-                if (OJBetter.monaco.loaderOnload) {
-                    resolve();
-                } else {
-                    setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
-                }
-            };
-            checkInitialized();
-        });
-    }
-    if (!OJBetter.monaco.loaderOnload) await waitForMonacoLoaderOnload();
+    await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
 
     /**
      * 通用参数
