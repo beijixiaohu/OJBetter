@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.6
+// @version      1.14.7
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -50,6 +50,7 @@
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
+// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -139,6 +140,8 @@ OJBetter.basic = {
     expandFoldingblocks: undefined,
     /** @type {boolean?} 是否开启折叠块渲染性能优化 */
     renderPerfOpt: undefined,
+    /** @type {boolean?} 是否开启下拉选择框性能优化 */
+    selectElementPerfOpt: undefined,
     /** @type {boolean?} 评论区分页 */
     commentPaging: undefined,
     /** @type {boolean?} 显示跳转到Luogu按钮 */
@@ -496,6 +499,22 @@ async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
 }
 
 /**
+ * 动态加载JavaScript库并返回一个Promise，该Promise在脚本加载完成后解决。
+ * 
+ * @param {string} url - 要加载的JavaScript库的URL地址。
+ * @returns {Promise<void>} 一个Promise，它在脚本加载并执行完成后解决。
+ */
+function OJB_LoadJS(url) {
+    return new Promise((resolve, reject) => {
+        let scriptElement = document.createElement("script");
+        scriptElement.src = url;
+        document.head.prepend(scriptElement);
+        scriptElement.onload = resolve;
+        scriptElement.onerror = reject;
+    });
+}
+
+/**
  * 安全地创建JQuery对象
  * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
  * @param {string} string - 字符串。
@@ -589,9 +608,9 @@ const OJB_removeHTMLTags = function (text) {
  *   },
  *   "c": 2
  * };
- * evaluatePathOrExpression(obj, "a.b"); // 1
- * evaluatePathOrExpression(obj, "a.b + c"); // 3
- * evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
+ * OJB_evaluatePathOrExpression(obj, "a.b"); // 1
+ * OJB_evaluatePathOrExpression(obj, "a.b + c"); // 3
+ * OJB_evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
  */
 function OJB_evaluatePathOrExpression(obj, pathOrExpression) {
     const hasOperator = /[\+\-\*\/]/.test(pathOrExpression);
@@ -793,6 +812,7 @@ async function initVar() {
     OJBetter.localization.websiteLang = OJB_getGMValue("localizationLanguage", "zh");
     OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
     OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
+    OJBetter.basic.selectElementPerfOpt = OJB_getGMValue("selectElementPerfOpt", true);
     OJBetter.basic.commentPaging = OJB_getGMValue("commentPaging", true);
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
     OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);
@@ -892,27 +912,11 @@ async function initVar() {
         "choice": -1,
         "configurations": []
     });
-    /**
-    * 加载monaco编辑器资源
-    */
+    // monaco
     OJBetter.monaco.lsp.enabled = OJB_getGMValue("useLSP", false);
     OJBetter.monaco.setting.position = OJB_getGMValue("monacoEditor_position", "initial");
     OJBetter.monaco.lsp.workUri = OJB_getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
-    if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
-        let monacoLoader = document.createElement("script");
-        monacoLoader.src = "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js";
-        document.head.prepend(monacoLoader);
-        monacoLoader.onload = () => {
-            require.config({
-                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
-                "vs/nls": { availableLanguages: { "*": "zh-cn" } },
-            });
-            require(["vs/editor/editor.main"], () => {
-                OJBetter.monaco.loaderOnload = true;
-            });
-        }
-    }
     OJBetter.preference.showLoading = OJB_getGMValue("showLoading", true);
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
@@ -1620,7 +1624,32 @@ function darkModeStyleAdjustment() {
 }
 
 /**
- * 美化Pre代码块
+ * 初始化monaco编辑器资源
+ */
+async function initMonacoEditor() {
+    if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
+        try {
+            // 等待Monaco Editor加载器脚本加载完成
+            await OJB_LoadJS("https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js");
+
+            // 配置Monaco Editor
+            require.config({
+                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
+                "vs/nls": { availableLanguages: { "*": "zh-cn" } },
+            });
+
+            // 加载Monaco Editor主脚本
+            require(["vs/editor/editor.main"], () => {
+                OJBetter.monaco.loaderOnload = true;
+            });
+        } catch (error) {
+            console.error("Failed to load Monaco Editor: ", error);
+        }
+    }
+}
+
+/**
+ * 美化代码块
  */
 async function beautifyPreBlocksWithMonaco() {
     // 判断monacoLoader是否加载完毕
@@ -3472,6 +3501,17 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     background-color: #FF9800;
 }
 
+/* SelectPage样式 */
+.sp_input {
+    padding: 4px 6px px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    line-height: 20px !important;
+}
+div.sp_clear_btn {
+    padding: 0px !important;
+}
+
 /* 移动设备 */
 @media (max-device-width: 450px) {
     .ojb_btn{
@@ -3526,6 +3566,7 @@ div#select-lang {
  */
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
+    GM_addStyle(GM_getResourceText("selectpagecss"));
     // 自定义图标大小
     GM_addStyle(`
         .iconfont {
@@ -5269,6 +5310,14 @@ const basic_settings_HTML = `
         <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='OJBetter_setting_list' style="display:none;">
+        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list' style="display:none;">
         <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -6439,6 +6488,7 @@ async function initSettingsPanel() {
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
+        $("#selectElementPerfOpt").prop("checked", GM_getValue("selectElementPerfOpt") === true);
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
@@ -6528,6 +6578,7 @@ async function initSettingsPanel() {
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
                 renderPerfOpt: $("#renderPerfOpt").prop("checked"),
+                selectElementPerfOpt: $("#selectElementPerfOpt").prop("checked"),
                 commentPaging: $("#commentPaging").prop("checked"),
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
@@ -6723,7 +6774,7 @@ async function initHTML2MarkDown() {
                 node.classList.contains('div-btn-copy') ||
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('overlay') ||
-                node.classList.contains('monaco-editor');
+                node.classList.contains('monaco-editor')
         },
         replacement: function () {
             return '';
@@ -8687,6 +8738,90 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     translateResult.translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
 
     return translateResult;
+}
+
+//弹窗翻译
+function alertZh() {
+    // var _alert = window.alert;
+    // window.alert = async function (msg) {
+    //     _alert(msg + "\n=========翻译=========\n" + await translate_deepl(msg));
+    //     return true;
+    // }
+};
+
+/**
+ * 折叠块展开
+ */
+function ExpandFoldingblocks() {
+    $('.spoiler').addClass('spoiler-open');
+    $('.spoiler-content').attr('style', '');
+};
+
+/**
+ * 折叠块渲染优化
+ */
+function RenderPerfOpt() {
+    GM_addStyle(`
+        .spoiler-content {
+            contain: layout style;
+        }
+    `);
+}
+
+/**
+ * 下拉选择框性能优化
+ */
+async function SelectElementPerfOpt() {
+    // TODO 10
+    // 加载库资源
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js");
+    /**
+     * 将一个<select>元素转换为SelectPage控件
+     * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
+     */
+    const OJB_transformSelectToSelectPage = (selector) => {
+        const $select = $(selector);
+        if ($select.length === 0 || !$select.is('select')) {
+            console.error('Invalid select element provided.');
+            return;
+        }
+
+        // 隐藏原生的<select>元素
+        $select.hide();
+
+        // 创建一个新的<input>元素用于SelectPage控件
+        const $inputForSelectPage = $('<input>', {
+            type: 'text',
+            class: 'selectpage-input',
+            autocomplete: 'off'
+        });
+        $select.after($inputForSelectPage);
+
+        // 准备SelectPage所需的数据格式
+        const data = $select.find('option').map((_, option) => ({
+            id: option.value,
+            text: option.text
+        })).get();
+
+        // 初始化SelectPage
+        $inputForSelectPage.selectPage({
+            showField: 'text',
+            keyField: 'id',
+            data,
+            lang: 'en',
+            // 当选中一个选项时，更新隐藏的<select>元素的值
+            eSelect: (data) => {
+                $select.val(data.id).trigger('change');
+            },
+            // 初始化时根据<select>的当前值设置SelectPage
+            initRecord: $select.val()
+        });
+    };
+
+    // 遍历页面上的所有select
+    $('select').each(function () {
+        OJB_transformSelectToSelectPage(this);
+    });
 }
 
 /**
@@ -13029,11 +13164,13 @@ function initOnDOMReady() {
     showAnnounce(); // 显示公告
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
+    initMonacoEditor(), // 初始化monaco编辑器资源
     localizeWebsite(); // 网站本地化替换
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
     // if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
     // if (OJBetter.basic.renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
+    // if (OJBetter.basic.selectElementPerfOpt) SelectElementPerfOpt(); // 下拉选择框性能优化
     if (OJBetter.typeOfPage.is_problem) {
         const problemPageLinkbar = new ProblemPageLinkbar(); // 创建题目页相关链接栏
         if (OJBetter.basic.showCF2vjudge) CF2vjudge(problemPageLinkbar); // 跳转到Vjudge按钮
