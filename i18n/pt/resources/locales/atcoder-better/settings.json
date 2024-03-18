@@ -34,6 +34,10 @@
             "label": "Otimização da renderização de blocos de dobragem",
             "helpText": "<p>Adicione restrições de contenção a elementos de blocos dobrados</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Se o seu navegador apresentar atrasos ao visualizar um grande número de blocos dobrados, ativá-lo<strong>pode</strong>melhorar um pouco</p>"
         },
+        "selectElementOptimization": {
+            "label": "Otimização do desempenho da caixa de seleção pendente",
+            "helpText": "<p>Quando activada, optimiza o desempenho das caixas de seleção do menu pendente na página</p><p> Se houver mais de 1w de opções na caixa pendente da página, a página ficará muito lenta. Depois de ativar esta opção, a página deixará de ficar lenta.</p>"
+        },
         "paging": {
             "label": "Comentários Página de distinção",
             "helpText": "Os comentários são apresentados em páginas separadas, com um número especificado de<strong>andar principal</strong>por página."
