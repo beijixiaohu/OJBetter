@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.7
+// @version      1.14.8
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -178,6 +178,10 @@ OJBetter.typeOfPage = {
     is_cfStandings: false,
     /** @type {boolean?} 是否是提交页面 */
     is_submitPage: false,
+    /** @type {boolean?} 是否是代码状态页面 */
+    is_statePage: false,
+    /** @type {boolean?} 是否是提交记录页面 */
+    is_submissions: false,
     /** @type {boolean?} 是否是主页 */
     is_homepage: undefined,
     /** @type {boolean?} 是否选择的是英语页面 */
@@ -776,16 +780,11 @@ function OJB_observeElement({
     function observeAndReport(node, callback) {
         const childObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (childList) {
-                    mutation.addedNodes.forEach((addedNode) => {
-                        if (addedNode.nodeType === Node.ELEMENT_NODE) {
-                            callback(addedNode); // 执行回调函数
-                        }
-                    });
-                }
-                if (attributes && mutation.type === 'attributes') {
-                    callback(mutation.target); // 执行回调函数
-                }
+                mutation.addedNodes.forEach((addedNode) => {
+                    if (addedNode.nodeType === Node.ELEMENT_NODE) {
+                        callback(addedNode); // 执行回调函数
+                    }
+                });
             });
         });
 
@@ -812,7 +811,7 @@ async function initVar() {
     OJBetter.localization.websiteLang = OJB_getGMValue("localizationLanguage", "zh");
     OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
     OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
-    OJBetter.basic.selectElementPerfOpt = OJB_getGMValue("selectElementPerfOpt", false);
+    OJBetter.basic.selectElementPerfOpt = OJB_getGMValue("selectElementPerfOpt", true);
     OJBetter.basic.commentPaging = OJB_getGMValue("commentPaging", true);
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
     OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);
@@ -1704,7 +1703,7 @@ async function beautifyPreBlocksWithMonaco() {
         replacePreWithMonaco(this);
     });
     // 监听页面上的提交状态页面窗口的 <pre> 元素
-    if (OJBetter.typeOfPage.is_statePage) {
+    if (OJBetter.typeOfPage.is_statePage || OJBetter.typeOfPage.is_submissions) {
         OJB_observeElement({
             selector: '#facebox',
             callback: (node) => {

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.25
+// @version      1.73.26
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -183,6 +183,8 @@ OJBetter.typeOfPage = {
     is_submitPage: undefined,
     /** @type {boolean?} 是否是代码状态页面 */
     is_statePage: undefined,
+    /** @type {boolean?} 是否是提交记录页面 */
+    is_submissions: undefined,
 };
 
 /**
@@ -774,16 +776,11 @@ function OJB_observeElement({
     function observeAndReport(node, callback) {
         const childObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                if (childList) {
-                    mutation.addedNodes.forEach((addedNode) => {
-                        if (addedNode.nodeType === Node.ELEMENT_NODE) {
-                            callback(addedNode); // 执行回调函数
-                        }
-                    });
-                }
-                if (attributes && mutation.type === 'attributes') {
-                    callback(mutation.target); // 执行回调函数
-                }
+                mutation.addedNodes.forEach((addedNode) => {
+                    if (addedNode.nodeType === Node.ELEMENT_NODE) {
+                        callback(addedNode); // 执行回调函数
+                    }
+                });
             });
         });
 
@@ -812,6 +809,7 @@ async function initVar() {
     OJBetter.typeOfPage.is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     OJBetter.typeOfPage.is_submitPage = href.includes('/submit');
     OJBetter.typeOfPage.is_statePage = href.includes('/status');
+    OJBetter.typeOfPage.is_submissions = href.includes('/submissions');
     OJBetter.typeOfPage.is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
             .map(function () {
@@ -1791,7 +1789,7 @@ async function beautifyPreBlocksWithMonaco() {
         replacePreWithMonaco(this);
     });
     // 监听页面上的提交状态页面窗口的 <pre> 元素
-    if (OJBetter.typeOfPage.is_statePage) {
+    if (OJBetter.typeOfPage.is_statePage || OJBetter.typeOfPage.is_submissions) {
         OJB_observeElement({
             selector: '#facebox',
             callback: (node) => {
