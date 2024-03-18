@@ -35,8 +35,8 @@
             "helpText": "<p>Añada restricciones de contención a los elementos de bloque plegados</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Si su navegador se ralentiza al visualizar un gran número de bloques plegados, activarla<strong>puede</strong>mejorarlo algo</p>"
         },
         "selectElementOptimization": {
-            "label": "Optimización del rendimiento del cuadro de selección desplegable",
-            "helpText": "<p>Cuando está activada, optimiza el rendimiento de los cuadros de selección desplegables de la página.</p><p> Si hay 1w+ opciones en el cuadro desplegable en la página, la página será muy lag, después de habilitar esta opción la página no será lag más.</p>"
+            "label": "Optimización del rendimiento de los cuadros desplegables",
+            "helpText": "Sustituir los <p>elementos del cuadro de selección desplegable de la página por una visualización paginada, cuadros desplegables dinámicos con soporte de búsqueda</p><p>Si su navegador tiene mucho retardo al visualizar cuadros desplegables con más de 10.000 datos de volumen, la página dejará de tener retardo al activar esta opción."
         },
         "paging": {
             "label": "Comentarios Distinción Página",
