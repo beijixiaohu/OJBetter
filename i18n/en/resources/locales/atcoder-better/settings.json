@@ -35,8 +35,8 @@
             "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser is laggy when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
         },
         "selectElementOptimization": {
-            "label": "Optimization of drop-down selection box performance",
-            "helpText": "<p>When enabled, it will optimize the performance of the dropdown selection box in the page</p><p> If the page has 1w+ options in the dropdown box, the page will be very laggy, after enabling this option the page will not be laggy anymore.</p>"
+            "label": "Dropdown box performance optimization",
+            "helpText": "Replace <p>dropdown select box elements on a page with a paginated display, dynamic dropdown boxes with search support</p><p>If your browser is very laggy when viewing dropdown boxes with more than 10,000 data volume, the page will no longer be laggy when this option is turned on."
         },
         "paging": {
             "label": "Comment Pagination",
