@@ -34,6 +34,10 @@
             "label": "Ottimizzazione del rendering dei blocchi pieghevoli",
             "helpText": "<p>Aggiungere i vincoli contain agli elementi di blocco piegati</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: stile di layout;</p></div><p>Se il suo browser è lento quando visualizza un gran numero di blocchi piegati, l'attivazione di questa opzione<strong>può</strong>migliorare un po' la situazione</p>"
         },
+        "selectElementOptimization": {
+            "label": "Ottimizzazione delle prestazioni della casella di selezione a discesa",
+            "helpText": "<p>Se attivata, ottimizza le prestazioni delle caselle di selezione a discesa nella pagina.</p><p> Se nella casella a discesa della pagina sono presenti più di 1w opzioni, la pagina sarà molto laggosa; dopo aver abilitato questa opzione, la pagina non sarà più laggosa.</p>"
+        },
         "paging": {
             "label": "Commenti Pagina Distinzione",
             "helpText": "I commenti vengono visualizzati su pagine separate, con un numero specifico di piani principali<strong></strong>per pagina."
