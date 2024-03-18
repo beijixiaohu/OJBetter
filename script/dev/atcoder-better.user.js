@@ -812,7 +812,7 @@ async function initVar() {
     OJBetter.localization.websiteLang = OJB_getGMValue("localizationLanguage", "zh");
     OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
     OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
-    OJBetter.basic.selectElementPerfOpt = OJB_getGMValue("selectElementPerfOpt", true);
+    OJBetter.basic.selectElementPerfOpt = OJB_getGMValue("selectElementPerfOpt", false);
     OJBetter.basic.commentPaging = OJB_getGMValue("commentPaging", true);
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
     OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);

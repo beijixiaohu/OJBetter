@@ -35,8 +35,8 @@
             "helpText": "<p>为折叠块元素添加 contain 约束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>"
         },
         "selectElementOptimization":{
-            "label": "下拉选择框性能优化",
-            "helpText": "<p>启用后，会对页面中的下拉选择框进行性能优化</p><p>如果页面中有1w+选项的下拉框，页面会非常卡顿，开启该选项后页面将不再卡顿。</p>"
+            "label": "下拉框性能优化",
+            "helpText": "<p>将页面中的下拉选择框元素替换为分页展示，支持搜索的动态下拉框</p><p>如果你的浏览器查看有一万以上数据量的下拉框时非常卡顿，开启该选项后页面将不再卡顿。"
         },
         "paging": {
             "label": "评论区分页",
