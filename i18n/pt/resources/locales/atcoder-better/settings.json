@@ -35,8 +35,8 @@
             "helpText": "<p>Adicione restrições de contenção a elementos de blocos dobrados</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Se o seu navegador apresentar atrasos ao visualizar um grande número de blocos dobrados, ativá-lo<strong>pode</strong>melhorar um pouco</p>"
         },
         "selectElementOptimization": {
-            "label": "Otimização do desempenho da caixa de seleção pendente",
-            "helpText": "<p>Quando activada, optimiza o desempenho das caixas de seleção do menu pendente na página</p><p> Se houver mais de 1w de opções na caixa pendente da página, a página ficará muito lenta. Depois de ativar esta opção, a página deixará de ficar lenta.</p>"
+            "label": "Otimização do desempenho da caixa pendente",
+            "helpText": "Substituir <p>os elementos da caixa de seleção do menu pendente na página por uma apresentação paginada, caixas pendentes dinâmicas com suporte de pesquisa</p><p>Se o seu browser apresentar um grande atraso na visualização de caixas pendentes com um volume de dados superior a 10.000, a página deixará de apresentar esse atraso quando esta opção estiver activada."
         },
         "paging": {
             "label": "Comentários Página de distinção",
