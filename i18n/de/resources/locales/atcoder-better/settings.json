@@ -34,6 +34,10 @@
             "label": "Optimierung des Renderings von Faltblöcken",
             "helpText": "<p>Fügen Sie \"contain\"-Einschränkungen zu gefalteten Blockelementen hinzu</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>Wenn Ihr Browser bei der Anzeige einer großen Anzahl von gefalteten Blöcken lahmt, kann das Einschalten dieser Funktion<strong></strong>die Situation etwas verbessern</p>"
         },
+        "selectElementOptimization": {
+            "label": "Optimierung der Leistung von Dropdown-Auswahlboxen",
+            "helpText": "<p>Wenn diese Option aktiviert ist, wird die Leistung der Dropdown-Auswahlfelder auf der Seite optimiert</p><p> Wenn die Dropdown-Boxen auf der Seite mehr als 1w Optionen enthalten, ist die Seite sehr langsam. Wenn diese Option aktiviert ist, ist die Seite nicht mehr langsam.</p>"
+        },
         "paging": {
             "label": "Kommentare Unterscheidung Seite",
             "helpText": "Die Kommentare werden auf separaten Seiten angezeigt, mit einer bestimmten Anzahl von<strong>main floor</strong>pro Seite."
