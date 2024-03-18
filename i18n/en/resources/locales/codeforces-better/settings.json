@@ -34,6 +34,10 @@
             "label": "Optimization of foldable block render",
             "helpText": "<p>Add contain constraints to folded block elements</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>If your browser is laggy when viewing large numbers of folded blocks, turning it on<strong>may</strong>improve it somewhat</p>"
         },
+        "selectElementOptimization": {
+            "label": "Optimization of drop-down selection box performance",
+            "helpText": "<p>When enabled, it will optimize the performance of the dropdown selection box in the page</p><p> If the page has 1w+ options in the dropdown box, the page will be very laggy, after enabling this option the page will not be laggy anymore.</p>"
+        },
         "paging": {
             "label": "Comment Pagination",
             "helpText": "The comments are displayed on separate pages, with a specified number of<strong>main floor</strong>per page."
