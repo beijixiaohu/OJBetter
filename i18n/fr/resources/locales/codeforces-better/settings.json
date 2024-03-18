@@ -35,7 +35,7 @@
             "helpText": "<p>Ajoutez des contraintes de contenu aux éléments de blocs pliés</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain : layout style ;</p></div><p>Si votre navigateur est lent lors de l'affichage d'un grand nombre de blocs pliés, l'activer<strong>peut</strong>l'améliorer quelque peu</p>"
         },
         "selectElementOptimization": {
-            "label": "下拉选择框性能优化",
+            "label": "Optimisation des performances de la boîte de sélection déroulante",
             "helpText": "<p>Lorsque cette option est activée, elle optimise les performances des boîtes de sélection déroulantes sur la page.</p><p> S'il y a plus d'une option dans le menu déroulant de la page, la page sera très lente. Après avoir activé cette option, la page ne sera plus lente.</p>"
         },
         "paging": {
