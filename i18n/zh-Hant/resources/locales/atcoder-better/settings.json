@@ -34,6 +34,10 @@
             "label": "折疊塊渲染優化",
             "helpText": "<p>為折疊塊元素加上contain 限制</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的瀏覽器查看大量折疊塊時比較卡頓，開啟後<strong>可能</strong>會有一定程度的改善</p>"
         },
+        "selectElementOptimization": {
+            "label": "下拉框效能優化",
+            "helpText": "<p>將頁面中的下拉選擇框元素替換為分頁展示，支援搜尋的動態下拉框</p><p>如果你的瀏覽器查看有一萬以上資料量的下拉框時非常卡頓，開啟該選項後頁面將不再卡頓。"
+        },
         "paging": {
             "label": "評論區分頁",
             "helpText": "評論區分頁顯示，每頁顯示指定數量的<strong>主樓</strong>。"
