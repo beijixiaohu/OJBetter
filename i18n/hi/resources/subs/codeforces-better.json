@@ -321,7 +321,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "रेटिंग परिवर्तन के पिछले दौर को अस्थायी रूप से वापस ले लिया गया है। वे जल्द ही ठीक हो जायेंगे.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "अनुस्मारक：यदि कोई तकनीकी समस्या आती है, तो आप एक हल्की वेबसाइट का उपयोग कर सकते हैं",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "कृपया लिंक के माध्यम से कोडफोर्स के आधिकारिक टेलीग्राम चैनल की सदस्यता लें",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ उत्तर सबमिट करते समय, कृपया अपने कंपाइलर के रूप में C++14 (GCC 6-32) या C++17 (GCC 7-32) चुनें।"
+                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ उत्तर सबमिट करते समय, कृपया अपने कंपाइलर के रूप में C++14 (GCC 6-32) या C++17 (GCC 7-32) चुनें।",
+                "Thank you for your interest in Codeforces. You have been successfully registered.": "कोडफोर्सेस में आपकी रुचि के लिए धन्यवाद। आपको सफलतापूर्वक रजिस्टर कर लिया है।",
+                "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "अब आपको अपना ईमेल कन्फर्म करना होगा। आपके ईमेल पर एक पत्र भेजा गया है, कृपया अपना पंजीकरण पूरा करने के लिए निर्देशों का पालन करें।",
+                "If for any reason the letter did not come, it can be sent again": "यदि किसी कारणवश पत्र नहीं आता है तो उसे दोबारा भेजा जा सकता है"
             }
         },
         ".lang-chooser": {
@@ -501,7 +504,8 @@
                 "Spectator ranklists": "दर्शकों की रैंकिंग सूची",
                 "Ghosts:": "भूत खिलाड़ी",
                 "Export Submissions": "निर्यात प्रस्तुतीकरण",
-                "Register in Codeforces": "कोडफोर्स के लिए पंजीकरण करें"
+                "Register in Codeforces": "कोडफोर्स के लिए पंजीकरण करें",
+                "Password recovery": "पासवर्ड की दोबारा प्राप्ति"
             }
         },
         "QuestionFilter1": {
@@ -834,6 +838,37 @@
                 "Solution Size": "समाधान का आकार",
                 "Execution Time": "निष्पादन समय"
             }
+        },
+        "error for__password": {
+            "class": [
+                ".error.for__password"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please, confirm email before entering the website.": "कृपया वेबसाइट में प्रवेश करने से पहले अपना ईमेल सत्यापित करें।"
+            }
+        },
+        "#enterForm": {
+            "class": [
+                "#enterForm"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Remember me for a month": "记住我一个月",
+                "Forgot your password": "忘记密码"
+            }
+        },
+        ".centered-message": {
+            "class": [
+                ".centered-message"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Password recovery letter has been sent successfully": "密码恢复邮件已成功发送"
+            }
         }
     },
     "InputValueReplacements": {
@@ -864,7 +899,8 @@
                 "Delete problem": "प्रश्न हटाएं",
                 "Restore problem": "पुनर्प्राप्ति मुद्दे",
                 "Generate": "उत्पन्न",
-                "Send": "भेजना"
+                "Send": "भेजना",
+                "Recover": "恢复"
             }
         },
         "InputButton": {
@@ -877,6 +913,35 @@
                 "Reset": "रीसेट",
                 "Delete contest": "मिलान हटाएँ",
                 "Preview": "पूर्व दर्शन"
+            }
+        }
+    },
+    "dynamicReplacements": {
+        "bottomRightPopup ": {
+            "class": [
+                "#jGrowl"
+            ],
+            "description": "右下角弹窗",
+            "isStrict": false,
+            "rules": {
+                "Welcome": "欢迎",
+                "Goodbye, ": "再见，",
+                "Looking forward to seeing you at Codeforces.": "期待在Codeforces见到你。",
+                "You have been successfully registered": "您已成功报名",
+                "No such contests": "没有该比赛",
+                "The example input has been copied into the clipboard": "示例输入已复制到剪贴板",
+                "The source code has been copied into the clipboard": "源代码已复制到剪贴板",
+                "Settings have been updated": "设置已更新",
+                "Solution to the problem": "सवाल",
+                "has been submitted successfully": "的解答已成功提交",
+                "Settings have been saved": "设置已保存",
+                "Contest is over": "比赛已结束",
+                "Illegal contest ID": "非法的比赛ID",
+                "No such contest": "没有该比赛",
+                "Can't find such user": "找不到此用户",
+                "No such blog entry": "没有该博客条目",
+                "Compilation error": "编译错误",
+                "No registration is opened now": "现在没有开放报名"
             }
         }
     }
