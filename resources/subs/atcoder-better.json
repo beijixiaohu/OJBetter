@@ -476,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "搜索存档",
                 "Permanent Contests": "长期持续的比赛",
@@ -556,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "非官方（无评级）",
-                "Sponsored Parallel(rated)": "赞助平行（有评级）",
-                "Sponsored Parallel(unrated)": "赞助平行（无评级）",
+                "Unofficial\\(unrated\\)": "非官方（无评级）",
+                "Sponsored Parallel\\(rated\\)": "赞助平行（有评级）",
+                "Sponsored Parallel\\(unrated\\)": "赞助平行（无评级）",
                 "Sponsored Heuristic Contest": "启发式赞助比赛",
                 "All": "全部",
                 "AtCoder Typical Contest": "AtCoder 经典比赛",
@@ -624,7 +624,8 @@
                 "Editorial": "题解",
                 "Virtual Standings": "虚拟排名",
                 "Cancel Registration": "取消报名",
-                "Request a clarification": "请求澄清"
+                "Request a clarification": "请求澄清",
+                "Search": "搜索"
             }
         },
         "#navbar-collapse": {
@@ -699,6 +700,33 @@
                 "Please refer to ": "请参考",
                 "this post": "这篇文章",
                 " for detailed information on Rated/Unrated registration.": "以获取有关评级/非评级报名的详细信息。"
+            }
+        },
+        "footer": {
+            "class": [
+                "footer"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "服务条款",
+                "Privacy Policy": "隐私政策",
+                "Information Protection Policy": "信息保护政策",
+                "Company": "公司",
+                "FAQ": "常见问题",
+                "Contact": "联系",
+                "Rule": "规则",
+                "Glossary": "术语表"
+            }
+        },
+        "back-to-home":{
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "返回主页"
             }
         }
     },
