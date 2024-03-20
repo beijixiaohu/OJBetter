@@ -464,7 +464,8 @@
                 "Permanent Contests": "長続きする競技",
                 "Upcoming Contests": "今後のコンペティション",
                 "Recent Contests": "最近の試合",
-                "Ranking": "あね",
+                "Ranking: Algorithm": "ランキング：アルゴリズム",
+                "Ranking: Heuristic": "ランキング：ヒューリスティック",
                 "Contest Archive": "競技アーカイブ",
                 "Information": "インフォメーション",
                 "About the situation where it is difficult to access the contest site": "コンペティションサイトへのアクセス障害について"
@@ -475,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "検索アーカイブ",
                 "Permanent Contests": "長続きする競技",
@@ -555,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "非公式（未評価）",
-                "Sponsored Parallel(rated)": "スポンサー・パラレル（格付け）",
-                "Sponsored Parallel(unrated)": "スポンサー・パラレル（未評価）",
+                "Unofficial\\(unrated\\)": "非公式（未評価）",
+                "Sponsored Parallel\\(rated\\)": "スポンサー・パラレル（格付け）",
+                "Sponsored Parallel\\(unrated\\)": "スポンサー・パラレル（未評価）",
                 "Sponsored Heuristic Contest": "インスピレーション・スポンサーシップ・コンテスト",
                 "All": "フル",
                 "AtCoder Typical Contest": "AtCoderクラシック・コンペティション",
@@ -616,9 +617,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "格付け登録",
+                "Unrated Register": "非格付け登録",
                 "Register": "名前を書く",
                 "Virtual Participation": "バーチャル参加",
-                "Editorial": "備考"
+                "Editorial": "備考",
+                "Virtual Standings": "バーチャルランキング",
+                "Cancel Registration": "登録の取り消し",
+                "Request a clarification": "明確化の要求",
+                "Search": "ものを探す。"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +633,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "ホームページ",
                 "Contest": "競技",
@@ -653,7 +660,73 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "競技時間",
-                "local time": "現地時間"
+                "local time": "現地時間",
+                "Back to Home": "ホームページに戻る"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "あなたはこのレースに",
+                "participant. Please refer to": "参加者以下をご参照ください。",
+                "for details.": "詳細はこちら。"
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "バーチャル参加で評価が変わることはない。",
+                "The following are prohibited while virtual participation.": "バーチャル参加中は、以下の行為を禁止します。",
+                "Submitting someone else's code.": "他人のコードを提出する",
+                "Submitting code created before start your virtual participation.": "バーチャル参加開始前にコードを送信してください。",
+                "Start Time: ": "開始時間："
+            }
+        },
+        ".help-block": {
+            "class": [
+                "ヘルプブロック"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "をご参照ください。",
+                "this post": "この記事",
+                " for detailed information on Rated/Unrated registration.": "をご覧ください。"
+            }
+        },
+        "footer": {
+            "class": [
+                "フッター"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "利用規約",
+                "Privacy Policy": "プライバシーポリシー",
+                "Information Protection Policy": "情報保護方針",
+                "Company": "ファームズ",
+                "FAQ": "一般的な問題",
+                "Contact": "リエゾン",
+                "Rule": "規則",
+                "Glossary": "用語集"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                "バック・トゥ・ホーム"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "ホームページに戻る"
             }
         }
     },
@@ -664,29 +737,7 @@
             ],
             "description": "中国語を投稿する",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "バーチャルエントリー登録",
-                "Register for practice": "ログインして練習を開始する",
-                "Apply": "アプライアンス",
-                "Register": "名前を書く",
-                "Login": "サインイン",
-                "Run": "うごきだす",
-                "Start virtual contest": "バーチャルエントリー開始",
-                "Manage invitations": "経営陣の招待",
-                "Disable manager mode": "管理モードの一時閉鎖",
-                "Enable manager mode": "オープン管理モード",
-                "Clone Contest": "クローン・コンペティション",
-                "Submit": "だす",
-                "Save changes": "設定の保存",
-                "Filter": "ろ過",
-                "Find": "見つける",
-                "Save": "セーブ",
-                "Create Mashup Contest": "マッシュアップコンテストを開催",
-                "Delete problem": "質問を削除する",
-                "Restore problem": "リカバリーの問題",
-                "Generate": "生成",
-                "Send": "送信"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +745,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "リビジョン",
-                "Delete contest": "マッチ削除",
-                "Preview": "プレビュー"
-            }
+            "rules": {}
         }
     }
 }
