@@ -118,8 +118,6 @@
                 "ログイン": "登入",
                 "現在のコンテスト": "現在的比賽",
                 "過去のコンテスト": "過去的比賽",
-                "Algorithm": "演算法",
-                "Heuristic": "啟發式",
                 "アクティブユーザのみ": "僅活躍用戶",
                 "全ユーザ": "所有用戶",
                 "新エディタテストコンテスト": "新編輯器測試比賽",
@@ -155,6 +153,17 @@
                 "ユーザ名の変更": "更改使用者名稱",
                 "退会": "註銷",
                 "その他": "其他"
+            }
+        },
+        "traverseTextNodes3": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Algorithm": "演算法",
+                "Heuristic": "啟發式"
             }
         },
         "#collapse-search": {
@@ -840,5 +849,6 @@
             "isStrict": false,
             "rules": {}
         }
-    }
+    },
+    "dynamicReplacements": {}
 }
