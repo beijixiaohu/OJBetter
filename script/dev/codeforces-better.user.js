@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.28
+// @version      1.73.29
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -26,7 +26,6 @@
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
-// @connect      8.130.66.249
 // @connect      *
 // @grant        GM_xmlhttpRequest
 // @grant        GM_info
@@ -4721,14 +4720,6 @@ async function localizeWebsite() {
         });
     });
 
-    // 测试
-    {
-        // var translations = {
-        //     
-        // };
-        // traverseTextNodes($('xxx'), translations);
-    };
-
     /**
      * 应用value替换
      */
@@ -4741,43 +4732,25 @@ async function localizeWebsite() {
     });
 
     /**
-     * 右下角弹窗本地化
+     * 动态添加的文本的替换
      */
-    OJB_observeElement({
-        selector: '#jGrowl',
-        callback: (node) => {
-            let popupContent = node.textContent.replace(/^×/, ''); // 去除开头多余的 '×' 字符
-            /**
-             * ===========================================================================
-             * 由于作者不清楚右下角弹窗中大致有哪些文本，因此使用该段代码，
-             * 以收集上报弹窗出现的文本以便制作对应的翻译规则，
-             * 这是一段临时代码，将在信息足够时移除并更换为实际的本地化代码
-             * ===========================================================================
-             */
-            reportPopupContent(popupContent);
-        }
-    });
-
-    // 上报弹窗内容
-    function reportPopupContent(popupContent) {
-        /**
-         * 数据上报收集
-         */
-        OJB_GMRequest({
-            method: "POST",
-            url: 'http://8.130.66.249:2345/report-popup',
-            data: JSON.stringify({ content: popupContent }),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(response => {
-                console.log('Popup content reported:', popupContent);
-            })
-            .catch(error => {
-                console.error('Error reporting popup content:', error);
+    let dynamicReplacements = subs.dynamicReplacements;
+    Object.entries(dynamicReplacements).forEach(([key, value]) => {
+        const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
+        classSelectors.forEach(classSelector => {
+            OJB_observeElement({
+                selector: classSelector,
+                callback: (node) => {
+                    // let popupContent = node.textContent.replace(/^×/, ''); // 去除开头多余的 '×' 字符
+                    if (value.isStrict) {
+                        strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+                    } else {
+                        traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+                    }
+                }
             });
-    }
+        });
+    });
 
     // 杂项
     (function () {
@@ -9091,9 +9064,12 @@ async function SelectElementPerfOpt() {
     };
 
     // 遍历页面上的所有select
-    $('select').each(function () {
-        OJB_transformSelectToSelectPage(this);
-    });
+    $('select').each((_, select) => {
+        // 选项大于500才优化
+        if ($(select).find('option').length > 500) {
+          OJB_transformSelectToSelectPage(select);
+        }
+      });
 }
 
 /**
@@ -13475,8 +13451,8 @@ function initOnDOMReady() {
     showAnnounce(); // 显示公告
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
-    initMonacoEditor(), // 初始化monaco编辑器资源
-        localizeWebsite(); // 网站本地化替换
+    initMonacoEditor(); // 初始化monaco编辑器资源
+    localizeWebsite(); // 网站本地化替换
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
     if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
