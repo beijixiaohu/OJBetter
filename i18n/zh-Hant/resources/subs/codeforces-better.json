@@ -322,9 +322,9 @@
                 "Reminder: in case of any technical issues, you can use the lightweight website": "提醒：如果出現任何技術問題，您可以使用輕量網站",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "請透過連結訂閱Codeforces的官方Telegram頻道",
                 "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "在提交C++解答時，請選擇C++14（GCC 6-32）或C++17（GCC 7-32）作為您的編譯器。",
-                "Thank you for your interest in Codeforces. You have been successfully registered.": "感谢您对Codeforces的关注。您已成功注册。",
-                "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "现在您需要确认您的电子邮件。一封信已发送到您的电子邮件，请按照说明完成注册。",
-                "If for any reason the letter did not come, it can be sent again": "如果由于任何原因信件未到达，可以再次发送"
+                "Thank you for your interest in Codeforces. You have been successfully registered.": "感謝您對Codeforces的關注。您已成功註冊。",
+                "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "現在您需要確認您的電子郵件。一封信已發送到您的電子郵件，請按照指示完成註冊。",
+                "If for any reason the letter did not come, it can be sent again": "如果因任何原因信件未到達，可以再次發送"
             }
         },
         ".lang-chooser": {
@@ -505,7 +505,7 @@
                 "Ghosts:": "幽靈選手",
                 "Export Submissions": "匯出提交",
                 "Register in Codeforces": "註冊Codeforces",
-                "Password recovery": "密码恢复"
+                "Password recovery": "密碼恢復"
             }
         },
         "QuestionFilter1": {
@@ -846,7 +846,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Please, confirm email before entering the website.": "在进入网站之前请先验证电子邮件。"
+                "Please, confirm email before entering the website.": "在進入網站之前請先驗證電子郵件。"
             }
         },
         "#enterForm": {
@@ -856,8 +856,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Remember me for a month": "记住我一个月",
-                "Forgot your password": "忘记密码"
+                "Remember me for a month": "記得我一個月",
+                "Forgot your password": "忘記密碼"
             }
         },
         ".centered-message": {
@@ -867,7 +867,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Password recovery letter has been sent successfully": "密码恢复邮件已成功发送"
+                "Password recovery letter has been sent successfully": "密碼恢復郵件已成功發送"
             }
         }
     },
@@ -900,7 +900,7 @@
                 "Restore problem": "恢復問題",
                 "Generate": "產生",
                 "Send": "傳送",
-                "Recover": "恢复"
+                "Recover": "恢復"
             }
         },
         "InputButton": {
@@ -921,27 +921,27 @@
             "class": [
                 "#jGrowl"
             ],
-            "description": "右下角弹窗",
+            "description": "右下角彈跳窗",
             "isStrict": false,
             "rules": {
-                "Welcome": "欢迎",
-                "Goodbye, ": "再见，",
-                "Looking forward to seeing you at Codeforces.": "期待在Codeforces见到你。",
-                "You have been successfully registered": "您已成功报名",
-                "No such contests": "没有该比赛",
-                "The example input has been copied into the clipboard": "示例输入已复制到剪贴板",
-                "The source code has been copied into the clipboard": "源代码已复制到剪贴板",
-                "Settings have been updated": "设置已更新",
+                "Welcome": "歡迎",
+                "Goodbye, ": "再見，",
+                "Looking forward to seeing you at Codeforces.": "期待在Codeforces見到你。",
+                "You have been successfully registered": "您已成功報名",
+                "No such contests": "沒有該比賽",
+                "The example input has been copied into the clipboard": "範例輸入已複製到剪貼簿",
+                "The source code has been copied into the clipboard": "原始碼已複製到剪貼簿",
+                "Settings have been updated": "設定已更新",
                 "Solution to the problem": "問題",
                 "has been submitted successfully": "的解答已成功提交",
-                "Settings have been saved": "设置已保存",
-                "Contest is over": "比赛已结束",
-                "Illegal contest ID": "非法的比赛ID",
-                "No such contest": "没有该比赛",
-                "Can't find such user": "找不到此用户",
-                "No such blog entry": "没有该博客条目",
-                "Compilation error": "编译错误",
-                "No registration is opened now": "现在没有开放报名"
+                "Settings have been saved": "設定已儲存",
+                "Contest is over": "比賽已結束",
+                "Illegal contest ID": "非法的比賽ID",
+                "No such contest": "沒有該比賽",
+                "Can't find such user": "找不到此用戶",
+                "No such blog entry": "沒有該部落格條目",
+                "Compilation error": "編譯錯誤",
+                "No registration is opened now": "現在沒有開放報名"
             }
         }
     }
