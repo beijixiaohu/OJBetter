@@ -856,8 +856,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Remember me for a month": "记住我一个月",
-                "Forgot your password": "忘记密码"
+                "Remember me for a month": "Erinnern Sie sich einen Monat lang an mich.",
+                "Forgot your password": "Passwort vergessen?"
             }
         },
         ".centered-message": {
@@ -867,7 +867,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Password recovery letter has been sent successfully": "密码恢复邮件已成功发送"
+                "Password recovery letter has been sent successfully": "Die E-Mail zur Wiederherstellung des Passworts wurde erfolgreich gesendet."
             }
         }
     },
@@ -900,7 +900,7 @@
                 "Restore problem": "Probleme bei der Wiederherstellung",
                 "Generate": "Erzeugung von",
                 "Send": "Senden",
-                "Recover": "恢复"
+                "Recover": "Wiederaufnahme"
             }
         },
         "InputButton": {
@@ -921,27 +921,27 @@
             "class": [
                 "#jGrowl"
             ],
-            "description": "右下角弹窗",
+            "description": "Pop-up unten rechts",
             "isStrict": false,
             "rules": {
-                "Welcome": "欢迎",
-                "Goodbye, ": "再见，",
-                "Looking forward to seeing you at Codeforces.": "期待在Codeforces见到你。",
-                "You have been successfully registered": "您已成功报名",
-                "No such contests": "没有该比赛",
-                "The example input has been copied into the clipboard": "示例输入已复制到剪贴板",
-                "The source code has been copied into the clipboard": "源代码已复制到剪贴板",
-                "Settings have been updated": "设置已更新",
+                "Welcome": "herzlich willkommen",
+                "Goodbye, ": "Auf Wiedersehen.",
+                "Looking forward to seeing you at Codeforces.": "Ich freue mich darauf, Sie bei Codeforces zu sehen.",
+                "You have been successfully registered": "Sie haben sich erfolgreich angemeldet",
+                "No such contests": "Einen solchen Wettbewerb gibt es nicht.",
+                "The example input has been copied into the clipboard": "Beispiel einer in die Zwischenablage kopierten Eingabe",
+                "The source code has been copied into the clipboard": "Der Quellcode wurde in die Zwischenablage kopiert",
+                "Settings have been updated": "Einstellungen aktualisiert",
                 "Solution to the problem": "Ausgaben",
-                "has been submitted successfully": "的解答已成功提交",
-                "Settings have been saved": "设置已保存",
-                "Contest is over": "比赛已结束",
-                "Illegal contest ID": "非法的比赛ID",
-                "No such contest": "没有该比赛",
-                "Can't find such user": "找不到此用户",
-                "No such blog entry": "没有该博客条目",
-                "Compilation error": "编译错误",
-                "No registration is opened now": "现在没有开放报名"
+                "has been submitted successfully": "Die Antwort wurde erfolgreich übermittelt",
+                "Settings have been saved": "Gespeicherte Einstellungen",
+                "Contest is over": "Das Spiel ist vorbei.",
+                "Illegal contest ID": "Illegaler Rassenausweis",
+                "No such contest": "Einen solchen Wettbewerb gibt es nicht.",
+                "Can't find such user": "Dieser Benutzer kann nicht gefunden werden",
+                "No such blog entry": "Es gibt keinen Eintrag für diesen Blog",
+                "Compilation error": "Kompilierungsfehler",
+                "No registration is opened now": "Die Registrierung ist zur Zeit nicht möglich."
             }
         }
     }
