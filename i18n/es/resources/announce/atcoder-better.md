@@ -1,3 +1,12 @@
+## 1.15.0
+
+- Los datos MarkDown ya no contienen bloques de códigos interlínea
+- Mejorar las normas de localización de sitios web
+- Métodos mejorados para determinar si un texto es un fragmento de código.
+- Corrección de error no definido en la función "embellecer bloque de código".
+- Corrección de los errores de notificación del método `OJB_observeElement()`.
+- Corrección para el método de localización de sitios web `strictTraverseTextNodes()` que no funcionaba.
+
 ## 1.14.2
 
 - Corrección de un error de estilo en el editor en modo oscuro
