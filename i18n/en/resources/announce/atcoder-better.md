@@ -1,3 +1,12 @@
+## 1.15.0
+
+- MarkDown data no longer contains interline code blocks
+- Improve website localization rules
+- Improved methods related to determining that text is a code snippet
+- Fix not defined error in "Beautify Code Block" function.
+- Fix error reported by `OJB_observeElement()` method
+- Fix invalid site localization method `strictTraverseTextNodes()`
+
 ## 1.14.2
 
 - Fix a styling error in the editor in dark mode
