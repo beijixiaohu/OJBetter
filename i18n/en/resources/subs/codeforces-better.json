@@ -321,7 +321,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "The rating changes from the previous round have been temporarily rolled back. They will be restored shortly.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Reminder：If any technical issues arise, you can use the lightweight site",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "Please subscribe to Codeforces' official Telegram channel via the link!",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "When submitting a C++ answer, please select C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler."
+                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "When submitting a C++ answer, please select C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler.",
+                "Thank you for your interest in Codeforces. You have been successfully registered.": "Thank you for your interest in Codeforces. You have been successfully registered.",
+                "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "Now you need to confirm your e-mail. A letter has been sent to your email, please follow the instructions to complete the registration.",
+                "If for any reason the letter did not come, it can be sent again": "If for any reason the letter does not arrive, it can be sent again"
             }
         },
         ".lang-chooser": {
@@ -501,7 +504,8 @@
                 "Spectator ranklists": "Audience Ranking List",
                 "Ghosts:": "ghost player",
                 "Export Submissions": "Export Submission",
-                "Register in Codeforces": "Register for Codeforces"
+                "Register in Codeforces": "Register for Codeforces",
+                "Password recovery": "Password Recovery"
             }
         },
         "QuestionFilter1": {
@@ -834,6 +838,37 @@
                 "Solution Size": "Solution Size",
                 "Execution Time": "execution time"
             }
+        },
+        "error for__password": {
+            "class": [
+                ".error.for__password"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please, confirm email before entering the website.": "Please verify email before entering the site."
+            }
+        },
+        "#enterForm": {
+            "class": [
+                "#enterForm"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Remember me for a month": "Remember me for a month.",
+                "Forgot your password": "forgotten password?"
+            }
+        },
+        ".centered-message": {
+            "class": [
+                ".centered-message"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Password recovery letter has been sent successfully": "Password recovery email has been sent successfully"
+            }
         }
     },
     "InputValueReplacements": {
@@ -864,7 +899,8 @@
                 "Delete problem": "Delete the question",
                 "Restore problem": "Recovery issues",
                 "Generate": "generating",
-                "Send": "dispatch"
+                "Send": "dispatch",
+                "Recover": "rehabilitate"
             }
         },
         "InputButton": {
@@ -877,6 +913,35 @@
                 "Reset": "reprovision",
                 "Delete contest": "Delete Match",
                 "Preview": "previews"
+            }
+        }
+    },
+    "dynamicReplacements": {
+        "bottomRightPopup ": {
+            "class": [
+                "#jGrowl"
+            ],
+            "description": "Bottom right pop-up window",
+            "isStrict": false,
+            "rules": {
+                "Welcome": "wellcome",
+                "Goodbye, ": "Bye.",
+                "Looking forward to seeing you at Codeforces.": "Looking forward to seeing you at Codeforces.",
+                "You have been successfully registered": "You have been successfully enrolled",
+                "No such contests": "There is no such contest.",
+                "The example input has been copied into the clipboard": "Example input copied to clipboard",
+                "The source code has been copied into the clipboard": "The source code has been copied to the clipboard",
+                "Settings have been updated": "Settings updated",
+                "Solution to the problem": "concern",
+                "has been submitted successfully": "The answer has been successfully submitted",
+                "Settings have been saved": "Settings saved",
+                "Contest is over": "The game is over.",
+                "Illegal contest ID": "Illegal race ID",
+                "No such contest": "There is no such contest.",
+                "Can't find such user": "This user cannot be found",
+                "No such blog entry": "There is no entry for this blog",
+                "Compilation error": "compilation error",
+                "No registration is opened now": "Registration is not open right now."
             }
         }
     }

@@ -1,3 +1,12 @@
+## 1.15.0
+
+- Os dados de MarkDown já não contêm blocos de códigos entre linhas
+- Melhorar as regras de localização do sítio Web
+- Métodos melhorados para determinar se o texto é um trecho de código
+- Correção de um erro não definido na função "embelezar bloco de código".
+- Correção dos erros de relatório do método `OJB_observeElement()`
+- Correção do método de localização do sítio Web `strictTraverseTextNodes()` que não funciona
+
 ## 1.14.2
 
 - Correção de um erro de estilo no editor em modo escuro

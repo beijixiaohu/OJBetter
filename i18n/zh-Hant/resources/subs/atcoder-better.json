@@ -17,7 +17,8 @@
                 "アイコン設定": "頭像設定",
                 "パスワードの変更": "修改密碼",
                 "お気に入り管理": "收藏管理",
-                "ログアウト": "註銷"
+                "ログアウト": "註銷",
+                "AtCoderInfo": "AtCoder訊息"
             }
         },
         ".a-title_ttl": {
@@ -63,8 +64,8 @@
             "isStrict": false,
             "rules": {
                 "解けた！を": "解決了！",
-                "世界に届けたい。": "給全世界。",
-                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder是全球最高水準的競技程式網站。",
+                "世界に届けたい。": "告訴全世界。",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder是世界頂尖的競技程式網站。",
                 "リアルタイムのオンラインコンテストで競い合うことや、": "您可以參加即時線上比賽，",
                 "5,000以上の過去問にいつでもチャレンジすることができます。": "隨時挑戰超過5,000道歷年題目。"
             }
@@ -77,18 +78,19 @@
                 "h4"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "開催中のコンテスト": "進行中的比賽",
                 "常設中のコンテスト": "長期持續的比賽",
                 "予定されたコンテスト": "計劃中的比賽",
-                "終了後のコンテスト(最新 10 件)": "已結束的比賽（最新10場）",
-                "終了後のコンテスト(最新 50 件)": "已結束的比賽（最新10場）",
-                "ランキング": "排名",
+                "終了後のコンテスト": "已結束的比賽",
+                "ランキング: Algorithm": "排名：演算法",
+                "ランキング: Heuristic": "排名：啟發式",
                 "インフォメーション": "資訊",
                 "過去のコンテスト": "過去的比賽",
                 "過去のコンテストを検索": "搜尋過去的比賽",
-                "コンテスト": "比賽"
+                "コンテスト": "比賽",
+                "AtCoder練習・活用サービス": "AtCoder練習/應用服務"
             }
         },
         "traverseTextNodes": {
@@ -112,6 +114,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "新規登録": "註冊",
+                "ログイン": "登入",
                 "現在のコンテスト": "現在的比賽",
                 "過去のコンテスト": "過去的比賽",
                 "Algorithm": "演算法",
@@ -121,7 +125,6 @@
                 "新エディタテストコンテスト": "新編輯器測試比賽",
                 "日本語": "日語",
                 "English": "英語",
-                "bjxh (Guest)": "bjxh（遊客）",
                 "マイプロフィール": "個人資料",
                 "基本設定": "基本設定",
                 "アイコン設定": "頭像設定",
@@ -163,22 +166,22 @@
             "rules": {
                 "Rated対象": "限定範圍",
                 "ABCクラス": "ABC類別",
-                "(Rated上限: 1999)": "(Rated上限: 1999)",
+                "\\(Rated上限: 1999\\)": "(Rated上限: 1999)",
                 "ARCクラス": "ARC類別",
-                "(Rated上限: 2799)": "(Rated上限: 2799)",
+                "\\(Rated上限: 2799\\)": "(Rated上限: 2799)",
                 "AGCクラス": "AGC類別",
-                "(Rated上限なし)": "(無Rated上限)",
+                "\\(Rated上限なし\\)": "(無Rated上限)",
                 "AHCクラス": "AHC類別",
                 "カテゴリ": "分類",
                 "全て": "全部",
                 "AtCoder Typical Contest": "AtCoder經典賽",
                 "PAST過去問": "PAST歷年問題",
                 "AtCoder Daily Training": "AtCoder每日訓練",
-                "非公式コンテスト(unrated)": "非官方比賽（未評級）",
+                "非公式コンテスト\\(unrated\\)": "非官方比賽（未評級）",
                 "JOI過去問": "JOI歷年問題",
                 "企業コンテスト決勝": "企業比賽決賽",
-                "企業オープンコンテスト(rated)": "企業公開比賽（已評級）",
-                "企業オープンコンテスト(unrated)": "企業公開比賽（未評級）",
+                "企業オープンコンテスト\\(rated\\)": "企業公開比賽（已評級）",
+                "企業オープンコンテスト\\(unrated\\)": "企業公開比賽（未評級）",
                 "企業ABC": "企業ABC",
                 "企業ARC": "企業ARC",
                 "ヒューリスティック": "啟發式",
@@ -189,7 +192,7 @@
                 "コンテスト名": "比賽名稱"
             }
         },
-        ".btn-text": {
+        ".btn-text-jp": {
             "class": [
                 ".btn-text"
             ],
@@ -202,7 +205,26 @@
                 "記事アーカイブ": "文章存檔",
                 "詳細": "詳情",
                 "すべて表示": "顯示全部",
-                "殿堂入り": "名人堂"
+                "殿堂入り": "名人堂",
+                "コンテスト成績表": "比賽成績表",
+                "直近のコンテスト成績証": "最近的比賽成績證明"
+            }
+        },
+        "lang-ja": {
+            "class": [
+                ".lang-ja"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ーチャル参加とは、コンテストに仮想的に参加できる機能です。": "虛擬參加是指您可以虛擬參加比賽的功能。",
+                "バーチャル参加を開始すると、": "開始虛擬參加後，",
+                "バーチャル順位表": "虛擬排名表",
+                "が経過時間に応じてリアルタイムに更新されていきます。": "將根據經過的時間即時更新。",
+                "ただし、本番のコンテストとは異なり、レーティングの変動は起こりません。": "但是，與正式比賽不同，不會影響評級。",
+                "参加条件に制限はありませんが、以下の行為はお控えください。": "參加條件沒有限制，但請避免以下行為。",
+                "他人の回答をコピーして提出する行為": "複製他人的答案並提交",
+                "事前に作成した回答ソースコードを提出する行為": "提交事先創建的答案原始碼"
             }
         },
         "#footer": {
@@ -219,6 +241,7 @@
                 "ランキング": "排名",
                 "便利リンク集": "實用連結",
                 "AtCoderJobs": "AtCoder職位",
+                "AtCoder职位トップ": "AtCoder職缺首頁",
                 "AtCoderJobsトップ": "AtCoder職缺首頁",
                 "2024年新卒採用求人一覧": "2024年應屆畢業生招募職缺列表",
                 "2025年新卒採用求人一覧": "2025年應屆畢業生招募職位列表",
@@ -230,6 +253,7 @@
                 "採用担当者の方へ": "給招募負責人的信息",
                 "検定": "認證考試",
                 "検定トップ": "認證考試首頁",
+                "认证考试トップ": "認證考試首頁",
                 "マイページ": "個人主頁",
                 "AtCoderCareerDesign": "AtCoder職業設計",
                 "キャリアデザイントップ": "職業設計首頁",
@@ -243,7 +267,7 @@
                 "用語集": "術語表",
                 "プライバシーポリシー": "隱私權政策",
                 "個人情報保護方針": "個人資訊保護政策",
-                "Copyright Since 2012 (C) AtCoder Inc. All rights reserved.": "版權所有© 2012年起AtCoder公司。保留所有權利。"
+                "Copyright Since 2012 \\(C\\) AtCoder Inc. All rights reserved.": "版權所有© 2012年起AtCoder公司。保留所有權利。"
             }
         },
         ".editor-buttons-jp": {
@@ -271,7 +295,31 @@
                 "ソースコード": "原始碼",
                 "標準入力": "標註輸入",
                 "標準出力": "標準輸出",
-                "標準エラー出力": "標準錯誤輸出"
+                "標準エラー出力": "標準錯誤輸出",
+                "ユーザ名": "使用者名稱",
+                "パスワード": "密碼",
+                "メールアドレス": "電子郵件地址",
+                "パスワードの確認": "確認密碼",
+                "国と地域": "國家和地區",
+                "誕生年": "出生年份",
+                "メール通知": "郵件通知"
+            }
+        },
+        ".alert-jp": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "現在": "目前",
+                "で参加登録しています。詳細は": "已報名參加。詳情請閱讀",
+                "こちら": "這裡",
+                "参加登録しました。": "已報名參加。",
+                "参加登録を取り消しました。": "已取消報名。",
+                "ログアウトしました。": "已登出登入。",
+                "ようこそ、": "歡迎，",
+                "さん": "先生/女士"
             }
         },
         ".h2, h2": {
@@ -339,7 +387,9 @@
                 "コンテスト名": "比賽名稱",
                 "Rated対象": "計分對象",
                 "時間": "時長",
-                "開始時刻": "開始時間"
+                "開始時刻": "開始時間",
+                "Rated/Unrated参加についての詳細は": "有關Rated/Unrated參加的詳細信息，請參考",
+                "こちら": "這裡"
             }
         },
         ".table-responsive tr th": {
@@ -393,8 +443,16 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated参加登録": "評等報名",
+                "Unrated参加登録": "非評等報名",
+                "参加登録を取り消す": "取消報名",
+                "バーチャル参加登録": "虛擬參與",
                 "参加登録": "報名",
-                "バーチャル参加": "虛擬參與"
+                "バーチャル参加": "虛擬參與",
+                "質問する": "提問",
+                "ログイン": "登入",
+                "新規登録": "註冊",
+                "または": "或者"
             }
         },
         ".nav": {
@@ -423,6 +481,7 @@
                 "Heuristic": "啟發式",
                 "Active Users": "活躍用戶",
                 "All Users": "所有用戶",
+                "My Profile": "我的資料",
                 "Profile": "個人資料",
                 "Competition History": "比賽記錄",
                 "General Settings": "常規設定",
@@ -464,7 +523,8 @@
                 "Permanent Contests": "長期持續的比賽",
                 "Upcoming Contests": "即將舉行的比賽",
                 "Recent Contests": "最近的比賽",
-                "Ranking": "排行",
+                "Ranking: Algorithm": "排行：演算法",
+                "Ranking: Heuristic": "排行：啟發式",
                 "Contest Archive": "比賽檔案",
                 "Information": "資訊",
                 "About the situation where it is difficult to access the contest site": "關於難以訪問比賽網站的情況"
@@ -475,7 +535,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "搜尋存檔",
                 "Permanent Contests": "長期持續的比賽",
@@ -527,15 +587,15 @@
                 "Family Name": "姓氏",
                 "First Name": "名字",
                 "Category": "分類",
-                "College Students (Master or Doctor cource)": "大學生（碩士或博士課程）",
+                "College Students \\(Master or Doctor cource\\)": "大學生（碩士或博士課程）",
                 "College Students": "大學生",
                 "Technical college/Vocational school/Short-term university": "技術學院/職業學校/短期大學",
                 "High school": "高中",
                 "Junior high school": "國中",
                 "Office worker": "上班族",
                 "Other": "其他",
-                "Organization Name (Company Name or School Name)": "組織名稱（公司名稱或學校名稱）",
-                "Depertment (For Students)": "系（適用於學生）",
+                "Organization Name \\(Company Name or School Name\\)": "組織名稱（公司名稱或學校名稱）",
+                "Depertment \\(For Students\\)": "系（適用於學生）",
                 "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "您是否有意向或計劃在2023年或2024年找工作或換工作？",
                 "Graduation Schedule": "畢業時間表",
                 "I'm already employed.": "我已經就業了。",
@@ -555,9 +615,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "非官方（無評級）",
-                "Sponsored Parallel(rated)": "贊助平行（有評級）",
-                "Sponsored Parallel(unrated)": "贊助平行（無評級）",
+                "Unofficial\\(unrated\\)": "非官方（無評級）",
+                "Sponsored Parallel\\(rated\\)": "贊助平行（有評級）",
+                "Sponsored Parallel\\(unrated\\)": "贊助平行（無評級）",
                 "Sponsored Heuristic Contest": "啟發式贊助比賽",
                 "All": "全部",
                 "AtCoder Typical Contest": "AtCoder 經典賽",
@@ -616,9 +676,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "評等報名",
+                "Unrated Register": "非評等報名",
                 "Register": "報名",
                 "Virtual Participation": "虛擬參加",
-                "Editorial": "題解"
+                "Editorial": "題解",
+                "Virtual Standings": "虛擬排名",
+                "Cancel Registration": "取消報名",
+                "Request a clarification": "請求澄清",
+                "Search": "搜尋",
+                "Update Registration": "更新報名訊息",
+                "Cancel": "取消"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +694,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "首頁",
                 "Contest": "比賽",
@@ -653,7 +721,105 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "比賽時間",
-                "local time": "當地時間"
+                "local time": "當地時間",
+                "Back to Home": "返回首頁"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as an": "您已經報名參加了這場比賽，作為一個",
+                "You have registered for this contest as a": "您已經報名參加了這場比賽，作為一個",
+                "participant. Please refer to": "參與者。請參考",
+                "this post": "這篇文章",
+                "for details.": "了解詳情。",
+                "participant": "參與者",
+                "Registered": "已報名",
+                "Canceled registration": "已取消報名",
+                "Welcome, ": "歡迎，"
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "虛擬參加不會改變評級。",
+                "The following are prohibited while virtual participation.": "虛擬參加期間禁止以下行為。",
+                "Submitting someone else's code.": "提交他人的代碼。",
+                "Submitting code created before start your virtual participation.": "在開始虛擬參加之前提交程式碼。",
+                "Start Time: ": "開始時間："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "請參考",
+                "this post": "這篇文章",
+                " for detailed information on Rated/Unrated registration.": "以取得有關評級/非評級報名的詳細資訊。"
+            }
+        },
+        "footer": {
+            "class": [
+                "footer"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "服務條款",
+                "Privacy Policy": "隱私權政策",
+                "Information Protection Policy": "資訊保護政策",
+                "Company": "公司",
+                "FAQ": "常見問題",
+                "Contact": "聯繫",
+                "Rule": "規則",
+                "Glossary": "術語表"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "返回首頁"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-text"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "View all": "看全部",
+                "Hall of Fame": "名人堂",
+                "AWTF Race Ranking 2024": "AWTF 比賽排名2024",
+                "Post Archive": "文章存檔",
+                "Back to Top": "回到頂部",
+                "Detail": "詳情"
+            }
+        },
+        "modal-dialog": {
+            "class": [
+                ".modal-dialog"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Are you sure you want to cancel registration?": "您確定要取消報名嗎？",
+                "Confirm": "確認"
             }
         }
     },
@@ -664,29 +830,7 @@
             ],
             "description": "submit漢化",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "報名虛擬參賽",
-                "Register for practice": "登入以開始練習",
-                "Apply": "應用",
-                "Register": "報名",
-                "Login": "登入",
-                "Run": "運行",
-                "Start virtual contest": "開始虛擬參賽",
-                "Manage invitations": "管理邀請",
-                "Disable manager mode": "臨時關閉管理模式",
-                "Enable manager mode": "開啟管理模式",
-                "Clone Contest": "複製比賽",
-                "Submit": "提交",
-                "Save changes": "儲存設定",
-                "Filter": "濾",
-                "Find": "尋找",
-                "Save": "儲存",
-                "Create Mashup Contest": "創建混搭比賽",
-                "Delete problem": "刪除問題",
-                "Restore problem": "恢復問題",
-                "Generate": "產生",
-                "Send": "傳送"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +838,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "重置",
-                "Delete contest": "刪除比賽",
-                "Preview": "預覽"
-            }
+            "rules": {}
         }
     }
 }

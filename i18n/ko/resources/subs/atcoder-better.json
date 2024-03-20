@@ -17,7 +17,8 @@
                 "アイコン設定": "아바타 설정",
                 "パスワードの変更": "비밀번호 변경",
                 "お気に入り管理": "즐겨찾기 관리",
-                "ログアウト": "취소"
+                "ログアウト": "취소",
+                "AtCoderInfo": "AtCoder 정보"
             }
         },
         ".a-title_ttl": {
@@ -63,8 +64,8 @@
             "isStrict": false,
             "rules": {
                 "解けた！を": "해결되었습니다!",
-                "世界に届けたい。": "전 세계로.",
-                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder는 세계 최고 수준의 경쟁 프로그래밍 웹사이트입니다.",
+                "世界に届けたい。": "세상에 알리세요.",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder는 세계 최고의 경쟁 프로그래밍 사이트입니다.",
                 "リアルタイムのオンラインコンテストで競い合うことや、": "다음과 같은 실시간 온라인 대회에 참여할 수 있습니다.",
                 "5,000以上の過去問にいつでもチャレンジすることができます。": "5,000개 이상의 전년도 문제에 언제든지 도전하세요."
             }
@@ -77,18 +78,19 @@
                 "h4"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "開催中のコンテスト": "race",
                 "常設中のコンテスト": "오래 지속되는 대회",
                 "予定されたコンテスト": "계획된 경기",
-                "終了後のコンテスト(最新 10 件)": "완료된 경기(최근 10건)",
-                "終了後のコンテスト(最新 50 件)": "완료된 경기(최근 10건)",
-                "ランキング": "순위",
+                "終了後のコンテスト": "완료된 경기",
+                "ランキング: Algorithm": "순위：알고리즘",
+                "ランキング: Heuristic": "순위：휴리스틱",
                 "インフォメーション": "정보",
                 "過去のコンテスト": "지난 경기",
                 "過去のコンテストを検索": "과거 일치 항목 검색",
-                "コンテスト": "대회(스포츠 등)"
+                "コンテスト": "대회(스포츠 등)",
+                "AtCoder練習・活用サービス": "AtCoder 연습/애플리케이션 서비스"
             }
         },
         "traverseTextNodes": {
@@ -112,6 +114,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "新規登録": "등록",
+                "ログイン": "로그인",
                 "現在のコンテスト": "이제 게임입니다.",
                 "過去のコンテスト": "지난 경기",
                 "Algorithm": "산술",
@@ -121,7 +125,6 @@
                 "新エディタテストコンテスト": "새로운 에디터 테스트 콘테스트",
                 "日本語": "일본어",
                 "English": "영어(언어)",
-                "bjxh (Guest)": "bjxh(방문자)",
                 "マイプロフィール": "개인 프로필",
                 "基本設定": "기본 설정",
                 "アイコン設定": "아바타 설정",
@@ -163,22 +166,22 @@
             "rules": {
                 "Rated対象": "제한 범위",
                 "ABCクラス": "ABC 카테고리",
-                "(Rated上限: 1999)": "(최대 등급: 1999)",
+                "\\(Rated上限: 1999\\)": "(최대 등급: 1999)",
                 "ARCクラス": "ARC 카테고리",
-                "(Rated上限: 2799)": "(정격 한도: 2799)",
+                "\\(Rated上限: 2799\\)": "(정격 한도: 2799)",
                 "AGCクラス": "AGC 카테고리",
-                "(Rated上限なし)": "(등급 제한 없음)",
+                "\\(Rated上限なし\\)": "(등급 제한 없음)",
                 "AHCクラス": "AHC 카테고리",
                 "カテゴリ": "분류",
                 "全て": "전체",
                 "AtCoder Typical Contest": "앳코더 클래식 대회",
                 "PAST過去問": "지난 연도 이슈",
                 "AtCoder Daily Training": "AtCoder 일일 교육",
-                "非公式コンテスト(unrated)": "비공식 대회(등급 미분류)",
+                "非公式コンテスト\\(unrated\\)": "비공식 대회(등급 미분류)",
                 "JOI過去問": "올해의 JOI 질문",
                 "企業コンテスト決勝": "기업 경쟁 결승전",
-                "企業オープンコンテスト(rated)": "기업 공개 대회(등급)",
-                "企業オープンコンテスト(unrated)": "기업 공개 대회(등급 없음)",
+                "企業オープンコンテスト\\(rated\\)": "기업 공개 대회(등급)",
+                "企業オープンコンテスト\\(unrated\\)": "기업 공개 대회(등급 없음)",
                 "企業ABC": "비즈니스의 ABC",
                 "企業ARC": "엔터프라이즈 ARC",
                 "ヒューリスティック": "휴리스틱",
@@ -189,7 +192,7 @@
                 "コンテスト名": "대회 이름"
             }
         },
-        ".btn-text": {
+        ".btn-text-jp": {
             "class": [
                 ".btn-text"
             ],
@@ -202,7 +205,26 @@
                 "記事アーカイブ": "기사 아카이브",
                 "詳細": "세부 정보",
                 "すべて表示": "모두 보기",
-                "殿堂入り": "명예의 전당"
+                "殿堂入り": "명예의 전당",
+                "コンテスト成績表": "대회 결과 표",
+                "直近のコンテスト成績証": "최근 대회 결과 증명"
+            }
+        },
+        "lang-ja": {
+            "class": [
+                ".lang-ja"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ーチャル参加とは、コンテストに仮想的に参加できる機能です。": "가상 참여는 가상으로 콘테스트에 참가할 수 있는 기능입니다.",
+                "バーチャル参加を開始すると、": "가상으로 참여하기 시작한 후",
+                "バーチャル順位表": "가상 리그 테이블",
+                "が経過時間に応じてリアルタイムに更新されていきます。": "경과 시간에 따라 실시간으로 업데이트됩니다.",
+                "ただし、本番のコンテストとは異なり、レーティングの変動は起こりません。": "하지만 공식 경기와 달리 등급에는 영향을 미치지 않습니다.",
+                "参加条件に制限はありませんが、以下の行為はお控えください。": "참여에는 제한이 없지만 다음과 같은 행동은 피하시기 바랍니다.",
+                "他人の回答をコピーして提出する行為": "다른 사람의 답을 복사하여 제출하기",
+                "事前に作成した回答ソースコードを提出する行為": "미리 작성된 답안 소스 코드 제출"
             }
         },
         "#footer": {
@@ -219,6 +241,7 @@
                 "ランキング": "순위",
                 "便利リンク集": "유용한 링크",
                 "AtCoderJobs": "AtCoder 채용 정보",
+                "AtCoder职位トップ": "앳코더 채용 홈",
                 "AtCoderJobsトップ": "앳코더 채용 홈",
                 "2024年新卒採用求人一覧": "2024년 신입 졸업생 채용 공고",
                 "2025年新卒採用求人一覧": "2025년 신입 졸업생 채용 공고",
@@ -230,6 +253,7 @@
                 "採用担当者の方へ": "채용 책임자에게 보내는 메시지",
                 "検定": "인증 시험",
                 "検定トップ": "인증 시험 홈",
+                "认证考试トップ": "인증 시험 홈",
                 "マイページ": "개인 홈페이지",
                 "AtCoderCareerDesign": "AtCoder 경력 설계",
                 "キャリアデザイントップ": "커리어 디자인 홈",
@@ -243,7 +267,7 @@
                 "用語集": "용어집",
                 "プライバシーポリシー": "개인정보 보호정책",
                 "個人情報保護方針": "개인 정보 보호 정책",
-                "Copyright Since 2012 (C) AtCoder Inc. All rights reserved.": "저작권 © 2012 이후 AtCoder Inc. 모든 권리 보유."
+                "Copyright Since 2012 \\(C\\) AtCoder Inc. All rights reserved.": "저작권 © 2012 이후 AtCoder Inc. 모든 권리 보유."
             }
         },
         ".editor-buttons-jp": {
@@ -271,7 +295,31 @@
                 "ソースコード": "소스 코드(컴퓨팅)",
                 "標準入力": "마커 입력",
                 "標準出力": "표준 출력",
-                "標準エラー出力": "표준 오류 출력"
+                "標準エラー出力": "표준 오류 출력",
+                "ユーザ名": "사용자 ID",
+                "パスワード": "암호화",
+                "メールアドレス": "이메일 주소",
+                "パスワードの確認": "비밀번호 확인",
+                "国と地域": "국가 및 지역",
+                "誕生年": "출생 연도",
+                "メール通知": "이메일 알림"
+            }
+        },
+        ".alert-jp": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "現在": "(우리를) 마주보고",
+                "で参加登録しています。詳細は": "에 참여하겠다고 등록했습니다. 자세한 내용은 다음을 참조하세요.",
+                "こちら": "다음은 다음과 같습니다.",
+                "参加登録しました。": "등록됨.",
+                "参加登録を取り消しました。": "등록이 취소되었습니다.",
+                "ログアウトしました。": "로그아웃했습니다.",
+                "ようこそ、": "환영합니다.",
+                "さん": "Mr/Ms"
             }
         },
         ".h2, h2": {
@@ -339,7 +387,9 @@
                 "コンテスト名": "대회 이름",
                 "Rated対象": "표시 체계",
                 "時間": "시간 길이",
-                "開始時刻": "시작 시간"
+                "開始時刻": "시작 시간",
+                "Rated/Unrated参加についての詳細は": "평점/미평가 참여에 대한 자세한 내용은 다음을 참조하세요.",
+                "こちら": "다음은 다음과 같습니다."
             }
         },
         ".table-responsive tr th": {
@@ -393,8 +443,16 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated参加登録": "등급 등록",
+                "Unrated参加登録": "비등급 등록",
+                "参加登録を取り消す": "등록 취소",
+                "バーチャル参加登録": "가상 참여",
                 "参加登録": "이름 입력",
-                "バーチャル参加": "가상 참여"
+                "バーチャル参加": "가상 참여",
+                "質問する": "질문하기",
+                "ログイン": "로그인",
+                "新規登録": "등록",
+                "または": "또는"
             }
         },
         ".nav": {
@@ -423,6 +481,7 @@
                 "Heuristic": "휴리스틱",
                 "Active Users": "활성 사용자",
                 "All Users": "모든 사용자",
+                "My Profile": "내 프로필",
                 "Profile": "개인 프로필",
                 "Competition History": "경기 기록",
                 "General Settings": "일반 설정",
@@ -464,7 +523,8 @@
                 "Permanent Contests": "오래 지속되는 대회",
                 "Upcoming Contests": "예정된 대회",
                 "Recent Contests": "최근 경기",
-                "Ranking": "연공서열(형제자매 간)",
+                "Ranking: Algorithm": "순위：알고리즘",
+                "Ranking: Heuristic": "순위：휴리스틱",
                 "Contest Archive": "대회 아카이브",
                 "Information": "정보",
                 "About the situation where it is difficult to access the contest site": "대회 웹사이트 접속 장애에 관한 사항"
@@ -475,7 +535,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "아카이브 검색",
                 "Permanent Contests": "오래 지속되는 대회",
@@ -527,15 +587,15 @@
                 "Family Name": "성",
                 "First Name": "이름(사람 또는 사물의 이름)",
                 "Category": "분류",
-                "College Students (Master or Doctor cource)": "대학생(석사 또는 박사 과정)",
+                "College Students \\(Master or Doctor cource\\)": "대학생(석사 또는 박사 과정)",
                 "College Students": "대학생",
                 "Technical college/Vocational school/Short-term university": "전문대/직업학교/전문대학",
                 "High school": "축하합니다! (시험 합격)",
                 "Junior high school": "중학교",
                 "Office worker": "직장인(사회 집단)",
                 "Other": "나머지",
-                "Organization Name (Company Name or School Name)": "조직 이름(회사명 또는 학교명)",
-                "Depertment (For Students)": "학과(학생용)",
+                "Organization Name \\(Company Name or School Name\\)": "조직 이름(회사명 또는 학교명)",
+                "Depertment \\(For Students\\)": "학과(학생용)",
                 "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "2023년 또는 2024년에 구직 또는 이직할 계획이 있거나 계획 중이신가요?",
                 "Graduation Schedule": "졸업 시간표",
                 "I'm already employed.": "이미 고용되어 있습니다.",
@@ -555,9 +615,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "비공식(등급 없음)",
-                "Sponsored Parallel(rated)": "스폰서십 병렬(등급)",
-                "Sponsored Parallel(unrated)": "스폰서십 병렬(등급 없음)",
+                "Unofficial\\(unrated\\)": "비공식(등급 없음)",
+                "Sponsored Parallel\\(rated\\)": "스폰서십 병렬(등급)",
+                "Sponsored Parallel\\(unrated\\)": "스폰서십 병렬(등급 없음)",
                 "Sponsored Heuristic Contest": "영감 스폰서십 콘테스트",
                 "All": "전체",
                 "AtCoder Typical Contest": "앳코더 클래식 대회",
@@ -616,9 +676,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "등급 등록",
+                "Unrated Register": "비등급 등록",
                 "Register": "이름 입력",
                 "Virtual Participation": "가상 참여",
-                "Editorial": "메모"
+                "Editorial": "메모",
+                "Virtual Standings": "가상 랭킹",
+                "Cancel Registration": "등록 취소",
+                "Request a clarification": "설명 요청",
+                "Search": "STH를 찾습니다.",
+                "Update Registration": "등록 정보 업데이트",
+                "Cancel": "취소"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +694,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "홈페이지",
                 "Contest": "대회(스포츠 등)",
@@ -653,7 +721,105 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "대회 시간",
-                "local time": "현지 시간"
+                "local time": "현지 시간",
+                "Back to Home": "홈 페이지로 돌아가기"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as an": "귀하는 이 레이스에",
+                "You have registered for this contest as a": "귀하는 이 레이스에",
+                "participant. Please refer to": "참가자 다음을 참조하세요.",
+                "this post": "이 문서",
+                "for details.": "자세히 알아보세요.",
+                "participant": "참가자",
+                "Registered": "등록",
+                "Canceled registration": "등록 취소",
+                "Welcome, ": "환영합니다."
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "가상 참여는 등급을 변경하지 않습니다.",
+                "The following are prohibited while virtual participation.": "가상 참여 중에는 다음과 같은 행위가 금지됩니다.",
+                "Submitting someone else's code.": "다른 사람의 코드를 제출하세요.",
+                "Submitting code created before start your virtual participation.": "가상 참여를 시작하기 전에 코드를 제출하세요.",
+                "Start Time: ": "시작 시간："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "다음을 참조하십시오.",
+                "this post": "이 문서",
+                " for detailed information on Rated/Unrated registration.": "에서 등급제/비등급제 등록에 대한 자세한 정보를 확인하세요."
+            }
+        },
+        "footer": {
+            "class": [
+                "바닥글"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "서비스 약관",
+                "Privacy Policy": "개인정보 보호정책",
+                "Information Protection Policy": "정보 보호 정책",
+                "Company": "기업",
+                "FAQ": "일반적인 문제",
+                "Contact": "연락",
+                "Rule": "규칙 및 규정",
+                "Glossary": "용어집"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "홈 페이지로 돌아가기"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-text"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "View all": "모두 보기",
+                "Hall of Fame": "명예의 전당",
+                "AWTF Race Ranking 2024": "AWTF 랭킹 2024",
+                "Post Archive": "기사 아카이브",
+                "Back to Top": "맨 위로 돌아가기",
+                "Detail": "세부 정보"
+            }
+        },
+        "modal-dialog": {
+            "class": [
+                ".modal-dialog"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Are you sure you want to cancel registration?": "등록을 취소하시겠습니까?",
+                "Confirm": "인식"
             }
         }
     },
@@ -664,29 +830,7 @@
             ],
             "description": "중국어 제출",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "가상 참가 신청하기",
-                "Register for practice": "로그인하여 연습 시작하기",
-                "Apply": "어플라이언스",
-                "Register": "이름 입력",
-                "Login": "로그인",
-                "Run": "움직이고 있음",
-                "Start virtual contest": "가상 입장 시작",
-                "Manage invitations": "경영진 초대",
-                "Disable manager mode": "관리 모드 임시 종료",
-                "Enable manager mode": "개방형 관리 모드",
-                "Clone Contest": "복제 경쟁",
-                "Submit": "제출(보고서 등)",
-                "Save changes": "설정 저장",
-                "Filter": "필터링",
-                "Find": "찾기",
-                "Save": "(파일 등) 저장(컴퓨팅)",
-                "Create Mashup Contest": "매시업 콘테스트 만들기",
-                "Delete problem": "질문 삭제하기",
-                "Restore problem": "복구 문제",
-                "Generate": "생성",
-                "Send": "보내기"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +838,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "재프로비저닝",
-                "Delete contest": "경기 삭제",
-                "Preview": "미리 보기"
-            }
+            "rules": {}
         }
     }
 }

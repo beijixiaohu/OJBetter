@@ -1,3 +1,12 @@
+## 1.15.0
+
+- Les données MarkDown ne contiennent plus de blocs de codes interlignes
+- Améliorer les règles de localisation des sites web
+- Amélioration des méthodes permettant de déterminer si un texte est un extrait de code
+- Correction de l'erreur "not defined" dans la fonction "beautify code block".
+- Correction des erreurs de rapport de la méthode `OJB_observeElement()`.
+- Correction de la méthode de localisation du site web `strictTraverseTextNodes()` ne fonctionnant pas
+
 ## 1.14.2
 
 - Correction d'une erreur de style dans l'éditeur en mode sombre

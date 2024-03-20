@@ -1,3 +1,12 @@
+## 1.15.0
+
+- MarkDown-Daten enthalten keine Interline-Codeblöcke mehr
+- Verbesserung der Lokalisierungsregeln für Websites
+- Verbesserte Methoden zur Bestimmung, ob ein Text ein Codefragment ist
+- Behebung eines nicht definierten Fehlers in der Funktion "Codeblock verschönern".
+- Behebung von Fehlern bei der Methode `OJB_observeElement()`
+- Fix für Website-Lokalisierung Methode `strictTraverseTextNodes()` nicht funktioniert
+
 ## 1.14.2
 
 - Behebung eines Styling-Fehlers im Editor im dunklen Modus

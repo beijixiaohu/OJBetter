@@ -17,7 +17,8 @@
                 "アイコン設定": "Avatar Settings",
                 "パスワードの変更": "modify a password",
                 "お気に入り管理": "Favorites Management",
-                "ログアウト": "deregister"
+                "ログアウト": "deregister",
+                "AtCoderInfo": "AtCoder Information"
             }
         },
         ".a-title_ttl": {
@@ -63,8 +64,8 @@
             "isStrict": false,
             "rules": {
                 "解けた！を": "Resolved!",
-                "世界に届けたい。": "To the world.",
-                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder is the world's highest level competitive programming website.",
+                "世界に届けたい。": "Tell the world.",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder is the world's top competitive programming site.",
                 "リアルタイムのオンラインコンテストで競い合うことや、": "You can participate in real-time online contests that",
                 "5,000以上の過去問にいつでもチャレンジすることができます。": "Challenge over 5,000 previous years' questions at any time."
             }
@@ -77,18 +78,19 @@
                 "h4"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "開催中のコンテスト": "race",
                 "常設中のコンテスト": "Long lasting matches",
                 "予定されたコンテスト": "Planned matches",
-                "終了後のコンテスト(最新 10 件)": "Completed matches (latest 10)",
-                "終了後のコンテスト(最新 50 件)": "Completed matches (latest 10)",
-                "ランキング": "rankings",
+                "終了後のコンテスト": "Completed matches",
+                "ランキング: Algorithm": "Ranking：Algorithm",
+                "ランキング: Heuristic": "Ranking：Heuristic",
                 "インフォメーション": "text",
                 "過去のコンテスト": "Past matches",
                 "過去のコンテストを検索": "Search past matches",
-                "コンテスト": "competition (sports etc)"
+                "コンテスト": "competition (sports etc)",
+                "AtCoder練習・活用サービス": "AtCoder Exercise/Application Services"
             }
         },
         "traverseTextNodes": {
@@ -112,6 +114,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "新規登録": "enrollment",
+                "ログイン": "log in",
                 "現在のコンテスト": "Now the game.",
                 "過去のコンテスト": "Past matches",
                 "Algorithm": "arithmetic",
@@ -121,7 +125,6 @@
                 "新エディタテストコンテスト": "New Editor Test Contest",
                 "日本語": "dictionary",
                 "English": "English (language)",
-                "bjxh (Guest)": "bjxh (Guest)",
                 "マイプロフィール": "personal profile",
                 "基本設定": "Basic settings",
                 "アイコン設定": "Avatar Settings",
@@ -163,22 +166,22 @@
             "rules": {
                 "Rated対象": "limit",
                 "ABCクラス": "ABC category",
-                "(Rated上限: 1999)": "(Rated maximum: 1999)",
+                "\\(Rated上限: 1999\\)": "(Rated maximum: 1999)",
                 "ARCクラス": "ARC Category",
-                "(Rated上限: 2799)": "(Rated ceiling: 2799)",
+                "\\(Rated上限: 2799\\)": "(Rated ceiling: 2799)",
                 "AGCクラス": "AGC category",
-                "(Rated上限なし)": "(no Rated cap)",
+                "\\(Rated上限なし\\)": "(no Rated cap)",
                 "AHCクラス": "AHC category",
                 "カテゴリ": "categorization",
                 "全て": "full",
                 "AtCoder Typical Contest": "AtCoder Classic Competition",
                 "PAST過去問": "PAST Calendar Year Issues",
                 "AtCoder Daily Training": "AtCoder Daily Training",
-                "非公式コンテスト(unrated)": "Unofficial competitions (not rated)",
+                "非公式コンテスト\\(unrated\\)": "Unofficial competitions (not rated)",
                 "JOI過去問": "JOI Calendar Year Questions",
                 "企業コンテスト決勝": "Corporate Competition Final",
-                "企業オープンコンテスト(rated)": "Corporate open competitions (rated)",
-                "企業オープンコンテスト(unrated)": "Corporate open competitions (unrated)",
+                "企業オープンコンテスト\\(rated\\)": "Corporate open competitions (rated)",
+                "企業オープンコンテスト\\(unrated\\)": "Corporate open competitions (unrated)",
                 "企業ABC": "ABC of Business",
                 "企業ARC": "Enterprise ARC",
                 "ヒューリスティック": "heuristic",
@@ -189,7 +192,7 @@
                 "コンテスト名": "Name of the competition"
             }
         },
-        ".btn-text": {
+        ".btn-text-jp": {
             "class": [
                 ".btn-text"
             ],
@@ -202,7 +205,26 @@
                 "記事アーカイブ": "Article Archive",
                 "詳細": "particulars",
                 "すべて表示": "Show all",
-                "殿堂入り": "hall of fame"
+                "殿堂入り": "hall of fame",
+                "コンテスト成績表": "Competition results table",
+                "直近のコンテスト成績証": "Proof of recent competition results"
+            }
+        },
+        "lang-ja": {
+            "class": [
+                ".lang-ja"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ーチャル参加とは、コンテストに仮想的に参加できる機能です。": "Virtual Participation is a feature that allows you to participate in a contest virtually.",
+                "バーチャル参加を開始すると、": "After starting to participate virtually, the",
+                "バーチャル順位表": "virtual league table",
+                "が経過時間に応じてリアルタイムに更新されていきます。": "It will be updated in real time based on elapsed time.",
+                "ただし、本番のコンテストとは異なり、レーティングの変動は起こりません。": "However, unlike official matches, it will not affect the rating.",
+                "参加条件に制限はありませんが、以下の行為はお控えください。": "There are no restrictions on participation, but please avoid the following behaviors.",
+                "他人の回答をコピーして提出する行為": "Copy someone else's answer and submit it",
+                "事前に作成した回答ソースコードを提出する行為": "Submit pre-created answer source code"
             }
         },
         "#footer": {
@@ -219,6 +241,7 @@
                 "ランキング": "rankings",
                 "便利リンク集": "Useful Links",
                 "AtCoderJobs": "AtCoder jobs",
+                "AtCoder职位トップ": "AtCoder Jobs Home",
                 "AtCoderJobsトップ": "AtCoder Jobs Home",
                 "2024年新卒採用求人一覧": "2024 Fresh Graduate Job Listings",
                 "2025年新卒採用求人一覧": "2025 Fresh Graduate Job Listings",
@@ -230,6 +253,7 @@
                 "採用担当者の方へ": "Message to the Head of Recruitment",
                 "検定": "certification exam",
                 "検定トップ": "Certification Exam Home",
+                "认证考试トップ": "Certification Exam Home",
                 "マイページ": "Personal homepage",
                 "AtCoderCareerDesign": "AtCoder Career Design",
                 "キャリアデザイントップ": "Career Design Home",
@@ -243,7 +267,7 @@
                 "用語集": "glossary",
                 "プライバシーポリシー": "privacy policy",
                 "個人情報保護方針": "Personal Information Protection Policy",
-                "Copyright Since 2012 (C) AtCoder Inc. All rights reserved.": "Copyright © 2012 onwards AtCoder Inc. All rights reserved."
+                "Copyright Since 2012 \\(C\\) AtCoder Inc. All rights reserved.": "Copyright © 2012 onwards AtCoder Inc. All rights reserved."
             }
         },
         ".editor-buttons-jp": {
@@ -271,7 +295,31 @@
                 "ソースコード": "source code (computing)",
                 "標準入力": "Labeling input",
                 "標準出力": "standard output",
-                "標準エラー出力": "Standard Error Output"
+                "標準エラー出力": "Standard Error Output",
+                "ユーザ名": "user ID",
+                "パスワード": "cryptographic",
+                "メールアドレス": "e-mail address",
+                "パスワードの確認": "Confirm Password",
+                "国と地域": "Country and area",
+                "誕生年": "Year of birth",
+                "メール通知": "email notification"
+            }
+        },
+        ".alert-jp": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "現在": "be facing (us)",
+                "で参加登録しています。詳細は": "Signed up to participate. For more information, please read",
+                "こちら": "here are",
+                "参加登録しました。": "Enrolled.",
+                "参加登録を取り消しました。": "Enrollment has been canceled.",
+                "ログアウトしました。": "Logged out.",
+                "ようこそ、": "Welcome.",
+                "さん": "Mr./Ms."
             }
         },
         ".h2, h2": {
@@ -339,7 +387,9 @@
                 "コンテスト名": "Name of the competition",
                 "Rated対象": "marking scheme",
                 "時間": "length of time",
-                "開始時刻": "Starting time"
+                "開始時刻": "Starting time",
+                "Rated/Unrated参加についての詳細は": "For more information on Rated/Unrated participation, please refer to the",
+                "こちら": "here are"
             }
         },
         ".table-responsive tr th": {
@@ -393,8 +443,16 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated参加登録": "Ratings Registration",
+                "Unrated参加登録": "Non-rated enrollment",
+                "参加登録を取り消す": "Cancel Enrollment",
+                "バーチャル参加登録": "virtual participation",
                 "参加登録": "enroll",
-                "バーチャル参加": "virtual participation"
+                "バーチャル参加": "virtual participation",
+                "質問する": "ask questions",
+                "ログイン": "log in",
+                "新規登録": "enrollment",
+                "または": "or"
             }
         },
         ".nav": {
@@ -423,6 +481,7 @@
                 "Heuristic": "heuristic",
                 "Active Users": "active user",
                 "All Users": "all users",
+                "My Profile": "My Profile",
                 "Profile": "personal profile",
                 "Competition History": "Match Records",
                 "General Settings": "General Settings",
@@ -464,7 +523,8 @@
                 "Permanent Contests": "Long lasting matches",
                 "Upcoming Contests": "Upcoming competitions",
                 "Recent Contests": "Recent matches",
-                "Ranking": "seniority (among siblings)",
+                "Ranking: Algorithm": "Ranking：Algorithm",
+                "Ranking: Heuristic": "Ranking：Heuristic",
                 "Contest Archive": "Contest Archive",
                 "Information": "text",
                 "About the situation where it is difficult to access the contest site": "Regarding difficulties in accessing the competition website"
@@ -475,7 +535,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "Search Archives",
                 "Permanent Contests": "Long lasting matches",
@@ -527,15 +587,15 @@
                 "Family Name": "last name",
                 "First Name": "name (of a person or thing)",
                 "Category": "categorization",
-                "College Students (Master or Doctor cource)": "University students (master's or doctoral programs)",
+                "College Students \\(Master or Doctor cource\\)": "University students (master's or doctoral programs)",
                 "College Students": "university student",
                 "Technical college/Vocational school/Short-term university": "Technical colleges/vocational schools/junior colleges",
                 "High school": "congrats! (on passing an exam)",
                 "Junior high school": "junior high school",
                 "Office worker": "office workers (as social group)",
                 "Other": "(sth. or sb) else",
-                "Organization Name (Company Name or School Name)": "Name of organization (company name or school name)",
-                "Depertment (For Students)": "Department (for students)",
+                "Organization Name \\(Company Name or School Name\\)": "Name of organization (company name or school name)",
+                "Depertment \\(For Students\\)": "Department (for students)",
                 "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "Do you intend or plan to look for a job or change jobs in 2023 or 2024?",
                 "Graduation Schedule": "Graduation timetable",
                 "I'm already employed.": "I'm already employed.",
@@ -555,9 +615,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "Unofficial (unrated)",
-                "Sponsored Parallel(rated)": "Sponsorship parallel (rated)",
-                "Sponsored Parallel(unrated)": "Sponsorship parallel (unrated)",
+                "Unofficial\\(unrated\\)": "Unofficial (unrated)",
+                "Sponsored Parallel\\(rated\\)": "Sponsorship parallel (rated)",
+                "Sponsored Parallel\\(unrated\\)": "Sponsorship parallel (unrated)",
                 "Sponsored Heuristic Contest": "Inspired Sponsorship Contest",
                 "All": "full",
                 "AtCoder Typical Contest": "AtCoder Classic Competition",
@@ -616,9 +676,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "Ratings Registration",
+                "Unrated Register": "Non-rated enrollment",
                 "Register": "enroll",
                 "Virtual Participation": "virtual participation",
-                "Editorial": "notes"
+                "Editorial": "notes",
+                "Virtual Standings": "virtual ranking",
+                "Cancel Registration": "Cancel Enrollment",
+                "Request a clarification": "Request for clarification",
+                "Search": "look for sth.",
+                "Update Registration": "Updating Enrollment Information",
+                "Cancel": "Cancel"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +694,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "homepage",
                 "Contest": "competition (sports etc)",
@@ -653,7 +721,105 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "competition time",
-                "local time": "local time"
+                "local time": "local time",
+                "Back to Home": "Back to home page"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as an": "You have signed up for this race as a",
+                "You have registered for this contest as a": "You have signed up for this race as a",
+                "participant. Please refer to": "Participants. Please refer to",
+                "this post": "this article",
+                "for details.": "Learn more.",
+                "participant": "participant",
+                "Registered": "Enrolled",
+                "Canceled registration": "Cancelled enrollment",
+                "Welcome, ": "Welcome."
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "Virtual participation does not change ratings.",
+                "The following are prohibited while virtual participation.": "The following behaviors are prohibited during virtual participation.",
+                "Submitting someone else's code.": "Submit someone else's code.",
+                "Submitting code created before start your virtual participation.": "Submit code before starting virtual participation.",
+                "Start Time: ": "Start time："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "please refer to",
+                "this post": "this article",
+                " for detailed information on Rated/Unrated registration.": "for detailed information on rated/non-rated enrollment."
+            }
+        },
+        "footer": {
+            "class": [
+                "footer"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "terms of service",
+                "Privacy Policy": "privacy policy",
+                "Information Protection Policy": "Information Protection Policy",
+                "Company": "firms",
+                "FAQ": "common problems",
+                "Contact": "liaison",
+                "Rule": "rules and regulations",
+                "Glossary": "glossary"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "Back to home page"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-text"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "View all": "View All",
+                "Hall of Fame": "hall of fame",
+                "AWTF Race Ranking 2024": "AWTF Competition Rankings 2024",
+                "Post Archive": "Article Archive",
+                "Back to Top": "Back to top",
+                "Detail": "particulars"
+            }
+        },
+        "modal-dialog": {
+            "class": [
+                ".modal-dialog"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Are you sure you want to cancel registration?": "Are you sure you want to cancel your enrollment?",
+                "Confirm": "recognize"
             }
         }
     },
@@ -664,29 +830,7 @@
             ],
             "description": "Submit Chinese",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "Sign up for virtual entries",
-                "Register for practice": "Log in to start practicing",
-                "Apply": "appliance",
-                "Register": "enroll",
-                "Login": "log in",
-                "Run": "(of a computer) run",
-                "Start virtual contest": "Starting Virtual Entries",
-                "Manage invitations": "Management Invitation",
-                "Disable manager mode": "Temporary closure of the management mode",
-                "Enable manager mode": "Open management mode",
-                "Clone Contest": "cloning competition",
-                "Submit": "Submit",
-                "Save changes": "Save Settings",
-                "Filter": "filtration",
-                "Find": "find",
-                "Save": "save (a file etc) (computing)",
-                "Create Mashup Contest": "Create a mashup contest",
-                "Delete problem": "Delete the question",
-                "Restore problem": "Recovery issues",
-                "Generate": "generating",
-                "Send": "dispatch"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +838,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "reprovision",
-                "Delete contest": "Delete Match",
-                "Preview": "previews"
-            }
+            "rules": {}
         }
     }
 }
