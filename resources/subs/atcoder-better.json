@@ -189,7 +189,7 @@
                 "コンテスト名": "比赛名称"
             }
         },
-        ".btn-text": {
+        ".btn-text-jp": {
             "class": [
                 ".btn-text"
             ],
@@ -423,6 +423,7 @@
                 "Heuristic": "启发式",
                 "Active Users": "活跃用户",
                 "All Users": "所有用户",
+                "My Profile": "我的资料",
                 "Profile": "个人资料",
                 "Competition History": "比赛记录",
                 "General Settings": "常规设置",
@@ -625,7 +626,8 @@
                 "Virtual Standings": "虚拟排名",
                 "Cancel Registration": "取消报名",
                 "Request a clarification": "请求澄清",
-                "Search": "搜索"
+                "Search": "搜索",
+                "Update Registration": "更新报名信息"
             }
         },
         "#navbar-collapse": {
@@ -673,7 +675,10 @@
             "rules": {
                 "You have registered for this contest as a": "您已经报名参加了这场比赛，作为一个",
                 "participant. Please refer to": "参与者。请参考",
-                "for details.": "了解详情。"
+                "this post": "这篇文章",
+                "for details.": "了解详情。",
+                "participant": "参与者",
+                "Registered": "已报名"
             }
         },
         ".lang-en": {
@@ -719,7 +724,7 @@
                 "Glossary": "术语表"
             }
         },
-        "back-to-home":{
+        "back-to-home": {
             "class": [
                 ".back-to-home"
             ],
@@ -727,6 +732,21 @@
             "isStrict": false,
             "rules": {
                 "Back to Home": "返回主页"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-text"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "View all": "查看全部",
+                "Hall of Fame": "名人堂",
+                "AWTF Race Ranking 2024": "AWTF 比赛排名 2024",
+                "Post Archive": "文章存档",
+                "Back to Top": "返回顶部",
+                "Detail": "详情"
             }
         }
     },
