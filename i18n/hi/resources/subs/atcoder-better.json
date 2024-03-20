@@ -464,7 +464,8 @@
                 "Permanent Contests": "लंबे समय तक चलने वाला खेल",
                 "Upcoming Contests": "आगामी प्रतियोगिताएं",
                 "Recent Contests": "हाल के खेल",
-                "Ranking": "रैंकिंग",
+                "Ranking: Algorithm": "रैंकिंग：एल्गोरिदम",
+                "Ranking: Heuristic": "रैंकिंग：अनुमानी",
                 "Contest Archive": "प्रतियोगिता पुरालेख",
                 "Information": "जानकारी",
                 "About the situation where it is difficult to access the contest site": "प्रतियोगिता वेबसाइट तक पहुँचने में कठिनाई के संबंध में"
@@ -475,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "पुरालेख खोजें",
                 "Permanent Contests": "लंबे समय तक चलने वाला खेल",
@@ -555,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "अनौपचारिक (कोई रेटिंग नहीं)",
-                "Sponsored Parallel(rated)": "प्रायोजित समानताएं (रेटिंग के साथ)",
-                "Sponsored Parallel(unrated)": "प्रायोजित समानांतर (कोई रेटिंग नहीं)",
+                "Unofficial\\(unrated\\)": "अनौपचारिक (कोई रेटिंग नहीं)",
+                "Sponsored Parallel\\(rated\\)": "प्रायोजित समानताएं (रेटिंग के साथ)",
+                "Sponsored Parallel\\(unrated\\)": "प्रायोजित समानांतर (कोई रेटिंग नहीं)",
                 "Sponsored Heuristic Contest": "अनुमानी प्रायोजित प्रतियोगिता",
                 "All": "सभी",
                 "AtCoder Typical Contest": "एटकोडर क्लासिक प्रतियोगिता",
@@ -616,9 +617,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "रेटिंग पंजीकरण",
+                "Unrated Register": "अनरेटेड पंजीकरण",
                 "Register": "साइन अप करें",
                 "Virtual Participation": "वस्तुतः उपस्थित हों",
-                "Editorial": "उत्तर"
+                "Editorial": "उत्तर",
+                "Virtual Standings": "आभासी रैंकिंग",
+                "Cancel Registration": "पंजीकरण रद्द करें",
+                "Request a clarification": "स्पष्टीकरण का अनुरोध करें",
+                "Search": "खोज"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +633,7 @@
                 "#नेवबार-पतन"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "होम पेज",
                 "Contest": "प्रतियोगिता",
@@ -653,7 +660,73 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "प्रतिस्पर्धा का समय",
-                "local time": "स्थानीय समय"
+                "local time": "स्थानीय समय",
+                "Back to Home": "होमपेज पर वापस आएं"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "आपने इस प्रतियोगिता के लिए एक के रूप में साइन अप किया है",
+                "participant. Please refer to": "प्रतिभागियों. कृपया देखें",
+                "for details.": "और अधिक जानें।"
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".लैंग-एन"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "वस्तुतः भाग लेने से रेटिंग नहीं बदलेगी।",
+                "The following are prohibited while virtual participation.": "आभासी उपस्थिति के दौरान निम्नलिखित व्यवहार निषिद्ध है।",
+                "Submitting someone else's code.": "अन्य लोगों का कोड सबमिट करें.",
+                "Submitting code created before start your virtual participation.": "अपनी वर्चुअल उपस्थिति शुरू करने से पहले अपना कोड सबमिट करें।",
+                "Start Time: ": "प्रारंभ समय："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-ब्लॉक"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "कृपया देखें",
+                "this post": "यह लेख",
+                " for detailed information on Rated/Unrated registration.": "रेटेड/अनरेटेड पंजीकरण के विवरण के लिए।"
+            }
+        },
+        "footer": {
+            "class": [
+                "FOOTER"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "सेवा की शर्तें",
+                "Privacy Policy": "गोपनीयता नीति",
+                "Information Protection Policy": "सूचना सुरक्षा नीति",
+                "Company": "कंपनी",
+                "FAQ": "आम समस्या",
+                "Contact": "जोड़ना",
+                "Rule": "नियम",
+                "Glossary": "शब्दकोष"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                "।घर वापिस जा रहा हूँ"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "होमपेज पर वापस आएं"
             }
         }
     },
@@ -664,29 +737,7 @@
             ],
             "description": "सबमिट करेंचीनी",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "वर्चुअल प्रविष्टि के लिए साइन अप करें",
-                "Register for practice": "अभ्यास शुरू करने के लिए साइन इन करें",
-                "Apply": "आवेदन",
-                "Register": "साइन अप करें",
-                "Login": "लॉग इन करें",
-                "Run": "दौड़ना",
-                "Start virtual contest": "आभासी प्रविष्टि प्रारंभ करें",
-                "Manage invitations": "निमंत्रण प्रबंधित करें",
-                "Disable manager mode": "प्रबंधन मोड को अस्थायी रूप से बंद करें",
-                "Enable manager mode": "प्रबंधन मोड सक्षम करें",
-                "Clone Contest": "क्लोन प्रतियोगिता",
-                "Submit": "जमा करना",
-                "Save changes": "सेटिंग्स सेव करें",
-                "Filter": "फ़िल्टर",
-                "Find": "खोजो",
-                "Save": "बचाना",
-                "Create Mashup Contest": "एक मैशअप मैच बनाएं",
-                "Delete problem": "प्रश्न हटाएं",
-                "Restore problem": "पुनर्प्राप्ति मुद्दे",
-                "Generate": "उत्पन्न",
-                "Send": "भेजना"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +745,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "रीसेट",
-                "Delete contest": "मिलान हटाएँ",
-                "Preview": "पूर्व दर्शन"
-            }
+            "rules": {}
         }
     }
 }
