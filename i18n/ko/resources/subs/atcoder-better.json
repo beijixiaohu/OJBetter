@@ -464,7 +464,8 @@
                 "Permanent Contests": "오래 지속되는 대회",
                 "Upcoming Contests": "예정된 대회",
                 "Recent Contests": "최근 경기",
-                "Ranking": "연공서열(형제자매 간)",
+                "Ranking: Algorithm": "순위：알고리즘",
+                "Ranking: Heuristic": "순위：휴리스틱",
                 "Contest Archive": "대회 아카이브",
                 "Information": "정보",
                 "About the situation where it is difficult to access the contest site": "대회 웹사이트 접속 장애에 관한 사항"
@@ -475,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "아카이브 검색",
                 "Permanent Contests": "오래 지속되는 대회",
@@ -555,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "비공식(등급 없음)",
-                "Sponsored Parallel(rated)": "스폰서십 병렬(등급)",
-                "Sponsored Parallel(unrated)": "스폰서십 병렬(등급 없음)",
+                "Unofficial\\(unrated\\)": "비공식(등급 없음)",
+                "Sponsored Parallel\\(rated\\)": "스폰서십 병렬(등급)",
+                "Sponsored Parallel\\(unrated\\)": "스폰서십 병렬(등급 없음)",
                 "Sponsored Heuristic Contest": "영감 스폰서십 콘테스트",
                 "All": "전체",
                 "AtCoder Typical Contest": "앳코더 클래식 대회",
@@ -616,9 +617,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "등급 등록",
+                "Unrated Register": "비등급 등록",
                 "Register": "이름 입력",
                 "Virtual Participation": "가상 참여",
-                "Editorial": "메모"
+                "Editorial": "메모",
+                "Virtual Standings": "가상 랭킹",
+                "Cancel Registration": "등록 취소",
+                "Request a clarification": "설명 요청",
+                "Search": "STH를 찾습니다."
             }
         },
         "#navbar-collapse": {
@@ -626,7 +633,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "홈페이지",
                 "Contest": "대회(스포츠 등)",
@@ -653,7 +660,73 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "대회 시간",
-                "local time": "현지 시간"
+                "local time": "현지 시간",
+                "Back to Home": "홈 페이지로 돌아가기"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "귀하는 이 레이스에",
+                "participant. Please refer to": "참가자 다음을 참조하세요.",
+                "for details.": "자세히 알아보세요."
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "가상 참여는 등급을 변경하지 않습니다.",
+                "The following are prohibited while virtual participation.": "가상 참여 중에는 다음과 같은 행위가 금지됩니다.",
+                "Submitting someone else's code.": "다른 사람의 코드를 제출하세요.",
+                "Submitting code created before start your virtual participation.": "가상 참여를 시작하기 전에 코드를 제출하세요.",
+                "Start Time: ": "시작 시간："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "다음을 참조하십시오.",
+                "this post": "이 문서",
+                " for detailed information on Rated/Unrated registration.": "에서 등급제/비등급제 등록에 대한 자세한 정보를 확인하세요."
+            }
+        },
+        "footer": {
+            "class": [
+                "바닥글"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "서비스 약관",
+                "Privacy Policy": "개인정보 보호정책",
+                "Information Protection Policy": "정보 보호 정책",
+                "Company": "기업",
+                "FAQ": "일반적인 문제",
+                "Contact": "연락",
+                "Rule": "규칙 및 규정",
+                "Glossary": "용어집"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "홈 페이지로 돌아가기"
             }
         }
     },
@@ -664,29 +737,7 @@
             ],
             "description": "중국어 제출",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "가상 참가 신청하기",
-                "Register for practice": "로그인하여 연습 시작하기",
-                "Apply": "어플라이언스",
-                "Register": "이름 입력",
-                "Login": "로그인",
-                "Run": "움직이고 있음",
-                "Start virtual contest": "가상 입장 시작",
-                "Manage invitations": "경영진 초대",
-                "Disable manager mode": "관리 모드 임시 종료",
-                "Enable manager mode": "개방형 관리 모드",
-                "Clone Contest": "복제 경쟁",
-                "Submit": "제출(보고서 등)",
-                "Save changes": "설정 저장",
-                "Filter": "필터링",
-                "Find": "찾기",
-                "Save": "(파일 등) 저장(컴퓨팅)",
-                "Create Mashup Contest": "매시업 콘테스트 만들기",
-                "Delete problem": "질문 삭제하기",
-                "Restore problem": "복구 문제",
-                "Generate": "생성",
-                "Send": "보내기"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +745,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "재프로비저닝",
-                "Delete contest": "경기 삭제",
-                "Preview": "미리 보기"
-            }
+            "rules": {}
         }
     }
 }
