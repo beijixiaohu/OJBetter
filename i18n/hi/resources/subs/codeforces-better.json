@@ -851,23 +851,23 @@
         },
         "#enterForm": {
             "class": [
-                "#enterForm"
+                "#एंटरफॉर्म"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "Remember me for a month": "记住我一个月",
-                "Forgot your password": "忘记密码"
+                "Remember me for a month": "एक महीने तक मुझे याद रखना",
+                "Forgot your password": "पासवर्ड भूल जाओ"
             }
         },
         ".centered-message": {
             "class": [
-                ".centered-message"
+                ".केन्द्रित-संदेश"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "Password recovery letter has been sent successfully": "密码恢复邮件已成功发送"
+                "Password recovery letter has been sent successfully": "पासवर्ड पुनर्प्राप्ति ईमेल सफलतापूर्वक भेज दिया गया है"
             }
         }
     },
@@ -900,7 +900,7 @@
                 "Restore problem": "पुनर्प्राप्ति मुद्दे",
                 "Generate": "उत्पन्न",
                 "Send": "भेजना",
-                "Recover": "恢复"
+                "Recover": "वापस पाना"
             }
         },
         "InputButton": {
@@ -919,29 +919,29 @@
     "dynamicReplacements": {
         "bottomRightPopup ": {
             "class": [
-                "#jGrowl"
+                "#jग्रोवल"
             ],
-            "description": "右下角弹窗",
+            "description": "निचले दाएं कोने में पॉप-अप विंडो",
             "isStrict": false,
             "rules": {
-                "Welcome": "欢迎",
-                "Goodbye, ": "再见，",
-                "Looking forward to seeing you at Codeforces.": "期待在Codeforces见到你。",
-                "You have been successfully registered": "您已成功报名",
-                "No such contests": "没有该比赛",
-                "The example input has been copied into the clipboard": "示例输入已复制到剪贴板",
-                "The source code has been copied into the clipboard": "源代码已复制到剪贴板",
-                "Settings have been updated": "设置已更新",
+                "Welcome": "स्वागत",
+                "Goodbye, ": "अलविदा,",
+                "Looking forward to seeing you at Codeforces.": "कोडफोर्सेस में आपसे मिलने के लिए उत्सुक हूं।",
+                "You have been successfully registered": "आपको सफलतापूर्वक रजिस्टर कर लिया है",
+                "No such contests": "ऐसा कोई मैच नहीं है",
+                "The example input has been copied into the clipboard": "नमूना इनपुट क्लिपबोर्ड पर कॉपी किया गया",
+                "The source code has been copied into the clipboard": "स्रोत कोड क्लिपबोर्ड पर कॉपी किया गया",
+                "Settings have been updated": "सेटिंग को अद्यतन किया गया है",
                 "Solution to the problem": "सवाल",
-                "has been submitted successfully": "的解答已成功提交",
-                "Settings have been saved": "设置已保存",
-                "Contest is over": "比赛已结束",
-                "Illegal contest ID": "非法的比赛ID",
-                "No such contest": "没有该比赛",
-                "Can't find such user": "找不到此用户",
-                "No such blog entry": "没有该博客条目",
-                "Compilation error": "编译错误",
-                "No registration is opened now": "现在没有开放报名"
+                "has been submitted successfully": "का उत्तर सफलतापूर्वक प्रस्तुत कर दिया गया है",
+                "Settings have been saved": "सेटिंग्स को सहेजा गया",
+                "Contest is over": "खेल समाप्त हो गया है",
+                "Illegal contest ID": "अवैध मिलान आईडी",
+                "No such contest": "ऐसा कोई मैच नहीं है",
+                "Can't find such user": "यह उपयोगकर्ता नहीं मिल सका",
+                "No such blog entry": "ऐसी कोई ब्लॉग प्रविष्टि नहीं है",
+                "Compilation error": "संकलन त्रुटि",
+                "No registration is opened now": "पंजीकरण अभी खुला नहीं है"
             }
         }
     }
