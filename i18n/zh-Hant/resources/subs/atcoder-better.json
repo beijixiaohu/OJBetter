@@ -464,7 +464,8 @@
                 "Permanent Contests": "長期持續的比賽",
                 "Upcoming Contests": "即將舉行的比賽",
                 "Recent Contests": "最近的比賽",
-                "Ranking": "排行",
+                "Ranking: Algorithm": "排行：演算法",
+                "Ranking: Heuristic": "排行：啟發式",
                 "Contest Archive": "比賽檔案",
                 "Information": "資訊",
                 "About the situation where it is difficult to access the contest site": "關於難以訪問比賽網站的情況"
@@ -475,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "搜尋存檔",
                 "Permanent Contests": "長期持續的比賽",
@@ -555,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "非官方（無評級）",
-                "Sponsored Parallel(rated)": "贊助平行（有評級）",
-                "Sponsored Parallel(unrated)": "贊助平行（無評級）",
+                "Unofficial\\(unrated\\)": "非官方（無評級）",
+                "Sponsored Parallel\\(rated\\)": "贊助平行（有評級）",
+                "Sponsored Parallel\\(unrated\\)": "贊助平行（無評級）",
                 "Sponsored Heuristic Contest": "啟發式贊助比賽",
                 "All": "全部",
                 "AtCoder Typical Contest": "AtCoder 經典賽",
@@ -616,9 +617,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "評等報名",
+                "Unrated Register": "非評等報名",
                 "Register": "報名",
                 "Virtual Participation": "虛擬參加",
-                "Editorial": "題解"
+                "Editorial": "題解",
+                "Virtual Standings": "虛擬排名",
+                "Cancel Registration": "取消報名",
+                "Request a clarification": "請求澄清",
+                "Search": "搜尋"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +633,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "首頁",
                 "Contest": "比賽",
@@ -653,7 +660,73 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "比賽時間",
-                "local time": "當地時間"
+                "local time": "當地時間",
+                "Back to Home": "返回首頁"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "您已經報名參加了這場比賽，作為一個",
+                "participant. Please refer to": "參與者。請參考",
+                "for details.": "了解詳情。"
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "虛擬參加不會改變評級。",
+                "The following are prohibited while virtual participation.": "虛擬參加期間禁止以下行為。",
+                "Submitting someone else's code.": "提交他人的代碼。",
+                "Submitting code created before start your virtual participation.": "在開始虛擬參加之前提交程式碼。",
+                "Start Time: ": "開始時間："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "請參考",
+                "this post": "這篇文章",
+                " for detailed information on Rated/Unrated registration.": "以取得有關評級/非評級報名的詳細資訊。"
+            }
+        },
+        "footer": {
+            "class": [
+                "footer"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "服務條款",
+                "Privacy Policy": "隱私權政策",
+                "Information Protection Policy": "資訊保護政策",
+                "Company": "公司",
+                "FAQ": "常見問題",
+                "Contact": "聯繫",
+                "Rule": "規則",
+                "Glossary": "術語表"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "返回首頁"
             }
         }
     },
@@ -664,29 +737,7 @@
             ],
             "description": "submit漢化",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "報名虛擬參賽",
-                "Register for practice": "登入以開始練習",
-                "Apply": "應用",
-                "Register": "報名",
-                "Login": "登入",
-                "Run": "運行",
-                "Start virtual contest": "開始虛擬參賽",
-                "Manage invitations": "管理邀請",
-                "Disable manager mode": "臨時關閉管理模式",
-                "Enable manager mode": "開啟管理模式",
-                "Clone Contest": "複製比賽",
-                "Submit": "提交",
-                "Save changes": "儲存設定",
-                "Filter": "濾",
-                "Find": "尋找",
-                "Save": "儲存",
-                "Create Mashup Contest": "創建混搭比賽",
-                "Delete problem": "刪除問題",
-                "Restore problem": "恢復問題",
-                "Generate": "產生",
-                "Send": "傳送"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +745,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "重置",
-                "Delete contest": "刪除比賽",
-                "Preview": "預覽"
-            }
+            "rules": {}
         }
     }
 }
