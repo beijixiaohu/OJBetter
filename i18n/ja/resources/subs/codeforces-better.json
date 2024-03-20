@@ -851,13 +851,13 @@
         },
         "#enterForm": {
             "class": [
-                "#enterForm"
+                "#フォームに入る"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "Remember me for a month": "记住我一个月",
-                "Forgot your password": "忘记密码"
+                "Remember me for a month": "1ヶ月間、私を覚えていてください。",
+                "Forgot your password": "パスワードをお忘れですか？"
             }
         },
         ".centered-message": {
@@ -867,7 +867,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Password recovery letter has been sent successfully": "密码恢复邮件已成功发送"
+                "Password recovery letter has been sent successfully": "パスワード回復メールが正常に送信されました"
             }
         }
     },
@@ -900,7 +900,7 @@
                 "Restore problem": "リカバリーの問題",
                 "Generate": "生成",
                 "Send": "送信",
-                "Recover": "恢复"
+                "Recover": "再開"
             }
         },
         "InputButton": {
@@ -921,27 +921,27 @@
             "class": [
                 "#jGrowl"
             ],
-            "description": "右下角弹窗",
+            "description": "右下のポップアップ",
             "isStrict": false,
             "rules": {
-                "Welcome": "欢迎",
-                "Goodbye, ": "再见，",
-                "Looking forward to seeing you at Codeforces.": "期待在Codeforces见到你。",
-                "You have been successfully registered": "您已成功报名",
-                "No such contests": "没有该比赛",
-                "The example input has been copied into the clipboard": "示例输入已复制到剪贴板",
-                "The source code has been copied into the clipboard": "源代码已复制到剪贴板",
-                "Settings have been updated": "设置已更新",
+                "Welcome": "ウェルカム",
+                "Goodbye, ": "さようなら。",
+                "Looking forward to seeing you at Codeforces.": "Codeforcesでお会いできるのを楽しみにしています。",
+                "You have been successfully registered": "登録が完了しました",
+                "No such contests": "そんなコンテストはない。",
+                "The example input has been copied into the clipboard": "クリップボードにコピーされた入力例",
+                "The source code has been copied into the clipboard": "ソースコードがクリップボードにコピーされた",
+                "Settings have been updated": "設定を更新",
                 "Solution to the problem": "課題",
-                "has been submitted successfully": "的解答已成功提交",
-                "Settings have been saved": "设置已保存",
-                "Contest is over": "比赛已结束",
-                "Illegal contest ID": "非法的比赛ID",
-                "No such contest": "没有该比赛",
-                "Can't find such user": "找不到此用户",
-                "No such blog entry": "没有该博客条目",
-                "Compilation error": "编译错误",
-                "No registration is opened now": "现在没有开放报名"
+                "has been submitted successfully": "回答は正常に送信されました",
+                "Settings have been saved": "設定の保存",
+                "Contest is over": "試合は終わった。",
+                "Illegal contest ID": "違法な人種ID",
+                "No such contest": "そんなコンテストはない。",
+                "Can't find such user": "このユーザーが見つかりません",
+                "No such blog entry": "このブログのエントリーはありません",
+                "Compilation error": "コンパイルエラー",
+                "No registration is opened now": "現在、参加登録は受け付けておりません。"
             }
         }
     }
