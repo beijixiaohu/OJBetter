@@ -840,5 +840,7 @@
             "isStrict": false,
             "rules": {}
         }
+    },
+    "dynamicReplacements": {
     }
 }

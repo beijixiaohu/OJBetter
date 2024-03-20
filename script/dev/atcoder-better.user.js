@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.10
+// @version      1.14.11
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -4618,14 +4618,6 @@ async function localizeWebsite() {
         });
     });
 
-    // 测试
-    {
-        // var translations = {
-        //     
-        // };
-        // traverseTextNodes($('xxx'), translations);
-    };
-
     /**
      * 应用value替换
      */
@@ -4634,6 +4626,27 @@ async function localizeWebsite() {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class];
         classSelectors.forEach(classSelector => {
             traverseValueNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+        });
+    });
+
+    /**
+     * 动态添加的文本的替换
+     */
+    let dynamicReplacements = subs.dynamicReplacements;
+    Object.entries(dynamicReplacements).forEach(([key, value]) => {
+        const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
+        classSelectors.forEach(classSelector => {
+            OJB_observeElement({
+                selector: classSelector,
+                callback: (node) => {
+                    // let popupContent = node.textContent.replace(/^×/, ''); // 去除开头多余的 '×' 字符
+                    if (value.isStrict) {
+                        strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+                    } else {
+                        traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+                    }
+                }
+            });
         });
     });
 
@@ -8814,8 +8827,11 @@ async function SelectElementPerfOpt() {
     };
 
     // 遍历页面上的所有select
-    $('select').each(function () {
-        OJB_transformSelectToSelectPage(this);
+    $('select').each((_, select) => {
+        // 选项大于500才优化
+        if ($(select).find('option').length > 500) {
+            OJB_transformSelectToSelectPage(select);
+        }
     });
 }
 
@@ -13158,8 +13174,8 @@ function initOnDOMReady() {
     showAnnounce(); // 显示公告
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
-    initMonacoEditor(), // 初始化monaco编辑器资源
-        localizeWebsite(); // 网站本地化替换
+    initMonacoEditor(); // 初始化monaco编辑器资源
+    localizeWebsite(); // 网站本地化替换
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
     // if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
