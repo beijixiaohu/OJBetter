@@ -118,8 +118,6 @@
                 "ログイン": "sich anmelden",
                 "現在のコンテスト": "Nun zum Spiel.",
                 "過去のコンテスト": "Vergangene Spiele",
-                "Algorithm": "Arithmetik",
-                "Heuristic": "Heuristik",
                 "アクティブユーザのみ": "Nur aktive Nutzer",
                 "全ユーザ": "alle Benutzer",
                 "新エディタテストコンテスト": "Neuer Editor-Test-Wettbewerb",
@@ -155,6 +153,17 @@
                 "ユーザ名の変更": "Benutzernamen ändern",
                 "退会": "stornieren",
                 "その他": "der Rest"
+            }
+        },
+        "traverseTextNodes3": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Algorithm": "Arithmetik",
+                "Heuristic": "Heuristik"
             }
         },
         "#collapse-search": {
@@ -840,5 +849,6 @@
             "isStrict": false,
             "rules": {}
         }
-    }
+    },
+    "dynamicReplacements": {}
 }
