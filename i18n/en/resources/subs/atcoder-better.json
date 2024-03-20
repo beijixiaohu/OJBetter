@@ -464,7 +464,8 @@
                 "Permanent Contests": "Long lasting matches",
                 "Upcoming Contests": "Upcoming competitions",
                 "Recent Contests": "Recent matches",
-                "Ranking": "seniority (among siblings)",
+                "Ranking: Algorithm": "Ranking：Algorithm",
+                "Ranking: Heuristic": "Ranking：Heuristic",
                 "Contest Archive": "Contest Archive",
                 "Information": "text",
                 "About the situation where it is difficult to access the contest site": "Regarding difficulties in accessing the competition website"
@@ -475,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "Search Archives",
                 "Permanent Contests": "Long lasting matches",
@@ -555,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "Unofficial (unrated)",
-                "Sponsored Parallel(rated)": "Sponsorship parallel (rated)",
-                "Sponsored Parallel(unrated)": "Sponsorship parallel (unrated)",
+                "Unofficial\\(unrated\\)": "Unofficial (unrated)",
+                "Sponsored Parallel\\(rated\\)": "Sponsorship parallel (rated)",
+                "Sponsored Parallel\\(unrated\\)": "Sponsorship parallel (unrated)",
                 "Sponsored Heuristic Contest": "Inspired Sponsorship Contest",
                 "All": "full",
                 "AtCoder Typical Contest": "AtCoder Classic Competition",
@@ -616,9 +617,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "Ratings Registration",
+                "Unrated Register": "Non-rated enrollment",
                 "Register": "enroll",
                 "Virtual Participation": "virtual participation",
-                "Editorial": "notes"
+                "Editorial": "notes",
+                "Virtual Standings": "virtual ranking",
+                "Cancel Registration": "Cancel Enrollment",
+                "Request a clarification": "Request for clarification",
+                "Search": "look for sth."
             }
         },
         "#navbar-collapse": {
@@ -626,7 +633,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "homepage",
                 "Contest": "competition (sports etc)",
@@ -653,7 +660,73 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "competition time",
-                "local time": "local time"
+                "local time": "local time",
+                "Back to Home": "Back to home page"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "You have signed up for this race as a",
+                "participant. Please refer to": "Participants. Please refer to",
+                "for details.": "Learn more."
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "Virtual participation does not change ratings.",
+                "The following are prohibited while virtual participation.": "The following behaviors are prohibited during virtual participation.",
+                "Submitting someone else's code.": "Submit someone else's code.",
+                "Submitting code created before start your virtual participation.": "Submit code before starting virtual participation.",
+                "Start Time: ": "Start time："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "please refer to",
+                "this post": "this article",
+                " for detailed information on Rated/Unrated registration.": "for detailed information on rated/non-rated enrollment."
+            }
+        },
+        "footer": {
+            "class": [
+                "footer"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "terms of service",
+                "Privacy Policy": "privacy policy",
+                "Information Protection Policy": "Information Protection Policy",
+                "Company": "firms",
+                "FAQ": "common problems",
+                "Contact": "liaison",
+                "Rule": "rules and regulations",
+                "Glossary": "glossary"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".back-to-home"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "Back to home page"
             }
         }
     },
@@ -664,29 +737,7 @@
             ],
             "description": "Submit Chinese",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "Sign up for virtual entries",
-                "Register for practice": "Log in to start practicing",
-                "Apply": "appliance",
-                "Register": "enroll",
-                "Login": "log in",
-                "Run": "(of a computer) run",
-                "Start virtual contest": "Starting Virtual Entries",
-                "Manage invitations": "Management Invitation",
-                "Disable manager mode": "Temporary closure of the management mode",
-                "Enable manager mode": "Open management mode",
-                "Clone Contest": "cloning competition",
-                "Submit": "Submit",
-                "Save changes": "Save Settings",
-                "Filter": "filtration",
-                "Find": "find",
-                "Save": "save (a file etc) (computing)",
-                "Create Mashup Contest": "Create a mashup contest",
-                "Delete problem": "Delete the question",
-                "Restore problem": "Recovery issues",
-                "Generate": "generating",
-                "Send": "dispatch"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +745,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "reprovision",
-                "Delete contest": "Delete Match",
-                "Preview": "previews"
-            }
+            "rules": {}
         }
     }
 }
