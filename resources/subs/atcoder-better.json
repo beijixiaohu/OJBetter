@@ -464,7 +464,8 @@
                 "Permanent Contests": "长期持续的比赛",
                 "Upcoming Contests": "即将举行的比赛",
                 "Recent Contests": "最近的比赛",
-                "Ranking": "排行",
+                "Ranking: Algorithm": "排行：算法",
+                "Ranking: Heuristic": "排行：启发式",
                 "Contest Archive": "比赛档案",
                 "Information": "信息",
                 "About the situation where it is difficult to access the contest site": "关于难以访问比赛网站的情况"
@@ -616,9 +617,14 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "评级报名",
+                "Unrated Register": "非评级报名",
                 "Register": "报名",
                 "Virtual Participation": "虚拟参加",
-                "Editorial": "题解"
+                "Editorial": "题解",
+                "Virtual Standings": "虚拟排名",
+                "Cancel Registration": "取消报名",
+                "Request a clarification": "请求澄清"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +632,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "主页",
                 "Contest": "比赛",
@@ -653,7 +659,46 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "比赛时间",
-                "local time": "当地时间"
+                "local time": "当地时间",
+                "Back to Home": "返回主页"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "您已经报名参加了这场比赛，作为一个",
+                "participant. Please refer to": "参与者。请参考",
+                "for details.": "了解详情。"
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-en"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "虚拟参加不会改变评级。",
+                "The following are prohibited while virtual participation.": "虚拟参加期间禁止以下行为。",
+                "Submitting someone else's code.": "提交他人的代码。",
+                "Submitting code created before start your virtual participation.": "在开始虚拟参加之前提交代码。",
+                "Start Time: ": "开始时间："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "请参考",
+                "this post": "这篇文章",
+                " for detailed information on Rated/Unrated registration.": "以获取有关评级/非评级报名的详细信息。"
             }
         }
     },
@@ -664,29 +709,7 @@
             ],
             "description": "submit type input",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "报名虚拟参赛",
-                "Register for practice": "登录以开始练习",
-                "Apply": "应用",
-                "Register": "报名",
-                "Login": "登录",
-                "Run": "运行",
-                "Start virtual contest": "开始虚拟参赛",
-                "Manage invitations": "管理邀请",
-                "Disable manager mode": "临时关闭管理模式",
-                "Enable manager mode": "开启管理模式",
-                "Clone Contest": "克隆比赛",
-                "Submit": "提交",
-                "Save changes": "保存设置",
-                "Filter": "过滤",
-                "Find": "查找",
-                "Save": "保存",
-                "Create Mashup Contest": "创建混搭比赛",
-                "Delete problem": "删除问题",
-                "Restore problem": "恢复问题",
-                "Generate": "生成",
-                "Send": "发送"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +717,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "重置",
-                "Delete contest": "删除比赛",
-                "Preview": "预览"
-            }
+            "rules": {}
         }
     }
 }
