@@ -464,7 +464,8 @@
                 "Permanent Contests": "Langfristige Wettbewerbe",
                 "Upcoming Contests": "Kommende Auswahlverfahren",
                 "Recent Contests": "Jüngste Spiele",
-                "Ranking": "Dienstalter (unter Geschwistern)",
+                "Ranking: Algorithm": "Rangliste：Algorithmus",
+                "Ranking: Heuristic": "Rangfolge：Heuristik",
                 "Contest Archive": "Wettbewerb Archiv",
                 "Information": "Informationen",
                 "About the situation where it is difficult to access the contest site": "Zu den Schwierigkeiten beim Zugang zur Website des Auswahlverfahrens"
@@ -475,7 +476,7 @@
                 "h3"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Search in Archive": "Suche im Archiv",
                 "Permanent Contests": "Langfristige Wettbewerbe",
@@ -555,9 +556,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unofficial(unrated)": "Inoffiziell (unbewertet)",
-                "Sponsored Parallel(rated)": "Sponsoring parallel (bewertet)",
-                "Sponsored Parallel(unrated)": "Sponsoring parallel (unbewertet)",
+                "Unofficial\\(unrated\\)": "Inoffiziell (unbewertet)",
+                "Sponsored Parallel\\(rated\\)": "Sponsoring parallel (bewertet)",
+                "Sponsored Parallel\\(unrated\\)": "Sponsoring parallel (unbewertet)",
                 "Sponsored Heuristic Contest": "Inspirierter Sponsoring-Wettbewerb",
                 "All": "vollständig",
                 "AtCoder Typical Contest": "AtCoder Classic Wettbewerb",
@@ -616,9 +617,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated Register": "Bewertungen Registrierung",
+                "Unrated Register": "Nicht bewertete Immatrikulation",
                 "Register": "Ihren Namen eingeben",
                 "Virtual Participation": "Virtuelle Teilnahme",
-                "Editorial": "Notizen"
+                "Editorial": "Notizen",
+                "Virtual Standings": "virtuelles Ranking",
+                "Cancel Registration": "Annullierung der Einschreibung",
+                "Request a clarification": "Antrag auf Klärung",
+                "Search": "nach etw. Ausschau halten"
             }
         },
         "#navbar-collapse": {
@@ -626,7 +633,7 @@
                 "#navbar-collapse"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "Home": "Homepage",
                 "Contest": "Wettbewerb (Sport usw.)",
@@ -653,7 +660,73 @@
             "isStrict": false,
             "rules": {
                 "Contest Duration": "Wettkampfzeit",
-                "local time": "Ortszeit"
+                "local time": "Ortszeit",
+                "Back to Home": "Zurück zur Hauptseite"
+            }
+        },
+        ".alert": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "You have registered for this contest as a": "Sie haben sich für dieses Rennen angemeldet als",
+                "participant. Please refer to": "Teilnehmer. Bitte beziehen Sie sich auf",
+                "for details.": "Erfahren Sie mehr."
+            }
+        },
+        ".lang-en": {
+            "class": [
+                ".lang-de"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Virtual participation does not change rating.": "Die virtuelle Teilnahme hat keinen Einfluss auf die Bewertung.",
+                "The following are prohibited while virtual participation.": "Die folgenden Verhaltensweisen sind während der virtuellen Teilnahme verboten.",
+                "Submitting someone else's code.": "Den Code einer anderen Person einreichen.",
+                "Submitting code created before start your virtual participation.": "Geben Sie den Code vor Beginn der virtuellen Teilnahme ein.",
+                "Start Time: ": "Startzeit："
+            }
+        },
+        ".help-block": {
+            "class": [
+                ".help-block"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Please refer to ": "Bitte beachten Sie",
+                "this post": "dieser Artikel",
+                " for detailed information on Rated/Unrated registration.": "für detaillierte Informationen über die Einschreibung mit und ohne Bewertung."
+            }
+        },
+        "footer": {
+            "class": [
+                "Fußzeile"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Terms of service": "Servicebedingungen",
+                "Privacy Policy": "Datenschutzbestimmungen",
+                "Information Protection Policy": "Politik zum Schutz von Informationen",
+                "Company": "Firmen",
+                "FAQ": "allgemeine Probleme",
+                "Contact": "Verbindung aufnehmen mit",
+                "Rule": "Regeln und Vorschriften",
+                "Glossary": "glossar"
+            }
+        },
+        "back-to-home": {
+            "class": [
+                ".zurück-nach-Hause"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Back to Home": "Zurück zur Hauptseite"
             }
         }
     },
@@ -664,29 +737,7 @@
             ],
             "description": "Chinesisch einreichen",
             "isStrict": false,
-            "rules": {
-                "Register for virtual participation": "Registrieren Sie sich für virtuelle Einträge",
-                "Register for practice": "Anmelden, um mit dem Üben zu beginnen",
-                "Apply": "Gerät",
-                "Register": "Ihren Namen eingeben",
-                "Login": "sich anmelden",
-                "Run": "in Bewegung sein",
-                "Start virtual contest": "Virtuellen Eintrag starten",
-                "Manage invitations": "Management-Einladungen",
-                "Disable manager mode": "Vorübergehende Schließung des Verwaltungsmodus",
-                "Enable manager mode": "Verwaltungsmodus öffnen",
-                "Clone Contest": "Klonwettbewerb",
-                "Submit": "einreichen (einen Bericht usw.)",
-                "Save changes": "Einstellungen speichern",
-                "Filter": "Filtration",
-                "Find": "ausfindig machen.",
-                "Save": "(eine Datei etc.) speichern (Informatik)",
-                "Create Mashup Contest": "Erstellen Sie einen Mashup-Wettbewerb",
-                "Delete problem": "Löschen Sie die Frage",
-                "Restore problem": "Probleme bei der Wiederherstellung",
-                "Generate": "Erzeugung von",
-                "Send": "Senden"
-            }
+            "rules": {}
         },
         "InputButton": {
             "class": [
@@ -694,11 +745,7 @@
             ],
             "description": "",
             "isStrict": false,
-            "rules": {
-                "Reset": "Reprovision",
-                "Delete contest": "Spiel löschen",
-                "Preview": "Vorschauen"
-            }
+            "rules": {}
         }
     }
 }
