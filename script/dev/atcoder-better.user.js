@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.9
+// @version      1.14.10
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -4518,34 +4518,30 @@ async function localizeWebsite() {
      * @param {Object} textReplaceRules 文本替换规则对象
      * @param {string} key 应用的规则集的名字
      */
-    function traverseTextNodes($nodes, textReplaceRules, key) {
+    const traverseTextNodes = ($nodes, textReplaceRules, key) => {
         if (!$nodes) return;
 
-        $nodes.each(function () {
-            let node = this;
+        $nodes.each((_, node) => {
             if (node.nodeType === Node.TEXT_NODE) {
-                Object.keys(textReplaceRules).forEach(match => {
+                Object.entries(textReplaceRules).forEach(([match, replace]) => {
                     try {
-                        const replace = textReplaceRules[match];
                         const regex = new RegExp(match, 'g');
-                        if (OJBetter.dev.isRuleMarkingEnabled) {
-                            const before_text = node.textContent;
-                            node.textContent = node.textContent.replace(regex, replace);
-                            if (node.textContent !== before_text) $(node).after(`<span class="markingTextReplaceRule">${key}</span>`);
-                        } else {
-                            node.textContent = node.textContent.replace(regex, replace);
+                        const beforeText = node.textContent;
+                        node.textContent = node.textContent.replace(regex, replace);
+                        if (node.textContent !== beforeText && OJBetter.dev.isRuleMarkingEnabled) {
+                            $(node).after(`<span class="markingTextReplaceRule">${key}</span>`);
                         }
                     } catch (error) {
                         console.error(`Error processing text replacement for match: ${match}`, error);
                     }
                 });
             } else {
-                $(node).contents().each(function () {
-                    traverseTextNodes($(this), textReplaceRules, key);
+                $(node).contents().each((_, childNode) => {
+                    traverseTextNodes($(childNode), textReplaceRules, key);
                 });
             }
         });
-    }
+    };
 
     /**
      * value替换
@@ -4579,35 +4575,33 @@ async function localizeWebsite() {
 
     /**
      * 严格的文本节点遍历替换
-     * @param {JQuery} $node jQuery对象
+     * 要求被替换文本严格与规则文本一致
+     * @param {JQuery} $nodes jQuery对象
      * @param {Object} textReplaceRules 文本替换规则对象
      * @param {string} key 应用的规则集的名字
      */
-    function strictTraverseTextNodes($nodes, textReplaceRules, key) {
+    const strictTraverseTextNodes = ($nodes, textReplaceRules, key) => {
         if (!$nodes) return;
 
-        $nodes.each(function () {
-            let $node = $(this);
-            if ($node.nodeType === Node.TEXT_NODE) {
-                const trimmedNodeText = $node.textContent.trim();
-                Object.keys(textReplaceRules).forEach(match => {
+        $nodes.each((_, node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const trimmedNodeText = node.textContent.trim();
+                for (const [match, replacement] of Object.entries(textReplaceRules)) {
                     if (trimmedNodeText === match) {
-                        if (OJBetter.dev.isRuleMarkingEnabled) {
-                            const before_text = $node.textContent;
-                            $node.textContent = textReplaceRules[match];
-                            if ($node.textContent !== before_text) $($node).after(`<span class="markingTextReplaceRule">${key}</span>`);
-                        } else {
-                            $node.textContent = textReplaceRules[match];
+                        const beforeText = node.textContent;
+                        node.textContent = replacement;
+                        if (node.textContent !== beforeText && OJBetter.dev.isRuleMarkingEnabled) {
+                            $(node).after(`<span class="markingTextReplaceRule">${key}</span>`);
                         }
                     }
-                });
+                }
             } else {
-                $($node).contents().each(function () {
-                    strictTraverseTextNodes($(this), textReplaceRules, key);
+                $(node).contents().each((_, childNode) => {
+                    strictTraverseTextNodes($(childNode), textReplaceRules, key);
                 });
             }
         });
-    }
+    };
 
     /**
      * 应用文本替换
@@ -13165,7 +13159,7 @@ function initOnDOMReady() {
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
     initMonacoEditor(), // 初始化monaco编辑器资源
-    localizeWebsite(); // 网站本地化替换
+        localizeWebsite(); // 网站本地化替换
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
     // if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
