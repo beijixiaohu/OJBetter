@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.26
+// @version      1.73.27
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -3883,6 +3883,8 @@ class TextBlockReplacer {
  * @returns {string} 清理后的链接字符串
  */
 function OJB_cleanLink(url) {
+    if (url === null || url === undefined) return "";
+
     // 替换'http://'为'https://'
     let cleanUrl = url.replace(/^http:\/\//i, 'https://');
 
@@ -9589,8 +9591,7 @@ async function getRatingFromHTML(problem, problem_url, contest = null) {
 
         for (let tr of trs) {
             const rating = tr.querySelector('.problem-rating-column').textContent.trim();
-            const linkElement = tr.querySelector('.problem-name-column a:nth-of-type(2)');
-            let link = linkElement ? OJB_cleanLink(linkElement) : null;
+            const link = OJB_cleanLink(tr.querySelector('.problem-name-column a:nth-of-type(2)')?.href);
 
             if (link === problem_url || link === problem_url + '/') {
                 return {
@@ -13481,7 +13482,7 @@ function initOnDOMReady() {
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
     initMonacoEditor(), // 初始化monaco编辑器资源
-    localizeWebsite(); // 网站本地化替换
+        localizeWebsite(); // 网站本地化替换
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
     if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开

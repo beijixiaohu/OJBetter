@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.14.8
+// @version      1.14.9
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -3778,6 +3778,8 @@ class TextBlockReplacer {
  * @returns {string} 清理后的链接字符串
  */
 function OJB_cleanLink(url) {
+    if (url === null || url === undefined) return "";
+
     // 替换'http://'为'https://'
     let cleanUrl = url.replace(/^http:\/\//i, 'https://');
 
@@ -9176,8 +9178,7 @@ async function getRatingFromHTML(problem, problem_url, contest = null) {
 
         for (let tr of trs) {
             const rating = tr.querySelector('.problem-rating-column').textContent.trim();
-            const linkElement = tr.querySelector('.problem-name-column a:nth-of-type(2)');
-            let link = linkElement ? OJB_cleanLink(linkElement) : null;
+            const link = OJB_cleanLink(tr.querySelector('.problem-name-column a:nth-of-type(2)')?.href);
 
             if (link === problem_url || link === problem_url + '/') {
                 return {
