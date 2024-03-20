@@ -17,7 +17,8 @@
                 "アイコン設定": "Impostazioni dell'avatar",
                 "パスワードの変更": "cambiare la password",
                 "お気に入り管理": "Gestione dei preferiti",
-                "ログアウト": "annullamento"
+                "ログアウト": "annullamento",
+                "AtCoderInfo": "Informazioni su AtCoder"
             }
         },
         ".a-title_ttl": {
@@ -63,8 +64,8 @@
             "isStrict": false,
             "rules": {
                 "解けた！を": "Risolto!",
-                "世界に届けたい。": "Al mondo.",
-                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder è il sito web di programmazione competitiva di più alto livello al mondo.",
+                "世界に届けたい。": "Dillo al mondo.",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder è il sito di programmazione competitivo più importante al mondo.",
                 "リアルタイムのオンラインコンテストで競い合うことや、": "È possibile partecipare a concorsi online in tempo reale che",
                 "5,000以上の過去問にいつでもチャレンジすることができます。": "Sfidate in qualsiasi momento le oltre 5.000 domande degli anni precedenti."
             }
@@ -77,18 +78,19 @@
                 "h4"
             ],
             "description": "",
-            "isStrict": false,
+            "isStrict": true,
             "rules": {
                 "開催中のコンテスト": "gara",
                 "常設中のコンテスト": "Concorsi di lunga durata",
                 "予定されたコンテスト": "Partite programmate",
-                "終了後のコンテスト(最新 10 件)": "Partite completate (ultime 10)",
-                "終了後のコンテスト(最新 50 件)": "Partite completate (ultime 10)",
-                "ランキング": "classifiche",
+                "終了後のコンテスト": "Partite completate",
+                "ランキング: Algorithm": "Classifica：Algoritmo",
+                "ランキング: Heuristic": "Classifica：Euristica",
                 "インフォメーション": "informazioni",
                 "過去のコンテスト": "Le partite passate",
                 "過去のコンテストを検索": "Ricerca delle partite passate",
-                "コンテスト": "competizione (sport, ecc.)"
+                "コンテスト": "competizione (sport, ecc.)",
+                "AtCoder練習・活用サービス": "Servizi di esercitazione/applicazione AtCoder"
             }
         },
         "traverseTextNodes": {
@@ -112,6 +114,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "新規登録": "iscrizione",
+                "ログイン": "accedi",
                 "現在のコンテスト": "Ora il gioco.",
                 "過去のコンテスト": "Le partite passate",
                 "Algorithm": "aritmetico",
@@ -121,7 +125,6 @@
                 "新エディタテストコンテスト": "Concorso di prova per nuovi redattori",
                 "日本語": "Lingua giapponese",
                 "English": "Inglese (lingua)",
-                "bjxh (Guest)": "bjxh (visitatore)",
                 "マイプロフィール": "profilo personale",
                 "基本設定": "Impostazioni di base",
                 "アイコン設定": "Impostazioni dell'avatar",
@@ -163,22 +166,22 @@
             "rules": {
                 "Rated対象": "ambito di restrizione",
                 "ABCクラス": "Categoria ABC",
-                "(Rated上限: 1999)": "(Voto massimo: 1999)",
+                "\\(Rated上限: 1999\\)": "(Voto massimo: 1999)",
                 "ARCクラス": "Categoria ARC",
-                "(Rated上限: 2799)": "(Massimale nominale: 2799)",
+                "\\(Rated上限: 2799\\)": "(Massimale nominale: 2799)",
                 "AGCクラス": "Categoria AGC",
-                "(Rated上限なし)": "(senza tappo nominale)",
+                "\\(Rated上限なし\\)": "(senza tappo nominale)",
                 "AHCクラス": "Categoria AHC",
                 "カテゴリ": "categorizzazione",
                 "全て": "completo",
                 "AtCoder Typical Contest": "Concorso AtCoder Classic",
                 "PAST過去問": "Edizioni dell'anno solare passato",
                 "AtCoder Daily Training": "Formazione quotidiana AtCoder",
-                "非公式コンテスト(unrated)": "Competizioni non ufficiali (non valutate)",
+                "非公式コンテスト\\(unrated\\)": "Competizioni non ufficiali (non valutate)",
                 "JOI過去問": "Domande JOI dell'anno",
                 "企業コンテスト決勝": "Finale del concorso aziendale",
-                "企業オープンコンテスト(rated)": "Concorsi pubblici aziendali (valutati)",
-                "企業オープンコンテスト(unrated)": "Concorsi pubblici aziendali (non classificati)",
+                "企業オープンコンテスト\\(rated\\)": "Concorsi pubblici aziendali (valutati)",
+                "企業オープンコンテスト\\(unrated\\)": "Concorsi pubblici aziendali (non classificati)",
                 "企業ABC": "L'ABC del business",
                 "企業ARC": "Impresa ARC",
                 "ヒューリスティック": "euristico",
@@ -189,7 +192,7 @@
                 "コンテスト名": "Nome del concorso"
             }
         },
-        ".btn-text": {
+        ".btn-text-jp": {
             "class": [
                 ".btn-testo"
             ],
@@ -202,7 +205,26 @@
                 "記事アーカイブ": "Archivio articoli",
                 "詳細": "particolari",
                 "すべて表示": "Mostra tutti",
-                "殿堂入り": "hall of fame"
+                "殿堂入り": "hall of fame",
+                "コンテスト成績表": "Tabella dei risultati della competizione",
+                "直近のコンテスト成績証": "Prova dei risultati recenti di una competizione"
+            }
+        },
+        "lang-ja": {
+            "class": [
+                ".lang-ja"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "ーチャル参加とは、コンテストに仮想的に参加できる機能です。": "La partecipazione virtuale è una funzione che consente di partecipare a un concorso in modo virtuale.",
+                "バーチャル参加を開始すると、": "Dopo aver iniziato a partecipare virtualmente, il",
+                "バーチャル順位表": "classifica virtuale",
+                "が経過時間に応じてリアルタイムに更新されていきます。": "Verrà aggiornato in tempo reale in base al tempo trascorso.",
+                "ただし、本番のコンテストとは異なり、レーティングの変動は起こりません。": "Tuttavia, a differenza delle partite ufficiali, non influisce sulla valutazione.",
+                "参加条件に制限はありませんが、以下の行為はお控えください。": "Non ci sono restrizioni alla partecipazione, ma si prega di evitare i seguenti comportamenti.",
+                "他人の回答をコピーして提出する行為": "Copiare la risposta di qualcun altro e inviarla",
+                "事前に作成した回答ソースコードを提出する行為": "Inviare il codice sorgente della risposta precostituito"
             }
         },
         "#footer": {
@@ -219,6 +241,7 @@
                 "ランキング": "classifiche",
                 "便利リンク集": "Link utili",
                 "AtCoderJobs": "Offerte di lavoro AtCoder",
+                "AtCoder职位トップ": "AtCoder Offerte di lavoro Home",
                 "AtCoderJobsトップ": "AtCoder Offerte di lavoro Home",
                 "2024年新卒採用求人一覧": "2024 Annunci di lavoro per neolaureati",
                 "2025年新卒採用求人一覧": "2025 Annunci di lavoro per neolaureati",
@@ -230,6 +253,7 @@
                 "採用担当者の方へ": "Messaggio al responsabile delle assunzioni",
                 "検定": "esame di certificazione",
                 "検定トップ": "Esame di certificazione Home",
+                "认证考试トップ": "Esame di certificazione Home",
                 "マイページ": "Homepage personale",
                 "AtCoderCareerDesign": "Carriera AtCoder Design",
                 "キャリアデザイントップ": "Carriera Design Home",
@@ -243,7 +267,7 @@
                 "用語集": "glossario",
                 "プライバシーポリシー": "Informativa sulla privacy",
                 "個人情報保護方針": "Politica di protezione dei dati personali",
-                "Copyright Since 2012 (C) AtCoder Inc. All rights reserved.": "Copyright © 2012 in poi AtCoder Inc. Tutti i diritti riservati."
+                "Copyright Since 2012 \\(C\\) AtCoder Inc. All rights reserved.": "Copyright © 2012 in poi AtCoder Inc. Tutti i diritti riservati."
             }
         },
         ".editor-buttons-jp": {
@@ -271,7 +295,31 @@
                 "ソースコード": "codice sorgente (informatica)",
                 "標準入力": "Ingresso marcatore",
                 "標準出力": "uscita standard",
-                "標準エラー出力": "Errore standard"
+                "標準エラー出力": "Errore standard",
+                "ユーザ名": "ID utente",
+                "パスワード": "crittografico",
+                "メールアドレス": "indirizzo e-mail",
+                "パスワードの確認": "Conferma la password",
+                "国と地域": "Paese e area",
+                "誕生年": "Anno di nascita",
+                "メール通知": "notifica via e-mail"
+            }
+        },
+        ".alert-jp": {
+            "class": [
+                ".alert"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "現在": "essere di fronte a (noi)",
+                "で参加登録しています。詳細は": "si sono iscritti per partecipare. Per ulteriori informazioni, leggere",
+                "こちら": "qui ci sono",
+                "参加登録しました。": "Iscritti.",
+                "参加登録を取り消しました。": "La registrazione è stata annullata.",
+                "ログアウトしました。": "Disconnesso.",
+                "ようこそ、": "Benvenuti.",
+                "さん": "Signore e signori"
             }
         },
         ".h2, h2": {
@@ -339,7 +387,9 @@
                 "コンテスト名": "Nome del concorso",
                 "Rated対象": "schema di marcatura",
                 "時間": "durata del tempo",
-                "開始時刻": "Ora di inizio"
+                "開始時刻": "Ora di inizio",
+                "Rated/Unrated参加についての詳細は": "Per ulteriori informazioni sulla partecipazione Rated/Unrated, consultare il documento",
+                "こちら": "qui ci sono"
             }
         },
         ".table-responsive tr th": {
@@ -393,8 +443,16 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rated参加登録": "Registrazione delle valutazioni",
+                "Unrated参加登録": "Iscrizione non classificata",
+                "参加登録を取り消す": "Cancellazione dell'iscrizione",
+                "バーチャル参加登録": "partecipazione virtuale",
                 "参加登録": "inserire il proprio nome",
-                "バーチャル参加": "partecipazione virtuale"
+                "バーチャル参加": "partecipazione virtuale",
+                "質問する": "fare domande",
+                "ログイン": "accedi",
+                "新規登録": "iscrizione",
+                "または": "o"
             }
         },
         ".nav": {
@@ -423,6 +481,7 @@
                 "Heuristic": "euristico",
                 "Active Users": "utente attivo",
                 "All Users": "tutti gli utenti",
+                "My Profile": "Il mio profilo",
                 "Profile": "profilo personale",
                 "Competition History": "Record di partite",
                 "General Settings": "Impostazioni generali",
@@ -528,15 +587,15 @@
                 "Family Name": "cognome",
                 "First Name": "nome (di una persona o di una cosa)",
                 "Category": "categorizzazione",
-                "College Students (Master or Doctor cource)": "Studenti universitari (programmi di master o di dottorato)",
+                "College Students \\(Master or Doctor cource\\)": "Studenti universitari (programmi di master o di dottorato)",
                 "College Students": "studente universitario",
                 "Technical college/Vocational school/Short-term university": "Istituti tecnici/ scuole professionali/ scuole medie inferiori",
                 "High school": "congratulazioni (per aver superato un esame)",
                 "Junior high school": "scuola media",
                 "Office worker": "impiegati (come gruppo sociale)",
                 "Other": "il resto",
-                "Organization Name (Company Name or School Name)": "Nome dell'organizzazione (nome della società o della scuola)",
-                "Depertment (For Students)": "Dipartimento (per gli studenti)",
+                "Organization Name \\(Company Name or School Name\\)": "Nome dell'organizzazione (nome della società o della scuola)",
+                "Depertment \\(For Students\\)": "Dipartimento (per gli studenti)",
                 "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "Intende o prevede di cercare un lavoro o di cambiare lavoro nel 2023 o 2024?",
                 "Graduation Schedule": "Orario di laurea",
                 "I'm already employed.": "Ho già un lavoro.",
@@ -625,7 +684,9 @@
                 "Virtual Standings": "classifica virtuale",
                 "Cancel Registration": "Cancellazione dell'iscrizione",
                 "Request a clarification": "Richiesta di chiarimenti",
-                "Search": "cercare qcs."
+                "Search": "cercare qcs.",
+                "Update Registration": "Aggiornare le informazioni di registrazione",
+                "Cancel": "cancellazioni"
             }
         },
         "#navbar-collapse": {
@@ -671,9 +732,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "You have registered for this contest as an": "Vi siete iscritti a questa gara come",
                 "You have registered for this contest as a": "Vi siete iscritti a questa gara come",
                 "participant. Please refer to": "Partecipanti. Si prega di fare riferimento a",
-                "for details.": "Per saperne di più."
+                "this post": "questo articolo",
+                "for details.": "Per saperne di più.",
+                "participant": "partecipanti",
+                "Registered": "Iscritta",
+                "Canceled registration": "Registrazione annullata",
+                "Welcome, ": "Benvenuti."
             }
         },
         ".lang-en": {
@@ -727,6 +794,32 @@
             "isStrict": false,
             "rules": {
                 "Back to Home": "Torna alla pagina iniziale"
+            }
+        },
+        ".btn-text": {
+            "class": [
+                ".btn-testo"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "View all": "Visualizza tutti",
+                "Hall of Fame": "hall of fame",
+                "AWTF Race Ranking 2024": "Classifica AWTF 2024",
+                "Post Archive": "Archivio articoli",
+                "Back to Top": "Torna all'inizio",
+                "Detail": "particolari"
+            }
+        },
+        "modal-dialog": {
+            "class": [
+                ".modal-dialog"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Are you sure you want to cancel registration?": "Siete sicuri di voler cancellare la vostra registrazione?",
+                "Confirm": "Riconoscere"
             }
         }
     },
