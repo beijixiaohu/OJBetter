@@ -48,9 +48,9 @@
             "apresentar (um relatório, etc.)"
         ]
     },
-    "isLikelyCodeSnippet": {
+    "isEmptyText": {
         "title": "A tradução vai continuar?",
-        "content": "A próxima tradução parece ser um **código snippet** e traduzi-lo pode ser inútil, tem a certeza de continuar?",
+        "content": "O conteúdo de texto da área que está prestes a ser traduzida está vazio (excluindo a parte do bloco de código), traduzi-lo é inútil, tem a certeza que quer continuar?",
         "buttons": [
             "ser",
             "entupido"

@@ -48,9 +48,9 @@
             "presentare (un rapporto, ecc.)"
         ]
     },
-    "isLikelyCodeSnippet": {
-        "title": "La traduzione continuerà?",
-        "content": "La traduzione in arrivo sembra essere un **codice snippet** e tradurlo potrebbe essere inutile, è sicuro di continuare?",
+    "isEmptyText": {
+        "title": "是否继续翻译？",
+        "content": "Il contenuto del testo dell'area che sta per essere tradotta è vuoto (esclusa la parte del blocco di codice), tradurlo è inutile, sei sicuro di voler continuare?",
         "buttons": [
             "essere",
             "intasato"

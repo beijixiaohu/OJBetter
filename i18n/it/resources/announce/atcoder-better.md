@@ -1,3 +1,7 @@
+## 1.15.2
+
+- Rimuovere i metodi che non sono più significativi：Determinare se il testo è probabilmente un codice
+
 ## 1.15.0
 
 - I dati di MarkDown non contengono più blocchi di codice interlinea

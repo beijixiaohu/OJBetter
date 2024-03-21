@@ -48,9 +48,9 @@
             "einreichen (einen Bericht usw.)"
         ]
     },
-    "isLikelyCodeSnippet": {
-        "title": "Wird die Übersetzung fortgesetzt?",
-        "content": "Die anstehende Übersetzung scheint ein **Codeschnipsel** zu sein und es könnte sinnlos sein, ihn zu übersetzen. Sind Sie sicher, dass Sie fortfahren wollen?",
+    "isEmptyText": {
+        "title": "是否继续翻译？",
+        "content": "Der Textinhalt des Bereichs, der übersetzt werden soll, ist leer (mit Ausnahme des Codeblocks), die Übersetzung ist sinnlos.",
         "buttons": [
             "sein",
             "Verstopft"

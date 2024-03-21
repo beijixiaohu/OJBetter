@@ -56,6 +56,14 @@
             "Verstopft"
         ]
     },
+    "isEmptyText": {
+        "title": "Wird die Übersetzung fortgesetzt?",
+        "content": "Der Textinhalt des Bereichs, der übersetzt werden soll, ist leer (mit Ausnahme des Codeblocks), die Übersetzung ist sinnlos.",
+        "buttons": [
+            "sein",
+            "Verstopft"
+        ]
+    },
     "isClearDatabase": {
         "title": "Ist die Datenbank geleert?",
         "content": "Sind Sie sicher, dass Sie die Datenbank leeren wollen? Sie ist nicht wiederherstellbar.",

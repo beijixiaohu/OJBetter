@@ -1,45 +1,25 @@
 ## 1.74.0
 
 - Añadir botón para saltar a VJudge
-
 - Añade la función "embellecer bloque de código", utiliza el editor monaco para reemplazar el bloque de código previo en la página, esto también mejorará el efecto de visualización del código en modo oscuro.
-
 - Mejoras en varios métodos de solicitud en Clist Rating para solucionar problemas con la obtención incorrecta de datos.
-
 - Mejora de la rapidez de las traducciones de ChatGPT y corrección de un posible error de inyección que podía dar lugar a traducciones incompletas.
-
 - Mejoras en el código relacionado con LaTeX Replace/Restore, que ahora restaura correctamente en caso de anidamiento múltiple.
-
-- Métodos mejorados para determinar si un texto es un fragmento de código.
-
 - Mejora de la solidez de los métodos de localización de sitios web
-
 - Ajuste del código relacionado con el modo oscuro, utilizando variables para facilitar la uniformidad de estilo y gestión.
-
 - Sustituir CDN staticfile.org por staticfile.net
-
 - Los datos MarkDown ya no contienen bloques de códigos interlínea
-
+- Eliminar los métodos relacionados con la determinación de si el texto es código o no
 - Soluciona el problema de que la clasificación de algunos temas en la página de la lista de preguntas aparezca como no encontrada.
-
 - Solucionar el problema de la visualización anormal de las puntuaciones clist en la página de conjunto de preguntas.
-
 - Solucionar el problema de los estilos de comparación de diferencias no alineados en las pruebas en línea de código.
-
 - Solucionar el problema por el que deepl 429 no muestra correctamente el mensaje de alerta tras informar de un error.
-
 - Se corrige un problema por el que la página de título Clist Clasificación puede mostrar No encontrado
-
 - Se ha solucionado el problema por el que el método de salto de Rock Valley informaba de un error en versiones antiguas de Tampermonkey.
-
 - Corrección de un bucle muerto inesperado que provocaba el bloqueo de la página cuando el archivo de la biblioteca MathJax no se cargaba correctamente.
-
 - Se ha corregido el problema por el que DeepL no mostraba correctamente el mensaje de alerta durante la traducción al traducir en modo libre.
-
 - Se corrige un problema por el que los scripts podían no cargarse correctamente.
-
 - Se corrige un problema por el que podía corromperse la tipografía entre fórmulas LaTeX vecinas.
-
 - Algunos otros ajustes y mejoras
 
 ## 1.73.0

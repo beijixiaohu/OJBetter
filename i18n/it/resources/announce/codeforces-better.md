@@ -1,45 +1,25 @@
 ## 1.74.0
 
 - Aggiungi il pulsante per passare a VJudge
-
 - Aggiungere la funzione "abbellimento del blocco di codice", utilizzare l'editor monaco per sostituire il blocco di codice preesistente nella pagina; questo migliorerà anche l'effetto di visualizzazione del codice in modalità scura.
-
 - Miglioramenti a vari metodi di richiesta in Clist Rating per risolvere problemi di mancata ricezione dei dati.
-
 - Miglioramento del prompt delle traduzioni di ChatGPT e correzione di un possibile errore di iniezione che potrebbe portare a traduzioni incomplete.
-
 - Miglioramenti al codice relativo a LaTeX Replace/Restore, che ora ripristina correttamente in caso di annidamento multiplo
-
-- Metodi migliorati per determinare se un testo è un frammento di codice
-
 - Migliorare la robustezza dei metodi di localizzazione dei siti web
-
 - Adattare il codice relativo alla modalità scura, utilizzando le variabili per facilitare l'uniformità di stile e di gestione.
-
 - Sostituire il CDN staticfile.org con staticfile.net
-
 - I dati di MarkDown non contengono più blocchi di codice interlinea
-
+- Rimuovere i metodi per determinare se il testo è un codice o meno.
 - Risolvere il problema per cui la classificazione di alcuni argomenti nella pagina dell'elenco delle domande può essere visualizzata come non trovata.
-
 - Risolvere il problema della visualizzazione anomala dei punteggi della classifica nella pagina delle domande.
-
 - Risolvere il problema degli stili di confronto delle differenze non allineati nei test online del codice
-
 - Risolvere il problema per cui deepl 429 non visualizza correttamente il messaggio di avviso dopo la segnalazione di un errore.
-
 - Corregge un problema per cui il titolo della pagina Clist Rating potrebbe mostrare Not Found (Non trovato).
-
 - Corretto il problema per cui il metodo di salto Rock Valley riportava un errore nelle vecchie versioni di Tampermonkey.
-
 - Correzione di un ciclo morto inatteso che causa il blocco della pagina quando il file della libreria MathJax non viene caricato correttamente
-
 - È stato risolto il problema per cui DeepL non visualizzava correttamente il messaggio di avviso in traduzione quando si traduceva in modalità libera.
-
 - Corregge un problema per cui gli script potrebbero non essere caricati correttamente.
-
 - Corregge un problema per cui la tipografia tra formule LaTeX vicine poteva essere interrotta.
-
 - Altre modifiche e miglioramenti
 
 ## 1.73.0

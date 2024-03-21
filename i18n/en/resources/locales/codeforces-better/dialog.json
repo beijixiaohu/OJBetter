@@ -48,9 +48,9 @@
             "Commit"
         ]
     },
-    "isLikelyCodeSnippet": {
+    "isEmptyText": {
         "title": "Does it continue to be translated?",
-        "content": "The upcoming translation appears to be **code snippet** and translating it may be pointless, are you sure to continue?",
+        "content": "The text content of the area about to be translated is empty (excluding the code block part), translating it is pointless, are you sure you want to continue?",
         "buttons": [
             "be",
             "clogged"

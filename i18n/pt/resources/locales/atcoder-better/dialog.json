@@ -56,6 +56,14 @@
             "entupido"
         ]
     },
+    "isEmptyText": {
+        "title": "A tradução vai continuar?",
+        "content": "O conteúdo de texto da área que está prestes a ser traduzida está vazio (excluindo a parte do bloco de código), traduzi-lo é inútil, tem a certeza que quer continuar?",
+        "buttons": [
+            "ser",
+            "entupido"
+        ]
+    },
     "isClearDatabase": {
         "title": "A base de dados foi esvaziada?",
         "content": "Tem a certeza que quer esvaziar a base de dados? É irrecuperável.",

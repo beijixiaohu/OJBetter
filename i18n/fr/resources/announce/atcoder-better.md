@@ -1,3 +1,7 @@
+## 1.15.2
+
+- Supprimer les méthodes qui n'ont plus de sens：Déterminer si le texte est susceptible d'être un code
+
 ## 1.15.0
 
 - Les données MarkDown ne contiennent plus de blocs de codes interlignes

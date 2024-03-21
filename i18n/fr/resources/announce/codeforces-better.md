@@ -1,45 +1,25 @@
 ## 1.74.0
 
 - Ajouter un bouton pour accéder à VJudge
-
 - Ajout de la fonction "embellir le bloc de code", utiliser l'éditeur monaco pour remplacer le bloc de pré-code sur la page, cela améliorera également l'effet d'affichage du code en mode sombre.
-
 - Améliorations apportées à diverses méthodes de requête dans Clist Rating afin de résoudre les problèmes liés à l'obtention incorrecte des données
-
 - Amélioration de la rapidité des traductions de ChatGPT et correction d'une erreur d'injection pouvant entraîner des traductions incomplètes.
-
 - Amélioration du code LaTeX de remplacement/restauration, qui restaure maintenant correctement dans les cas d'imbrication multiple.
-
-- Amélioration des méthodes permettant de déterminer si un texte est un extrait de code
-
 - Améliorer la robustesse des méthodes de localisation des sites web
-
 - Ajustement du code relatif au mode sombre, en utilisant des variables pour faciliter l'uniformité du style et de la gestion
-
 - Remplacer le CDN staticfile.org par staticfile.net
-
 - Les données MarkDown ne contiennent plus de blocs de codes interlignes
-
+- Supprimer les méthodes permettant de déterminer si un texte est un code ou non
 - Correction d'un problème d'affichage de la classification de certains sujets sur la page de la liste des questions comme n'étant pas trouvée.
-
 - Correction du problème d'affichage anormal des scores de la liste sur la page de la série de questions.
-
 - Correction du problème des styles de comparaison de différences non alignées dans les tests en ligne de code
-
 - Correction du problème qui fait que deepl 429 n'affiche pas correctement le message d'alerte après avoir signalé une erreur.
-
 - Correction d'un problème où la page de titre Clist Rating pouvait afficher "non trouvé".
-
 - Correction du problème de la méthode de saut de la vallée de la roche qui signalait une erreur dans les anciennes versions de Tampermonkey.
-
 - Correction d'une boucle morte inattendue entraînant le blocage de la page lorsque le fichier de la bibliothèque MathJax n'est pas correctement chargé.
-
 - Correction du problème qui faisait que DeepL n'affichait pas correctement le message d'alerte en cours de traduction lors de la traduction en mode libre.
-
 - Correction d'un problème où les scripts peuvent ne pas se charger correctement
-
 - Corrige un problème de typographie entre des formules LaTeX voisines.
-
 - Quelques autres ajustements et améliorations
 
 ## 1.73.0

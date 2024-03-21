@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.15.0",
+    "lastVersion": "1.15.2",
+    "1.15.2": "- Remove methods that are no longer meaningful：Determine if text may be code",
     "1.15.0": "- MarkDown data no longer contains interline code blocks\n\n- Improved site localization rules\n\n- Improved methods for determining if text is a code snippet\n\n- Fixed \"Beautify Code Block\" function reporting not defined error\n\n- Fixed `OJB_observeElement()` method reporting error Issue\n\n- Fix invalid website localization method `strictTraverseTextNodes()`",
-    "1.14.2": "- Fix a style error in the editor in dark mode\n\n- Fix wrong initialization value for code editor language selection\n\n- Fix code editor initialization exception in non-chrome browsers",
-    "1.14.0": "- Fix code editor not loading correctly in some cases Thanks to @smart_stupid @acstor for the feedback!"
+    "1.14.2": "- Fix a style error in the editor in dark mode\n\n- Fix wrong initialization value for code editor language selection\n\n- Fix code editor initialization exception in non-chrome browsers"
 }

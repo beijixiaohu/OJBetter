@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.15.0",
+    "lastVersion": "1.15.2",
+    "1.15.2": "- Entfernen Sie Methoden, die nicht mehr sinnvoll sind：Bestimmen Sie, ob es sich bei dem Text wahrscheinlich um Code handelt",
     "1.15.0": "- MarkDown-Daten enthalten keine Interline-Codeblöcke mehr\n\n- Verbesserte Website-Lokalisierungsregeln\n\n- Verbesserte Methoden zur Bestimmung, ob Text ein Code-Snippet ist\n\n- Behobener nicht definierter Fehler mit der Funktion \"Beautify Code Block\"\n\n- Behobener Fehler mit der Methode `OJB_observeElement()`. Problem\n\n- Behebung der ungültigen Website-Lokalisierungsmethode `strictTraverseTextNodes()`.",
-    "1.14.2": "- Behebung eines Stilfehlers im Editor im dunklen Modus\n\n- Behebung eines falschen Anfangswertes für die Sprachauswahl im Code-Editor\n\n- Behebung einer Ausnahme bei der Initialisierung des Code-Editors in Nicht-Chrom-Browsern",
-    "1.14.0": "- Code-Editor wird in manchen Fällen nicht korrekt geladen Danke an @smart_stupid @acstor für das Feedback!"
+    "1.14.2": "- Behebung eines Stilfehlers im Editor im dunklen Modus\n\n- Behebung eines falschen Anfangswertes für die Sprachauswahl im Code-Editor\n\n- Behebung einer Ausnahme bei der Initialisierung des Code-Editors in Nicht-Chrom-Browsern"
 }

@@ -1,45 +1,25 @@
 ## 1.74.0
 
 - Schaltfläche hinzufügen, um zu VJudge zu springen
-
 - Fügen Sie die Funktion "Codeblock verschönern" hinzu, verwenden Sie den Monaco-Editor, um den vordefinierten Codeblock auf der Seite zu ersetzen, dies wird auch den Effekt der Codeanzeige im dunklen Modus verbessern.
-
 - Verbesserungen an verschiedenen Abfragemethoden in Clist Rating zur Behebung von Problemen beim korrekten Erhalt von Daten
-
 - Verbesserung der Eingabeaufforderung für ChatGPT-Übersetzungen und Behebung eines möglichen Injektionsfehlers, der zu unvollständigen Übersetzungen führen konnte.
-
 - Verbesserungen am LaTeX Replace/Restore-bezogenen Code, der nun bei Mehrfachverschachtelung korrekt wiederhergestellt wird
-
-- Verbesserte Methoden zur Bestimmung, ob ein Text ein Codefragment ist
-
 - Verbesserung der Robustheit von Website-Lokalisierungsmethoden
-
 - Anpassung des Codes in Bezug auf den dunklen Modus unter Verwendung von Variablen, um die Einheitlichkeit des Stils und der Verwaltung zu erleichtern
-
 - Ersetzen Sie das CDN staticfile.org durch staticfile.net
-
 - MarkDown-Daten enthalten keine Interline-Codeblöcke mehr
-
+- Methoden zur Bestimmung, ob Text Code ist oder nicht, entfernen
 - Behebung des Problems, dass die Listenbewertung einiger Themen auf der Seite mit der Fragenliste als nicht gefunden angezeigt werden kann.
-
 - Behebung des Problems der abnormalen Anzeige von Listenpunkten auf der Seite mit den Fragensätzen.
-
 - Behebung des Problems der nicht ausgerichteten Differenzvergleichsstile beim Online-Test von Code
-
 - Behebung des Problems, dass deepl 429 die Warnmeldung nach der Meldung eines Fehlers nicht korrekt anzeigt.
-
 - Behebt ein Problem, bei dem auf der Titelseite "Clist Rating" als "Nicht gefunden" angezeigt werden kann
-
 - Das Problem, dass die Rock Valley Sprungmethode in älteren Versionen von Tampermonkey einen Fehler meldete, wurde behoben.
-
 - Behebung einer unerwarteten Sackgasse, die dazu führt, dass die Seite hängen bleibt, wenn die MathJax-Bibliotheksdatei nicht korrekt geladen ist
-
 - Das Problem, dass DeepL die Warnmeldung während der Übersetzung nicht korrekt anzeigt, wenn im freien Modus übersetzt wird, wurde behoben.
-
 - Behebt ein Problem, bei dem Skripte möglicherweise nicht korrekt geladen werden
-
 - Behebt ein Problem, bei dem die Typografie zwischen benachbarten LaTeX-Formeln unterbrochen werden konnte
-
 - Einige andere Optimierungen und Verbesserungen
 
 ## 1.73.0
