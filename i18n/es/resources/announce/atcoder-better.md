@@ -1,3 +1,7 @@
+## 1.15.2
+
+- Eliminar los métodos que ya no tienen sentido：Determinar si es probable que el texto sea código
+
 ## 1.15.0
 
 - Los datos MarkDown ya no contienen bloques de códigos interlínea
