@@ -1,45 +1,25 @@
 ## 1.74.0
 
 - Add button to jump to VJudge
-
 - Add "beautify code block" function, use monaco editor to replace the pre code block on the page, this will also improve the code display effect in dark mode.
-
 - Improvements to various request methods in Clist Rating to address issues where data was not fetched correctly
-
 - Improve the prompt of ChatGPT translations and fix a possible injection error that could lead to incomplete translations.
-
 - Improvements to LaTeX Replace/Restore related code, which now restores correctly in the case of multiple nesting
-
-- Improved methods related to determining that text is a code snippet
-
 - Enhancing the robustness of website localization methods
-
 - Adjusting the code related to dark mode, using variables to facilitate uniformity of style and management
-
 - Replace CDN staticfile.org with staticfile.net
-
 - MarkDown data no longer contains interline code blocks
-
+- Remove methods related to determining whether text is code or not
 - Fix the problem that the clist rating of some topics on the question list page may be displayed as not found.
-
 - Fix an issue where clist scores are displayed abnormally on the topic set page
-
 - Fix the problem of unaligned difference comparison styles in code online testing
-
 - Fix deepl 429 not displaying correct alert message after reporting an error
-
 - Fixes the issue where the title page Clist Rating may show Not Found
-
 - Fix for the Lobo jump method reporting errors in older versions of Tampermonkey
-
 - Fix an unexpected dead loop that causes the page to get stuck when the MathJax library file is not loaded correctly
-
 - Fixed the issue that DeepL did not correctly display the in-translation message when translating in free mode.
-
 - Fix for scripts that may not load correctly
-
 - Fixes an issue where typography between neighboring LaTeX formulas could be broken
-
 - Some other tweaks and improvements
 
 ## 1.73.0
