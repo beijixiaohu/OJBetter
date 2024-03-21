@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.29
+// @version      1.73.30
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -7065,133 +7065,11 @@ class TaskQueue {
 }
 
 /**
- * 检测文本是否可能为代码片段
+ * 检测为空文本
  * @param {string} text 待检测的文本
- * @returns {boolean} 是否可能为代码片段
+ * @returns {boolean} 是否为空文本
  */
-function isLikelyCodeSnippet(text) {
-    /** @param {string} debug 是否输出调试信息 */
-    const debug = false;
-
-    // 代码分数
-    let score = 0;
-
-    // 过滤文本中可能的HTML标签
-    text = OJB_removeHTMLTags(text);
-
-    // 清除文本中的 LaTeX 公式
-    text = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
-
-    // 基本数据类型关键字
-    const basicDataTypes = ["int", "float", "double", "char", "bool", "boolean", "string"];
-
-    // boolean 的关键字
-    const booleanKeywords = ["true", "false", "True", "False"];
-
-    // 循环分支关键字
-    const loopBranchKeywords = ["if", "else", "for", "while", "switch", "case", "default"];
-
-    // 运算符
-    const operators = ["+", "*", "%", "(", ")", "++", "--", "!=", ">", "<", ">=", "<=", "&&", "!", "&", "||", "^", "~", "<<", ">>", "+=", "-=", "*=", "%=", "&=", "^=", "<<=", ">>=", "==", "===", "::"];
-
-    // JAVA 的关键字
-    const javaKeywords = ["public", "class", "void", "static", "String", "return", "break", "catch", "finally", "throw", "throws", "private", "protected", "package", "interface", "extends", "implements", "abstract", "final", "native", "strictfp", "transient", "volatile", "synchronized", "const", "goto", "enum", "assert"];
-    // Python 的关键字
-    const pythonKeywords = ["range", "None", "assert", "break", "class", "elif", "except", "finally", "global", "lambda", "nonlocal", "pass", "raise", "return", "yield"];
-    // C++ 的关键字
-    const cppKeywords = ["alignas", "alignof", "and_eq", "asm", "atomic_cancel", "atomic_commit", "atomic_noexcept", "auto", "bitand", "bitor", "break", "catch", "char8_t", "char16_t", "char32_t", "class", "compl", "concept", "const", "consteval", "constexpr", "constinit", "const_cast", "co_await", "co_return", "co_yield", "decltype", "delete", "double", "dynamic_cast", "enum", "explicit", "export", "extern", "false", "goto", "inline", "mutable", "namespace", "noexcept", "not_eq", "nullptr", "operator", "or_eq", "private", "protected", "public", "reflexpr", "reinterpret_cast", "requires", "return", "signed", "sizeof", "static", "static_assert", "static_cast", "struct", "synchronized", "template", "thread_local", "throw", "typedef", "typeid", "typename", "union", "unsigned", "virtual", "void", "volatile", "wchar_t", "xor", "xor_eq"];
-    // C 的关键字
-    const cKeywords = ["auto", "break", "const", "enum", "extern", "goto", "inline", "restrict", "return", "signed", "sizeof", "static", "struct", "typedef", "union", "unsigned", "void", "volatile", "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary", "_Noreturn", "_Static_assert", "_Thread_local"];
-
-    // 检查关键字
-    const recodeLikelyFeatures = {
-        basicDataTypes: basicDataTypes,
-        booleanKeywords: booleanKeywords,
-        loopBranchKeywords: loopBranchKeywords,
-        operators: operators,
-        java: javaKeywords,
-        python: pythonKeywords,
-        cpp: cppKeywords,
-        c: cKeywords,
-    };
-    const codeLikelyFeatures = recodeLikelyFeatures;
-
-    /**
-     * 将代码分割成单词
-     * @param {string} text 文本
-     * @returns {string[]} 单词数组
-     */
-    const splitCodeIntoTokens = function (text) {
-        // 匹配字符串字面量、各种操作符、单词等
-        const regex = /(["'`].*?["'`])|([\[\]{}()$$$$.,;:+\-*/&|<>=~!?%#@^])|(\b\w+\b)/g;
-        const tokens = [];
-        let match;
-        while ((match = regex.exec(text)) !== null) {
-            // 过滤掉匹配结果中的undefined项
-            tokens.push(match.find(m => m !== undefined));
-        }
-        return tokens;
-    }
-
-    const words = splitCodeIntoTokens(text);
-    if (debug) console.log(words);
-
-    // 检查关键字
-    words.forEach(word => {
-        Object.keys(codeLikelyFeatures).forEach(lang => {
-            codeLikelyFeatures[lang].forEach(keyword => {
-                if (word === keyword) {
-                    // 输出这个关键字
-                    if (debug) console.log(keyword);
-                    score++;
-                }
-            });
-        });
-    });
-
-    // 检查各个语言的常见特征语句
-    const javaFeatures = ["System.out", "System.in", "import", "Scanner", "Math.", "public static void main", "java.util.", "str.", "HashMap<"];
-    const pythonFeatures = ["print(", "import", "input(", "sys.", "math.", "range(", "def", "add(", "remove("];
-    const cppFeatures = ["#include", "cin", "std::", "cout", "iostream", "using namespace std;", "std::ios::sync_with_stdio(false);", "cin.tie(", "vector<", "map<", "for(int i =", "sort(", "min(", "max("];
-    const cFeatures = ["#include", "printf", "scanf", "stdio.h", "#define", "return 0;", "scanf(\"%", "int* ", "int *", "free(", "malloc(", "calloc(", "realloc(", "sizeof("];
-    const features = {
-        java: javaFeatures,
-        python: pythonFeatures,
-        cpp: cppFeatures,
-        c: cFeatures
-    };
-    Object.keys(features).forEach(lang => {
-        features[lang].forEach(feature => {
-            if (text.includes(feature)) {
-                if (debug) console.log(feature);
-                score += 3; // 权重大
-            }
-        });
-    });
-
-    // 检查是否有连续的行以分号或者括号结束
-    const lines = text.split('\n');
-    const codePattern = /(;|\{|\})\s*$/;
-    lines.forEach(line => {
-        if (codePattern.test(line.trim())) {
-            score++;
-        }
-    });
-
-    // 比率
-    const ratio = score / words.length;
-    // 放大系数
-    const magnification = 1.5;
-    // 最终分数
-    const finalScore = Math.min(ratio * magnification, 1);
-    if (debug) {
-        console.log(text);
-        console.log(score);
-        console.log(finalScore);
-    }
-    // 基于分数阈值判断是否为代码
-    return finalScore > 0.5;
-}
+const isEmptyText = text => text.trim() === '';
 
 /**
  * 加载按钮相关函数
@@ -7603,7 +7481,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
             text = $(element).getMarkdown();
         }
         let length = text.length;
-        if (length > OJBetter.translation.auto.shortTextLength || isLikelyCodeSnippet(text) || $(element).find('.spoiler').length > 0) {
+        if (length > OJBetter.translation.auto.shortTextLength || isEmptyText(text) || $(element).find('.spoiler').length > 0) {
             button.setNotAutoTranslate();
         }
         // button.after(`<span>${length}</span>`); // 显示字符数
@@ -8835,14 +8713,14 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
         translateResult.translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 显示额度查询
     }
 
-    // 翻译内容是否可能为代码片段
-    if (isLikelyCodeSnippet(text)) {
+    // 翻译内容是否为空文本
+    if (isEmptyText(text)) {
         const shouldContinue = await OJB_createDialog(
-            i18next.t('isLikelyCodeSnippet.title', { ns: 'dialog' }),
-            i18next.t('isLikelyCodeSnippet.content', { ns: 'dialog' }),
+            i18next.t('isEmptyText.title', { ns: 'dialog' }),
+            i18next.t('isEmptyText.content', { ns: 'dialog' }),
             [
-                i18next.t('isLikelyCodeSnippet.buttons.0', { ns: 'dialog' }),
-                i18next.t('isLikelyCodeSnippet.buttons.1', { ns: 'dialog' })
+                i18next.t('isEmptyText.buttons.0', { ns: 'dialog' }),
+                i18next.t('isEmptyText.buttons.1', { ns: 'dialog' })
             ],
             true
         );
