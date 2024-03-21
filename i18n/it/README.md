@@ -22,23 +22,22 @@ Migliorare l'interfaccia del sito web e l'interazione con l'utente, aggiungendo 
 Per lo script di installazione, è possibile ottenere：.
 
 - Supporto per la modalità scura：Aggiungete la modalità scura al vostro sito web e sfogliatelo di notte, senza danneggiare gli occhi.
-- Traduzione di siti web multilingue：sostituisce il testo principale del vostro sito web con la lingua di vostra scelta.
-- Pulsanti di utilità：Aggiungere alla pagina i pulsanti `MrakDown`, `Copy`, `Translate`.
+- Localizzazione del sito web：sostituisce il testo principale del sito web con la lingua di vostra scelta.
 - Traduzione dei titoli：Traduzione in un solo clic dei titoli nella lingua di destinazione, garantendo al contempo che le formule LaTeX non vengano danneggiate.
-- Visualizzazione del punteggio di valutazione Clist：visualizza i dati del punteggio di valutazione Clist per l'argomento.
+- Clist Rating Score：visualizza i dati del Clist Rating Score per l'argomento.
 - Salto rapido：Salto con un solo clic alla pagina corrispondente a questa domanda in Logu, VJudge.
-- Editor di codice e supporto LSP：Editor di codice integrato, supporto di salvataggio automatico, invio rapido, esecuzione di test online e altre funzioni.
+- Editor di codice：Integrare l'editor di codice di Monaco in fondo alla pagina dell'argomento, supportare il salvataggio automatico, l'invio rapido, l'esecuzione di test online e così via.
 - Alcune altre piccole caratteristiche……
 
 > [!NOTA]
 >
-> Fare clic sul pulsante **`xxxBetter Settings`** nell'angolo superiore destro della **pagina web** per aprire il pannello delle impostazioni.
+> Fare clic sul pulsante **\`xxxBetter! Settings** nell'angolo superiore destro della **pagina web** per aprire il pannello delle impostazioni.
 >
-> Per la maggior parte delle funzioni è disponibile un testo di aiuto che può essere visualizzato passando il mouse sull'icona del "punto interrogativo".
+> Per la maggior parte delle funzioni è disponibile un testo di aiuto che può essere visualizzato passando il mouse sull'icona "? per visualizzarlo.
 
 ## Utilizzo dei documenti
 
-Per informazioni e istruzioni più dettagliate, visiti la [pagina Wiki](https://github.com/beijixiaohu/OJBetter/wiki).
+Per informazioni e istruzioni più dettagliate, **visitare la [pagina Wiki](https://github.com/beijixiaohu/OJBetter/wiki).**
 
 ## Come contribuire
 
