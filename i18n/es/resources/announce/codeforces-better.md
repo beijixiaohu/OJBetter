@@ -10,11 +10,15 @@
 
 - Mejoras en el código relacionado con LaTeX Replace/Restore, que ahora restaura correctamente en caso de anidamiento múltiple.
 
+- Métodos mejorados para determinar si un texto es un fragmento de código.
+
 - Mejora de la solidez de los métodos de localización de sitios web
 
 - Ajuste del código relacionado con el modo oscuro, utilizando variables para facilitar la uniformidad de estilo y gestión.
 
 - Sustituir CDN staticfile.org por staticfile.net
+
+- Los datos MarkDown ya no contienen bloques de códigos interlínea
 
 - Soluciona el problema de que la clasificación de algunos temas en la página de la lista de preguntas aparezca como no encontrada.
 
