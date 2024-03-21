@@ -49,7 +49,7 @@
         ]
     },
     "isEmptyText": {
-        "title": "是否继续翻译？",
+        "title": "Wird die Übersetzung fortgesetzt?",
         "content": "Der Textinhalt des Bereichs, der übersetzt werden soll, ist leer (mit Ausnahme des Codeblocks), die Übersetzung ist sinnlos.",
         "buttons": [
             "sein",
