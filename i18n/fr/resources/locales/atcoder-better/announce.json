@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.15.0",
+    "lastVersion": "1.15.2",
+    "1.15.2": "- Supprimer les méthodes qui n'ont plus de sens：Déterminer si le texte est susceptible d'être un code",
     "1.15.0": "- Les données MarkDown ne contiennent plus de blocs de code interlignes\n\n- Amélioration des règles de localisation du site\n\n- Amélioration des méthodes permettant de déterminer si un texte est un extrait de code\n\n- Correction d'une erreur non définie avec la fonction \"Beautify Code Block\"\n\n- Correction d'une erreur avec la méthode `OJB_observeElement()`. Problème\n\n- Correction de la méthode de localisation de site web invalide `strictTraverseTextNodes()`.",
-    "1.14.2": "- Corrige une erreur de style dans l'éditeur en mode sombre\n\n- Corrige une valeur initiale erronée pour la sélection de la langue de l'éditeur de code\n\n- Corrige une exception d'initialisation de l'éditeur de code dans les navigateurs non chromatiques",
-    "1.14.0": "- Correction de l'éditeur de code qui ne se charge pas correctement dans certains cas Merci à @smart_stupid @acstor pour leurs commentaires !"
+    "1.14.2": "- Corrige une erreur de style dans l'éditeur en mode sombre\n\n- Corrige une valeur initiale erronée pour la sélection de la langue de l'éditeur de code\n\n- Corrige une exception d'initialisation de l'éditeur de code dans les navigateurs non chromatiques"
 }
