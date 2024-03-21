@@ -22,23 +22,22 @@ Améliorer l'interface du site web et l'interaction avec les utilisateurs en ajo
 Pour le script d'installation, vous pouvez obtenir：
 
 - Prise en charge du mode sombre：Ajoutez le mode sombre à votre site Web et éclaircissez-le la nuit sans vous faire mal aux yeux.
-- Multilingual Website Translation：remplace le texte principal de votre site web par la langue de votre choix.
-- Boutons pratiques：Ajouter les boutons `MrakDown`, `Copy`, `Translate` à la page.
+- Localisation du site web：remplace le texte principal du site web par la langue de votre choix.
 - Traduction des titres：Traduction en un clic des titres dans la langue cible tout en veillant à ce que les formules LaTeX ne soient pas corrompues.
-- Affichage du score de classement Clist：affiche les données du score de classement Clist pour le sujet.
+- Score d'évaluation Clist：affiche les données du score d'évaluation Clist pour le sujet.
 - Quick Jump：Saut en un clic à la page correspondante pour cette question dans Logu, VJudge.
-- Éditeur de code et support LSP：Éditeur de code intégré, supportant la sauvegarde automatique, l'envoi rapide, l'exécution de tests en ligne et d'autres fonctions.
+- Éditeur de code：Intégrer l'éditeur de code Monaco au bas de la page de la rubrique, prendre en charge l'enregistrement automatique, l'envoi rapide, le test en ligne, etc.
 - Quelques autres petites fonctionnalités……
 
 > [!NOTE]
 >
-> Cliquez sur le bouton **`xxxBetter Settings`** dans le coin supérieur droit de la **page web** pour ouvrir le panneau de configuration.
+> Cliquez sur le bouton **xxxBetter ! Settings** dans le coin supérieur droit de la **page web** pour ouvrir le panneau de configuration.
 >
-> Un texte d'aide est fourni pour la plupart des fonctions et peut être consulté en survolant l'icône "point d'interrogation".
+> Un texte d'aide est fourni pour la plupart des fonctions et peut être consulté en survolant l'icône " ? pour l'afficher.
 
 ## Utilisation des documents
 
-Pour obtenir des informations et des instructions plus détaillées, consultez la [page Wiki] (https\://github.com/beijixiaohu/OJBetter/wiki).
+Pour des informations et des instructions plus détaillées, **visiter la [page Wiki] (https\://github.com/beijixiaohu/OJBetter/wiki).**
 
 ## Comment contribuer
 
