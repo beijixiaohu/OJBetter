@@ -49,7 +49,7 @@
         ]
     },
     "isEmptyText": {
-        "title": "是否继续翻译？",
+        "title": "La traduzione continuerà?",
         "content": "Il contenuto del testo dell'area che sta per essere tradotta è vuoto (esclusa la parte del blocco di codice), tradurlo è inutile, sei sicuro di voler continuare?",
         "buttons": [
             "essere",
