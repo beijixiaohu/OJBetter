@@ -48,9 +48,9 @@
             "soumettre (un rapport, etc.)"
         ]
     },
-    "isLikelyCodeSnippet": {
-        "title": "La traduction se poursuivra-t-elle ?",
-        "content": "La traduction à venir semble être **un extrait de code** et la traduire pourrait être inutile, êtes-vous sûr de continuer ?",
+    "isEmptyText": {
+        "title": "是否继续翻译？",
+        "content": "Le contenu textuel de la zone sur le point d'être traduite est vide (à l'exception de la partie du bloc de code), la traduire est inutile, êtes-vous sûr de vouloir continuer ?",
         "buttons": [
             "être",
             "bouché"
