@@ -118,8 +118,6 @@
                 "ログイン": "log in",
                 "現在のコンテスト": "Now the game.",
                 "過去のコンテスト": "Past matches",
-                "Algorithm": "arithmetic",
-                "Heuristic": "heuristic",
                 "アクティブユーザのみ": "Active users only",
                 "全ユーザ": "all users",
                 "新エディタテストコンテスト": "New Editor Test Contest",
@@ -155,6 +153,17 @@
                 "ユーザ名の変更": "Change User Name",
                 "退会": "deregister",
                 "その他": "(sth. or sb) else"
+            }
+        },
+        "traverseTextNodes3": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Algorithm": "arithmetic",
+                "Heuristic": "heuristic"
             }
         },
         "#collapse-search": {
@@ -840,5 +849,6 @@
             "isStrict": false,
             "rules": {}
         }
-    }
+    },
+    "dynamicReplacements": {}
 }

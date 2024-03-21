@@ -118,8 +118,6 @@
                 "ログイン": "inicie sessão",
                 "現在のコンテスト": "Agora o jogo.",
                 "過去のコンテスト": "Jogos anteriores",
-                "Algorithm": "aritmética",
-                "Heuristic": "heurística",
                 "アクティブユーザのみ": "Apenas utilizadores activos",
                 "全ユーザ": "todos os utilizadores",
                 "新エディタテストコンテスト": "Concurso de teste para novos editores",
@@ -155,6 +153,17 @@
                 "ユーザ名の変更": "Alterar o nome de utilizador",
                 "退会": "cancelar",
                 "その他": "o resto"
+            }
+        },
+        "traverseTextNodes3": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Algorithm": "aritmética",
+                "Heuristic": "heurística"
             }
         },
         "#collapse-search": {
@@ -840,5 +849,6 @@
             "isStrict": false,
             "rules": {}
         }
-    }
+    },
+    "dynamicReplacements": {}
 }

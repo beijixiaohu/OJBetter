@@ -118,8 +118,6 @@
                 "ログイン": "Regístrese",
                 "現在のコンテスト": "Ahora el juego.",
                 "過去のコンテスト": "Partidos anteriores",
-                "Algorithm": "aritmética",
-                "Heuristic": "heurística",
                 "アクティブユーザのみ": "Sólo usuarios activos",
                 "全ユーザ": "todos los usuarios",
                 "新エディタテストコンテスト": "Concurso de pruebas para nuevos redactores",
@@ -155,6 +153,17 @@
                 "ユーザ名の変更": "Cambiar nombre de usuario",
                 "退会": "cancelar",
                 "その他": "el resto"
+            }
+        },
+        "traverseTextNodes3": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Algorithm": "aritmética",
+                "Heuristic": "heurística"
             }
         },
         "#collapse-search": {
@@ -840,5 +849,6 @@
             "isStrict": false,
             "rules": {}
         }
-    }
+    },
+    "dynamicReplacements": {}
 }

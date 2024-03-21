@@ -118,8 +118,6 @@
                 "ログイン": "로그인",
                 "現在のコンテスト": "이제 게임입니다.",
                 "過去のコンテスト": "지난 경기",
-                "Algorithm": "산술",
-                "Heuristic": "휴리스틱",
                 "アクティブユーザのみ": "활성 사용자만 해당",
                 "全ユーザ": "모든 사용자",
                 "新エディタテストコンテスト": "새로운 에디터 테스트 콘테스트",
@@ -155,6 +153,17 @@
                 "ユーザ名の変更": "사용자 이름 변경",
                 "退会": "취소",
                 "その他": "나머지"
+            }
+        },
+        "traverseTextNodes3": {
+            "class": [
+                ".nav"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Algorithm": "산술",
+                "Heuristic": "휴리스틱"
             }
         },
         "#collapse-search": {
@@ -840,5 +849,6 @@
             "isStrict": false,
             "rules": {}
         }
-    }
+    },
+    "dynamicReplacements": {}
 }
