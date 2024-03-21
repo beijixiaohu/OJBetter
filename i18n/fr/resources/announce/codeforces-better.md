@@ -10,11 +10,15 @@
 
 - Amélioration du code LaTeX de remplacement/restauration, qui restaure maintenant correctement dans les cas d'imbrication multiple.
 
+- Amélioration des méthodes permettant de déterminer si un texte est un extrait de code
+
 - Améliorer la robustesse des méthodes de localisation des sites web
 
 - Ajustement du code relatif au mode sombre, en utilisant des variables pour faciliter l'uniformité du style et de la gestion
 
 - Remplacer le CDN staticfile.org par staticfile.net
+
+- Les données MarkDown ne contiennent plus de blocs de codes interlignes
 
 - Correction d'un problème d'affichage de la classification de certains sujets sur la page de la liste des questions comme n'étant pas trouvée.
 

@@ -10,11 +10,15 @@
 
 - Verbesserungen am LaTeX Replace/Restore-bezogenen Code, der nun bei Mehrfachverschachtelung korrekt wiederhergestellt wird
 
+- Verbesserte Methoden zur Bestimmung, ob ein Text ein Codefragment ist
+
 - Verbesserung der Robustheit von Website-Lokalisierungsmethoden
 
 - Anpassung des Codes in Bezug auf den dunklen Modus unter Verwendung von Variablen, um die Einheitlichkeit des Stils und der Verwaltung zu erleichtern
 
 - Ersetzen Sie das CDN staticfile.org durch staticfile.net
+
+- MarkDown-Daten enthalten keine Interline-Codeblöcke mehr
 
 - Behebung des Problems, dass die Listenbewertung einiger Themen auf der Seite mit der Fragenliste als nicht gefunden angezeigt werden kann.
 

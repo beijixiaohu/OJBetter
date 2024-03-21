@@ -22,23 +22,22 @@ Verbesserung der Website-Oberfläche und der Benutzerinteraktion durch Hinzufüg
 Das Installationsskript können Sie unter：abrufen.
 
 - Unterstützung für den dunklen Modus：Fügen Sie Ihrer Website einen dunklen Modus hinzu, um sich nachts zu erholen, ohne Ihre Augen zu verletzen.
-- Multilingual Website Translation：ersetzt den Haupttext Ihrer Website durch die Sprache Ihrer Wahl.
-- Komfortschaltflächen：Fügen Sie der Seite die Schaltflächen "Abwärts", "Kopieren" und "Übersetzen" hinzu.
+- Website-Lokalisierung：ersetzt den Haupttext der Website durch die Sprache Ihrer Wahl.
 - Titelübersetzung：Übersetzung von Titeln in die Zielsprache mit einem Klick, wobei sichergestellt wird, dass die LaTeX-Formeln nicht beschädigt werden.
-- Clist Rating Score Anzeige：zeigt die Clist Rating Score Daten für das Thema an.
+- Clist Rating Score：zeigt die Clist Rating Score Daten für das Thema an.
 - Schnellsprung：Springen Sie mit einem Klick auf die entsprechende Seite für diese Frage in Logu, VJudge.
-- Code-Editor und LSP-Unterstützung：Integrierter Code-Editor, Unterstützung von Auto-Save, Quick Submit, Online-Testlauf und anderen Funktionen.
+- Code-Editor：Integrieren Sie den Monaco-Code-Editor unten auf der Themenseite, unterstützen Sie automatisches Speichern, schnelles Absenden, Online-Testlauf und so weiter.
 - Einige andere kleine Funktionen……
 
 > [!NOTE]
 >
-> Klicken Sie auf die Schaltfläche **xxxBessere Einstellungen**\*\* in der oberen rechten Ecke der **Webseite**, um das Einstellungsfeld zu öffnen.
+> Klicken Sie auf die Schaltfläche **\`xxxBetter! Einstellungen** in der oberen rechten Ecke der **Webseite**, um das Einstellungsfeld zu öffnen.
 >
-> Für die meisten Funktionen steht ein Hilfetext zur Verfügung, den Sie aufrufen können, indem Sie den Mauszeiger über das Fragezeichen-Symbol bewegen.
+> Für die meisten Funktionen steht ein Hilfetext zur Verfügung, den Sie anzeigen können, indem Sie mit dem Mauszeiger auf das "? Symbol" bewegen, um ihn anzuzeigen.
 
 ## Dokumente verwenden
 
-Ausführlichere Informationen und Anweisungen finden Sie auf der [Wiki-Seite](https://github.com/beijixiaohu/OJBetter/wiki).
+Ausführlichere Informationen und Anleitungen finden Sie **auf der [Wiki-Seite] (https\://github.com/beijixiaohu/OJBetter/wiki).**
 
 ## Wie Sie beitragen können
 

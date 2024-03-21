@@ -10,11 +10,15 @@
 
 - Improvements to LaTeX Replace/Restore related code, which now restores correctly in the case of multiple nesting
 
+- Improved methods related to determining that text is a code snippet
+
 - Enhancing the robustness of website localization methods
 
 - Adjusting the code related to dark mode, using variables to facilitate uniformity of style and management
 
 - Replace CDN staticfile.org with staticfile.net
+
+- MarkDown data no longer contains interline code blocks
 
 - Fix the problem that the clist rating of some topics on the question list page may be displayed as not found.
 
