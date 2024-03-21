@@ -1,3 +1,7 @@
+## 1.15.2
+
+- Remove methods that are no longer meaningful：Determine if text may be code
+
 ## 1.15.0
 
 - MarkDown data no longer contains interline code blocks
