@@ -1,3 +1,7 @@
+## 1.15.2
+
+- Remover métodos que já não são significativos：Determinar se o texto é suscetível de ser código
+
 ## 1.15.0
 
 - Os dados de MarkDown já não contêm blocos de códigos entre linhas
