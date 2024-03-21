@@ -22,23 +22,22 @@ Improve the website interface and user interaction by adding a number of useful 
 To install the script, you can get：
 
 - Dark Mode Support：Add dark mode to your website and brush up at night without hurting your eyes.
-- Multilingual Website Translation：replaces the main text of your website with the language of your choice.
-- Convenience Buttons：Add `MrakDown`, `Copy`, `Translate` buttons to the page.
+- Website Localization：replaces the main text of the website with the language of your choice.
 - Title Translation：One-click translation of titles into the target language while ensuring that LaTeX formulas are not corrupted.
-- Clist Rating Score Display：displays the Clist Rating score data for the topic.
+- Clist Rating Score：displays the Clist Rating score data for the topic.
 - Quick Jump：One-click jump to the corresponding page for this question in Rock Valley, VJudge.
-- Code editor with LSP support：Integrated code editor, support auto-save, quick submit, online test run and other functions.
+- Code Editor：Integrate Monaco code editor at the bottom of the topic page, support auto-save, quick submit, online test run and other functions.
 - Some other small features……
 
 > [!NOTE]
 >
-> Click on the **`xxxBetter Settings`** button in the upper right corner of the **web page** to open the settings panel.
+> Click on the **\`xxxBetter! Settings** button in the upper right corner of the **web page** to open the settings panel.
 >
-> Help text is provided for most of the functions and can be viewed by hovering over the "question mark icon".
+> Help text is provided for most functions and can be viewed by hovering over the "? icon" to view it.
 
 ## Using Documents
 
-For more detailed information and instructions, visit the [Wiki page](https://github.com/beijixiaohu/OJBetter/wiki).
+For more detailed information and usage guidelines, **visit the [Wiki page](https://github.com/beijixiaohu/OJBetter/wiki).**
 
 ## How to contribute
 
