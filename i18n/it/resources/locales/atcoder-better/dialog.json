@@ -56,6 +56,14 @@
             "intasato"
         ]
     },
+    "isEmptyText": {
+        "title": "La traduzione continuerà?",
+        "content": "Il contenuto del testo dell'area che sta per essere tradotta è vuoto (esclusa la parte del blocco di codice), tradurlo è inutile, sei sicuro di voler continuare?",
+        "buttons": [
+            "essere",
+            "intasato"
+        ]
+    },
     "isClearDatabase": {
         "title": "Il database è stato svuotato?",
         "content": "È sicuro di voler svuotare il database? Non è recuperabile.",
