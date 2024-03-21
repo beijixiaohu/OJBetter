@@ -48,9 +48,9 @@
             "presentar (un informe, etc.)"
         ]
     },
-    "isLikelyCodeSnippet": {
-        "title": "¿Continuará la traducción?",
-        "content": "La próxima traducción parece ser **un fragmento de código** y traducirlo puede ser inútil, ¿está seguro de continuar?",
+    "isEmptyText": {
+        "title": "是否继续翻译？",
+        "content": "El contenido de texto del área que se va a traducir está vacío (excluyendo la parte del bloque de código), traducirlo no tiene sentido, ¿está seguro de que quiere continuar?",
         "buttons": [
             "sea",
             "obstruido"
