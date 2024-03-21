@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.15.0",
+    "lastVersion": "1.15.2",
+    "1.15.2": "- Eliminar los métodos que ya no tienen sentido：Determinar si es probable que el texto sea código",
     "1.15.0": "- Los datos MarkDown ya no contienen bloques de código entre líneas\n\n- Mejoradas las reglas de localización de sitios\n\n- Mejorados los métodos para determinar si un texto es un fragmento de código\n\n- Corregido un error no definido con la función \"Beautify Code Block\"\n\n- Corregido un error con el método `OJB_observeElement()`. Problema\n\n- Corrección del método de localización de sitios web no válido `strictTraverseTextNodes()`.",
-    "1.14.2": "- Corrección de un error de estilo en el editor en modo oscuro\n\n- Corrección de un valor inicial erróneo en la selección de idioma del editor de código\n\n- Corrección de una excepción de inicialización del editor de código en navegadores que no son Chrome",
-    "1.14.0": "- ¡Corregir editor de código no se carga correctamente en algunos casos Gracias a @smart_stupid @acstor para la retroalimentación!"
+    "1.14.2": "- Corrección de un error de estilo en el editor en modo oscuro\n\n- Corrección de un valor inicial erróneo en la selección de idioma del editor de código\n\n- Corrección de una excepción de inicialización del editor de código en navegadores que no son Chrome"
 }
