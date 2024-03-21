@@ -56,6 +56,14 @@
             "bouché"
         ]
     },
+    "isEmptyText": {
+        "title": "La traduction se poursuivra-t-elle ?",
+        "content": "Le contenu textuel de la zone sur le point d'être traduite est vide (à l'exception de la partie du bloc de code), la traduire est inutile, êtes-vous sûr de vouloir continuer ?",
+        "buttons": [
+            "être",
+            "bouché"
+        ]
+    },
     "isClearDatabase": {
         "title": "La base de données est-elle vidée ?",
         "content": "Êtes-vous sûr de vouloir vider la base de données ? Elle est irrécupérable.",
