@@ -1,45 +1,25 @@
 ## 1.74.0
 
 - Adicionar botão para saltar para VJudge
-
 - Adicionar a função "embelezar bloco de código", utilizar o editor monaco para substituir o bloco de código anterior na página, o que também melhorará o efeito de visualização do código no modo escuro.
-
 - Melhorias em vários métodos de pedido no Clist Rating para resolver problemas de não obtenção correcta de dados
-
 - Melhorar a prontidão das traduções do ChatGPT e corrigir um possível erro de injeção que poderia levar a traduções incompletas.
-
 - Melhorias no código relacionado com a substituição/restauro do LaTeX, que agora restaura corretamente no caso de múltiplos aninhamentos
-
-- Métodos melhorados para determinar se o texto é um trecho de código
-
 - Aumentar a robustez dos métodos de localização de sítios Web
-
 - Ajustar o código relativo ao modo escuro, utilizando variáveis para facilitar a uniformidade do estilo e da gestão
-
 - Substituir CDN staticfile.org por staticfile.net
-
 - Os dados de MarkDown já não contêm blocos de códigos entre linhas
-
+- Remover métodos relacionados com a determinação do facto de o texto ser ou não código
 - Correção do problema em que a classificação da lista de alguns tópicos na página da lista de perguntas pode ser apresentada como não encontrada.
-
 - Corrigir o problema de apresentação anormal das pontuações do clist na página do conjunto de perguntas.
-
 - Corrigir o problema de estilos de comparação de diferenças não alinhados em testes online de código
-
 - Corrigir o problema de o deepl 429 não apresentar corretamente a mensagem de alerta após comunicar um erro.
-
 - Corrige um problema em que a página de título Clist Rating pode mostrar não encontrado
-
 - Corrigido o problema em que o método de salto de Rock Valley reportava um erro em versões mais antigas do Tampermonkey
-
 - Correção de um ciclo morto inesperado que faz com que a página fique bloqueada quando o ficheiro da biblioteca MathJax não é carregado corretamente
-
 - Foi corrigido o problema em que DeepL não apresentava corretamente a mensagem de alerta na tradução quando traduzia em modo livre.
-
 - Corrige o problema em que os scripts podem não ser carregados corretamente
-
 - Corrige um problema em que a tipografia entre fórmulas LaTeX vizinhas podia ser quebrada
-
 - Alguns outros ajustes e melhorias
 
 ## 1.73.0
