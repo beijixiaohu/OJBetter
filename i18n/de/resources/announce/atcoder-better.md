@@ -1,3 +1,7 @@
+## 1.15.2
+
+- Entfernen Sie Methoden, die nicht mehr sinnvoll sind：Bestimmen Sie, ob es sich bei dem Text wahrscheinlich um Code handelt
+
 ## 1.15.0
 
 - MarkDown-Daten enthalten keine Interline-Codeblöcke mehr
