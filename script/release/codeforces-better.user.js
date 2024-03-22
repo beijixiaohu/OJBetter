@@ -1,28 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
-// @name:zh-TW   Codeforces Better!
-// @name:en      Codeforces Better!
-// @name:de      Codeforces Better!
-// @name:fr      Codeforces Better!
-// @name:ko      Codeforces Better!
-// @name:pt      Codeforces Better!
-// @name:ja      Codeforces Better!
-// @name:es      Codeforces Better!
-// @name:it      Codeforces Better!
-// @name:hi      Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.73.0
-// @description         一个适用于 Codeforces 的 Tampermonkey 脚本，增强功能与界面。
-// @description:zh-TW   一個適用於 Codeforces 的 Tampermonkey 腳本，增強功能與界面。
-// @description:en      A Tampermonkey script for Codeforces that enhances functionality and interface.
-// @description:de      Ein Tampermonkey-Skript für Codeforces, das Funktionalität und Benutzeroberfläche verbessert.
-// @description:fr      Un script Tampermonkey pour Codeforces qui améliore les fonctionnalités et l'interface.
-// @description:ko      Codeforces를 위한 Tampermonkey 스크립트로 기능과 인터페이스를 개선합니다.
-// @description:pt      Um script Tampermonkey para Codeforces que aprimora a funcionalidade e a interface.
-// @description:ja      Codeforces用のTampermonkeyスクリプトで機能とインターフェースを強化します。
-// @description:es      Un script Tampermonkey para Codeforces que mejora la funcionalidad y la interfaz.
-// @description:it      Uno script Tampermonkey per Codeforces che migliora la funzionalità e l'interfaccia.
-// @description:hi      Codeforces के लिए एक Tampermonkey स्क्रिप्ट जो कार्यक्षमता और इंटरफ़ेस को बेहतर बनाता है।
+// @version      1.74.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -38,11 +17,12 @@
 // @connect      openai.api2d.net
 // @connect      api.openai.com
 // @connect      www.luogu.com.cn
+// @connect      vjudge.net
 // @connect      clist.by
 // @connect      greasyfork.org
 // @connect      rextester.com
 // @connect      wandbox.org
-// @connect      staticfile.org
+// @connect      staticfile.net
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
@@ -57,20 +37,22 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
-// @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
+// @require      https://cdn.staticfile.net/turndown/7.1.2/turndown.min.js
+// @require      https://cdn.staticfile.net/markdown-it/13.0.1/markdown-it.min.js
 // @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.staticfile.org/chroma-js/2.4.2/chroma.min.js
-// @require      https://cdn.staticfile.org/xterm/3.9.2/xterm.min.js
-// @require      https://cdn.staticfile.org/dexie/3.2.4/dexie.min.js
-// @require      https://cdn.staticfile.org/i18next/23.5.1/i18next.min.js
-// @require      https://cdn.staticfile.org/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
-// @require      https://cdn.staticfile.org/jquery-i18next/1.2.1/jquery-i18next.min.js
+// @require      https://cdn.staticfile.net/chroma-js/2.4.2/chroma.min.js
+// @require      https://cdn.staticfile.net/xterm/3.9.2/xterm.min.js
+// @require      https://cdn.staticfile.net/dexie/3.2.4/dexie.min.js
+// @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
+// @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
+// @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
+// @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
 // @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
 // @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://cdn.staticfile.org/xterm/3.9.2/xterm.min.css
+// @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
+// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -79,6 +61,27 @@
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
 // @downloadURL  https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js
 // @updateURL    https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.meta.js
+// @name:zh-TW   Codeforces Better!
+// @name:en      Codeforces Better!
+// @name:de      Codeforces Better!
+// @name:fr      Codeforces Better!
+// @name:ko      Codeforces Better!
+// @name:pt      Codeforces Better!
+// @name:ja      Codeforces Better!
+// @name:es      Codeforces Better!
+// @name:it      Codeforces Better!
+// @name:hi      Codeforces Better!
+// @description         一个适用于 Codeforces 的 Tampermonkey 脚本，增强功能与界面。
+// @description:zh-TW   一個適用於 Codeforces 的 Tampermonkey 腳本，增強功能與界面。
+// @description:en      A Tampermonkey script for Codeforces that enhances functionality and interface.
+// @description:de      Ein Tampermonkey-Skript für Codeforces, das Funktionalität und Benutzeroberfläche verbessert.
+// @description:fr      Un script Tampermonkey pour Codeforces qui améliore les fonctionnalités et l'interface.
+// @description:ko      Codeforces를 위한 Tampermonkey 스크립트로 기능과 인터페이스를 개선합니다.
+// @description:pt      Um script Tampermonkey para Codeforces que aprimora a funcionalidade e a interface.
+// @description:ja      Codeforces用のTampermonkeyスクリプトで機能とインターフェースを強化します。
+// @description:es      Un script Tampermonkey para Codeforces que mejora la funcionalidad y la interfaz.
+// @description:it      Uno script Tampermonkey per Codeforces che migliora la funzionalità e l'interfaccia.
+// @description:hi      Codeforces के लिए एक Tampermonkey स्क्रिप्ट जो कार्यक्षमता और इंटरफ़ेस को बेहतर बनाता है।
 // ==/UserScript==
 
 /**
@@ -95,6 +98,8 @@ const OJBetter = {};
 OJBetter.state = {
     /** @type {string} 脚本名*/
     name: GM_info.script.name,
+    /** @type {string} 格式化后的脚本名*/
+    formatName: undefined,
     /** @type {string} 版本号*/
     version: GM_info.script.version,
     /** @type {boolean?} 是否跳过页面加载等待 */
@@ -119,8 +124,10 @@ OJBetter.common = {
     cf_csrf_token: undefined,
     /** @type {Array?} 任务队列 */
     taskQueue: undefined,
-    /** @type {object} CFBetter数据库连接实例*/
-    database: undefined
+    /** @type {object} OJBetter数据库连接实例*/
+    database: undefined,
+    /** @type {object} turndownService实例*/
+    turndownService: undefined,
 };
 
 /**
@@ -135,10 +142,14 @@ OJBetter.basic = {
     expandFoldingblocks: undefined,
     /** @type {boolean?} 是否开启折叠块渲染性能优化 */
     renderPerfOpt: undefined,
+    /** @type {boolean?} 是否开启下拉选择框性能优化 */
+    selectElementPerfOpt: undefined,
     /** @type {boolean?} 评论区分页 */
     commentPaging: undefined,
     /** @type {boolean?} 显示跳转到Luogu按钮 */
     showJumpToLuogu: undefined,
+    /** @type {boolean?} 显示跳转到Virtual Judge按钮 */
+    showCF2vjudge: undefined,
     /** @type {boolean?} 比赛排行榜重新着色 */
     standingsRecolor: undefined
 };
@@ -155,7 +166,7 @@ OJBetter.typeOfPage = {
     is_acmsguru: undefined,
     /** @type {boolean?} 是否是旧版LaTeX页面 */
     is_oldLatex: undefined,
-    /** @type {boolean?} 是否是比赛页面 */
+    /** @type {boolean?} 是否是题目集页面 */
     is_contest: undefined,
     /** @type {boolean?} 是否是题目页面 */
     is_problem: undefined,
@@ -168,7 +179,11 @@ OJBetter.typeOfPage = {
     /** @type {boolean?} 是否是Codeforces排名页面 */
     is_cfStandings: undefined,
     /** @type {boolean?} 是否是提交页面 */
-    is_submitPage: undefined
+    is_submitPage: undefined,
+    /** @type {boolean?} 是否是代码状态页面 */
+    is_statePage: undefined,
+    /** @type {boolean?} 是否是提交记录页面 */
+    is_submissions: undefined,
 };
 
 /**
@@ -255,6 +270,8 @@ OJBetter.clist = {
 OJBetter.monaco = {
     /** @type {boolean?} 在问题页面上启用Monaco编辑器 */
     enableOnProblemPage: undefined,
+    /** @type {boolean?} 美化pre代码块 */
+    beautifyPreBlocks: undefined,
     /** @type {boolean} Monaco编辑器加载完成标志 */
     loaderOnload: false,
     lsp: {
@@ -277,8 +294,10 @@ OJBetter.monaco = {
     editor: null,
     /** @type {string?} 在线编译器选择 */
     onlineCompilerChoice: undefined,
-    /** @type {string?} 编译器选择 */
+    /** @type {string?} 记忆编译器语言选择 */
     compilerSelection: undefined,
+    /** @type {string?}  当前选择的语言 */
+    nowLangSelect: undefined,
     setting: {
         /** @type {Array?} 语言设置数组 */
         language: [],
@@ -392,6 +411,16 @@ OJBetter.preference = {
 };
 
 /**
+ * @namespace dev
+ * @desc 维护
+ * @memberof OJBetter
+ */
+OJBetter.dev = {
+    /** @type {boolean?} 是否显示规则标记 */
+    isRuleMarkingEnabled: undefined,
+};
+
+/**
  * @namespace about
  * @desc 关于页信息
  * @memberof OJBetter
@@ -416,7 +445,7 @@ OJBetter.supportList = {
         'youdao': { 'zh': 'AUTO' },
         'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
-        'openai': { 'zh': '中文', 'zh-Hant': '繁體中文', 'de': 'Deutsch', 'fr': 'Français', 'ko': '한국어', 'pt': 'Português', 'ja': '日本語', 'es': 'Español', 'it': 'Italiano', 'hi': 'हिन्दी' }
+        'openai': { 'zh': 'Chinese', 'zh-Hant': 'Traditional Chinese', 'de': 'German', 'fr': 'French', 'ko': 'Korean', 'pt': 'Portuguese', 'ja': 'Japanese', 'es': 'Spanish', 'it': 'Italian', 'hi': 'Hindi' }
     },
     /** @type {object} 更新源支持列表*/
     updateSourceSupportList: {
@@ -438,6 +467,62 @@ OJBetter.supportList = {
 // ------------------------------
 // 一些工具函数
 // ------------------------------
+
+/**
+ * 延迟函数 
+ * @param {number} ms 延迟时间（毫秒） 
+ * @returns {Promise<void>}
+ */
+function OJB_delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 等待直到指定的条件函数返回true。
+ * 
+ * @param {() => boolean} conditionCheck 一个无参数的函数，用于检查条件是否满足。当函数返回true时，表示条件已满足。
+ * @param {number} [interval=100] 检查条件的间隔时间，单位为毫秒。默认为100毫秒。
+ * @returns {Promise<void>} 返回一个Promise，在条件满足时解决。
+ */
+async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
+    return new Promise((resolve) => {
+        const checkCondition = async () => {
+            if (conditionCheck()) {
+                resolve();
+            } else {
+                await OJB_delay(interval);
+                checkCondition();
+            }
+        };
+        checkCondition();
+    });
+}
+
+/**
+ * 动态加载JavaScript库并返回一个Promise，该Promise在脚本加载完成后解决。
+ * 
+ * @param {string} url - 要加载的JavaScript库的URL地址。
+ * @returns {Promise<void>} 一个Promise，它在脚本加载并执行完成后解决。
+ */
+function OJB_LoadJS(url) {
+    return new Promise((resolve, reject) => {
+        let scriptElement = document.createElement("script");
+        scriptElement.src = url;
+        document.head.prepend(scriptElement);
+        scriptElement.onload = resolve;
+        scriptElement.onerror = reject;
+    });
+}
+
+/**
+ * 安全地创建JQuery对象
+ * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
+ * @param {string} string - 字符串。
+ * @returns JQuery对象
+ */
+const OJB_safeCreateJQElement = function (string) {
+    return $(string.replace(/^\s+/, ""));
+}
 
 /**
  * 将数字或者字符串解析为数字。
@@ -502,6 +587,15 @@ const OJB_parseLinePairArray = val => {
 };
 
 /**
+ * 移除文本中的HTML标签
+ * @param {string} text - 包含HTML标签的文本
+ * @returns {string} - 移除HTML标签后的文本
+ */
+const OJB_removeHTMLTags = function (text) {
+    return text.replace(/<\/?[a-zA-Z]+("[^"]*"|'[^']*'|[^'">])*>/g, '');
+}
+
+/**
  * 获取对象中指定路径表达式的值
  * @param {Object} obj - 要计算的对象
  * @param {string} pathOrExpression - 要计算的路径表达式
@@ -513,9 +607,9 @@ const OJB_parseLinePairArray = val => {
  *   },
  *   "c": 2
  * };
- * evaluatePathOrExpression(obj, "a.b"); // 1
- * evaluatePathOrExpression(obj, "a.b + c"); // 3
- * evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
+ * OJB_evaluatePathOrExpression(obj, "a.b"); // 1
+ * OJB_evaluatePathOrExpression(obj, "a.b + c"); // 3
+ * OJB_evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
  */
 function OJB_evaluatePathOrExpression(obj, pathOrExpression) {
     const hasOperator = /[\+\-\*\/]/.test(pathOrExpression);
@@ -634,10 +728,74 @@ const OJB_getPreviousVersion = function (currentVersion) {
 };
 
 /**
+ * 在指定根节点下观察指定选择器的元素，当元素存在时，执行回调函数
+ * @param {Object} options - 配置对象
+ * @param {string} options.selector - CSS选择器文本
+ * @param {Function} options.callback - 回调函数，接收变动的节点作为参数
+ * @param {Boolean} [options.triggerOnExist=true] - 如果为true，元素已存在时立即触发一次回调
+ * @param {Element} [options.root=document.body] - 在哪个根节点下监听变化
+ * @param {Boolean} [options.subtree=false] - 是否监听子树变化（即非直接子元素）
+ */
+function OJB_observeElement({
+    selector,
+    callback,
+    triggerOnExist = true,
+    root = document.body,
+    subtree = false
+}) {
+    // 尝试获取选择器指定的元素
+    const targetNode = root.querySelector(selector);
+
+    if (targetNode) {
+        // 如果元素已存在，直接开始观察
+        observeAndReport(targetNode, callback);
+        // 如果triggerOnExist为true，则立即触发一次回调
+        if (triggerOnExist) {
+            callback(targetNode);
+        }
+    } else {
+        // 如果元素不存在，监听DOM变化直到该元素被添加
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE && node.matches(selector)) {
+                        observeAndReport(node, callback);
+                        if (triggerOnExist) {
+                            callback(node);
+                        }
+                        observer.disconnect(); // 停止监听
+                    }
+                });
+            });
+        });
+
+        observer.observe(root, { childList: true, subtree, attributes: false });
+    }
+
+    function observeAndReport(node, callback) {
+        const childObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((addedNode) => {
+                    if (addedNode.nodeType === Node.ELEMENT_NODE) {
+                        callback(addedNode); // 执行回调函数
+                    }
+                });
+            });
+        });
+
+        childObserver.observe(node, { childList: true, subtree: true, attributes: false });
+    }
+}
+
+/**
  * 初始化全局变量
  */
 async function initVar() {
     const { hostname, href } = window.location;
+    OJBetter.state.formatName = (() => OJBetter.state.name
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, ''))();
     OJBetter.state.lastAnnounceVer = OJB_getGMValue("lastAnnounceVer", "0");
     OJBetter.state.lastReadAnnounceVer = OJB_getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
@@ -649,6 +807,8 @@ async function initVar() {
     OJBetter.typeOfPage.is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
     OJBetter.typeOfPage.is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     OJBetter.typeOfPage.is_submitPage = href.includes('/submit');
+    OJBetter.typeOfPage.is_statePage = href.includes('/status');
+    OJBetter.typeOfPage.is_submissions = href.includes('/submissions');
     OJBetter.typeOfPage.is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
             .map(function () {
@@ -659,8 +819,10 @@ async function initVar() {
     OJBetter.localization.websiteLang = OJB_getGMValue("localizationLanguage", "zh");
     OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
     OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
+    OJBetter.basic.selectElementPerfOpt = OJB_getGMValue("selectElementPerfOpt", false);
     OJBetter.basic.commentPaging = OJB_getGMValue("commentPaging", true);
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
+    OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);
     OJBetter.basic.standingsRecolor = OJB_getGMValue("standingsRecolor", true);
     OJBetter.state.notWaiteLoaded = OJB_getGMValue("notWaiteLoaded", false);
     OJBetter.translation.targetLang = OJB_getGMValue("transTargetLang", "zh");
@@ -744,6 +906,7 @@ async function initVar() {
     OJBetter.monaco.compilerSelection = OJB_getGMValue("compilerSelection", "61");
     OJBetter.monaco.setting.fontsize = OJB_getGMValue("editorFontSize", "15");
     OJBetter.monaco.enableOnProblemPage = OJB_getGMValue("problemPageCodeEditor", true);
+    OJBetter.monaco.beautifyPreBlocks = OJB_getGMValue("beautifyPreBlocks", true);
     OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
     OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
     OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
@@ -754,31 +917,16 @@ async function initVar() {
         "choice": -1,
         "configurations": []
     });
-    /**
-    * 加载monaco编辑器资源
-    */
+    // monaco
     OJBetter.monaco.lsp.enabled = OJB_getGMValue("useLSP", false);
     OJBetter.monaco.setting.position = OJB_getGMValue("monacoEditor_position", "initial");
     OJBetter.monaco.lsp.workUri = OJB_getGMValue("OJBetter_Bridge_WorkUri", "C:/OJBetter_Bridge");
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
-    if (OJBetter.monaco.enableOnProblemPage) {
-        let monacoLoader = document.createElement("script");
-        monacoLoader.src = "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs/loader.min.js";
-        document.head.prepend(monacoLoader);
-        monacoLoader.onload = () => {
-            require.config({
-                paths: { vs: "https://cdn.staticfile.org/monaco-editor/0.44.0/min/vs" },
-                "vs/nls": { availableLanguages: { "*": "zh-cn" } },
-            });
-            require(["vs/editor/editor.main"], () => {
-                OJBetter.monaco.loaderOnload = true;
-            });
-        }
-    }
     OJBetter.preference.showLoading = OJB_getGMValue("showLoading", true);
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
 }
@@ -982,7 +1130,7 @@ function readFileInput(callback) {
 }
 
 /**
- * 删除所有设置
+ * 清除所有设置
  */
 async function deleteAllConfigSettings() {
     const isConfirmed = await OJB_createDialog(
@@ -1112,113 +1260,123 @@ function handleColorSchemeChange(event) {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) setDarkTheme();
     }
 
+    // 定义全局变量
     GM_addStyle(`
         /* 黑暗支持 */
         html[data-theme=dark]:root {
             color-scheme: light dark;
         }
-        /* 文字颜色1 */
-        html[data-theme=dark] .title,html[data-theme=dark] .problem-statement,
-        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
-        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
-        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
+        /* 颜色 */
+        :root {
+            /* 文字颜色 */
+            --ojb-color-text-primary: #a0adb9; /* 主要文字颜色 */
+            --ojb-color-text-secondary: #9AA4B1; /* 次要文字颜色 */
+            --ojb-color-text-tertiary: #9BA5B2; /* 第三级文字颜色 */
+            --ojb-color-text-success: #43A047; /* 成功状态文字颜色 */
+            --ojb-color-text-highlight: #cbd6e2; /* 高亮文字颜色 */
+            --ojb-color-text-disabled: #506778; /* 禁用状态文字颜色 */
+            --ojb-color-text-icon-success: #2e7d32; /* 成功状态图标颜色 */
+            --ojb-color-text-link: #4b8eda; /* 链接颜色 */
+
+            /* 背景颜色 */
+            --ojb-color-bg-primary: #22272e; /* 主背景颜色 */
+            --ojb-color-bg-secondary: #2d333b; /* 次级背景颜色 */
+            --ojb-color-bg-disabled: #24292e; /* 禁用元素背景颜色 */
+
+            /* 边框颜色 */
+            --ojb-color-border-primary: #48535F; /* 主要边框颜色 */
+            --ojb-color-border-disabled: #404950; /* 禁用状态边框颜色 */
+            --ojb-color-border-dashed-hover: #03A9F4; /* 虚线边框悬浮颜色 */
+            --ojb-color-border-radio-checked: #326154; /* 选中的单选框边框颜色 */
+
+            /* 阴影颜色 */
+            --ojb-shadow-standard: 0px 0px 0.5px 0.5px #3A4048; /* 标准阴影 */
+            --ojb-shadow-menu-modal: 0px 0px 0px 4px #2d333b; /* 菜单和模态框阴影 */
+
+            /* 区域遮罩颜色 */
+            --ojb-overlay-background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px); /* 区域遮罩背景 */
+
+            /* 文字阴影 */
+            --ojb-text-shadow-icon: 1px 1px 0px #2d333b, 1px -1px 0px #2d333b, -1px -1px 0px #2d333b, -1px 1px 0px #2d333b; /* 图标文字阴影 */
+        }
+        /* 边框样式 */
+        :root {
+            /* 边框样式 */
+            --ojb-border-width: 1px; /* 边框宽度 */
+            --ojb-border-style-solid: solid; /* 实线样式 */
+            --ojb-border-style-dashed: dashed; /* 虚线样式 */
+            --ojb-border-radius-small: 4px; /* 小圆角 */
+            --ojb-border-radius-medium: 8px; /* 中圆角 */
+            --ojb-border-radius-large: 12px; /* 大圆角 */
+            
+            /* 组合边框样式 */
+            --ojb-border-solid-primary: var(--ojb-border-width) var(--ojb-border-style-solid) var(--ojb-color-border-primary); /* 主要实线边框 */
+            --ojb-border-dashed: var(--ojb-border-width) var(--ojb-border-style-dashed) var(--ojb-color-border-primary); /* 主要虚线边框 */
+            --ojb-border-dashed-hover: var(--ojb-border-width) var(--ojb-border-style-dashed) var(--ojb-color-border-dashed-hover); /* 悬浮虚线边框 */
+            --ojb-border-solid-disabled: var(--ojb-border-width) var(--ojb-border-style-solid) var(--ojb-color-border-disabled); /* 禁用状态实线边框 */
+        }
+    `);
+
+    // OJBetter界面样式
+    GM_addStyle(`
+        /* 主要文字颜色 */
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, html[data-theme=dark] #pageContent,
-        html[data-theme=dark] .ace-chrome .ace_gutter, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] .setting-name, html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text,
-        html[data-theme=dark] textarea, html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
-        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, 
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .OJBetter_setting_menu, 
+        html[data-theme=dark] .help_tip .tip_text,
+        html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
+        html[data-theme=dark] #OJBetter_SubmitForm input, html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select,
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, 
+        html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
         html[data-theme=dark] .popup .content{
-            color: #a0adb9 !important;
+            color: var(--ojb-color-text-primary);
         }
-        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
-            color: #adbac7;
-        }
-        /* 文字颜色2 */
-        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
-        html[data-theme=dark] .lang-chooser,
-        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
-        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
-        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
-        html[data-theme=dark] .user-admin, html[data-theme=dark] .ojb_btn:hover,
-        html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_statusBar,
+        /* 次要文字颜色 */
+        html[data-theme=dark] .ojb_btn:hover, html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_statusBar,
         html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #addCustomTest,
         html[data-theme=dark] #customTestBlock, html[data-theme=dark] .OJBetter_setting_list.alert_info{
-            color: #9099a3 !important;
+            color: var(--ojb-color-text-secondary);
         }
         /* 文字颜色3 */
-        html[data-theme=dark] .ojb_btn, html[data-theme=dark] #program-source-text-copy{
-            color: #6385a6;
-        }
-        html[data-theme=dark] input{
-            color: #6385a6 !important;
-        }
-        /* 文字颜色4 */
-        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
-            color: #cbd6e2 !important;
+        html[data-theme=dark] .ojb_btn{
+            color: var(--ojb-color-text-tertiary);
         }
         /* 文字颜色 浅绿 */
         html[data-theme=dark] #SubmitButton{
-            color: #43A047;
+            color: var(--ojb-color-text-success);
         }
-        /* 链接颜色 */
-        html[data-theme=dark] a:link {
-            color: #3989c9;
+        /* 禁止文字颜色 */
+        html[data-theme=dark] .ojb_btn[disabled]{
+            color: var(--ojb-color-text-disabled);
         }
-        html[data-theme=dark] a:visited {
-            color: #8590a6;
-        }
-        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
-            color: #9099a3 !important;
-        }
-        /* 按钮 */
-        html[data-theme=dark] .second-level-menu-list li.backLava {
-            border-radius: 6px;
-            overflow: hidden;
-            filter: invert(1) hue-rotate(.5turn);
-        }
-        html[data-theme=dark] input:hover{
-            background-color: #22272e !important;
-        }
-        /* 背景层次1 */
-        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
-        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
-        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
-        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
-        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
+        /* 主要背景层次 */
         html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
-        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
-        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
-        html[data-theme=dark] .ojb_btn:hover,
+        html[data-theme=dark] .ojb_btn:hover, 
+        html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
+        html[data-theme=dark] #OJBetter_SubmitForm input, 
+        html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"], html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"]:checked,
+        html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select, 
         html[data-theme=dark] .OJBetter_setting_sidebar li a.active, html[data-theme=dark] .OJBetter_setting_sidebar li,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
-        html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
-        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text,
+        html[data-theme=dark] .popup .content, 
         html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
-        html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover{
-            background-color: #22272e !important;
+        html[data-theme=dark] .OJBetter_setting_menu a, html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button:hover,
+        html[data-theme=dark] .OJBetter_setting_menu select{
+            background-color: var(--ojb-color-bg-primary);
             background-image: none;
         }
-        /* 背景层次2 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
-        html[data-theme=dark] .ojb_btn, html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
-        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
-        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        /* 次要背景层次 */
+        html[data-theme=dark] .ojb_btn, 
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
         html[data-theme=dark] .translate-problem-statement-panel,
-        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
-        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .datatable,
+        html[data-theme=dark] .translate-problem-statement, 
         html[data-theme=dark] .OJBetter_setting_list,
         html[data-theme=dark] .OJBetter_setting_menu hr, 
-        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
-        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .OJBetter_setting_sidebar li a,
+        html[data-theme=dark] .OJBetter_setting_sidebar li a,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] .test-for-popup pre,
         html[data-theme=dark] .popup .content pre, html[data-theme=dark] .popup .content pre code,
@@ -1228,63 +1386,208 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::before,
         html[data-theme=dark] .config::before, html[data-theme=dark] .config li.tempConfig_add_button:hover,
         html[data-theme=dark] .OJBetter_setting_menu details, html[data-theme=dark] #config_bar_menu,
-        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button{
-            background-color: #2d333b !important;
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button, 
+        html[data-theme=dark] .OJBetter_setting_menu .badge, html[data-theme=dark] #OJBetter_SubmitForm #SubmitButton{
+            background-color: var(--ojb-color-bg-secondary);
+        }
+        /* 禁止背景层次 */
+        html[data-theme=dark] .ojb_btn[disabled]{
+            background-color: var(--ojb-color-bg-disabled);
         }
         /* 实线边框颜色-圆角 */
-        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
-        html[data-theme=dark] .ojb_btn, html[data-theme=dark] .sidebar-menu ul li,
-        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
-        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement,
-        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
-            border: 1px solid #424b56 !important;
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .translate-problem-statement{
+            border: var(--ojb-border-solid-primary);
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
+        html[data-theme=dark] .ojb_btn, 
         html[data-theme=dark] .OJBetter_setting_list, html[data-theme=dark] .config_bar_list,
-        html[data-theme=dark] label.config_bar_ul_li_text, html[data-theme=dark] .problem-statement .sample-tests .input,
-        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
+        html[data-theme=dark] label.config_bar_ul_li_text, 
         html[data-theme=dark] .OJBetter_setting_sidebar li, html[data-theme=dark] .OJBetter_setting_menu select,
-        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button,
-        html[data-theme=dark] .test-for-popup pre, html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
-        html[data-theme=dark] #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
-        html[data-theme=dark] #addCustomTest, 
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_SubmitForm select,
+        html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
+        html[data-theme=dark] #OJBetter_SubmitForm #RunTestButton, html[data-theme=dark] #programTypeId, html[data-theme=dark] #customTestBlock,
+        html[data-theme=dark] #OJBetter_SubmitForm #addCustomTest, html[data-theme=dark] #OJBetter_SubmitForm #SubmitButton,
+        html[data-theme=dark] .OJBetter_setting_menu input,
+        html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"], html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"]:checked,
+        html[data-theme=dark] .OJBetter_setting_menu textarea,
+        html[data-theme=dark] #OJBetter_SubmitForm input, html[data-theme=dark] #OJBetter_SubmitForm textarea,
         html[data-theme=dark] #CompilerSetting select, html[data-theme=dark] #CompilerSetting textarea, html[data-theme=dark] #CompilerBox,
-        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs, html[data-theme=dark] .OJBetter_setting_menu a,
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] .config::before,
-        html[data-theme=dark] #statePanel, html[data-theme=dark] .test-case{
-            border: 1px solid #424b56 !important;
+        html[data-theme=dark] #statePanel, html[data-theme=dark] .test-case, html[data-theme=dark] .OJBetter_setting_menu .badge{
+            border: var(--ojb-border-solid-primary);
         }
-        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
-            border-bottom: 1px solid #424b56 !important;
-        }
-        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer, html[data-theme=dark] #customTestBlock #customTests{
-            border-top: 1px solid #424b56 !important;
-        }
-        html[data-theme=dark] .topic .content {
-            border-left: 4px solid #424b56 !important;
+        html[data-theme=dark] #customTestBlock #customTests{
+            border-top: var(--ojb-border-solid-primary);
         }
         html[data-theme=dark] .OJBetter_setting_sidebar {
-            border-right: 1px solid #424b56 !important;
+            border-right: var(--ojb-border-solid-primary);
         }
-        html[data-theme=dark] hr {
-            border-color: #424b56 !important;
+        /* 实线边框-禁止 */
+        html[data-theme=dark] .ojb_btn[disabled]{
+            border: var(--ojb-border-solid-disabled);
         }
-        /* 虚线边框颜色 */
-        html[data-theme=dark] .comment-table, html[data-theme=dark] li#add_button,
+        /* 虚线边框 */
+        html[data-theme=dark] li#add_button,
         html[data-theme=dark] .OJBetter_setting_menu_label_text{
-            border: 1px dashed #424b56 !important;
+            border: var(--ojb-border-dashed);
         }
+        /* 虚线边框-悬浮 */
         html[data-theme=dark] li#add_button:hover{
-            border: 1px dashed #03A9F4 !important;
-            background-color: #2d333b !important;
-            color: #03A9F4 !important;
+            border: var(--ojb-border-dashed-hover);
+            background-color: var(--ojb-color-bg-secondary);
+            color: var(--ojb-color-border-dashed-hover);
         }
         /* 无边框 */
         html[data-theme=dark] .translate-problem-statement-panel .ojb_btn{
-            border: none !important;
+            border: none;
+        }
+        /* 区域遮罩 */
+        html[data-theme=dark] .overlay::before {
+            background: var(--ojb-overlay-background);
+            color: var(--ojb-color-text-secondary);
+            text-shadow: 0px 0px 2px #000000;
+        }
+        /* 阴影 */
+        html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
+            box-shadow: var(--ojb-shadow-standard);
+        }
+        /* 图标按钮状态样式 */
+        html[data-theme=dark] .ojb_btn_popover.success i:before, html[data-theme=dark] .ojb_btn_popover.success i {
+            color: var(--ojb-color-text-icon-success);
+        }
+        html[data-theme=dark] .ojb_btn_popover i:before {
+            text-shadow: var(--ojb-text-shadow-icon);
+        }
+        /* 其他样式 */
+        html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .OJBetter_modal{
+            box-shadow: var(--ojb-shadow-menu-modal);
+            border: 1px solid var(--ojb-color-bg-secondary);
+        }
+        html[data-theme=dark] input[type="radio"]:checked+.OJBetter_setting_menu_label_text {
+            color: var(--ojb-color-text-primary);
+            border: 1px solid var(--ojb-color-border-radio-checked);
+        }
+        html[data-theme=dark] .alert{
+            text-shadow: none;
+        }
+    `);
+
+    // 网站界面样式
+    GM_addStyle(`
+        /* 文字颜色1 */
+        html[data-theme=dark] body, html[data-theme=dark] .title,
+        html[data-theme=dark] .problem-statement, html[data-theme=dark] #pageContent,
+        html[data-theme=dark] .ttypography, html[data-theme=dark] .roundbox, html[data-theme=dark] .info,
+        html[data-theme=dark] .ttypography .bordertable, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
+        html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
+        html[data-theme=dark] .ace-chrome .ace_gutter, 
+        html[data-theme=dark] .setting-name, 
+        html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
+        html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table{
+            color: var(--ojb-color-text-primary) !important;
+        }
+        html[data-theme=dark] h1 a, html[data-theme=dark] h2 a, html[data-theme=dark] h3 a, html[data-theme=dark] h4 a{
+            color: var(--ojb-color-text-secondary);
+        }
+        /* 文字颜色2 */
+        html[data-theme=dark] .contest-state-phase, html[data-theme=dark] .legendary-user-first-letter,
+        html[data-theme=dark] .lang-chooser,
+        html[data-theme=dark] .second-level-menu-list li a, html[data-theme=dark] #footer,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .roundbox .caption, html[data-theme=dark] .topic .title *,
+        html[data-theme=dark] .user-admin{
+            color: var(--ojb-color-text-secondary) !important;
+        }
+        /* 文字颜色3 */
+        html[data-theme=dark] #program-source-text-copy{
+            color: var(--ojb-color-text-secondary);
+        }
+        html[data-theme=dark] input{
+            color: var(--ojb-color-text-secondary) !important;
+        }
+        /* 文字颜色4 */
+        html[data-theme=dark] .ttypography .MathJax, html[data-theme=dark] .MathJax span{
+            color: var(--ojb-color-text-highlight) !important;
+        }
+        /* 链接颜色 */
+        html[data-theme=dark] a:link {
+            color: var(--ojb-color-text-link);
+        }
+        html[data-theme=dark] a:visited {
+            color: var(--ojb-color-text-secondary);
+        }
+        html[data-theme=dark] .menu-box a, html[data-theme=dark] .sidebox th a{
+            color: var(--ojb-color-text-secondary) !important;
+        }
+        /* 按钮 */
+        html[data-theme=dark] .second-level-menu-list li.backLava {
+            border-radius: 6px;
+            overflow: hidden;
+            filter: invert(1) hue-rotate(.5turn);
+        }
+        html[data-theme=dark] input:hover{
+            background-color: var(--ojb-color-bg-primary) !important;
+        }
+        /* 背景层次1 */
+        html[data-theme=dark] body, html[data-theme=dark] .ttypography .bordertable thead th,
+        html[data-theme=dark] .datatable table, html[data-theme=dark] .datatable .dark, html[data-theme=dark] li#add_button,
+        html[data-theme=dark] .problem-statement .sample-tests pre, html[data-theme=dark] .markItUpEditor,
+        html[data-theme=dark] .SumoSelect>.CaptionCont, html[data-theme=dark] .SumoSelect>.optWrapper,
+        html[data-theme=dark] .SumoSelect>.optWrapper.multiple>.options li.opt span i, html[data-theme=dark] .ace_scroller,
+        html[data-theme=dark] textarea, html[data-theme=dark] .state, html[data-theme=dark] .ace-chrome .ace_gutter-active-line,
+        html[data-theme=dark] .sidebar-menu ul li:hover, html[data-theme=dark] .sidebar-menu ul li.active,
+        html[data-theme=dark] .popup .content, html[data-theme=dark] .file.input-view .text, html[data-theme=dark] .file.output-view .text,
+        html[data-theme=dark] .file.answer-view .text, html[data-theme=dark] .file.checker-comment-view .text{
+            background-color: var(--ojb-color-bg-primary) !important;
+            background-image: none;
+        }
+        /* 背景层次2 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .dark, html[data-theme=dark] .bottom-links,
+        html[data-theme=dark] .spoiler-content, html[data-theme=dark] input,
+        html[data-theme=dark] .problem-statement .test-example-line-even, html[data-theme=dark] .highlight-blue,
+        html[data-theme=dark] .ttypography .tt, html[data-theme=dark] select,
+        html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
+        html[data-theme=dark] .aceEditorTd, html[data-theme=dark] .ace-chrome .ace_gutter,
+        html[data-theme=dark] .datatable,
+        html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
+        html[data-theme=dark] .pagination span.active, html[data-theme=dark] .test-for-popup pre{
+            background-color: var(--ojb-color-bg-secondary) !important;
+        }
+        /* 实线边框颜色-圆角 */
+        html[data-theme=dark] .roundbox, html[data-theme=dark] .roundbox .rtable td,
+        html[data-theme=dark] .sidebar-menu ul li,
+        html[data-theme=dark] input, html[data-theme=dark] .ttypography .tt, html[data-theme=dark] #items-per-page,
+        html[data-theme=dark] .datatable td, html[data-theme=dark] .datatable th,
+        html[data-theme=dark] textarea, html[data-theme=dark] .input-output-copier{
+            border: var(--ojb-border-solid-primary) !important;
+            border-radius: 2px;
+        }
+        /* 实线边框颜色-无圆角 */
+         html[data-theme=dark] .problem-statement .sample-tests .input,
+        html[data-theme=dark] .problem-statement .sample-tests .output, html[data-theme=dark] .pagination span.active,
+        html[data-theme=dark] .test-for-popup pre{
+            border: var(--ojb-border-solid-primary) !important;
+        }
+        html[data-theme=dark] .roundbox .titled, html[data-theme=dark] .roundbox .rtable th {
+            border-bottom: var(--ojb-border-solid-primary) !important;
+        }
+        html[data-theme=dark] .roundbox .bottom-links, html[data-theme=dark] #footer{
+            border-top: var(--ojb-border-solid-primary) !important;
+        }
+        html[data-theme=dark] .topic .content {
+            border-left: 4px solid var(--ojb-color-border-primary) !important;
+        }
+        html[data-theme=dark] hr {
+            border-color: var(--ojb-color-border-primary) !important;
+        }
+        /* 虚线边框 */
+        html[data-theme=dark] .comment-table{
+            border: var(--ojb-border-dashed);
         }
         /* input-output-copier特殊处理 */
         html[data-theme=dark] .html2md-panel.input-output-copier,
@@ -1311,22 +1614,34 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .popup .content pre code{
             filter: invert(1) hue-rotate(.5turn);
         }
-        /* 区域遮罩 */
-        html[data-theme=dark] .overlay::before {
-            background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
-            color: #9099a3;
-            text-shadow: 0px 0px 2px #000000;
-        }
         /* 阴影 */
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .translate-problem-statement{
-            box-shadow: 0px 0px 0.5px 0.5px #30353b;
+            box-shadow: var(--ojb-shadow-standard);
         }
         /* 图标按钮状态样式 */
         html[data-theme=dark] .ojb_btn_popover.success i:before, html[data-theme=dark] .ojb_btn_popover.success i {
-            color: #2e7d32;
+            color: var(--ojb-color-text-icon-success);
         }
         html[data-theme=dark] .ojb_btn_popover i:before {
-            text-shadow: 1px 1px 0px #2d333b, 1px -1px 0px #2d333b, -1px -1px 0px #2d333b, -1px 1px 0px #2d333b;
+            text-shadow: var(--ojb-text-shadow-icon);
+        }
+        /* 评测状态文字颜色 */
+        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
+        html[data-theme=dark] .verdict-successful-challenge{
+            color: #0a0 !important;
+        }
+        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
+            color: red !important;
+        }
+        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
+            color: #673ab7 !important;
+        }
+        html[data-theme=dark] .verdict-waiting {
+            color: gray !important;
+        }
+        /* 样例hover样式 */
+        html[data-theme=dark] .problem-statement .darkhighlight {
+          background-color: #455a64 !important;
         }
         /* 其他样式 */
         html[data-theme=dark] .rated-user{
@@ -1352,37 +1667,8 @@ function handleColorSchemeChange(event) {
             background-color: #ef9a9a !important;
             border-radius: 0px;
         }
-        html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .OJBetter_modal{
-            box-shadow: 0px 0px 0px 4px #2d333b;
-            border: 1px solid #2d333b;
-        }
         html[data-theme=dark] .collapsible-topic.collapsed .content .collapsible-topic-options:before{
             background-image: linear-gradient(#22272e00, #22272e);
-        }
-        html[data-theme=dark] .alert{
-            text-shadow: none;
-        }
-        html[data-theme=dark] input[type="radio"]:checked+.OJBetter_setting_menu_label_text {
-            color: #a0adb9 !important;
-            border: 1px solid #326154 !important;
-        }
-        /* 评测状态文字颜色 */
-        html[data-theme=dark] .verdict-accepted, html[data-theme=dark] .verdict-accepted-challenged,
-        html[data-theme=dark] .verdict-successful-challenge{
-            color: #0a0 !important;
-        }
-        html[data-theme=dark] .verdict-failed, html[data-theme=dark] .verdict-challenged{
-            color: red !important;
-        }
-        html[data-theme=dark] .verdict-rejected, html[data-theme=dark] .verdict-unsuccessful-challenge{
-            color: #673ab7 !important;
-        }
-        html[data-theme=dark] .verdict-waiting {
-            color: gray !important;
-        }
-        /* 样例hover样式 */
-        html[data-theme=dark] .problem-statement .darkhighlight {
-          background-color: #455a64 !important;
         }
     `);
 })()
@@ -1419,6 +1705,101 @@ function darkModeStyleAdjustment() {
             $(this).nextUntil(':not(.test-example-line-even)').removeClass('darkhighlight');
         }
     );
+}
+
+/**
+ * 初始化monaco编辑器资源
+ */
+async function initMonacoEditor() {
+    if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
+        try {
+            // 等待Monaco Editor加载器脚本加载完成
+            await OJB_LoadJS("https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js");
+
+            // 配置Monaco Editor
+            require.config({
+                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
+                "vs/nls": { availableLanguages: { "*": "zh-cn" } },
+            });
+
+            // 加载Monaco Editor主脚本
+            require(["vs/editor/editor.main"], () => {
+                OJBetter.monaco.loaderOnload = true;
+            });
+        } catch (error) {
+            console.error("Failed to load Monaco Editor: ", error);
+        }
+    }
+}
+
+/**
+ * 美化代码块
+ */
+async function beautifyPreBlocksWithMonaco() {
+    // 判断monacoLoader是否加载完毕
+    await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
+
+    // 用于替换 <pre> 标签为 Monaco 编辑器的函数
+    function replacePreWithMonaco(preElement) {
+        const pre = $(preElement);
+        if (pre.hasClass('source-code-for-copy')) return; // 跳过复制块
+        const code = OJB_getCodeFromPre(pre.get(0));
+        if (!code) return;
+        const language = OJB_codeLangDetect(code);
+
+        // 创建一个用于 Monaco 编辑器的容器
+        const container = $('<div></div>');
+        const lineCount = code.split('\n').length; // 代码的行数
+
+        // 计算容器的高度
+        const calculateContainerHeight = (lineCount) => {
+            const lineHeight = 20; // 每行代码的高度
+            const minHeight = 100; // 最小高度
+            const maxHeight = 1000; // 最大高度
+            const dynamicHeight = lineCount * lineHeight;
+            return Math.min(Math.max(dynamicHeight, minHeight), maxHeight) + 'px';
+        };
+
+        // 应用样式
+        container.css({
+            height: calculateContainerHeight(lineCount),
+            width: '100%'
+        });
+        pre.replaceWith(container);
+
+        // 初始化 Monaco 编辑器
+        monaco.editor.create(container[0], {
+            value: code,
+            language: language,
+            readOnly: true,
+            tabSize: 4,
+            theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
+            scrollbar: {
+                verticalScrollbarSize: 10,
+                horizontalScrollbarSize: 10,
+                alwaysConsumeMouseWheel: false
+            },
+            automaticLayout: true,
+            scrollBeyondLastLine: false
+        });
+    }
+    // 全局替换页面上所有的 <pre> 元素
+    $('pre').each(function () {
+        replacePreWithMonaco(this);
+    });
+    // 监听页面上的提交状态页面窗口的 <pre> 元素
+    if (OJBetter.typeOfPage.is_statePage || OJBetter.typeOfPage.is_submissions) {
+        OJB_observeElement({
+            selector: '#facebox',
+            callback: (node) => {
+                // 如果 facebox 中存在 pre 元素，则替换它们
+                const preElements = $(node).find('pre');
+                preElements.each(function () {
+                    replacePreWithMonaco(this);
+                });
+            }
+        });
+    }
 }
 
 // 样式
@@ -1570,8 +1951,8 @@ dialog::backdrop {
 .ojb_btn[disabled] {
     cursor: not-allowed !important;
     color: rgb(168, 171, 178) !important;
-    border: 1px solid rgb(228, 231, 237) !important;
-    background-color: rgb(255, 255, 255) !important;
+    border: 1px solid #e4e7ed;
+    background-color: #ffffff;
 }
 .ojb_btn:hover {
     color: #409eff;
@@ -1784,6 +2165,14 @@ html:not([data-theme='dark']) .translateDiv {
     box-sizing: border-box;
     font-size: 13px;
 }
+.translate-problem-statement h2 {
+    font-size: 1.6em;
+    font-weight: 700;
+}
+.translate-problem-statement h3 {
+    font-size: 1.3em;
+    font-weight: 700;
+}
 .translate-problem-statement-panel{
     display: flex;
     justify-content: space-between;
@@ -1812,6 +2201,7 @@ html:not([data-theme='dark']) .translateDiv {
     margin-inline-start: 0.8em;
     margin-block-start: 0em;
     margin: 0.5em 0 0 3em;
+    padding-inline-start: 0px;
 }
 .translate-problem-statement li {
     display: list-item;
@@ -1862,6 +2252,7 @@ html:not([data-theme='dark']) .translateDiv {
 .translate-problem-statement p {
     line-height: 20px !important;
     word-wrap: break-word;
+    font-size: 13px !important
 }
 .problem-statement p:last-child {
     margin-bottom: 0px !important;
@@ -1906,6 +2297,8 @@ header .enter-or-register-box, header .languages {
 }
 .OJBetter_setting_menu h3 {
     margin-top: 10px;
+    font-size: 1.4em;
+    font-weight: 700;
 }
 .OJBetter_setting_menu h4 {
     margin: 15px 0px 10px 0px;
@@ -1930,10 +2323,12 @@ header .enter-or-register-box, header .languages {
     border-radius: 4px;
     border: 1px solid #009688;
     color: #009688;
-    font-size: 12px;
+    background-color: #fff;
     padding: 0.5px 4px;
     margin-left: 5px;
     margin-right: auto;
+    line-height: initial;
+    font-weight: initial;
 }
 .OJBetter_setting_menu .missing {
     box-shadow: inset 0px 0px 1px 1px red;
@@ -2024,6 +2419,7 @@ header .enter-or-register-box, header .languages {
     border-style: solid;
     border: 1px solid #ced4da;
     color: #009688;
+    background: #ffffff;
     font-size: 15px;
 }
 .OJBetter_setting_menu select:focus-visible {
@@ -2077,7 +2473,6 @@ header .enter-or-register-box, header .languages {
     right: 3px;
 }
 .OJBetter_setting_menu .btn-close {
-    cursor: pointer;
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -2089,7 +2484,10 @@ header .enter-or-register-box, header .languages {
     box-sizing: border-box;
     text-align: center;
     color: transparent;
-    font-size: 17px;
+}
+.OJBetter_setting_menu .iconfont {
+    font-size: 10px;
+    font-weight: bolder;
 }
 .OJBetter_setting_menu .btn-close:hover {
     color: #ffffff;
@@ -2261,6 +2659,8 @@ header .enter-or-register-box, header .languages {
 }
 /*设置面板-radio*/
 .OJBetter_setting_menu label {
+    display: block;
+    font-weight: initial;
     list-style-type: none;
     padding-inline-start: 0px;
     overflow-x: auto;
@@ -2671,6 +3071,10 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     border: 1px solid #ffffff;
     color: #697e91;
 }
+.OJBetter_modal h2 {
+    font-size: 1.6em;
+    font-weight: 700;
+}
 .OJBetter_modal .content{
     white-space: nowrap;
     max-height: 500px;
@@ -2742,6 +3146,9 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
     box-sizing: content-box;
     box-shadow: 0px 0px 0px 2px #eddbdb4d;
 }
+.OJBetter_contextmenu label {
+    margin: 0px;
+}
 input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     background: #41e49930;
     border: 1px solid green;
@@ -2755,6 +3162,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     width: 100%;
     color: gray;
     font-size: 13px;
+    font-weight: initial;
     padding: 4px;
     align-items: center;
     -webkit-box-sizing: border-box;
@@ -2825,17 +3233,26 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     outline: none;
 }
 #OJBetter_SubmitForm .topDiv {
-    height: 28px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 0px;
+    box-sizing: border-box;
 }
 #OJBetter_SubmitForm .topDiv .topRightDiv {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 0px;
+}
+#OJBetter_SubmitForm input[type="checkbox"], #OJBetter_SubmitForm label {
+    margin: 0px;
+    font-weight: initial;
+}
+#OJBetter_SubmitForm #fontSizeInput {
+    border: none;
+    background-color: #ffffff00;
 }
 
 /* 顶部区域 */
@@ -2851,6 +3268,10 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     flex-wrap: wrap;
     gap: 0px;
     align-items: center;
+}
+#OJBetter_SubmitForm input[type="checkbox"], #OJBetter_SubmitForm label {
+    margin: 0px;
+    font-weight: initial;
 }
 
 /* LSP连接Log */
@@ -2901,7 +3322,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 100;
+    z-index: 2000;
 }
 #OJBetter_editor.bottom{
     position: fixed;
@@ -2909,13 +3330,13 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     left: 0;
     width: 100%;
     height: 50vh;
-    z-index: 100;
+    z-index: 2000;
 }
 .ojb_btn.exit_button_bottom {
     position: fixed;
     bottom: 30px;
     right: 15px;
-    z-index: 100;
+    z-index: 2000;
     height: 28px;
 }
 
@@ -2948,7 +3369,8 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 #OJBetter_submitDiv{
     display: flex;
     padding-top: 15px;
-    height: 35px;
+    height: 50px;
+    box-sizing: border-box;
 }
 #OJBetter_submitDiv >* {
     border-radius: 6px;
@@ -3141,15 +3563,12 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 .output_diff .added {
     background-color: #c8f7c5;
     user-select: none;
-    padding-left: 3px;
 }
 .output_diff .removed {
-    background-color: #f7c5c5;
-    padding-left: 3px;
+    background-color: #f7c5c5; 
 }
 .output_diff .diffLine {
     display: flex;
-
 }
 .output_diff .diffLine:nth-child(odd) {
     background-color: #f5f5f5;
@@ -3170,6 +3589,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 }
 .lineContent>span {
     height: 16px;
+    padding-left: 3px;
 }
 .output_no_diff {
     padding: 5px;
@@ -3179,9 +3599,21 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     font-size: 10px;
 }
 
-/* 覆盖网站原本的样式 */
-#footer > div:nth-child(7) {
-    left: 0px !important;
+/* 网站本地化替换规则标记 */
+.markingTextReplaceRule{
+    color: #FFF3E0;
+    background-color: #FF9800;
+}
+
+/* SelectPage样式 */
+.sp_input {
+    padding: 4px 6px px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    line-height: 20px !important;
+}
+div.sp_clear_btn {
+    padding: 0px !important;
 }
 
 /* 移动设备 */
@@ -3226,6 +3658,11 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
         font-size: 1em;
     }
 }
+
+/* 覆盖网站原本的样式 */
+#footer > div:nth-child(7) {
+    left: 0px !important;
+}
 `);
 
 /**
@@ -3233,6 +3670,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
  */
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
+    GM_addStyle(GM_getResourceText("selectpagecss"));
     // 自定义图标大小
     GM_addStyle(`
         .iconfont {
@@ -3279,6 +3717,7 @@ function addI18nStyles() {
         line-height: 20px;
         padding: 2px 10px;
         border-radius: 8px 8px 0px 0px;
+        box-sizing: content-box;
     }
     .config.missing::before {
         content: "${i18next.t('common.missing.radio', { ns: 'settings' })}";
@@ -3290,16 +3729,168 @@ function addI18nStyles() {
 }
 
 // ------------------------------
+// 一些工具类
+// ------------------------------
+
+/**
+ * 自定义错误类，以区分不同的错误类型
+ */
+class OJB_GMError extends Error {
+    constructor(type, message, originalError) {
+        super(message);
+        this.name = 'GMError';
+        this.type = type;
+        this.stack = originalError.stack;
+        Object.assign(this, originalError);
+    }
+}
+
+/**
+ * 文本块替换/恢复类
+ */
+class TextBlockReplacer {
+    constructor() {
+        /** @type {string[]} 匹配项 */
+        this.matches = [];
+        /** @type {Map<string, string>} 待还原项 */
+        this.replacements = new Map();
+        /** @type {Map<string, string>} 暂时未找到的待还原项 */
+        this.tempReplacements = new Map();
+        /** @type {string} 替换符号 */
+        this.replaceSymbol = OJBetter.translation.replaceSymbol;
+    }
+
+    /**
+     * 替换文本
+     * @param {string} text 原文本
+     * @param {RegExp} regex 匹配规则
+     * @returns {string} 替换后的文本
+     */
+    replace(text, regex) {
+        this.matches = text.match(regex) || [];
+        try {
+            for (let i = 0; i < this.matches.length; i++) {
+                const match = this.matches[i];
+                const id = OJB_getRandomNumber(8);
+                let replacement = '';
+                switch (this.replaceSymbol) {
+                    case "1":
+                        replacement = `【${id}】`;
+                        break;
+                    case "2":
+                        replacement = `{${id}}`;
+                        break;
+                    case "3":
+                        replacement = `[${id}]`;
+                        break;
+                    default:
+                        replacement = `【${id}】`;
+                        break;
+                }
+                text = text.replace(match, replacement);
+                this.replacements.set(id, match);
+            }
+        } catch (e) { }
+        return text;
+    }
+
+
+    /**
+     * 恢复替换的文本
+     * @param {string} text 还原前的文本
+     * @returns {string} 还原后的文本
+     */
+    recover(text) {
+        let textCopy = text;
+
+        /**
+         * 替换文本
+         * @param {string} replacement 替换的文本
+         * @param {string} regexPattern 匹配规则
+         * @returns {void}
+         */
+        const replaceText = (replacement, regexPattern) => {
+            const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+            const regex = new RegExp(latexMatch + regexPattern, 'g');
+            textCopy = textCopy.replace(regex, (match, ...args) => {
+                // LaTeX中的不替换
+                const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
+                if (groups.latex_block || groups.latex_inline) return match;
+                // 没有空格则加一个
+                const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
+                let leftSpace = "", rightSpace = "";
+                if (!/\s/.test(textCopy[offset - 1])) leftSpace = " ";
+                if (!/\s/.test(textCopy[offset + match.length])) rightSpace = " ";
+                return leftSpace + replacement + rightSpace;
+            });
+        };
+
+        /**
+         * 尝试还原
+         * @param {string} replacement 替换的文本
+         * @param {string} id 替换的 id
+         * @returns {boolean} 是否替换成功
+         */
+        const tryRecover = (replacement, id) => {
+            // 尝试还原，如果还原成功，则从 replacements 中删除
+            const originalText = textCopy;
+            replaceText(replacement, `【\\s*${id}\\s*】|\\[\\s*${id}\\s*\\]|{\\s*${id}\\s*}`); // 替换符完整匹配（考虑了多出空格的情况）
+            replaceText(replacement, `【\\s*${id}(?![】\\d])|(?<![【\\d])${id}\\s*】|\\[\\s*${id}(?![\\]\\d])|(?<![\\[\\d])${id}\\s*\\]|{\\s*${id}(?![}\\d])|(?<![{\\d])${id}\\s*}`); // 替换符部分匹配
+
+            if (textCopy === originalText) {
+                // 如果文本没有变化，说明没有找到，加入到 tempReplacements
+                this.tempReplacements.set(id, replacement);
+                return false;
+            } else {
+                // 如果文本变化了，说明找到并成功替换，则删除
+                this.replacements.delete(id);
+                this.tempReplacements.delete(id);
+                return true;
+            }
+        }
+
+        // 处理 replacements 中的项
+        this.replacements.forEach((replacement, id) => {
+            tryRecover(replacement, id);
+        });
+
+        // 处理 tempReplacements 中的项
+        while (this.tempReplacements.size > 0) {
+            let found = false;
+            this.tempReplacements.forEach((replacement, id) => {
+                found = tryRecover(replacement, id) || found;
+            });
+            if (!found) break; // 如果这一轮没有找到任何项，终止循环
+        }
+
+        // 如果 tempReplacements 还有未找到的项
+        if (this.tempReplacements.size > 0) {
+            console.warn("There are still some replacements not found:", this.tempReplacements);
+        }
+
+        return textCopy;
+    }
+}
+
+// ------------------------------
 // 一些工具函数
 // ------------------------------
 
 /**
- * 延迟函数 
- * @param {number} ms 延迟时间（毫秒） 
- * @returns {Promise<void>}
+ * 格式化链接格式
+ * @param {string} url 链接字符串
+ * @returns {string} 清理后的链接字符串
  */
-function OJB_delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function OJB_cleanLink(url) {
+    if (url === null || url === undefined) return "";
+
+    // 替换'http://'为'https://'
+    let cleanUrl = url.replace(/^http:\/\//i, 'https://');
+
+    // 移除末尾的斜杠
+    cleanUrl = cleanUrl.replace(/\/$/, '');
+
+    return cleanUrl;
 }
 
 /**
@@ -3352,23 +3943,10 @@ async function OJB_promiseRetryWrapper(task, {
 }
 
 /**
- * 自定义错误类，以区分不同的错误类型
- */
-class GMError extends Error {
-    constructor(type, message, originalError) {
-        super(message);
-        this.name = 'GMError';
-        this.type = type;
-        this.stack = originalError.stack;
-        Object.assign(this, originalError);
-    }
-}
-
-/**
  * GM_xmlhttpRequest 的 Promise 封装
  * @param {Object} options GM_xmlhttpRequest 的参数
  * @param {Boolean} isStream 是否为流式请求
- * @returns {Promise} 返回 Promise
+ * @returns {Promise<OJB_GMError>} 返回 Promise
  */
 function OJB_GMRequest(options, isStream = false) {
     return new Promise((resolve, reject) => {
@@ -3379,9 +3957,9 @@ function OJB_GMRequest(options, isStream = false) {
             } : {
                 onload: resolve
             }),
-            onerror: (error) => reject(new GMError('error', 'An error occurred during the request.', error)),
-            ontimeout: (error) => reject(new GMError('timeout', 'The request timed out.', error)),
-            onabort: (error) => reject(new GMError('abort', 'The request was aborted.', error)),
+            onerror: (error) => reject(new OJB_GMError('error', 'An error occurred during the request.', error)),
+            ontimeout: (error) => reject(new OJB_GMError('timeout', 'The request timed out.', error)),
+            onabort: (error) => reject(new OJB_GMError('abort', 'The request was aborted.', error)),
         });
     });
 }
@@ -3402,6 +3980,21 @@ function OJB_getCookie(name) {
         }
     }
     return "";
+}
+
+/**
+ * 检查是否仍在同一浏览器会话中
+ * @param {string} sessionKey - 会话键名，用于标识会话
+ * @returns {boolean} - 如果在当前会话中之前已经设置过这个键，则返回true，否则返回false
+ */
+function OJB_isSameBrowserSession(sessionKey) {
+    const fullCookieName = `OJB_Session_${sessionKey}`;
+    const sessionValue = OJB_getCookie(fullCookieName);
+    if (sessionValue === "") {
+        document.cookie = `${fullCookieName}=true; path=/`;
+        return false;
+    }
+    return true;
 }
 
 /**
@@ -3546,12 +4139,14 @@ function OJB_toggleCollapseExpand(element) {
 /**
  * 获取外部JSON并转换为Object
  * @param {string} url JSON Url
+ * @param {boolean} [nacache=true] 是否不使用缓存
  * @returns {Promise<Object>} JSON Object
  */
-async function OJB_getExternalJSON(url) {
+async function OJB_getExternalJSON(url, nacache = true) {
     const response = await OJB_GMRequest({
         method: "GET",
-        url: url
+        url: url,
+        nocache: nacache
     });
     try {
         return JSON.parse(response.responseText);
@@ -3577,16 +4172,16 @@ function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
             contentHtml = md.render(content);
         }
 
-        const dialog = $(`
+        const dialog = OJB_safeCreateJQElement(`
         <dialog class="OJBetter_modal">
             <h2>${title}</h2>
             <div class="content">${contentHtml}</div>
         </dialog>
         `);
-        const buttonbox = $(`<div class="buttons"></div>`);
-        const cancelButton = $(`<button class="cancelButton">${buttons[0]}</button>`)
+        const buttonbox = OJB_safeCreateJQElement(`<div class="buttons"></div>`);
+        const cancelButton = OJB_safeCreateJQElement(`<button class="cancelButton">${buttons[0]}</button>`)
             .addClass("secondary");
-        const continueButton = $(`<button class="continueButton">${buttons[1]}</button>`);
+        const continueButton = OJB_safeCreateJQElement(`<button class="continueButton">${buttons[1]}</button>`);
         if (buttons[0] !== null) buttonbox.append(cancelButton);
         if (buttons[1] !== null) buttonbox.append(continueButton);
         dialog.append(buttonbox);
@@ -3618,32 +4213,32 @@ function OJB_showModal(element) {
 
     if (OJBetter.state.openDialogCount === 1) {
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        // 获取原始的body marginRight，考虑到可能的非数字值，比如auto
-        const originalMarginRight = window.getComputedStyle(document.body).marginRight;
+        // 获取原始的html marginRight，考虑到可能的非数字值，比如auto
+        const originalMarginRight = window.getComputedStyle(document.documentElement).marginRight;
         const marginRightValue = parseFloat(originalMarginRight) || 0; // 将非数字值转换为0
 
         if (scrollbarWidth > 0) {
             // 保存原始的marginRight，并设置新的值以补偿滚动条宽度
-            document.body.style.setProperty('--original-margin-right', originalMarginRight);
-            document.body.style.marginRight = `${marginRightValue + scrollbarWidth}px`;
+            document.documentElement.style.setProperty('--original-margin-right', originalMarginRight);
+            document.documentElement.style.marginRight = `${marginRightValue + scrollbarWidth}px`;
         }
 
         // 保存原始的overflow样式
-        document.body.setAttribute('data-original-overflow', document.body.style.overflow);
-        document.body.style.overflow = 'hidden';
+        document.documentElement.setAttribute('data-original-overflow', document.documentElement.style.overflow);
+        document.documentElement.style.overflow = 'hidden';
     }
 
     const allowScrollIfNeeded = () => {
         OJBetter.state.openDialogCount--;
         if (OJBetter.state.openDialogCount === 0) {
-            // 恢复原始的body marginRight和overflow样式
-            const originalMarginRight = document.body.style.getPropertyValue('--original-margin-right');
-            document.body.style.marginRight = originalMarginRight;
-            document.body.style.removeProperty('--original-margin-right');
+            // 恢复原始的html marginRight和overflow样式
+            const originalMarginRight = document.documentElement.style.getPropertyValue('--original-margin-right');
+            document.documentElement.style.marginRight = originalMarginRight;
+            document.documentElement.style.removeProperty('--original-margin-right');
 
-            const originalOverflow = document.body.getAttribute('data-original-overflow');
-            document.body.style.overflow = originalOverflow;
-            document.body.removeAttribute('data-original-overflow');
+            const originalOverflow = document.documentElement.getAttribute('data-original-overflow');
+            document.documentElement.style.overflow = originalOverflow;
+            document.documentElement.removeAttribute('data-original-overflow');
         }
     };
 
@@ -3680,6 +4275,106 @@ function clearI18nextCache() {
 }
 
 /**
+ * 清除网站本地化数据
+ */
+async function clearWebsiteL10nData() {
+    OJBetter.common.database.localizeSubsData.clear().then(() => {
+        console.log('localizeSubsData table has been cleared');
+        window.location.reload();
+    }).catch((error) => {
+        console.error('Failed to clear localizeSubsData table:', error);
+    });
+}
+
+/**
+ * 从Pre代码块中获取原始代码
+ * @param {HTMLElement} element pre代码块元素
+ * @returns {string|null} 代码文本
+ */
+function OJB_getCodeFromPre(element) {
+    /**
+     * 从Ace格式化的代码块中获取原始代码
+     * @param {HTMLElement} element pre代码块元素
+     * @returns {string} 代码文本
+     */
+    const getCodeFromAcePre = function (element) {
+        const editor = ace.edit(element);
+        return editor.getValue();
+    }
+
+    /**
+     * 从Pretty格式化的代码块中获取原始代码-1
+     * 代码直接存放在 pre 元素中
+     * @param {HTMLElement} element pre代码块元素
+     * @returns {string} 代码文本
+     */
+    const getCodeFromPrettyPre = function (element) {
+        return Array.from(element.querySelectorAll('li')).map(function (li) {
+            return li.textContent;
+        }).join('\n');
+    }
+
+    /**
+     * 从Pretty格式化的代码块中获取原始代码-2
+     * 代码存放在子元素 code 中
+     * @param {HTMLElement} element pre代码块元素
+     * @returns {string} 代码文本
+     */
+    const getCodeFromPreChild = function (element) {
+        const code = element.querySelector("code.prettyprint");
+        if (code.classList.contains("linenums")) {
+            return getCodeFromPrettyPre(element);
+        } else {
+            return element.querySelector("code.prettyprint").textContent;
+        }
+    }
+
+    if (element.id === "submission-code") {
+        return getCodeFromAcePre(element);
+    } else if (element.classList.contains("prettyprint")) {
+        return getCodeFromPrettyPre(element);
+    } else if (element.querySelector("code.prettyprint")) {
+        return getCodeFromPreChild(element);
+    } else {
+        return null;
+    }
+}
+
+/**
+ * 判断代码的语言
+ * @param {string} code 代码文本
+ * @returns {string} 可能的语言
+ */
+function OJB_codeLangDetect(code) {
+    result = hljs.highlightAuto(code);
+    return result.language;
+}
+
+/**
+ * 获取指定命名空间下的所有i18n翻译键值对。
+ * 
+ * @param {string} namespace - 要获取键值对的i18next命名空间。
+ * @returns {Map<string, string>} 一个包含命名空间下所有键值对的Map对象。
+ */
+function OJB_getAllI18nKeysForNamespace(namespace) {
+    const language = i18next.language; // 获取当前语言
+    const resources = i18next.store.data[language]; // 获取当前语言的所有资源
+    const nsResources = resources[namespace]; // 获取特定命名空间的资源
+    const resultMap = new Map();
+
+    if (nsResources) {
+        // 遍历命名空间下的所有键值对，并添加到Map中
+        Object.keys(nsResources).forEach(key => {
+            resultMap.set(key, nsResources[key]);
+        });
+    } else {
+        console.log(`No resources found for namespace "${namespace}"`);
+    }
+
+    return resultMap;
+}
+
+/**
  * 更新检查
  */
 async function checkScriptVersion() {
@@ -3691,11 +4386,11 @@ async function checkScriptVersion() {
             nocache: true
         });
         const versionData = JSON.parse(versionResponse.responseText);
-        const { 'codeforces-better': { dev: version_dev, release: version_release } } = versionData;
+        const { [OJBetter.state.formatName]: { dev: version_dev, release: version_release } } = versionData;
         const baseUrls = {
             greasyfork: 'https://update.greasyfork.org/scripts/465777/Codeforces%20Better%21.user.js',
-            github: `https://github.com/beijixiaohu/OJBetter/raw/main/script/${OJBetter.about.updateChannel}/codeforces-better.user.js`,
-            aliyunoss: `https://aowuucdn.oss-accelerate.aliyuncs.com/script/${OJBetter.about.updateChannel}/codeforces-better.user.js`
+            github: `https://github.com/beijixiaohu/OJBetter/raw/main/script/${OJBetter.about.updateChannel}/${OJBetter.state.formatName}.user.js`,
+            aliyunoss: `https://aowuucdn.oss-accelerate.aliyuncs.com/script/${OJBetter.about.updateChannel}/${OJBetter.state.formatName}.user.js`
         };
         /** @type {string} 更新跳转url */
         const updateUrl = baseUrls[OJBetter.about.updateSource];
@@ -3717,7 +4412,7 @@ async function checkScriptVersion() {
             if (updateConfirmed) {
                 window.location.href = updateUrl;
             } else {
-                document.cookie = "skipUpdate=true; expires=session; path=/";
+                document.cookie = "skipUpdate=true; path=/";
             }
         }
     } catch (error) {
@@ -3738,24 +4433,29 @@ async function showAnnounce() {
         /** @type {Boolean} 是否展示新的公告(高于当前版本的测试公告不展示) */
         const showNewAnnounceVer = OJB_compareVersions(lastAnnounceVer, OJBetter.state.version) !== 1;
         /**
-         * 获取最后三个公告的内容
-         * @param {string} lastAnnounceVer 
+         * 获取公告的内容
          * @returns {string} 公告内容
          */
-        const getLastThreeAnnounceContent = function (lastAnnounceVer) {
+        const getAnnounceContent = function () {
+            // 获取公告
+            const announceMap = OJB_getAllI18nKeysForNamespace('announce');
+            // 移除 'lastVersion' 键
+            announceMap.delete('lastVersion');
+            // 将 Map 转换为数组并根据版本号排序
+            const sortedVersions = [...announceMap.keys()].sort(OJB_compareVersions).reverse();
             let content = "";
-            for (let i = 0; i < 3; i++) {
-                content += `### ${lastAnnounceVer}\n\n`;
-                content += i18next.t(`${lastAnnounceVer}`, { ns: 'announce' });
+            sortedVersions.forEach(version => {
+                content += `### ${version}\n\n`; // 使用版本号作为标题
+                content += announceMap.get(version); // 添加对应版本的公告内容
                 content += "\n\n";
-                lastAnnounceVer = OJB_getPreviousVersion(lastAnnounceVer);
-            }
+            });
+
             return content;
         };
 
         const content = (() => {
             if (isNewAnnounceVer && showNewAnnounceVer) {
-                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getLastThreeAnnounceContent(lastAnnounceVer)}`;
+                return `${i18next.t('announce.prefix', { ns: 'dialog' })}\n\n${getAnnounceContent()}`;
             } else {
                 return i18next.t('announce.divContent', { ns: 'dialog' });
             }
@@ -3779,7 +4479,7 @@ async function showAnnounce() {
 };
 
 /**
- * 提示信息类
+ * 页面顶部提示信息alert类
  */
 class LoadingMessage {
     constructor() {
@@ -3849,7 +4549,7 @@ class LoadingMessage {
      */
     updateStatus(text, type = 'info', timeout = Infinity, isMarkdown = false) {
         if (isMarkdown) {
-            var md = window.markdownit({
+            let md = window.markdownit({
                 html: !is_escapeHTML,
             });
             text = md.render(text);
@@ -3874,23 +4574,28 @@ class LoadingMessage {
 async function getLocalizeWebsiteJson(localizationLanguage) {
     let data = await OJBetter.common.database.localizeSubsData.get(localizationLanguage);
     let url = localizationLanguage === "zh" ?
-        "https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/Codeforces-subs.json" :
-        `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/Codeforces-subs.json`;
+        `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/${OJBetter.state.formatName}.json` :
+        `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/${OJBetter.state.formatName}.json`;
     if (data) data = data.data;
     if (!data) {
         // 如果本地没有数据，从远端获取并保存
         data = await OJB_getExternalJSON(url);
         await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: data });
     } else {
-        // 如果本地有数据，先返回旧数据，然后在后台更新
-        (async () => {
-            try {
-                const newData = await OJB_getExternalJSON(url);
-                await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
-            } catch (error) {
-                console.error('Failed to update localization data:', error);
-            }
-        })();
+        // 如果本地有数据，检查是否已经在当前会话中尝试过更新
+        const sessionKey = `ojb_updateL10nWebsiteJson_${localizationLanguage}`;
+        if (!OJB_isSameBrowserSession(sessionKey)) {
+            // 如果尚未更新，则在后台更新
+            (async () => {
+                try {
+                    const newData = await OJB_getExternalJSON(url);
+                    await OJBetter.common.database.localizeSubsData.put({ lang: localizationLanguage, data: newData });
+                    console.log("Website local data has been refreshed!");
+                } catch (error) {
+                    console.error('Failed to update localization data:', error);
+                }
+            })();
+        }
     }
     return data;
 }
@@ -3913,32 +4618,40 @@ async function localizeWebsite() {
      * 文本节点遍历替换
      * @param {JQuery} $nodes jQuery对象
      * @param {Object} textReplaceRules 文本替换规则对象
+     * @param {string} key 应用的规则集的名字
      */
-    function traverseTextNodes($nodes, textReplaceRules) {
+    const traverseTextNodes = ($nodes, textReplaceRules, key) => {
         if (!$nodes) return;
 
-        $nodes.each(function () {
-            let node = this;
+        $nodes.each((_, node) => {
             if (node.nodeType === Node.TEXT_NODE) {
-                Object.keys(textReplaceRules).forEach(match => {
-                    const replace = textReplaceRules[match];
-                    const regex = new RegExp(match, 'g');
-                    node.textContent = node.textContent.replace(regex, replace);
+                Object.entries(textReplaceRules).forEach(([match, replace]) => {
+                    try {
+                        const regex = new RegExp(match, 'g');
+                        const beforeText = node.textContent;
+                        node.textContent = node.textContent.replace(regex, replace);
+                        if (node.textContent !== beforeText && OJBetter.dev.isRuleMarkingEnabled) {
+                            $(node).after(`<span class="markingTextReplaceRule">${key}</span>`);
+                        }
+                    } catch (error) {
+                        console.error(`Error processing text replacement for match: ${match}`, error);
+                    }
                 });
             } else {
-                $(node).contents().each(function () {
-                    traverseTextNodes($(this), textReplaceRules);
+                $(node).contents().each((_, childNode) => {
+                    traverseTextNodes($(childNode), textReplaceRules, key);
                 });
             }
         });
-    }
+    };
 
     /**
      * value替换
      * @param {JQuery} $nodes jQuery对象
      * @param {Object} valueReplaceRules 值替换规则对象
+     * @param {string} key 应用的规则集的名字
      */
-    function traverseValueNodes($nodes, valueReplaceRules) {
+    function traverseValueNodes($nodes, valueReplaceRules, key) {
         if (!$nodes) return;
 
         $nodes.each(function () {
@@ -3950,10 +4663,13 @@ async function localizeWebsite() {
                     let currentValue = $node.val();
                     let newValue = currentValue.replace(regex, replace);
                     $node.val(newValue);
+                    if (OJBetter.dev.isRuleMarkingEnabled) {
+                        if (newValue !== currentValue) $($node).after(`<span class="markingTextReplaceRule">${key}</span>`);
+                    }
                 });
             } else {
                 $node.children().each(function () {
-                    traverseValueNodes($(this), valueReplaceRules);
+                    traverseValueNodes($(this), valueReplaceRules, key);
                 });
             }
         });
@@ -3961,28 +4677,33 @@ async function localizeWebsite() {
 
     /**
      * 严格的文本节点遍历替换
-     * @param {JQuery} $node jQuery对象
+     * 要求被替换文本严格与规则文本一致
+     * @param {JQuery} $nodes jQuery对象
      * @param {Object} textReplaceRules 文本替换规则对象
+     * @param {string} key 应用的规则集的名字
      */
-    function strictTraverseTextNodes($nodes, textReplaceRules) {
+    const strictTraverseTextNodes = ($nodes, textReplaceRules, key) => {
         if (!$nodes) return;
 
-        $nodes.each(function () {
-            let $node = $(this);
-            if ($node.nodeType === Node.TEXT_NODE) {
-                const trimmedNodeText = $node.textContent.trim();
-                Object.keys(textReplaceRules).forEach(match => {
+        $nodes.each((_, node) => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const trimmedNodeText = node.textContent.trim();
+                for (const [match, replacement] of Object.entries(textReplaceRules)) {
                     if (trimmedNodeText === match) {
-                        $node.textContent = textReplaceRules[match];
+                        const beforeText = node.textContent;
+                        node.textContent = replacement;
+                        if (node.textContent !== beforeText && OJBetter.dev.isRuleMarkingEnabled) {
+                            $(node).after(`<span class="markingTextReplaceRule">${key}</span>`);
+                        }
                     }
-                });
+                }
             } else {
-                $($node).contents().each(function () {
-                    strictTraverseTextNodes($(this), textReplaceRules);
+                $(node).contents().each((_, childNode) => {
+                    strictTraverseTextNodes($(childNode), textReplaceRules, key);
                 });
             }
         });
-    }
+    };
 
     /**
      * 应用文本替换
@@ -3992,20 +4713,12 @@ async function localizeWebsite() {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
         classSelectors.forEach(classSelector => {
             if (value.isStrict) {
-                strictTraverseTextNodes($(`${classSelector}`), value.rules);
+                strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
             } else {
-                traverseTextNodes($(`${classSelector}`), value.rules);
+                traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
             }
         });
     });
-
-    // 测试
-    {
-        // var translations = {
-        //     
-        // };
-        // traverseTextNodes($('xxx'), translations);
-    };
 
     /**
      * 应用value替换
@@ -4014,7 +4727,28 @@ async function localizeWebsite() {
     Object.entries(InputValueReplacements).forEach(([key, value]) => {
         const classSelectors = Array.isArray(value.class) ? value.class : [value.class];
         classSelectors.forEach(classSelector => {
-            traverseValueNodes($(`${classSelector}`), value.rules);
+            traverseValueNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+        });
+    });
+
+    /**
+     * 动态添加的文本的替换
+     */
+    let dynamicReplacements = subs.dynamicReplacements;
+    Object.entries(dynamicReplacements).forEach(([key, value]) => {
+        const classSelectors = Array.isArray(value.class) ? value.class : [value.class]; // 兼容，class的值可以为数组或者字符串
+        classSelectors.forEach(classSelector => {
+            OJB_observeElement({
+                selector: classSelector,
+                callback: (node) => {
+                    // let popupContent = node.textContent.replace(/^×/, ''); // 去除开头多余的 '×' 字符
+                    if (value.isStrict) {
+                        strictTraverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+                    } else {
+                        traverseTextNodes(OJB_safeCreateJQElement(`${classSelector}`), value.rules, key);
+                    }
+                }
+            });
         });
     });
 
@@ -4104,9 +4838,9 @@ async function initI18next() {
                         /* options for secondary backend */
                         loadPath: (lng, ns) => {
                             if (lng[0] === 'zh' || lng[0] === 'zh-Hans') {
-                                return `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/locales/Codeforces/${ns}.json`;
+                                return `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/locales/${OJBetter.state.formatName}/${ns}.json`;
                             }
-                            return `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${lng}/resources/locales/Codeforces/${ns}.json`;
+                            return `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${lng}/resources/locales/${OJBetter.state.formatName}/${ns}.json`;
                         }
                     }]
                 }
@@ -4114,7 +4848,9 @@ async function initI18next() {
                 if (err) {
                     reject(err);
                 } else {
-                    jqueryI18next.init(i18next, $);
+                    jqueryI18next.init(i18next, $, {
+                        useOptionsAttr: true
+                    });
                     resolve(t);
                 }
             });
@@ -4403,9 +5139,9 @@ class ConfigManager {
      * 创建控制栏
      */
     createControlBar() {
-        this.controlTip = $(`<div id='${this.prefix}configControlTip' style='color:red;'></div>`);
-        this.config_bar_list = $(`<div class='config_bar_list' id='${this.prefix}config_bar_list'></div>`);
-        this.config_bar_ul = $(`<ul class='config_bar_ul' id='${this.prefix}config_bar_ul'></ul>`);
+        this.controlTip = OJB_safeCreateJQElement(`<div id='${this.prefix}configControlTip' style='color:red;'></div>`);
+        this.config_bar_list = OJB_safeCreateJQElement(`<div class='config_bar_list' id='${this.prefix}config_bar_list'></div>`);
+        this.config_bar_ul = OJB_safeCreateJQElement(`<ul class='config_bar_ul' id='${this.prefix}config_bar_ul'></ul>`);
         this.element.append(this.controlTip);
         this.element.append(this.config_bar_list);
         this.config_bar_list.append(this.config_bar_ul);
@@ -4415,12 +5151,12 @@ class ConfigManager {
      * 创建右键菜单
      */
     createContextMenu() {
-        const menu = $(`<div id='config_bar_menu' style='display: none;'></div>`);
-        const editItem = $(`
+        const menu = OJB_safeCreateJQElement(`<div id='config_bar_menu' style='display: none;'></div>`);
+        const editItem = OJB_safeCreateJQElement(`
         <div class='config_bar_menu_item' id='config_bar_menu_edit'>
             ${i18next.t('contextMenu.edit', { ns: 'translator' })}
         </div>`);
-        const deleteItem = $(`
+        const deleteItem = OJB_safeCreateJQElement(`
         <div class='config_bar_menu_item' id='config_bar_menu_delete'>
             ${i18next.t('contextMenu.delete', { ns: 'translator' })}
         </div>`);
@@ -4447,7 +5183,7 @@ class ConfigManager {
     createListItemElement(text) {
         const id = OJB_getRandomNumber(4);
         const li = $("<li></li>");
-        const radio = $(`<input type='radio' name='${this.prefix}config_item'></input>`)
+        const radio = OJB_safeCreateJQElement(`<input type='radio' name='${this.prefix}config_item'></input>`)
             .attr("value", text)
             .attr("id", id)
             .attr("prev_id", this.lastItemId)
@@ -4455,7 +5191,7 @@ class ConfigManager {
         if (!this.allowChoice) {
             radio.prop("disabled", true);
         }
-        const label = $(`<label for='${id}' class='config_bar_ul_li_text'>${text}</label>`).appendTo(li);
+        const label = OJB_safeCreateJQElement(`<label for='${id}' class='config_bar_ul_li_text'>${text}</label>`).appendTo(li);
 
 
         this.lastItemId = id;
@@ -4504,7 +5240,7 @@ class ConfigManager {
         });
 
         // 添加按钮
-        let addButton = $(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
+        let addButton = OJB_safeCreateJQElement(`<li id='${this.prefix}add_button' class="tempConfig_add_button">
             <span>+ ${i18next.t('add', { ns: 'common' })}</span>
         </li>`);
         this.config_add_button = addButton;
@@ -4602,7 +5338,7 @@ class ConfigManager {
      * @returns {JQuery<HTMLElement>} 返回配置编辑页面
      */
     createConfigHTML() {
-        const configMenu = $(this.configHTML);
+        const configMenu = OJB_safeCreateJQElement(this.configHTML);
         this.settingMenuDiv.after(configMenu);
         OJB_showModal(configMenu);
         OJB_addDraggable(configMenu);
@@ -4684,6 +5420,14 @@ const basic_settings_HTML = `
         <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -4698,6 +5442,14 @@ const basic_settings_HTML = `
             <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
         </div>
         <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
     </div>
     <div class='OJBetter_setting_list'>
         <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
@@ -5050,6 +5802,15 @@ const code_editor_settings_HTML = `
         </div>
         <input type="checkbox" id="problemPageCodeEditor" name="problemPageCodeEditor">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="beautifyPreBlocks"><span
+                data-i18n="settings:codeEditor.beautifyPreBlocks.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.beautifyPreBlocks.helpText"></div>
+        </div>
+        <input type="checkbox" id="beautifyPreBlocks" name="beautifyPreBlocks">
+    </div>
     <hr>
     <h4 data-i18n="settings:codeEditor.preferences.title"></h4>
     <div class='OJBetter_setting_list'>
@@ -5166,7 +5927,7 @@ const preference_settings_HTML = `
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:preference.loadingInfo.helpText"></div>
+            <div class="tip_text" data-i18n="[html]settings:preference.loadingInfo.helpText" data-i18n-options='{ "scriptName": "${OJBetter.state.name}" }'></div>
         </div>
         <input type="checkbox" id="showLoading" name="showLoading">
     </div>
@@ -5222,6 +5983,24 @@ const dev_settings_HTML = `
         <button type="button" id="l10n_refreshScrpitCacheButton" name="l10n_refreshScrpitCacheButton" data-i18n="settings:dev.l10n.refreshScrpitCache.button"></button>
     </div>
     <hr>
+    <h5 data-i18n="settings:dev.l10n_web.title"></h5>
+    <div class='OJBetter_setting_list'>
+        <label><span data-i18n="settings:dev.l10n_web.refreshScrpitCache.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:dev.l10n_web.refreshScrpitCache.helpText"></div>
+        </div>
+        <button type="button" id="l10n_web_refreshScrpitCacheButton" name="l10n_web_refreshScrpitCacheButton" data-i18n="settings:dev.l10n_web.refreshScrpitCache.button"></button>
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="isRuleMarkingEnabled"><span data-i18n="settings:dev.l10n_web.isRuleMarkingEnabled.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:dev.l10n_web.isRuleMarkingEnabled.helpText"></div>
+        </div>
+        <input type="checkbox" id="isRuleMarkingEnabled" name="isRuleMarkingEnabled">
+    </div>
+    <hr>
     <h5 data-i18n="settings:dev.indexedDB.title"></h5>
     <div class='OJBetter_setting_list'>
         <label><span data-i18n="settings:dev.indexedDB.clear.label"></span></label>
@@ -5262,13 +6041,12 @@ const dev_settings_HTML = `
 </div>
 `;
 
-// TODO 2
 const about_settings_HTML = `
 <div id="about-settings" class="settings-page">
     <h3 data-i18n="settings:about.title"></h3>
     <hr>
     <div class='versionInfo'>
-        <p>Codeforces Better!</p>
+        <p>${OJBetter.state.name}</p>
         <p><span data-i18n="settings:about.version"></span><span id="nowVersion">${OJBetter.state.version}</span></p>
         <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a> 
         <a target="_blank" href="https://greasyfork.org/zh-CN/scripts/465777">GreasyFork</a></p>
@@ -5276,7 +6054,7 @@ const about_settings_HTML = `
     <hr>
     <h5 data-i18n="settings:about.update.title"></h5>
     <div id="thanksforDevChannelNotice" class='OJBetter_setting_list alert_info'>
-        <div data-i18n="[html]settings:about.update.thanksforDevChannelNotice"></div>
+        <div data-i18n="[html]settings:about.update.thanksforDevChannelNotice"} data-i18n-options='{ "scriptName": "${OJBetter.state.name}" }' ></div>
     </div>
     <div class='OJBetter_setting_list'>
         <label for="updateChannel"><span data-i18n="settings:about.update.channel.label"></span></label>
@@ -5318,10 +6096,12 @@ const OJBetter_setting_content_HTML = `
 `;
 
 // 设置界面HTML
-const CFBetterSettingMenu_HTML = `
+const OJBetterSettingMenu_HTML = `
     <dialog class='OJBetter_setting_menu' id='OJBetter_setting_menu'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <div class="OJBetter_setting_container">
             ${OJBetter_setting_sidebar_HTML}
@@ -5426,7 +6206,9 @@ const deeplConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <h4 data-i18n="config:deepl.title"></h4>
         <h5 data-i18n="config:deepl.basic.title"></h5>
@@ -5491,7 +6273,9 @@ const chatgptConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <h4 data-i18n="config:chatgpt.title"></h4>
         <h5 data-i18n="config:chatgpt.basic.title"></h5>
@@ -5556,7 +6340,9 @@ const CompletConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class="btn-close">×</button>
+            <button class='ojb_btn ojb_btn_popover top btn-close'>
+                <i class="iconfont">&#xe614;</i>
+            </button>
         </div>
         <h4 data-i18n="config:complet.title"></h4>
         <hr>
@@ -5612,22 +6398,33 @@ const CompletConfigEditHTML = `
  * 加载设置按钮面板
  */
 async function initSettingsPanel() {
-    // 添加右上角设置按钮
-    function insertCFBetterSettingButton(location, method) {
+    /**
+     * 添加右上角设置按钮
+     * @param {string} location 位置选择器
+     * @param {string} method 插入方法
+     */
+    function insertOJBetterSettingButton(location, method) {
         $(location)[method](`<button class='ojb_btn OJBetter_setting'>
-        Codeforces Better ${i18next.t('settings', { ns: 'common' })}</button>`);
+        ${OJBetter.state.name} ${i18next.t('settings', { ns: 'common' })}</button>`);
     }
 
-    insertCFBetterSettingButton(".lang-chooser", "before");
-    insertCFBetterSettingButton(".enter-or-register-box", "after");
-    if (OJBetter.typeOfPage.is_completeProblemset) insertCFBetterSettingButton(".lang", "before");
+    /**
+     * ============================================
+     * 该网站插入设置按钮的位置和方式
+     */
+    insertOJBetterSettingButton(".lang-chooser", "before");
+    insertOJBetterSettingButton(".enter-or-register-box", "after");
+    if (OJBetter.typeOfPage.is_completeProblemset) insertOJBetterSettingButton(".lang", "before");
+    /**
+     * ============================================
+     */
 
     const $settingBtns = $(".OJBetter_setting");
     $settingBtns.click(() => {
         $settingBtns.prop("disabled", true).addClass("open");
 
         // 设置面板div
-        const settingMenu = $(CFBetterSettingMenu_HTML)
+        const settingMenu = OJB_safeCreateJQElement(OJBetterSettingMenu_HTML);
         $("body").append(settingMenu);
 
         elementLocalize(settingMenu); // 加载i18n
@@ -5794,9 +6591,11 @@ async function initSettingsPanel() {
         $("#showLoading").prop("checked", GM_getValue("showLoading") === true);
         $("#expandFoldingblocks").prop("checked", GM_getValue("expandFoldingblocks") === true);
         $("#renderPerfOpt").prop("checked", GM_getValue("renderPerfOpt") === true);
+        $("#selectElementPerfOpt").prop("checked", GM_getValue("selectElementPerfOpt") === true);
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
+        $("#showCF2vjudge").prop("checked", GM_getValue("showCF2vjudge") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
         $("#showClistRating_contest").prop("checked", GM_getValue("showClistRating_contest") === true);
         $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
@@ -5840,6 +6639,7 @@ async function initSettingsPanel() {
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
+        $("#beautifyPreBlocks").prop("checked", GM_getValue("beautifyPreBlocks") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
@@ -5851,8 +6651,9 @@ async function initSettingsPanel() {
         $("input[name='compiler']").css("color", "gray");
         // 调试
         $("#notWaiteLoaded").prop("checked", GM_getValue("notWaiteLoaded") === true);
-        // TODO 3
         $('#l10n_refreshScrpitCacheButton').click(clearI18nextCache);
+        $('#l10n_web_refreshScrpitCacheButton').click(clearWebsiteL10nData);
+        $("#isRuleMarkingEnabled").prop("checked", GM_getValue("isRuleMarkingEnabled") === true);
         $('#indexedDB_clearButton').click(async () => { await clearDatabase(); });
         $('#indexedDB_exportButton').click(async () => { downloadDataAsFile(await exportDatabase(), 'database_export.json') });
         $('#indexedDB_importButton').click(() => { readFileInput(async (fileContent) => { await importDatabase(fileContent); }); });
@@ -5880,9 +6681,11 @@ async function initSettingsPanel() {
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
                 renderPerfOpt: $("#renderPerfOpt").prop("checked"),
+                selectElementPerfOpt: $("#selectElementPerfOpt").prop("checked"),
                 commentPaging: $("#commentPaging").prop("checked"),
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
+                showCF2vjudge: $("#showCF2vjudge").prop("checked"),
                 scriptL10nLanguage: $('#scriptL10nLanguage').val(),
                 localizationLanguage: $('#localizationLanguage').val(),
                 transTargetLang: $('#transTargetLang').val(),
@@ -5917,6 +6720,7 @@ async function initSettingsPanel() {
                 RatingHidden: $('#RatingHidden').prop("checked"),
                 clist_Authorization: $('#clist_Authorization').val(),
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
+                beautifyPreBlocks: $("#beautifyPreBlocks").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
@@ -5926,6 +6730,7 @@ async function initSettingsPanel() {
                 OJBetter_Bridge_SocketUrl: $('#OJBetter_Bridge_SocketUrl').val(),
                 onlineCompilerChoice: $("input[name='compiler']:checked").val(),
                 notWaiteLoaded: $("#notWaiteLoaded").prop("checked"),
+                isRuleMarkingEnabled: $("#isRuleMarkingEnabled").prop("checked"),
                 updateChannel: $('#updateChannel').val(),
                 updateSource: $('#updateSource').val()
             };
@@ -6057,127 +6862,145 @@ async function initSettingsPanel() {
     });
 };
 
-// html2markdown转换/处理规则
-const turndownService = new TurndownService({ bulletListMarker: '-' });
+/**
+ * 初始化html2markdown转换器
+ */
+async function initHTML2MarkDown() {
+    OJBetter.common.turndownService = new TurndownService({ bulletListMarker: '-' });
 
-// 保留原始
-turndownService.keep(['del']);
+    // 保留原始
+    OJBetter.common.turndownService.keep(['del']);
 
-// 丢弃
-turndownService.addRule('remove-by-class', {
-    filter: function (node) {
-        return node.classList.contains('sample-tests') ||
-            node.classList.contains('header') ||
-            node.classList.contains('overlay') ||
-            node.classList.contains('html2md-panel') ||
-            node.classList.contains('likeForm');
-    },
-    replacement: function (content, node) {
-        return "";
-    }
-});
-turndownService.addRule('remove-script', {
-    filter: function (node, options) {
-        return node.tagName.toLowerCase() == "script" && node.type.startsWith("math/tex");
-    },
-    replacement: function (content, node) {
-        return "";
-    }
-});
-
-// inline math
-turndownService.addRule('inline-math', {
-    filter: function (node, options) {
-        return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
-    },
-    replacement: function (content, node) {
-        var latex = $(node).next().text();
-        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return "$" + latex + "$";
-    }
-});
-
-// block math
-turndownService.addRule('block-math', {
-    filter: function (node, options) {
-        return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
-    },
-    replacement: function (content, node) {
-        var latex = $(node).next().text();
-        latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return "\n$$\n" + latex + "\n$$\n";
-    }
-});
-
-// texFontStyle
-turndownService.addRule('texFontStyle', {
-    filter: function (node) {
-        return (
-            node.nodeName === 'SPAN' &&
-            node.classList.contains('tex-font-style-bf')
-        )
-    },
-    replacement: function (content) {
-        return '**' + content + '**'
-    }
-})
-
-// sectionTitle
-turndownService.addRule('sectionTitle', {
-    filter: function (node) {
-        return (
-            node.nodeName === 'DIV' &&
-            node.classList.contains('section-title')
-        )
-    },
-    replacement: function (content) {
-        return '**' + content + '**'
-    }
-})
-
-// property-title
-turndownService.addRule('property-title', {
-    filter: function (node) {
-        return (
-            node.nodeName === 'DIV' &&
-            node.classList.contains('property-title')
-        )
-    },
-    replacement: function (content) {
-        return content + ': '
-    }
-})
-
-
-// bordertable
-turndownService.addRule('bordertable', {
-    filter: 'table',
-    replacement: function (content, node) {
-        if (node.classList.contains('bordertable')) {
-            var output = [],
-                thead = '',
-                trs = node.querySelectorAll('tr');
-            if (trs.length > 0) {
-                var ths = trs[0].querySelectorAll('td,th');
-                if (ths.length > 0) {
-                    thead = '| ' + Array.from(ths).map(th => turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
-                        + '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
-                }
-            }
-            var rows = node.querySelectorAll('tr');
-            Array.from(rows).forEach(function (row, i) {
-                if (i > 0) {
-                    var cells = row.querySelectorAll('td,th');
-                    var trow = '| ' + Array.from(cells).map(cell => turndownService.turndown(cell.innerHTML.trim())).join(' | ') + ' |';
-                    output.push(trow);
-                }
-            });
-            return thead + output.join('\n');
-        } else {
-            return content;
+    // 丢弃
+    OJBetter.common.turndownService.addRule('remove-by-class', {
+        filter: function (node) {
+            return node.classList.contains('sample-tests') ||
+                node.classList.contains('header') ||
+                node.classList.contains('overlay') ||
+                node.classList.contains('html2md-panel') ||
+                node.classList.contains('likeForm') ||
+                node.classList.contains('monaco-editor');
+        },
+        replacement: function (content, node) {
+            return "";
         }
-    }
-});
+    });
+    OJBetter.common.turndownService.addRule('remove-script', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "script" && node.type.startsWith("math/tex");
+        },
+        replacement: function (content, node) {
+            return "";
+        }
+    });
+
+    // inline math
+    OJBetter.common.turndownService.addRule('inline-math', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "span" && node.className == "MathJax";
+        },
+        replacement: function (content, node) {
+            var latex = $(node).next().text();
+            latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "$" + latex + "$";
+        }
+    });
+
+    // block math
+    OJBetter.common.turndownService.addRule('block-math', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "div" && node.className == "MathJax_Display";
+        },
+        replacement: function (content, node) {
+            var latex = $(node).next().text();
+            latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "\n$$\n" + latex + "\n$$\n";
+        }
+    });
+
+    // texFontStyle
+    OJBetter.common.turndownService.addRule('texFontStyle', {
+        filter: function (node) {
+            return (
+                node.nodeName === 'SPAN' &&
+                node.classList.contains('tex-font-style-bf')
+            )
+        },
+        replacement: function (content) {
+            return '**' + content + '**'
+        }
+    })
+
+    // sectionTitle
+    OJBetter.common.turndownService.addRule('sectionTitle', {
+        filter: function (node) {
+            return (
+                node.nodeName === 'DIV' &&
+                node.classList.contains('section-title')
+            )
+        },
+        replacement: function (content) {
+            return '**' + content + '**'
+        }
+    })
+
+    // property-title
+    OJBetter.common.turndownService.addRule('property-title', {
+        filter: function (node) {
+            return (
+                node.nodeName === 'DIV' &&
+                node.classList.contains('property-title')
+            )
+        },
+        replacement: function (content) {
+            return content + ': '
+        }
+    })
+
+    // pre
+    OJBetter.common.turndownService.addRule('pre', {
+        filter: function (node, options) {
+            return node.tagName.toLowerCase() == "pre";
+        },
+        replacement: function (content, node) {
+            if (!!node.querySelector('code.prettyprint')) {
+                return "";
+            } else {
+                return "```\n" + content + "```\n";
+            }
+        }
+    });
+
+    // bordertable
+    OJBetter.common.turndownService.addRule('bordertable', {
+        filter: 'table',
+        replacement: function (content, node) {
+            if (node.classList.contains('bordertable')) {
+                var output = [],
+                    thead = '',
+                    trs = node.querySelectorAll('tr');
+                if (trs.length > 0) {
+                    var ths = trs[0].querySelectorAll('td,th');
+                    if (ths.length > 0) {
+                        thead = '| ' + Array.from(ths).map(th => OJBetter.common.turndownService.turndown(th.innerHTML.trim())).join(' | ') + ' |\n'
+                            + '| ' + Array.from(ths).map(() => ' --- ').join('|') + ' |\n';
+                    }
+                }
+                var rows = node.querySelectorAll('tr');
+                Array.from(rows).forEach(function (row, i) {
+                    if (i > 0) {
+                        var cells = row.querySelectorAll('td,th');
+                        var trow = '| ' + Array.from(cells).map(cell => OJBetter.common.turndownService.turndown(cell.innerHTML.trim())).join(' | ') + ' |';
+                        output.push(trow);
+                    }
+                });
+                return thead + output.join('\n');
+            } else {
+                return content;
+            }
+        }
+    });
+};
 
 /**
  * 任务队列
@@ -6242,56 +7065,11 @@ class TaskQueue {
 }
 
 /**
- * 检测文本是否可能为代码片段
+ * 检测为空文本
  * @param {string} text 待检测的文本
- * @returns {boolean} 是否可能为代码片段
+ * @returns {boolean} 是否为空文本
  */
-function isLikelyCodeSnippet(text) {
-    // 移除LaTeX公式部分
-    const cleanedText = text.replace(/(\$\$?[\s\S]*?\$\$?)/g, '');
-
-    // 代码的关键字
-    const keywords = [
-        'int', 'float', 'return', 'if', 'else', 'while', 'for', 'switch', 'case', 'break', 'continue',
-        'class', 'public', 'private', 'protected', 'void', 'static', 'const', 'enum', 'struct',
-        'char', 'double', 'long', 'include', 'def', 'import', 'from', 'as', 'elif', 'try', 'except',
-        'raise', 'with', 'lambda', 'print'
-    ];
-    // 代码的特殊字符
-    const codeChars = [';', '{', '}', '<', '>', '=', '+', '-',
-        '&', '|', '#', ':', '\'\'\'', '\"\"\"', '->'];
-
-    // 普通文本的标点符号
-    const textChars = ['.', ',', '?', '!', ':', '"', "'"];
-
-    // 关键字的数量
-    const keywordCount = keywords.reduce((count, keyword) => {
-        const regex = new RegExp("\\b" + keyword + "\\b", 'gi');
-        return count + (cleanedText.match(regex) || []).length;
-    }, 0);
-
-    // 特殊字符的数量
-    const codeCharCount = codeChars.reduce((count, char) => {
-        const regex = new RegExp("\\" + char, 'g');
-        return count + (cleanedText.match(regex) || []).length;
-    }, 0);
-
-    // 普通文本字符的数量
-    const textCharCount = textChars.reduce((count, char) => {
-        const regex = new RegExp("\\" + char, 'g');
-        return count + (cleanedText.match(regex) || []).length;
-    }, 0);
-
-    // 检查Python的缩进特征
-    const hasPythonIndentation = cleanedText.includes('\n    ') || cleanedText.includes('\n\t');
-
-    // 如果代码关键字数量或者特殊代码字符数量显著高于普通文本标点符号数量，或者存在Python缩进，则可能是代码
-    if (keywordCount > textCharCount * 2 || codeCharCount > textCharCount * 2 || hasPythonIndentation) {
-        return true;
-    }
-
-    return false;
-}
+const isEmptyText = text => text.trim() === '';
 
 /**
  * 加载按钮相关函数
@@ -6329,7 +7107,7 @@ async function initButtonFunc() {
         if (i.length != 0 && i.hasClass("iconfont")) {
             i.html(icon);
         } else {
-            i = $(`<i>${icon}</i>`);
+            i = OJB_safeCreateJQElement(`<i>${icon}</i>`);
             this.prepend(i);
         }
         return this;
@@ -6364,7 +7142,7 @@ async function initButtonFunc() {
         if (popover_content.length != 0) {
             popover_content.text(text);
         } else {
-            popover_content = $(`<span class="popover_content">${text}</span>`);
+            popover_content = OJB_safeCreateJQElement(`<span class="popover_content">${text}</span>`);
             this.append(popover_content);
         }
         return this;
@@ -6378,7 +7156,7 @@ async function initButtonFunc() {
         const markdown = this.data('markdown');
         if (markdown === undefined) {
             const htmlContent = this.html();
-            const newMarkdown = turndownService.turndown(htmlContent);
+            const newMarkdown = OJBetter.common.turndownService.turndown(htmlContent);
             this.data('markdown', newMarkdown);
             return newMarkdown;
         }
@@ -6488,18 +7266,18 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     else if (OJBetter.translation.comment.transMode == "2") text = i18next.t('trans.select', { ns: 'button' });
     else text = i18next.t('trans.normal', { ns: 'button' });
 
-    let panel = $(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
-    let viewButton = $(`
+    let panel = OJB_safeCreateJQElement(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
+    let viewButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
             <i class="iconfont">&#xe7e5;</i>
             <span class="popover_content">${i18next.t('md.normal', { ns: 'button' })}</span>
         </button>`);
-    let copyButton = $(`
+    let copyButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
         </button>`);
-    let translateButton = $(`
+    let translateButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
             <i class="iconfont">&#xe6be;</i>
             <span class="popover_content">${text}</span>
@@ -6598,7 +7376,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         } else {
             setViewmd(true);
             var markdown = $(element).getMarkdown();
-            var mdViewContent = $(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            var mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
             $(element).after(mdViewContent);
             $(element).hide();
         }
@@ -6680,7 +7458,10 @@ async function addButtonWithCopy(button, element, suffix, type) {
  * @param {boolean} is_comment 是否是评论
  */
 async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
-    // 添加可指定翻译服务的方法调用
+    /**
+     * 添加可指定翻译服务的方法调用
+     * @param {string} translation 翻译服务
+     */
     button.data("translatedItBy", function (translation) {
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
         OJBetter.common.taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
@@ -6691,11 +7472,16 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     await waitForMathJaxIdle();
     button.setButtonLoaded();
 
-    // 标记目标文本是短字符文本
+    // 标记目标文本区域不自动翻译
     {
-        let text = $(element).getMarkdown();
+        let text;
+        if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+            text = $(element).html();
+        } else {
+            text = $(element).getMarkdown();
+        }
         let length = text.length;
-        if (length > OJBetter.translation.auto.shortTextLength || isLikelyCodeSnippet(text)) {
+        if (length > OJBetter.translation.auto.shortTextLength || isEmptyText(text) || $(element).find('.spoiler').length > 0) {
             button.setNotAutoTranslate();
         }
         // button.after(`<span>${length}</span>`); // 显示字符数
@@ -6777,7 +7563,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
 
         if (is_comment) {
-            var label = $(`<label><input type="radio" name="translation" value="0">
+            var label = OJB_safeCreateJQElement(`<label><input type="radio" name="translation" value="0">
             <span class="OJBetter_contextmenu_label_text">
             ${i18next.t('translation.preference.comment_translation_choice.services.follow', { ns: 'settings' })}
             </span></label>`);
@@ -6785,7 +7571,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
         translations.forEach(function (translation) {
             if (supportsTargetLanguage(translation.value, OJBetter.translation.targetLang)) {
-                var label = $(`<label><input type="radio" name="translation" value="${translation.value}">
+                var label = OJB_safeCreateJQElement(`<label><input type="radio" name="translation" value="${translation.value}">
                 <span class="OJBetter_contextmenu_label_text">${translation.name}</span></label>`);
                 menu.append(label);
             }
@@ -6832,28 +7618,36 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
  * @param {HTMLElement} element 目标元素
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
-async function transTask(button, element, type, is_comment, translation) {
-    var target, element;
-    var count = {
+async function transTask(button, element, type, is_comment, overrideTrans) {
+    /** @type {HTMLElement} 目标元素 */
+    let target;
+    /**
+     * 错误计数数据结构
+     * @typedef {Object} count
+     * @property {number} errerNum 错误数量
+     * @property {number} skipNum 跳过数量
+     */
+    const count = {
         errerNum: 0,
         skipNum: 0
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        var pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
+        let pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, is_comment, count, translation);
+            await process(button, target, element_node, type, is_comment, count, overrideTrans);
         }
     } else if (OJBetter.translation.comment.transMode == "2") {
         // 选段翻译
-        var pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru");
+        let pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
-            await process(button, target, element_node, type, is_comment, count, translation);
+            await process(button, target, element_node, type, is_comment, count, overrideTrans);
         }
         $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
     } else {
@@ -6861,7 +7655,7 @@ async function transTask(button, element, type, is_comment, translation) {
         target = $(element).eq(0).clone();
         if (type === "child_level") $(target).children(':first').remove();
         element_node = $($(element)).get(0);
-        await process(button, target, element_node, type, is_comment, count, translation);
+        await process(button, target, element_node, type, is_comment, count, overrideTrans);
     }
 
     // 翻译完成
@@ -6877,8 +7671,9 @@ async function transTask(button, element, type, is_comment, translation) {
  * @param {HTMLElement} element_node 目标节点
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
-async function process(button, target, element_node, type, is_comment, count, translation) {
+async function process(button, target, element_node, type, is_comment, count, overrideTrans) {
     if (type === "child_level") {
         let div = $("<div>");
         $(element_node).append(div);
@@ -6903,10 +7698,9 @@ async function process(button, target, element_node, type, is_comment, count, tr
         }
     }
 
-    // 等待结果
-    let result;
+    // 等待并获取结果
     button.setTransButtonState('running');
-    result = await blockProcessing(button, target, element_node, is_comment, translation);
+    const result = await blockProcessing(button, target, element_node, is_comment, overrideTrans);
     button.pushResultToTransButton(result);
 
     if (result.status == "error") count.errerNum += 1;
@@ -6914,14 +7708,23 @@ async function process(button, target, element_node, type, is_comment, count, tr
     $(target).remove();
 }
 
-// 块处理
-async function blockProcessing(button, target, element_node, is_comment, translation) {
+/**
+ * 块处理
+ * @param {JQuery<HTMLElement>} button 
+ * @param {HTMLElement} target 目标元素
+ * @param {HTMLElement} element_node 目标节点
+ * @param {boolean} is_comment 是否是评论
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @returns {TranslateResult} 翻译结果对象
+ */
+async function blockProcessing(button, target, element_node, is_comment, overrideTrans) {
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
-        target.markdown = turndownService.turndown($(target).html());
+        target.markdown = OJBetter.common.turndownService.turndown($(target).html());
     }
-    var result = await translateProblemStatement(button, target.markdown, element_node, is_comment, translation);
+
+    const result = await translateProblemStatement(target.markdown, element_node, is_comment, overrideTrans);
     if (result.status == "skip") {
         button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
         result.translateDiv.close();
@@ -6957,7 +7760,7 @@ async function multiChoiceTranslation() {
             $this.attr('OJBetter_p_id', id);
             $this.addClass('block_selected');
             // 添加按钮 
-            let menu = $(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
+            let menu = OJB_safeCreateJQElement(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
                 });
@@ -7022,6 +7825,8 @@ async function acmsguruReblock() {
  * 添加MD/复制/翻译按钮
  */
 async function addConversionButton() {
+    let promises = []; // 用于收集所有的 Promise
+
     // 题目页添加按钮
     if (OJBetter.typeOfPage.is_problem) {
         let exContentsPageClasses = ["sample-tests"];
@@ -7030,25 +7835,25 @@ async function addConversionButton() {
             if (!exContentsPageClasses.includes(className)) {
                 var id = "_problem_" + OJB_getRandomNumber(8);
                 let panel = addButtonPanel(e, id, "this_level");
-                addButtonWithHTML2MD(panel.viewButton, e, id, "this_level");
-                addButtonWithCopy(panel.copyButton, e, id, "this_level");
-                addButtonWithTranslation(panel.translateButton, e, id, "this_level");
+                promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
+                promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
+                promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
                 if (i == 0) panel.translateButton.setNotAutoTranslate(); // 题目标题块跳过，不自动翻译
             }
         });
     }
     // 添加按钮到ttypography部分
-    $(".ttypography").each(function () {
+    $(".ttypography").each((i, e) => {
         // 是否为评论
         let is_comment = false;
-        if ($(this).parents('.comments').length > 0) is_comment = true;
+        if ($(e).parents('.comments').length > 0) is_comment = true;
         // 题目页不添加
         if (!OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_acmsguru) {
             let id = "_ttypography_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(this, id, "this_level");
-            addButtonWithHTML2MD(panel.viewButton, this, id, "this_level");
-            addButtonWithCopy(panel.copyButton, this, id, "this_level");
-            addButtonWithTranslation(panel.translateButton, this, id, "this_level", is_comment);
+            let panel = addButtonPanel(e, id, "this_level");
+            promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
+            promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
+            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level", is_comment));
         }
     });
 
@@ -7056,14 +7861,14 @@ async function addConversionButton() {
     if (OJBetter.typeOfPage.is_completeProblemset) {
         let exContentsPageClasses = ["sample-tests"];
         $('.problem-statement').each(function () {
-            $(this).children('div').each(function (i, e) {
+            $(this).children('div').each((i, e) => {
                 var className = $(e).attr('class');
                 if (!exContentsPageClasses.includes(className)) {
                     var id = "_problem_" + OJB_getRandomNumber(8);
                     let panel = addButtonPanel(e, id, "this_level");
-                    addButtonWithHTML2MD(panel.viewButton, e, id, "this_level");
-                    addButtonWithCopy(panel.copyButton, e, id, "this_level");
-                    addButtonWithTranslation(panel.translateButton, e, id, "this_level");
+                    promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
+                    promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
+                    promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
                     if (i == 0) panel.translateButton.setNotAutoTranslate(); // 题目标题块跳过，不自动翻译
                 }
             });
@@ -7071,13 +7876,13 @@ async function addConversionButton() {
     }
 
     // 添加按钮到spoiler部分
-    $('.spoiler-content').each(function () {
-        if ($(this).find('.html2md-panel').length === 0) {
+    $('.spoiler-content').each((i, e) => {
+        if ($(e).find('.html2md-panel').length === 0) {
             let id = "_spoiler_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(this, id, "child_level");
-            addButtonWithHTML2MD(panel.viewButton, this, id, "child_level");
-            addButtonWithCopy(panel.copyButton, this, id, "child_level");
-            addButtonWithTranslation(panel.translateButton, this, id, "child_level");
+            let panel = addButtonPanel(e, id, "child_level");
+            promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "child_level"));
+            promises.push(addButtonWithCopy(panel.copyButton, e, id, "child_level"));
+            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
         }
     });
 
@@ -7087,71 +7892,75 @@ async function addConversionButton() {
         $.each(elements, (i, e) => {
             $(e).each(function () {
                 let id = "_titled_" + OJB_getRandomNumber(8);
-                let nextDiv = $(this).next().children().get(0);
+                let nextDiv = $(e).next().children().get(0);
                 if (!nextDiv) return;
                 let panel = addButtonPanel(nextDiv, id, "child_level", true);
-                addButtonWithTranslation(panel.translateButton, nextDiv, id, "child_level");
+                promises.push(addButtonWithTranslation(panel.translateButton, nextDiv, id, "child_level"));
             });
         });
     })();
     if (OJBetter.typeOfPage.is_mSite) {
-        $("div[class='_IndexPage_notice']").each(function () {
+        $("div[class='_IndexPage_notice']").each((i, e) => {
             let id = "_titled_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(this, id, "this_level", true);
-            addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+            let panel = addButtonPanel(e, id, "this_level", true);
+            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
         });
     }
 
     // 添加按钮到比赛QA部分
-    $(".question-response").each(function () {
+    $(".question-response").each((i, e) => {
         let id = "_question_" + OJB_getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "this_level", true);
-        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+        let panel = addButtonPanel(e, id, "this_level", true);
+        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
     });
     if (OJBetter.typeOfPage.is_mSite) {
-        $("div._ProblemsPage_announcements table tbody tr:gt(0)").each(function () {
-            var $nextDiv = $(this).find("td:first");
+        $("div._ProblemsPage_announcements table tbody tr:gt(0)").each((i, e) => {
+            var $nextDiv = $(e).find("td:first");
             let id = "_question_" + OJB_getRandomNumber(8);
             let panel = addButtonPanel($nextDiv, id, "this_level", true);
-            addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level");
+            promises.push(addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level"));
         });
     }
 
     // 添加按钮到弹窗confirm-proto部分
-    $(".confirm-proto").each(function () {
+    $(".confirm-proto").each((i, e) => {
         let id = "_titled_" + OJB_getRandomNumber(8);
-        var $nextDiv = $(this).children().get(0);
+        var $nextDiv = $(e).children().get(0);
         let panel = addButtonPanel($nextDiv, id, "this_level", true);
-        addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level");
+        promises.push(addButtonWithTranslation(panel.translateButton, $nextDiv, id, "this_level"));
     });
 
     // 添加按钮到_CatalogHistorySidebarFrame_item部分
-    $("._CatalogHistorySidebarFrame_item").each(function () {
+    $("._CatalogHistorySidebarFrame_item").each((i, e) => {
         let id = "_history_sidebar_" + OJB_getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "this_level", true);
-        addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+        let panel = addButtonPanel(e, id, "this_level", true);
+        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
     });
 
     $(".problem-lock-link").on("click", function () {
-        $(".popup .content div").each(function () {
+        $(".popup .content div").each((i, e) => {
             let id = "_popup_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(this, id, "this_level", true);
-            addButtonWithTranslation(panel.translateButton, this, id, "this_level");
+            let panel = addButtonPanel(e, id, "this_level", true);
+            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
         });
     });
 
     // 添加按钮到弹窗alert部分
-    $(".alert:not(.OJBetter_alert)").each(function () {
+    $(".alert:not(.OJBetter_alert)").each((i, e) => {
         let id = "_alert_" + OJB_getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "child_level", true);
-        addButtonWithTranslation(panel.translateButton, this, id, "child_level");
+        let panel = addButtonPanel(e, id, "child_level", true);
+        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
     });
 
     // 添加按钮到talk-text部分
-    $(".talk-text").each(function () {
+    $(".talk-text").each((i, e) => {
         let id = "_talk-text_" + OJB_getRandomNumber(8);
-        let panel = addButtonPanel(this, id, "child_level", true);
-        addButtonWithTranslation(panel.translateButton, this, id, "child_level");
+        let panel = addButtonPanel(e, id, "child_level", true);
+        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
+    });
+
+    return Promise.all(promises).catch(error => {
+        console.error("One or more of the Add Button operations failed: ", error);
     });
 };
 
@@ -7161,71 +7970,31 @@ async function addConversionButton() {
  */
 function waitForMathJaxIdle() {
     return new Promise((resolve, reject) => {
-        var intervalId = setInterval(() => {
-            var queue = MathJax.Hub.queue;
-            if (queue.pending === 0 && queue.running === 0) {
-                clearInterval(intervalId);
-                resolve();
+        // 检查MathJax对象是否存在
+        const checkMathJaxExists = () => {
+            if (typeof MathJax === 'undefined') {
+                // 如果MathJax不存在，稍后再次检查
+                OJB_delay(100).then(checkMathJaxExists);
+            } else {
+                // MathJax存在，开始监视渲染队列
+                startMonitoringQueue();
             }
-        }, 100);
+        };
+
+        // 开始监视MathJax渲染队列
+        const startMonitoringQueue = () => {
+            const intervalId = setInterval(() => {
+                const queue = MathJax.Hub.queue;
+                if (queue.pending === 0 && queue.running === 0) {
+                    clearInterval(intervalId);
+                    resolve();
+                }
+            }, 100);
+        };
+
+        // 开始检查MathJax对象
+        checkMathJaxExists();
     });
-}
-
-// 块替换
-function replaceBlock(text, matches, replacements) {
-    try {
-        for (let i = 0; i < matches.length; i++) {
-            let match = matches[i];
-            let replacement = '';
-            if (OJBetter.translation.replaceSymbol === "1") {
-                replacement = `【${i + 1}】`;
-            } else if (OJBetter.translation.replaceSymbol === "2") {
-                replacement = `{${i + 1}}`;
-            } else if (OJBetter.translation.replaceSymbol === "3") {
-                replacement = `[${i + 1}]`;
-            }
-            text = text.replace(match, replacement);
-            replacements[replacement] = match;
-        }
-    } catch (e) { }
-    return text;
-}
-
-// 块还原
-function recoverBlock(translatedText, matches, replacements) {
-    for (let i = 0; i < matches.length; i++) {
-        let match = matches[i];
-        let replacement = replacements[`【${i + 1}】`] || replacements[`[${i + 1}]`] || replacements[`{${i + 1}}`];
-
-        let latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
-
-        let regex = new RegExp(latexMatch + `【\\s*${i + 1}\\s*】|\\[\\s*${i + 1}\\s*\\]|{\\s*${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, ...args) {
-            // LaTeX中的不替换
-            const groups = args[args.length - 1]; // groups是replace方法的最后一个参数
-            if (groups.latex_block || groups.latex_inline) return match;
-            // 没有空格则加一个
-            const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
-            let leftSpace = "", rightSpace = "";
-            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
-            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
-            return leftSpace + replacement + rightSpace;
-        });
-
-        regex = new RegExp(latexMatch + `【\\s*${i + 1}(?![】\\d])|(?<![【\\d])${i + 1}\\s*】|\\[\\s*${i + 1}(?![\\]\\d])|(?<![\\[\\d])${i + 1}\\s*\\]|{\\s*${i + 1}(?![}\\d])|(?<![{\\d])${i + 1}\\s*}`, 'g');
-        translatedText = translatedText.replace(regex, function (match, ...args) {
-            // LaTeX中的不替换
-            const groups = args[args.length - 1];
-            if (groups.latex_block || groups.latex_inline) return match;
-            // 没有空格则加一个
-            const offset = args[args.length - 3];
-            let leftSpace = "", rightSpace = "";
-            if (!/\s/.test(translatedText[offset - 1])) leftSpace = " ";
-            if (!/\s/.test(translatedText[offset + match.length])) rightSpace = " ";
-            return leftSpace + replacement + rightSpace;
-        });
-    }
-    return translatedText;
 }
 
 /**
@@ -7263,31 +8032,31 @@ class TranslateDiv {
         // 右侧
         this.rightDiv = $('<div>').css('display', 'flex');
         this.panelDiv.append(this.rightDiv);
-        this.debugButton = $(`
+        this.debugButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe641;</i>
             <span class="popover_content">${i18next.t('rawData.normal', { ns: 'button' })}</span>
         </button>`).hide();
         this.rightDiv.append(this.debugButton);
-        this.queryBalanceButton = $(`
+        this.queryBalanceButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe6ae;</i>
             <span class="popover_content">${i18next.t('queryBalance.normal', { ns: 'button' })}</span>
         </button>`).hide();
         this.rightDiv.append(this.queryBalanceButton);
-        this.copyButton = $(`
+        this.copyButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
         </button>`);
         this.rightDiv.append(this.copyButton);
-        this.upButton = $(`
+        this.upButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe601;</i>
             <span class="popover_content">${i18next.t('fold.normal', { ns: 'button' })}</span>
         </button>`);
         this.rightDiv.append(this.upButton);
-        this.closeButton = $(`
+        this.closeButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe614;</i>
             <span class="popover_content">${i18next.t('close.normal', { ns: 'button' })}</span>
@@ -7321,6 +8090,14 @@ class TranslateDiv {
     }
 
     /**
+     * 渲染一个元素内的LaTeX公式
+     * @param {HTMLElement} element 元素
+     */
+    renderLaTeX(element) {
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+    }
+
+    /**
      * 更新翻译框内容
      * @param {string} text 文本内容
      * @param {boolean} is_escapeHTML 是否转义HTML标签，为true则HTML标签将作为普通文本处理，默认为true
@@ -7336,8 +8113,17 @@ class TranslateDiv {
         this.mainDiv.html(html);
         // 渲染Latex
         if (is_renderLaTeX) {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+            // MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
+            this.renderLaTeX(this.mainDiv.get(0));
         }
+        // // 渲染代码块中的公式 (AtCoder)
+        // this.mainDiv.find('pre code').each((index, element) => {
+        //     const codeText = $(element).text();
+        //     const latexPattern = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/;
+        //     if (latexPattern.test(codeText)) {
+        //         this.renderLaTeX(element);
+        //     }
+        // });
     }
 
     /**
@@ -7377,7 +8163,7 @@ class TranslateDiv {
             if (OJBetter.typeOfPage.is_problem && OJBetter.translation.memory.enabled) {
                 OJBetter.translation.memory.ttTree.rmTransResultMap(this.id); // 移除ttTree中的数据
                 OJBetter.translation.memory.ttTree.refreshNode(".ttypography");
-                updateTransDBData(OJBetter.translation.memory.ttTree.getNodeDate(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新DB中的数据
+                updateTransDBData(OJBetter.translation.memory.ttTree.getNodeData(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新DB中的数据
             }
         });
     }
@@ -7548,7 +8334,7 @@ class ElementsTree {
 
     // 向树中添加一个节点
     addNode(i_, prev, e) {
-        var node = this.node[i_];
+        let node = this.node[i_];
         node[this.index] = {
             prev: prev,
             next: null,
@@ -7569,11 +8355,11 @@ class ElementsTree {
         return prev;
     }
 
-    getNodeDate() {
+    getNodeData() {
         return this.node;
     }
 
-    setNodeDate(node) {
+    setNodeData(node) {
         this.node = node;
     }
 
@@ -7629,9 +8415,8 @@ class ElementsTree {
                     return;
                 }
             }
-            if (pElement.prop("tagName") !== ttTreeNode[index].type) {
-                // console.warn(`类型不同, 元素结构可能已经发生了变化: \nindex: ${index}`);
-                // console.warn(pElement);
+            if (!ttTreeNode[index] || pElement.prop("tagName") !== ttTreeNode[index].type) {
+                // console.warn(`元素不存在或类型不同, 元素结构可能已经发生了变化: \nindex: ${index}`, pElement);
                 return;
             } else {
                 // recursively child element
@@ -7646,6 +8431,7 @@ class ElementsTree {
                 // check if next node is translateDiv
                 if (node.next !== null) {
                     index = node.next;
+
                     var ne_node = ttTreeNode[index];
                     if (ne_node.isTranslateDiv) {
                         var id = ne_node.id;
@@ -7717,7 +8503,7 @@ async function initTransResultsRecover() {
     OJBetter.translation.memory.ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
     let result = await getTransDBData();
     if (!result) return;
-    OJBetter.translation.memory.ttTree.setNodeDate(result.nodeDate);
+    OJBetter.translation.memory.ttTree.setNodeData(result.nodeDate);
     OJBetter.translation.memory.ttTree.setTransResultMap(result.transResultMap);
     OJBetter.translation.memory.ttTree.recover($(".ttypography"));
 }
@@ -7764,69 +8550,105 @@ async function initTransWhenViewable() {
     observers.push(observer);
 }
 
-// 翻译主方法
-async function translateProblemStatement(button, text, element_node, is_comment, translation_) {
-    let status = "ok";
-    let id = OJB_getRandomNumber(8);
-    let matches = [];
-    let replacements = {};
+/** 
+ * 翻译返回结果结构体
+ * @typedef {Object} TranslateResult
+ * @property {string} status 翻译状态
+ * @property {TranslateDiv} translateDiv 翻译结果面板
+ * @property {TransRawData} rawData 原始翻译数据
+ */
+
+/**
+ * 翻译主方法
+ * @param {string} text 待翻译文本
+ * @param {HTMLElement} element_node 元素节点
+ * @param {Boolean} is_comment 是否为评论区文本
+ * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @returns {TranslateResult} 翻译结果对象
+ */
+async function translateProblemStatement(text, element_node, is_comment, overrideTrans) {
+    /** @type {number} 翻译结果的ID*/
+    const id = OJB_getRandomNumber(8);
+    /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
+    const textBlockReplacer = new TextBlockReplacer();
+    /** @type {string} 翻译结果文本*/
     let translatedText = "";
-    let rawData = {
-        done: false
-    };
+
+    /** @type {string} 当前实际应用的翻译服务 */
+    const realTransServer = overrideTrans ||
+        (is_comment && OJBetter.translation.comment.choice != "0" ?
+            OJBetter.translation.comment.choice :
+            OJBetter.translation.choice);
+
+    /** @type {TranslateResult} 翻译结果对象 */
+    const translateResult = {
+        status: "ok",
+        rawData: {
+            done: false
+        }
+    }
 
     /**
      * LaTeX替换
-     * @param {string} text 
-     * @returns {string}
+     * @param {string} text 待翻译文本
+     * @returns {string} 处理后的文本
      */
-    function replaceLatex(text) {
+    const replaceLatex = function (text) {
         if (OJBetter.typeOfPage.is_oldLatex) {
-            let regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-            matches = matches.concat(text.match(regex));
-            text = replaceBlock(text, matches, replacements);
+            const regex = /<span\s+class="tex-span">.*?<\/span>/gi;
+            text = textBlockReplacer.replace(text, regex);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            let regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
-            matches = matches.concat(text.match(regex));
-            text = replaceBlock(text, matches, replacements);
-        } else if (realTranlate != "openai") {
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            text = textBlockReplacer.replace(text, regex);
+        } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            let regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
-            matches = matches.concat(text.match(regex));
-            text = replaceBlock(text, matches, replacements);
+            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            text = textBlockReplacer.replace(text, regex);
+
+            // 替换行间代码块```
+            const regex2 = /```[\s\S]*?```/g;
+            text = textBlockReplacer.replace(text, regex2);
         }
         return text;
     }
 
     /**
      * LaTeX恢复
-     * @param {*} translatedText 
-     * @returns {string}
+     * @param {string} text 已翻译的文本
+     * @returns {string} 恢复后的文本
      */
-    function recoverLatex(translatedText) {
-        translatedText = translatedText.replace(/】\s*【/g, '】 【');
-        translatedText = translatedText.replace(/\]\s*\[/g, '] [');
-        translatedText = translatedText.replace(/\}\s*\{/g, '} {');
+    const recoverLatex = function (text) {
+        // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
+        let resultText = text
+            .replace(/】【/g, '】 【')
+            .replace(/\]\[/g, '] [')
+            .replace(/\}\{/g, '} {');
+
         if (OJBetter.typeOfPage.is_oldLatex) {
-            translatedText = translatedText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
-            translatedText = recoverBlock(translatedText, matches, replacements);
+            resultText = resultText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
+            resultText = textBlockReplacer.recover(resultText);
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            translatedText = recoverBlock(translatedText, matches, replacements);
-        } else if (realTranlate != "openai") {
-            translatedText = recoverBlock(translatedText, matches, replacements);
+            resultText = textBlockReplacer.recover(resultText);
+        } else if (realTransServer != "openai") {
+            resultText = textBlockReplacer.recover(resultText);
         }
-        return translatedText;
+        return resultText;
     }
 
     /**
      * 格式化翻译结果
-     * @param {string} translatedText 
+     * @param {string} text 
      * @returns {string} 处理后的翻译结果
      */
-    function formatText(translatedText) {
+    const formatText = function (text) {
         // 转义LaTex中的特殊符号
         if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+            // 先替换掉行间代码块
+            const replacer = new TextBlockReplacer();
+            text = replacer.replace(text, /```[\s\S]*?```/g);
+
+            // 处理LaTeX公式
             const escapeRules = [
                 { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
                 { pattern: /(?<!\\)</g, replacement: " &lt; " }, // <符号
@@ -7836,8 +8658,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                 { pattern: /(?<!\\)\\(?![\\a-zA-Z0-9])/g, replacement: "\\\\" }, // \符号
             ];
 
-            let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
-
+            let latexMatches = [...text.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$|\$([\s\S]*?)\$/g)];
             for (const match of latexMatches) {
                 const matchedText = match[0];
                 let escapedText = matchedText;
@@ -7845,9 +8666,12 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                 for (const rule of escapeRules) {
                     escapedText = escapedText.replaceAll(rule.pattern, rule.replacement);
                 }
-                escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement）
-                translatedText = translatedText.replace(matchedText, escapedText);
+                escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$");// $$符号（因为后面需要作为replacement，双倍消耗）
+                text = text.replace(matchedText, escapedText);
             }
+
+            // 恢复行间代码块
+            text = replacer.recover(text);
         }
 
         // 使符合mathjx的转换语法
@@ -7855,7 +8679,7 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             { pattern: /\$/g, replacement: "$$$$$$" }, // $$ 行间
         ];
         mathjaxRuleMap.forEach(({ pattern, replacement }) => {
-            translatedText = translatedText.replace(pattern, replacement);
+            text = text.replace(pattern, replacement);
         });
 
         // markdown修正
@@ -7868,53 +8692,41 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
         ];
         mdRuleMap.forEach(({ pattern, replacement }) => {
-            translatedText = translatedText.replace(pattern, replacement);
+            text = text.replace(pattern, replacement);
         });
 
-        return translatedText;
+        return text;
     }
 
     // 创建翻译结果元素并放在element_node的后面
-    const translateDiv = new TranslateDiv(id);
-    $(element_node).after(translateDiv.getDiv());
+    translateResult.translateDiv = new TranslateDiv(id);
+    $(element_node).after(translateResult.translateDiv.getDiv());
 
-    // 当前实际翻译服务
-    let realTranlate;
-    if (translation_) {
-        realTranlate = translation_;
-    } else {
-        if (is_comment && OJBetter.translation.comment.choice != "0") realTranlate = OJBetter.translation.comment.choice;
-        else realTranlate = OJBetter.translation.choice;
-    }
-
-    // 信息
-    translateDiv.setTopText(i18next.t('servers.' + realTranlate, { ns: 'translator' }) +
+    // 顶栏左侧信息
+    translateResult.translateDiv.setTopText(i18next.t('servers.' + realTransServer, { ns: 'translator' }) +
         i18next.t('translateDiv.topTextSuffix', { ns: 'translator' }));
 
     // 注册按钮
-    translateDiv.registerUpButtonEvent();
-    translateDiv.registerCloseButtonEvent();
+    translateResult.translateDiv.registerUpButtonEvent();
+    translateResult.translateDiv.registerCloseButtonEvent();
     if (OJBetter.translation.choice == 'openai' || OJBetter.translation.choice == 'deepl') {
-        translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 额度查询
+        translateResult.translateDiv.showQueryBalanceButton(OJBetter.translation.choice); // 显示额度查询
     }
 
-    // 翻译内容是否可能为代码片段
-    if (isLikelyCodeSnippet(text)) {
+    // 翻译内容是否为空文本
+    if (isEmptyText(text)) {
         const shouldContinue = await OJB_createDialog(
-            i18next.t('isLikelyCodeSnippet.title', { ns: 'dialog' }),
-            i18next.t('isLikelyCodeSnippet.content', { ns: 'dialog' }),
+            i18next.t('isEmptyText.title', { ns: 'dialog' }),
+            i18next.t('isEmptyText.content', { ns: 'dialog' }),
             [
-                i18next.t('isLikelyCodeSnippet.buttons.0', { ns: 'dialog' }),
-                i18next.t('isLikelyCodeSnippet.buttons.1', { ns: 'dialog' })
+                i18next.t('isEmptyText.buttons.0', { ns: 'dialog' }),
+                i18next.t('isEmptyText.buttons.1', { ns: 'dialog' })
             ],
             true
         );
         if (shouldContinue) {
-            return {
-                translateDiv: translateDiv,
-                status: "skip",
-                rawData: rawData
-            };
+            translateResult.status = "skip";
+            return translateResult;
         }
     }
 
@@ -7934,8 +8746,8 @@ async function translateProblemStatement(button, text, element_node, is_comment,
         google: 5000,
         caiyun: 5000
     };
-    if (translationLimits.hasOwnProperty(realTranlate) && text.length > translationLimits[realTranlate]) {
-        let textLength = translationLimits[realTranlate];
+    if (translationLimits.hasOwnProperty(realTransServer) && text.length > translationLimits[realTransServer]) {
+        let textLength = translationLimits[realTransServer];
         let realTextLength = text.length;
         const shouldContinue = await OJB_createDialog(
             i18next.t('transTextLimits.title', { ns: 'dialog' }),
@@ -7947,26 +8759,28 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             true
         ); // 字数超限确认
         if (shouldContinue) {
-            return {
-                translateDiv: translateDiv,
-                status: "skip",
-                rawData: rawData
-            };
+            translateResult.status = "skip";
+            return translateResult;
         }
     }
 
-    // 翻译
-    async function translate(translation) {
+    /**
+     * 调用各个翻译服务
+     * @param {string} transServer 翻译服务
+     * @returns {TransRawData} 原始翻译数据
+     */
+    async function translate(transServer) {
         const is_renderLaTeX = !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru);
-        const servername = i18next.t('servers.' + realTranlate, { ns: 'translator' });
+        const servername = i18next.t('servers.' + realTransServer, { ns: 'translator' });
+        /** @type {TransRawData} 原始翻译数据*/
         let rawData = {};
         try {
-            if (translation == "deepl") {
+            if (transServer == "deepl") {
                 if (OJBetter.deepl.config.type == 'free') {
+                    translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                     rawData = await translate_deepl(text);
-                    translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 } else if (OJBetter.deepl.config.type == 'api') {
-                    translateDiv.updateTranslateDiv(`${i18next.t('transingTip.deeplApi', { ns: 'translator', deepl_configName: OJBetter.deepl.config.name })}`, is_renderLaTeX);
+                    translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.deeplApi', { ns: 'translator', deepl_configName: OJBetter.deepl.config.name })}`, is_renderLaTeX);
                     if (OJBetter.deepl.config.apiGenre == 'deeplx') {
                         rawData = await translate_deeplx(text);
                     } else {
@@ -7981,26 +8795,25 @@ async function translateProblemStatement(button, text, element_node, is_comment,
                         if (OJBetter.deepl.enableLinkProtection) rawData.text = convertLinksHTMLToMarkdown(rawData.text);
                     }
                 }
-            } else if (translation == "iflyrec") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "iflyrec") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_iflyrec(text);
-            } else if (translation == "youdao") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "youdao") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_youdao_mobile(text);
-            } else if (translation == "google") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
+            } else if (transServer == "google") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_gg(text);
-            } else if (translation == "caiyun") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
-                await translate_caiyun_startup();
+            } else if (transServer == "caiyun") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_caiyun(text);
-            } else if (translation == "openai") {
-                translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
+            } else if (transServer == "openai") {
+                translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
                     ? i18next.t('transingTip.openai_isStream', { ns: 'translator' }) : ""}`,
                     is_renderLaTeX);
                 if (OJBetter.chatgpt.isStream) {
                     // 流式传输
-                    rawData = await translate_openai_stream(text, translateDiv);
+                    rawData = await translate_openai_stream(text, translateResult.translateDiv);
                 } else {
                     // 普通模式
                     rawData = await translate_openai(text);
@@ -8008,24 +8821,20 @@ async function translateProblemStatement(button, text, element_node, is_comment,
             }
             translatedText = rawData.text;
             if (!rawData.done) {
-                status = "error";
+                translateResult.status = "error";
             }
         } catch (e) {
-            status = "error";
+            translateResult.status = "error";
             rawData.message = i18next.t('error.unexpected', { ns: 'translator' });
             console.warn(e);
         }
         return rawData;
     }
-    rawData = await translate(realTranlate);
+    translateResult.rawData = await translate(realTransServer);
 
-    if (status == "error") {
-        translateDiv.updateTranslateDiv(rawData.message);
-        return {
-            status: status,
-            translateDiv: translateDiv,
-            rawData: rawData
-        };
+    if (translateResult.status == "error") {
+        translateResult.translateDiv.updateTranslateDiv(translateResult.rawData.message);
+        return translateResult;
     }
 
     // 还原latex公式
@@ -8033,9 +8842,9 @@ async function translateProblemStatement(button, text, element_node, is_comment,
 
     // 注册结果复制按钮
     if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-        translateDiv.registerCopyButtonEvent(translatedText);
+        translateResult.translateDiv.registerCopyButtonEvent(translatedText);
     } else {
-        translateDiv.disableCopyButton();
+        translateResult.translateDiv.disableCopyButton();
     }
 
     // 翻译结果格式化
@@ -8045,17 +8854,13 @@ async function translateProblemStatement(button, text, element_node, is_comment,
     if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
         OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
         OJBetter.translation.memory.ttTree.addTransResultMap(id, translatedText);
-        updateTransDBData(OJBetter.translation.memory.ttTree.getNodeDate(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新翻译结果到transDB
+        updateTransDBData(OJBetter.translation.memory.ttTree.getNodeData(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新翻译结果到transDB
     }
 
     // 翻译结果面板更新
-    translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+    translateResult.translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
 
-    return {
-        status: status,
-        translateDiv: translateDiv,
-        rawData: rawData
-    };
+    return translateResult;
 }
 
 //弹窗翻译
@@ -8084,6 +8889,65 @@ function RenderPerfOpt() {
             contain: layout style;
         }
     `);
+}
+
+/**
+ * 下拉选择框性能优化
+ */
+async function SelectElementPerfOpt() {
+    // TODO 10
+    // 加载库资源
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js");
+    /**
+     * 将一个<select>元素转换为SelectPage控件
+     * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
+     */
+    const OJB_transformSelectToSelectPage = (selector) => {
+        const $select = $(selector);
+        if ($select.length === 0 || !$select.is('select')) {
+            console.error('Invalid select element provided.');
+            return;
+        }
+
+        // 隐藏原生的<select>元素
+        $select.hide();
+
+        // 创建一个新的<input>元素用于SelectPage控件
+        const $inputForSelectPage = $('<input>', {
+            type: 'text',
+            class: 'selectpage-input',
+            autocomplete: 'off'
+        });
+        $select.after($inputForSelectPage);
+
+        // 准备SelectPage所需的数据格式
+        const data = $select.find('option').map((_, option) => ({
+            id: option.value,
+            text: option.text
+        })).get();
+
+        // 初始化SelectPage
+        $inputForSelectPage.selectPage({
+            showField: 'text',
+            keyField: 'id',
+            data,
+            lang: 'en',
+            // 当选中一个选项时，更新隐藏的<select>元素的值
+            eSelect: (data) => {
+                $select.val(data.id).trigger('change');
+            },
+            // 初始化时根据<select>的当前值设置SelectPage
+            initRecord: $select.val()
+        });
+    };
+
+    // 遍历页面上的所有select
+    $('select').each((_, select) => {
+        // 选项大于500才优化
+        if ($(select).find('option').length > 500) {
+          OJB_transformSelectToSelectPage(select);
+        }
+      });
 }
 
 /**
@@ -8361,34 +9225,82 @@ async function CF2luogu(problemToolbar) {
         i18next.t('state.loading', { ns: 'button' }),
         $("<img>").attr("src", "https://cdn.luogu.com.cn/fe/logo.png")
     );
-    const checkLinkExistence = (url) => {
-        return new Promise((resolve, reject) => {
-            GM.xmlHttpRequest({
+
+    const checkLinkExistence = async (url) => {
+        return OJB_promiseRetryWrapper(async () => {
+            const response = await OJB_GMRequest({
                 method: "GET",
-                url,
-                headers: { "Range": "bytes=0-9999" }, // 获取前10KB数据
-                onload(response) {
-                    if (response.responseText.match(/题目未找到/g)) {
-                        resolve(false);
-                    } else {
-                        resolve(true);
-                    }
-                },
-                onerror(error) {
-                    reject(error);
-                }
+                url
             });
+            return !response.responseText.match(/出错了/g);
+        }, {
+            maxRetries: 3,
+            retryInterval: 1000
         });
     };
 
     const LuoguUrl = `https://www.luogu.com.cn/problem/CF${problemId}`;
-    const result = await checkLinkExistence(LuoguUrl);
-    if (problemId && result) {
-        problemToolbar.updateText(luoguButton, "");
-        problemToolbar.updateUrl(luoguButton, LuoguUrl);
-    } else {
-        problemToolbar.updateText(luoguButton, i18next.t('state.404', { ns: 'button' }));
-        problemToolbar.disableButton(luoguButton);
+    try {
+        const result = await checkLinkExistence(LuoguUrl);
+        if (problemId && result) {
+            problemToolbar.updateText(luoguButton, "");
+            problemToolbar.updateUrl(luoguButton, LuoguUrl);
+        } else {
+            problemToolbar.updateText(luoguButton, i18next.t('state.404', { ns: 'button' }));
+            problemToolbar.disableButton(luoguButton);
+        }
+    } catch (error) {
+        if (error instanceof OJB_GMError && error.type == "error") {
+            problemToolbar.updateText(luoguButton, i18next.t('state.netError', { ns: 'button' }));
+            problemToolbar.disableButton(luoguButton);
+        }
+    }
+}
+
+/**
+ * 跳转到 Virtual Judge
+ * @param {ProblemPageLinkbar} problemToolbar 
+ */
+async function CF2vjudge(problemToolbar) {
+    const url = window.location.href;
+    const problemId = getProblemId(url);
+    const vjudgeButton = problemToolbar.addLinkButton(
+        "vjudgeButton",
+        "https://vjudge.net/",
+        i18next.t('state.loading', { ns: 'button' }),
+        $("<img>").attr("src", "https://aowuucdn.oss-accelerate.aliyuncs.com/vjudge.ico")
+    );
+
+    const checkLinkExistence = async (url) => {
+        return OJB_promiseRetryWrapper(async () => {
+            const response = await OJB_GMRequest({
+                method: "HEAD",
+                url: url,
+            });
+            if (response.status >= 200 && response.status < 300) return true;
+            else if (response.status == 404) return false;
+            else throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+        }, {
+            maxRetries: 3,
+            retryInterval: 1000
+        });
+    };
+
+    const VjudgeUrl = `https://vjudge.net/problem/CodeForces-${problemId}`;
+    try {
+        const result = await checkLinkExistence(VjudgeUrl);
+        if (problemId && result) {
+            problemToolbar.updateText(vjudgeButton, "VJudge");
+            problemToolbar.updateUrl(vjudgeButton, VjudgeUrl);
+        } else {
+            problemToolbar.updateText(vjudgeButton, i18next.t('state.404', { ns: 'button' }));
+            problemToolbar.disableButton(vjudgeButton);
+        }
+    } catch (error) {
+        if (error instanceof OJB_GMError && error.type == "error") {
+            problemToolbar.updateText(vjudgeButton, i18next.t('state.netError', { ns: 'button' }));
+            problemToolbar.disableButton(vjudgeButton);
+        }
     }
 }
 
@@ -8419,7 +9331,7 @@ const cssMap = {
     "rating_by_clist_color8": "#ff3333",
     "rating_by_clist_color9": "#aa0000"
 };
-
+// TODO 7
 /**
  * clist 访问有效性检查
  * @param {boolean} onlyCookie 是否只检查Cookie
@@ -8488,7 +9400,6 @@ function creatRatingCss(hasBorder = true) {
         dynamicCss += `a.${cssClass}${hoverSelector}, a.${cssClass}${hoverSelector}:link {\n`;
         let borderColor = hasBorder ? cssMap[cssClass] : defaultBorderColor;
         dynamicCss += `    color: ${cssMap[cssClass]} ${OJBetter.clist.ratingHidden ? "!important" : ""};\n`;
-        dynamicCss += `    border: 1px solid ${borderColor} ${OJBetter.clist.ratingHidden ? "!important" : ""};\n`;
         dynamicCss += `}\n`;
     }
     GM_addStyle(dynamicCss);
@@ -8508,118 +9419,236 @@ function creatRatingCss(hasBorder = true) {
  * @param {string} contest 比赛名称
  * @returns {Promise<{rating: number, problem: string}>} 题目难度
  */
-async function getRating(problem, problem_url, contest = null) {
-    problem = problem.replace(/\([\s\S]*?\)/g, '').replace(/^\s+|\s+$/g, '');
-    return new Promise((resolve, reject) => {
-        const queryString = `search=${problem}&resource=1`;
-        GM_xmlhttpRequest({
+async function getRatingFromHTML(problem, problem_url, contest = null) {
+    // 去除题目名称中的括号，以及首尾的空白符
+    problem = problem.replace(/\([\s\S]*?\)/g, '').trim();
+
+    return OJB_promiseRetryWrapper(async () => {
+        const queryString = `search=${encodeURIComponent(problem)}&resource=1`;
+        const response = await OJB_GMRequest({
             method: 'GET',
             url: `https://clist.by/problems/?${queryString}`,
-            responseType: 'html',
-            onload: function (response) {
-                const html = response.responseText;
-                var cleanedHtml = html.replace(/src=(.|\s)*?"/g, '');
-                const trs = $(cleanedHtml).find('table').find('tbody tr');
-                let records = [];
-                trs.each(function (index) {
-                    const rating = $(this).find('.problem-rating-column').text().trim();
-                    const link = $(this).find('.problem-name-column').find('a').eq(1).attr('href');
-                    var contests = [];
-                    $(this).find('.problem-name-column').find('.pull-right a[title], .pull-right span[title]').each(function () {
-                        var value = $(this).attr('title');
-                        if (value) {
-                            value = value.replace(/<br\/?><\/a>/g, '');
-                            contests.push(value);
-                        }
-                    });
-                    records.push({ rating: rating, link: link, contests: contests });
-                });
-                for (let record of records) {
-                    let link;
-                    if (typeof record.link !== 'undefined') link = record.link.replace(/http:/g, 'https:');
-                    if (link == problem_url || link == problem_url + '/') {
-                        resolve({
-                            rating: parseInt(record.rating),
-                            problem: problem
-                        });
-                        return;
-                    } else if (contest != null) {
-                        for (let item of record.contests) {
-                            if (contest == item) {
-                                resolve({
-                                    rating: parseInt(record.rating),
-                                    problem: problem
-                                });
-                                return;
-                            }
-                        }
-                    }
-                }
-                reject(`No data found for the question of ${problem} .`);
-            },
-            onerror: function (response) {
-                reject(`An error occurred while handling the ${problem} problem.`);
-            }
         });
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+        const html = response.responseText;
+        const cleanedHtml = html.replace(/src=(.|\s)*?"/g, '');
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(cleanedHtml, 'text/html');
+        const trs = doc.querySelectorAll('table tbody tr');
+
+        for (let tr of trs) {
+            const rating = tr.querySelector('.problem-rating-column').textContent.trim();
+            const link = OJB_cleanLink(tr.querySelector('.problem-name-column a:nth-of-type(2)')?.href);
+
+            if (link === problem_url || link === problem_url + '/') {
+                return {
+                    rating: parseInt(rating),
+                    problem: problem
+                };
+            } else if (contest !== null) {
+                const contestTitles = [...tr.querySelectorAll('.problem-name-column .pull-right a[title], .problem-name-column .pull-right span[title]')].map(el => el.title);
+                if (contestTitles.includes(contest)) {
+                    return {
+                        rating: parseInt(rating),
+                        problem: problem
+                    };
+                }
+            }
+        }
+        console.warn(`No data found for the question: ${problem}`);
+    }, {
+        maxRetries: 3,
+        retryInterval: 500
     });
 }
 
 /**
  * 从clist API获取题目的rating
- * @param {string} problem 题目名
+ * @param {string} problem_name 题目名
  * @param {string} problem_url 题目链接
  * @returns {Promise<number>} 题目rating
+ * 
+ * 使用两个Map对象来存储和快速访问题目信息：
+ * - problemsMap: 通过题目的URL作为键来存储题目信息。
+ * - nameMap: 通过题目的名称作为键来存储题目信息。
+ * 
+ * 每个题目信息是一个对象，包含以下属性：
+ * @typedef {Object} ProblemInfo
+ * @property {string} name 题目名称
+ * @property {string} url 题目URL
+ * @property {number} rating 题目评分，如果没有评分信息则为NaN
  */
-async function getRatingFromApi_problem(problem, problem_url) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
+async function getRatingFromApi_problem(problem_name, problem_url) {
+    return OJB_promiseRetryWrapper(async () => {
+        const response = await OJB_GMRequest({
             method: "GET",
-            url: `https://clist.by:443/api/v4/problem/?name=${problem}&resource__regex=codeforces.com`,
-            headers: {
-                "Authorization": OJBetter.clist.authorization
-            },
-            onload: function (response) {
-                if (!response) reject('An unknown error occurred!');
-                let data = JSON.parse(response.responseText);
-                let objects = data.objects;
-                let problemsMap = new Map();
-                if (objects.length > 0) {
-                    for (let i = 0; i < objects.length; i++) {
-                        let problem = objects[i];
-                        problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
-                    }
-                    resolve(problemsMap.get(problem_url));
-                }
-            }
+            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces.com`,
+            headers: { "Authorization": OJBetter.clist.authorization }
         });
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+        let data = JSON.parse(response.responseText);
+        /** 
+         * 使用题目的URL作为键来存储题目信息。
+         * @type {Map<string, ProblemInfo>}
+         */
+        let problemsMap = new Map();
+
+        /** 
+         * 使用题目的名称作为键来存储题目信息。
+         * @type {Map<string, ProblemInfo>}
+         */
+        let nameMap = new Map();
+
+        data.objects.forEach(problem => {
+            /** @type {ProblemInfo} 题目信息*/
+            let problemInfo = {
+                name: problem.name,
+                url: problem.url,
+                rating: problem.rating ? problem.rating : NaN
+            };
+            problemsMap.set(OJB_cleanLink(problem.url), problemInfo);
+            nameMap.set(problem.name, problemInfo);
+        });
+
+        if (problemsMap.has(problem_url)) {
+            return problemsMap.get(problem_url).rating;
+        } else if (nameMap.has(problem_name)) {
+            return nameMap.get(problem_name).rating;
+        } else {
+            console.warn('Problem not found in the response');
+        }
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000
     });
 }
 
 /**
- * 从clist API获取比赛的题目rating
- * @param {string} event 比赛名
+ * 获取字符串中的关键词列表
+ * @param {string} text 字符串文本
+ * @returns {array<string>} 返回关键词列表
+ */
+function getKeywords(text) {
+    // 定义要过滤掉的高频词
+    const highFrequencyWords = ['Educational', 'Codeforces', 'Round', 'Div'];
+
+    // 使用正则表达式替换掉特殊符号（保留空格以便分词）
+    const sanitizedText = text.replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
+
+    // 将字符串拆分为单词数组
+    const words = sanitizedText.split(' ');
+
+    // 过滤掉高频词和空字符串
+    const filteredWords = words.filter(word => {
+        return word && highFrequencyWords.indexOf(word) === -1;
+    });
+
+    // 返回关键词列表
+    return filteredWords;
+}
+
+/**
+ * 根据关键词从 Clist API 中获取实际比赛名称
+ * @param {string} contestName 比赛名
+ * @param {string} contestUrl 比赛链接
+ * @returns {string|null} 该比赛在Clist中的实际名字
+ */
+async function getContestNameFromApi(contestName, contestUrl) {
+    return OJB_promiseRetryWrapper(async () => {
+        const options = {
+            method: "GET",
+            url: `https://clist.by:443/api/v4/contest/?resource_id=1&event__regex=${encodeURIComponent(contestName)}`,
+            headers: {
+                "Authorization": OJBetter.clist.authorization
+            }
+        };
+
+        let response = await OJB_GMRequest(options);
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+
+        let data = JSON.parse(response.responseText);
+        let objects = data.objects;
+
+        if (objects.length > 0) {
+            for (const contest of objects) {
+                const href = contest.href.replace(/\/contests\//i, '/contest/'); // 链接可能是contests而不是contest，换回来
+                if (OJB_cleanLink(href) == contestUrl) {
+                    return contest.event;
+                }
+            }
+        }
+        return null;
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000
+    });
+}
+
+/**
+ * 获取在clist中的实际比赛名称
+ * @param {string} contestName 待搜索的比赛名称
+ * @param {string} contestUrl 比赛的url
+ * @returns {Promise<string|null>} 在clist中的实际比赛名称，如果没有找到，则返回null
+ */
+async function getActualContestName(contestName, contestUrl) {
+    // 首先尝试使用完整的比赛名称进行搜索
+    let actualContestName = await getContestNameFromApi(contestName, contestUrl);
+    if (actualContestName) {
+        return actualContestName;
+    }
+
+    // 如果使用完整名称没有找到，则尝试使用关键词进行搜索
+    const keywords = getKeywords(contestName);
+    const maxKeywordAttempts = 1; // 最多尝试到第几个关键词（因为Clist API有频率限制）
+    for (let i = 0; i < Math.min(keywords.length, maxKeywordAttempts); i++) {
+        actualContestName = await getContestNameFromApi(keywords[i], contestUrl);
+        if (actualContestName) {
+            return actualContestName;
+        }
+    }
+
+    // 如果全部尝试后仍没有找到，返回null
+    return null;
+}
+
+/**
+ * 从clist API获取比赛题目集的rating
+ * @param {string} contestName 比赛名
  * @returns {Promise<Map<string, number>>} 题目rating
  */
-async function getRatingFromApi_contest(event) {
-    const options = {
-        method: "GET",
-        url: `https://clist.by:443/api/v4/contest/?limit=1&with_problems=true&event=${event}`,
-        headers: {
-            "Authorization": OJBetter.clist.authorization
+async function getRatingFromApi_contest(contestName, contestUrl) {
+    const actualContestName = await getActualContestName(contestName, contestUrl);
+    return OJB_promiseRetryWrapper(async () => {
+        const options = {
+            method: "GET",
+            url: `https://clist.by:443/api/v4/contest/?resource_id=1&with_problems=true&event=${encodeURIComponent(actualContestName)}`,
+            headers: {
+                "Authorization": OJBetter.clist.authorization
+            }
+        };
+
+        let response = await OJB_GMRequest(options);
+
+        if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
+
+        let data = JSON.parse(response.responseText);
+        let objects = data.objects;
+        let problemsMap = new Map();
+
+        if (objects.length > 0 && objects[0].problems) {
+            objects[0].problems.forEach(problem => {
+                problemsMap.set(OJB_cleanLink(problem.url), problem.rating ? problem.rating : NaN);
+            });
         }
-    }
-    let response = await OJB_GMRequest(options);
-    let data = JSON.parse(response.responseText);
-    let objects = data.objects;
-    let problemsMap = new Map();
-    if (objects.length > 0) {
-        var problems = objects[0].problems;
-        for (var i = 0; i < problems.length; i++) {
-            var problem = problems[i];
-            problemsMap.set(problem.url, problem.rating ? problem.rating : NaN);
-        }
-    }
-    return problemsMap;
+
+        return problemsMap;
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000
+    });
 }
 
 /**
@@ -8644,13 +9673,13 @@ function getClassNameByRating(rating) {
 }
 
 /**
- * problem页显示Rating
+ * problem题目页显示Rating
  * @param {ProblemPageLinkbar} problemToolbar 
  * @returns {Promise<void>}
  */
 async function showRatingByClist_problem(problemToolbar) {
     // 题目名
-    let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    const problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
     if (OJBetter.typeOfPage.is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
 
     // 创建Rating按钮元素
@@ -8706,7 +9735,7 @@ async function showRatingByClist_contest() {
     let ratingBadges = {};
     $('.datatable .id.left').each(function () {
         let href = 'https://codeforces.com' + $(this).find('a').attr('href');
-        let badge = $(`<a id="clistButton" class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
+        let badge = OJB_safeCreateJQElement(`<a id="clistButton" class="ratingBadge">${i18next.t('state.wait', { ns: 'button' })}</a>`);
         $(this).find('a').after(badge);
         ratingBadges[href] = badge;
     });
@@ -8725,18 +9754,27 @@ async function showRatingByClist_contest() {
     }
 
     // 获取Rating
-    let event = encodeURIComponent($('#sidebar').children().first().find('.rtable th').first().text());
-    let problemsMap = await getRatingFromApi_contest(event);
+    let contestName = $('#sidebar').children().first().find('.rtable th').first().text();
+    let contestUrl = OJB_cleanLink(window.location.href);
+    try {
+        let problemsMap = await getRatingFromApi_contest(contestName, contestUrl);
 
-    // 填充数据
-    for (let href in ratingBadges) {
-        if (problemsMap.has(href)) {
-            let rating = problemsMap.get(href);
-            let className = getClassNameByRating(rating);
-            ratingBadges[href].text(rating).addClass(className);
-        } else {
-            ratingBadges[href].text(i18next.t('state.404', { ns: 'button' })).addClass('ratingBadge_no');
+        // 填充数据
+        for (let href in ratingBadges) {
+            if (problemsMap.has(href)) {
+                let rating = problemsMap.get(href);
+                let className = getClassNameByRating(rating);
+                ratingBadges[href].text(rating).addClass(className);
+            } else {
+                ratingBadges[href].text(i18next.t('state.404', { ns: 'button' })).addClass('ratingBadge_no');
+            }
         }
+    } catch (error) {
+        // 填充数据
+        for (let href in ratingBadges) {
+            ratingBadges[href].text(i18next.t('state.netError', { ns: 'button' })).addClass('ratingBadge_no');
+        }
+        console.warn(error);
     }
 }
 
@@ -8753,12 +9791,13 @@ async function showRatingByClist_problemset() {
     // 先创建Rating显示框，并将关系存进数组ratingBadges
     for (let i = 0; i < $trs.length; i++) {
         const $tds = $($trs[i]).find('td');
-        let problem = $($tds[0]).text();
-        let problem_url = $($tds[0]).find('a').attr('href');
+        const $firstDiv = $($tds[1]).find('div:first');
+        let problem = $firstDiv.text();
+        let problem_url = $firstDiv.find('a').attr('href');
         problem_url = problem_url.replace(/^\/problemset\/problem\/(\d+)\/(\w+)/, 'https://codeforces.com/contest/$1/problem/$2');
 
-        const ratingBadge = $(`<a id="clistButton" class="ratingBadge"></a>`);
-        const rating = $(`<span class="rating">${i18next.t('state.wait', { ns: 'button' })}</span>`);
+        const ratingBadge = OJB_safeCreateJQElement(`<a id="clistButton" class="ratingBadge"></a>`);
+        const rating = OJB_safeCreateJQElement(`<span class="rating">${i18next.t('state.wait', { ns: 'button' })}</span>`);
         ratingBadge.append(rating);
         $($tds[0]).find('a').after(ratingBadge);
         ratingBadges.push({ ratingBadge, rating, problem, problem_url });
@@ -8781,7 +9820,7 @@ async function showRatingByClist_problemset() {
             const ratingBadge = ratingBadges[j];
             // 显示请求中
             ratingBadge.rating.text(i18next.t('state.loading', { ns: 'button' }));
-            promises.push(getRating(ratingBadge.problem, ratingBadge.problem_url).catch(error => console.warn(error)));
+            promises.push(getRatingFromHTML(ratingBadge.problem, ratingBadge.problem_url).catch(error => console.warn(error)));
         }
 
         const results = await Promise.all(promises);
@@ -8841,26 +9880,28 @@ const value_monacoLanguageMap = {
 
 /**
  * 更新代码提交页的HTML
- * @param {string} submitUrl 
- * @param {string} cacheKey 
- * @returns {Promise<jQuery>}
+ * @param {string} submitUrl 提交页面的URL
+ * @param {string} cacheKey 本地缓存的键名
+ * @returns {Promise<jQuery<HTMLElement>>} 返回 jQuery 包装的 HTML 元素
  */
 async function CloneOriginalHTML(submitUrl, cacheKey) {
-    return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
+    return OJB_promiseRetryWrapper(async () => {
+        const response = await OJB_GMRequest({
             method: 'GET',
-            url: submitUrl,
-            responseType: 'html',
-            onload: function (response) {
-                const html = response.responseText;
-                const cloneHTML = $(html);
-                localStorage.setItem(cacheKey, html);
-                resolve(cloneHTML);
-            },
-            onerror: function (response) {
-                reject('A network error occurred while retrieving the HTML for the code submission page.');
-            }
+            url: submitUrl
         });
+        const html = response.responseText;
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const cloneHTML = $(doc.body).html();
+        localStorage.setItem(cacheKey, html);
+        return $(cloneHTML);
+    }, {
+        maxRetries: 5,
+        retryInterval: 1000,
+        errorHandler: (err) => {
+            console.error('A network error occurred while retrieving the HTML for the code submission page.', submitUrl);
+        }
     });
 }
 
@@ -8919,11 +9960,11 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.cf_csrf_token);
 
     // 顶部区域
-    let topDiv = $(`<div class="topDiv"></div>`);
+    let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
     let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 语言选择
     selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
     topDiv.append(selectLang);
-    let topRightDiv = $(`<div class="topRightDiv"></div>`);
+    let topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
     topDiv.append(topRightDiv);
     formDiv.append(topDiv);
 
@@ -8959,7 +10000,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     editorDiv.append(monaco);
 
     // 自定义调试
-    let customTestDiv = $(`
+    let customTestDiv = OJB_safeCreateJQElement(`
         <details id="customTestBlock">
             <summary >${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
             <div id="customTests" style="min-height: 30px;"></div>
@@ -8986,13 +10027,13 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
     submitDiv.append(CompilerArgsInput);
 
-    let runButton = $(`
+    let runButton = OJB_safeCreateJQElement(`
         <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe6c1;</i>
             <span class="popover_content">${i18next.t('runTestButton.initial', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    let submitButton = $(`
+    let submitButton = OJB_safeCreateJQElement(`
         <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
             <i class="iconfont">&#xe633;</i>
             <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
@@ -9005,11 +10046,11 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
     }
 
     formDiv.append(submitDiv);
-    let CompilerSetting = $(`
+    let CompilerSetting = OJB_safeCreateJQElement(`
         <div id="CompilerSetting"></div>
     `);
     formDiv.append(CompilerSetting);
-    let statePanel = $(`
+    let statePanel = OJB_safeCreateJQElement(`
         <div id="statePanel"></div>
     `);
     formDiv.append(statePanel);
@@ -9078,19 +10119,7 @@ function parseMonacoCompleter(rules, range) {
  */
 async function createMonacoEditor(language, form, support) {
     // 判断monacoLoader是否加载完毕
-    async function waitForMonacoLoaderOnload() {
-        return new Promise((resolve) => {
-            const checkInitialized = () => {
-                if (OJBetter.monaco.loaderOnload) {
-                    resolve();
-                } else {
-                    setTimeout(checkInitialized, 100); // 每100毫秒检查一次initialized的值
-                }
-            };
-            checkInitialized();
-        });
-    }
-    if (!OJBetter.monaco.loaderOnload) await waitForMonacoLoaderOnload();
+    await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
 
     /**
      * 通用参数
@@ -9290,7 +10319,7 @@ async function createMonacoEditor(language, form, support) {
         OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
         // 调整字体大小
-        let changeSize = $(`
+        let changeSize = OJB_safeCreateJQElement(`
         <div class="ojb_btn ojb_btn_popover top">
             <input type="number" id="fontSizeInput" value="${OJBetter.monaco.setting.fontsize}">
             <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
@@ -9303,7 +10332,7 @@ async function createMonacoEditor(language, form, support) {
         });
 
         // 全屏按钮
-        let fullscreenButton = $(`
+        let fullscreenButton = OJB_safeCreateJQElement(`
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe606;</i>
             <span class="popover_content">${i18next.t('fullscreenButton', { ns: 'codeEditor' })}</span>
@@ -9313,7 +10342,7 @@ async function createMonacoEditor(language, form, support) {
         fullscreenButton.on('click', enterFullscreen);
 
         // 固定到底部按钮
-        let fixToBottomButton = $(`
+        let fixToBottomButton = OJB_safeCreateJQElement(`
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe607;</i>
             <span class="popover_content">${i18next.t('fixToBottomButton', { ns: 'codeEditor' })}</span>
@@ -9323,7 +10352,7 @@ async function createMonacoEditor(language, form, support) {
         fixToBottomButton.on('click', fixToBottom);
 
         // 固定到右侧按钮
-        let fixToRightButton = $(`
+        let fixToRightButton = OJB_safeCreateJQElement(`
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe605;</i>
             <span class="popover_content">${i18next.t('fixToRightButton', { ns: 'codeEditor' })}</span>
@@ -9370,7 +10399,7 @@ async function createMonacoEditor(language, form, support) {
             editor.addClass('fullscreen');
 
             // 取消按钮
-            let cancelButton = $(`
+            let cancelButton = OJB_safeCreateJQElement(`
                 <button type="button" class="ojb_btn ojb_btn_popover top primary exit_button_bottom">
                     <i class="iconfont">&#xe60b;</i>
                     <span class="popover_content">${i18next.t('exitFullscreenButton', { ns: 'codeEditor' })}</span>
@@ -9403,7 +10432,7 @@ async function createMonacoEditor(language, form, support) {
             });
             $('body').append(blankSpace);
 
-            let cancelButton = $(`
+            let cancelButton = OJB_safeCreateJQElement(`
                 <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
                     <i class="iconfont">&#xe625;</i>
                     <span class="popover_content">${i18next.t('cancelFixButton', { ns: 'codeEditor' })}</span>
@@ -9466,7 +10495,7 @@ async function createMonacoEditor(language, form, support) {
             const editor = $('#OJBetter_editor').prependTo(blankSpace).addClass('right-side');
 
             // 取消按钮
-            const cancelButton = $(`
+            const cancelButton = OJB_safeCreateJQElement(`
                 <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
                     <i class="iconfont">&#xe625;</i>
                     <span class="popover_content">${i18next.t('cancelFixButton', { ns: 'codeEditor' })}</span>
@@ -9488,7 +10517,7 @@ async function createMonacoEditor(language, form, support) {
         const cancelFixingToRight = (sidebar, styleElement, editor, cancelButton) => {
             sidebar.show();
             // 移回来
-            editor.insertAfter('#sourceCodeTextarea').removeClass('right-side');
+            editor.insertAfter(form.sourceDiv).removeClass('right-side');
 
             // 移除包装
             $('#body').unwrap();
@@ -9505,12 +10534,12 @@ async function createMonacoEditor(language, form, support) {
         const code = await getCode(nowUrl);
         if (code) {
             OJBetter.monaco.editor.setValue(code); // 恢复代码
-            $('#sourceCodeTextarea').val(code);
+            form.sourceDiv.val(code);
         }
         OJBetter.monaco.editor.onDidChangeModelContent(async () => {
-            // 将monaco editor的内容同步到sourceCodeTextarea
+            // 将monaco editor的内容同步到sourceDiv
             const code = OJBetter.monaco.editor.getValue();
-            $('#sourceCodeTextarea').val(code);
+            form.sourceDiv.val(code);
             await saveCode(nowUrl, code);
         });
     })();
@@ -9538,8 +10567,12 @@ async function createMonacoEditor(language, form, support) {
 
         // 注册acwing cpp 模板
         if (language == "cpp" && OJBetter.monaco.complet.cppCodeTemplate) {
-            var acwing_cpp_code_completer = JSON.parse(GM_getResourceText("acwing_cpp_code_completer"));
-            registMyCompletionItemProvider('cpp', 'ace', acwing_cpp_code_completer);
+            try {
+                var acwing_cpp_code_completer = JSON.parse(GM_getResourceText("acwing_cpp_code_completer"));
+                registMyCompletionItemProvider('cpp', 'ace', acwing_cpp_code_completer);
+            } catch (error) {
+                console.error("Error registering acwing cpp template:", error);
+            }
         }
 
         // 注册自定义的补全
@@ -9548,7 +10581,12 @@ async function createMonacoEditor(language, form, support) {
             for (let i = 0; i < complet_length; i++) {
                 let item = OJBetter.monaco.complet.customConfig.configurations[i];
                 if (item.isChoose && item.language == language) {
-                    registMyCompletionItemProvider(item.language, item.genre, await OJB_getExternalJSON(item.jsonUrl));
+                    try {
+                        let rule = await OJB_getExternalJSON(item.jsonUrl);
+                        registMyCompletionItemProvider(item.language, item.genre, rule);
+                    } catch (error) {
+                        console.error(`Error registering custom completer for ${item.language}:`, error);
+                    }
                 }
             }
         }
@@ -9559,7 +10597,7 @@ async function createMonacoEditor(language, form, support) {
     /**
      * LSP连接状态指示
      */
-    const lspStateButton = $(`
+    const lspStateButton = OJB_safeCreateJQElement(`
     <div id="lspStateDiv" class="ojb_btn ojb_btn_popover top loading">
         <i class="iconfont">&#xe658;</i>
         <span class="popover_content">${i18next.t('lsp.connect', { ns: 'codeEditor' })}</span>
@@ -9570,7 +10608,7 @@ async function createMonacoEditor(language, form, support) {
     });
     form.topRightDiv.prepend(lspStateButton);
 
-    const LSPLogDiv = $(`
+    const LSPLogDiv = OJB_safeCreateJQElement(`
     <dialog id="LSPLog" style="display: none;">
         <button class="ojb_btn">${i18next.t('close', { ns: 'common' })}</button>
         <div id="LSPLogList" style="overflow: auto;"></div>
@@ -9624,7 +10662,8 @@ async function createMonacoEditor(language, form, support) {
     var languageSocket = new WebSocket(url + language);
     OJBetter.monaco.lsp.socket.push(languageSocket);
     var languageSocketState = false;
-    var responseHandlers = {}; // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
+    var responseHandlers = new Map(); // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
+
     languageSocket.onopen = () => {
         languageSocketState = true;
         lspStateButton.setButtonPopover(i18next.t('lsp.waitingAnswer', { ns: 'codeEditor' }));
@@ -9647,10 +10686,13 @@ async function createMonacoEditor(language, form, support) {
             OJBetter_monaco.PassiveReceiveHandler(); // 注册被动接收函数
         } else if (message.id === 0 && message.error) {
             pushLSPLogMessage("warn", `Initialization ${i18next.t('lsp.state.error', { ns: 'logMessage' })}`);
-        } else if (message.id !== undefined && responseHandlers[message.id]) {
+        } else if (message.id !== undefined && responseHandlers.has(message.id)) {
             // 如果收到带有id字段的消息，则回传给对应的事件触发函数
-            responseHandlers[message.id](message);
-            delete responseHandlers[message.id]; // 删除已处理的事件触发函数
+            const handler = responseHandlers.get(message.id);
+            if (handler) {
+                handler(message);
+                responseHandlers.delete(message.id); // 删除已处理的事件触发函数
+            }
         } else if (message.method == "textDocument/publishDiagnostics") {
             // 接收代码诊断推送
             OJBetter_monaco.updateMarkers(message);
@@ -9707,7 +10749,7 @@ async function createMonacoEditor(language, form, support) {
             await waitForInitialized(); // 等待initialized为真
         }
         if (requiresResponse) {
-            responseHandlers[data.id] = callback; // 将事件触发函数与id关联起来
+            responseHandlers.set(data.id, callback) // 将事件触发函数与id关联起来
         }
         if (!languageSocketState) await waitForLanguageSocketState();
         languageSocket.send(JSON.stringify(data));
@@ -10772,7 +11814,7 @@ function changeMonacoLanguage(form) {
             createMonacoEditor(language, form, false);
         }
     } else {
-        createMonacoEditor(null, false);
+        createMonacoEditor(null, form, false);
     }
     // 更新在线编译器参数
     changeCompilerArgs(nowSelect);
@@ -10780,9 +11822,13 @@ function changeMonacoLanguage(form) {
 
 // 收集样例数据
 function getTestData() {
-    var testData = {};
+    let testData = {};
 
-    // 从pre中获取文本信息
+    /**
+     * 从pre中获取文本信息
+     * @param {JQuery<HTMLElement>} node 元素
+     * @returns {string} 文本信息
+     */
     function getTextFromPre(node) {
         let text;
         if (node.find("br").length > 0) {
@@ -10830,7 +11876,7 @@ function CustomTestInit() {
         var sampleDiv = $('<div class="sampleDiv">');
         var inputTextarea = $('<p style="padding: 0px 5px;">input</p><textarea class="dynamicTextarea inputTextarea"></textarea>');
         var outputTextarea = $('<p style="padding: 0px 5px;">output</p><textarea class="dynamicTextarea outputTextarea"></textarea>');
-        var deleteCustomTest = $(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
+        var deleteCustomTest = OJB_safeCreateJQElement(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
         sampleDiv.append(deleteCustomTest);
         sampleDiv.append(inputTextarea);
         sampleDiv.append(outputTextarea);
@@ -10893,9 +11939,9 @@ function CustomTestInit() {
             if (data.samples && data.samples.length > 0) {
                 data.samples.forEach(function (item, index) {
                     var sampleDiv = $('<div class="sampleDiv">');
-                    var inputTextarea = $(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
-                    var outputTextarea = $(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
-                    var deleteCustomTest = $(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
+                    var inputTextarea = OJB_safeCreateJQElement(`<p style="padding: 0px 5px;">input</p><textarea id="input${index}" class="dynamicTextarea inputTextarea"></textarea>`);
+                    var outputTextarea = OJB_safeCreateJQElement(`<p style="padding: 0px 5px;">output</p><textarea id="output${index}" class="dynamicTextarea outputTextarea"></textarea>`);
+                    var deleteCustomTest = OJB_safeCreateJQElement(`<button type="button" class="deleteCustomTest">${closeIcon}</button>`);
 
                     inputTextarea.val(item.input);
                     outputTextarea.val(item.output);
@@ -11159,7 +12205,7 @@ function wandboxCompilerArgsChange(nowSelect) {
             $("#CompilerBox").remove();
             let div = $("<div id='CompilerBox'></div>");
 
-            let display_compile_command = $(`<input id='${Compiler.name}' value='${Compiler['display-compile-command']}' style="display:none;"}></input>`);
+            let display_compile_command = OJB_safeCreateJQElement(`<input id='${Compiler.name}' value='${Compiler['display-compile-command']}' style="display:none;"}></input>`);
             div.append(display_compile_command);
 
             let switches = Compiler.switches;
@@ -11167,7 +12213,7 @@ function wandboxCompilerArgsChange(nowSelect) {
                 let switche = switches[i];
 
                 if (switche.type == "single") {
-                    let single = $(`
+                    let single = OJB_safeCreateJQElement(`
                     <div>
                         <input type='checkbox' id='${switche.name}' value='${switche['display-flags']}' ${switche.default ? 'checked' : ''}></input>
                         <label for='${switche.name}'>${switche['display-name']}</label>
@@ -11178,7 +12224,7 @@ function wandboxCompilerArgsChange(nowSelect) {
                         refreshCompilerArgs();
                     });
                 } else if (switche.type == "select") {
-                    let select = $(`<select id='${switche.name}'></select>`);
+                    let select = OJB_safeCreateJQElement(`<select id='${switche.name}'></select>`);
                     select.data('previousValue', switche.options[0]['display-flags']);
                     div.append(select);
                     for (let i = 0; i < switche.options.length; i++) {
@@ -11195,14 +12241,14 @@ function wandboxCompilerArgsChange(nowSelect) {
             }
 
             if (Compiler['compiler-option-raw'] == true) {
-                let textarea = $(`<textarea id="compiler_option_raw" placeholder="Raw compiler options" style="resize: vertical;"></textarea>`);
+                let textarea = OJB_safeCreateJQElement(`<textarea id="compiler_option_raw" placeholder="Raw compiler options" style="resize: vertical;"></textarea>`);
                 div.append(textarea);
                 textarea.on('input', function () {
                     refreshCompilerArgs();
                 });
             }
             if (Compiler['runtime-option-raw'] == true) {
-                let textarea = $(`<textarea id="runtime_option_raw" placeholder="Raw runtime options" style="resize: vertical;"></textarea>`);
+                let textarea = OJB_safeCreateJQElement(`<textarea id="runtime_option_raw" placeholder="Raw runtime options" style="resize: vertical;"></textarea>`);
                 div.append(textarea);
                 textarea.on('input', function () {
                     refreshCompilerArgs();
@@ -11317,7 +12363,9 @@ function codeDiff(expectedText, actualText) {
         contentDiv.className = 'lineContent';
 
         if (isEquals) {
-            contentDiv.textContent = expected;
+            const span = document.createElement('span');
+            span.textContent = expected;
+            contentDiv.appendChild(span);
         } else {
             if (removed != null) {
                 const removedSpan = document.createElement('span');
@@ -11368,13 +12416,13 @@ const TestCaseContentType = {
 // 样例测试状态类
 class TestCaseStatus {
     constructor(item, prefix) {
-        this.testCase = $(`<div class="test-case"></div>`);
+        this.testCase = OJB_safeCreateJQElement(`<div class="test-case"></div>`);
         this.item = item;
         this.prefix = prefix;
-        this.titleElement = $(`<div class="test-case-title">${this.prefix} ${this.item}</div>`);
-        this.statusElement = $(`<div class="test-case-status"></div>`);
-        this.contentElement = $(`<div class="test-case-content"></div>`);
-        this.judgeElement = $(`<div class="test-case-judge"></div>`);
+        this.titleElement = OJB_safeCreateJQElement(`<div class="test-case-title">${this.prefix} ${this.item}</div>`);
+        this.statusElement = OJB_safeCreateJQElement(`<div class="test-case-status"></div>`);
+        this.contentElement = OJB_safeCreateJQElement(`<div class="test-case-content"></div>`);
+        this.judgeElement = OJB_safeCreateJQElement(`<div class="test-case-judge"></div>`);
         this.testCase.append(this.titleElement, this.statusElement, this.contentElement, this.judgeElement);
         $('#statePanel').append(this.testCase);
         this.setStatus('Queued', 'queued');
@@ -11401,13 +12449,13 @@ class TestCaseStatus {
             switch (type) {
                 case TestCaseContentType.TERMINAL:
                     // 为TERMINAL类型创建一个新的终端容器
-                    contentElement = $(`<div class="terminal-container" style="overflow: auto;"></div>`);
+                    contentElement = OJB_safeCreateJQElement(`<div class="terminal-container" style="overflow: auto;"></div>`);
                     break;
                 case TestCaseContentType.DIFF:
                 case TestCaseContentType.NO_DIFF:
                     // 为DIFF和NO_DIFF类型创建相应的内容元素，并添加差异说明
                     const className = type === TestCaseContentType.DIFF ? "output_diff" : "output_no_diff";
-                    contentElement = $(`<pre class="${className}">${content}</pre>`);
+                    contentElement = OJB_safeCreateJQElement(`<pre class="${className}">${content}</pre>`);
                     appendDiffNote();
                     break;
                 default:
@@ -11427,7 +12475,7 @@ class TestCaseStatus {
 
         // 添加差异说明
         const appendDiffNote = () => {
-            const diffNote = $(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
+            const diffNote = OJB_safeCreateJQElement(`<div class="diff_note">${i18next.t('resultBlock.diffNote', { ns: 'codeEditor' })}</div>`);
             this.testCase.append(diffNote);
         };
 
@@ -11562,9 +12610,12 @@ async function addProblemPageCodeEditor() {
     // 初始化
     CustomTestInit(); // 自定义测试数据面板
     selectLang.val(OJBetter.monaco.compilerSelection);
-    changeMonacoLanguage(form);
 
-    selectLang.on('change', () => changeMonacoLanguage(form)); // 编辑器语言切换监听
+    // 设置语言选择change事件监听器
+    selectLang.on('change', () => {
+        changeMonacoLanguage(form); // 编辑器语言切换监听
+    });
+    changeMonacoLanguage(form);
 
     // 样例测试
     runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv))
@@ -11647,7 +12698,7 @@ function convertLinksHTMLToMarkdown(html) {
 /**
  * DeepL翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl(raw) {
     const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
@@ -11687,12 +12738,13 @@ async function translate_deepl(raw) {
         anonymous: true,
         nocache: true,
     }
-    return await BaseTranslate(options, res => JSON.parse(res).result.texts[0].text, res => {
+
+    return await BaseTranslate(options, res => JSON.parse(res)?.result?.texts?.[0]?.text || res, res => {
         const resObj = {
             status: true,
             message: 'ok'
         };
-        if (res.includes('"error":{"code":1042912,"message":"Too many requests"}')) {
+        if (res.includes('"message":"Too many requests"')) {
             resObj.status = false;
             resObj.message = i18next.t('error.deepl429', { ns: 'translator' }); // Too many requests 提示
             return resObj;
@@ -11704,7 +12756,7 @@ async function translate_deepl(raw) {
 /**
  * 使用 DeepL Free API 进行翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl_api_free(raw) {
     const data = JSON.stringify({
@@ -11734,7 +12786,7 @@ async function translate_deepl_api_free(raw) {
 /**
  * 使用 DeepL Pro API 进行翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl_api_pro(raw) {
     const data = JSON.stringify({
@@ -11764,7 +12816,7 @@ async function translate_deepl_api_pro(raw) {
 /**
  * 使用 DeepLX 进行翻译
  * @param {String} text 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deeplx(text) {
     const options = {
@@ -11805,7 +12857,7 @@ function getTimeStamp(iCount) {
 /**
  * 讯飞听见翻译
  * @param {String} text 要翻译的文本
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_iflyrec(text) {
     const options = {
@@ -11832,7 +12884,7 @@ async function translate_iflyrec(text) {
 /**
  * 有道翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_youdao_mobile(raw) {
     const options = {
@@ -11871,9 +12923,9 @@ async function translate_youdao_mobile(raw) {
 }
 
 /**
- * 谷歌翻译
+ * google翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_gg(raw) {
     const params = `tl=${getTargetLanguage('google')}&q=${encodeURIComponent(raw)}`;
@@ -11886,33 +12938,29 @@ async function translate_gg(raw) {
 }
 
 /**
- * 彩云翻译预处理
- */
-async function translate_caiyun_startup() {
-    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
-    sessionStorage.setItem('caiyun_id', browser_id);
-    const options = {
-        method: "POST",
-        url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
-        headers: {
-            "Content-Type": "application/json",
-            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
-            "Origin": "https://fanyi.caiyunapp.com",
-        },
-        data: JSON.stringify({ browser_id }),
-    }
-    const res = await OJB_GMRequest(options);
-    sessionStorage.setItem('caiyun_jwt', JSON.parse(res.responseText).jwt);
-}
-
-/**
  * 彩云翻译
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_caiyun(raw) {
     const source = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
     const dic = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"].reduce((dic, current, index) => { dic[current] = source[index]; return dic }, {});
+    const browser_id = CryptoJS.MD5(Math.random().toString()).toString();
+    const caiyun_jwt = await (async () => {
+        const options = {
+            method: "POST",
+            url: 'https://api.interpreter.caiyunai.com/v1/user/jwt/generate',
+            headers: {
+                "content-type": "application/json",
+                "x-authorization": "token:qgemv4jr1y38jyq6vhvi",
+                "origin": "https://fanyi.caiyunapp.com",
+            },
+            data: JSON.stringify({ browser_id }),
+        }
+        const res = await OJB_GMRequest(options);
+        return JSON.parse(res.responseText).jwt;
+    })();
+
     // 解码
     const decodeUnicode = str => {
         const decoder = new TextDecoder();
@@ -11920,18 +12968,28 @@ async function translate_caiyun(raw) {
         return decoder.decode(data);
     };
     const decoder = line => decodeUnicode([...line].map(i => dic[i] || i).join(""));
+
     const options = {
         method: "POST",
         url: 'https://api.interpreter.caiyunai.com/v1/translator',
         data: JSON.stringify({
             "source": raw.split('\n'),
+            "browser_id": browser_id,
             "trans_type": getTargetLanguage('caiyun'),
+            "request_id": "web_fanyi",
+            "media": "text",
+            "os_type": "web",
+            "dict": true,
+            "cached": true,
+            "replaced": true,
+            "style": "formal",
+            "model": "",
             "detect": true,
-            "browser_id": sessionStorage.getItem('caiyun_id')
         }),
         headers: {
-            "X-Authorization": "token:qgemv4jr1y38jyq6vhvi",
-            "T-Authorization": sessionStorage.getItem('caiyun_jwt')
+            "content-type": "application/json;charset=UTF-8",
+            "x-authorization": "token:qgemv4jr1y38jyq6vhvi",
+            "t-authorization": caiyun_jwt
         }
     }
     return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
@@ -11940,19 +12998,26 @@ async function translate_caiyun(raw) {
 /**
  * ChatGPT
  * @param {string} raw 原文
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang });
+    const prompt = `
+As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
+The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+            ? "keeping the LaTeX equations unchanged."
+            : "keeping the brackets【】, HTML tags, and their content unchanged."
+        }
+After translation, please ensure that the ${lang} version conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment, The segment to be translated is as follows: "
+${raw}
+"`;
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: [{
-            role: "user",
-            content: prompt + raw
+            role: "assistant",
+            content: prompt
         }],
         temperature: 0.7,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
@@ -11978,7 +13043,7 @@ async function translate_openai(raw) {
  * ChatGPT 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
- * @returns {Promise<TranslateResult>} 翻译结果对象
+ * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_openai_stream(raw, translateDiv) {
     const result = {
@@ -12020,14 +13085,22 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) ?
-        i18next.t('chatgpt_prompt.notLaTeX', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang }) :
-        i18next.t('chatgpt_prompt.common', { ns: 'translator', transTargetLang: lang, lng: OJBetter.translation.targetLang });
+    const prompt = `
+I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
+During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+            ? "keeping the LaTeX equations unchanged."
+            : "keeping the brackets【】, HTML tags, and their content unchanged."
+        }
+After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
+"
+${raw}
+"`;
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: [{
-            role: "user",
-            content: prompt + raw
+            role: "assistant",
+            content: prompt
         }],
         temperature: 0.7,
         stream: true,
@@ -12094,7 +13167,7 @@ async function* openai_stream(raw) {
  */
 
 /**
- * @typedef {Object} TranslateResult
+ * @typedef {Object} TransRawData
  * @property {boolean} done 操作是否完成
  * @property {CheckResponseResult|null} checkPassed 检查是否通过的结果
  * @property {Object|null} response 响应对象
@@ -12109,7 +13182,7 @@ async function* openai_stream(raw) {
  * @param {Function} processer 响应再处理函数，它接收响应文本，并应返回处理后的文本。
  * @param {Function} checkResponse 检查文本是否符合预期的函数，它接收文本，并返回一个Object，包含状态和信息。默认为返回 { status: true, message: 'ok' }
  * @param {Function} getResponseText 重写响应文本获取函数，它接收response，并返回响应文本。 默认为 response.responseText
- * @returns {Promise<TranslateResult>} 返回 Promise，其解析值为翻译结果对象
+ * @returns {Promise<TransRawData>} 返回 Promise，其解析值为翻译结果对象
  */
 async function BaseTranslate(options, processer, checkResponse = () => { return { status: true, message: 'ok' } }, getResponseText = (response) => response.responseText) {
     const result = {
@@ -12235,7 +13308,7 @@ async function ensureJQueryIsLoaded(retryDelay = 50) {
 
 /**
  * 加载必须的函数
- * @returns {Promise<LoadingMessage>} 加载提示信息
+ * @returns {Promise} 加载提示信息
  */
 async function loadRequiredFunctions() {
     await initVar();// 初始化全局变量
@@ -12243,6 +13316,7 @@ async function loadRequiredFunctions() {
         initDB(), // 连接数据库
         initI18next(), // i18next初始化
         initButtonFunc(), // 加载按钮相关函数
+        initHTML2MarkDown(), // 初始化html2markdown转换器
         checkScriptVersion(), // 更新检查
         ...(OJBetter.typeOfPage.is_acmsguru ? [acmsguruReblock()] : []) // 为acmsguru题面重新划分div
     ]);
@@ -12255,13 +13329,16 @@ function initOnDOMReady() {
     showAnnounce(); // 显示公告
     showWarnMessage(); // 显示警告消息
     initSettingsPanel(); // 加载设置按钮面板
+    initMonacoEditor(); // 初始化monaco编辑器资源
     localizeWebsite(); // 网站本地化替换
     addDependencyStyles(); // 添加一些依赖库的样式
     addI18nStyles(); // 添加包含i18n内容的样式
     if (OJBetter.basic.expandFoldingblocks) ExpandFoldingblocks(); // 折叠块展开
     if (OJBetter.basic.renderPerfOpt) RenderPerfOpt(); // 折叠块渲染优化
+    if (OJBetter.basic.selectElementPerfOpt) SelectElementPerfOpt(); // 下拉选择框性能优化
     if (OJBetter.typeOfPage.is_problem) {
         const problemPageLinkbar = new ProblemPageLinkbar(); // 创建题目页相关链接栏
+        if (OJBetter.basic.showCF2vjudge) CF2vjudge(problemPageLinkbar); // 跳转到Vjudge按钮
         if (OJBetter.basic.showJumpToLuogu) CF2luogu(problemPageLinkbar); // 跳转到洛谷按钮
         if (OJBetter.clist.enabled.problem) showRatingByClist_problem(problemPageLinkbar); // problem页显示Rating
     }
@@ -12292,6 +13369,7 @@ function initializeInParallel(loadingMessage) {
     if (OJBetter.basic.darkMode == "dark") darkModeStyleAdjustment(); // 黑暗模式额外的处理事件
     if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
+    if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
 }
 
 /**
@@ -12312,9 +13390,9 @@ async function initializeSequentially(loadingMessage) {
 }
 
 /**
- * 脚本开始加载
+ * 主方法
  */
-document.addEventListener("DOMContentLoaded", async () => {
+async function main() {
     await ensureJQueryIsLoaded(); // 等待jQuery加载
     const loadingMessage = new LoadingMessage();
     await loadRequiredFunctions(); // 加载必须的函数
@@ -12331,7 +13409,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.addEventListener('load', () => onResourcesReady(loadingMessage));
         }
     }
-});
+};
+
+// ------------------------------
+// 脚本加载入口
+if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", main);
+} else {
+    main(); // 如果DOMContentLoaded已经触发，立即执行
+}
+// ------------------------------
 
 // ------------------------------
 // 配置自动迁移代码（将在10个小版本后移除-1.83）
