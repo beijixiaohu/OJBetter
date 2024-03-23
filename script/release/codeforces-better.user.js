@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.1
+// @version      1.74.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1556,7 +1556,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .datatable,
         html[data-theme=dark] .highlighted-row td, html[data-theme=dark] .highlighted-row th,
         html[data-theme=dark] .pagination span.active, html[data-theme=dark] .test-for-popup pre,
-        html[data-theme=dark] pre{
+        html[data-theme=dark] .source-popup pre{
             background-color: var(--ojb-color-bg-secondary) !important;
         }
         /* 实线边框颜色-圆角 */
