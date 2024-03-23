@@ -1,3 +1,7 @@
+## 1.74.1
+
+- Normales Pre mit weißem Hintergrund im dunklen Modus korrigiert, wenn die Codeblockverschönerung nicht aktiviert ist
+
 ## 1.74.0
 
 - Schaltfläche hinzufügen, um zu VJudge zu springen
