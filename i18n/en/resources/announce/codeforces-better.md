@@ -1,3 +1,7 @@
+## 1.74.1
+
+- Fix normal pre with white background in dark mode when code block beautification is not enabled
+
 ## 1.74.0
 
 - Add button to jump to VJudge
