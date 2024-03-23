@@ -1,3 +1,7 @@
+## 1.74.1
+
+- Arreglar pre normal con fondo blanco en modo oscuro cuando el embellecimiento de bloques de código no está activado.
+
 ## 1.74.0
 
 - Añadir botón para saltar a VJudge
