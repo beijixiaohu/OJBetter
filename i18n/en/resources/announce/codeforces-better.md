@@ -1,3 +1,7 @@
+## 1.74.2
+
+- Fixes issues from the last fix Thanks to @Dechancer for the feedback!
+
 ## 1.74.1
 
 - Fix normal pre with white background in dark mode when code block beautification is not enabled

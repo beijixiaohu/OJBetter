@@ -1,3 +1,7 @@
+## 1.74.2
+
+- Corregge i problemi dell'ultima correzione Grazie a @Dechancer per il feedback!
+
 ## 1.74.1
 
 - Correggere il pre normale con sfondo bianco in modalità scura quando l'abbellimento dei blocchi di codice non è abilitato

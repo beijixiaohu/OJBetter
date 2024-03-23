@@ -1,3 +1,7 @@
+## 1.74.2
+
+- Corrige les problèmes de la dernière correction Merci à @Dechancer pour son feedback !
+
 ## 1.74.1
 
 - Correction d'un pré normal avec un fond blanc en mode sombre lorsque l'embellissement des blocs de code n'est pas activé
