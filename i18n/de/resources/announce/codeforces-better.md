@@ -1,3 +1,7 @@
+## 1.74.2
+
+- Behebt Probleme aus dem letzten Fix Danke an @Dechancer für das Feedback!
+
 ## 1.74.1
 
 - Normales Pre mit weißem Hintergrund im dunklen Modus korrigiert, wenn die Codeblockverschönerung nicht aktiviert ist
