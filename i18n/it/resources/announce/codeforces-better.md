@@ -1,3 +1,7 @@
+## 1.74.1
+
+- Correggere il pre normale con sfondo bianco in modalità scura quando l'abbellimento dei blocchi di codice non è abilitato
+
 ## 1.74.0
 
 - Aggiungi il pulsante per passare a VJudge
