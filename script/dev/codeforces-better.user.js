@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.2
+// @version      1.74.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -11,7 +11,7 @@
 // @connect      api.deepl.com
 // @connect      api.deeplx.org
 // @connect      www.iflyrec.com
-// @connect      m.youdao.com
+// @connect      dict.youdao.com
 // @connect      api.interpreter.caiyunai.com
 // @connect      translate.google.com
 // @connect      openai.api2d.net
@@ -442,7 +442,7 @@ OJBetter.supportList = {
     translationSupport: {
         'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
         'iflyrec': { 'zh': '1' },
-        'youdao': { 'zh': 'AUTO' },
+        'youdao': { 'zh': 'zh-CHS', 'zh-Hant': 'zh-CHT', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
         'openai': { 'zh': 'Chinese', 'zh-Hant': 'Traditional Chinese', 'de': 'German', 'fr': 'French', 'ko': 'Korean', 'pt': 'Portuguese', 'ja': 'Japanese', 'es': 'Spanish', 'it': 'Italian', 'hi': 'Hindi' }
@@ -4001,11 +4001,21 @@ function OJB_isSameBrowserSession(sessionKey) {
 /**
  * 随机数生成
  * @param {number} numDigits 位数
- * @returns {number}
+ * @returns {number} 一个随机数
  */
 function OJB_getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * 随机数生成-范围内
+ * @param {number} min 最小值
+ * @param {number} max 最大值
+ * @returns {number} 一个随机数
+ */
+function OJB_getRandomNumberInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -8743,7 +8753,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     const translationLimits = {
         deepl: 5000,
         iflyrec: 2000,
-        youdao: 600,
+        youdao: 5000,
         google: 5000,
         caiyun: 5000
     };
@@ -8946,9 +8956,9 @@ async function SelectElementPerfOpt() {
     $('select').each((_, select) => {
         // 选项大于500才优化
         if ($(select).find('option').length > 500) {
-          OJB_transformSelectToSelectPage(select);
+            OJB_transformSelectToSelectPage(select);
         }
-      });
+    });
 }
 
 /**
@@ -12888,39 +12898,134 @@ async function translate_iflyrec(text) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_youdao_mobile(raw) {
+    /**
+     * 生成cookie
+     */
+    const getcookie = (() => {
+        // 生成IP地址
+        const generateIP = () => {
+            return `${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}`;
+        }
+        // 生成OUTFOX_SEARCH_USER_ID_NCOO的值
+        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(100000000, 999999999)}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
+        // 生成OUTFOX_SEARCH_USER_ID的值
+        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(100000000, 999999999)}@${generateIP()}`;
+        return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
+    })();
+
+    /**
+     * 生成随机时间戳
+     */
+    const gettime = (new Date()).getTime();
+
+    /**
+     * 生成sign
+     */
+    const getsign = (() => {
+        const d = "fanyideskweb";
+        const u = "webfanyi";
+        const t = "fsdsogkndfokasodnaso";
+        function A(e) {
+            return CryptoJS.MD5(e.toString()).toString(CryptoJS.enc.Hex);
+        }
+        function w(e) {
+            return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+        }
+        return w(gettime);
+    })();
+
+    /**
+     * 解码方法
+     * @param {string} src 待解码的字符串
+     * @returns {Object} 解码后的数据
+     */
+    const decode = function (src) {
+        // 解码URL安全的Base64
+        const decodeUrlSafeBase64 = (str) => {
+            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            return base64;
+        }
+
+        // 使用MD5生成key和iv，取前16字节
+        const key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl";
+        const iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4";
+        const keyHash = CryptoJS.MD5(key).toString();
+        const ivHash = CryptoJS.MD5(iv).toString();
+
+        // 使用AES-128-CBC模式进行解密
+        const keyForAES = CryptoJS.enc.Hex.parse(keyHash).toString().substring(0, 32);
+        const ivForAES = CryptoJS.enc.Hex.parse(ivHash).toString().substring(0, 32);
+
+        // 解码URL安全的Base64
+        const decodedBase64 = decodeUrlSafeBase64(src);
+
+        // 解密
+        const decrypted = CryptoJS.AES.decrypt({
+            ciphertext: CryptoJS.enc.Base64.parse(decodedBase64)
+        }, CryptoJS.enc.Hex.parse(keyForAES), {
+            iv: CryptoJS.enc.Hex.parse(ivForAES),
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        // 将解密结果转换为Utf8字符串
+        const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+
+        // 处理JSON字符串并解析
+        const jsonStr = decryptedStr.substring(0, decryptedStr.lastIndexOf("}") + 1);
+        return JSON.parse(jsonStr);
+    }
+    // 整理数据
+    const organizeTranslation = (data) => {
+        // 提取translateResult数组
+        const { translateResult } = data;
+
+        // 整理tgt字段
+        return translateResult
+            .flat()
+            .map(item => item.tgt)
+            .join('');
+    };
+    // 表单数据
+    const data = {
+        "i": raw,
+        "from": "auto",
+        "to": getTargetLanguage('youdao'),
+        "dictResult": "true",
+        "keyid": "webfanyi",
+        "sign": getsign,
+        "client": "fanyideskweb",
+        "product": "webfanyi",
+        "appVersion": "1.0.0",
+        "vendor": "web",
+        "pointParam": "client,mysticTime,product",
+        "mysticTime": gettime,
+        "keyfrom": "fanyi.web",
+        "mid": "1",
+        "screen": "1",
+        "model": "1",
+        "network": "wifi",
+        "abtest": "0",
+        "yduuid": "abcdefg"
+    };
     const options = {
         method: "POST",
-        url: 'http://m.youdao.com/translate',
-        data: "inputtext=" + encodeURIComponent(raw) + "&type=" + getTargetLanguage('youdao'),
+        url: 'https://dict.youdao.com/webtranslate',
+        data: new URLSearchParams(data),
         anonymous: true,
+        cookie: getcookie,
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            'Host': 'm.youdao.com',
-            'Origin': 'http://m.youdao.com',
-            'Referer': 'http://m.youdao.com/translate',
+            'Referer': 'https://fanyi.youdao.com/',
         }
     }
     return await BaseTranslate(options,
         res => {
-            const array = /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res);
-            if (array && array.length > 1) {
-                return array[1];
-            } else {
-                return res;
-            }
-        },
-        res => {
-            const resObj = {
-                status: true,
-                message: 'ok'
-            };
-            if (res.includes('<title>413 Request Entity Too Large</title>')) {
-                resObj.status = false;
-                resObj.message = i18next.t('error.youdao413', { ns: 'translator' }); // Request Entity Too Large 提示
-                return resObj;
-            };
-            return resObj;
-        })
+            const decodeData = decode(res)
+            const result = organizeTranslation(decodeData);
+            return result;
+        }
+    );
 }
 
 /**
