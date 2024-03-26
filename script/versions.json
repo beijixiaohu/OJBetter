@@ -4,11 +4,11 @@
         "release": "3.27"
     },
     "atcoder-better": {
-        "dev": "1.15.2",
+        "dev": "1.15.3",
         "release": "1.15.2"
     },
     "codeforces-better": {
-        "dev": "1.74.2",
+        "dev": "1.74.3",
         "release": "1.74.2"
     },
     "nowcoder-better": {
