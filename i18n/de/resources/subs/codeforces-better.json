@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "Die E-Mail zur Wiederherstellung des Passworts wurde erfolgreich gesendet."
             }
+        },
+        "button": {
+            "class": [
+                "Taste"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "Vergleiche"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "Streik (auf der Tastatur)",
+                "to see test details": "Testdetails anzeigen"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "Reprovision",
                 "Delete contest": "Spiel löschen",
-                "Preview": "Vorschauen"
+                "Preview": "Vorschauen",
+                "Delete": "Entfernen von",
+                "Save draft": "保存草稿",
+                "Post": "发布"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "Dieser Benutzer kann nicht gefunden werden",
                 "No such blog entry": "Es gibt keinen Eintrag für diesen Blog",
                 "Compilation error": "Kompilierungsfehler",
-                "No registration is opened now": "Die Registrierung ist zur Zeit nicht möglich."
+                "No registration is opened now": "Die Registrierung ist zur Zeit nicht möglich.",
+                "Blog entry has been deleted": "博客条目已删除",
+                "Added to liked": "已点击喜欢"
             }
         }
     }
