@@ -935,8 +935,8 @@
                 "Delete contest": "マッチ削除",
                 "Preview": "プレビュー",
                 "Delete": "削除",
-                "Save draft": "保存草稿",
-                "Post": "发布"
+                "Save draft": "下書きの保存",
+                "Post": "ポスト"
             }
         }
     },
@@ -966,8 +966,8 @@
                 "No such blog entry": "このブログのエントリーはありません",
                 "Compilation error": "コンパイルエラー",
                 "No registration is opened now": "現在、参加登録は受け付けておりません。",
-                "Blog entry has been deleted": "博客条目已删除",
-                "Added to liked": "已点击喜欢"
+                "Blog entry has been deleted": "ブログエントリー削除",
+                "Added to liked": "のようにクリックした。"
             }
         }
     }
