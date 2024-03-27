@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "密碼恢復郵件已成功發送"
             }
+        },
+        "button": {
+            "class": [
+                "button"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "比较"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "点击",
+                "to see test details": "查看测试详情"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "重置",
                 "Delete contest": "刪除比賽",
-                "Preview": "預覽"
+                "Preview": "預覽",
+                "Delete": "刪除",
+                "Save draft": "保存草稿",
+                "Post": "发布"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "找不到此用戶",
                 "No such blog entry": "沒有該部落格條目",
                 "Compilation error": "編譯錯誤",
-                "No registration is opened now": "現在沒有開放報名"
+                "No registration is opened now": "現在沒有開放報名",
+                "Blog entry has been deleted": "博客条目已删除",
+                "Added to liked": "已点击喜欢"
             }
         }
     }

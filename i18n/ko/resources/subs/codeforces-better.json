@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "비밀번호 복구 이메일이 성공적으로 전송되었습니다."
             }
+        },
+        "button": {
+            "class": [
+                "버튼"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "비교"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "스트라이크(키보드에서)",
+                "to see test details": "테스트 세부 정보 보기"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "재프로비저닝",
                 "Delete contest": "경기 삭제",
-                "Preview": "미리 보기"
+                "Preview": "미리 보기",
+                "Delete": "제거",
+                "Save draft": "초안 저장",
+                "Post": "post"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "이 사용자를 찾을 수 없습니다.",
                 "No such blog entry": "이 블로그에 대한 항목이 없습니다.",
                 "Compilation error": "컴파일 오류",
-                "No registration is opened now": "현재 등록이 불가능합니다."
+                "No registration is opened now": "현재 등록이 불가능합니다.",
+                "Blog entry has been deleted": "블로그 항목 삭제됨",
+                "Added to liked": "좋아요 클릭"
             }
         }
     }

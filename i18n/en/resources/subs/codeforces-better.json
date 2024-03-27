@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "Password recovery email has been sent successfully"
             }
+        },
+        "button": {
+            "class": [
+                "button"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "comparisons"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "strike (on the keyboard)",
+                "to see test details": "View Test Details"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "reprovision",
                 "Delete contest": "Delete Match",
-                "Preview": "previews"
+                "Preview": "previews",
+                "Delete": "Delete",
+                "Save draft": "Saving drafts",
+                "Post": "post"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "This user cannot be found",
                 "No such blog entry": "There is no entry for this blog",
                 "Compilation error": "compilation error",
-                "No registration is opened now": "Registration is not open right now."
+                "No registration is opened now": "Registration is not open right now.",
+                "Blog entry has been deleted": "Blog entry deleted",
+                "Added to liked": "Liked"
             }
         }
     }

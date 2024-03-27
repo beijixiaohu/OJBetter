@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "L'e-mail de récupération du mot de passe a été envoyé avec succès"
             }
+        },
+        "button": {
+            "class": [
+                "bouton"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "comparaisons"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "frappe (sur le clavier)",
+                "to see test details": "Voir les détails du test"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "reprovision",
                 "Delete contest": "Supprimer la correspondance",
-                "Preview": "avant-premières"
+                "Preview": "avant-premières",
+                "Delete": "supprimer",
+                "Save draft": "Sauvegarde des brouillons",
+                "Post": "poste"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "Cet utilisateur est introuvable",
                 "No such blog entry": "Il n'y a pas d'entrée pour ce blog",
                 "Compilation error": "erreur de compilation",
-                "No registration is opened now": "L'inscription n'est pas ouverte pour le moment"
+                "No registration is opened now": "L'inscription n'est pas ouverte pour le moment",
+                "Blog entry has been deleted": "Article de blog supprimé",
+                "Added to liked": "Cliquer comme"
             }
         }
     }
