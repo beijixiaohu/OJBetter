@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.3
+// @version      1.74.4
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -6890,7 +6890,8 @@ async function initHTML2MarkDown() {
                 node.classList.contains('overlay') ||
                 node.classList.contains('html2md-panel') ||
                 node.classList.contains('likeForm') ||
-                node.classList.contains('monaco-editor');
+                node.classList.contains('monaco-editor')||
+                node.nodeName === 'SCRIPT';
         },
         replacement: function (content, node) {
             return "";
@@ -7323,7 +7324,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
      * 改变按钮状态
      * @param {string} state 状态
      */
-    function changeButtonState(state) {
+    const changeButtonState = (state) => {
         if (state == "loading") {
             button.setButtonLoading();
             button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
@@ -7342,6 +7343,17 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }
 
+    /**
+     * 存放目标元素的 JQueryObject
+     */
+    const target = (() => {
+        if (type = "child_level") {
+            return $(element).children(':not(.html2md-panel)');
+        }else {
+            return $(element);
+        }
+    })();
+
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
         return;
@@ -7352,8 +7364,6 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
     }
 
     button.click(OJB_debounce(function () {
-        var target = $(element).get(0);
-
         /**
          * 检查是否是MarkDown视图 
          * @returns {boolean} 是否是MarkDown视图
@@ -7382,14 +7392,14 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
 
         if (checkViewmd()) {
             setViewmd(false);
-            $(element).next(".mdViewContent").remove();
-            $(element).show();
+            target.last().next(".mdViewContent").remove();
+            target.show();
         } else {
             setViewmd(true);
-            var markdown = $(element).getMarkdown();
-            var mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
-            $(element).after(mdViewContent);
-            $(element).hide();
+            const markdown = $(element).getMarkdown();
+            const mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            target.last().after(mdViewContent);
+            target.hide();
         }
     }));
 
@@ -7889,34 +7899,13 @@ async function addConversionButton() {
     // 添加按钮到spoiler部分
     $('.spoiler-content').each((i, e) => {
         if ($(e).find('.html2md-panel').length === 0) {
-            let id = "_spoiler_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(e, id, "child_level");
+            const id = "_spoiler_" + OJB_getRandomNumber(8);
+            const panel = addButtonPanel(e, id, "child_level");
             promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "child_level"));
             promises.push(addButtonWithCopy(panel.copyButton, e, id, "child_level"));
             promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
         }
     });
-
-    // 添加按钮到titled部分
-    (function () {
-        var elements = [".Virtual.participation", ".Attention", ".Practice"];//只为部分titled添加
-        $.each(elements, (i, e) => {
-            $(e).each(function () {
-                let id = "_titled_" + OJB_getRandomNumber(8);
-                let nextDiv = $(e).next().children().get(0);
-                if (!nextDiv) return;
-                let panel = addButtonPanel(nextDiv, id, "child_level", true);
-                promises.push(addButtonWithTranslation(panel.translateButton, nextDiv, id, "child_level"));
-            });
-        });
-    })();
-    if (OJBetter.typeOfPage.is_mSite) {
-        $("div[class='_IndexPage_notice']").each((i, e) => {
-            let id = "_titled_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(e, id, "this_level", true);
-            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
-        });
-    }
 
     // 添加按钮到比赛QA部分
     $(".question-response").each((i, e) => {

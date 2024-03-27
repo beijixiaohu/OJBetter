@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.3
+// @version      1.15.4
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -6792,7 +6792,8 @@ async function initHTML2MarkDown() {
                 node.classList.contains('div-btn-copy') ||
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('overlay') ||
-                node.classList.contains('monaco-editor')
+                node.classList.contains('monaco-editor')||
+                node.nodeName === 'SCRIPT';
         },
         replacement: function () {
             return '';
@@ -7183,7 +7184,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
      * 改变按钮状态
      * @param {string} state 状态
      */
-    function changeButtonState(state) {
+    const changeButtonState = (state) => {
         if (state == "loading") {
             button.setButtonLoading();
             button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
@@ -7202,6 +7203,17 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }
 
+    /**
+     * 存放目标元素的 JQueryObject
+     */
+    const target = (() => {
+        if (type = "child_level") {
+            return $(element).children(':not(.html2md-panel)');
+        }else {
+            return $(element);
+        }
+    })();
+
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
         return;
@@ -7212,8 +7224,6 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
     }
 
     button.click(OJB_debounce(function () {
-        var target = $(element).get(0);
-
         /**
          * 检查是否是MarkDown视图 
          * @returns {boolean} 是否是MarkDown视图
@@ -7242,14 +7252,14 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
 
         if (checkViewmd()) {
             setViewmd(false);
-            $(element).next(".mdViewContent").remove();
-            $(element).show();
+            target.last().next(".mdViewContent").remove();
+            target.show();
         } else {
             setViewmd(true);
-            var markdown = $(element).getMarkdown();
-            var mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
-            $(element).after(mdViewContent);
-            $(element).hide();
+            const markdown = $(element).getMarkdown();
+            const mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            target.last().after(mdViewContent);
+            target.hide();
         }
     }));
 
