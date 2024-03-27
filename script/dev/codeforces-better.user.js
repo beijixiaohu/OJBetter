@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.4
+// @version      1.74.5
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -184,6 +184,8 @@ OJBetter.typeOfPage = {
     is_statePage: undefined,
     /** @type {boolean?} 是否是提交记录页面 */
     is_submissions: undefined,
+    /** @type {boolean?} 是否是提交记录详情页面 */
+    is_submission: undefined,
 };
 
 /**
@@ -809,6 +811,7 @@ async function initVar() {
     OJBetter.typeOfPage.is_submitPage = href.includes('/submit');
     OJBetter.typeOfPage.is_statePage = href.includes('/status');
     OJBetter.typeOfPage.is_submissions = href.includes('/submissions');
+    OJBetter.typeOfPage.is_submission = href.includes('/submission');
     OJBetter.typeOfPage.is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
             .map(function () {
@@ -1766,10 +1769,11 @@ async function beautifyPreBlocksWithMonaco() {
             height: calculateContainerHeight(lineCount),
             width: '100%'
         });
-        pre.replaceWith(container);
+        pre.hide();
+        pre.after(container);
 
         // 初始化 Monaco 编辑器
-        monaco.editor.create(container[0], {
+        const editor = monaco.editor.create(container[0], {
             value: code,
             language: language,
             readOnly: true,
@@ -1783,6 +1787,19 @@ async function beautifyPreBlocksWithMonaco() {
             automaticLayout: true,
             scrollBeyondLastLine: false
         });
+
+        // 替换复制按钮事件
+        if (OJBetter.typeOfPage.is_submission) {
+            const button = $('div[title=Copy]');
+            console.log(button);
+            button.off('click');
+            button.on('click', (event) => {
+                event.stopPropagation(); // 阻止事件冒泡到 clipboard.min.js
+                const text = editor.getValue(); // 获取编辑器内的内容
+                GM_setClipboard(text);
+                Codeforces.showMessage("The source code has been copied into the clipboard");
+            });
+        }
     }
     // 全局替换页面上所有的 <pre> 元素
     $('pre').each(function () {
@@ -6890,7 +6907,7 @@ async function initHTML2MarkDown() {
                 node.classList.contains('overlay') ||
                 node.classList.contains('html2md-panel') ||
                 node.classList.contains('likeForm') ||
-                node.classList.contains('monaco-editor')||
+                node.classList.contains('monaco-editor') ||
                 node.nodeName === 'SCRIPT';
         },
         replacement: function (content, node) {
@@ -7349,7 +7366,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
     const target = (() => {
         if (type = "child_level") {
             return $(element).children(':not(.html2md-panel)');
-        }else {
+        } else {
             return $(element);
         }
     })();

@@ -1680,7 +1680,8 @@ async function beautifyPreBlocksWithMonaco() {
             height: calculateContainerHeight(lineCount),
             width: '100%'
         });
-        pre.replaceWith(container);
+        pre.hide();
+        pre.after(container);
 
         // 初始化 Monaco 编辑器
         monaco.editor.create(container[0], {
