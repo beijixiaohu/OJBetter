@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "पासवर्ड पुनर्प्राप्ति ईमेल सफलतापूर्वक भेज दिया गया है"
             }
+        },
+        "button": {
+            "class": [
+                "button"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "比较"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "点击",
+                "to see test details": "查看测试详情"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "रीसेट",
                 "Delete contest": "मिलान हटाएँ",
-                "Preview": "पूर्व दर्शन"
+                "Preview": "पूर्व दर्शन",
+                "Delete": "मिटाना",
+                "Save draft": "保存草稿",
+                "Post": "发布"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "यह उपयोगकर्ता नहीं मिल सका",
                 "No such blog entry": "ऐसी कोई ब्लॉग प्रविष्टि नहीं है",
                 "Compilation error": "संकलन त्रुटि",
-                "No registration is opened now": "पंजीकरण अभी खुला नहीं है"
+                "No registration is opened now": "पंजीकरण अभी खुला नहीं है",
+                "Blog entry has been deleted": "博客条目已删除",
+                "Added to liked": "已点击喜欢"
             }
         }
     }
