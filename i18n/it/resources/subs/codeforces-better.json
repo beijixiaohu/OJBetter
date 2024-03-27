@@ -935,8 +935,8 @@
                 "Delete contest": "Elimina partita",
                 "Preview": "anteprime",
                 "Delete": "rimozione",
-                "Save draft": "保存草稿",
-                "Post": "发布"
+                "Save draft": "Salvataggio delle bozze",
+                "Post": "posta"
             }
         }
     },
@@ -966,8 +966,8 @@
                 "No such blog entry": "Non ci sono voci per questo blog",
                 "Compilation error": "errore di compilazione",
                 "No registration is opened now": "La registrazione non è aperta in questo momento",
-                "Blog entry has been deleted": "博客条目已删除",
-                "Added to liked": "已点击喜欢"
+                "Blog entry has been deleted": "Voce del blog cancellata",
+                "Added to liked": "Cliccato come"
             }
         }
     }
