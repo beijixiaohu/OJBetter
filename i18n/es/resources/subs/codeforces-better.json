@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "El correo electrónico de recuperación de contraseña se ha enviado correctamente"
             }
+        },
+        "button": {
+            "class": [
+                "botón"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "comparaciones"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "golpe (en el teclado)",
+                "to see test details": "Ver detalles de la prueba"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "reprovisión",
                 "Delete contest": "Borrar partido",
-                "Preview": "avances"
+                "Preview": "avances",
+                "Delete": "eliminando",
+                "Save draft": "保存草稿",
+                "Post": "发布"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "No se encuentra este usuario",
                 "No such blog entry": "No hay ninguna entrada para este blog",
                 "Compilation error": "error de compilación",
-                "No registration is opened now": "La inscripción no está abierta en este momento"
+                "No registration is opened now": "La inscripción no está abierta en este momento",
+                "Blog entry has been deleted": "博客条目已删除",
+                "Added to liked": "已点击喜欢"
             }
         }
     }
