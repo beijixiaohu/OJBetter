@@ -869,6 +869,27 @@
             "rules": {
                 "Password recovery letter has been sent successfully": "パスワード回復メールが正常に送信されました"
             }
+        },
+        "button": {
+            "class": [
+                "ボタン"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Compare": "比較"
+            }
+        },
+        ".click-to-view-tests-div": {
+            "class": [
+                ".click-to-view-tests-div"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Click": "打込む",
+                "to see test details": "テストの詳細を見る"
+            }
         }
     },
     "InputValueReplacements": {
@@ -912,7 +933,10 @@
             "rules": {
                 "Reset": "リビジョン",
                 "Delete contest": "マッチ削除",
-                "Preview": "プレビュー"
+                "Preview": "プレビュー",
+                "Delete": "削除",
+                "Save draft": "保存草稿",
+                "Post": "发布"
             }
         }
     },
@@ -941,7 +965,9 @@
                 "Can't find such user": "このユーザーが見つかりません",
                 "No such blog entry": "このブログのエントリーはありません",
                 "Compilation error": "コンパイルエラー",
-                "No registration is opened now": "現在、参加登録は受け付けておりません。"
+                "No registration is opened now": "現在、参加登録は受け付けておりません。",
+                "Blog entry has been deleted": "博客条目已删除",
+                "Added to liked": "已点击喜欢"
             }
         }
     }
