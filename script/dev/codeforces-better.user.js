@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.5
+// @version      1.74.6
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -7543,7 +7543,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
                         $($(element)).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
-                    item.translateDiv.foldMainDiv();
+                    item.translateDiv.fold();
                 }
             }
         }
@@ -7811,7 +7811,7 @@ async function multiChoiceTranslation() {
                     if (OJBetter.translation.retransAction == "0") {
                         result.translateDiv.close();
                     } else {
-                        result.translateDiv.foldMainDiv();
+                        result.translateDiv.fold();
                     }
                 }
                 // 翻译
@@ -8151,6 +8151,15 @@ class TranslateDiv {
     }
 
     /**
+     * 收起元素
+     */
+    fold() {
+        if (!this.upButton.hasClass("reverse")) {
+            this.upButton.click();
+        }
+    }
+
+    /**
      * 注册收起按钮事件
      */
     registerUpButtonEvent() {
@@ -8455,7 +8464,7 @@ class ElementsTree {
                         var topText = ne_node.topText;
                         var text = this.transResultMap[id];
                         // create element after pElement
-                        this.reCreateTransDiv(pElement, id, text, topText);
+                        this.reCreateTransDiv(pElement, id, text, topText, node.isTranslateDiv); // 如果前面一个也是翻译结果，则该结果折叠
                     }
                     pElement = pElement.next(); // go to next element
                 }
@@ -8463,8 +8472,15 @@ class ElementsTree {
         } while (node.next !== null);
     }
 
-    // 重新创建translateDiv
-    reCreateTransDiv(pElement, id, translatedText, topText) {
+    /**
+     * 重新创建translateDiv
+     * @param {*} pElement 
+     * @param {*} id 
+     * @param {*} translatedText 
+     * @param {*} topText 
+     * @param {Boolean} isFold 是否折叠
+     */
+    reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
         const translateDiv = new TranslateDiv(id);
         pElement.after(translateDiv.getDiv());
         translateDiv.setTopText(topText);
@@ -8482,6 +8498,7 @@ class ElementsTree {
             // 如果没有找到，则应该是得在父元素中找到
             transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
         }
+        if (isFold) translateDiv.fold(); // 是否折叠该翻译
         transButton.pushResultToTransButton({
             translateDiv: translateDiv,
             status: 0
