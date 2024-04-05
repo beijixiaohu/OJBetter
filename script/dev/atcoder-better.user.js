@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.4
+// @version      1.15.5
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -3701,13 +3701,13 @@ class TextBlockReplacer {
         let textCopy = text;
 
         /**
-         * 替换文本
+         * 替换回文本
          * @param {string} replacement 替换的文本
          * @param {string} regexPattern 匹配规则
          * @returns {void}
          */
         const replaceText = (replacement, regexPattern) => {
-            const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+            const latexMatch = '(?<latex_block>\\$\\$(\\\\\\$|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\\\$|[^\\$])*?\\$)|';
             const regex = new RegExp(latexMatch + regexPattern, 'g');
             textCopy = textCopy.replace(regex, (match, ...args) => {
                 // LaTeX中的不替换
@@ -7387,7 +7387,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
                         $($(element)).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
-                    item.translateDiv.foldMainDiv();
+                    item.translateDiv.fold();
                 }
             }
         }
@@ -7655,7 +7655,7 @@ async function multiChoiceTranslation() {
                     if (OJBetter.translation.retransAction == "0") {
                         result.translateDiv.close();
                     } else {
-                        result.translateDiv.foldMainDiv();
+                        result.translateDiv.fold();
                     }
                 }
                 // 翻译
@@ -7904,7 +7904,7 @@ class TranslateDiv {
         // 渲染代码块中的公式 (AtCoder)
         this.mainDiv.find('pre code').each((index, element) => {
             const codeText = $(element).text();
-            const latexPattern = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/;
+            const latexPattern = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/;
             if (latexPattern.test(codeText)) {
                 this.renderLaTeX(element);
             }
@@ -7916,6 +7916,15 @@ class TranslateDiv {
      */
     close() {
         this.closeButton.click();
+    }
+    
+    /**
+     * 收起元素
+     */
+    fold() {
+        if (!this.upButton.hasClass("reverse")) {
+            this.upButton.click();
+        }
     }
 
     /**
@@ -8224,7 +8233,7 @@ class ElementsTree {
                         var topText = ne_node.topText;
                         var text = this.transResultMap[id];
                         // create element after pElement
-                        this.reCreateTransDiv(pElement, id, text, topText);
+                        this.reCreateTransDiv(pElement, id, text, topText, node.isTranslateDiv); // 如果前面一个也是翻译结果，则该结果折叠
                     }
                     pElement = pElement.next(); // go to next element
                 }
@@ -8232,8 +8241,15 @@ class ElementsTree {
         } while (node.next !== null);
     }
 
-    // 重新创建translateDiv
-    reCreateTransDiv(pElement, id, translatedText, topText) {
+    /**
+     * 重新创建translateDiv
+     * @param {*} pElement 
+     * @param {*} id 
+     * @param {*} translatedText 
+     * @param {*} topText 
+     * @param {Boolean} isFold 是否折叠
+     */
+    reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
         const translateDiv = new TranslateDiv(id);
         pElement.after(translateDiv.getDiv());
         translateDiv.setTopText(topText);
@@ -8251,6 +8267,7 @@ class ElementsTree {
             // 如果没有找到，则应该是得在父元素中找到
             transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
         }
+        if (isFold) translateDiv.fold(); // 是否折叠该翻译
         transButton.pushResultToTransButton({
             translateDiv: translateDiv,
             status: 0
@@ -8390,7 +8407,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```

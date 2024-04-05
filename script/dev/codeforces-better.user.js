@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.6
+// @version      1.74.7
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -3822,13 +3822,13 @@ class TextBlockReplacer {
         let textCopy = text;
 
         /**
-         * 替换文本
+         * 替换回文本
          * @param {string} replacement 替换的文本
          * @param {string} regexPattern 匹配规则
          * @returns {void}
          */
         const replaceText = (replacement, regexPattern) => {
-            const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+            const latexMatch = '(?<latex_block>\\$\\$(\\\\\\$|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\\\$|[^\\$])*?\\$)|';
             const regex = new RegExp(latexMatch + regexPattern, 'g');
             textCopy = textCopy.replace(regex, (match, ...args) => {
                 // LaTeX中的不替换
@@ -8637,7 +8637,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```
