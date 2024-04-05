@@ -9663,7 +9663,7 @@ async function createCodeEditorForm(submitUrl) {
     //     let matchResult = problemCode.match(/([A-Z0-9]+)/);
     //     problemCode = matchResult[0];
     // } else if (OJBetter.typeOfPage.is_problemset_problem) {
-    //     let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)(?!=[A-Z0-9])/);
+    //     let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Za-z0-9]+?)(?!=[A-Za-z0-9])/);
     //     problemCode = match[1] + match[2];
     //     selectProblem.attr('name', 'submittedProblemCode');
     // } else {
