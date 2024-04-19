@@ -60,7 +60,7 @@
                 "Gym": "训练营",
                 "Problemset": "题库",
                 "Groups": "团体",
-                "Rating": "Rating榜",
+                "Rating": "Rating排行榜",
                 "Edu": "培训",
                 "Calendar": "日历",
                 "ICPC Challenge": "ICPC挑战赛",
@@ -336,7 +336,7 @@
             "rules": {
                 "Enter": "登录",
                 "Register": "注册",
-                "Contest rating": "测试 rating",
+                "Contest rating": "比赛rating",
                 "Logout": "退出登录"
             }
         },
