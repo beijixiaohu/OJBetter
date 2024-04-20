@@ -220,6 +220,8 @@
                 "Custom Invocation": "自定义调试",
                 "Common standings": "全部排行",
                 "Friends standings": "只看关注",
+                "Rating Changes": "全部评级变化",
+                "Friends 全部评级变化": "关注评级变化",
                 "Submit": "提交",
                 "Hacks": "黑客",
                 "Room": "房间",
@@ -249,17 +251,6 @@
                 "Social": "社会信息",
                 "Address": "地址",
                 "Wallets": "钱包"
-            }
-        },
-        ".third-level-menu": {
-            "class": [
-                ".third-level-menu"
-            ],
-            "description": "",
-            "isStrict": false,
-            "rules": {
-                "评级 changes": "全部评级变化",
-                "Friends 评级 changes": "关注评级变化",
             }
         },
         ".topic-toggle-collapse": {
