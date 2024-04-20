@@ -253,6 +253,17 @@
                 "Wallets": "钱包"
             }
         },
+        ".third-level-menu": {
+            "class": [
+                ".third-level-menu"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "评级 changes": "全部评级变化",
+                "Friends 评级 changes": "关注评级变化",
+            }
+        },
         ".topic-toggle-collapse": {
             "class": [
                 ".topic-toggle-collapse"
