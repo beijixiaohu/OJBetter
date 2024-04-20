@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.8
+// @version      1.74.9
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -4357,15 +4357,18 @@ function OJB_getCodeFromPre(element) {
         }
     }
 
+    let result;
     if (element.id === "submission-code") {
-        return getCodeFromAcePre(element);
+        result = getCodeFromAcePre(element);
     } else if (element.classList.contains("prettyprint")) {
-        return getCodeFromPrettyPre(element);
+        result = getCodeFromPrettyPre(element);
     } else if (element.querySelector("code.prettyprint")) {
-        return getCodeFromPreChild(element);
+        result = getCodeFromPreChild(element);
     } else {
-        return null;
+        result = null;
     }
+    result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
+    return result;
 }
 
 /**

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.5
+// @version      1.15.6
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -4236,15 +4236,18 @@ function OJB_getCodeFromPre(element) {
         }
     }
 
+    let result;
     if (element.id === "submission-code") {
-        return getCodeFromAcePre(element);
+        result = getCodeFromAcePre(element);
     } else if (element.classList.contains("prettyprint")) {
-        return getCodeFromPrettyPre(element);
+        result = getCodeFromPrettyPre(element);
     } else if (element.querySelector("code.prettyprint")) {
-        return getCodeFromPreChild(element);
+        result = getCodeFromPreChild(element);
     } else {
-        return null;
+        result = null;
     }
+    result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
+    return result;
 }
 
 /**
