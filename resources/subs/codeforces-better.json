@@ -146,6 +146,22 @@
                 "Contest history": "比赛历史"
             }
         },
+        ".datatable": {
+            "class": [
+                ".datatable"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "When": "时间",
+                "Who": "提交者",
+                "Problem": "问题",
+                "Lang": "语言",
+                "Verdict": "判题状态",
+                "Time": "运行时间",
+                "Memory": "运行内存",
+            }
+        },
         ".roundbox.sidebox.borderTopRound": {
             "class": [
                 ".roundbox.sidebox.borderTopRound"
@@ -156,6 +172,8 @@
                 "Register now": "现在报名",
                 "No tag edit access": "没有标签编辑权限",
                 "Problem([\\s]*)$": "问题",
+                "Submission": "提交编号",
+                "Time": "时间",
                 "Verdict": "判题状态",
                 "Language:": "语言:",
                 "Participant": "参赛者",
