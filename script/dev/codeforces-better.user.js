@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.9
+// @version      1.74.10
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1227,13 +1227,19 @@ function handleColorSchemeChange(event) {
     if (!event.matches) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
-        if (OJBetter.monaco.editor) {
+        const intervalId = setinterval(() => {
+        if (OJBetter.monaco && OJBetter.monaco.editor) {
             monaco.editor.setTheme('vs');
+            clearInterval(intervalId);
         }
+    }, 100);
     } else {
-        if (OJBetter.monaco.editor) {
+        const intervalId = setInterval(() => {
+        if (OJBetter.monaco && OJBetter.monaco.editor) {
             monaco.editor.setTheme('vs-dark');
+            clearInterval(intervalId);
         }
+    },100);
     }
 }
 
@@ -1248,6 +1254,12 @@ function handleColorSchemeChange(event) {
         const htmlElement = document.querySelector('html');
         if (htmlElement) {
             htmlElement.setAttribute('data-theme', 'dark');
+            const intervalId = setInterval(() => {
+                if (OJBetter.monaco && OJBetter.monaco.editor) {
+                    monaco.editor.setTheme('vs-dark');
+                    clearInterval(intervalId);
+                }
+            }, 100);
         } else {
             setTimeout(setDarkTheme, 100);
         }
