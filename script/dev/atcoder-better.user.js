@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.7
+// @version      1.15.8
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -8993,28 +8993,28 @@ async function CF2vjudge(problemToolbar) {
 const ratingClassMap = {
     NaN: "rating_by_clist_colorNaN",
     0: "rating_by_clist_color0",
-    1200: "rating_by_clist_color1",
-    1400: "rating_by_clist_color2",
-    1600: "rating_by_clist_color3",
-    1900: "rating_by_clist_color4",
-    2100: "rating_by_clist_color5",
-    2300: "rating_by_clist_color6",
-    2400: "rating_by_clist_color7",
-    2600: "rating_by_clist_color8",
-    3000: "rating_by_clist_color9"
+    400: "rating_by_clist_color1",
+    800: "rating_by_clist_color2",
+    1200: "rating_by_clist_color3",
+    1600: "rating_by_clist_color4",
+    2000: "rating_by_clist_color5",
+    2400: "rating_by_clist_color6",
+    2800: "rating_by_clist_color7",
+    2800: "rating_by_clist_color8",
+    2800: "rating_by_clist_color9"
 };
 const cssMap = {
     "rating_by_clist_colorNaN": "#cccccc",
     "rating_by_clist_color0": "#808080",
-    "rating_by_clist_color1": "#73e473",
-    "rating_by_clist_color2": "#77ddbb",
-    "rating_by_clist_color3": "#aaaaff",
-    "rating_by_clist_color4": "#ff88ff",
-    "rating_by_clist_color5": "#ffcc88",
-    "rating_by_clist_color6": "#ffbb55",
-    "rating_by_clist_color7": "#ff7777",
-    "rating_by_clist_color8": "#ff3333",
-    "rating_by_clist_color9": "#aa0000"
+    "rating_by_clist_color1": "#804000",
+    "rating_by_clist_color2": "#008000",
+    "rating_by_clist_color3": "#00c0c0",
+    "rating_by_clist_color4": "#0000ff",
+    "rating_by_clist_color5": "#c0c000",
+    "rating_by_clist_color6": "#fb7e00",
+    "rating_by_clist_color7": "#ff0000",
+    "rating_by_clist_color8": "#ff0000",
+    "rating_by_clist_color9": "#ff0000"
 };
 // TODO 7
 /**
