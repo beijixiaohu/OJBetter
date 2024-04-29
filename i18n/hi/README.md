@@ -4,18 +4,18 @@ OJBetter एक टैम्परमॉन्की स्क्रिप्ट
 
 वेबसाइट इंटरफ़ेस और उपयोगकर्ता इंटरैक्शन को बेहतर बनाने के लिए कई व्यावहारिक कार्यों को जोड़कर, आपकी प्रोग्रामिंग प्रतियोगिता यात्रा अधिक कुशल और सुविधाजनक होगी।
 
-***
+------
 
-[सरलीकृत चीनी](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [पारंपरिक चीनी](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh -Hant/README.md) | [अंग्रेजी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https\://github.com/beijixiaohu /OJBetter/blob/main/i18n/de/README.md) | [फ़्रांसीसी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https ://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [पुर्तगाली](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README। एमडी) | [日本语](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https\://github.com/beijixiaohu/OJBetter/blob /main/i18n/es/README.md) | [इटालियानो](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिंदी](https\://github .com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
+[सरलीकृत चीनी](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [पारंपरिक चीनी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh -Hant/README.md) | [अंग्रेजी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/beijixiaohu /OJBetter/blob/main/i18n/de/README.md) | [फ़्रांसीसी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https ://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [पुर्तगाली](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README। एमडी) | [日本语](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob /main/i18n/es/README.md) | [इटालियानो](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिंदी](https://github .com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
-***
+------
 
 ## स्थापित करना
 
-| लिखी हुई कहानी | आधिकारिक संस्करण डाउनलोड                                                                                                                                                                                                                                    | बीटा डाउनलोड                                                                                   |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| कोडफोर्स बेहतर | [ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/main/script/release/codeforces -better.user.js) | [गिटहब](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
-| एटकोडर बेहतर   | [ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/main/script/release/atcoder -better.user.js)       | [गिटहब](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
+| लिखी हुई कहानी | आधिकारिक संस्करण डाउनलोड                                                                                                                                                                                                                                                                                                   | बीटा डाउनलोड                                                                                   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| कोडफोर्स बेहतर | [ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/release/codeforces -better.user.js) | [गिटहब](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| एटकोडर बेहतर   | [ग्रीसीफोर्क](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/release/atcoder -better.user.js)       | [गिटहब](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## मुख्य कार्य
 
@@ -47,7 +47,7 @@ OJBetter एक टैम्परमॉन्की स्क्रिप्ट
 
 परियोजना का गैर-चीनी संस्करण मुख्य रूप से मशीनी अनुवाद (डीपीएल और गूगल) के माध्यम से पूरा किया गया है और क्राउडिन पर होस्ट किया गया है।
 
-यदि आप अनुवादों को बेहतर बनाने में मदद करना चाहते हैं ताकि उन्हें अधिक सटीक और प्राकृतिक बनाया जा सके, तो योगदान देने के लिए कृपया [क्राउडिन प्रोजेक्ट पेज] (https\://zh.crowdin.com/project/codeforcesbetter) पर जाएं।
+यदि आप अनुवादों को बेहतर बनाने में मदद करना चाहते हैं ताकि उन्हें अधिक सटीक और प्राकृतिक बनाया जा सके, तो योगदान देने के लिए कृपया [क्राउडिन प्रोजेक्ट पेज] (https://zh.crowdin.com/project/codeforcesbetter) पर जाएं।
 
 ## अन्य OJs का समर्थन करें?
 
