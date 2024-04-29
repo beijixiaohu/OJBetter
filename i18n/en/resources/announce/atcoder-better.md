@@ -63,7 +63,7 @@
 
 - Some other tweaks and improvements
 
-***
+------
 
 - Separate website localized data into external JSON for easy maintenance
 - Scripts support internationalization and use the crowdin platform to automate localization efforts.
@@ -93,12 +93,12 @@
 - **lots of css class renaming, so you may need to tweak that if you're using stylus custom styles**
 - Some other adjustments and improvements
 
-***
+------
 
 - Fix ChatGPT configuration panel not showing, thanks for the feedback @caoxuanming
 - Add a configuration switch "Mouse Scroll Lock" which is enabled by default, thanks to @liuhao6 for the suggestion!
 
-***
+------
 
 - Updated API for clist rating to v4, adjusted how data is fetched on title page to be fetched via API, thanks to @wrkwrk for the suggestion!
 - Add ChatGPT translation "Streaming" option, enabled by default
@@ -107,7 +107,7 @@
 - Buttons to add small areas to the full title set page
 - Fix the problem that the translation results are not shown when the complete topic set page is right-clicked to print Thanks to @zfs732 for the feedback!
 
-***
+------
 
 - Add a code editor at the bottom of the title page to support online code testing, code submission, etc. Please read the information page.
 - Fixed the problem that when inserting script buttons and translating results, they were treated as changes to the title description.
