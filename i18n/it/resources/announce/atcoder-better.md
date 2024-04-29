@@ -8,7 +8,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2
@@ -63,7 +63,7 @@
 
 - Altre modifiche e miglioramenti
 
-***
+------
 
 - Indipendenza dei dati localizzati del sito web come JSON esterno per una facile manutenzione.
 - Gli script supportano l'internazionalizzazione e utilizzano la piattaforma crowdin per automatizzare la localizzazione.
@@ -93,12 +93,12 @@
 - **molte rinominazioni di classi css, quindi potrebbe essere necessario modificare questo aspetto se sta usando gli stili personalizzati di Stylus**.
 - Altri miglioramenti e correzioni
 
-***
+------
 
 - Risolva il problema per cui il pannello di configurazione di ChatGPT non viene visualizzato, grazie al feedback di @caoxuanming!
 - Aggiungere un interruttore di configurazione "Blocco dello scorrimento del mouse", attivo per impostazione predefinita, grazie a @liuhao6 per il suggerimento.
 
-***
+------
 
 - Aggiornato l'API per la valutazione clista alla v4, adattato il modo in cui i dati vengono recuperati sulla pagina del titolo per essere recuperati tramite API, grazie a @wrkwrk per il suggerimento!
 - Aggiungere l'opzione di traduzione ChatGPT "Streaming", abilitata per impostazione predefinita
@@ -107,7 +107,7 @@
 - Pulsanti per aggiungere piccole aree alla pagina completa degli argomenti.
 - Risolva il problema per cui il risultato della traduzione non viene mostrato quando si fa clic con il tasto destro del mouse sulla pagina completa del set di argomenti per stampare Grazie a @zfs732 per il feedback!
 
-***
+------
 
 - Aggiungere un editor di codice nella parte inferiore della pagina del titolo, per supportare il test del codice online, l'invio del codice, ecc.
 - È stato risolto il problema per cui, quando si inseriscono i pulsanti di script e si traducono i risultati, questi vengono trattati come modifiche alla descrizione del titolo.
