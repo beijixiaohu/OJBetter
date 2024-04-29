@@ -63,7 +63,7 @@
 
 - Einige andere Optimierungen und Verbesserungen
 
-***
+------
 
 - Unabhängigkeit der lokalisierten Daten der Website als externes JSON für eine einfache Pflege
 - Skripte unterstützen die Internationalisierung und nutzen die Crowdin-Plattform, um die Lokalisierung zu automatisieren.
@@ -93,12 +93,12 @@
 - **Viele Umbenennungen von CSS-Klassen, so dass Sie diese möglicherweise anpassen müssen, wenn Sie die benutzerdefinierten Stile von Stylus verwenden**.
 - Einige andere Anpassungen und Verbesserungen
 
-***
+------
 
 - Behebung des Problems, dass das ChatGPT-Konfigurationspanel nicht angezeigt wird, dank des Feedbacks von @caoxuanming!
 - Fügen Sie einen Konfigurationsschalter "Mouse Scroll Lock" hinzu, der standardmäßig aktiviert ist. Danke an @liuhao6 für den Vorschlag.
 
-***
+------
 
 - Die API für die Listenbewertung wurde auf v4 aktualisiert, die Art und Weise, wie die Daten auf der Titelseite abgerufen werden, wurde angepasst, damit sie über die API abgerufen werden können. Danke an @wrkwrk für den Vorschlag!
 - Hinzufügen der ChatGPT-Übersetzungsoption "Streaming", standardmäßig aktiviert
@@ -107,7 +107,7 @@
 - Schaltflächen zum Hinzufügen kleiner Bereiche zur vollständigen Themenseite
 - Das Problem, dass das Übersetzungsergebnis nicht angezeigt wird, wenn die komplette Themenseite zum Drucken mit der rechten Maustaste angeklickt wird, wurde behoben. Danke an @zfs732 für das Feedback!
 
-***
+------
 
 - Fügen Sie unten auf der Titelseite einen Code-Editor hinzu, um das Testen von Online-Code, die Übermittlung von Code usw. zu unterstützen. Details finden Sie auf der Informationsseite.
 - Das Problem wurde behoben, dass beim Einfügen von Skript-Schaltflächen und beim Übersetzen von Ergebnissen diese als Änderungen an der Titelbeschreibung behandelt wurden.
