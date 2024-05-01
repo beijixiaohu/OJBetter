@@ -153,22 +153,6 @@
                 "Contest history": "比赛历史"
             }
         },
-        ".datatable": {
-            "class": [
-                ".datatable"
-            ],
-            "description": "",
-            "isStrict": false,
-            "rules": {
-                "When": "时间",
-                "Who": "提交者",
-                "Problem": "问题",
-                "Lang": "语言",
-                "Verdict": "判题状态",
-                "Time": "运行时间",
-                "Memory": "运行内存",
-            }
-        },
         ".roundbox.sidebox.borderTopRound": {
             "class": [
                 ".roundbox.sidebox.borderTopRound"
