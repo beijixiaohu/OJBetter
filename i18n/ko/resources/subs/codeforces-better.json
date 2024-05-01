@@ -965,6 +965,7 @@
                 "You have been successfully registered": "등록에 성공했습니다.",
                 "No such contests": "그런 콘테스트는 없습니다.",
                 "The example input has been copied into the clipboard": "클립보드에 복사된 샘플 입력",
+                "The example output has been copied into the clipboard": "样例输出已复制到剪贴板",
                 "The source code has been copied into the clipboard": "소스 코드가 클립보드에 복사되었습니다.",
                 "Settings have been updated": "설정 업데이트",
                 "Solution to the problem": "이슈",
