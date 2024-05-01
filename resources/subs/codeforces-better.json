@@ -43,7 +43,14 @@
                 "Contest status": "比赛状态",
                 "Invited users": "邀请的用户",
                 "Invitation links": "邀请链接",
-                "API keys": "API密钥"
+                "API keys": "API密钥",
+                "When": "时间",
+                "Who": "提交者",
+                "Problem": "问题",
+                "Lang": "语言",
+                "Verdict": "判题状态",
+                "Time": "运行时间",
+                "Memory": "运行内存"
             }
         },
         ".menu-list.main-menu-list": {

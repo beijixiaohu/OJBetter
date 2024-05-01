@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.5
+// @version      1.15.8
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -1218,13 +1218,19 @@ function handleColorSchemeChange(event) {
     if (!event.matches) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
-        if (OJBetter.monaco.editor) {
+        const intervalId = setinterval(() => {
+        if (OJBetter.monaco && OJBetter.monaco.editor) {
             monaco.editor.setTheme('vs');
+            clearInterval(intervalId);
         }
+    }, 100);
     } else {
-        if (OJBetter.monaco.editor) {
+        const intervalId = setInterval(() => {
+        if (OJBetter.monaco && OJBetter.monaco.editor) {
             monaco.editor.setTheme('vs-dark');
+            clearInterval(intervalId);
         }
+    },100);
     }
 }
 
@@ -1235,6 +1241,12 @@ function handleColorSchemeChange(event) {
         const htmlElement = document.querySelector('html');
         if (htmlElement) {
             htmlElement.setAttribute('data-theme', 'dark');
+            const intervalId = setInterval(() => {
+                if (OJBetter.monaco && OJBetter.monaco.editor) {
+                    monaco.editor.setTheme('vs-dark');
+                    clearInterval(intervalId);
+                }
+            }, 100);
         } else {
             setTimeout(setDarkTheme, 100);
         }
@@ -4236,15 +4248,18 @@ function OJB_getCodeFromPre(element) {
         }
     }
 
+    let result;
     if (element.id === "submission-code") {
-        return getCodeFromAcePre(element);
+        result = getCodeFromAcePre(element);
     } else if (element.classList.contains("prettyprint")) {
-        return getCodeFromPrettyPre(element);
+        result = getCodeFromPrettyPre(element);
     } else if (element.querySelector("code.prettyprint")) {
-        return getCodeFromPreChild(element);
+        result = getCodeFromPreChild(element);
     } else {
-        return null;
+        result = null;
     }
+    result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
+    return result;
 }
 
 /**
@@ -8978,28 +8993,28 @@ async function CF2vjudge(problemToolbar) {
 const ratingClassMap = {
     NaN: "rating_by_clist_colorNaN",
     0: "rating_by_clist_color0",
-    1200: "rating_by_clist_color1",
-    1400: "rating_by_clist_color2",
-    1600: "rating_by_clist_color3",
-    1900: "rating_by_clist_color4",
-    2100: "rating_by_clist_color5",
-    2300: "rating_by_clist_color6",
-    2400: "rating_by_clist_color7",
-    2600: "rating_by_clist_color8",
-    3000: "rating_by_clist_color9"
+    400: "rating_by_clist_color1",
+    800: "rating_by_clist_color2",
+    1200: "rating_by_clist_color3",
+    1600: "rating_by_clist_color4",
+    2000: "rating_by_clist_color5",
+    2400: "rating_by_clist_color6",
+    2800: "rating_by_clist_color7",
+    2800: "rating_by_clist_color8",
+    2800: "rating_by_clist_color9"
 };
 const cssMap = {
     "rating_by_clist_colorNaN": "#cccccc",
     "rating_by_clist_color0": "#808080",
-    "rating_by_clist_color1": "#73e473",
-    "rating_by_clist_color2": "#77ddbb",
-    "rating_by_clist_color3": "#aaaaff",
-    "rating_by_clist_color4": "#ff88ff",
-    "rating_by_clist_color5": "#ffcc88",
-    "rating_by_clist_color6": "#ffbb55",
-    "rating_by_clist_color7": "#ff7777",
-    "rating_by_clist_color8": "#ff3333",
-    "rating_by_clist_color9": "#aa0000"
+    "rating_by_clist_color1": "#804000",
+    "rating_by_clist_color2": "#008000",
+    "rating_by_clist_color3": "#00c0c0",
+    "rating_by_clist_color4": "#0000ff",
+    "rating_by_clist_color5": "#c0c000",
+    "rating_by_clist_color6": "#fb7e00",
+    "rating_by_clist_color7": "#ff0000",
+    "rating_by_clist_color8": "#ff0000",
+    "rating_by_clist_color9": "#ff0000"
 };
 // TODO 7
 /**
