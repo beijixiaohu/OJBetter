@@ -240,6 +240,10 @@
                 "label": "Confirmation secondaire de la soumission du code",
                 "helpText": "En cliquant sur la page de titre de l'éditeur Monaco, une deuxième fenêtre s'ouvrira lorsque le code sera soumis afin d'éviter les fausses soumissions."
             },
+            "autoSubmitAfterPass": {
+                "label": "Envoi automatique après approbation",
+                "helpText": "Validation automatique du code lorsqu'il passe les tests"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Verrouillage du défilement de la souris",
                 "helpText": "Lorsque cette option est activée, lorsque le pointeur de la souris se trouve à l'intérieur de l'éditeur monaco, le défilement de la souris ne fait défiler que le contenu de l'éditeur."
