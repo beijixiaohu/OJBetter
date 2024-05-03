@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "コードを確認しますか？",
-        "content": "",
+        "content": "投稿するトピックは\n\n**{{questionTitle}}**\n\nです。",
         "buttons": [
             "キャンセル",
             "送信"
