@@ -244,6 +244,10 @@
                 "label": "Conferma secondaria dell'invio del codice",
                 "helpText": "Cliccando sulla pagina del titolo dell'editor di Monaco, il codice verrà visualizzato una seconda volta al momento dell'invio del codice, per evitare falsi invii."
             },
+            "autoSubmitAfterPass": {
+                "label": "Invio automatico dopo l'approvazione",
+                "helpText": "Commette automaticamente il codice quando supera i test"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Blocco dello scorrimento del mouse",
                 "helpText": "Se attivata, quando il puntatore del mouse si trova all'interno dell'editor monaco, lo scorrimento del mouse farà scorrere solo il contenuto dell'editor."
