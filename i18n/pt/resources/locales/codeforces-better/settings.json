@@ -55,8 +55,8 @@
             "helpText": "<p>Para a lista de corridas que utilizam o sistema Codeforces</p><p>Volte a colorir as pontuações de acordo com o intervalo de \"Pontuação/Total\"</p><p>Intervalo：1~0,7~0,45~0 Verde escuro→Laranja claro→Laranja escuro→Vermelho</p>"
         },
         "hiddenProblemTag": {
-            "label": "隐藏问题标签",
-            "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
+            "label": "Ocultar etiquetas de perguntas",
+            "helpText": "<p>Ocultar a etiqueta da pergunta na barra lateral da página de título e mostrá-la quando o rato estiver a pairar sobre a etiqueta</p>"
         }
     },
     "localization": {
