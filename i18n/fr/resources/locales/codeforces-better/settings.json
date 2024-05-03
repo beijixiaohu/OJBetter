@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Recoloration de la liste",
             "helpText": "<p>Pour la liste des courses utilisant le système Codeforces</p><p>Recolorez les scores en fonction de la fourchette \"Score/Total\"</p><p>Fourchette：1~0.7~0.45~0 Vert foncé→Orange clair→Orange foncé→Rouge</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "隐藏问题标签",
+            "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
         }
     },
     "localization": {
