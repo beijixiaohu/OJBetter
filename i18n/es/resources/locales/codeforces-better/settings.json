@@ -55,8 +55,8 @@
             "helpText": "<p>Para la lista de carreras que utilizan el sistema Codeforces</p><p>Recoloree las puntuaciones según el rango de \"Puntuación/Total\"</p><p>Rango：1~0.7~0.45~0 Verde oscuro→Naranja claro→Naranja oscuro→Rojo</p>"
         },
         "hiddenProblemTag": {
-            "label": "隐藏问题标签",
-            "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
+            "label": "Ocultar etiquetas de preguntas",
+            "helpText": "<p>Ocultar la etiqueta de la pregunta en la barra lateral de la página de título y mostrarla cuando el ratón pasa por encima de la etiqueta.</p>"
         }
     },
     "localization": {
