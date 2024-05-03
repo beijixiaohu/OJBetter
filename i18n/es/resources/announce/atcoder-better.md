@@ -63,7 +63,7 @@
 
 - Algunos otros ajustes y mejoras
 
-***
+------
 
 - Independencia de los datos localizados del sitio web como JSON externo para facilitar el mantenimiento
 - Los scripts son compatibles con la internacionalización y utilizan la plataforma crowdin para automatizar la localización.
@@ -93,12 +93,12 @@
 - **mucho cambio de nombre de clases css, por lo que puede que tenga que retocarlo si utiliza estilos personalizados de stylus**
 - Otros ajustes y mejoras
 
-***
+------
 
 - Solucionado el problema de que el panel de configuración de ChatGPT no aparece, ¡gracias a los comentarios de @caoxuanming!
 - Añada un interruptor de configuración "Bloqueo de desplazamiento del ratón", activado por defecto, gracias a @liuhao6 por la sugerencia.
 
-***
+------
 
 - ¡Actualizado API para la clasificación clist a v4, ajustado cómo los datos se obtiene en la página de título para ser obtenido a través de la API, gracias a @wrkwrk por la sugerencia!
 - Añadir la opción "Streaming" de traducción de ChatGPT, activada por defecto
@@ -107,7 +107,7 @@
 - Botones para añadir pequeñas áreas a la página completa del conjunto de temas
 - Solucionado el problema de que no se muestra el resultado de la traducción cuando se hace clic con el botón derecho del ratón en la página completa del conjunto de temas para imprimir ¡Gracias a @zfs732 por el comentario!
 
-***
+------
 
 - Añada un editor de código en la parte inferior de la portada para facilitar las pruebas de código en línea, el envío de código, etc. Para más detalles, lea la página de información.
 - Se ha solucionado el problema por el que, al insertar botones de script y traducir los resultados, se trataban como cambios en la descripción del título.

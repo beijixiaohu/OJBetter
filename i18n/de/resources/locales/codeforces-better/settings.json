@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Die Liste neu färben",
             "helpText": "<p>Für die Liste der Rennen, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "Frage-Tags ausblenden",
+            "helpText": "<p>Die Fragebezeichnung in der Seitenleiste auf der Titelseite ausblenden und einblenden, wenn der Mauszeiger über der Bezeichnung schwebt</p>"
         }
     },
     "localization": {

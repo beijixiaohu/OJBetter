@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Ricolorare l'elenco",
             "helpText": "<p>Per l'elenco delle gare che utilizzano il sistema Codeforces</p><p>Ricolori i punteggi in base all'intervallo \"Punteggio/Totale\"</p><p>Intervallo：1~0,7~0,45~0 Verde scuro→Arancio chiaro→Arancio scuro→Rosso</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "Nascondi i tag delle domande",
+            "helpText": "<p>Nascondere l'etichetta della domanda nella barra laterale nella pagina del titolo e mostrarla quando il mouse passa sopra l'etichetta</p>"
         }
     },
     "localization": {
