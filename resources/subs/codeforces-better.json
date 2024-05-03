@@ -49,8 +49,9 @@
                 "Problem": "问题",
                 "Lang": "语言",
                 "Verdict": "判题状态",
-                "Time": "运行时间",
-                "Memory": "运行内存"
+                "Time": "时间",
+                "时间 limit exceeded": "Time limit exceeded",
+                "Memory": "内存"
             }
         },
         ".menu-list.main-menu-list": {
