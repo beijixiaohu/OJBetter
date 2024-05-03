@@ -244,6 +244,10 @@
                 "label": "代碼提交二次確認",
                 "helpText": "點選題目頁Monaco 編輯器的程式碼提交時會彈窗二次確認，防止誤提交"
             },
+            "autoSubmitAfterPass": {
+                "label": "通过后自动提交",
+                "helpText": "当代码通过测试后自动提交"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "滑鼠滾動鎖定",
                 "helpText": "開啟後，當滑鼠指標在monaco 編輯器內部時，滑鼠捲動將只會捲動編輯器內的內容"
