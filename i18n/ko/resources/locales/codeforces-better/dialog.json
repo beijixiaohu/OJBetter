@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "코드 제출을 확인하셨나요?",
-        "content": "",
+        "content": "제출 주제:\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "취소",
             "제출(보고서 등)"
