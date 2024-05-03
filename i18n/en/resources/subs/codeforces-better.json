@@ -49,7 +49,8 @@
                 "Problem": "concern",
                 "Lang": "multilingualism",
                 "Verdict": "Case Status",
-                "Time": "running time",
+                "Time": "timing",
+                "时间 limit exceeded": "Time limit exceeded",
                 "Memory": "Running memory"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "You can clone this match into a mixed match.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "A mashup is a special type of training contest consisting of open questions from past Codeforces contests. It is also possible to add",
                 "problems to mashup contest.": "Question to the mashup contest.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Such competitions cannot be publicized and are only used for personal training purposes. Mashups can also be added to groups. To specify additional information about a mashup contest, use the Boot Camp Contest Edit form."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Such competitions cannot be publicized and are only used for personal training purposes. Mashups can also be added to groups. To specify additional information about a mashup contest, use the Boot Camp Contest Edit form.",
+                "时间 limit exceeded": "Time limit exceeded"
             }
         },
         ".icon-eye-close.icon-large": {
