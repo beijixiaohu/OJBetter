@@ -4,18 +4,18 @@ OJBetter는 다양한 온라인 판사(OJ) 웹사이트 사용 경험을 향상�
 
 웹사이트 인터페이스와 사용자 상호작용을 개선하고 유용한 기능을 추가하여 프로그래밍 대회를 보다 효율적이고 편리하게 이용할 수 있도록 합니다.
 
-***
+------
 
 [简体中文](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [繁體中文](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
-***
+------
 
 ## 마운팅
 
-| 스크립트           | 다운로드                                                                                                                                                                                                                                         | 베타 다운로드                                                                                      |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| 더 나은 코드 적용     | [그리시포크](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [깃허브](https://github.com/beijixiaohu/OJBetter/raw/) 메인/스크립트/리리스/코드포스-베터.사용자.js)                                                                                     | [깃허브](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
-| AtCoder Better | [그리시포크](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [깃허브](https\://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js) | [깃허브](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
+| 스크립트           | 다운로드                                                                                                                                                                                                                                                                                                        | 베타 다운로드                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 더 나은 코드 적용     | [그리시포크](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [깃허브](https://github.com/beijixiaohu/OJBetter/raw/) 메인/스크립트/리리스/코드포스-베터.사용자.js)                                                                                                                    | [깃허브](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| AtCoder Better | [그리시포크](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [깃허브](https://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js) | [깃허브](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## 주요 기능
 
