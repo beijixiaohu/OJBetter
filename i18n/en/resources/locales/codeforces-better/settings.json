@@ -55,8 +55,8 @@
             "helpText": "<p>For the competition list using the Codeforces format</p><p>Re-color the gradient according to the range of \"score/total score\"</p><p>Range：1~0.7~0.45~0 Dark green → light orange → dark orange → red</p>"
         },
         "hiddenProblemTag": {
-            "label": "隐藏问题标签",
-            "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
+            "label": "Hide question tags",
+            "helpText": "<p>Hide the question label in the sidebar on the title page and show it when the mouse is hovering over the label</p>"
         }
     },
     "localization": {
