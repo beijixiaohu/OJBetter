@@ -63,7 +63,7 @@
 
 - Alguns outros ajustes e melhorias
 
-***
+------
 
 - Independência dos dados localizados do sítio Web como JSON externo para facilitar a manutenção
 - Os guiões suportam a internacionalização e utilizam a plataforma crowdin para automatizar a localização.
@@ -93,12 +93,12 @@
 - **muitas renomeações de classes css, pelo que poderá ter de as ajustar se estiver a utilizar estilos personalizados do stylus**
 - Alguns outros ajustamentos e melhorias
 
-***
+------
 
 - Corrija o problema de o painel de configuração do ChatGPT não aparecer, graças ao feedback de @caoxuanming!
 - Adicione um interrutor de configuração "Mouse Scroll Lock", ativado por predefinição, graças a @liuhao6 pela sugestão.
 
-***
+------
 
 - Actualizou a API para a classificação da lista para a v4, ajustou a forma como os dados são obtidos na página de título para serem obtidos através da API, graças a @wrkwrk pela sugestão!
 - Adicione a opção "Streaming" da tradução do ChatGPT, activada por predefinição
@@ -107,7 +107,7 @@
 - Botões para adicionar pequenas áreas à página completa do conjunto de tópicos
 - Corrija o problema de o resultado da tradução não ser mostrado quando se clica com o botão direito do rato na página completa do conjunto de tópicos para imprimir.
 
-***
+------
 
 - Adicione um editor de código na parte inferior da página de título para suportar testes de código online, submissão de código, etc. Para mais informações, leia a página de informações.
 - Foi corrigido o problema em que, ao inserir botões de script e traduzir resultados, estes eram tratados como alterações à descrição do título.
