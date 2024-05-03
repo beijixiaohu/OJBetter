@@ -49,7 +49,8 @@
                 "Problem": "Ausgaben",
                 "Lang": "Mehrsprachigkeit",
                 "Verdict": "Status der Rechtsprechung",
-                "Time": "Laufzeit",
+                "Time": "mal",
+                "时间 limit exceeded": "Zeitlimit überschritten",
                 "Memory": "Laufender Speicher"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "Sie können diesen Wettbewerb in einen Mashup-Wettbewerb umwandeln.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Ein Mashup ist eine besondere Art von Trainingswettbewerb, der aus offenen Fragen aus vergangenen Codeforces-Wettbewerben besteht. Es ist auch möglich, ein",
                 "problems to mashup contest.": "Frage zum Mashup-Wettbewerb.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Solche Wettbewerbe können nicht veröffentlicht werden und werden nur für persönliche Trainingszwecke verwendet. Mashups können auch zu Gruppen hinzugefügt werden. Um zusätzliche Informationen zu einem Mashup-Wettbewerb anzugeben, verwenden Sie das Formular Trainingslager-Wettbewerb bearbeiten."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Solche Wettbewerbe können nicht veröffentlicht werden und werden nur für persönliche Trainingszwecke verwendet. Mashups können auch zu Gruppen hinzugefügt werden. Um zusätzliche Informationen zu einem Mashup-Wettbewerb anzugeben, verwenden Sie das Formular Trainingslager-Wettbewerb bearbeiten.",
+                "时间 limit exceeded": "Zeitlimit überschritten"
             }
         },
         ".icon-eye-close.icon-large": {
