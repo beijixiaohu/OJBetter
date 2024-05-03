@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.8
+// @version      1.15.9
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -315,6 +315,8 @@ OJBetter.monaco = {
         alwaysConsumeMouseWheel: undefined,
         /** @type {boolean?} 提交代码二次确认 */
         isCodeSubmitDoubleConfirm: undefined,
+        /** @type {boolean?} 测试通过后自动提交 */
+        autoSubmitAfterPass: undefined,
         /** @type {string?} 提交按钮位置 */
         submitButtonPosition: undefined
     }
@@ -522,7 +524,7 @@ function OJB_LoadJS(url) {
  * 安全地创建JQuery对象
  * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
  * @param {string} string - 字符串。
- * @returns JQuery对象
+ * @returns {JQuery} JQuery对象
  */
 const OJB_safeCreateJQElement = function (string) {
     return $(string.replace(/^\s+/, ""));
@@ -904,6 +906,7 @@ async function initVar() {
     OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
     OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
     OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
+    OJBetter.monaco.setting.autoSubmitAfterPass = OJB_getGMValue("autoSubmitAfterPass", false);
     OJBetter.monaco.setting.alwaysConsumeMouseWheel = OJB_getGMValue("alwaysConsumeMouseWheel", true);
     OJBetter.monaco.setting.submitButtonPosition = OJB_getGMValue("submitButtonPosition", "bottom");
     //自定义补全
@@ -5751,6 +5754,15 @@ const code_editor_settings_HTML = `
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="autoSubmitAfterPass"><span
+                data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoSubmitAfterPass" name="autoSubmitAfterPass">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
                 data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
@@ -6572,6 +6584,7 @@ async function initSettingsPanel() {
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#beautifyPreBlocks").prop("checked", GM_getValue("beautifyPreBlocks") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
+        $("#autoSubmitAfterPass").prop("checked", GM_getValue("autoSubmitAfterPass") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
@@ -6653,6 +6666,7 @@ async function initSettingsPanel() {
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 beautifyPreBlocks: $("#beautifyPreBlocks").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
+                autoSubmitAfterPass: $("#autoSubmitAfterPass").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
@@ -12275,7 +12289,7 @@ class TestCaseStatus {
 }
 
 // 样例测试函数
-async function runCode(event, runButton, sourceDiv, submitDiv) {
+async function runCode(event, runButton, sourceDiv) {
     event.preventDefault();
     const statePanel = $('#statePanel').show().empty();
     const testData = getTestData();
@@ -12344,6 +12358,9 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
         runButton.setButtonState('error', `${passedTests}/${totalTests} ` + i18next.t('runTestButton.partial', { ns: 'codeEditor' }));
     } else {
         runButton.setButtonState('success', i18next.t('runTestButton.success', { ns: 'codeEditor' }));
+        if (OJBetter.monaco.setting.autoSubmitAfterPass) {
+            $('#OJBetter_SubmitForm').submit(); // 自动提交
+        }
     }
 }
 
@@ -12406,13 +12423,22 @@ async function addProblemPageCodeEditor() {
     submitButton.on('click', async function (event) {
         event.preventDefault();
         if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
+            // 获取题目名
+            const questionTitle = (() => {
+                const element = document.querySelector('.h2');
+                return Array.from(element.childNodes)
+                    .filter(node => node.nodeType === Node.TEXT_NODE)
+                    .map(textNode => textNode.textContent.trim())
+                    .join(' ');
+            })();
             const submit = await OJB_createDialog(
                 i18next.t('submitCode.title', { ns: 'dialog' }),
-                i18next.t('submitCode.content', { ns: 'dialog' }),
+                i18next.t('submitCode.content', { ns: 'dialog', questionTitle: questionTitle }),
                 [
                     i18next.t('submitCode.buttons.0', { ns: 'dialog' }),
                     i18next.t('submitCode.buttons.1', { ns: 'dialog' })
-                ]
+                ],
+                true
             ); //提交确认
             if (submit) {
                 submitButton.after(`<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
