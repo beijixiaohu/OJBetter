@@ -49,7 +49,8 @@
                 "Problem": "課題",
                 "Lang": "多言語主義",
                 "Verdict": "タクティクス",
-                "Time": "走行時間",
+                "Time": "回",
+                "时间 limit exceeded": "制限時間超過",
                 "Memory": "ランニングメモリー"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "この試合をマッシュアップ試合に複製できます。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "マッシュアップとは、過去のCodeforcesコンテストで出題された問題を集めた特別なトレーニングコンテストのことです。また",
                 "problems to mashup contest.": "マッシュアップコンテストへの質問。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "このような大会は公開されることはなく、個人的なトレーニング目的にのみ使用されます。マッシュアップはグループに追加することもできます。マッシュアップコンテストに関する追加情報を指定するには、トレーニングキャンプコンテスト編集フォームを使用してください。"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "このような大会は公開されることはなく、個人的なトレーニング目的にのみ使用されます。マッシュアップはグループに追加することもできます。マッシュアップコンテストに関する追加情報を指定するには、トレーニングキャンプコンテスト編集フォームを使用してください。",
+                "时间 limit exceeded": "制限時間超過"
             }
         },
         ".icon-eye-close.icon-large": {

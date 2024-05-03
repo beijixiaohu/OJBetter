@@ -49,7 +49,8 @@
                 "Problem": "問題",
                 "Lang": "語言",
                 "Verdict": "判題狀態",
-                "Time": "运行时间",
+                "Time": "時間",
+                "时间 limit exceeded": "Time limit exceeded",
                 "Memory": "运行内存"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "您可以將此比賽克隆到混搭比賽中。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一種特殊類型的訓練比賽，由過去Codeforces比賽的公開問題組成。還可以添加",
                 "problems to mashup contest.": "問題到混搭比賽。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。",
+                "时间 limit exceeded": "Time limit exceeded"
             }
         },
         ".icon-eye-close.icon-large": {

@@ -49,7 +49,8 @@
                 "Problem": "questions",
                 "Lang": "multilinguisme",
                 "Verdict": "état d'avancement de l'adjudication",
-                "Time": "durée de fonctionnement",
+                "Time": "fois",
+                "时间 limit exceeded": "Limite de temps dépassée",
                 "Memory": "Mémoire vive"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "Vous pouvez transformer ce concours en un concours de mashup.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup est un type spécial de concours de formation composé de questions ouvertes provenant de concours Codeforces antérieurs. Il est également possible d'ajouter",
                 "problems to mashup contest.": "Question au concours de mashup.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Ces compétitions ne peuvent pas être rendues publiques et ne sont utilisées qu'à des fins d'entraînement personnel. Les mashups peuvent également être ajoutés à des groupes. Pour spécifier des informations supplémentaires sur un concours de mashups, utilisez le formulaire Modifier un concours de camp d'entraînement."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Ces compétitions ne peuvent pas être rendues publiques et ne sont utilisées qu'à des fins d'entraînement personnel. Les mashups peuvent également être ajoutés à des groupes. Pour spécifier des informations supplémentaires sur un concours de mashups, utilisez le formulaire Modifier un concours de camp d'entraînement.",
+                "时间 limit exceeded": "Limite de temps dépassée"
             }
         },
         ".icon-eye-close.icon-large": {

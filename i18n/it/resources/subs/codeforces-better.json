@@ -49,7 +49,8 @@
                 "Problem": "problemi",
                 "Lang": "multilinguismo",
                 "Verdict": "stato di giudizio",
-                "Time": "tempo di esecuzione",
+                "Time": "tempi",
+                "时间 limit exceeded": "Limite di tempo superato",
                 "Memory": "Memoria di esercizio"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "Può clonare questo concorso in un concorso mashup.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup è un tipo speciale di concorso di formazione che consiste in domande aperte provenienti da concorsi Codeforces passati. È anche possibile aggiungere",
                 "problems to mashup contest.": "Domanda al concorso mashup.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Tali gare non possono essere rese pubbliche e sono utilizzate solo per scopi di formazione personale. I mashup possono anche essere aggiunti ai gruppi. Per specificare ulteriori informazioni su una gara mashup, utilizzi il modulo Modifica gara campo di addestramento."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Tali gare non possono essere rese pubbliche e sono utilizzate solo per scopi di formazione personale. I mashup possono anche essere aggiunti ai gruppi. Per specificare ulteriori informazioni su una gara mashup, utilizzi il modulo Modifica gara campo di addestramento.",
+                "时间 limit exceeded": "Limite di tempo superato"
             }
         },
         ".icon-eye-close.icon-large": {

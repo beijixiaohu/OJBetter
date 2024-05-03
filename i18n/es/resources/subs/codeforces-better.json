@@ -49,7 +49,8 @@
                 "Problem": "cuestiones",
                 "Lang": "multilingüismo",
                 "Verdict": "estado de la adjudicación",
-                "Time": "tiempo de funcionamiento",
+                "Time": "veces",
+                "时间 limit exceeded": "Tiempo límite superado",
                 "Memory": "Memoria de funcionamiento"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "Puede clonar este concurso para convertirlo en un concurso de mashups.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup es un tipo especial de concurso de formación que consiste en preguntas abiertas de concursos anteriores de Codeforces. También es posible añadir",
                 "problems to mashup contest.": "Pregunta para el concurso de mashups.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estas competiciones no pueden hacerse públicas y sólo se utilizan con fines de entrenamiento personal. Los concursos mashup también pueden añadirse a los grupos. Para especificar información adicional sobre un concurso de mashups, utilice el formulario Editar concurso de campo de entrenamiento."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estas competiciones no pueden hacerse públicas y sólo se utilizan con fines de entrenamiento personal. Los concursos mashup también pueden añadirse a los grupos. Para especificar información adicional sobre un concurso de mashups, utilice el formulario Editar concurso de campo de entrenamiento.",
+                "时间 limit exceeded": "Tiempo límite superado"
             }
         },
         ".icon-eye-close.icon-large": {
