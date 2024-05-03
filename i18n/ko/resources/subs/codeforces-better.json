@@ -49,7 +49,8 @@
                 "Problem": "이슈",
                 "Lang": "다국어 지원",
                 "Verdict": "판결 상태",
-                "Time": "실행 시간",
+                "Time": "times",
+                "时间 limit exceeded": "시간 제한 초과",
                 "Memory": "실행 중인 메모리"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "이 콘테스트를 매시업 콘테스트로 복제할 수 있습니다.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "매시업은 과거 코드포스 콘테스트의 공개 문제로 구성된 특별한 유형의 교육 콘테스트입니다. 또한",
                 "problems to mashup contest.": "매시업 콘테스트에 대한 질문입니다.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "이러한 대회는 공개할 수 없으며 개인 트레이닝 목적으로만 사용됩니다. 매시업은 그룹에 추가할 수도 있습니다. 매시업 경연대회에 대한 추가 정보를 지정하려면 합숙 경연대회 수정 양식을 사용하세요."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "이러한 대회는 공개할 수 없으며 개인 트레이닝 목적으로만 사용됩니다. 매시업은 그룹에 추가할 수도 있습니다. 매시업 경연대회에 대한 추가 정보를 지정하려면 합숙 경연대회 수정 양식을 사용하세요.",
+                "时间 limit exceeded": "시간 제한 초과"
             }
         },
         ".icon-eye-close.icon-large": {
