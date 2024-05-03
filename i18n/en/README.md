@@ -31,13 +31,13 @@ To install the script, you can get：
 
 > [!NOTE]
 >
-> Click on the **\\`xxxBetter! Settings** button in the upper right corner of the **web page** to open the settings panel.
+> Click on the **\\\`xxxBetter! Settings** button in the upper right corner of the **web page** to open the settings panel.
 >
 > Help text is provided for most functions and can be viewed by hovering over the "? icon" to view it.
 
 ## Using Documents
 
-For more detailed information and usage guidelines, **visit the [Wiki page](https://github.com/beijixiaohu/OJBetter/wiki).**\*\*
+For more detailed information and usage guidelines, **visit the [Wiki page](https://github.com/beijixiaohu/OJBetter/wiki).**\*\*\*\*
 
 ## How to contribute
 
