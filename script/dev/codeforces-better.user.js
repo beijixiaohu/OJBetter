@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.11
+// @version      1.74.12
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -151,7 +151,9 @@ OJBetter.basic = {
     /** @type {boolean?} 显示跳转到Virtual Judge按钮 */
     showCF2vjudge: undefined,
     /** @type {boolean?} 比赛排行榜重新着色 */
-    standingsRecolor: undefined
+    standingsRecolor: undefined,
+    /** @type {boolean?} 隐藏题目问题标签 */
+    hiddenProblemTag: undefined
 };
 
 /**
@@ -827,6 +829,7 @@ async function initVar() {
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
     OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);
     OJBetter.basic.standingsRecolor = OJB_getGMValue("standingsRecolor", true);
+    OJBetter.basic.hiddenProblemTag = OJB_getGMValue("hiddenProblemTag", false);
     OJBetter.state.notWaiteLoaded = OJB_getGMValue("notWaiteLoaded", false);
     OJBetter.translation.targetLang = OJB_getGMValue("transTargetLang", "zh");
     OJBetter.translation.choice = OJB_getGMValue("translation", "deepl");
@@ -1228,18 +1231,18 @@ function handleColorSchemeChange(event) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
         const intervalId = setinterval(() => {
-        if (OJBetter.monaco && OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs');
-            clearInterval(intervalId);
-        }
-    }, 100);
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs');
+                clearInterval(intervalId);
+            }
+        }, 100);
     } else {
         const intervalId = setInterval(() => {
-        if (OJBetter.monaco && OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs-dark');
-            clearInterval(intervalId);
-        }
-    },100);
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs-dark');
+                clearInterval(intervalId);
+            }
+        }, 100);
     }
 }
 
@@ -1830,6 +1833,17 @@ async function beautifyPreBlocksWithMonaco() {
             }
         });
     }
+}
+
+/**
+ * 隐藏题目问题标签
+ */
+function hiddenProblemTag() {
+    document.querySelectorAll('.roundbox.sidebox.borderTopRound .tag-box').forEach(element => {
+        if (!element.textContent.includes('*')) {
+            element.classList.add('hover-reveal');
+        }
+    });    
 }
 
 // 样式
@@ -3646,6 +3660,16 @@ div.sp_clear_btn {
     padding: 0px !important;
 }
 
+/* 题目问题标签hover隐藏 */
+.hover-reveal {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+.hover-reveal:hover {
+    opacity: 1;
+}
+
+
 /* 移动设备 */
 @media (max-device-width: 450px) {
     .ojb_btn{
@@ -4377,7 +4401,7 @@ function OJB_getCodeFromPre(element) {
     } else if (element.querySelector("code.prettyprint")) {
         result = getCodeFromPreChild(element);
     } else {
-        result = null;
+        result = "";
     }
     result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
     return result;
@@ -5501,6 +5525,14 @@ const basic_settings_HTML = `
             <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
         </div>
         <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="hiddenProblemTag" data-i18n="settings:basic.hiddenProblemTag.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.hiddenProblemTag.helpText"></div>
+        </div>
+        <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
     </div>
 </div>
 `;
@@ -6637,6 +6669,7 @@ async function initSettingsPanel() {
         $("#selectElementPerfOpt").prop("checked", GM_getValue("selectElementPerfOpt") === true);
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
+        $("#hiddenProblemTag").prop("checked", GM_getValue("hiddenProblemTag") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#showCF2vjudge").prop("checked", GM_getValue("showCF2vjudge") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
@@ -6727,6 +6760,7 @@ async function initSettingsPanel() {
                 selectElementPerfOpt: $("#selectElementPerfOpt").prop("checked"),
                 commentPaging: $("#commentPaging").prop("checked"),
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
+                hiddenProblemTag: $("#hiddenProblemTag").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 showCF2vjudge: $("#showCF2vjudge").prop("checked"),
                 scriptL10nLanguage: $('#scriptL10nLanguage').val(),
@@ -13514,6 +13548,7 @@ function initializeInParallel(loadingMessage) {
     if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
     if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
+    if (OJBetter.basic.hiddenProblemTag) hiddenProblemTag()// 隐藏题目问题标签
 }
 
 /**
