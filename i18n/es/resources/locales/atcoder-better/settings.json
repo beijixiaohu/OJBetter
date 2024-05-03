@@ -240,6 +240,10 @@
                 "label": "Confirmación secundaria de la presentación del código",
                 "helpText": "Al hacer clic en la portada del editor de Mónaco aparecerá una segunda ventana emergente cuando se envíe el código para evitar falsos envíos."
             },
+            "autoSubmitAfterPass": {
+                "label": "Envío automático tras la aprobación",
+                "helpText": "Compilación automática del código cuando supera las pruebas"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueo de desplazamiento del ratón",
                 "helpText": "Cuando está activado, cuando el puntero del ratón está dentro del editor de monaco, el desplazamiento del ratón sólo se desplazará por el contenido del editor"
