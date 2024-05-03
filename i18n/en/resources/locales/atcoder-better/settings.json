@@ -240,6 +240,10 @@
                 "label": "Secondary confirmation of code submission",
                 "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
             },
+            "autoSubmitAfterPass": {
+                "label": "Automatic submission after approval",
+                "helpText": "Automatically commits code when it passes tests"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",
                 "helpText": "When turned on, when the mouse pointer is inside the monaco editor, mouse scrolling will only scroll the content inside the editor"
