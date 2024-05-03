@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "Confirmação da submissão do código?",
-        "content": "",
+        "content": "O tópico que está a submeter é\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "cancelamentos",
             "apresentar (um relatório, etc.)"
