@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.13
+// @version      1.74.14
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -47,12 +47,14 @@
 // @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
 // @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
 // @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
+// @require      https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.js
 // @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
 // @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
 // @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
+// @resource     dialogpolyfillcss https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.css
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -1947,7 +1949,7 @@ span.mdViewContent {
 
 /* dialog */
 dialog {
-    margin: 0px;
+    margin: 0px !important;
 }
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.4);
@@ -3728,6 +3730,7 @@ div.sp_clear_btn {
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
     GM_addStyle(GM_getResourceText("selectpagecss"));
+    GM_addStyle(GM_getResourceText("dialogpolyfillcss"));
     // 自定义图标大小
     GM_addStyle(`
         .iconfont {
@@ -4275,6 +4278,7 @@ function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
  */
 function OJB_showModal(element) {
     const dialog = element.get(0);
+    dialogPolyfill.registerDialog(dialog);
     dialog.showModal();
     OJBetter.state.openDialogCount++;
 
