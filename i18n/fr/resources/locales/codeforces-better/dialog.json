@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "Confirmation de la soumission du code ?",
-        "content": "",
+        "content": "Le sujet que vous soumettez est\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "annulations",
             "soumettre (un rapport, etc.)"
