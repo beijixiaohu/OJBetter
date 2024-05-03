@@ -49,7 +49,8 @@
                 "Problem": "questões",
                 "Lang": "multilinguismo",
                 "Verdict": "estado da adjudicação",
-                "Time": "tempo de funcionamento",
+                "Time": "tempos",
+                "时间 limit exceeded": "Tempo limite excedido",
                 "Memory": "Memória de funcionamento"
             }
         },
@@ -177,7 +178,8 @@
                 "You can clone this contest to a mashup.": "Pode transformar este concurso num concurso de mashups.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Um mashup é um tipo especial de concurso de formação que consiste em perguntas abertas de concursos anteriores do Codeforces. Também é possível adicionar",
                 "problems to mashup contest.": "Pergunta para o concurso de mashups.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estes concursos não podem ser tornados públicos e são utilizados apenas para fins de treino pessoal. Os mashups também podem ser adicionados a grupos. Para especificar informações adicionais sobre um concurso de mashup, utilize o formulário Editar concurso de campo de treino."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estes concursos não podem ser tornados públicos e são utilizados apenas para fins de treino pessoal. Os mashups também podem ser adicionados a grupos. Para especificar informações adicionais sobre um concurso de mashup, utilize o formulário Editar concurso de campo de treino.",
+                "时间 limit exceeded": "Tempo limite excedido"
             }
         },
         ".icon-eye-close.icon-large": {
