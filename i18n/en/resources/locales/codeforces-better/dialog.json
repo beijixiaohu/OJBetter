@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "Confirm submission code?",
-        "content": "",
+        "content": "The topic you are submitting is\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "Cancel",
             "Commit"
