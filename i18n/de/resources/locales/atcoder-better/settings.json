@@ -240,6 +240,10 @@
                 "label": "Sekundäre Bestätigung der Codeübermittlung",
                 "helpText": "Wenn Sie auf die Titelseite des Monaco-Editors klicken, wird ein zweites Mal ein Popup-Fenster angezeigt, wenn der Code eingereicht wird, um falsche Eingaben zu verhindern."
             },
+            "autoSubmitAfterPass": {
+                "label": "Automatisch übermittelt nach der Genehmigung",
+                "helpText": "Automatisches Übertragen von Code, wenn er Tests besteht"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Maus-Scrollsperre",
                 "helpText": "Wenn diese Funktion aktiviert ist und sich der Mauszeiger im Monaco-Editor befindet, wird beim Scrollen mit der Maus nur der Inhalt des Editors gescrollt."
