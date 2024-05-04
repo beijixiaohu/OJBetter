@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "公告",
-                "Statements": "統計報表",
+                "Statements": "题面陈述",
                 "Tutorial": "題解"
             }
         },
