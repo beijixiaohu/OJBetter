@@ -26,7 +26,7 @@
                 "Trainings": "训练",
                 "Prepared by": "编写人",
                 "Current or upcoming contests": "当前或即将举行的比赛",
-                "Rating: users participated in recent 6 months": "评级：最近 6 个月有参与的用户",
+                "Rating: users participated in recent 6 个月之前": "评级：最近 6 个月有参与的用户",
                 "Past contests": "过去的比赛",
                 "Exclusions": "排除",
                 "Before start": "距比赛开始还有",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "公告",
-                "Statements": "统计报表",
+                "Statements": "题面陈述",
                 "Tutorial": "题解"
             }
         },
