@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "घोषणा",
-                "Statements": "सांख्यिकीय रिपोर्ट",
+                "Statements": "题面陈述",
                 "Tutorial": "उत्तर"
             }
         },
