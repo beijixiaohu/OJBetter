@@ -190,6 +190,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtering of ** symbols in text",
                 "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forcing the use of Turndown conversions",
+                "helpText": " <p>Some pages may have both formulas that use MathJax and old formulas that do not use MathJax. The default policy is that if there are old formulas on the page, they will all be processed according to the logic of the old formulas. After opening it will all be processed with the new formula's strategy. <strong>If you don't know what this means, keep it closed.</strong> </p>"
             }
         }
     },
