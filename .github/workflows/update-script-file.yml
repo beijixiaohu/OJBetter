@@ -20,7 +20,9 @@ jobs:
           node-version: '20'
 
       - name: Read versions and update JSON
-        run: node .github/scripts/update-version.js
+        run: |
+          node .github/scripts/update-version.js
+          git add script/versions.json
 
       - name: Sync with remote main branch
         run: |
