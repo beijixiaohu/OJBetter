@@ -21,7 +21,8 @@
         "is_acmsguru": "Note：The current page is an acmsguru question (this is a very old question), and some functions are not applicable.<br>In addition, the translation function of the current page adopts a special implementation method, so typography misalignment may occur.",
         "trans_segment": "Notice! It is currently in segmented translation mode, which will cause negative effects.<p>Unless you need to translate a very long blog or question now, please go to the settings to switch to normal mode</p>",
         "trans_select": "Notice! Currently in the selected translation mode, only the selected part in the target area will be translated. Click the paragraph to select it (orange box)<br><p>If you do not need to translate very long blogs or questions now, it is recommended that you go to the settings and switch to the normal mode</p>",
-        "is_submitPage": "You have turned on the \"Add Editor to Question Page\" option, and you can quickly submit it at the bottom of the question page."
+        "is_submitPage": "You have turned on the \"Add Editor to Question Page\" option, and you can quickly submit it at the bottom of the question page.",
+        "forceTurndownConversion": "Notes! Turndown conversion is currently mandatory, so if you don't particularly need it right now, we suggest you please go to Settings and turn it off!"
     },
     "error": {
         "clist": {
