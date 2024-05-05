@@ -190,6 +190,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtrage des signes ** dans le texte",
                 "helpText": " <p>Certains services de traduction (par exemple DeepL) ne traitent pas correctement l'accent dans MarkDown <strong>**</strong> </p><p>La traduction peut alors manquer son wrapper, vous pouvez choisir de supprimer l'accent (l'utilisation de ChatGPT n'en tient pas compte) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forcer l'utilisation des conversions Turndown",
+                "helpText": " <p>Certaines pages peuvent contenir à la fois des formules qui utilisent MathJax et d'anciennes formules qui n'utilisent pas MathJax. La stratégie par défaut est la suivante : si la page contient d'anciennes formules, elles seront toutes traitées selon la logique des anciennes formules. Après l'ouverture, elles seront toutes traitées selon la stratégie de la nouvelle formule. <strong>Si vous ne savez pas ce que cela signifie, gardez-le fermé.</strong> </p>"
             }
         }
     },
