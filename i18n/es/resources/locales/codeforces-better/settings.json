@@ -190,6 +190,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtrado de signos ** en el texto",
                 "helpText": " <p>Algunos servicios de traducción (por ejemplo, DeepL) manejan incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que la traducción pierda su envoltorio, puede optar por eliminar el énfasis (el uso de ChatGPT lo ignora) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forzar el uso de conversiones Turndown",
+                "helpText": " <p>Algunas páginas pueden tener tanto fórmulas que usan MathJax como fórmulas antiguas que no usan MathJax. La estrategia por defecto es que si hay fórmulas viejas en la página, todas serán procesadas de acuerdo a la lógica de las fórmulas viejas. Después de la apertura todas serán procesadas con la estrategia de la nueva fórmula. <strong>Si no sabes lo que esto significa, mantenlo cerrado.</strong> </p>"
             }
         }
     },
