@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.10
+// @version      1.15.11
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -2347,7 +2347,7 @@ header .enter-or-register-box, header .languages {
 }
 /* 数值输入框 */
 .OJBetter_setting_menu input[type="number"] {
-    width: 40px;
+    width: 70px;
     color: #009688;
     font-size: 15px;
     appearance: none;
@@ -4263,7 +4263,7 @@ function OJB_getCodeFromPre(element) {
     } else if (element.querySelector("code.prettyprint")) {
         result = getCodeFromPreChild(element);
     } else {
-        result = null;
+        result = "";
     }
     result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
     return result;
@@ -5561,7 +5561,6 @@ const translation_settings_HTML = `
     </div>
     <hr>
 
-    <div style="display:none;">
     <h4 data-i18n="settings:translation.autoTranslation.title"></h4>
     <div class='OJBetter_setting_list'>
         <label for="autoTranslation" data-i18n="settings:translation.autoTranslation.enable"></label>
@@ -5584,6 +5583,7 @@ const translation_settings_HTML = `
         <input type='number' id='shortTextLength' class='no_default' require=true data-i18n="[placeholder]settings:translation.autoTranslation.shortTextLength.placeholder">
         <span data-i18n="settings:translation.autoTranslation.shortTextLength.end"></span>
     </div>
+    <div style="display:none;">
     <div class='OJBetter_setting_list'>
         <label for="allowMixTrans" data-i18n="settings:translation.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
@@ -5605,8 +5605,8 @@ const translation_settings_HTML = `
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
         </div>
     </div>
-    <hr>
     </div>
+    <hr>
 
     <h4 data-i18n="settings:translation.advanced.name"></h4>
     <div class='OJBetter_setting_list'>
@@ -13286,9 +13286,9 @@ async function initializeSequentially(loadingMessage) {
     if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
         await initTransResultsRecover(); // 翻译结果恢复功能初始化
     }
-    // if (OJBetter.translation.auto.enabled) {
-    //     await initTransWhenViewable(); // 自动翻译
-    // }
+    if (OJBetter.translation.auto.enabled) {
+        await initTransWhenViewable(); // 自动翻译
+    }
     // if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
     //     await recolorStandings(); // cf赛制榜单重新着色
     // }
