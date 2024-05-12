@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "traduzione automatica",
             "enable": "Abilita la traduzione automatica",
-            "helpText": "<p>Per i testi brevi nell'area<strong>.ttypography, .comments</strong></p><p>vengono tradotti automaticamente quando entrano nell'area visibile della finestra del browser</p>",
+            "helpText": "<p>对于<strong>#task-statement 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
             "shortTextLength": {
                 "name": "Lunghezza del testo",
                 "helpText": "<p>Quando la lunghezza del testo è inferiore a questo valore, viene considerato come un testo breve</p>",
