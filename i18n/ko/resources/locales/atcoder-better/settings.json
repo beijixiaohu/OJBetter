@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "자동 번역",
             "enable": "자동 번역 사용",
-            "helpText": "<p><strong>.t타이포그래피, .comments 영역의 짧은 텍스트의 경우</strong></p><p>브라우저 창의 보이는 영역(</p>)에 들어가면 자동으로 번역됩니다.",
+            "helpText": "<p>对于<strong>#task-statement 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
             "shortTextLength": {
                 "name": "텍스트 길이",
                 "helpText": "<p>텍스트 길이가 이 값보다 작으면 짧은 텍스트로 간주됩니다</p>",
