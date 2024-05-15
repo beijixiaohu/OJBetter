@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.15
+// @version      1.74.16
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -403,7 +403,11 @@ OJBetter.chatgpt = {
         }
     },
     /** @type {boolean?} 是否为流式传输 */
-    isStream: undefined
+    isStream: undefined,
+    /** @type {string?} 是否使用自定义Prompt */
+    customPrompt: undefined,
+    /** @type {boolean?} 是否作为系统Prompt */
+    asSystemPrompt: undefined
 };
 
 /**
@@ -888,6 +892,8 @@ async function initVar() {
     OJBetter.deepl.enableLinkProtection = OJB_getGMValue("enableLinkProtection", true);
     //openai
     OJBetter.chatgpt.isStream = OJB_getGMValue("openai_isStream", true);
+    OJBetter.chatgpt.customPrompt = OJB_getGMValue("openai_customPrompt", '');
+    OJBetter.chatgpt.asSystemPrompt = OJB_getGMValue("openai_asSystemPrompt", false);
     OJBetter.chatgpt.configs = OJB_getGMValue("chatgpt_config", {
         "choice": "",
         "configurations": []
@@ -5701,6 +5707,26 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="openai_asSystemPrompt" data-i18n="settings:translation.chatgpt.asSystemPrompt.name"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.asSystemPrompt.helpText"></div>
+        </div>
+        <input type="checkbox" id="openai_asSystemPrompt" name="openai_asSystemPrompt">
+    </div>
+    <div class="OJBetter_setting_list">
+        <label for='openai_customPrompt'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="settings:translation.chatgpt.customPrompt.label"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.customPrompt.tipText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="openai_customPrompt" placeholder='' require = false data-i18n="[placeholder]settings:translation.chatgpt.customPrompt.placeholder"></textarea>
+    </div>
     <hr>
     <h4 data-i18n="settings:translation.preference.title"></h4>
     <div class='OJBetter_setting_list'>
@@ -6718,6 +6744,8 @@ async function initSettingsPanel() {
         $('#enableLinkProtection').prop("checked", GM_getValue("enableLinkProtection") === true);
         $("#chatgpt_config_config_bar_ul").find(`input[name='chatgpt_config_config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
+        $("#openai_asSystemPrompt").prop("checked", GM_getValue("openai_asSystemPrompt") === true);
+        $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
@@ -6804,6 +6832,8 @@ async function initSettingsPanel() {
                 enableEmphasisProtection: $("#enableEmphasisProtection").prop("checked"),
                 enableLinkProtection: $("#enableLinkProtection").prop("checked"),
                 openai_isStream: $("#openai_isStream").prop("checked"),
+                openai_asSystemPrompt: $("#openai_asSystemPrompt").prop("checked"),
+                openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
@@ -13228,25 +13258,39 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
+    const prompt = OJBetter.chatgpt.customPrompt || `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
             : "keeping the brackets【】, HTML tags, and their content unchanged."
         }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, The segment to be translated is as follows: "
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+            `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "assistant",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "assistant",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -13310,27 +13354,40 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
-I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
-During the translation process, I would like you to use more professional terms and maintain the text format, ${(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)
+    const prompt = OJBetter.chatgpt.customPrompt || `
+As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
+The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
             : "keeping the brackets【】, HTML tags, and their content unchanged."
         }
-After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, which is as follows:
-"
-${raw}
-"`;
+After translation, please ensure that the ${lang} version conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+            `The segment to be translated is as follows: "
+    ${raw}
+    "`}`;
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "assistant",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "assistant",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         stream: true,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
