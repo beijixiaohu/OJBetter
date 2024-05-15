@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "automatic translation",
             "enable": "Enable Auto Translate",
-            "helpText": "<p>For short texts in the<strong>.ttypography, .comments area</strong></p><p>are automatically translated when they enter the visible area of the browser window</p>",
+            "helpText": "<p>For short texts in <strong> the #task-statement area</strong>, the</p><p> It is automatically translated when it enters the visible area of the browser window.</p>",
             "shortTextLength": {
                 "name": "Short text length",
                 "helpText": "<p>When the text length is less than this value, it is considered as a short text</p>",
@@ -239,6 +239,10 @@
             "isCodeSubmitConfirm": {
                 "label": "Secondary confirmation of code submission",
                 "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
+            },
+            "autoSubmitAfterPass": {
+                "label": "Automatic submission after approval",
+                "helpText": "Automatically commits code when it passes tests"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",

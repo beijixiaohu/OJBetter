@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "Bestätigung der Übermittlung des Codes?",
-        "content": "",
+        "content": "Das Thema, das Sie einreichen, lautet\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "Stornierungen",
             "einreichen (einen Bericht usw.)"

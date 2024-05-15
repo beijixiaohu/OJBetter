@@ -44,7 +44,7 @@
                 "Invited users": "邀請的用戶",
                 "Invitation links": "邀請連結",
                 "API keys": "API金鑰",
-                "When": "時間",
+                "When": "提交時間",
                 "Who": "提交者",
                 "Problem": "問題",
                 "Lang": "語言",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "公告",
-                "Statements": "統計報表",
+                "Statements": "题面陈述",
                 "Tutorial": "題解"
             }
         },

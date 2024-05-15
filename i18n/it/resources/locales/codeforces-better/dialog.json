@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "Conferma dell'invio del codice?",
-        "content": "",
+        "content": "L'argomento che stai inviando è\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "cancellazioni",
             "presentare (un rapporto, ecc.)"

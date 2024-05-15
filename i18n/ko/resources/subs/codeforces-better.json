@@ -44,7 +44,7 @@
                 "Invited users": "초대된 사용자",
                 "Invitation links": "초대 링크",
                 "API keys": "API 키",
-                "When": "times",
+                "When": "제출 시간",
                 "Who": "제출자",
                 "Problem": "이슈",
                 "Lang": "다국어 지원",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "게시판",
-                "Statements": "통계 보고서",
+                "Statements": "헤드라인 프레젠테이션",
                 "Tutorial": "메모"
             }
         },

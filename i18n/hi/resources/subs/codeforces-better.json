@@ -44,7 +44,7 @@
                 "Invited users": "उपयोगकर्ताओं को आमंत्रित किया गया",
                 "Invitation links": "आमंत्रण लिंक",
                 "API keys": "एपीआई कुंजी",
-                "When": "समय",
+                "When": "सबमिशन का समय",
                 "Who": "提交者",
                 "Problem": "सवाल",
                 "Lang": "भाषा",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "घोषणा",
-                "Statements": "सांख्यिकीय रिपोर्ट",
+                "Statements": "题面陈述",
                 "Tutorial": "उत्तर"
             }
         },

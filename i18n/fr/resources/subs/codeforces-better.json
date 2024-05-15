@@ -44,7 +44,7 @@
                 "Invited users": "Utilisateurs invités",
                 "Invitation links": "Lien d'invitation",
                 "API keys": "Clé API",
-                "When": "fois",
+                "When": "Date de soumission",
                 "Who": "déposant",
                 "Problem": "questions",
                 "Lang": "multilinguisme",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "bulletin",
-                "Statements": "Rapports statistiques",
+                "Statements": "présentation des titres",
                 "Tutorial": "notes"
             }
         },

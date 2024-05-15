@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "自動翻譯",
             "enable": "啟用自動翻譯",
-            "helpText": "<p>對於<strong>.ttypography, .comments 區域</strong>中的短文本，</p><p>當其進入瀏覽器視窗的可視區域時自動翻譯</p>",
+            "helpText": "<p>对于<strong>#task-statement 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
             "shortTextLength": {
                 "name": "短文本長度",
                 "helpText": "<p>當文字長度小於該值時，視為短文字</p>",
@@ -239,6 +239,10 @@
             "isCodeSubmitConfirm": {
                 "label": "代碼提交二次確認",
                 "helpText": "點選題目頁Monaco 編輯器的程式碼提交時會彈窗二次確認，防止誤提交"
+            },
+            "autoSubmitAfterPass": {
+                "label": "通过后自动提交",
+                "helpText": "当代码通过测试后自动提交"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "滑鼠滾動鎖定",

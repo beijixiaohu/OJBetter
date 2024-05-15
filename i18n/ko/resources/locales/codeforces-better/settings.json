@@ -190,6 +190,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "텍스트에서 ** 기호 필터링",
                 "helpText": " <p>일부 번역 서비스(예: DeepL)는 마크다운에서 강조를 잘못 처리합니다. <strong>**</strong> </p><p>이로 인해 번역이 래퍼를 놓칠 수 있으며, 강조를 제거하도록 선택할 수 있습니다(ChatGPT를 사용하면 무시됨) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "턴다운 전환 사용 강제하기",
+                "helpText": " <p>일부 페이지에는 MathJax를 사용하는 공식과 MathJax를 사용하지 않는 이전 공식이 모두 있을 수 있습니다. 기본 전략은 페이지에 이전 수식이 있는 경우 모두 이전 수식의 논리에 따라 처리하는 것입니다. 열면 모두 새 공식의 전략에 따라 처리됩니다. <strong>이것이 무엇을 의미하는지 모르겠다면 닫아 두세요.</strong> </p>"
             }
         }
     },
@@ -243,6 +247,10 @@
             "isCodeSubmitConfirm": {
                 "label": "코드 제출에 대한 2차 확인",
                 "helpText": "모나코 편집기의 제목 페이지를 클릭하면 잘못된 제출을 방지하기 위해 코드가 제출될 때 두 번째로 팝업이 표시됩니다."
+            },
+            "autoSubmitAfterPass": {
+                "label": "승인 후 자동으로 제출",
+                "helpText": "테스트 통과 시 코드 자동 커밋"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "마우스 스크롤 잠금",

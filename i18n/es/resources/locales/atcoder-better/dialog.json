@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "¿Confirmación de la presentación del código?",
-        "content": "",
+        "content": "El tema que presenta es\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "cancelaciones",
             "presentar (un informe, etc.)"

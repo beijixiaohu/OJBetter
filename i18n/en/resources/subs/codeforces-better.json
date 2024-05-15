@@ -44,7 +44,7 @@
                 "Invited users": "Invited users",
                 "Invitation links": "Invitation Links",
                 "API keys": "API key",
-                "When": "timing",
+                "When": "Submission time",
                 "Who": "submitter",
                 "Problem": "concern",
                 "Lang": "multilingualism",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "bulletin",
-                "Statements": "Statistical reports",
+                "Statements": "presentation of the topic",
                 "Tutorial": "notes"
             }
         },

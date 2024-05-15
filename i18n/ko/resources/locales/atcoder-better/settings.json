@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "자동 번역",
             "enable": "자동 번역 사용",
-            "helpText": "<p><strong>.t타이포그래피, .comments 영역의 짧은 텍스트의 경우</strong></p><p>브라우저 창의 보이는 영역(</p>)에 들어가면 자동으로 번역됩니다.",
+            "helpText": "<p><strong>작업 설명 영역에</strong> 있는 짧은 텍스트의 경우</p><p> 브라우저 창의 표시 영역에 들어가면 자동으로 번역됩니다.</p>",
             "shortTextLength": {
                 "name": "텍스트 길이",
                 "helpText": "<p>텍스트 길이가 이 값보다 작으면 짧은 텍스트로 간주됩니다</p>",
@@ -239,6 +239,10 @@
             "isCodeSubmitConfirm": {
                 "label": "코드 제출에 대한 2차 확인",
                 "helpText": "모나코 편집기의 제목 페이지를 클릭하면 잘못된 제출을 방지하기 위해 코드가 제출될 때 두 번째로 팝업이 표시됩니다."
+            },
+            "autoSubmitAfterPass": {
+                "label": "승인 후 자동으로 제출",
+                "helpText": "테스트 통과 시 코드 자동 커밋"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "마우스 스크롤 잠금",

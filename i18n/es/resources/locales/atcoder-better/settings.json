@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "traducción automática",
             "enable": "Activar la traducción automática",
-            "helpText": "<p>Los textos breves de la zona<strong>.ttypography, .comments</strong></p><p>se traducen automáticamente cuando entran en la zona visible de la ventana del navegador</p>.",
+            "helpText": "<p>Para textos breves en <strong> el área #task-statement</strong>, el botón</p><p> Se traduce automáticamente cuando entra en el área visible de la ventana del navegador</p>",
             "shortTextLength": {
                 "name": "Longitud del texto",
                 "helpText": "<p>Cuando la longitud del texto es inferior a este valor, se considera un texto corto</p>",
@@ -239,6 +239,10 @@
             "isCodeSubmitConfirm": {
                 "label": "Confirmación secundaria de la presentación del código",
                 "helpText": "Al hacer clic en la portada del editor de Mónaco aparecerá una segunda ventana emergente cuando se envíe el código para evitar falsos envíos."
+            },
+            "autoSubmitAfterPass": {
+                "label": "Envío automático tras la aprobación",
+                "helpText": "Compilación automática del código cuando supera las pruebas"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueo de desplazamiento del ratón",

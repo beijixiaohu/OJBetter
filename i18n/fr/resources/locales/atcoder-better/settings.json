@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "traduction automatique",
             "enable": "Activer la traduction automatique",
-            "helpText": "<p>Les textes courts dans la zone<strong>.ttypography, .comments</strong></p><p>sont automatiquement traduits lorsqu'ils entrent dans la zone visible de la fenêtre du navigateur</p>.",
+            "helpText": "<p>Pour les textes courts dans la <strong> zone #task-statement</strong>, le texte en anglais est traduit automatiquement lorsqu'il entre dans la zone visible de la fenêtre du navigateur.</p><p> Traduit automatiquement lorsqu'il entre dans la zone visible de la fenêtre du navigateur.</p>",
             "shortTextLength": {
                 "name": "Longueur du texte",
                 "helpText": "<p>Lorsque la longueur du texte est inférieure à cette valeur, il est considéré comme un texte court</p>",
@@ -239,6 +239,10 @@
             "isCodeSubmitConfirm": {
                 "label": "Confirmation secondaire de la soumission du code",
                 "helpText": "En cliquant sur la page de titre de l'éditeur Monaco, une deuxième fenêtre s'ouvrira lorsque le code sera soumis afin d'éviter les fausses soumissions."
+            },
+            "autoSubmitAfterPass": {
+                "label": "Envoi automatique après approbation",
+                "helpText": "Validation automatique du code lorsqu'il passe les tests"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Verrouillage du défilement de la souris",

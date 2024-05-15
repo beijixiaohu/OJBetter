@@ -190,6 +190,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtrazione dei segni ** nel testo",
                 "helpText": " <p>Alcuni servizi di traduzione (ad esempio DeepL) gestiscono in modo errato l'enfasi in MarkDown <strong>**</strong> </p><p>Questo può far sì che la traduzione manchi il suo involucro; può scegliere di rimuovere l'enfasi (usando ChatGPT la ignora) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forzare l'uso delle conversioni Turndown",
+                "helpText": " <p>Alcune pagine possono avere sia formule che utilizzano MathJax sia vecchie formule che non utilizzano MathJax. La strategia predefinita prevede che se nella pagina sono presenti vecchie formule, queste vengano tutte elaborate secondo la logica delle vecchie formule. Dopo l'apertura, saranno tutte elaborate con la strategia della nuova formula. <strong>Se non si sa cosa significhi, tenere chiuso.</strong> </p>"
             }
         }
     },
@@ -243,6 +247,10 @@
             "isCodeSubmitConfirm": {
                 "label": "Conferma secondaria dell'invio del codice",
                 "helpText": "Cliccando sulla pagina del titolo dell'editor di Monaco, il codice verrà visualizzato una seconda volta al momento dell'invio del codice, per evitare falsi invii."
+            },
+            "autoSubmitAfterPass": {
+                "label": "Invio automatico dopo l'approvazione",
+                "helpText": "Commette automaticamente il codice quando supera i test"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Blocco dello scorrimento del mouse",

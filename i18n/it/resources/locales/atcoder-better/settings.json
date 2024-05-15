@@ -126,7 +126,7 @@
         "autoTranslation": {
             "title": "traduzione automatica",
             "enable": "Abilita la traduzione automatica",
-            "helpText": "<p>Per i testi brevi nell'area<strong>.ttypography, .comments</strong></p><p>vengono tradotti automaticamente quando entrano nell'area visibile della finestra del browser</p>",
+            "helpText": "<p>Per i testi brevi nell'<strong>area #task-statement</strong>, l'opzione</p><p> Viene tradotto automaticamente quando entra nell'area visibile della finestra del browser.</p>",
             "shortTextLength": {
                 "name": "Lunghezza del testo",
                 "helpText": "<p>Quando la lunghezza del testo è inferiore a questo valore, viene considerato come un testo breve</p>",
@@ -239,6 +239,10 @@
             "isCodeSubmitConfirm": {
                 "label": "Conferma secondaria dell'invio del codice",
                 "helpText": "Cliccando sulla pagina del titolo dell'editor di Monaco, il codice verrà visualizzato una seconda volta al momento dell'invio del codice, per evitare falsi invii."
+            },
+            "autoSubmitAfterPass": {
+                "label": "Invio automatico dopo l'approvazione",
+                "helpText": "Commette automaticamente il codice quando supera i test"
             },
             "alwaysConsumeMouseWheel": {
                 "label": "Blocco dello scorrimento del mouse",

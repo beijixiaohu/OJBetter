@@ -44,7 +44,7 @@
                 "Invited users": "Utenti invitati",
                 "Invitation links": "Link per l'invito",
                 "API keys": "Chiave API",
-                "When": "tempi",
+                "When": "Ora di invio",
                 "Who": "proponente",
                 "Problem": "problemi",
                 "Lang": "multilinguismo",
@@ -210,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "bollettino",
-                "Statements": "Rapporti statistici",
+                "Statements": "presentazione del titolo",
                 "Tutorial": "note"
             }
         },
