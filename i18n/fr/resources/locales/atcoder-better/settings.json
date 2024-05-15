@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "streaming",
                 "helpText": "<p>Permettre le flux de données, l'effet machine à écrire</p>"
+            },
+            "customPrompt": {
+                "name": "Queues de billard sur mesure",
+                "helpText": "<p>Utilisez vos invites personnalisées pour demander à ChatGPT de traduire un texte.</p>",
+                "placeholder": "Les repères peuvent être personnalisés ici ; s'ils sont vides, les repères prédéfinis sont utilisés."
+            },
+            "asSystemPrompt": {
+                "name": "En tant qu'invite système",
+                "helpText": "<p>L'utilisation d'invites de traduction en tant qu'invites système, ce qui, dans certains cas, peut réduire les problèmes d'injection d'invites.</p>"
             }
         },
         "preference": {
@@ -247,6 +256,10 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Verrouillage du défilement de la souris",
                 "helpText": "Lorsque cette option est activée, lorsque le pointeur de la souris se trouve à l'intérieur de l'éditeur monaco, le défilement de la souris ne fait défiler que le contenu de l'éditeur."
+            },
+            "autoMemoryCode": {
+                "label": "Code de sauvegarde automatique",
+                "helpText": "Lorsque cette option est activée, lorsque vous tapez quelque chose dans l'éditeur monaco, ce texte est automatiquement sauvegardé localement et restauré lorsque vous actualisez ou ouvrez le sujet la prochaine fois."
             },
             "submitButtonPosition": {
                 "label": "Emplacement du bouton de soumission",
