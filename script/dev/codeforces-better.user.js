@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.16
+// @version      1.74.17
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -322,7 +322,9 @@ OJBetter.monaco = {
         /** @type {boolean?} 测试通过后自动提交 */
         autoSubmitAfterPass: undefined,
         /** @type {string?} 提交按钮位置 */
-        submitButtonPosition: undefined
+        submitButtonPosition: undefined,
+        /** @type {boolean?} 自动保存代码 */
+        autoMemoryCode: undefined
     }
 };
 
@@ -932,6 +934,7 @@ async function initVar() {
     OJBetter.monaco.setting.autoSubmitAfterPass = OJB_getGMValue("autoSubmitAfterPass", false);
     OJBetter.monaco.setting.alwaysConsumeMouseWheel = OJB_getGMValue("alwaysConsumeMouseWheel", true);
     OJBetter.monaco.setting.submitButtonPosition = OJB_getGMValue("submitButtonPosition", "bottom");
+    OJBetter.monaco.setting.autoMemoryCode = OJB_getGMValue("autoMemoryCode", true);
     //自定义补全
     OJBetter.monaco.complet.customConfig = OJB_getGMValue("Complet_config", {
         "choice": -1,
@@ -5718,10 +5721,10 @@ const translation_settings_HTML = `
     <div class="OJBetter_setting_list">
         <label for='openai_customPrompt'>
             <div style="display: flex;align-items: center;">
-                <span class="input_label" data-i18n="settings:translation.chatgpt.customPrompt.label"></span>
+                <span class="input_label" data-i18n="settings:translation.chatgpt.customPrompt.name"></span>
                 <div class="help_tip">
                     ${helpCircleHTML}
-                    <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.customPrompt.tipText"></div>
+                    <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.customPrompt.helpText"></div>
                 </div>
             </div>
         </label>
@@ -5962,6 +5965,15 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="autoMemoryCode"><span
+                data-i18n="settings:codeEditor.preferences.autoMemoryCode.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
     </div>
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
@@ -6779,6 +6791,7 @@ async function initSettingsPanel() {
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
         $("#autoSubmitAfterPass").prop("checked", GM_getValue("autoSubmitAfterPass") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
+        $("#autoMemoryCode").prop("checked", GM_getValue("autoMemoryCode") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
@@ -6865,6 +6878,7 @@ async function initSettingsPanel() {
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
                 autoSubmitAfterPass: $("#autoSubmitAfterPass").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
+                autoMemoryCode: $("#autoMemoryCode").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
@@ -10677,19 +10691,21 @@ async function createMonacoEditor(language, form, support) {
         }
 
         // 代码同步与保存
-        var nowUrl = window.location.href;
-        nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
-        const code = await getCode(nowUrl);
-        if (code) {
-            OJBetter.monaco.editor.setValue(code); // 恢复代码
-            form.sourceDiv.val(code);
+        if (OJBetter.monaco.setting.autoMemoryCode) {
+            let nowUrl = window.location.href;
+            nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
+            const code = await getCode(nowUrl);
+            if (code) {
+                OJBetter.monaco.editor.setValue(code); // 恢复代码
+                form.sourceDiv.val(code);
+            }
+            OJBetter.monaco.editor.onDidChangeModelContent(async () => {
+                // 将monaco editor的内容同步到sourceDiv
+                const code = OJBetter.monaco.editor.getValue();
+                form.sourceDiv.val(code);
+                await saveCode(nowUrl, code);
+            });
         }
-        OJBetter.monaco.editor.onDidChangeModelContent(async () => {
-            // 将monaco editor的内容同步到sourceDiv
-            const code = OJBetter.monaco.editor.getValue();
-            form.sourceDiv.val(code);
-            await saveCode(nowUrl, code);
-        });
     })();
 
     /**
