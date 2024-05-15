@@ -106,6 +106,15 @@
             "isStream": {
                 "name": "스트리밍",
                 "helpText": "<p>데이터 스트리밍 활성화, 타자기 효과</p>"
+            },
+            "customPrompt": {
+                "name": "사용자 지정 단서",
+                "helpText": "<p>사용자 지정 프롬프트를 사용하여 ChatGPT가 텍스트를 번역하도록 하세요.</p>",
+                "placeholder": "여기에서 큐를 사용자 지정할 수 있으며, 비어 있으면 사전 설정된 큐가 사용됩니다."
+            },
+            "asSystemPrompt": {
+                "name": "시스템 프롬프트로서",
+                "helpText": "<p>번역 프롬프트를 시스템 프롬프트로 사용하면 경우에 따라 프롬프트 주입 문제를 줄일 수 있습니다.</p>"
             }
         },
         "preference": {
@@ -255,6 +264,10 @@
             "alwaysConsumeMouseWheel": {
                 "label": "마우스 스크롤 잠금",
                 "helpText": "이 기능을 켜면 마우스 포인터가 모나코 편집기 안에 있을 때 마우스 스크롤은 편집기의 내용만 스크롤합니다."
+            },
+            "autoMemoryCode": {
+                "label": "코드 자동 저장",
+                "helpText": "이 기능을 켜면 모나코 편집기에서 무언가를 입력하면 자동으로 로컬에 저장되고 다음에 주제를 새로 고치거나 열 때 복원됩니다."
             },
             "submitButtonPosition": {
                 "label": "제출 버튼 위치",
