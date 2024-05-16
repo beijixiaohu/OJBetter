@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "streaming",
                 "helpText": "<p>Abilitazione dello streaming dei dati, effetto macchina da scrivere</p>"
+            },
+            "customPrompt": {
+                "name": "Stecche personalizzate",
+                "helpText": "<p>Utilizzate i vostri prompt personalizzati per far sì che ChatGPT traduca il testo</p>",
+                "placeholder": "I segnali possono essere personalizzati, se sono vuoti vengono utilizzati i segnali preimpostati."
+            },
+            "asSystemPrompt": {
+                "name": "Come prompt di sistema",
+                "helpText": "<p>L'utilizzo dei prompt di traduzione come prompt di sistema, che in alcuni casi può ridurre i problemi di iniezione dei prompt, è un'ottima soluzione.</p>"
             }
         },
         "preference": {
@@ -247,6 +256,10 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Blocco dello scorrimento del mouse",
                 "helpText": "Se attivata, quando il puntatore del mouse si trova all'interno dell'editor monaco, lo scorrimento del mouse farà scorrere solo il contenuto dell'editor."
+            },
+            "autoMemoryCode": {
+                "label": "Codice di salvataggio automatico",
+                "helpText": "Se attivata, quando si digita qualcosa nell'editor di monaco, questa viene automaticamente salvata in locale e ripristinata quando si aggiorna o si apre l'argomento la volta successiva."
             },
             "submitButtonPosition": {
                 "label": "Posizione del pulsante Invia",

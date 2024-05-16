@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "Streaming",
                 "helpText": "<p>Ermöglicht das Streamen von Daten, Schreibmaschineneffekt</p>"
+            },
+            "customPrompt": {
+                "name": "Benutzerdefinierte Queues",
+                "helpText": "<p>Verwenden Sie Ihre benutzerdefinierten Eingabeaufforderungen, um ChatGPT zum Übersetzen von Text zu veranlassen</p>",
+                "placeholder": "Hier können die Cues angepasst werden, wenn sie leer sind, werden die voreingestellten Cues verwendet."
+            },
+            "asSystemPrompt": {
+                "name": "Als System-Eingabeaufforderung",
+                "helpText": "<p>Verwendung von Übersetzungs-Prompts als System-Prompts, was in einigen Fällen Probleme bei der Eingabe von Prompts verringern kann</p>"
             }
         },
         "preference": {
@@ -247,6 +256,10 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Maus-Scrollsperre",
                 "helpText": "Wenn diese Funktion aktiviert ist und sich der Mauszeiger im Monaco-Editor befindet, wird beim Scrollen mit der Maus nur der Inhalt des Editors gescrollt."
+            },
+            "autoMemoryCode": {
+                "label": "Automatisch speichernder Code",
+                "helpText": "Wenn diese Funktion aktiviert ist, wird die Eingabe im Monaco-Editor automatisch lokal gespeichert und beim nächsten Aktualisieren oder Öffnen des Themas wiederhergestellt."
             },
             "submitButtonPosition": {
                 "label": "Position der Schaltfläche Senden",

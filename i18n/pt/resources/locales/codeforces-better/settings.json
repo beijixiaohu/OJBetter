@@ -106,6 +106,15 @@
             "isStream": {
                 "name": "transmissão",
                 "helpText": "<p>Permitir o fluxo de dados, efeito de máquina de escrever</p>"
+            },
+            "customPrompt": {
+                "name": "Tacos personalizados",
+                "helpText": "<p>Utilize os seus comandos personalizados para que o ChatGPT traduza texto</p>",
+                "placeholder": "Os sinais podem ser personalizados aqui; se estiverem vazios, são utilizados os sinais predefinidos"
+            },
+            "asSystemPrompt": {
+                "name": "Como prompt do sistema",
+                "helpText": "<p>Utilizar os prompts de tradução como prompts do sistema, o que, em alguns casos, pode reduzir os problemas de injeção de prompts</p>"
             }
         },
         "preference": {
@@ -255,6 +264,10 @@
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueio de deslocamento do rato",
                 "helpText": "Quando ativado, quando o ponteiro do rato está dentro do editor monaco, o deslocamento do rato só se desloca pelo conteúdo do editor"
+            },
+            "autoMemoryCode": {
+                "label": "Código de gravação automática",
+                "helpText": "Se estiver ativado, quando escrever algo no editor monaco, esse texto será automaticamente guardado localmente e restaurado quando atualizar ou abrir o tópico da próxima vez."
             },
             "submitButtonPosition": {
                 "label": "Localização do botão Enviar",
