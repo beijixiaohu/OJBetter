@@ -13274,7 +13274,14 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = OJBetter.chatgpt.customPrompt || `
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt){
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt){
+            prompt += `\n${raw}`;
+        };
+    } else {
+    prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
@@ -13285,6 +13292,7 @@ What I need is a carefully polished ${lang} translation of my question segment. 
             `The segment to be translated is as follows: "
 ${raw}
 "`}`;
+};
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
@@ -13294,13 +13302,13 @@ ${raw}
                     content: prompt
                 },
                 {
-                    role: "assistant",
+                    role: "user",
                     content: raw
                 }
             ] :
             [
                 {
-                    role: "assistant",
+                    role: "user",
                     content: prompt
                 }
             ],
@@ -13370,7 +13378,14 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = OJBetter.chatgpt.customPrompt || `
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt){
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt){
+            prompt += `\n${raw}`;
+        };
+    } else {
+    prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
@@ -13379,8 +13394,9 @@ The translation should use professional terms and maintain the text format, incl
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
             `The segment to be translated is as follows: "
-    ${raw}
-    "`}`;
+${raw}
+"`}`;
+};
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
@@ -13390,13 +13406,13 @@ What I need is a carefully polished ${lang} translation of my question segment. 
                     content: prompt
                 },
                 {
-                    role: "assistant",
+                    role: "user",
                     content: raw
                 }
             ] :
             [
                 {
-                    role: "assistant",
+                    role: "user",
                     content: prompt
                 }
             ],
