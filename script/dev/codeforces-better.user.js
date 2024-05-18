@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.18
+// @version      1.74.19
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -8619,7 +8619,7 @@ class ElementsTree {
         } else {
             translateDiv.disableCopyButton();
         }
-        translateDiv.updateTranslateDiv(translatedText, !((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (OJBetter.translation.forceTurndownConversion)));
+        translateDiv.updateTranslateDiv(translatedText, !((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)));
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
         if (transButton.length == 0) {
@@ -13275,24 +13275,24 @@ async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     let prompt = "";
-    if (OJBetter.chatgpt.customPrompt){
+    if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-        if (!OJBetter.chatgpt.asSystemPrompt){
+        if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
     } else {
-    prompt = `
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-            `The segment to be translated is as follows: "
+                `The segment to be translated is as follows: "
 ${raw}
 "`}`;
-};
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
@@ -13379,24 +13379,24 @@ async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     let prompt = "";
-    if (OJBetter.chatgpt.customPrompt){
+    if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-        if (!OJBetter.chatgpt.asSystemPrompt){
+        if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
     } else {
-    prompt = `
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-            `The segment to be translated is as follows: "
+                `The segment to be translated is as follows: "
 ${raw}
 "`}`;
-};
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
