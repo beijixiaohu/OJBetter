@@ -50,8 +50,9 @@
                 "Lang": "Mehrsprachigkeit",
                 "Verdict": "Status der Rechtsprechung",
                 "Time": "mal",
+                "Memory": "Laufender Speicher",
                 "时间 limit exceeded": "Zeitlimit überschritten",
-                "Memory": "Laufender Speicher"
+                "内存 limit exceeded": "Speichergrenze überschritten"
             }
         },
         ".menu-list.main-menu-list": {
