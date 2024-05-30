@@ -50,8 +50,9 @@
                 "Lang": "multilingualism",
                 "Verdict": "Case Status",
                 "Time": "timing",
+                "Memory": "Running memory",
                 "时间 limit exceeded": "Time limit exceeded",
-                "Memory": "Running memory"
+                "内存 limit exceeded": "Memory limit exceeded"
             }
         },
         ".menu-list.main-menu-list": {
