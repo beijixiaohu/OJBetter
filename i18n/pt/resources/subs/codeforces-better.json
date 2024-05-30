@@ -50,8 +50,9 @@
                 "Lang": "multilinguismo",
                 "Verdict": "estado da adjudicação",
                 "Time": "tempos",
+                "Memory": "Memória de funcionamento",
                 "时间 limit exceeded": "Tempo limite excedido",
-                "Memory": "Memória de funcionamento"
+                "内存 limit exceeded": "Limite de memória excedido"
             }
         },
         ".menu-list.main-menu-list": {
