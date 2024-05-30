@@ -53,6 +53,10 @@
         "recolor": {
             "label": "重新著色榜單",
             "helpText": "<p>對於採用 Codeforces 賽制的比賽榜單</p><p>按照“得分/總分”所在的範圍為分數重新漸變著色</p><p>範圍：1~0.7~0.45~0 深綠色→淺橙色→深橙色→紅色</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "隐藏问题标签",
+            "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
         }
     },
     "localization": {
@@ -102,6 +106,15 @@
             "isStream": {
                 "name": "串流媒體",
                 "helpText": "<p>啟用資料串流，打字機效果</p>"
+            },
+            "customPrompt": {
+                "name": "自定义提示词",
+                "helpText": "<p>使用你自定义提示词来让 ChatGPT 翻译文本</p>",
+                "placeholder": "可以在这里自定义提示词，如果为空则使用预置的提示词"
+            },
+            "asSystemPrompt": {
+                "name": "作为系统提示词",
+                "helpText": "<p>将翻译提示词作为系统提示词，这在一些情况下可以减少提示词注入的问题</p>"
             }
         },
         "preference": {
@@ -186,6 +199,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "過濾文字中的**號",
                 "helpText": " <p>有些翻譯服務(例如DeepL)會錯誤處理MarkDown 中的著重號 <strong>**</strong> </p><p>這可能會導致翻譯結果漏掉其包裹的內容，你可以選擇將著重號去掉(使用ChatGPT會忽略該項) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "强制使用Turndown转换",
+                "helpText": " <p>部分页面可能既存在使用了MathJax的公式，也有没有使用MathJax的旧公式。默认策略是如果页面存在旧公式，则全部按照旧公式的逻辑来处理。打开之后会全部用新公式的策略来处理。<strong>如果你不知道这是什么意思，请保持关闭。</strong> </p>"
             }
         }
     },
@@ -240,9 +257,17 @@
                 "label": "代碼提交二次確認",
                 "helpText": "點選題目頁Monaco 編輯器的程式碼提交時會彈窗二次確認，防止誤提交"
             },
+            "autoSubmitAfterPass": {
+                "label": "通过后自动提交",
+                "helpText": "当代码通过测试后自动提交"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "滑鼠滾動鎖定",
                 "helpText": "開啟後，當滑鼠指標在monaco 編輯器內部時，滑鼠捲動將只會捲動編輯器內的內容"
+            },
+            "autoMemoryCode": {
+                "label": "自动保存代码",
+                "helpText": "开启后，当你在 monaco 编辑器中输入内容时，会自动保存到本地，刷新或者下次打开该题目时会自动恢复"
             },
             "submitButtonPosition": {
                 "label": "提交按鈕位置",

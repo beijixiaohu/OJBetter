@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "串流媒體",
                 "helpText": "<p>啟用資料串流，打字機效果</p>"
+            },
+            "customPrompt": {
+                "name": "自定义提示词",
+                "helpText": "<p>使用你自定义提示词来让 ChatGPT 翻译文本</p>",
+                "placeholder": "可以在这里自定义提示词，如果为空则使用预置的提示词"
+            },
+            "asSystemPrompt": {
+                "name": "作为系统提示词",
+                "helpText": "<p>将翻译提示词作为系统提示词，这在一些情况下可以减少提示词注入的问题</p>"
             }
         },
         "preference": {
@@ -126,7 +135,7 @@
         "autoTranslation": {
             "title": "自動翻譯",
             "enable": "啟用自動翻譯",
-            "helpText": "<p>對於<strong>.ttypography, .comments 區域</strong>中的短文本，</p><p>當其進入瀏覽器視窗的可視區域時自動翻譯</p>",
+            "helpText": "<p>对于<strong>#task-statement 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
             "shortTextLength": {
                 "name": "短文本長度",
                 "helpText": "<p>當文字長度小於該值時，視為短文字</p>",
@@ -240,9 +249,17 @@
                 "label": "代碼提交二次確認",
                 "helpText": "點選題目頁Monaco 編輯器的程式碼提交時會彈窗二次確認，防止誤提交"
             },
+            "autoSubmitAfterPass": {
+                "label": "通过后自动提交",
+                "helpText": "当代码通过测试后自动提交"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "滑鼠滾動鎖定",
                 "helpText": "開啟後，當滑鼠指標在monaco 編輯器內部時，滑鼠捲動將只會捲動編輯器內的內容"
+            },
+            "autoMemoryCode": {
+                "label": "自动保存代码",
+                "helpText": "开启后，当你在 monaco 编辑器中输入内容时，会自动保存到本地，刷新或者下次打开该题目时会自动恢复"
             },
             "submitButtonPosition": {
                 "label": "提交按鈕位置",

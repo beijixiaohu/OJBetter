@@ -43,7 +43,15 @@
                 "Contest status": "Stato del gioco",
                 "Invited users": "Utenti invitati",
                 "Invitation links": "Link per l'invito",
-                "API keys": "Chiave API"
+                "API keys": "Chiave API",
+                "When": "Ora di invio",
+                "Who": "proponente",
+                "Problem": "problemi",
+                "Lang": "multilinguismo",
+                "Verdict": "stato di giudizio",
+                "Time": "tempi",
+                "时间 limit exceeded": "Limite di tempo superato",
+                "Memory": "Memoria di esercizio"
             }
         },
         ".menu-list.main-menu-list": {
@@ -58,9 +66,9 @@
                 "Catalog": "Catalogo delle guide",
                 "Contests": "competizione (sport, ecc.)",
                 "Gym": "campo di addestramento",
-                "Problemset": "questionario",
+                "Problemset": "banca delle domande",
                 "Groups": "organizzazioni",
-                "Rating": "Tabella dei punteggi (negli esami o nel campionato sportivo)",
+                "Rating": "Valutazione",
                 "Edu": "coltivare",
                 "Calendar": "calendario",
                 "ICPC Challenge": "Sfida ICPC",
@@ -156,6 +164,8 @@
                 "Register now": "Si iscriva ora",
                 "No tag edit access": "Nessun privilegio di modifica dei tag",
                 "Problem([\\s]*)$": "problemi",
+                "Submission": "Numero di presentazione",
+                "Time": "tempi",
                 "Verdict": "stato di giudizio",
                 "Language:": "Lingue.",
                 "Participant": "concorrenti",
@@ -164,11 +174,12 @@
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "I tornei virtuali sono un modo per partecipare a tornei passati il più vicino possibile alla partecipazione in tempo reale. Attualmente sono supportati solo i tornei virtuali in modalità ICPC.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "Se ha già affrontato questi argomenti, i tornei virtuali non fanno per lei: dovrebbero essere risolti nella banca delle domande.",
                 "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "Se vuole solo risolvere un problema in un torneo, anche i tornei virtuali non fanno per lei - dovrebbe risolverlo nella banca delle domande.",
-                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "Non utilizzi il codice di altre persone, non legga tutorial e non comunichi con altri durante la competizione virtuale.",
+                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "Non utilizzate il codice di qualcun altro, non leggete le soluzioni dei problemi e non comunicate con altri durante la competizione virtuale.",
                 "You can clone this contest to a mashup.": "Può clonare questo concorso in un concorso mashup.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup è un tipo speciale di concorso di formazione che consiste in domande aperte provenienti da concorsi Codeforces passati. È anche possibile aggiungere",
                 "problems to mashup contest.": "Domanda al concorso mashup.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Tali gare non possono essere rese pubbliche e sono utilizzate solo per scopi di formazione personale. I mashup possono anche essere aggiunti ai gruppi. Per specificare ulteriori informazioni su una gara mashup, utilizzi il modulo Modifica gara campo di addestramento."
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Tali gare non possono essere rese pubbliche e sono utilizzate solo per scopi di formazione personale. I mashup possono anche essere aggiunti ai gruppi. Per specificare ulteriori informazioni su una gara mashup, utilizzi il modulo Modifica gara campo di addestramento.",
+                "时间 limit exceeded": "Limite di tempo superato"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -199,7 +210,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "bollettino",
-                "Statements": "Rapporti statistici",
+                "Statements": "presentazione del titolo",
                 "Tutorial": "note"
             }
         },
@@ -219,7 +230,9 @@
                 "Edit": "compilatore",
                 "Custom Invocation": "Debug personalizzato",
                 "Common standings": "Tutte le classifiche",
-                "Friends standings": "Solo per gli amici.",
+                "Friends standings": "Seguire solo",
+                "Rating Changes": "Tutte le variazioni di rating",
+                "Friends 全部评级变化": "Focus sulle modifiche del rating",
                 "Submit": "presentare (un rapporto, ecc.)",
                 "Hacks": "hacker (informatica) (parola d'ordine)",
                 "Room": "cubicoli",
@@ -229,7 +242,7 @@
                 "Submissions": "Presentazione dei registri",
                 "Groups": "organizzazioni",
                 "Rating": "classificazioni",
-                "Friends rating": "Valutazione degli amici",
+                "Friends rating": "Valutazione della preoccupazione",
                 "Favourites": "segnalibro (Internet)",
                 "Contests": "competizione (sport, ecc.)",
                 "Magic": "stregoneria",
@@ -336,7 +349,7 @@
             "rules": {
                 "Enter": "accedi",
                 "Register": "iscrizione",
-                "Contest rating": "Valutazione del test",
+                "Contest rating": "Valutazione della gara",
                 "Logout": "Esca dal sito"
             }
         },
@@ -632,16 +645,16 @@
             "rules": {
                 "combine tags by OR": "Etichette in base alla logica o alla combinazione delle mie scelte",
                 "combine-tags-by-or": "Combina la mia scelta di tag per logica o (combina-tag per o)",
-                "2-sat": "Problema di soddisfabilità del grafo bipartito (2-sat)",
+                "2-sat": "2-SAT (2-sat)",
                 "binary search": "Ricerca binaria",
-                "bitmasks": "Bitmaschere",
+                "bitmasks": "Compressione di stato (bitmask)",
                 "brute force": "Enumerazione a forza bruta.",
                 "chinese remainder theorem": "teorema del resto cinese (中国剩余定理)",
                 "combinatorics": "Combinatoria",
-                "constructive algorithms": "Algoritmi costruttivi (algoritmi costruttivi)",
+                "constructive algorithms": "Costruttivo (algoritmi costruttivi)",
                 "data structures": "Strutture dati",
-                "dfs and similar": "Ricerca in profondità e le sue varianti (dfs e simili)",
-                "divide and conquer": "Algoritmo \"dividi e conquista\".",
+                "dfs and similar": "DFS e le sue varianti (dfs e simili)",
+                "divide and conquer": "Dividere e conquistare",
                 "dp": "Programmazione dinamica (dp)",
                 "dsu": "Set di ricerca parallelo (dsu)",
                 "expression parsing": "Parsing delle espressioni",
@@ -653,21 +666,21 @@
                 "graphs": "Teoria dei grafici (grafici)",
                 "greedy": "Avido",
                 "hashing": "Tabella hash (hashing)",
-                "implementation": "Problemi di implementazione, capacità di programmazione, simulazione (implementazione)",
-                "interactive": "Problemi di interattività (interattivo)",
+                "implementation": "Simulazione (implementazione)",
+                "interactive": "Interattivo",
                 "math": "Matematica (matematica)",
                 "matrices": "Matrici",
-                "meet-in-the-middle": "algoritmo meet-in-the-middle (meet-in-the-middle)",
+                "meet-in-the-middle": "Ricerca bidirezionale (meet-in-the-middle)",
                 "number theory": "Teoria dei numeri",
                 "probabilities": "Probabilità",
                 "schedules": "Algoritmi di pianificazione (schedulazioni)",
-                "shortest paths": "Algoritmi del percorso più breve (percorsi più brevi)",
-                "sortings": "Algoritmi di ordinamento (ordinamenti)",
+                "shortest paths": "Percorsi più brevi",
+                "sortings": "Ordinamento",
                 "string suffix structures": "Strutture di suffissi di stringhe",
                 "strings": "Gestione delle stringhe (stringhe)",
-                "ternary search": "Ricerca ternaria",
+                "ternary search": "Tre punti (ricerca ternaria)",
                 "trees": "Struttura ad albero (alberi)",
-                "two pointers": "Algoritmo dei due puntatori (due puntatori)"
+                "two pointers": "Due puntatori"
             }
         },
         "SettingField-name": {
@@ -774,7 +787,7 @@
                 "Logo \\(Russian\\):": "Logo (russo).",
                 "End time:": "Orario di fine.",
                 "Name:": "Nome.",
-                "Contest\\(s\\):": "Competizione.",
+                "Contest\\(s\\):": "Concorso.",
                 "Add contest:": "Aggiunga il concorso.",
                 "Show Contestants:": "I concorrenti dello show.",
                 "Show Out of Competition Participants:": "Mostra dei partecipanti non competitivi.",
@@ -954,6 +967,7 @@
                 "You have been successfully registered": "L'iscrizione è avvenuta con successo",
                 "No such contests": "Non c'è una gara di questo tipo.",
                 "The example input has been copied into the clipboard": "Esempio di input copiato negli appunti",
+                "The example output has been copied into the clipboard": "Esempio di output copiato negli appunti",
                 "The source code has been copied into the clipboard": "Il codice sorgente è stato copiato negli appunti",
                 "Settings have been updated": "Impostazioni aggiornate",
                 "Solution to the problem": "problemi",

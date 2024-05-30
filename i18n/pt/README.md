@@ -4,18 +4,18 @@ OJBetter é um projeto de script Tampermonkey concebido para melhorar a sua expe
 
 Melhorar a interface do sítio Web e a interação com o utilizador, acrescentando uma série de funcionalidades úteis para tornar a sua viagem aos concursos de programação mais eficiente e conveniente.
 
-***
+------
 
-[Chinês simplificado](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [Chinês tradicional](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/ zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https\://github.com/ beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https\://github.com/beijixiaohu/OJBetter/ blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https\://github. com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https\://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README. md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
+[Chinês simplificado](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [Chinês tradicional](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/ beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/ blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github. com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README. md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
-***
+------
 
 ## montagem
 
-| guiões                  | Descarregar                                                                                                                                                                                                                                                | Descarregar Beta                                                                                |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Forças de código Melhor | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/ main/script/release/codeforces-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
-| AtCoder Melhor          | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js)       | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
+| guiões                  | Descarregar                                                                                                                                                                                                                                                                                                               | Descarregar Beta                                                                                |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Forças de código Melhor | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/ main/script/release/codeforces-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| AtCoder Melhor          | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js)       | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## função-chave
 
@@ -31,13 +31,13 @@ Para o script de instalação, pode obter：
 
 > [!NOTE]
 >
-> Clique no botão **\`xxxBetter! Settings** no canto superior direito da **página Web** para abrir o painel de definições.
+> Clique no botão **\\\\\`xxxBetter! Settings** no canto superior direito da **página Web** para abrir o painel de definições.
 >
 > O texto de ajuda é fornecido para a maioria das funções e pode ser visualizado ao passar o rato sobre o ícone "? para o visualizar.
 
 ## Utilizar documentos
 
-Para obter informações e instruções mais pormenorizadas, **visite a [página Wiki] (https\://github.com/beijixiaohu/OJBetter/wiki).**
+Para obter informações e instruções mais pormenorizadas, **visite a [página Wiki] (https://github.com/beijixiaohu/OJBetter/wiki).\\\\\*\\\\\*\\\\\\\\\\*\\\\\*\\*\\*\*\**\*
 
 ## Como contribuir
 

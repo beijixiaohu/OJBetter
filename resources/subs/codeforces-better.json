@@ -211,7 +211,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "公告",
-                "Statements": "统计报表",
+                "Statements": "题面陈述",
                 "Tutorial": "题解"
             }
         },

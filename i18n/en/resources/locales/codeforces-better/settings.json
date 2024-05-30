@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Recolor list",
             "helpText": "<p>For the competition list using the Codeforces format</p><p>Re-color the gradient according to the range of \"score/total score\"</p><p>Range：1~0.7~0.45~0 Dark green → light orange → dark orange → red</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "Hide question tags",
+            "helpText": "<p>Hide the question label in the sidebar on the title page and show it when the mouse is hovering over the label</p>"
         }
     },
     "localization": {
@@ -102,6 +106,15 @@
             "isStream": {
                 "name": "Streaming",
                 "helpText": "<p>Enabling data streaming, typewriter effect</p>"
+            },
+            "customPrompt": {
+                "name": "Customized Cues",
+                "helpText": "<p>Use your customized prompts to have ChatGPT translate the text.</p>",
+                "placeholder": "Cues can be customized here, if empty then the preset cues are used"
+            },
+            "asSystemPrompt": {
+                "name": "As a system reminder",
+                "helpText": "<p>Using translation prompts as system prompts, which in some cases can reduce prompt injection problems</p>"
             }
         },
         "preference": {
@@ -186,6 +199,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtering of ** symbols in text",
                 "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forcing the use of Turndown conversions",
+                "helpText": " <p>Some pages may have both formulas that use MathJax and old formulas that do not use MathJax. The default policy is that if there are old formulas on the page, they will all be processed according to the logic of the old formulas. After opening it will all be processed with the new formula's strategy. <strong>If you don't know what this means, keep it closed.</strong> </p>"
             }
         }
     },
@@ -240,9 +257,17 @@
                 "label": "Secondary confirmation of code submission",
                 "helpText": "Clicking on the title page of the Monaco editor will cause a pop-up window to confirm code submission twice, preventing incorrect submissions."
             },
+            "autoSubmitAfterPass": {
+                "label": "Automatic submission after approval",
+                "helpText": "Automatically commits code when it passes tests"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Mouse scroll lock",
                 "helpText": "When turned on, when the mouse pointer is inside the monaco editor, mouse scrolling will only scroll the content inside the editor"
+            },
+            "autoMemoryCode": {
+                "label": "Auto-save code",
+                "helpText": "When turned on, when you type something in the monaco editor, it will be automatically saved locally and restored when you refresh or open the topic next time."
             },
             "submitButtonPosition": {
                 "label": "Submit Button Location",

@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "transmissão",
                 "helpText": "<p>Permitir o fluxo de dados, efeito de máquina de escrever</p>"
+            },
+            "customPrompt": {
+                "name": "Tacos personalizados",
+                "helpText": "<p>Utilize os seus comandos personalizados para que o ChatGPT traduza texto</p>",
+                "placeholder": "Os sinais podem ser personalizados aqui; se estiverem vazios, são utilizados os sinais predefinidos"
+            },
+            "asSystemPrompt": {
+                "name": "Como prompt do sistema",
+                "helpText": "<p>Utilizar os prompts de tradução como prompts do sistema, o que, em alguns casos, pode reduzir os problemas de injeção de prompts</p>"
             }
         },
         "preference": {
@@ -126,7 +135,7 @@
         "autoTranslation": {
             "title": "tradução automática",
             "enable": "Ativar a tradução automática",
-            "helpText": "<p>Para textos curtos na área<strong>.ttypography, .comments</strong></p><p>são traduzidos automaticamente quando entram na área visível da janela do browser</p>",
+            "helpText": "<p>Para textos curtos na <strong> área #task-statement</strong>, o</p><p> Traduzido automaticamente quando entra na área visível da janela do navegador</p>",
             "shortTextLength": {
                 "name": "Comprimento do texto",
                 "helpText": "<p>Quando o comprimento do texto é inferior a este valor, é considerado como um texto curto</p>",
@@ -240,9 +249,17 @@
                 "label": "Confirmação secundária da apresentação do código",
                 "helpText": "Se clicar na página de título do editor Mónaco, aparecerá uma segunda vez quando o código for submetido para evitar submissões falsas."
             },
+            "autoSubmitAfterPass": {
+                "label": "Apresentado automaticamente após aprovação",
+                "helpText": "Confirma automaticamente o código quando este passa nos testes"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueio de deslocamento do rato",
                 "helpText": "Quando ativado, quando o ponteiro do rato está dentro do editor monaco, o deslocamento do rato só se desloca pelo conteúdo do editor"
+            },
+            "autoMemoryCode": {
+                "label": "Código de gravação automática",
+                "helpText": "Se estiver ativado, quando escrever algo no editor monaco, esse texto será automaticamente guardado localmente e restaurado quando atualizar ou abrir o tópico da próxima vez."
             },
             "submitButtonPosition": {
                 "label": "Localização do botão Enviar",

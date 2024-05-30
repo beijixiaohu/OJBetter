@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Die Liste neu färben",
             "helpText": "<p>Für die Liste der Rennen, die das Codeforces-System verwenden</p><p>Färben Sie die Punkte entsprechend dem Bereich von \"Score/Total\"</p><p>Bereich：1~0.7~0.45~0 Dunkelgrün→Hellorange→Dunkelorange→Rot</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "Frage-Tags ausblenden",
+            "helpText": "<p>Die Fragebezeichnung in der Seitenleiste auf der Titelseite ausblenden und einblenden, wenn der Mauszeiger über der Bezeichnung schwebt</p>"
         }
     },
     "localization": {
@@ -102,6 +106,15 @@
             "isStream": {
                 "name": "Streaming",
                 "helpText": "<p>Ermöglicht das Streamen von Daten, Schreibmaschineneffekt</p>"
+            },
+            "customPrompt": {
+                "name": "Benutzerdefinierte Queues",
+                "helpText": "<p>Verwenden Sie Ihre benutzerdefinierten Eingabeaufforderungen, um ChatGPT zum Übersetzen von Text zu veranlassen</p>",
+                "placeholder": "Hier können die Cues angepasst werden, wenn sie leer sind, werden die voreingestellten Cues verwendet."
+            },
+            "asSystemPrompt": {
+                "name": "Als System-Eingabeaufforderung",
+                "helpText": "<p>Verwendung von Übersetzungs-Prompts als System-Prompts, was in einigen Fällen Probleme bei der Eingabe von Prompts verringern kann</p>"
             }
         },
         "preference": {
@@ -186,6 +199,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtern von ** Zeichen im Text",
                 "helpText": " <p>Einige Übersetzungsdienste (z.B. DeepL) behandeln die Hervorhebung in MarkDown nicht korrekt <strong>**</strong> </p><p>Dies kann dazu führen, dass die Übersetzung ihren Wrapper vermisst. Sie können die Hervorhebung entfernen (mit ChatGPT wird sie ignoriert) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Erzwingen der Verwendung von Turndown-Umwandlungen",
+                "helpText": " <p>Einige Seiten können sowohl Formeln enthalten, die MathJax verwenden, als auch alte Formeln, die MathJax nicht verwenden. Die Standardstrategie ist, dass, wenn es alte Formeln auf der Seite gibt, sie alle nach der Logik der alten Formeln verarbeitet werden. Nach dem Öffnen werden sie alle mit der Strategie der neuen Formel verarbeitet. <strong>Wenn Sie nicht wissen, was das bedeutet, lassen Sie es geschlossen.</strong> </p>"
             }
         }
     },
@@ -240,9 +257,17 @@
                 "label": "Sekundäre Bestätigung der Codeübermittlung",
                 "helpText": "Wenn Sie auf die Titelseite des Monaco-Editors klicken, wird ein zweites Mal ein Popup-Fenster angezeigt, wenn der Code eingereicht wird, um falsche Eingaben zu verhindern."
             },
+            "autoSubmitAfterPass": {
+                "label": "Automatisch übermittelt nach der Genehmigung",
+                "helpText": "Automatisches Übertragen von Code, wenn er Tests besteht"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Maus-Scrollsperre",
                 "helpText": "Wenn diese Funktion aktiviert ist und sich der Mauszeiger im Monaco-Editor befindet, wird beim Scrollen mit der Maus nur der Inhalt des Editors gescrollt."
+            },
+            "autoMemoryCode": {
+                "label": "Automatisch speichernder Code",
+                "helpText": "Wenn diese Funktion aktiviert ist, wird die Eingabe im Monaco-Editor automatisch lokal gespeichert und beim nächsten Aktualisieren oder Öffnen des Themas wiederhergestellt."
             },
             "submitButtonPosition": {
                 "label": "Position der Schaltfläche Senden",

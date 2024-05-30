@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.8
+// @version      1.15.14
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -45,12 +45,14 @@
 // @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
 // @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
 // @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
+// @require      https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.js
 // @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
 // @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
 // @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
+// @resource     dialogpolyfillcss https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.css
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -315,8 +317,12 @@ OJBetter.monaco = {
         alwaysConsumeMouseWheel: undefined,
         /** @type {boolean?} 提交代码二次确认 */
         isCodeSubmitDoubleConfirm: undefined,
+        /** @type {boolean?} 测试通过后自动提交 */
+        autoSubmitAfterPass: undefined,
         /** @type {string?} 提交按钮位置 */
-        submitButtonPosition: undefined
+        submitButtonPosition: undefined,
+        /** @type {boolean?} 自动保存代码 */
+        autoMemoryCode: undefined
     }
 };
 
@@ -397,7 +403,11 @@ OJBetter.chatgpt = {
         }
     },
     /** @type {boolean?} 是否为流式传输 */
-    isStream: undefined
+    isStream: undefined,
+    /** @type {string?} 是否使用自定义Prompt */
+    customPrompt: undefined,
+    /** @type {boolean?} 是否作为系统Prompt */
+    asSystemPrompt: undefined
 };
 
 /**
@@ -522,7 +532,7 @@ function OJB_LoadJS(url) {
  * 安全地创建JQuery对象
  * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
  * @param {string} string - 字符串。
- * @returns JQuery对象
+ * @returns {JQuery} JQuery对象
  */
 const OJB_safeCreateJQElement = function (string) {
     return $(string.replace(/^\s+/, ""));
@@ -867,6 +877,8 @@ async function initVar() {
     OJBetter.deepl.enableLinkProtection = OJB_getGMValue("enableLinkProtection", true);
     //openai
     OJBetter.chatgpt.isStream = OJB_getGMValue("openai_isStream", true);
+    OJBetter.chatgpt.customPrompt = OJB_getGMValue("openai_customPrompt", '');
+    OJBetter.chatgpt.asSystemPrompt = OJB_getGMValue("openai_asSystemPrompt", false);
     OJBetter.chatgpt.configs = OJB_getGMValue("chatgpt_config", {
         "choice": "",
         "configurations": []
@@ -904,8 +916,10 @@ async function initVar() {
     OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
     OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
     OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
+    OJBetter.monaco.setting.autoSubmitAfterPass = OJB_getGMValue("autoSubmitAfterPass", false);
     OJBetter.monaco.setting.alwaysConsumeMouseWheel = OJB_getGMValue("alwaysConsumeMouseWheel", true);
     OJBetter.monaco.setting.submitButtonPosition = OJB_getGMValue("submitButtonPosition", "bottom");
+    OJBetter.monaco.setting.autoMemoryCode = OJB_getGMValue("autoMemoryCode", true);
     //自定义补全
     OJBetter.monaco.complet.customConfig = OJB_getGMValue("Complet_config", {
         "choice": -1,
@@ -1219,18 +1233,18 @@ function handleColorSchemeChange(event) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
         const intervalId = setinterval(() => {
-        if (OJBetter.monaco && OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs');
-            clearInterval(intervalId);
-        }
-    }, 100);
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs');
+                clearInterval(intervalId);
+            }
+        }, 100);
     } else {
         const intervalId = setInterval(() => {
-        if (OJBetter.monaco && OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs-dark');
-            clearInterval(intervalId);
-        }
-    },100);
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs-dark');
+                clearInterval(intervalId);
+            }
+        }, 100);
     }
 }
 
@@ -1812,7 +1826,7 @@ span.mdViewContent {
 
 /* dialog */
 dialog {
-    margin: 0px;
+    margin: 0px !important;
 }
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.4);
@@ -2342,7 +2356,7 @@ header .enter-or-register-box, header .languages {
 }
 /* 数值输入框 */
 .OJBetter_setting_menu input[type="number"] {
-    width: 40px;
+    width: 70px;
     color: #009688;
     font-size: 15px;
     appearance: none;
@@ -3579,6 +3593,7 @@ div#select-lang {
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
     GM_addStyle(GM_getResourceText("selectpagecss"));
+    GM_addStyle(GM_getResourceText("dialogpolyfillcss"));
     // 自定义图标大小
     GM_addStyle(`
         .iconfont {
@@ -4127,6 +4142,7 @@ function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
  */
 function OJB_showModal(element) {
     const dialog = element.get(0);
+    dialogPolyfill.registerDialog(dialog);
     dialog.showModal();
     OJBetter.state.openDialogCount++;
 
@@ -4256,7 +4272,7 @@ function OJB_getCodeFromPre(element) {
     } else if (element.querySelector("code.prettyprint")) {
         result = getCodeFromPreChild(element);
     } else {
-        result = null;
+        result = "";
     }
     result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
     return result;
@@ -5536,6 +5552,26 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="openai_asSystemPrompt" data-i18n="settings:translation.chatgpt.asSystemPrompt.name"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.asSystemPrompt.helpText"></div>
+        </div>
+        <input type="checkbox" id="openai_asSystemPrompt" name="openai_asSystemPrompt">
+    </div>
+    <div class="OJBetter_setting_list">
+        <label for='openai_customPrompt'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="settings:translation.chatgpt.customPrompt.name"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.customPrompt.helpText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="openai_customPrompt" placeholder='' require = false data-i18n="[placeholder]settings:translation.chatgpt.customPrompt.placeholder"></textarea>
+    </div>
     <hr>
     <h4 data-i18n="settings:translation.preference.title"></h4>
     <div class='OJBetter_setting_list'>
@@ -5554,7 +5590,6 @@ const translation_settings_HTML = `
     </div>
     <hr>
 
-    <div style="display:none;">
     <h4 data-i18n="settings:translation.autoTranslation.title"></h4>
     <div class='OJBetter_setting_list'>
         <label for="autoTranslation" data-i18n="settings:translation.autoTranslation.enable"></label>
@@ -5577,6 +5612,7 @@ const translation_settings_HTML = `
         <input type='number' id='shortTextLength' class='no_default' require=true data-i18n="[placeholder]settings:translation.autoTranslation.shortTextLength.placeholder">
         <span data-i18n="settings:translation.autoTranslation.shortTextLength.end"></span>
     </div>
+    <div style="display:none;">
     <div class='OJBetter_setting_list'>
         <label for="allowMixTrans" data-i18n="settings:translation.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
@@ -5598,8 +5634,8 @@ const translation_settings_HTML = `
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
         </div>
     </div>
-    <hr>
     </div>
+    <hr>
 
     <h4 data-i18n="settings:translation.advanced.name"></h4>
     <div class='OJBetter_setting_list'>
@@ -5751,6 +5787,15 @@ const code_editor_settings_HTML = `
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="autoSubmitAfterPass"><span
+                data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoSubmitAfterPass" name="autoSubmitAfterPass">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
                 data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
@@ -5758,6 +5803,15 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="autoMemoryCode"><span
+                data-i18n="settings:codeEditor.preferences.autoMemoryCode.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
     </div>
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
@@ -6542,6 +6596,8 @@ async function initSettingsPanel() {
         $('#enableLinkProtection').prop("checked", GM_getValue("enableLinkProtection") === true);
         $("#chatgpt_config_config_bar_ul").find(`input[name='chatgpt_config_config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
+        $("#openai_asSystemPrompt").prop("checked", GM_getValue("openai_asSystemPrompt") === true);
+        $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
@@ -6572,7 +6628,9 @@ async function initSettingsPanel() {
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#beautifyPreBlocks").prop("checked", GM_getValue("beautifyPreBlocks") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
+        $("#autoSubmitAfterPass").prop("checked", GM_getValue("autoSubmitAfterPass") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
+        $("#autoMemoryCode").prop("checked", GM_getValue("autoMemoryCode") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
@@ -6625,6 +6683,8 @@ async function initSettingsPanel() {
                 enableEmphasisProtection: $("#enableEmphasisProtection").prop("checked"),
                 enableLinkProtection: $("#enableLinkProtection").prop("checked"),
                 openai_isStream: $("#openai_isStream").prop("checked"),
+                openai_asSystemPrompt: $("#openai_asSystemPrompt").prop("checked"),
+                openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
@@ -6653,7 +6713,9 @@ async function initSettingsPanel() {
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 beautifyPreBlocks: $("#beautifyPreBlocks").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
+                autoSubmitAfterPass: $("#autoSubmitAfterPass").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
+                autoMemoryCode: $("#autoMemoryCode").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
@@ -6808,7 +6870,7 @@ async function initHTML2MarkDown() {
                 node.classList.contains('div-btn-copy') ||
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('overlay') ||
-                node.classList.contains('monaco-editor')||
+                node.classList.contains('monaco-editor') ||
                 node.nodeName === 'SCRIPT';
         },
         replacement: function () {
@@ -7225,7 +7287,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
     const target = (() => {
         if (type = "child_level") {
             return $(element).children(':not(.html2md-panel)');
-        }else {
+        } else {
             return $(element);
         }
     })();
@@ -7932,7 +7994,7 @@ class TranslateDiv {
     close() {
         this.closeButton.click();
     }
-    
+
     /**
      * 收起元素
      */
@@ -10242,19 +10304,21 @@ async function createMonacoEditor(language, form, support) {
         }
 
         // 代码同步与保存
-        var nowUrl = window.location.href;
-        nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
-        const code = await getCode(nowUrl);
-        if (code) {
-            OJBetter.monaco.editor.setValue(code); // 恢复代码
-            form.sourceDiv.val(code);
+        if (OJBetter.monaco.setting.autoMemoryCode) {
+            let nowUrl = window.location.href;
+            nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
+            const code = await getCode(nowUrl);
+            if (code) {
+                OJBetter.monaco.editor.setValue(code); // 恢复代码
+                form.sourceDiv.val(code);
+            }
+            OJBetter.monaco.editor.onDidChangeModelContent(async () => {
+                // 将monaco editor的内容同步到sourceDiv
+                const code = OJBetter.monaco.editor.getValue();
+                form.sourceDiv.val(code);
+                await saveCode(nowUrl, code);
+            });
         }
-        OJBetter.monaco.editor.onDidChangeModelContent(async () => {
-            // 将monaco editor的内容同步到sourceDiv
-            const code = OJBetter.monaco.editor.getValue();
-            form.sourceDiv.val(code);
-            await saveCode(nowUrl, code);
-        });
     })();
 
     /**
@@ -12275,7 +12339,7 @@ class TestCaseStatus {
 }
 
 // 样例测试函数
-async function runCode(event, runButton, sourceDiv, submitDiv) {
+async function runCode(event, runButton, sourceDiv) {
     event.preventDefault();
     const statePanel = $('#statePanel').show().empty();
     const testData = getTestData();
@@ -12344,6 +12408,9 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
         runButton.setButtonState('error', `${passedTests}/${totalTests} ` + i18next.t('runTestButton.partial', { ns: 'codeEditor' }));
     } else {
         runButton.setButtonState('success', i18next.t('runTestButton.success', { ns: 'codeEditor' }));
+        if (OJBetter.monaco.setting.autoSubmitAfterPass) {
+            $('#OJBetter_SubmitForm').submit(); // 自动提交
+        }
     }
 }
 
@@ -12406,13 +12473,22 @@ async function addProblemPageCodeEditor() {
     submitButton.on('click', async function (event) {
         event.preventDefault();
         if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
+            // 获取题目名
+            const questionTitle = (() => {
+                const element = document.querySelector('.h2');
+                return Array.from(element.childNodes)
+                    .filter(node => node.nodeType === Node.TEXT_NODE)
+                    .map(textNode => textNode.textContent.trim())
+                    .join(' ');
+            })();
             const submit = await OJB_createDialog(
                 i18next.t('submitCode.title', { ns: 'dialog' }),
-                i18next.t('submitCode.content', { ns: 'dialog' }),
+                i18next.t('submitCode.content', { ns: 'dialog', questionTitle: questionTitle }),
                 [
                     i18next.t('submitCode.buttons.0', { ns: 'dialog' }),
                     i18next.t('submitCode.buttons.1', { ns: 'dialog' })
-                ]
+                ],
+                true
             ); //提交确认
             if (submit) {
                 submitButton.after(`<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
@@ -12879,25 +12955,47 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt){
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt){
+            prompt += `\n${raw}`;
+        };
+    } else {
+    prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
             : "keeping the brackets【】, HTML tags, and their content unchanged."
         }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, The segment to be translated is as follows: "
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+            `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
+};
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "user",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -12961,27 +13059,48 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
-I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
-During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt){
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt){
+            prompt += `\n${raw}`;
+        };
+    } else {
+    prompt = `
+As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
+The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
             ? "keeping the LaTeX equations unchanged."
             : "keeping the brackets【】, HTML tags, and their content unchanged."
         }
-After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
-"
+After translation, please ensure that the ${lang} version conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+            `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
+};
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "user",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         stream: true,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -13256,9 +13375,9 @@ async function initializeSequentially(loadingMessage) {
     if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
         await initTransResultsRecover(); // 翻译结果恢复功能初始化
     }
-    // if (OJBetter.translation.auto.enabled) {
-    //     await initTransWhenViewable(); // 自动翻译
-    // }
+    if (OJBetter.translation.auto.enabled) {
+        await initTransWhenViewable(); // 自动翻译
+    }
     // if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
     //     await recolorStandings(); // cf赛制榜单重新着色
     // }

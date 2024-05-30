@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "確認提交代碼嗎",
-        "content": "",
+        "content": "您要提交的题目是\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "取消",
             "提交"

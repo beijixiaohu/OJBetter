@@ -21,7 +21,8 @@
         "is_acmsguru": "Nota：A página atual é um título acmsguru (que é um título muito antigo) e algumas das funcionalidades não estão disponíveis.<br>Além disso, a função de tradução na página atual é implementada de uma forma especial, pelo que pode estar mal posicionada.",
         "trans_segment": "Cuidado! Atualmente no Modo de Tradução Segmentada, que pode causar efeitos negativos<p>A menos que precise de traduzir blogues ou tópicos muito longos neste momento, vá às Definições e mude para o Modo Normal</p>",
         "trans_select": "Atenção! Atualmente, no Modo de Tradução de Segmentos Seleccionados, só traduzirá a parte selecionada da área de destino, clique no parágrafo para o selecionar (caixa cor de laranja)<br><p>Se não precisar de traduzir blogues ou tópicos muito longos neste momento, sugerimos que vá às Definições para mudar para o Modo Normal</p>",
-        "is_submitPage": "Activou a opção \"Adicionar editor à página de título\", para que possa enviar rapidamente na parte inferior da página da pergunta."
+        "is_submitPage": "Activou a opção \"Adicionar editor à página de título\", para que possa enviar rapidamente na parte inferior da página da pergunta.",
+        "forceTurndownConversion": "Notas! Atualmente, a conversão é obrigatória, por isso, se não precisar dela neste momento, sugerimos que vá às Definições e a desactive!"
     },
     "error": {
         "clist": {

@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "streaming",
                 "helpText": "<p>Habilitación del flujo de datos, efecto máquina de escribir</p>"
+            },
+            "customPrompt": {
+                "name": "Tacos personalizados",
+                "helpText": "<p>Utiliza tus instrucciones personalizadas para que ChatGPT traduzca el texto</p>",
+                "placeholder": "Las señales pueden personalizarse aquí; si están vacías, se utilizan las señales predefinidas."
+            },
+            "asSystemPrompt": {
+                "name": "Como indicador del sistema",
+                "helpText": "<p>Utilización de avisos de traducción como avisos del sistema, lo que en algunos casos puede reducir los problemas de inyección de avisos.</p>"
             }
         },
         "preference": {
@@ -126,7 +135,7 @@
         "autoTranslation": {
             "title": "traducción automática",
             "enable": "Activar la traducción automática",
-            "helpText": "<p>Los textos breves de la zona<strong>.ttypography, .comments</strong></p><p>se traducen automáticamente cuando entran en la zona visible de la ventana del navegador</p>.",
+            "helpText": "<p>Para textos breves en <strong> el área #task-statement</strong>, el botón</p><p> Se traduce automáticamente cuando entra en el área visible de la ventana del navegador</p>",
             "shortTextLength": {
                 "name": "Longitud del texto",
                 "helpText": "<p>Cuando la longitud del texto es inferior a este valor, se considera un texto corto</p>",
@@ -240,9 +249,17 @@
                 "label": "Confirmación secundaria de la presentación del código",
                 "helpText": "Al hacer clic en la portada del editor de Mónaco aparecerá una segunda ventana emergente cuando se envíe el código para evitar falsos envíos."
             },
+            "autoSubmitAfterPass": {
+                "label": "Envío automático tras la aprobación",
+                "helpText": "Compilación automática del código cuando supera las pruebas"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueo de desplazamiento del ratón",
                 "helpText": "Cuando está activado, cuando el puntero del ratón está dentro del editor de monaco, el desplazamiento del ratón sólo se desplazará por el contenido del editor"
+            },
+            "autoMemoryCode": {
+                "label": "Código de autoguardado",
+                "helpText": "Si está activada, cuando escribas algo en el editor monaco, se guardará automáticamente de forma local y se restaurará cuando actualices o abras el tema la próxima vez."
             },
             "submitButtonPosition": {
                 "label": "Ubicación del botón Enviar",

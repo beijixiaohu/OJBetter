@@ -4,18 +4,18 @@ OJBetter is a Tampermonkey scripting project designed to enhance your experience
 
 Improve the website interface and user interaction by adding a number of useful features to make your programming competition journey more efficient and convenient.
 
-***
+------
 
 [简体中文](https://github.com/beijixiaohu/OJBetter/blob/main/README.md) | [繁體中文](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/zh-Hant/README.md) | [English](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/en/README.md) | [Deutsch](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/de/README.md) | [Français](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/fr/README.md) | [한국어](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ko/README.md) | [Português](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/pt/README.md) | [日本語](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/ja/README.md) | [Español](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/es/README.md) | [Italiano](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/it/README.md) | [हिन्दी](https://github.com/beijixiaohu/OJBetter/blob/main/i18n/hi/README.md)
 
-***
+------
 
 ## mounting
 
-| scripts           | Download                                                                                                                                                                                                                                                   | Beta Download                                                                                   |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Codeforces Better | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/ main/script/release/codeforces-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
-| AtCoder Better    | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https\://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js)       | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
+| scripts           | Download                                                                                                                                                                                                                                                                                                                  | Beta Download                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Codeforces Better | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/ main/script/release/codeforces-better.user.js) | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) |
+| AtCoder Better    | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main /script/release/atcoder-better.user.js)       | [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    |
 
 ## Key Features
 
@@ -31,13 +31,13 @@ To install the script, you can get：
 
 > [!NOTE]
 >
-> Click on the **\`xxxBetter! Settings** button in the upper right corner of the **web page** to open the settings panel.
+> Click on the **\\\\\`xxxBetter! Settings** button in the upper right corner of the **web page** to open the settings panel.
 >
 > Help text is provided for most functions and can be viewed by hovering over the "? icon" to view it.
 
 ## Using Documents
 
-For more detailed information and usage guidelines, **visit the [Wiki page](https://github.com/beijixiaohu/OJBetter/wiki).**
+For more detailed information and usage guidelines, **visit the [Wiki page](https://github.com/beijixiaohu/OJBetter/wiki).**\*\*\*\*\*\*\*\*
 
 ## How to contribute
 

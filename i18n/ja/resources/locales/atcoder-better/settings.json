@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "ストリーミング",
                 "helpText": "<p>データストリーミングの有効化、タイプライター効果</p>"
+            },
+            "customPrompt": {
+                "name": "カスタム・キュー",
+                "helpText": "<p>カスタマイズしたプロンプトを使用して、ChatGPTにテキストを翻訳させます。</p>",
+                "placeholder": "キューはここでカスタマイズでき、空の場合はプリセットのキューが使用される"
+            },
+            "asSystemPrompt": {
+                "name": "システム・プロンプトとして",
+                "helpText": "<p>翻訳プロンプトをシステムプロンプトとして使用する。</p>"
             }
         },
         "preference": {
@@ -126,7 +135,7 @@
         "autoTranslation": {
             "title": "自動翻訳",
             "enable": "自動翻訳を有効にする",
-            "helpText": "<p><strong>.ttypography、.comments領域</strong></p><p>の短いテキストは、ブラウザウィンドウ</p>の可視領域に入ると自動的に翻訳されます。",
+            "helpText": "<p><strong>タスク・ステートメント・エリア</strong>内の短いテキストは</p><p>ブラウザウィンドウの可視エリアに入ると自動的に翻訳される</p>",
             "shortTextLength": {
                 "name": "テキストの長さ",
                 "helpText": "<p>テキストの長さがこの値より短い場合、短いテキストとみなされる</p>",
@@ -240,9 +249,17 @@
                 "label": "コード提出の二次確認",
                 "helpText": "Monacoエディターのタイトルページをクリックすると、誤送信を防ぐためにコード送信時に2度目のポップアップが表示されます。"
             },
+            "autoSubmitAfterPass": {
+                "label": "承認後、自動的に提出",
+                "helpText": "テストに合格したコードを自動的にコミットする"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "マウスのスクロールロック",
                 "helpText": "オンにすると、マウス・ポインタがモナコ・エディタ内にあるとき、マウス・スクロールはエディタの内容のみをスクロールします。"
+            },
+            "autoMemoryCode": {
+                "label": "自動保存コード",
+                "helpText": "オンにすると、モナコエディターで何かを入力すると、その内容が自動的にローカルに保存され、次にトピックを更新したり開いたりするときに復元されます。"
             },
             "submitButtonPosition": {
                 "label": "送信ボタンの位置",

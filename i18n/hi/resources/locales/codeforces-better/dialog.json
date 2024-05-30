@@ -42,7 +42,7 @@
     },
     "submitCode": {
         "title": "क्या आप वाकई कोड सबमिट करना चाहते हैं?",
-        "content": "",
+        "content": "您要提交的题目是\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "रद्द करना",
             "जमा करना"

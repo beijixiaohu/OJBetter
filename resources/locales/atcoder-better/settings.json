@@ -34,7 +34,7 @@
             "label": "折叠块渲染优化",
             "helpText": "<p>为折叠块元素添加 contain 约束</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>contain: layout style;</p></div><p>如果你的浏览器查看大量折叠块时比较卡顿，开启后<strong>可能</strong>会有一定程度的改善</p>"
         },
-        "selectElementOptimization":{
+        "selectElementOptimization": {
             "label": "下拉框性能优化",
             "helpText": "<p>将页面中的下拉选择框元素替换为分页展示，支持搜索的动态下拉框</p><p>如果你的浏览器查看有一万以上数据量的下拉框时非常卡顿，开启该选项后页面将不再卡顿。"
         },
@@ -102,6 +102,15 @@
             "isStream": {
                 "name": "流式传输",
                 "helpText": "<p>启用数据流式传输，打字机效果</p>"
+            },
+            "customPrompt": {
+                "name": "自定义提示词",
+                "helpText": "<p>使用你自定义提示词来让 ChatGPT 翻译文本</p>",
+                "placeholder": "可以在这里自定义提示词，如果为空则使用预置的提示词"
+            },
+            "asSystemPrompt": {
+                "name": "作为系统提示词",
+                "helpText": "<p>将翻译提示词作为系统提示词，这在一些情况下可以减少提示词注入的问题</p>"
             }
         },
         "preference": {
@@ -126,7 +135,7 @@
         "autoTranslation": {
             "title": "自动翻译",
             "enable": "启用自动翻译",
-            "helpText": "<p>对于<strong>.ttypography, .comments 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
+            "helpText": "<p>对于<strong>#task-statement 区域</strong>中的短文本，</p><p>当其进入浏览器窗口的 可视区域 时自动翻译</p>",
             "shortTextLength": {
                 "name": "短文本长度",
                 "helpText": "<p>当文本长度小于该值时，视为短文本</p>",
@@ -240,9 +249,17 @@
                 "label": "代码提交二次确认",
                 "helpText": "点击题目页 Monaco 编辑器的代码提交时会弹窗二次确认，防止误提交"
             },
+            "autoSubmitAfterPass": {
+                "label": "通过后自动提交",
+                "helpText": "当代码通过测试后自动提交"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "鼠标滚动锁定",
                 "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
+            },
+            "autoMemoryCode":{
+                "label": "自动保存代码",
+                "helpText": "开启后，当你在 monaco 编辑器中输入内容时，会自动保存到本地，刷新或者下次打开该题目时会自动恢复"
             },
             "submitButtonPosition": {
                 "label": "提交按钮位置",

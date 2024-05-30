@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Recolorir a lista",
             "helpText": "<p>Para a lista de corridas que utilizam o sistema Codeforces</p><p>Volte a colorir as pontuações de acordo com o intervalo de \"Pontuação/Total\"</p><p>Intervalo：1~0,7~0,45~0 Verde escuro→Laranja claro→Laranja escuro→Vermelho</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "Ocultar etiquetas de perguntas",
+            "helpText": "<p>Ocultar a etiqueta da pergunta na barra lateral da página de título e mostrá-la quando o rato estiver a pairar sobre a etiqueta</p>"
         }
     },
     "localization": {
@@ -102,6 +106,15 @@
             "isStream": {
                 "name": "transmissão",
                 "helpText": "<p>Permitir o fluxo de dados, efeito de máquina de escrever</p>"
+            },
+            "customPrompt": {
+                "name": "Tacos personalizados",
+                "helpText": "<p>Utilize os seus comandos personalizados para que o ChatGPT traduza texto</p>",
+                "placeholder": "Os sinais podem ser personalizados aqui; se estiverem vazios, são utilizados os sinais predefinidos"
+            },
+            "asSystemPrompt": {
+                "name": "Como prompt do sistema",
+                "helpText": "<p>Utilizar os prompts de tradução como prompts do sistema, o que, em alguns casos, pode reduzir os problemas de injeção de prompts</p>"
             }
         },
         "preference": {
@@ -186,6 +199,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtragem de sinais ** no texto",
                 "helpText": " <p>Alguns serviços de tradução (por exemplo, DeepL) tratam incorretamente a ênfase no MarkDown <strong>**</strong> </p><p>Isto pode fazer com que a tradução não atinja o seu invólucro, pode optar por remover a ênfase (o ChatGPT ignora-a) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forçar a utilização de conversões Turndown",
+                "helpText": " <p>Algumas páginas podem ter fórmulas que utilizam MathJax e fórmulas antigas que não utilizam MathJax. A estratégia predefinida é que, se existirem fórmulas antigas na página, todas serão processadas de acordo com a lógica das fórmulas antigas. Após a abertura, serão todas processadas com a estratégia da nova fórmula. <strong>Se não sabe o que isto significa, mantenha-o fechado.</strong> </p>"
             }
         }
     },
@@ -240,9 +257,17 @@
                 "label": "Confirmação secundária da apresentação do código",
                 "helpText": "Se clicar na página de título do editor Mónaco, aparecerá uma segunda vez quando o código for submetido para evitar submissões falsas."
             },
+            "autoSubmitAfterPass": {
+                "label": "Apresentado automaticamente após aprovação",
+                "helpText": "Confirma automaticamente o código quando este passa nos testes"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Bloqueio de deslocamento do rato",
                 "helpText": "Quando ativado, quando o ponteiro do rato está dentro do editor monaco, o deslocamento do rato só se desloca pelo conteúdo do editor"
+            },
+            "autoMemoryCode": {
+                "label": "Código de gravação automática",
+                "helpText": "Se estiver ativado, quando escrever algo no editor monaco, esse texto será automaticamente guardado localmente e restaurado quando atualizar ou abrir o tópico da próxima vez."
             },
             "submitButtonPosition": {
                 "label": "Localização do botão Enviar",

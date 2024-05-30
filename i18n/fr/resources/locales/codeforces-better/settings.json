@@ -53,6 +53,10 @@
         "recolor": {
             "label": "Recoloration de la liste",
             "helpText": "<p>Pour la liste des courses utilisant le système Codeforces</p><p>Recolorez les scores en fonction de la fourchette \"Score/Total\"</p><p>Fourchette：1~0.7~0.45~0 Vert foncé→Orange clair→Orange foncé→Rouge</p>"
+        },
+        "hiddenProblemTag": {
+            "label": "Cacher les étiquettes de la question",
+            "helpText": "<p>Cacher le libellé de la question dans la barre latérale de la page de titre et l'afficher lorsque la souris passe sur le libellé.</p>"
         }
     },
     "localization": {
@@ -102,6 +106,15 @@
             "isStream": {
                 "name": "streaming",
                 "helpText": "<p>Permettre le flux de données, l'effet machine à écrire</p>"
+            },
+            "customPrompt": {
+                "name": "Queues de billard sur mesure",
+                "helpText": "<p>Utilisez vos invites personnalisées pour demander à ChatGPT de traduire un texte.</p>",
+                "placeholder": "Les repères peuvent être personnalisés ici ; s'ils sont vides, les repères prédéfinis sont utilisés."
+            },
+            "asSystemPrompt": {
+                "name": "En tant qu'invite système",
+                "helpText": "<p>L'utilisation d'invites de traduction en tant qu'invites système, ce qui, dans certains cas, peut réduire les problèmes d'injection d'invites.</p>"
             }
         },
         "preference": {
@@ -186,6 +199,10 @@
             "filterTextWithoutEmphasis": {
                 "name": "Filtrage des signes ** dans le texte",
                 "helpText": " <p>Certains services de traduction (par exemple DeepL) ne traitent pas correctement l'accent dans MarkDown <strong>**</strong> </p><p>La traduction peut alors manquer son wrapper, vous pouvez choisir de supprimer l'accent (l'utilisation de ChatGPT n'en tient pas compte) </p>"
+            },
+            "forceTurndownConversion": {
+                "name": "Forcer l'utilisation des conversions Turndown",
+                "helpText": " <p>Certaines pages peuvent contenir à la fois des formules qui utilisent MathJax et d'anciennes formules qui n'utilisent pas MathJax. La stratégie par défaut est la suivante : si la page contient d'anciennes formules, elles seront toutes traitées selon la logique des anciennes formules. Après l'ouverture, elles seront toutes traitées selon la stratégie de la nouvelle formule. <strong>Si vous ne savez pas ce que cela signifie, gardez-le fermé.</strong> </p>"
             }
         }
     },
@@ -240,9 +257,17 @@
                 "label": "Confirmation secondaire de la soumission du code",
                 "helpText": "En cliquant sur la page de titre de l'éditeur Monaco, une deuxième fenêtre s'ouvrira lorsque le code sera soumis afin d'éviter les fausses soumissions."
             },
+            "autoSubmitAfterPass": {
+                "label": "Envoi automatique après approbation",
+                "helpText": "Validation automatique du code lorsqu'il passe les tests"
+            },
             "alwaysConsumeMouseWheel": {
                 "label": "Verrouillage du défilement de la souris",
                 "helpText": "Lorsque cette option est activée, lorsque le pointeur de la souris se trouve à l'intérieur de l'éditeur monaco, le défilement de la souris ne fait défiler que le contenu de l'éditeur."
+            },
+            "autoMemoryCode": {
+                "label": "Code de sauvegarde automatique",
+                "helpText": "Lorsque cette option est activée, lorsque vous tapez quelque chose dans l'éditeur monaco, ce texte est automatiquement sauvegardé localement et restauré lorsque vous actualisez ou ouvrez le sujet la prochaine fois."
             },
             "submitButtonPosition": {
                 "label": "Emplacement du bouton de soumission",
