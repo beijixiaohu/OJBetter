@@ -50,8 +50,9 @@
                 "Lang": "語言",
                 "Verdict": "判題狀態",
                 "Time": "時間",
+                "Memory": "运行内存",
                 "时间 limit exceeded": "Time limit exceeded",
-                "Memory": "运行内存"
+                "内存 limit exceeded": "Memory limit exceeded"
             }
         },
         ".menu-list.main-menu-list": {
