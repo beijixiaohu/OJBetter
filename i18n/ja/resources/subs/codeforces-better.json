@@ -50,8 +50,9 @@
                 "Lang": "多言語主義",
                 "Verdict": "タクティクス",
                 "Time": "回",
+                "Memory": "ランニングメモリー",
                 "时间 limit exceeded": "制限時間超過",
-                "Memory": "ランニングメモリー"
+                "内存 limit exceeded": "メモリの上限を超えた"
             }
         },
         ".menu-list.main-menu-list": {
