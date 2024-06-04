@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.14
+// @version      1.15.15
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -8952,7 +8952,7 @@ class ProblemPageLinkbar {
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
-    const regex = /\/contests\/([A-Za-z\d]+)\/tasks\/([A-Za-z\d\_]+)/;
+    const regex = /\/contests\/([A-Za-z\d\-]+)\/tasks\/([A-Za-z\d\_]+)/;
     const matchResult = url.match(regex);
     return matchResult && matchResult.length >= 3
         ? `${matchResult[2]}`
@@ -11167,7 +11167,6 @@ async function createMonacoEditor(language, form, support) {
                     });
                 });
 
-                return null; // 如果没有内容，则返回null
             },
         });
 
@@ -11202,7 +11201,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(references);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -11239,7 +11237,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(highlights);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -12956,24 +12953,24 @@ async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     let prompt = "";
-    if (OJBetter.chatgpt.customPrompt){
+    if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-        if (!OJBetter.chatgpt.asSystemPrompt){
+        if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
     } else {
-    prompt = `
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-            `The segment to be translated is as follows: "
+                `The segment to be translated is as follows: "
 ${raw}
 "`}`;
-};
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
@@ -13060,24 +13057,24 @@ async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     let prompt = "";
-    if (OJBetter.chatgpt.customPrompt){
+    if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-        if (!OJBetter.chatgpt.asSystemPrompt){
+        if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
     } else {
-    prompt = `
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-            `The segment to be translated is as follows: "
+                `The segment to be translated is as follows: "
 ${raw}
 "`}`;
-};
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
