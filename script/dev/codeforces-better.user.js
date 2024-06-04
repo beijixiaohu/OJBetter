@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.19
+// @version      1.74.20
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -166,6 +166,8 @@ OJBetter.basic = {
 OJBetter.typeOfPage = {
     /** @type {boolean?} 是否是轻量站 */
     is_mSite: undefined,
+    /** @type {boolean?} 是否是训练营页面 */
+    is_gym: undefined,
     /** @type {boolean?} 是否是acmsguru页面 */
     is_acmsguru: undefined,
     /** @type {boolean?} 是否是旧版LaTeX页面 */
@@ -816,6 +818,7 @@ async function initVar() {
     OJBetter.state.lastReadAnnounceVer = OJB_getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
     OJBetter.typeOfPage.is_oldLatex = $('.tex-span').length;
+    OJBetter.typeOfPage.is_gym = href.includes("gym") && href.includes('/problem/');
     OJBetter.typeOfPage.is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     OJBetter.typeOfPage.is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     OJBetter.typeOfPage.is_problem = href.includes('/problem/');
@@ -8761,7 +8764,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi; // TODO 111
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
@@ -9367,9 +9370,22 @@ class ProblemPageLinkbar {
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
-    const regex = url.includes('/contest/')
-        ? /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/
-        : /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/;
+    const regexMap = new Map([
+        ['/contest/', /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/],
+        ['/problemset/', /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/],
+        ['/gym/', /\/gym\/(\d+)\/problem\/([A-Za-z\d]+)/],
+    ]);
+
+    let regex = null;
+    for (let [key, value] of regexMap) {
+        if (url.includes(key)) {
+            regex = value;
+            break;
+        }
+    }
+
+    if (!regex) return '';
+
     const matchResult = url.match(regex);
     return matchResult && matchResult.length >= 3 ? `${matchResult[1]}${matchResult[2]}` : '';
 };
@@ -9448,7 +9464,9 @@ async function CF2vjudge(problemToolbar) {
         });
     };
 
-    const VjudgeUrl = `https://vjudge.net/problem/CodeForces-${problemId}`;
+    const VjudgeUrl = OJBetter.typeOfPage.is_gym ?
+        `https://vjudge.net/problem/Gym-${problemId}` :
+        `https://vjudge.net/problem/CodeForces-${problemId}`;
     try {
         const result = await checkLinkExistence(VjudgeUrl);
         if (problemId && result) {
@@ -9645,7 +9663,7 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
     return OJB_promiseRetryWrapper(async () => {
         const response = await OJB_GMRequest({
             method: "GET",
-            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces.com`,
+            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces`,
             headers: { "Authorization": OJBetter.clist.authorization }
         });
 
@@ -9841,7 +9859,7 @@ function getClassNameByRating(rating) {
  */
 async function showRatingByClist_problem(problemToolbar) {
     // 题目名
-    const problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
     if (OJBetter.typeOfPage.is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
 
     // 创建Rating按钮元素
@@ -9849,7 +9867,7 @@ async function showRatingByClist_problem(problemToolbar) {
     // TODO
     const clistButton = problemToolbar.addLinkButton(
         'clistButton',
-        `https://clist.by/problems/?search=${problem}&resource=1`,
+        `https://clist.by/problems/?search=${problem}&resource=1&resource=64`,
         i18next.t('state.wait', { ns: 'button' }),
         $("<img>").attr("src", "https://clist.by/static/img/logo-48.png"),
         "15px"
@@ -11554,7 +11572,6 @@ async function createMonacoEditor(language, form, support) {
                     });
                 });
 
-                return null; // 如果没有内容，则返回null
             },
         });
 
@@ -11589,7 +11606,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(references);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -11626,7 +11642,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(highlights);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
