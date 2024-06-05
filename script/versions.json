@@ -8,8 +8,8 @@
         "release": "1.15.2"
     },
     "codeforces-better": {
-        "dev": "1.74.20",
-        "release": "1.74.2"
+        "dev": "1.75.0",
+        "release": "1.75.0"
     },
     "nowcoder-better": {
         "dev": "1.11",
