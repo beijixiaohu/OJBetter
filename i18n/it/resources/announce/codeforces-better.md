@@ -1,3 +1,23 @@
+## 1.75.0
+
+- Miglioramento di alcune regole di localizzazione dei siti web, grazie al contributo di **@qjwh**.
+- Aggiungere le opzioni "Personalizzazione del prompt di traduzione di ChatGPT" e "Come prompt di sistema" Grazie a **@Dawn-Xu-helloworld** per la collaborazione!
+- Aggiungere la funzione "Forza conversione Turndown" Grazie a **@wrk-123** per il contributo!
+- Aggiungere la finestra pop-up di conferma dell'invio del codice per visualizzare il nome del titolo.
+- Aggiungi campione con l'opzione Auto-Commit (disattivata per impostazione predefinita)
+- Aggiunta della funzione "Nascondi le etichette delle domande sugli argomenti", disattivata per impostazione predefinita.
+- Sostituzione dell'interfaccia di "Yodo Translator"
+- Correggere i titoli delle palestre che non saltano al vjudge
+- &nbsp;Correggere i simboli ` ` nell'abbellimento dei blocchi di codice
+- Risolvere il problema per cui i sorgenti del problemset non possono essere inviati correttamente quando la lunghezza del numero di domanda non è 1 Grazie a **@WindJ0Y** per il contributo!
+- Correggere l'editor di Monaco che non applica correttamente il tema quando il tema è impostato su follow Grazie a **@cscnk52** per il contributo!
+- Correggere l'editor di codice che non viene caricato correttamente quando i link al titolo sono in minuscolo.
+- Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
+- Correggere l'errore durante la ritraduzione di "Raccogli i vecchi risultati".
+- Risolvere il problema che il pulsante di copia non funziona nella pagina di invio.
+- Correzione dei tag di script non filtrati durante la conversione di MarkDown
+- Utilizzare il polyfill per la compatibilità con i browser che non supportano il metodo dialog.showModal() (ad esempio Firefox79).
+
 ## 1.74.2
 
 - Corregge i problemi dell'ultima correzione Grazie a @Dechancer per il feedback!
