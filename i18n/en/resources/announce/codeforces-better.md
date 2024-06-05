@@ -1,3 +1,23 @@
+## 1.75.0
+
+- Improve some website localization rules, thanks to the contribution of **@qjwh**.
+- Add "ChatGPT Translation Prompt Customization" and "As System Prompt" options Thanks to **@Dawn-Xu-helloworld** for the collaboration!
+- Add "Force Turndown conversion" feature Thanks to **@wrk-123** for the contribution!
+- Add Code submission confirmation popup showing the title name.
+- Add Sample by Auto Commit option (off by default)
+- Add "Hide topic question labels" feature, off by default.
+- Replace the interface of "Youtube Translate".
+- Fix gym titles not jumping to vjudge
+- Fix `&nbsp;` symbol in code block beautification
+- Fix the problem that problemset sources cannot be submitted properly when the length of the question number is not 1 Thanks to **@WindJ0Y** for the contribution!
+- Fix Monaco editor not applying theme correctly when theme is set to follow Thanks to **@cscnk52** for the contribution!
+- Fix code editor not loading correctly when title set title links are lowercase
+- Fixes a problem where LaTeX is not replaced correctly between lines, and fixes a performance issue with the associated regularization.
+- Fixed the problem of "Collect old results" error when re-translating.
+- Fix copy button not working on submission page
+- Fix script tags not filtered during MarkDown conversion
+- Use polyfill for compatibility with browsers that don't support the dialog.showModal() method (e.g. Firefox79).
+
 ## 1.74.2
 
 - Fixes issues from the last fix Thanks to @Dechancer for the feedback!
