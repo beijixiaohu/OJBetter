@@ -1,3 +1,19 @@
+## 1.16.0
+
+- Add "ChatGPT Translation Prompt Customization" and "As System Prompt" options Thanks to **@Dawn-Xu-helloworld** for the collaboration!
+- Add Code submission confirmation popup showing the title name.
+- Add automatic translation option
+- Add Sample by Auto Commit option (off by default)
+- Replace the interface of "Youtube Translate".
+- Fix `&nbsp;` symbol in code block beautification
+- Fix Monaco editor not applying theme correctly when theme is set to follow Thanks to **@cscnk52** for the contribution!
+- Fixes a problem where LaTeX is not replaced correctly between lines, and fixes a performance issue with the associated regularization.
+- Fixed the problem of "Collect old results" error when re-translating.
+- Fix script tags not filtered during MarkDown conversion
+- Fix for some races not jumping to Logan Valley
+- Modify the color of clist rating to AtCoder's color rules
+- Use polyfill for compatibility with browsers that don't support the dialog.showModal() method (e.g. Firefox79).
+
 ## 1.15.2
 
 - Remove methods that are no longer meaningful：Determine if text may be code
