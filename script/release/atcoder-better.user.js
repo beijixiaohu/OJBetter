@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.2
+// @version      1.16.0
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -11,7 +11,7 @@
 // @connect      api.deepl.com
 // @connect      api.deeplx.org
 // @connect      www.iflyrec.com
-// @connect      m.youdao.com
+// @connect      dict.youdao.com
 // @connect      api.interpreter.caiyunai.com
 // @connect      translate.google.com
 // @connect      openai.api2d.net
@@ -45,12 +45,14 @@
 // @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
 // @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
 // @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
+// @require      https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.js
 // @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
 // @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
 // @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
+// @resource     dialogpolyfillcss https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.css
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -315,8 +317,12 @@ OJBetter.monaco = {
         alwaysConsumeMouseWheel: undefined,
         /** @type {boolean?} 提交代码二次确认 */
         isCodeSubmitDoubleConfirm: undefined,
+        /** @type {boolean?} 测试通过后自动提交 */
+        autoSubmitAfterPass: undefined,
         /** @type {string?} 提交按钮位置 */
-        submitButtonPosition: undefined
+        submitButtonPosition: undefined,
+        /** @type {boolean?} 自动保存代码 */
+        autoMemoryCode: undefined
     }
 };
 
@@ -397,7 +403,11 @@ OJBetter.chatgpt = {
         }
     },
     /** @type {boolean?} 是否为流式传输 */
-    isStream: undefined
+    isStream: undefined,
+    /** @type {string?} 是否使用自定义Prompt */
+    customPrompt: undefined,
+    /** @type {boolean?} 是否作为系统Prompt */
+    asSystemPrompt: undefined
 };
 
 /**
@@ -446,7 +456,7 @@ OJBetter.supportList = {
     translationSupport: {
         'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
         'iflyrec': { 'zh': '1' },
-        'youdao': { 'zh': 'AUTO' },
+        'youdao': { 'zh': 'zh-CHS', 'zh-Hant': 'zh-CHT', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
         'openai': { 'zh': 'Chinese', 'zh-Hant': 'Traditional Chinese', 'de': 'German', 'fr': 'French', 'ko': 'Korean', 'pt': 'Portuguese', 'ja': 'Japanese', 'es': 'Spanish', 'it': 'Italian', 'hi': 'Hindi' }
@@ -522,7 +532,7 @@ function OJB_LoadJS(url) {
  * 安全地创建JQuery对象
  * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
  * @param {string} string - 字符串。
- * @returns JQuery对象
+ * @returns {JQuery} JQuery对象
  */
 const OJB_safeCreateJQElement = function (string) {
     return $(string.replace(/^\s+/, ""));
@@ -867,6 +877,8 @@ async function initVar() {
     OJBetter.deepl.enableLinkProtection = OJB_getGMValue("enableLinkProtection", true);
     //openai
     OJBetter.chatgpt.isStream = OJB_getGMValue("openai_isStream", true);
+    OJBetter.chatgpt.customPrompt = OJB_getGMValue("openai_customPrompt", '');
+    OJBetter.chatgpt.asSystemPrompt = OJB_getGMValue("openai_asSystemPrompt", false);
     OJBetter.chatgpt.configs = OJB_getGMValue("chatgpt_config", {
         "choice": "",
         "configurations": []
@@ -904,8 +916,10 @@ async function initVar() {
     OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
     OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
     OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
+    OJBetter.monaco.setting.autoSubmitAfterPass = OJB_getGMValue("autoSubmitAfterPass", false);
     OJBetter.monaco.setting.alwaysConsumeMouseWheel = OJB_getGMValue("alwaysConsumeMouseWheel", true);
     OJBetter.monaco.setting.submitButtonPosition = OJB_getGMValue("submitButtonPosition", "bottom");
+    OJBetter.monaco.setting.autoMemoryCode = OJB_getGMValue("autoMemoryCode", true);
     //自定义补全
     OJBetter.monaco.complet.customConfig = OJB_getGMValue("Complet_config", {
         "choice": -1,
@@ -1218,13 +1232,19 @@ function handleColorSchemeChange(event) {
     if (!event.matches) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
-        if (OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs');
-        }
+        const intervalId = setinterval(() => {
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs');
+                clearInterval(intervalId);
+            }
+        }, 100);
     } else {
-        if (OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs-dark');
-        }
+        const intervalId = setInterval(() => {
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs-dark');
+                clearInterval(intervalId);
+            }
+        }, 100);
     }
 }
 
@@ -1235,6 +1255,12 @@ function handleColorSchemeChange(event) {
         const htmlElement = document.querySelector('html');
         if (htmlElement) {
             htmlElement.setAttribute('data-theme', 'dark');
+            const intervalId = setInterval(() => {
+                if (OJBetter.monaco && OJBetter.monaco.editor) {
+                    monaco.editor.setTheme('vs-dark');
+                    clearInterval(intervalId);
+                }
+            }, 100);
         } else {
             setTimeout(setDarkTheme, 100);
         }
@@ -1680,7 +1706,8 @@ async function beautifyPreBlocksWithMonaco() {
             height: calculateContainerHeight(lineCount),
             width: '100%'
         });
-        pre.replaceWith(container);
+        pre.hide();
+        pre.after(container);
 
         // 初始化 Monaco 编辑器
         monaco.editor.create(container[0], {
@@ -1799,7 +1826,7 @@ span.mdViewContent {
 
 /* dialog */
 dialog {
-    margin: 0px;
+    margin: 0px !important;
 }
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.4);
@@ -2329,7 +2356,7 @@ header .enter-or-register-box, header .languages {
 }
 /* 数值输入框 */
 .OJBetter_setting_menu input[type="number"] {
-    width: 40px;
+    width: 70px;
     color: #009688;
     font-size: 15px;
     appearance: none;
@@ -3566,6 +3593,7 @@ div#select-lang {
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
     GM_addStyle(GM_getResourceText("selectpagecss"));
+    GM_addStyle(GM_getResourceText("dialogpolyfillcss"));
     // 自定义图标大小
     GM_addStyle(`
         .iconfont {
@@ -3700,13 +3728,13 @@ class TextBlockReplacer {
         let textCopy = text;
 
         /**
-         * 替换文本
+         * 替换回文本
          * @param {string} replacement 替换的文本
          * @param {string} regexPattern 匹配规则
          * @returns {void}
          */
         const replaceText = (replacement, regexPattern) => {
-            const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+            const latexMatch = '(?<latex_block>\\$\\$(\\\\\\$|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\\\$|[^\\$])*?\\$)|';
             const regex = new RegExp(latexMatch + regexPattern, 'g');
             textCopy = textCopy.replace(regex, (match, ...args) => {
                 // LaTeX中的不替换
@@ -3896,11 +3924,21 @@ function OJB_isSameBrowserSession(sessionKey) {
 /**
  * 随机数生成
  * @param {number} numDigits 位数
- * @returns {number}
+ * @returns {number} 一个随机数
  */
 function OJB_getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * 随机数生成-范围内
+ * @param {number} min 最小值
+ * @param {number} max 最大值
+ * @returns {number} 一个随机数
+ */
+function OJB_getRandomNumberInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -4104,6 +4142,7 @@ function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
  */
 function OJB_showModal(element) {
     const dialog = element.get(0);
+    dialogPolyfill.registerDialog(dialog);
     dialog.showModal();
     OJBetter.state.openDialogCount++;
 
@@ -4225,15 +4264,18 @@ function OJB_getCodeFromPre(element) {
         }
     }
 
+    let result;
     if (element.id === "submission-code") {
-        return getCodeFromAcePre(element);
+        result = getCodeFromAcePre(element);
     } else if (element.classList.contains("prettyprint")) {
-        return getCodeFromPrettyPre(element);
+        result = getCodeFromPrettyPre(element);
     } else if (element.querySelector("code.prettyprint")) {
-        return getCodeFromPreChild(element);
+        result = getCodeFromPreChild(element);
     } else {
-        return null;
+        result = "";
     }
+    result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
+    return result;
 }
 
 /**
@@ -5510,6 +5552,26 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="openai_asSystemPrompt" data-i18n="settings:translation.chatgpt.asSystemPrompt.name"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.asSystemPrompt.helpText"></div>
+        </div>
+        <input type="checkbox" id="openai_asSystemPrompt" name="openai_asSystemPrompt">
+    </div>
+    <div class="OJBetter_setting_list">
+        <label for='openai_customPrompt'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="settings:translation.chatgpt.customPrompt.name"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.customPrompt.helpText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="openai_customPrompt" placeholder='' require = false data-i18n="[placeholder]settings:translation.chatgpt.customPrompt.placeholder"></textarea>
+    </div>
     <hr>
     <h4 data-i18n="settings:translation.preference.title"></h4>
     <div class='OJBetter_setting_list'>
@@ -5528,7 +5590,6 @@ const translation_settings_HTML = `
     </div>
     <hr>
 
-    <div style="display:none;">
     <h4 data-i18n="settings:translation.autoTranslation.title"></h4>
     <div class='OJBetter_setting_list'>
         <label for="autoTranslation" data-i18n="settings:translation.autoTranslation.enable"></label>
@@ -5551,6 +5612,7 @@ const translation_settings_HTML = `
         <input type='number' id='shortTextLength' class='no_default' require=true data-i18n="[placeholder]settings:translation.autoTranslation.shortTextLength.placeholder">
         <span data-i18n="settings:translation.autoTranslation.shortTextLength.end"></span>
     </div>
+    <div style="display:none;">
     <div class='OJBetter_setting_list'>
         <label for="allowMixTrans" data-i18n="settings:translation.autoTranslation.allowMixTrans.name"></label>
         <div class="help_tip">
@@ -5572,8 +5634,8 @@ const translation_settings_HTML = `
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
         </div>
     </div>
-    <hr>
     </div>
+    <hr>
 
     <h4 data-i18n="settings:translation.advanced.name"></h4>
     <div class='OJBetter_setting_list'>
@@ -5725,6 +5787,15 @@ const code_editor_settings_HTML = `
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="autoSubmitAfterPass"><span
+                data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoSubmitAfterPass" name="autoSubmitAfterPass">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
                 data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
@@ -5732,6 +5803,15 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="autoMemoryCode"><span
+                data-i18n="settings:codeEditor.preferences.autoMemoryCode.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
     </div>
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
@@ -6516,6 +6596,8 @@ async function initSettingsPanel() {
         $('#enableLinkProtection').prop("checked", GM_getValue("enableLinkProtection") === true);
         $("#chatgpt_config_config_bar_ul").find(`input[name='chatgpt_config_config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
+        $("#openai_asSystemPrompt").prop("checked", GM_getValue("openai_asSystemPrompt") === true);
+        $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
@@ -6546,7 +6628,9 @@ async function initSettingsPanel() {
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#beautifyPreBlocks").prop("checked", GM_getValue("beautifyPreBlocks") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
+        $("#autoSubmitAfterPass").prop("checked", GM_getValue("autoSubmitAfterPass") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
+        $("#autoMemoryCode").prop("checked", GM_getValue("autoMemoryCode") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
@@ -6599,6 +6683,8 @@ async function initSettingsPanel() {
                 enableEmphasisProtection: $("#enableEmphasisProtection").prop("checked"),
                 enableLinkProtection: $("#enableLinkProtection").prop("checked"),
                 openai_isStream: $("#openai_isStream").prop("checked"),
+                openai_asSystemPrompt: $("#openai_asSystemPrompt").prop("checked"),
+                openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
@@ -6627,7 +6713,9 @@ async function initSettingsPanel() {
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 beautifyPreBlocks: $("#beautifyPreBlocks").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
+                autoSubmitAfterPass: $("#autoSubmitAfterPass").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
+                autoMemoryCode: $("#autoMemoryCode").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
@@ -6782,7 +6870,8 @@ async function initHTML2MarkDown() {
                 node.classList.contains('div-btn-copy') ||
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('overlay') ||
-                node.classList.contains('monaco-editor')
+                node.classList.contains('monaco-editor') ||
+                node.nodeName === 'SCRIPT';
         },
         replacement: function () {
             return '';
@@ -7173,7 +7262,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
      * 改变按钮状态
      * @param {string} state 状态
      */
-    function changeButtonState(state) {
+    const changeButtonState = (state) => {
         if (state == "loading") {
             button.setButtonLoading();
             button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
@@ -7192,6 +7281,17 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }
 
+    /**
+     * 存放目标元素的 JQueryObject
+     */
+    const target = (() => {
+        if (type = "child_level") {
+            return $(element).children(':not(.html2md-panel)');
+        } else {
+            return $(element);
+        }
+    })();
+
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
         return;
@@ -7202,8 +7302,6 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
     }
 
     button.click(OJB_debounce(function () {
-        var target = $(element).get(0);
-
         /**
          * 检查是否是MarkDown视图 
          * @returns {boolean} 是否是MarkDown视图
@@ -7232,14 +7330,14 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
 
         if (checkViewmd()) {
             setViewmd(false);
-            $(element).next(".mdViewContent").remove();
-            $(element).show();
+            target.last().next(".mdViewContent").remove();
+            target.show();
         } else {
             setViewmd(true);
-            var markdown = $(element).getMarkdown();
-            var mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
-            $(element).after(mdViewContent);
-            $(element).hide();
+            const markdown = $(element).getMarkdown();
+            const mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            target.last().after(mdViewContent);
+            target.hide();
         }
     }));
 
@@ -7366,7 +7464,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
                         $($(element)).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
-                    item.translateDiv.foldMainDiv();
+                    item.translateDiv.fold();
                 }
             }
         }
@@ -7634,7 +7732,7 @@ async function multiChoiceTranslation() {
                     if (OJBetter.translation.retransAction == "0") {
                         result.translateDiv.close();
                     } else {
-                        result.translateDiv.foldMainDiv();
+                        result.translateDiv.fold();
                     }
                 }
                 // 翻译
@@ -7883,7 +7981,7 @@ class TranslateDiv {
         // 渲染代码块中的公式 (AtCoder)
         this.mainDiv.find('pre code').each((index, element) => {
             const codeText = $(element).text();
-            const latexPattern = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/;
+            const latexPattern = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/;
             if (latexPattern.test(codeText)) {
                 this.renderLaTeX(element);
             }
@@ -7895,6 +7993,15 @@ class TranslateDiv {
      */
     close() {
         this.closeButton.click();
+    }
+
+    /**
+     * 收起元素
+     */
+    fold() {
+        if (!this.upButton.hasClass("reverse")) {
+            this.upButton.click();
+        }
     }
 
     /**
@@ -8203,7 +8310,7 @@ class ElementsTree {
                         var topText = ne_node.topText;
                         var text = this.transResultMap[id];
                         // create element after pElement
-                        this.reCreateTransDiv(pElement, id, text, topText);
+                        this.reCreateTransDiv(pElement, id, text, topText, node.isTranslateDiv); // 如果前面一个也是翻译结果，则该结果折叠
                     }
                     pElement = pElement.next(); // go to next element
                 }
@@ -8211,8 +8318,15 @@ class ElementsTree {
         } while (node.next !== null);
     }
 
-    // 重新创建translateDiv
-    reCreateTransDiv(pElement, id, translatedText, topText) {
+    /**
+     * 重新创建translateDiv
+     * @param {*} pElement 
+     * @param {*} id 
+     * @param {*} translatedText 
+     * @param {*} topText 
+     * @param {Boolean} isFold 是否折叠
+     */
+    reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
         const translateDiv = new TranslateDiv(id);
         pElement.after(translateDiv.getDiv());
         translateDiv.setTopText(topText);
@@ -8230,6 +8344,7 @@ class ElementsTree {
             // 如果没有找到，则应该是得在父元素中找到
             transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
         }
+        if (isFold) translateDiv.fold(); // 是否折叠该翻译
         transButton.pushResultToTransButton({
             translateDiv: translateDiv,
             status: 0
@@ -8369,7 +8484,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```
@@ -8509,7 +8624,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     const translationLimits = {
         deepl: 5000,
         iflyrec: 2000,
-        youdao: 600,
+        youdao: 5000,
         google: 5000,
         caiyun: 5000
     };
@@ -8837,7 +8952,7 @@ class ProblemPageLinkbar {
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
-    const regex = /\/contests\/([A-Za-z\d]+)\/tasks\/([A-Za-z\d\_]+)/;
+    const regex = /\/contests\/([A-Za-z\d\-]+)\/tasks\/([A-Za-z\d\_]+)/;
     const matchResult = url.match(regex);
     return matchResult && matchResult.length >= 3
         ? `${matchResult[2]}`
@@ -8940,28 +9055,28 @@ async function CF2vjudge(problemToolbar) {
 const ratingClassMap = {
     NaN: "rating_by_clist_colorNaN",
     0: "rating_by_clist_color0",
-    1200: "rating_by_clist_color1",
-    1400: "rating_by_clist_color2",
-    1600: "rating_by_clist_color3",
-    1900: "rating_by_clist_color4",
-    2100: "rating_by_clist_color5",
-    2300: "rating_by_clist_color6",
-    2400: "rating_by_clist_color7",
-    2600: "rating_by_clist_color8",
-    3000: "rating_by_clist_color9"
+    400: "rating_by_clist_color1",
+    800: "rating_by_clist_color2",
+    1200: "rating_by_clist_color3",
+    1600: "rating_by_clist_color4",
+    2000: "rating_by_clist_color5",
+    2400: "rating_by_clist_color6",
+    2800: "rating_by_clist_color7",
+    2800: "rating_by_clist_color8",
+    2800: "rating_by_clist_color9"
 };
 const cssMap = {
     "rating_by_clist_colorNaN": "#cccccc",
     "rating_by_clist_color0": "#808080",
-    "rating_by_clist_color1": "#73e473",
-    "rating_by_clist_color2": "#77ddbb",
-    "rating_by_clist_color3": "#aaaaff",
-    "rating_by_clist_color4": "#ff88ff",
-    "rating_by_clist_color5": "#ffcc88",
-    "rating_by_clist_color6": "#ffbb55",
-    "rating_by_clist_color7": "#ff7777",
-    "rating_by_clist_color8": "#ff3333",
-    "rating_by_clist_color9": "#aa0000"
+    "rating_by_clist_color1": "#804000",
+    "rating_by_clist_color2": "#008000",
+    "rating_by_clist_color3": "#00c0c0",
+    "rating_by_clist_color4": "#0000ff",
+    "rating_by_clist_color5": "#c0c000",
+    "rating_by_clist_color6": "#fb7e00",
+    "rating_by_clist_color7": "#ff0000",
+    "rating_by_clist_color8": "#ff0000",
+    "rating_by_clist_color9": "#ff0000"
 };
 // TODO 7
 /**
@@ -9625,7 +9740,7 @@ async function createCodeEditorForm(submitUrl) {
     //     let matchResult = problemCode.match(/([A-Z0-9]+)/);
     //     problemCode = matchResult[0];
     // } else if (OJBetter.typeOfPage.is_problemset_problem) {
-    //     let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)(?!=[A-Z0-9])/);
+    //     let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Za-z0-9]+?)(?!=[A-Za-z0-9])/);
     //     problemCode = match[1] + match[2];
     //     selectProblem.attr('name', 'submittedProblemCode');
     // } else {
@@ -10189,19 +10304,21 @@ async function createMonacoEditor(language, form, support) {
         }
 
         // 代码同步与保存
-        var nowUrl = window.location.href;
-        nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
-        const code = await getCode(nowUrl);
-        if (code) {
-            OJBetter.monaco.editor.setValue(code); // 恢复代码
-            form.sourceDiv.val(code);
+        if (OJBetter.monaco.setting.autoMemoryCode) {
+            let nowUrl = window.location.href;
+            nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
+            const code = await getCode(nowUrl);
+            if (code) {
+                OJBetter.monaco.editor.setValue(code); // 恢复代码
+                form.sourceDiv.val(code);
+            }
+            OJBetter.monaco.editor.onDidChangeModelContent(async () => {
+                // 将monaco editor的内容同步到sourceDiv
+                const code = OJBetter.monaco.editor.getValue();
+                form.sourceDiv.val(code);
+                await saveCode(nowUrl, code);
+            });
         }
-        OJBetter.monaco.editor.onDidChangeModelContent(async () => {
-            // 将monaco editor的内容同步到sourceDiv
-            const code = OJBetter.monaco.editor.getValue();
-            form.sourceDiv.val(code);
-            await saveCode(nowUrl, code);
-        });
     })();
 
     /**
@@ -11050,7 +11167,6 @@ async function createMonacoEditor(language, form, support) {
                     });
                 });
 
-                return null; // 如果没有内容，则返回null
             },
         });
 
@@ -11085,7 +11201,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(references);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -11122,7 +11237,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(highlights);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -12222,7 +12336,7 @@ class TestCaseStatus {
 }
 
 // 样例测试函数
-async function runCode(event, runButton, sourceDiv, submitDiv) {
+async function runCode(event, runButton, sourceDiv) {
     event.preventDefault();
     const statePanel = $('#statePanel').show().empty();
     const testData = getTestData();
@@ -12291,6 +12405,9 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
         runButton.setButtonState('error', `${passedTests}/${totalTests} ` + i18next.t('runTestButton.partial', { ns: 'codeEditor' }));
     } else {
         runButton.setButtonState('success', i18next.t('runTestButton.success', { ns: 'codeEditor' }));
+        if (OJBetter.monaco.setting.autoSubmitAfterPass) {
+            $('#OJBetter_SubmitForm').submit(); // 自动提交
+        }
     }
 }
 
@@ -12353,13 +12470,22 @@ async function addProblemPageCodeEditor() {
     submitButton.on('click', async function (event) {
         event.preventDefault();
         if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
+            // 获取题目名
+            const questionTitle = (() => {
+                const element = document.querySelector('.h2');
+                return Array.from(element.childNodes)
+                    .filter(node => node.nodeType === Node.TEXT_NODE)
+                    .map(textNode => textNode.textContent.trim())
+                    .join(' ');
+            })();
             const submit = await OJB_createDialog(
                 i18next.t('submitCode.title', { ns: 'dialog' }),
-                i18next.t('submitCode.content', { ns: 'dialog' }),
+                i18next.t('submitCode.content', { ns: 'dialog', questionTitle: questionTitle }),
                 [
                     i18next.t('submitCode.buttons.0', { ns: 'dialog' }),
                     i18next.t('submitCode.buttons.1', { ns: 'dialog' })
-                ]
+                ],
+                true
             ); //提交确认
             if (submit) {
                 submitButton.after(`<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
@@ -12615,39 +12741,134 @@ async function translate_iflyrec(text) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_youdao_mobile(raw) {
+    /**
+     * 生成cookie
+     */
+    const getcookie = (() => {
+        // 生成IP地址
+        const generateIP = () => {
+            return `${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}`;
+        }
+        // 生成OUTFOX_SEARCH_USER_ID_NCOO的值
+        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(100000000, 999999999)}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
+        // 生成OUTFOX_SEARCH_USER_ID的值
+        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(100000000, 999999999)}@${generateIP()}`;
+        return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
+    })();
+
+    /**
+     * 生成随机时间戳
+     */
+    const gettime = (new Date()).getTime();
+
+    /**
+     * 生成sign
+     */
+    const getsign = (() => {
+        const d = "fanyideskweb";
+        const u = "webfanyi";
+        const t = "fsdsogkndfokasodnaso";
+        function A(e) {
+            return CryptoJS.MD5(e.toString()).toString(CryptoJS.enc.Hex);
+        }
+        function w(e) {
+            return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+        }
+        return w(gettime);
+    })();
+
+    /**
+     * 解码方法
+     * @param {string} src 待解码的字符串
+     * @returns {Object} 解码后的数据
+     */
+    const decode = function (src) {
+        // 解码URL安全的Base64
+        const decodeUrlSafeBase64 = (str) => {
+            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            return base64;
+        }
+
+        // 使用MD5生成key和iv，取前16字节
+        const key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl";
+        const iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4";
+        const keyHash = CryptoJS.MD5(key).toString();
+        const ivHash = CryptoJS.MD5(iv).toString();
+
+        // 使用AES-128-CBC模式进行解密
+        const keyForAES = CryptoJS.enc.Hex.parse(keyHash).toString().substring(0, 32);
+        const ivForAES = CryptoJS.enc.Hex.parse(ivHash).toString().substring(0, 32);
+
+        // 解码URL安全的Base64
+        const decodedBase64 = decodeUrlSafeBase64(src);
+
+        // 解密
+        const decrypted = CryptoJS.AES.decrypt({
+            ciphertext: CryptoJS.enc.Base64.parse(decodedBase64)
+        }, CryptoJS.enc.Hex.parse(keyForAES), {
+            iv: CryptoJS.enc.Hex.parse(ivForAES),
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        // 将解密结果转换为Utf8字符串
+        const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+
+        // 处理JSON字符串并解析
+        const jsonStr = decryptedStr.substring(0, decryptedStr.lastIndexOf("}") + 1);
+        return JSON.parse(jsonStr);
+    }
+    // 整理数据
+    const organizeTranslation = (data) => {
+        // 提取translateResult数组
+        const { translateResult } = data;
+
+        // 整理tgt字段
+        return translateResult
+            .flat()
+            .map(item => item.tgt)
+            .join('');
+    };
+    // 表单数据
+    const data = {
+        "i": raw,
+        "from": "auto",
+        "to": getTargetLanguage('youdao'),
+        "dictResult": "true",
+        "keyid": "webfanyi",
+        "sign": getsign,
+        "client": "fanyideskweb",
+        "product": "webfanyi",
+        "appVersion": "1.0.0",
+        "vendor": "web",
+        "pointParam": "client,mysticTime,product",
+        "mysticTime": gettime,
+        "keyfrom": "fanyi.web",
+        "mid": "1",
+        "screen": "1",
+        "model": "1",
+        "network": "wifi",
+        "abtest": "0",
+        "yduuid": "abcdefg"
+    };
     const options = {
         method: "POST",
-        url: 'http://m.youdao.com/translate',
-        data: "inputtext=" + encodeURIComponent(raw) + "&type=" + getTargetLanguage('youdao'),
+        url: 'https://dict.youdao.com/webtranslate',
+        data: new URLSearchParams(data),
         anonymous: true,
+        cookie: getcookie,
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            'Host': 'm.youdao.com',
-            'Origin': 'http://m.youdao.com',
-            'Referer': 'http://m.youdao.com/translate',
+            'Referer': 'https://fanyi.youdao.com/',
         }
     }
     return await BaseTranslate(options,
         res => {
-            const array = /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res);
-            if (array && array.length > 1) {
-                return array[1];
-            } else {
-                return res;
-            }
-        },
-        res => {
-            const resObj = {
-                status: true,
-                message: 'ok'
-            };
-            if (res.includes('<title>413 Request Entity Too Large</title>')) {
-                resObj.status = false;
-                resObj.message = i18next.t('error.youdao413', { ns: 'translator' }); // Request Entity Too Large 提示
-                return resObj;
-            };
-            return resObj;
-        })
+            const decodeData = decode(res)
+            const result = organizeTranslation(decodeData);
+            return result;
+        }
+    );
 }
 
 /**
@@ -12731,25 +12952,47 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt) {
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt) {
+            prompt += `\n${raw}`;
+        };
+    } else {
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, The segment to be translated is as follows: "
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+                `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "user",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -12813,27 +13056,48 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
-I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
-During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
-After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
-"
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt) {
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt) {
+            prompt += `\n${raw}`;
+        };
+    } else {
+        prompt = `
+As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
+The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
+After translation, please ensure that the ${lang} version conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+                `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "user",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         stream: true,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -13108,9 +13372,9 @@ async function initializeSequentially(loadingMessage) {
     if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
         await initTransResultsRecover(); // 翻译结果恢复功能初始化
     }
-    // if (OJBetter.translation.auto.enabled) {
-    //     await initTransWhenViewable(); // 自动翻译
-    // }
+    if (OJBetter.translation.auto.enabled) {
+        await initTransWhenViewable(); // 自动翻译
+    }
     // if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
     //     await recolorStandings(); // cf赛制榜单重新着色
     // }
