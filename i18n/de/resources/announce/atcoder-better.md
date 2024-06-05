@@ -1,3 +1,19 @@
+## 1.16.0
+
+- Hinzufügen der Optionen "ChatGPT Translation Prompt Customization" und "As System Prompt" Danke an **@Dawn-Xu-helloworld** für die Zusammenarbeit!
+- Fügen Sie ein Popup-Fenster zur Bestätigung der Codeübermittlung hinzu, um den Titelnamen anzuzeigen.
+- Option zur automatischen Übersetzung hinzufügen
+- Probe mit der Option Auto-Commit hinzufügen (standardmäßig ausgeschaltet)
+- Ersetzung der Schnittstelle des "Yodo Translator"
+- &nbsp;Korrektur der ` `-Symbole in der Code-Block-Verschönerung
+- Der Monaco-Editor wendet das Thema nicht korrekt an, wenn das Thema auf "Folgen" eingestellt ist. Danke an **@cscnk52** für den Beitrag!
+- Behebt, dass LaTeX nicht korrekt zwischen Zeilen ersetzt, behebt Leistungsprobleme mit verwandten Regeln
+- Fehler bei der Neuübersetzung von "Alte Ergebnisse sammeln" behoben.
+- Skript-Tags werden bei der MarkDown-Konvertierung nicht mehr gefiltert
+- Behebt einige Spiele, die nicht ins Logan Valley springen
+- Ändern Sie die Farbe der Clist-Bewertungen gemäß den Farbregeln von AtCoder.
+- Verwenden Sie Polyfill für die Kompatibilität mit Browsern, die die Methode dialog.showModal() nicht unterstützen (z. B. Firefox79).
+
 ## 1.15.2
 
 - Entfernen Sie Methoden, die nicht mehr sinnvoll sind：Bestimmen Sie, ob es sich bei dem Text wahrscheinlich um Code handelt
