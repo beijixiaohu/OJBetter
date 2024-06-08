@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.75.0
+// @version      1.75.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -4730,7 +4730,7 @@ async function localizeWebsite() {
                         console.error(`Error processing text replacement for match: ${match}`, error);
                     }
                 });
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     traverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -4790,7 +4790,7 @@ async function localizeWebsite() {
                         }
                     }
                 }
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     strictTraverseTextNodes($(childNode), textReplaceRules, key);
                 });
