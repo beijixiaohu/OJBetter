@@ -1,3 +1,7 @@
+## 1.16.1
+
+- Risolvere un problema con gli errori di localizzazione del sito web
+
 ## 1.16.0
 
 - Aggiungere le opzioni "Personalizzazione del prompt di traduzione di ChatGPT" e "Come prompt di sistema" Grazie a **@Dawn-Xu-helloworld** per la collaborazione!
@@ -24,7 +28,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2
