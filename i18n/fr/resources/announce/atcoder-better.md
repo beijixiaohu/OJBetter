@@ -1,3 +1,7 @@
+## 1.16.1
+
+- Résoudre un problème d'erreurs de localisation de site web
+
 ## 1.16.0
 
 - Ajouter les options "ChatGPT Translation Prompt Customisation" et "As System Prompt" Merci à **@Dawn-Xu-helloworld** pour sa collaboration !
