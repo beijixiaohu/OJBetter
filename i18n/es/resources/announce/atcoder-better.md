@@ -1,3 +1,7 @@
+## 1.16.1
+
+- Solucionar un problema de errores de localización del sitio web
+
 ## 1.16.0
 
 - Añadir las opciones "Personalización del aviso de traducción de ChatGPT" y "Como aviso del sistema" ¡Gracias a **@Dawn-Xu-helloworld** por la colaboración!
