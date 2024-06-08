@@ -1,3 +1,7 @@
+## 1.16.1
+
+- Corrigir um problema com erros de localização do sítio Web
+
 ## 1.16.0
 
 - Adicionar as opções "Personalização do prompt de tradução do ChatGPT" e "Como prompt do sistema" Obrigado a **@Dawn-Xu-helloworld** pela colaboração!
