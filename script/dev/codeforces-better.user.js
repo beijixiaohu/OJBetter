@@ -426,6 +426,9 @@ OJBetter.preference = {
     hoverTargetAreaDisplay: undefined,
     /** @type {string?} 按钮图标大小 */
     iconButtonSize: undefined,
+    /** @type {string?} 评测状态替换 */
+    judgeStatusReplaceText: undefined,
+
 };
 
 /**
@@ -952,6 +955,7 @@ async function initVar() {
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.preference.judgeStatusReplaceText = OJB_getGMValue("judgeStatusReplaceText", "");
     OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
@@ -6097,6 +6101,16 @@ const preference_settings_HTML = `
         <input type='number' id='iconButtonSize' class='no_default' require=true data-i18n="[placeholder]settings:preference.iconButtonSize.placeholder">
         <span>px</span>
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for='judgeStatusReplaceText'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.judgeStatusReplaceText.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.judgeStatusReplaceText.helpText"></div>
+        </div>
+        <input id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder">
+    </div>
 </div>
 `;
 
@@ -6763,6 +6777,7 @@ async function initSettingsPanel() {
         $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
+        $('#judgeStatusReplaceText').val(GM_getValue("judgeStatusReplaceText"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
@@ -6852,6 +6867,7 @@ async function initSettingsPanel() {
                 openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
+                judgeStatusReplaceText: $('#judgeStatusReplaceText').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -10043,6 +10059,73 @@ async function recolorStandings() {
             var colorValue = getColorValue(value / maxScores[index]);
             spanElement.css('color', colorValue);
         });
+    });
+}
+
+/**
+ * 评测状态替换
+ */
+
+const StatusAcronyms = {
+    "Accepted" : "AC",
+    "Wrong answer" : "WA",
+    "Time limit exceeded" : "TLE",
+    "Memory limit exceeded" : "MLE",
+    "Runtime error" : "RE",
+    "Compilation error" : "CE",
+    "Hacked" : "Hacked",
+    "Skipped" : "Skipped",
+    "Idleness limit exceeded" : "ILE",
+    "Perfect result:" : "AC",
+    "Partial result:" : "PC"
+
+};
+async function judgeStatusReplace() {
+    function getReplacedText(text) {
+        var words = text.split(' ');
+        var number_of_words = words.length;
+        var status_name = "", number = "0";
+        var status_name_is_over = false;
+        for (let i = 0; i < number_of_words; i++){
+            if (words[i] === "on"){
+                status_name_is_over = true;
+            }
+            if (!status_name_is_over){
+                status_name += words[i] + " ";
+            }else if (parseInt(words[i]).toString() !== "NaN"){
+                number = words[i];
+            }
+            if (words[i] === "result:"){
+                status_name_is_over = true;
+            }
+        }
+        status_name = status_name.trim();
+        var s_n = StatusAcronyms[status_name];
+        if (s_n === undefined){
+            console.log("Can't replace text: " + status_name +"\n");
+            return text;
+        }
+        var is_AC = s_n === "AC";
+        var result = OJBetter.preference.judgeStatusReplaceText;
+        result = result.replace("{Status}",status_name);
+        result = result.replace("{Stat}",s_n);
+        result = result.replace("{Number}",number);
+        var final_result = "", in_bracket = false ;
+        for (let i = 0; i < result.length; i++){
+            if (result[i] === '{'){
+                in_bracket = true;
+            }else if (result[i] === '}'){
+                in_bracket = false;
+            }else if (!in_bracket || !is_AC){
+                final_result += result[i];
+            }
+        }
+        return final_result;
+    }
+    $('.status-frame-datatable tr:not(:first)').each(function(){
+        var replaceElement = $(this).find('td:nth-child(6)');
+        var TEXT = replaceElement.text();
+        replaceElement.find('.submissionVerdictWrapper span').text(getReplacedText(TEXT));
     });
 }
 
@@ -13716,7 +13799,12 @@ async function initializeSequentially(loadingMessage) {
     if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.preference.judgeStatusReplaceText && (OJBetter.typeOfPage.is_submissions || OJBetter.typeOfPage.is_statePage)){
+        await judgeStatusReplace(); // 评测结果替换
+    }
+    if (OJBetter.preference.showLoading) {
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    }
 }
 
 /**

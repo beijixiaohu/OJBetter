@@ -390,6 +390,11 @@
             "title": "图标按钮大小",
             "helpText": "<p>设置翻译按钮的大小</p>",
             "placeholder": "请输入按钮大小"
+        },
+        "judgeStatusReplaceText": {
+            "title": "替换评测信息",
+            "helpText": "<p>此处可以替换评测信息。</p>\n<p>你可以使用以下规则进行替换：</p>\n<p><strong>{Status}</strong> 表示评测结果，如 Accepted</p>\n<p><strong>{Stat}</strong>: 表示评测结果简称，如 AC</p>\n<p><strong>{Number}</strong>: 表示返回的最后一个数</p>\n<p><strong>{...}</strong>, 其中...是任何不满足以上三条的字符串： 中间的内容在非AC时候不显示</p>\n例如，如果你只想看见评测结果而不看见评测编号，可以写 {Status}。",
+            "placeholder": "请输入替换的模式，为空则不替换。"
         }
     },
     "about": {
