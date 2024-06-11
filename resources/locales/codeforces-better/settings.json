@@ -392,8 +392,8 @@
             "placeholder": "请输入按钮大小"
         },
         "judgeStatusReplaceText": {
-            "title": "替换评测信息",
-            "helpText": "<p>此处可以替换评测信息。</p>\n<p>你可以使用以下规则进行替换：</p>\n<p><strong>{Status}</strong> 表示评测结果，如 Accepted</p>\n<p><strong>{Stat}</strong>: 表示评测结果简称，如 AC</p>\n<p><strong>{Number}</strong>: 表示返回的最后一个数</p>\n<p><strong>{...}</strong>, 其中...是任何不满足以上三条的字符串： 中间的内容在非AC时候不显示</p>\n例如，如果你只想看见评测结果而不看见评测编号，可以写 {Status}。",
+            "title": "评测状态文本替换",
+            "helpText": "<p>将题目的评测状态文本替换为指定的文本。</p><p>支持的变量：</p><p><strong><code>{Status}</code></strong> 评测结果的完整描述，例如 \"Accepted\"。</p><p><strong><code>{Stat}</code></strong> 评测结果的缩写形式，例如 \"AC\"。</p><p><strong><code>{Number}</code></strong> 评测结果中的最后一个数字，评测状态为AC时不显示。</p><p><strong><code>{标识符:xxx}</code> </strong>当标识符为真时显示括号内的内容。支持的标识符：<code>ac</code>、<code>wa</code>、<code>tle</code>、<code>mle</code>、<code>re</code>、<code>ce</code>、<code>hacked</code>、<code>skipped</code>、<code>ile</code>、<code>pc</code>、<code>pending</code></p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>示例：</p><p><code>我怎么{Stat}了，{wa:呜呜}</code></p><p>此时如果评测结果为\"Wrong answer\"，则会显示：<p></p>我怎么WA了，呜呜</p></div>",
             "placeholder": "请输入替换的模式，为空则不替换。"
         }
     },
