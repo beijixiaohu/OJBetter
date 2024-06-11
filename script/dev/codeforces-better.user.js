@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.75.2
+// @version      1.75.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -2474,7 +2474,7 @@ header .enter-or-register-box, header .languages {
 /* 链接样式 */
 .OJBetter_setting_menu a {
     font-size: 13px;
-    color: #009688;
+    color: #009688 !important;
     background-color: #E0F2F1;
     border: 1px solid #009688;
     border-radius: 4px;
@@ -5466,11 +5466,10 @@ const OJBetter_setting_sidebar_HTML = `
 <div class="OJBetter_setting_sidebar">
     <ul>
         <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="settings:sidebar.basic"></a></li>
-        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="settings:sidebar.localization"></a></li>
+        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="settings:sidebar.translation"></a></li>
         <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
         <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
-        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#dev-settings" id="sidebar-dev-settings" data-i18n="settings:sidebar.dev"></a></li>
         <li><a href="#about-settings" id="sidebar-about-settings" data-i18n="settings:sidebar.about"></a></li>
     </ul>
@@ -5504,73 +5503,6 @@ const basic_settings_HTML = `
             </label>
         </div>
     </div>
-    <div class='OJBetter_setting_list'>
-        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
-        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
-        </div>
-        <input type="checkbox" id="commentPaging" name="commentPaging">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
-        </div>
-        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="hiddenProblemTag" data-i18n="settings:basic.hiddenProblemTag.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.hiddenProblemTag.helpText"></div>
-        </div>
-        <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
-    </div>
-</div>
-`;
-
-const l10n_settings_HTML = `
-<div id="l10n_settings" class="settings-page">
-    <h3 data-i18n="settings:localization.title"></h3>
-    <hr>
     <div class='OJBetter_setting_list'>
         <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localization.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
@@ -6075,6 +6007,66 @@ const preference_settings_HTML = `
     <h3 data-i18n="settings:preference.title"></h3>
     <hr>
     <div class='OJBetter_setting_list'>
+        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
+        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
+        </div>
+        <input type="checkbox" id="commentPaging" name="commentPaging">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
+        </div>
+        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="hiddenProblemTag" data-i18n="settings:basic.hiddenProblemTag.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.hiddenProblemTag.helpText"></div>
+        </div>
+        <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -6246,7 +6238,6 @@ const about_settings_HTML = `
 const OJBetter_setting_content_HTML = `
 <div class="OJBetter_setting_content">
     ${basic_settings_HTML}
-    ${l10n_settings_HTML}
     ${translation_settings_HTML}
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
