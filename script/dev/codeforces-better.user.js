@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.75.1
+// @version      1.75.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -426,6 +426,9 @@ OJBetter.preference = {
     hoverTargetAreaDisplay: undefined,
     /** @type {string?} 按钮图标大小 */
     iconButtonSize: undefined,
+    /** @type {string?} 评测状态文本替换规则 */
+    judgeStatusReplaceText: undefined,
+
 };
 
 /**
@@ -952,6 +955,7 @@ async function initVar() {
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.preference.judgeStatusReplaceText = OJB_getGMValue("judgeStatusReplaceText", "");
     OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
@@ -6097,6 +6101,16 @@ const preference_settings_HTML = `
         <input type='number' id='iconButtonSize' class='no_default' require=true data-i18n="[placeholder]settings:preference.iconButtonSize.placeholder">
         <span>px</span>
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for='judgeStatusReplaceText'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.judgeStatusReplaceText.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.judgeStatusReplaceText.helpText"></div>
+        </div>
+        <input type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder">
+    </div>
 </div>
 `;
 
@@ -6763,6 +6777,7 @@ async function initSettingsPanel() {
         $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
+        $('#judgeStatusReplaceText').val(GM_getValue("judgeStatusReplaceText"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
@@ -6852,6 +6867,7 @@ async function initSettingsPanel() {
                 openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
+                judgeStatusReplaceText: $('#judgeStatusReplaceText').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -9985,7 +10001,7 @@ async function showRatingByClist_problemset() {
 
     // 检测clist连接
     if (!await validateClistConnection()) {
-        for (let i = 0; i < rating.length; i++) {
+        for (let i = 0; i < ratingBadges.length; i++) {
             ratingBadges[i].rating.text(i18next.t('state.netError', { ns: 'button' }));
         }
         return;
@@ -10043,6 +10059,204 @@ async function recolorStandings() {
             var colorValue = getColorValue(value / maxScores[index]);
             spanElement.css('color', colorValue);
         });
+    });
+}
+
+/**
+ * 评测结果的简写
+ */
+const StatusAcronyms = {
+    "Accepted": "AC",
+    "Wrong answer": "WA",
+    "Time limit exceeded": "TLE",
+    "Memory limit exceeded": "MLE",
+    "Runtime error": "RE",
+    "Compilation error": "CE",
+    "Hacked": "Hacked",
+    "Skipped": "Skipped",
+    "Idleness limit exceeded": "ILE",
+    "Perfect result:": "AC",
+    "Partial result:": "PC",
+    "Running": "PENDING"
+};
+
+/** 
+ * 评测结果的颜色
+ */
+const StatusColors = {
+    "AC": "#52c41a",
+    "WA": "#e74c3c",
+    "PENDING": "#808080",
+};
+
+/**
+ * 替换评测结果
+ */
+async function judgeStatusReplace() {
+
+    /**
+     * 获取评测状态的名称和编号
+     * 
+     * @param {string} text 评测状态
+     * @returns {object} 评测状态的名称和编号
+     */
+    const getStatusName = (text) => {
+        const words = text.split(' ');
+        const number_of_words = words.length;
+        let status_name = "", number = "";
+        let status_name_is_over = false;
+        for (let i = 0; i < number_of_words; i++) {
+            if (words[i] === "on") {
+                status_name_is_over = true;
+            }
+            if (!status_name_is_over) {
+                status_name += words[i] + " ";
+            } else if (parseInt(words[i]).toString() !== "NaN") {
+                number = words[i];
+            }
+            if (words[i] === "result:") {
+                status_name_is_over = true;
+            }
+        }
+        status_name = status_name.trim();
+        return {
+            status_name: status_name,
+            number: number
+        }
+    };
+
+    /** 
+     * 获取当前评测状态的缩写
+     * 
+     * @param {string} status_name 评测状态
+     * @returns {string} 评测状态的缩写
+     */
+    const getStatusAcronym = (status_name) => {
+        return StatusAcronyms[status_name];
+    };
+
+    /** 
+     * 根据评测状态的缩写获取颜色
+     * 
+     * @param {string} statusAcronym 评测状态的缩写
+     * @returns {string} 颜色值
+     */
+    const getStatusColor = (statusAcronym) => {
+        let color = StatusColors[statusAcronym];
+        return color ? color : StatusColors["WA"];
+    };
+
+    /**
+     * 解析模板
+     * 
+     * @param {string} template 模板
+     * @param {object} display 各个前置标识符的bool值，决定了是否显示这一部分
+     * @returns {string} 解析后的文本
+     * 
+     * @example
+     * parseTemplate("{ac:！}{wa:呜呜}{pending:别急}", {ac: false, wa: true, pending: false}) => "呜呜"
+     */
+    const parseTemplate = (template, display) => {
+        const regex = /{(\w+):([^}]*)}/g;
+        let result = '';
+        let lastIndex = 0;
+
+        template.replace(regex, (match, key, text, offset) => {
+            // 添加模板前的普通文本部分
+            result += template.slice(lastIndex, offset);
+
+            // 根据布尔值决定是否添加模板部分
+            if (display[key]) {
+                result += text;
+            }
+            lastIndex = offset + match.length;
+        });
+
+        // 添加最后一段普通文本部分
+        result += template.slice(lastIndex);
+
+        return result;
+    }
+
+    /**
+     * 根据替换规则获取替换后的文本
+     * 
+     * @param {string} status_name 评测状态
+     * @param {string} number 评测编号
+     * @returns {string} 替换后的文本
+     */
+    const getReplaceText = (status_name, number) => {
+        const statusAcronym = getStatusAcronym(status_name);
+
+        let result = OJBetter.preference.judgeStatusReplaceText;
+        result = result.replace("{Status}", status_name);
+        result = result.replace("{Stat}", statusAcronym);
+        result = result.replace("{Number}", number);
+
+        const statusMap = {
+            ac: statusAcronym === "AC",
+            wa: statusAcronym === "WA",
+            tle: statusAcronym === "TLE",
+            mle: statusAcronym === "MLE",
+            re: statusAcronym === "RE",
+            ce: statusAcronym === "CE",
+            hacked: statusAcronym === "Hacked",
+            skipped: statusAcronym === "Skipped",
+            ile: statusAcronym === "ILE",
+            pc: statusAcronym === "PC",
+            pending: statusAcronym === "PENDING"
+        }
+        const final_result = parseTemplate(result, statusMap);
+        return final_result;
+    };
+
+    /**
+     * 处理评测结果
+     * @param {string} text 代替换的文本
+     * @returns {object} 处理后的文本和颜色
+     */
+    const process = (text) => {
+        /**
+         * 当前评测状态
+         */
+        const { status_name, number } = getStatusName(text);
+
+        /**
+         * 当前评测状态的缩写
+         */
+        const statusAcronym = getStatusAcronym(status_name);
+
+        return {
+            text: statusAcronym ? getReplaceText(status_name, number) : text,
+            color: getStatusColor(statusAcronym)
+        }
+    };
+
+    OJB_observeElement({
+        selector: '.datatable',
+        callback: (node) => {
+            const updateElement = (element) => {
+                const { text, color } = process($(element).text());
+                $(element).text(text);
+                $(element).css({
+                    "color": color,
+                    "font-weight": "700"
+                });
+            };
+
+            // 选择器
+            const selectorCondition = "[class^='verdict-'], [submissionverdict='COMPILATION_ERROR']";
+
+            // 检查[node]本身是否符合选择器条件
+            if ($(node).is(selectorCondition)) {
+                updateElement(node);
+            }
+
+            // 更新[node]内部符合选择器条件的所有元素
+            $(node).find(selectorCondition).each(function () {
+                updateElement(this);
+            });
+        }
     });
 }
 
@@ -13680,6 +13894,9 @@ function initOnDOMReady() {
     if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
+    if (OJBetter.preference.judgeStatusReplaceText && (OJBetter.typeOfPage.is_submissions || OJBetter.typeOfPage.is_statePage)) {
+        judgeStatusReplace(); // 评测结果替换
+    }
 }
 
 /**
@@ -13716,7 +13933,9 @@ async function initializeSequentially(loadingMessage) {
     if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.preference.showLoading) {
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    }
 }
 
 /**
