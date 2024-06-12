@@ -65,7 +65,7 @@
         "websiteLanguageLabel": "वेबसाइट भाषा",
         "notice": {
             "1": "<strong>अनुवाद गुणवत्ता को बेहतर बनाने में मदद करें</strong><p>लेखक केवल सरलीकृत चीनी और अंग्रेजी से परिचित है। अन्य भाषाओं के लिए, स्क्रिप्ट और वेबसाइट भाषा स्थानीयकरण मशीन अनुवाद (डीपीएल और गूगल) द्वारा पूरा किया जाता है। अनुवाद वर्कफ़्लो क्राउडिन द्वारा होस्ट किया गया।</p><p>यदि आप किसी निश्चित भाषा के स्थानीयकरण अनुवाद की गुणवत्ता को बेहतर बनाने में मदद करने के इच्छुक हैं, तो</p><p>सुधार में मदद के लिए आपका स्वागत है<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'></a>, आपके योगदान के लिए धन्यवाद!</p>",
-            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后前往crowdin上改进其他语言的翻译质量。</p>"
+            "2": "<strong>帮助完善网站语言本地化</strong><p>如果你认为网站的某处有必要进行本地化，且对其进行本地化替换并不会导致严重的性能问题，欢迎<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/codeforces-better.json' target='_blank'>前往完善本地化规则</a>。</p><p>如果想要添加一个新的规则，你需要先添加其简体中文版本：fork 并修改规则文件，然后发起 pull 请求，</p><p>提交被合并后，crowdin会自动完成其他语言的翻译，并且你也可以稍后<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>前往crowdin</a>上改进其他语言的翻译质量。</p>"
         }
     },
     "translation": {
