@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AcWing Better!
-// @version      3.27
+// @version      3.28.1
 // @description  AcWing界面美化，功能增强，视频时间点标记跳转，代码markdown一键复制
 // @author       北极小狐
 // @match        https://www.acwing.com/*
@@ -13,9 +13,12 @@
 // @grant        GM_setClipboard
 // @connect      greasyfork.org
 // @run-at       document-end
-// @require      https://cdn.bootcdn.net/ajax/libs/turndown/7.1.1/turndown.min.js
-// @license      GPL3
+// @connect      sustech.edu.cn
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @license      MIT
 // @namespace    https://greasyfork.org/users/747162
+// @downloadURL https://update.greasyfork.org/scripts/464981/AcWing%20Better%21.user.js
+// @updateURL https://update.greasyfork.org/scripts/464981/AcWing%20Better%21.meta.js
 // ==/UserScript==
 
 // 状态与初始化
@@ -27,12 +30,13 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
-
+const { hostname, href } = window.location;
 const bottomBar = getGMValue("bottomBar", true);
 const bingWallpaper = getGMValue("bingWallpaper", true);
 const widthAdjustment = getGMValue("widthAdjustment", true);
 const autoPlay = getGMValue("autoPlay", true);
 const acTimer = getGMValue("acTimer", true);
+const hideNavbar = getGMValue("hideNavbar", false);
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
@@ -661,6 +665,18 @@ div#update_panel #updating a {
 }
 `);
 
+// 隐藏顶栏
+if (hideNavbar & href.includes("/problem/content/")) {
+    GM_addStyle(`
+    nav.navbar {
+        display: none;
+    }    
+    .base_body {
+        padding-top: 10px !important;
+    }
+    `);
+};
+
 // 获取cookie
 function getCookie(name) {
     const cookies = document.cookie.split(";");
@@ -834,6 +850,10 @@ const ACwingBetterSettingMenuHTML = `
         <label for="bottomBar">美化底栏</label>
     </div>
     <div class='ACBetter_setting_list'>
+        <input type="checkbox" id="hideNavbar" name="hideNavbar" checked>
+        <label for="hideNavbar">题目页隐藏顶栏</label>
+    </div>
+    <div class='ACBetter_setting_list'>
         <input type="checkbox" id="bingWallpaper" name="bingWallpaper" checked>
         <label for="bingWallpaper">Bing每日壁纸</label>
     </div>
@@ -866,6 +886,7 @@ $(document).ready(function () {
 
         addDraggable($('#ACwingBetter_setting_menu'));
         $("#bottomBar").prop("checked", GM_getValue("bottomBar"));
+        $("#hideNavbar").prop("checked", GM_getValue("hideNavbar"));
         $("#bingWallpaper").prop("checked", GM_getValue("bingWallpaper"));
         $("#widthAdjustment").prop("checked", GM_getValue("widthAdjustment"));
         $("#autoPlay").prop("checked", GM_getValue("autoPlay"));
@@ -873,6 +894,7 @@ $(document).ready(function () {
 
         $("#save").click(function () {
             GM_setValue("bottomBar", $("#bottomBar").prop("checked"));
+            GM_setValue("hideNavbar", $("#hideNavbar").prop("checked"));
             GM_setValue("bingWallpaper", $("#bingWallpaper").prop("checked"));
             GM_setValue("widthAdjustment", $("#widthAdjustment").prop("checked"));
             GM_setValue("autoPlay", $("#autoPlay").prop("checked"));

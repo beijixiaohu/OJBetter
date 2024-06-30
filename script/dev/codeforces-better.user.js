@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.75.3
+// @version      1.75.4
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -22,7 +22,7 @@
 // @connect      greasyfork.org
 // @connect      rextester.com
 // @connect      wandbox.org
-// @connect      staticfile.net
+// @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
@@ -37,24 +37,24 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
-// @require      https://cdn.staticfile.net/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.net/markdown-it/13.0.1/markdown-it.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.staticfile.net/chroma-js/2.4.2/chroma.min.js
-// @require      https://cdn.staticfile.net/xterm/3.9.2/xterm.min.js
-// @require      https://cdn.staticfile.net/dexie/3.2.4/dexie.min.js
-// @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
-// @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
-// @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
-// @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
-// @require      https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.js
-// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
-// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
-// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/crypto-js/4.2.0/crypto-js.min.js#sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/chroma-js/2.4.2/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dexie/4.0.7/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next/23.11.5/i18next.min.js#sha512-3RSGkmT48HnO+hlmzGYDx5/w2LIBX0O5hSuYX6KWAxmvVlSjFgoxIaWa2tlMExheGvt3lLyxeTsXfpC47yb8CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next-http-backend/2.5.2/i18nextHttpBackend.min.js#sha512-bBb+wrGRTx4MvHpksYb1Iv5oJ1o8ineCqpc0cnTgdJQhuAFJJ93SEVXxUOCptvt0vAqYdjzWO5emorYUBt6Ceg==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
+// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js#sha512-JYm2AqU8EvoEOnCucDItAsNtmGcjbxccOXjnwNFp87zdlyclpEephXrgR2sMlWj/gL4DCJUN3X0JhI1omaRO0A==
+// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js#sha512-kY1lU3DCvgzkWkOl47sIlmLKdgDcO4T3NYN6p/ET4oi3fnKO74sHUt1xYGtksIHXciKF8Jt+N4RDqG3CRoeYww==
+// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
-// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
-// @resource     dialogpolyfillcss https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.css
+// @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
+// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css#sha512-cRXJfA2tEcAxHEKylJfxteY17N7j9fia3waahHOVnvl63uVZT9OQ7jjjpofZMVZ4JSX3BRET+mI8UvKnsXd3NA==
+// @resource     dialogpolyfillcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css#sha512-J2+1q+RsZuJXabBfH1q/fgRr6jMy9By5SwVLk7bScEW7NFJkMUXxfeOyyxtDe6fsaJ4jsciexSlGrPYn9YbBIg==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -523,16 +523,60 @@ async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
  * 动态加载JavaScript库并返回一个Promise，该Promise在脚本加载完成后解决。
  *
  * @param {string} url - 要加载的JavaScript库的URL地址。
+ * @param {string} [expectedHash] - 可选的Base64编码的SHA-512哈希值，用于校验脚本内容。格式为 "sha512-<Base64编码的哈希值>"。
  * @returns {Promise<void>} 一个Promise，它在脚本加载并执行完成后解决。
  */
-function OJB_LoadJS(url) {
-    return new Promise((resolve, reject) => {
-        let scriptElement = document.createElement("script");
-        scriptElement.src = url;
+async function OJB_LoadJS(url, expectedHash) {
+    /**
+     * 计算给定数据的SHA-512哈希值，并将其转换为十六进制字符串。
+     *
+     * @param {string} data - 要计算哈希值的数据。
+     * @returns {Promise<string>} 一个Promise，它解析为数据的SHA-512哈希值的十六进制字符串。
+     */
+    const calculateHash = async (data) => {
+        const encoder = new TextEncoder();
+        const dataBuffer = encoder.encode(data);
+        const hashBuffer = await crypto.subtle.digest('SHA-512', dataBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    /**
+     * 将Base64编码的字符串转换为十六进制字符串。
+     *
+     * @param {string} base64 - Base64编码的字符串。
+     * @returns {string} 转换后的十六进制字符串。
+     */
+    const base64ToHex = (base64) => {
+        const binaryString = atob(base64);
+        const byteArray = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            byteArray[i] = binaryString.charCodeAt(i);
+        }
+        return Array.from(byteArray).map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch script: ${response.statusText}`);
+        const scriptContent = await response.text();
+
+        if (expectedHash) {
+            // 去掉前缀 "sha512-"
+            const base64Hash = expectedHash.replace(/^sha512-/, '');
+            const actualHash = await calculateHash(scriptContent);
+            const expectedHashHex = base64ToHex(base64Hash);
+            if (actualHash !== expectedHashHex) throw new Error('SHA-512 hash mismatch');
+        }
+
+        const scriptElement = document.createElement("script");
+        scriptElement.textContent = scriptContent;
         document.head.prepend(scriptElement);
-        scriptElement.onload = resolve;
-        scriptElement.onerror = reject;
-    });
+
+        return Promise.resolve();
+    } catch (error) {
+        return Promise.reject(error);
+    }
 }
 
 /**
@@ -1761,11 +1805,11 @@ async function initMonacoEditor() {
     if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         try {
             // 等待Monaco Editor加载器脚本加载完成
-            await OJB_LoadJS("https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js");
+            await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
 
             // 配置Monaco Editor
             require.config({
-                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
+                paths: { vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs" },
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
 
@@ -9069,7 +9113,7 @@ function RenderPerfOpt() {
 async function SelectElementPerfOpt() {
     // TODO 10
     // 加载库资源
-    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js");
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js","sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
     /**
      * 将一个<select>元素转换为SelectPage控件
      * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
