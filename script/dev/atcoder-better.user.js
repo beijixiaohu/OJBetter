@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.16.3
+// @version      1.16.4
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -1721,45 +1721,66 @@ async function initMonacoEditor() {
  * 美化代码块
  */
 async function beautifyPreBlocksWithMonaco() {
-    // 判断monacoLoader是否加载完毕
+    // 等待 MonacoLoader 加载完毕
     await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
 
-    // 用于替换 <pre> 标签为 Monaco 编辑器的函数
-    function replacePreWithMonaco(preElement) {
-        const pre = $(preElement);
-        if (pre.hasClass('source-code-for-copy')) return; // 跳过复制块
-        const code = OJB_getCodeFromPre(pre.get(0));
+    const LINE_HEIGHT = 20; // 每行代码的高度
+    const MIN_HEIGHT = 100; // 容器的最小高度
+
+    /**
+     * 计算容器的高度
+     * @param {number} lineCount 代码的行数
+     * @param {string} [maxHeightStr='1000px'] 最大高度，为 'none' 时表示不限制
+     * @returns {string} 容器的高度
+     */
+    const calculateContainerHeight = (lineCount, maxHeightStr = '1000px') => {
+        const maxHeight = parseInt(maxHeightStr, 10); // 最大高度
+        const calculatedHeight = Math.max(lineCount * LINE_HEIGHT, MIN_HEIGHT);
+        return `${isNaN(maxHeight) ? calculatedHeight : Math.min(calculatedHeight, maxHeight)}px`;
+    };
+
+    /**
+     * 用于替换 <pre> 标签为 Monaco 编辑器的函数
+     * @param {HTMLElement} pre <pre> 元素
+     */
+    const replacePreWithMonaco = (pre) => {
+        if (pre.classList.contains('source-code-for-copy')) return; // 跳过复制块
+
+        const code = OJB_getCodeFromPre(pre); // 获取 <pre> 标签中的代码
         if (!code) return;
-        const language = OJB_codeLangDetect(code);
 
-        // 创建一个用于 Monaco 编辑器的容器
-        const container = $('<div></div>');
-        const lineCount = code.split('\n').length; // 代码的行数
+        const language = OJB_codeLangDetect(code); // 检测代码语言
+        const container = document.createElement('div'); // 创建一个用于 Monaco 编辑器的容器
+        const lineCount = code.split('\n').length; // 计算代码的行数
 
-        // 计算容器的高度
-        const calculateContainerHeight = (lineCount) => {
-            const lineHeight = 20; // 每行代码的高度
-            const minHeight = 100; // 最小高度
-            const maxHeight = 1000; // 最大高度
-            const dynamicHeight = lineCount * lineHeight;
-            return Math.min(Math.max(dynamicHeight, minHeight), maxHeight) + 'px';
-        };
+        // 设置容器的样式
+        container.style.height = calculateContainerHeight(lineCount);
+        container.style.width = '100%';
+        pre.style.display = 'none';
+        pre.insertAdjacentElement('afterend', container);
 
-        // 应用样式
-        container.css({
-            height: calculateContainerHeight(lineCount),
-            width: '100%'
+        // 折叠/展开按钮点击事件
+        const toggleExpandCollapse = (() => {
+            let isExpanded = false;
+            return () => {
+                console.log(calculateContainerHeight(lineCount, isExpanded ? '1000px' : 'none'));
+                container.style.height = calculateContainerHeight(lineCount, isExpanded ? '1000px' : 'none');
+                isExpanded = !isExpanded;
+            };
+        })();
+
+        // 重新注册 submission-code-expand-btn 按钮的点击事件
+        document.querySelectorAll('.submission-code-expand-btn').forEach(button => {
+            button.addEventListener('click', toggleExpandCollapse);
         });
-        pre.hide();
-        pre.after(container);
 
         // 初始化 Monaco 编辑器
-        monaco.editor.create(container[0], {
+        monaco.editor.create(container, {
             value: code,
-            language: language,
+            language,
             readOnly: true,
             tabSize: 4,
-            theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
+            theme: OJBetter.basic.darkMode === "dark" ? "vs-dark" : "vs",
             scrollbar: {
                 verticalScrollbarSize: 10,
                 horizontalScrollbarSize: 10,
@@ -1768,21 +1789,18 @@ async function beautifyPreBlocksWithMonaco() {
             automaticLayout: true,
             scrollBeyondLastLine: false
         });
-    }
+    };
+
     // 全局替换页面上所有的 <pre> 元素
-    $('pre').each(function () {
-        replacePreWithMonaco(this);
-    });
+    document.querySelectorAll('pre').forEach(replacePreWithMonaco);
+
     // 监听页面上的提交状态页面窗口的 <pre> 元素
     if (OJBetter.typeOfPage.is_statePage || OJBetter.typeOfPage.is_submissions) {
         OJB_observeElement({
             selector: '#facebox',
             callback: (node) => {
                 // 如果 facebox 中存在 pre 元素，则替换它们
-                const preElements = $(node).find('pre');
-                preElements.each(function () {
-                    replacePreWithMonaco(this);
-                });
+                node.querySelectorAll('pre').forEach(replacePreWithMonaco);
             }
         });
     }
@@ -8816,7 +8834,7 @@ function RenderPerfOpt() {
 async function SelectElementPerfOpt() {
     // TODO 10
     // 加载库资源
-    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js","sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js", "sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
     /**
      * 将一个<select>元素转换为SelectPage控件
      * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
