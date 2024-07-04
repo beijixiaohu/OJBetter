@@ -1,3 +1,11 @@
+## 1.17.0
+
+- \*\*공용 리포지토리 CDN을 [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)로 교체, 이유는 [이슈](https://github.com/beijixiaohu/OJBetter/issues/151)\*를 참고하세요. \*
+
+- 제출물 페이지 코드에서 잘못된 '펼치기/접기' 버튼 문제를 수정했습니다.
+
+- 포트폴리오 매시업 관리 페이지 개선 사항
+
 ## 1.16.1
 
 - 웹사이트 현지화 오류 문제 해결
@@ -28,7 +36,7 @@
 - 웹사이트 현지화 규칙 개선
 - 텍스트가 코드 스니펫인지 확인하는 방법 개선
 - '코드 블록 미화' 기능의 정의되지 않은 오류 수정.
-- OJB_observeElement()\\\\\\\\\\\\\\\` 메서드 보고 오류 수정
+- OJB_observeElement()\\\\\\\\\\\\\\\\` 메서드 보고 오류 수정
 - 웹사이트 현지화 메서드 `strictTraverseTextNodes()`가 작동하지 않는 문제 수정
 
 ## 1.14.2
