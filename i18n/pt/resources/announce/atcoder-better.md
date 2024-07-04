@@ -1,3 +1,11 @@
+## 1.17.0
+
+- \*_Substituir o CDN do repositório público para [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por motivos. \*
+
+- Corrigir o problema do botão "Expandir/Colapsar" inválido no código da página de submissões.
+
+- Ajustar a estrutura do esquema da página de definições
+
 ## 1.16.1
 
 - Corrigir um problema com erros de localização do sítio Web
