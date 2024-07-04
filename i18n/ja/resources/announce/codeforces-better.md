@@ -1,6 +1,6 @@
 ## 1.76.0
 
-- \*\*公開リポジトリのCDNを[SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)に置き換える。理由は[issue](https://github.com/beijixiaohu/OJBetter/issues/151)_を参照。_
+- \*\*公開リポジトリのCDNを[SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)に置き換える。
 
 - wrk-123\*\*の協力により、「レビュー状況のテキスト置換」機能を追加。
 
@@ -20,7 +20,7 @@
 - 問題番号の長さが1でない場合、問題集のソースが正しく提出されない問題を修正しました **@WindJ0Y** さんの貢献に感謝します！
 - テーマがfollowに設定されている場合、モナコ・エディターがテーマを正しく適用しない問題を修正 投稿してくださった\*\*@cscnk52\*\*氏に感謝します！
 - タイトルセットのタイトルリンクが小文字の場合、コードエディタが正しく読み込まれなかった問題を修正
-- ポートフォリオ・マッシュアップ管理ページの改善
+- 理由は[issue](https://github.com/beijixiaohu/OJBetter/issues/151)_を参照。
 - 古い結果を収集する」の再翻訳時のエラーを修正。
 - 投稿ページでコピーボタンが機能しない問題の修正
 - MarkDown変換時にスクリプトタグがフィルタリングされなかった問題を修正
