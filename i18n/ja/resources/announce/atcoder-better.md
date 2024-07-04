@@ -1,3 +1,11 @@
+## 1.17.0
+
+- \*\*公開リポジトリのCDNを[SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)に置き換える。理由は[issue](https://github.com/beijixiaohu/OJBetter/issues/151)_を参照。_
+
+- 投稿ページのコードで、「展開/折りたたみ」ボタンが無効になっていた問題を修正しました。
+
+- ポートフォリオ・マッシュアップ管理ページの改善
+
 ## 1.16.1
 
 - ウェブサイトのローカライズエラーの問題を修正
@@ -28,7 +36,7 @@
 - ウェブサイトのローカリゼーション・ルールの改善
 - テキストがコード・スニペットであるかどうかの判定に関連するメソッドが改善された。
 - beautify code block "関数のnot definedエラーを修正。
-- OJB_observeElement()\\\\\\\\\\\\\\\` メソッドによるエラー報告の修正
+- OJB_observeElement()\\\\\\\\\\\\\\\\` メソッドによるエラー報告の修正
 - ウェブサイトのローカリゼーションメソッド `strictTraverseTextNodes()` が動作しない問題を修正した。
 
 ## 1.14.2
