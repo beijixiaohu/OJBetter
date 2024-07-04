@@ -1,3 +1,11 @@
+## 1.17.0
+
+- \*_Sustituir el repositorio público CDN a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por razones. \*
+
+- Solucionar el problema del botón "Expandir/Contraer" no válido en el código de la página de envíos.
+
+- Ajustar la estructura de la página de configuración
+
 ## 1.16.1
 
 - Solucionar un problema de errores de localización del sitio web
