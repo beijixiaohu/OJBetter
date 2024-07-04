@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AcWing Better!
-// @version      3.27
+// @version      3.29.0
 // @description  AcWing界面美化，功能增强，视频时间点标记跳转，代码markdown一键复制
 // @author       北极小狐
 // @match        https://www.acwing.com/*
@@ -13,11 +13,14 @@
 // @grant        GM_setClipboard
 // @connect      greasyfork.org
 // @run-at       document-end
-// @require      https://cdn.bootcdn.net/ajax/libs/turndown/7.1.1/turndown.min.js
+// @connect      sustech.edu.cn
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
 // @license      MIT
 // @namespace    https://greasyfork.org/users/747162
+// @downloadURL https://update.greasyfork.org/scripts/464981/AcWing%20Better%21.user.js
+// @updateURL https://update.greasyfork.org/scripts/464981/AcWing%20Better%21.meta.js
 // ==/UserScript==
- 
+
 // 状态与初始化
 const getGMValue = (key, defaultValue) => {
     const value = GM_getValue(key);
@@ -27,17 +30,18 @@ const getGMValue = (key, defaultValue) => {
     }
     return value;
 };
- 
+const { hostname, href } = window.location;
 const bottomBar = getGMValue("bottomBar", true);
 const bingWallpaper = getGMValue("bingWallpaper", true);
 const widthAdjustment = getGMValue("widthAdjustment", true);
 const autoPlay = getGMValue("autoPlay", true);
 const acTimer = getGMValue("acTimer", true);
- 
+const hideNavbar = getGMValue("hideNavbar", false);
+
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 9999; }`;
- 
+
 // 样式
 if (bottomBar) {
     GM_addStyle(`
@@ -289,7 +293,7 @@ input[type="radio"]:checked + .player_bar_ul_li_text {
     border: 1px solid green;
     color: green;
 }
- 
+
 ul#player_bar_ul::-webkit-scrollbar {
 width: 5px;
 height: 8px;
@@ -305,7 +309,7 @@ ul#player_bar_ul::-webkit-scrollbar-track {
 background-color: #f1f1f1;
 border-radius: 5px;
 }
- 
+
 label.player_bar_ul_li_text::-webkit-scrollbar {
 width: 5px;
 height: 7px;
@@ -417,7 +421,7 @@ button.html2mdButton.ACBetter_setting {
     color: #697e91;
     padding: 10px 20px 20px 20px;
 }
- 
+
 #ACwingBetter_setting_menu .tool-box {
     position: absolute;
     display: flex;
@@ -428,7 +432,7 @@ button.html2mdButton.ACBetter_setting {
     top: 3px;
     right: 3px;
 }
- 
+
 #ACwingBetter_setting_menu .btn-close {
     display: flex;
     align-items: center;
@@ -445,7 +449,7 @@ button.html2mdButton.ACBetter_setting {
     border-radius: 10px;
     transition: .2s ease all;
 }
- 
+
 #ACwingBetter_setting_menu .btn-close:hover {
     width: 2rem;
     height: 2rem;
@@ -454,7 +458,7 @@ button.html2mdButton.ACBetter_setting {
     background-color: #ff0000cc;
     box-shadow: 0 5px 5px 0 #00000026;
 }
- 
+
 #ACwingBetter_setting_menu .btn-close:active {
     width: .9rem;
     height: .9rem;
@@ -463,18 +467,18 @@ button.html2mdButton.ACBetter_setting {
     --shadow-btn-close: 0 3px 3px 0 #00000026;
     box-shadow: var(--shadow-btn-close);
 }
- 
+
 .checkbox-con {
     margin: 10px;
     display: flex;
     align-items: center;
     color: white;
 }
- 
+
 #ACwingBetter_setting_menu input[type=checkbox]:focus {
     outline: 0px;
 }
- 
+
 .checkbox-con input[type="checkbox"] {
     margin: 0px;
     appearance: none;
@@ -486,7 +490,7 @@ button.html2mdButton.ACBetter_setting {
     position: relative;
     box-sizing: border-box;
 }
- 
+
 .checkbox-con input[type="checkbox"]::before {
     content: "";
     width: 16px;
@@ -500,45 +504,45 @@ button.html2mdButton.ACBetter_setting {
     transform: translate(16%, 12%);
     transition: all 0.3s ease-in-out;
 }
- 
+
 .checkbox-con input[type="checkbox"]::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
     position: absolute;
     top: 0;
     left: 24px;
 }
- 
+
 .checkbox-con input[type="checkbox"]:checked {
     border: 2px solid #02c202;
     background: #e2f1e1;
 }
- 
+
 .checkbox-con input[type="checkbox"]:checked::before {
     background: rgba(2, 194, 2, 0.5);
     border: 2px solid #02c202;
     transform: translate(160%, 13%);
     transition: all 0.3s ease-in-out;
 }
- 
+
 .checkbox-con input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='13' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2302C202' fill-opacity='0.9'/%3E%3C/svg%3E");
     position: absolute;
     top: 3px;
     left: 4px;
 }
- 
+
 .checkbox-con label {
     margin: 0px 0px 0px 10px;
     cursor: pointer;
     user-select: none;
 }
- 
+
 .ACBetter_setting_list {
     display: flex;
     align-items: center;
     margin-top: 18px;
 }
- 
+
 .checkbox-con button {
     cursor: pointer;
     display: inline-flex;
@@ -660,21 +664,33 @@ div#update_panel #updating a {
     color: #f44336;
 }
 `);
- 
+
+// 隐藏顶栏
+if (hideNavbar & href.includes("/problem/content/")) {
+    GM_addStyle(`
+    nav.navbar {
+        display: none;
+    }    
+    .base_body {
+        padding-top: 10px !important;
+    }
+    `);
+};
+
 // 获取cookie
 function getCookie(name) {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
         const cookie = cookies[i].trim();
         const [cookieName, cookieValue] = cookie.split("=");
- 
+
         if (cookieName === name) {
             return decodeURIComponent(cookieValue);
         }
     }
     return "";
 }
- 
+
 // 防抖函数
 function debounce(callback) {
     let timer;
@@ -686,14 +702,14 @@ function debounce(callback) {
         timer = setTimeout(() => { immediateExecuted = false; }, delay);
     };
 }
- 
+
 // 为元素添加鼠标拖动
 function addDraggable(element) {
     let isDragging = false;
     let initialX, initialY; // 元素的初始位置
     let startX, startY, offsetX, offsetY; // 鼠标起始位置，移动偏移量
     let isSpecialMouseDown = false; // 选取某些元素时不拖动
- 
+
     element.on('mousedown', function (e) {
         var elem = $(this);
         var elemOffset = elem.offset();
@@ -701,17 +717,17 @@ function addDraggable(element) {
         var centerY = elemOffset.top + elem.outerHeight() / 2;
         initialX = centerX - window.pageXOffset;
         initialY = centerY - window.pageYOffset;
- 
+
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
- 
+
         isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
- 
+
         $('body').css('cursor', 'all-scroll');
     });
- 
- 
+
+
     $(document).on('mousemove', function (e) {
         if (!isDragging) return;
         // 不执行拖动操作
@@ -721,14 +737,14 @@ function addDraggable(element) {
         offsetY = e.clientY - startY;
         element.css({ top: initialY + offsetY + 'px', left: initialX + offsetX + 'px' });
     });
- 
+
     $(document).on('mouseup', function () {
         isDragging = false;
         isSpecialMouseDown = false;
         $('body').css('cursor', 'default');
     });
 }
- 
+
 // 更新检查
 (function checkScriptVersion() {
     function compareVersions(version1 = "0", version2 = "0") {
@@ -760,7 +776,7 @@ function addDraggable(element) {
         }
         return result;
     }
- 
+
     GM_xmlhttpRequest({
         method: "GET",
         url: "https://greasyfork.org/zh-CN/scripts/464981.json",
@@ -768,7 +784,7 @@ function addDraggable(element) {
         onload: function (response) {
             const scriptData = JSON.parse(response.responseText);
             const skipUpdate = getCookie("skipUpdate");
- 
+
             if (
                 scriptData.name === GM_info.script.name &&
                 compareVersions(scriptData.version, GM_info.script.version) === 1 &&
@@ -798,7 +814,7 @@ function addDraggable(element) {
                         </div>
                     </div>
                 `);
- 
+
                 $("#skip_update").click(function () {
                     document.cookie = "skipUpdate=true; expires=session; path=/";
                     styleElement.remove();
@@ -808,21 +824,21 @@ function addDraggable(element) {
         }
     });
 })();
- 
+
 // 随机数生成
 function getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
- 
+
 // 设置面板
 $(document).ready(function () {
     $("#topNavBar").after(
         "<button class='html2mdButton ACBetter_setting'>AcWingBetter设置</button>"
     );
 });
- 
+
 const ACwingBetterSettingMenuHTML = `
     <div class='checkbox-con' id='ACwingBetter_setting_menu'>
     <div class="tool-box">
@@ -832,6 +848,10 @@ const ACwingBetterSettingMenuHTML = `
     <div class='ACBetter_setting_list'>
         <input type="checkbox" id="bottomBar" name="bottomBar" checked>
         <label for="bottomBar">美化底栏</label>
+    </div>
+    <div class='ACBetter_setting_list'>
+        <input type="checkbox" id="hideNavbar" name="hideNavbar" checked>
+        <label for="hideNavbar">题目页隐藏顶栏</label>
     </div>
     <div class='ACBetter_setting_list'>
         <input type="checkbox" id="bingWallpaper" name="bingWallpaper" checked>
@@ -853,26 +873,28 @@ const ACwingBetterSettingMenuHTML = `
     <button id='save'>保存</button>
     </div>
 `;
- 
+
 $(document).ready(function () {
     $(".ACBetter_setting").click(function () {
         const styleElement = GM_addStyle(darkenPageStyle);
- 
+
         $(".ACBetter_setting").attr("disabled", true);
         $(".ACBetter_setting").css("background-color", "#e6e6e6");
         $(".ACBetter_setting").css("color", "#727378");
         $(".ACBetter_setting").css("cursor", "not-allowed");
         $("body").append(ACwingBetterSettingMenuHTML);
- 
+
         addDraggable($('#ACwingBetter_setting_menu'));
         $("#bottomBar").prop("checked", GM_getValue("bottomBar"));
+        $("#hideNavbar").prop("checked", GM_getValue("hideNavbar"));
         $("#bingWallpaper").prop("checked", GM_getValue("bingWallpaper"));
         $("#widthAdjustment").prop("checked", GM_getValue("widthAdjustment"));
         $("#autoPlay").prop("checked", GM_getValue("autoPlay"));
         $("#acTimer").prop("checked", GM_getValue("acTimer"));
- 
+
         $("#save").click(function () {
             GM_setValue("bottomBar", $("#bottomBar").prop("checked"));
+            GM_setValue("hideNavbar", $("#hideNavbar").prop("checked"));
             GM_setValue("bingWallpaper", $("#bingWallpaper").prop("checked"));
             GM_setValue("widthAdjustment", $("#widthAdjustment").prop("checked"));
             GM_setValue("autoPlay", $("#autoPlay").prop("checked"));
@@ -891,12 +913,12 @@ $(document).ready(function () {
         })
     });
 });
- 
+
 // html2md转换/处理规则
 let turndownService = new TurndownService();
- 
+
 turndownService.keep(['del']);
- 
+
 // 丢弃
 turndownService.addRule('remove-by-class', {
     filter: function (node) {
@@ -915,7 +937,7 @@ turndownService.addRule('remove-script', {
         return "";
     }
 });
- 
+
 // code block
 turndownService.addRule('pre', {
     filter: 'pre',
@@ -925,7 +947,7 @@ turndownService.addRule('pre', {
         return "```" + t + "\n" + content.trim() + "\n```";
     }
 });
- 
+
 // inline math
 turndownService.addRule('inline-math', {
     filter: function (node, options) {
@@ -935,7 +957,7 @@ turndownService.addRule('inline-math', {
         return "$" + $(node).next().text() + "$";
     }
 });
- 
+
 // block math
 turndownService.addRule('block-math', {
     filter: function (node, options) {
@@ -945,7 +967,7 @@ turndownService.addRule('block-math', {
         return "\n$$\n" + $(node).next().text() + "\n$$\n";
     }
 });
- 
+
 // 按钮面板
 function addButtonPanel(parent, suffix, type) {
     let htmlString = `<div class='html2md-panel'>
@@ -958,7 +980,7 @@ function addButtonPanel(parent, suffix, type) {
         $(parent).prepend(htmlString);
     }
 }
- 
+
 function addButtonWithHTML2MD(parent, suffix, type) {
     $(document).on("click", ".html2md-view" + suffix, function () {
         var target, removedChildren = $();
@@ -989,7 +1011,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         if (removedChildren) $(target).prepend(removedChildren);
     });
 }
- 
+
 function addButtonWithCopy(parent, suffix, type) {
     $(document).on("click", ".html2md-cb" + suffix, function () {
         let target, removedChildren, text;
@@ -1015,7 +1037,7 @@ function addButtonWithCopy(parent, suffix, type) {
         $(target).remove();
     });
 }
- 
+
 // 代码块复制按钮
 function codeCopy() {
     $('.hljs code').each(function () {
@@ -1029,7 +1051,7 @@ function codeCopy() {
             justifyContent: "flex-end"
         });
         codeBlock.parent().before(wrapperDiv);
- 
+
         $(document).on("click", `.copy-button${id}`, debounce(function () {
             GM_setClipboard(codeBlock.text().replace(/\n+$/, ''));
             // 更新复制按钮文本
@@ -1044,7 +1066,7 @@ function codeCopy() {
         }));
     });
 }
- 
+
 function addConversionButton() {
     // 添加按钮到content部分
     if (!window.location.href.includes("code")) {
@@ -1055,11 +1077,11 @@ function addConversionButton() {
             addButtonWithCopy(this, id, "this_level");
         });
     }
- 
+
     // 为代码块添加复制按钮
     codeCopy();
 };
- 
+
 // 播放器添加节点标签功能
 function addPlayerBar(player_bar_video) {
     $('.prism-player').after(`
@@ -1075,12 +1097,12 @@ function addPlayerBar(player_bar_video) {
             <button class='player_bar_list_add_button' id='player_bar_list_add_new_item_btn'>Add</button>
         </div>
     `);
- 
+
     // 页面路径标识
     const PAGE_IDENTIFIER = window.location.href;
     // 计数器
     let counter = 0;
- 
+
     // 获取数据
     function getListData() {
         let data = GM_getValue("cookieData");
@@ -1094,7 +1116,7 @@ function addPlayerBar(player_bar_video) {
         }
         return data[PAGE_IDENTIFIER];
     }
- 
+
     // 保存数据
     function saveListData(data) {
         let cookieData = GM_getValue("cookieData");
@@ -1106,22 +1128,22 @@ function addPlayerBar(player_bar_video) {
         cookieData[PAGE_IDENTIFIER] = data;
         GM_setValue("cookieData", JSON.stringify(cookieData));
     }
- 
+
     // 创建新的li元素
     function createListItemElement(text) {
         const li = $("<li></li>");
         const radio = $("<input type='radio' name='player_bar_ul'></input>").appendTo(li);
         radio.attr("id", counter++);
         const label = $("<label class='player_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("id")).appendTo(li);
- 
+
         li.on("contextmenu", (event) => {
             event.preventDefault();
             const menu = $("#player_bar_menu");
             menu.css({ display: "block", left: event.pageX, top: event.pageY });
- 
+
             const deleteItem = $("#player_bar_menu_delete");
             const editItem = $("#player_bar_menu_edit");
- 
+
             function onDelete() {
                 deleteItem.off("click", onDelete);
                 const list = $("#player_bar_ul");
@@ -1132,7 +1154,7 @@ function addPlayerBar(player_bar_video) {
                 li.remove();
                 menu.css({ display: "none" });
             }
- 
+
             function onEdit() {
                 editItem.off("click", onEdit);
                 const list = $("#player_bar_ul");
@@ -1147,10 +1169,10 @@ function addPlayerBar(player_bar_video) {
                 renderList();
                 menu.css({ display: "none" });
             }
- 
+
             deleteItem.on("click", onDelete);
             editItem.on("click", onEdit);
- 
+
             $(document).on("click", (event) => {
                 if (!menu.get(0).contains(event.target)) {
                     menu.css({ display: "none" });
@@ -1159,10 +1181,10 @@ function addPlayerBar(player_bar_video) {
                 }
             });
         });
- 
+
         return li;
     }
- 
+
     // 渲染列表
     function renderList() {
         const listContainer = $("#player_bar_list");
@@ -1173,7 +1195,7 @@ function addPlayerBar(player_bar_video) {
             list.append(createListItemElement(item.text));
         });
     }
- 
+
     // 新增列表项
     function addNewItem() {
         const input = $("#player_bar_list_add_input");
@@ -1189,7 +1211,7 @@ function addPlayerBar(player_bar_video) {
         list.append(createListItemElement(text));
         input.val("");
     }
- 
+
     // 为添加按钮添加事件处理程序
     const player_bar_add_button = $("#player_bar_list_add_new_item_btn");
     player_bar_add_button.on("click", () => {
@@ -1201,10 +1223,10 @@ function addPlayerBar(player_bar_video) {
             player_bar_add_button.text("Add");
         }, 2000);
     });
- 
+
     // 渲染列表
     renderList();
- 
+
     // 跳转按钮
     const click_player_bar_go = $("#player_bar_go");
     click_player_bar_go.on("click", () => {
@@ -1223,7 +1245,7 @@ function addPlayerBar(player_bar_video) {
             alert("请选择一项");
         }
     });
- 
+
     // 创建自定义菜单
     const menu = $("<div id='player_bar_menu' style='display: none;'></div>");
     menu.html(`
@@ -1232,52 +1254,52 @@ function addPlayerBar(player_bar_video) {
     `);
     $("body").append(menu);
 }
- 
+
 function formatTime(time) {
     var seconds = Math.floor((time / 1000) % 60);
     var minutes = Math.floor((time / (1000 * 60)) % 60);
     var hours = Math.floor((time / (1000 * 60 * 60)) % 24);
     var days = Math.floor(time / (1000 * 60 * 60 * 24));
- 
+
     var timeString = '';
- 
+
     if (days > 0) {
         timeString += days + '天';
     }
- 
+
     if (hours > 0) {
         timeString += hours + '小时';
     }
- 
+
     if (minutes > 0) {
         timeString += minutes + '分钟';
     }
- 
+
     if (seconds > 0) {
         timeString += seconds + '秒';
     }
- 
+
     return timeString;
 }
- 
+
 // AC计时器
 function acTiming() {
     var startTime = new Date();
     var timer = setInterval(function () {
         var status = $('#submit-code-status-value-id').text().trim();
- 
+
         if (status === 'Accepted') {
             clearInterval(timer);
- 
+
             var endTime = new Date();
             var totalTime = endTime - startTime;
- 
+
             var timeString = formatTime(totalTime);
             $('#submit-code-status-value-id').after('<div class="time-info">耗时：' + timeString + ' 要重新开始计时请刷新页面</div>');
         }
     }, 500);
 }
- 
+
 $(document).ready(function () {
     if (acTimer && window.location.href.includes("/problem/content/")) acTiming();
     // 让某些链接在新窗口打开
@@ -1309,7 +1331,7 @@ $(document).ready(function () {
     })();
     // 调整视频高度
     $('.prism-player').height($('.prism-player').width() / 1.7);
- 
+
     // 添加按钮
     addConversionButton();
     // 移除广告元素
@@ -1330,7 +1352,7 @@ $(document).ready(function () {
         var style = window.getComputedStyle(element);
         element.style.height = "55vh";
     }
- 
+
     var player_bar_video = document.querySelector('video');
     if (player_bar_video != null) addPlayerBar(player_bar_video);
 });

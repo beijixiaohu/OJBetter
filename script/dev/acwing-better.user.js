@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AcWing Better!
-// @version      3.28.1
+// @version      3.29.0
 // @description  AcWing界面美化，功能增强，视频时间点标记跳转，代码markdown一键复制
 // @author       北极小狐
 // @match        https://www.acwing.com/*
