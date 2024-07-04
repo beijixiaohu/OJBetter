@@ -1,3 +1,11 @@
+## 1.17.0
+
+- \*_Ersetzen Sie das CDN des öffentlichen Repositorys durch [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), siehe [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ für Gründe. \*
+
+- Behebung des Problems der ungültigen "Expand/Collapse"-Schaltfläche im Code der Einreichungsseite.
+
+- Anpassen der Layout-Struktur der Einstellungsseite
+
 ## 1.16.1
 
 - Behebung eines Problems mit Website-Lokalisierungsfehlern
