@@ -1,3 +1,11 @@
+## 1.76.0
+
+- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
+
+- 添加 "评测状态文本替换" 功能，感谢 **@wrk-123** 的协作
+
+- 调整设置页面的布局结构
+
 ## 1.75.0
 
 - 完善部分网站本地化规则，感谢 **@qjwh** 的贡献
