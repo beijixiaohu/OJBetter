@@ -1,3 +1,11 @@
+## 1.76.0
+
+- \*_Remplacer le CDN du dépôt public vers [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), voir [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ pour des raisons. \*
+
+- Ajout de la fonctionnalité "Remplacement du texte de l'état de l'examen", grâce à la collaboration de **@wrk-123**.
+
+- Ajustement de la structure de la page des paramètres
+
 ## 1.75.0
 
 - Amélioration de certaines règles de localisation de sites web, grâce à la contribution de **@qjwh**.

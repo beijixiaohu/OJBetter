@@ -1,3 +1,11 @@
+## 1.76.0
+
+- \*_Substituir o CDN do repositório público para [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por motivos. \*
+
+- Adicionada a funcionalidade "Substituição de texto do estado da revisão", graças à colaboração de **@wrk-123**.
+
+- Ajustar a estrutura do esquema da página de definições
+
 ## 1.75.0
 
 - Melhoria de algumas regras de localização de sítios Web, graças à contribuição de **@qjwh**.

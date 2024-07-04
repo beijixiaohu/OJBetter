@@ -1,3 +1,11 @@
+## 1.76.0
+
+- \*\*공용 리포지토리 CDN을 [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)로 교체, 이유는 [이슈](https://github.com/beijixiaohu/OJBetter/issues/151)\*를 참고하세요. \*
+
+- wrk-123\*\*의 협업으로 '검토 상태 텍스트 교체' 기능이 추가되었습니다.
+
+- 포트폴리오 매시업 관리 페이지 개선 사항
+
 ## 1.75.0
 
 - 의 기여로 일부 웹사이트 현지화 규칙이 개선되었습니다.

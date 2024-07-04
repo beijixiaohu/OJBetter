@@ -1,3 +1,11 @@
+## 1.17.0
+
+- \*_Sostituire il CDN del repository pubblico a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), vedere [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ per i motivi. \*
+
+- Risolvere il problema del pulsante "Espandi/Colla" non valido nel codice della pagina delle sottomissioni.
+
+- Miglioramento della pagina Gestione del Mashup del Portafoglio
+
 ## 1.16.1
 
 - Risolvere un problema con gli errori di localizzazione del sito web
@@ -28,7 +36,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2

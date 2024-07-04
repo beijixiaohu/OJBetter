@@ -1,3 +1,11 @@
+## 1.76.0
+
+- \*_Sostituire il CDN del repository pubblico a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), vedere [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ per i motivi. \*
+
+- Aggiunta la funzione "Sostituzione del testo dello stato delle recensioni", grazie alla collaborazione di **@wrk-123**.
+
+- Miglioramento della pagina Gestione del Mashup del Portafoglio
+
 ## 1.75.0
 
 - Miglioramento di alcune regole di localizzazione dei siti web, grazie al contributo di **@qjwh**.

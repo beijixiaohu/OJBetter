@@ -1,3 +1,11 @@
+## 1.76.0
+
+- \*\*公開リポジトリのCDNを[SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)に置き換える。理由は[issue](https://github.com/beijixiaohu/OJBetter/issues/151)_を参照。_
+
+- wrk-123\*\*の協力により、「レビュー状況のテキスト置換」機能を追加。
+
+- ポートフォリオ・マッシュアップ管理ページの改善
+
 ## 1.75.0
 
 - qjwh\*\*氏の貢献により、いくつかのウェブサイトのローカライズ・ルールが改善された。

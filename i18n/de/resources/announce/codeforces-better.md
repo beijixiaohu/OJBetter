@@ -1,3 +1,11 @@
+## 1.76.0
+
+- \*_Ersetzen Sie das CDN des öffentlichen Repositorys durch [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), siehe [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ für Gründe. \*
+
+- Dank der Mitarbeit von **@wrk-123** wurde die Funktion "Ersetzung des Überprüfungsstatus-Textes" hinzugefügt.
+
+- Anpassen der Layout-Struktur der Einstellungsseite
+
 ## 1.75.0
 
 - Verbesserung einiger Website-Lokalisierungsregeln, dank des Beitrags von **@qjwh**.
