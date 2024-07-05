@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.0
+// @version      1.76.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1878,7 +1878,6 @@ async function beautifyPreBlocksWithMonaco() {
         // 替换复制按钮事件
         if (OJBetter.typeOfPage.is_submission) {
             const button = $('div[title=Copy]');
-            console.log(button);
             button.off('click');
             button.on('click', (event) => {
                 event.stopPropagation(); // 阻止事件冒泡到 clipboard.min.js
@@ -10224,9 +10223,9 @@ async function judgeStatusReplace() {
         const statusAcronym = getStatusAcronym(status_name);
 
         let result = OJBetter.preference.judgeStatusReplaceText;
-        result = result.replace("{Status}", status_name);
-        result = result.replace("{Stat}", statusAcronym);
-        result = result.replace("{Number}", number);
+        result = result.replace(/{Status}/g, status_name);
+        result = result.replace(/{Stat}/g, statusAcronym);
+        result = result.replace(/{Number}/g, number);
 
         const statusMap = {
             ac: statusAcronym === "AC",
