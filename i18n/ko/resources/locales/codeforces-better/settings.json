@@ -65,7 +65,7 @@
         "websiteLanguageLabel": "웹사이트 언어",
         "notice": {
             "1": "<strong>번역 품질 개선에 도움을 주세요</strong><p>작성자는 중국어 간체와 영어에만 익숙하며, 다른 모든 언어의 경우 스크립트 및 웹사이트의 언어 현지화는 기계 번역(Deepl & Google)으로 이루어지며 번역 워크플로는 crowddin에서 호스팅합니다.</p><p>특정 언어의 현지화 번역 품질을 개선하는 데 도움을 주실 수 있다면</p><p><a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'></a>으로 이동하여 도움을 주시면 감사하겠습니다!</p>",
-            "2": "<strong>웹사이트 언어 현지화 개선하기</strong><p>웹사이트의 어딘가에 현지화가 필요하고 이를 교체해도 심각한 성능 문제가 발생하지 않는다고 생각되면<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>현지화 규칙 개선하기</a>로 이동하세요.</p><p>새 규칙을 추가하려면 중국어 간체 버전의 규칙：포크를 추가하고 규칙 파일을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p>제출이 병합되면 크라우드인이 자동으로 다른 언어의 번역을 완료하고 나중에 크라우드인으로 이동하여 다른 언어의 번역 품질도 개선할 수 있습니다.</p>"
+            "2": "<strong>웹사이트 언어 로컬라이제이션 완성하기</strong><p> 사이트의 일부를 현지화할 필요가 있고 심각한 성능 문제를 일으키지 않는 현지화로 대체할 필요가 있다고 생각되면 언제든지 <a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/codeforces-better.json' target='_blank'>현지화 규칙을 수정</a> 하세요.</p><p>：새 규칙을 추가하려면 중국어 간체 버전 포크를 추가하고 규칙 파일을 수정한 다음 풀 리퀘스트를 시작해야 합니다.</p><p> 제출이 병합되면 크라우드인에서 자동으로 다른 언어에 대한 번역을 완료하며, 나중에 <a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>크라우드인에서</a> 다른 언어의 번역 품질을 개선할 수도 있습니다.</p>"
         }
     },
     "translation": {
@@ -390,6 +390,11 @@
             "title": "아이콘 버튼 크기",
             "helpText": "<p>번역 버튼 크기 설정하기</p>",
             "placeholder": "버튼 크기를 입력하세요."
+        },
+        "judgeStatusReplaceText": {
+            "title": "검토 상태 텍스트 교체",
+            "helpText": "<p>将题目的评测状态文本替换为指定的文本。</p><p>支持的变量：</p><p><strong><code>{Status}</code></strong> 评测结果的完整描述，例如 \"Accepted\"。</p><p><strong><code>{Stat}</code></strong> 评测结果的缩写形式，例如 \"AC\"。</p><p><strong><code>{Number}</code></strong> 评测结果中的最后一个数字，评测状态为AC时不显示。</p><p><strong><code>{标识符:xxx}</code> </strong>当标识符为真时显示括号内的内容。支持的标识符：<code>ac</code>、<code>wa</code>、<code>tle</code>、<code>mle</code>、<code>re</code>、<code>ce</code>、<code>hacked</code>、<code>skipped</code>、<code>ile</code>、<code>pc</code>、<code>pending</code></p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>示例：</p><p><code>我怎么{Stat}了，{wa:呜呜}</code></p><p>此时如果评测结果为\"Wrong answer\"，则会显示：<p></p>我怎么WA了，呜呜</p></div>",
+            "placeholder": "교체할 패턴을 입력하세요. 비어 있으면 교체되지 않습니다."
         }
     },
     "about": {

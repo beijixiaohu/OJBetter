@@ -1,3 +1,31 @@
+## 1.17.0
+
+- \*_Substituir o CDN do repositório público para [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por motivos. \*
+
+- Corrigir o problema do botão "Expandir/Colapsar" inválido no código da página de submissões.
+
+- Ajustar a estrutura do esquema da página de definições
+
+## 1.16.1
+
+- Corrigir um problema com erros de localização do sítio Web
+
+## 1.16.0
+
+- Adicionar as opções "Personalização do prompt de tradução do ChatGPT" e "Como prompt do sistema" Obrigado a **@Dawn-Xu-helloworld** pela colaboração!
+- Adicionar janela pop-up de confirmação de envio de código para exibir o nome do título.
+- Adicionar opção de tradução automática
+- Adicionar amostra através da opção Auto-Commit (desactivada por predefinição)
+- Substituição da interface do "Yodo Translator"
+- &nbsp;Correção de símbolos ` ` no embelezamento de blocos de código
+- Corrigir o editor do Monaco que não aplica o tema corretamente quando o tema está definido para seguir Obrigado a **@cscnk52** pela contribuição!
+- Corrige o LaTeX que não substitui corretamente entre linhas, corrige problemas de desempenho com regras relacionadas
+- Correção do erro ao retraduzir "Recolher resultados antigos".
+- Correção de etiquetas de script não filtradas durante a conversão MarkDown
+- Corrige alguns jogos que não saltavam para Logan Valley
+- Altera a cor das classificações da lista para as regras de cor do AtCoder.
+- Utilize o polyfill para compatibilidade com navegadores que não suportam o método dialog.showModal() (por exemplo, Firefox79).
+
 ## 1.15.2
 
 - Remover métodos que já não são significativos：Determinar se o texto é suscetível de ser código

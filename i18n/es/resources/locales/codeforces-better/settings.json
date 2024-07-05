@@ -65,7 +65,7 @@
         "websiteLanguageLabel": "Idioma del sitio web",
         "notice": {
             "1": "<strong>Ayude a mejorar la calidad de las traducciones</strong><p>El autor sólo está familiarizado con el chino simplificado y el inglés, para todos los demás idiomas, los guiones y la localización lingüística del sitio web se realizan mediante traducción automática (Deepl y Google) y el flujo de trabajo de traducción está alojado en crowddin.</p><p>Si le apetece ayudar a mejorar la calidad de las traducciones localizadas para un idioma en particular,</p><p>le invitamos a<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>ir a</a>para ayudar a mejorarlo, ¡y su contribución es muy apreciada!</p>",
-            "2": "<strong>Ayudar a mejorar la localización lingüística de los sitios web</strong><p>Si cree que la localización es necesaria en algún lugar de su sitio web y que sustituirla no causará graves problemas de rendimiento, le invitamos a<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ir a Mejorar las reglas de localización</a>.</p><p>Si desea añadir una nueva regla, deberá añadir la versión en chino simplificado de la regla：bifurque y modifique el archivo de la regla y, a continuación, lance un pull request.</p><p>Una vez fusionado el envío, crowdin completará automáticamente la traducción para los demás idiomas, y usted podrá acudir a crowdin más tarde para mejorar la calidad de la traducción también para los demás idiomas.</p>"
+            "2": "<strong>Ayuda para perfeccionar la localización de idiomas del sitio web</strong><p> Si crees que es necesario localizar una parte de tu sitio y sustituirla por una localización que no cause graves problemas de rendimiento, no dudes en <a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/codeforces-better.json' target='_blank'>seguir adelante y perfeccionar las</a> reglas de localización.</p><p>：Para añadir una nueva regla, es necesario añadir su versión en chino simplificado fork y modificar el archivo de la regla, a continuación, lanzar una pull request.</p><p> Después de que el envío se fusiona, crowdin completará automáticamente la traducción para los otros idiomas, y también se puede <a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>ir a crowdin</a> más tarde para mejorar la calidad de la traducción para los otros idiomas.</p>"
         }
     },
     "translation": {
@@ -390,6 +390,11 @@
             "title": "Icono Tamaño del botón",
             "helpText": "<p>Ajuste del tamaño del botón de traducción</p>",
             "placeholder": "Introduzca el tamaño del botón"
+        },
+        "judgeStatusReplaceText": {
+            "title": "Estado de revisión Sustitución del texto",
+            "helpText": "<p>Sustituye el texto de estado de revisión de un tema por el texto especificado.</p><p>：Variables admitidas </p><p><strong><code>{Status}</code></strong> La descripción completa del resultado de la rúbrica, por ejemplo \"Aceptado\".</p><p><strong><code>{Stat}</code></strong> La forma abreviada del resultado de la evaluación, por ejemplo \"AC\".</p><p><strong><code>{Number}</code></strong> El último número del resultado de la evaluación, que no se muestra cuando el estado de la evaluación es AC.</p><p><strong><code>{标识符:xxx}</code> </strong> El contenido de los corchetes se muestra cuando el identificador es verdadero.：Identificadores admitidos <code>ac</code>, <code>wa</code>, <code>tle</code>, <code>mle</code>, <code>re</code>, <code>ce</code>, <code>hacked</code>, <code>skipped</code>, <code>ile</code>, <code>pc</code>, <code>pending</code></p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>：Ejemplo </p><p><code>{Stat}{wa:呜呜}¿Cómo he obtenido ?</code></p><p>：<p></p>En este caso, si el resultado de la evaluación es \"Respuesta incorrecta\", se mostrará ¿Cómo obtuve WA?</p></div>",
+            "placeholder": "Introduzca un patrón para la sustitución. Si está vacío, no se sustituirá."
         }
     },
     "about": {

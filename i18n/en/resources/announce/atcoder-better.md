@@ -1,3 +1,31 @@
+## 1.17.0
+
+- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
+
+- 修复 submissions 页面代码"展开/折叠"按钮无效的问题
+
+- 调整设置页面的布局结构
+
+## 1.16.1
+
+- Fix a problem with website localization errors
+
+## 1.16.0
+
+- Add "ChatGPT Translation Prompt Customization" and "As System Prompt" options Thanks to **@Dawn-Xu-helloworld** for the collaboration!
+- Add Code submission confirmation popup showing the title name.
+- Add automatic translation option
+- Add Sample by Auto Commit option (off by default)
+- Replace the interface of "Youtube Translate".
+- Fix `&nbsp;` symbol in code block beautification
+- Fix Monaco editor not applying theme correctly when theme is set to follow Thanks to **@cscnk52** for the contribution!
+- Fixes a problem where LaTeX is not replaced correctly between lines, and fixes a performance issue with the associated regularization.
+- Fixed the problem of "Collect old results" error when re-translating.
+- Fix script tags not filtered during MarkDown conversion
+- Fix for some races not jumping to Logan Valley
+- Modify the color of clist rating to AtCoder's color rules
+- Use polyfill for compatibility with browsers that don't support the dialog.showModal() method (e.g. Firefox79).
+
 ## 1.15.2
 
 - Remove methods that are no longer meaningful：Determine if text may be code

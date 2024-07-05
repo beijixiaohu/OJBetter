@@ -1,3 +1,31 @@
+## 1.76.0
+
+- \*_Ersetzen Sie das CDN des öffentlichen Repositorys durch [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), siehe [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ für Gründe. \*
+
+- Dank der Mitarbeit von **@wrk-123** wurde die Funktion "Ersetzung des Überprüfungsstatus-Textes" hinzugefügt.
+
+- Anpassen der Layout-Struktur der Einstellungsseite
+
+## 1.75.0
+
+- Verbesserung einiger Website-Lokalisierungsregeln, dank des Beitrags von **@qjwh**.
+- Hinzufügen der Optionen "ChatGPT Translation Prompt Customization" und "As System Prompt" Danke an **@Dawn-Xu-helloworld** für die Zusammenarbeit!
+- Hinzufügen der Funktion "Umwandlung erzwingen" Danke an **@wrk-123** für den Beitrag!
+- Fügen Sie ein Popup-Fenster zur Bestätigung der Codeübermittlung hinzu, um den Titelnamen anzuzeigen.
+- Probe mit der Option Auto-Commit hinzufügen (standardmäßig ausgeschaltet)
+- Hinzufügen der Funktion "Themenfragenbeschriftungen ausblenden", die standardmäßig deaktiviert ist.
+- Ersetzung der Schnittstelle des "Yodo Translator"
+- Turnhallentitel springen nicht zu vjudge
+- &nbsp;Korrektur der ` `-Symbole in der Code-Block-Verschönerung
+- Behebung des Problems, dass Problemset-Quellen nicht korrekt übermittelt werden können, wenn die Länge der Fragenummer nicht 1 ist Danke an **@WindJ0Y** für den Beitrag!
+- Der Monaco-Editor wendet das Thema nicht korrekt an, wenn das Thema auf "Folgen" eingestellt ist. Danke an **@cscnk52** für den Beitrag!
+- Der Code-Editor wird nicht mehr korrekt geladen, wenn die Titel-Links in Kleinbuchstaben gesetzt sind
+- Behebt, dass LaTeX nicht korrekt zwischen Zeilen ersetzt, behebt Leistungsprobleme mit verwandten Regeln
+- Fehler bei der Neuübersetzung von "Alte Ergebnisse sammeln" behoben.
+- Behebung des Problems, dass die Kopierschaltfläche auf der Anmeldeseite nicht funktioniert
+- Skript-Tags werden bei der MarkDown-Konvertierung nicht mehr gefiltert
+- Verwenden Sie Polyfill für die Kompatibilität mit Browsern, die die Methode dialog.showModal() nicht unterstützen (z. B. Firefox79).
+
 ## 1.74.2
 
 - Behebt Probleme aus dem letzten Fix Danke an @Dechancer für das Feedback!

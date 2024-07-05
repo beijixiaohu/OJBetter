@@ -1,3 +1,31 @@
+## 1.17.0
+
+- \*_Sostituire il CDN del repository pubblico a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), vedere [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ per i motivi. \*
+
+- Risolvere il problema del pulsante "Espandi/Colla" non valido nel codice della pagina delle sottomissioni.
+
+- Miglioramento della pagina Gestione del Mashup del Portafoglio
+
+## 1.16.1
+
+- Risolvere un problema con gli errori di localizzazione del sito web
+
+## 1.16.0
+
+- Aggiungere le opzioni "Personalizzazione del prompt di traduzione di ChatGPT" e "Come prompt di sistema" Grazie a **@Dawn-Xu-helloworld** per la collaborazione!
+- Aggiungere la finestra pop-up di conferma dell'invio del codice per visualizzare il nome del titolo.
+- Aggiungere l'opzione di traduzione automatica
+- Aggiungi campione con l'opzione Auto-Commit (disattivata per impostazione predefinita)
+- Sostituzione dell'interfaccia di "Yodo Translator"
+- &nbsp;Correggere i simboli ` ` nell'abbellimento dei blocchi di codice
+- Correggere l'editor di Monaco che non applica correttamente il tema quando il tema è impostato su follow Grazie a **@cscnk52** per il contributo!
+- Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
+- Correggere l'errore durante la ritraduzione di "Raccogli i vecchi risultati".
+- Correzione dei tag di script non filtrati durante la conversione di MarkDown
+- Correzione di alcune partite che non saltavano a Logan Valley
+- Cambia il colore delle valutazioni delle clist secondo le regole di colore di AtCoder.
+- Utilizzare il polyfill per la compatibilità con i browser che non supportano il metodo dialog.showModal() (ad esempio Firefox79).
+
 ## 1.15.2
 
 - Rimuovere i metodi che non sono più significativi：Determinare se il testo è probabilmente un codice
@@ -8,7 +36,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2

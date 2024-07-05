@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.19
+// @version      1.76.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -22,7 +22,7 @@
 // @connect      greasyfork.org
 // @connect      rextester.com
 // @connect      wandbox.org
-// @connect      staticfile.net
+// @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
@@ -37,24 +37,24 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
-// @require      https://cdn.staticfile.net/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.net/markdown-it/13.0.1/markdown-it.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.staticfile.net/chroma-js/2.4.2/chroma.min.js
-// @require      https://cdn.staticfile.net/xterm/3.9.2/xterm.min.js
-// @require      https://cdn.staticfile.net/dexie/3.2.4/dexie.min.js
-// @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
-// @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
-// @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
-// @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
-// @require      https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.js
-// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
-// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
-// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/crypto-js/4.2.0/crypto-js.min.js#sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/chroma-js/2.4.2/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dexie/4.0.7/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next/23.11.5/i18next.min.js#sha512-3RSGkmT48HnO+hlmzGYDx5/w2LIBX0O5hSuYX6KWAxmvVlSjFgoxIaWa2tlMExheGvt3lLyxeTsXfpC47yb8CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next-http-backend/2.5.2/i18nextHttpBackend.min.js#sha512-bBb+wrGRTx4MvHpksYb1Iv5oJ1o8ineCqpc0cnTgdJQhuAFJJ93SEVXxUOCptvt0vAqYdjzWO5emorYUBt6Ceg==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
+// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js#sha512-JYm2AqU8EvoEOnCucDItAsNtmGcjbxccOXjnwNFp87zdlyclpEephXrgR2sMlWj/gL4DCJUN3X0JhI1omaRO0A==
+// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js#sha512-kY1lU3DCvgzkWkOl47sIlmLKdgDcO4T3NYN6p/ET4oi3fnKO74sHUt1xYGtksIHXciKF8Jt+N4RDqG3CRoeYww==
+// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
-// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
-// @resource     dialogpolyfillcss https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.css
+// @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
+// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css#sha512-cRXJfA2tEcAxHEKylJfxteY17N7j9fia3waahHOVnvl63uVZT9OQ7jjjpofZMVZ4JSX3BRET+mI8UvKnsXd3NA==
+// @resource     dialogpolyfillcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css#sha512-J2+1q+RsZuJXabBfH1q/fgRr6jMy9By5SwVLk7bScEW7NFJkMUXxfeOyyxtDe6fsaJ4jsciexSlGrPYn9YbBIg==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -166,6 +166,8 @@ OJBetter.basic = {
 OJBetter.typeOfPage = {
     /** @type {boolean?} 是否是轻量站 */
     is_mSite: undefined,
+    /** @type {boolean?} 是否是训练营页面 */
+    is_gym: undefined,
     /** @type {boolean?} 是否是acmsguru页面 */
     is_acmsguru: undefined,
     /** @type {boolean?} 是否是旧版LaTeX页面 */
@@ -424,6 +426,9 @@ OJBetter.preference = {
     hoverTargetAreaDisplay: undefined,
     /** @type {string?} 按钮图标大小 */
     iconButtonSize: undefined,
+    /** @type {string?} 评测状态文本替换规则 */
+    judgeStatusReplaceText: undefined,
+
 };
 
 /**
@@ -518,16 +523,60 @@ async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
  * 动态加载JavaScript库并返回一个Promise，该Promise在脚本加载完成后解决。
  *
  * @param {string} url - 要加载的JavaScript库的URL地址。
+ * @param {string} [expectedHash] - 可选的Base64编码的SHA-512哈希值，用于校验脚本内容。格式为 "sha512-<Base64编码的哈希值>"。
  * @returns {Promise<void>} 一个Promise，它在脚本加载并执行完成后解决。
  */
-function OJB_LoadJS(url) {
-    return new Promise((resolve, reject) => {
-        let scriptElement = document.createElement("script");
-        scriptElement.src = url;
+async function OJB_LoadJS(url, expectedHash) {
+    /**
+     * 计算给定数据的SHA-512哈希值，并将其转换为十六进制字符串。
+     *
+     * @param {string} data - 要计算哈希值的数据。
+     * @returns {Promise<string>} 一个Promise，它解析为数据的SHA-512哈希值的十六进制字符串。
+     */
+    const calculateHash = async (data) => {
+        const encoder = new TextEncoder();
+        const dataBuffer = encoder.encode(data);
+        const hashBuffer = await crypto.subtle.digest('SHA-512', dataBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    /**
+     * 将Base64编码的字符串转换为十六进制字符串。
+     *
+     * @param {string} base64 - Base64编码的字符串。
+     * @returns {string} 转换后的十六进制字符串。
+     */
+    const base64ToHex = (base64) => {
+        const binaryString = atob(base64);
+        const byteArray = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            byteArray[i] = binaryString.charCodeAt(i);
+        }
+        return Array.from(byteArray).map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch script: ${response.statusText}`);
+        const scriptContent = await response.text();
+
+        if (expectedHash) {
+            // 去掉前缀 "sha512-"
+            const base64Hash = expectedHash.replace(/^sha512-/, '');
+            const actualHash = await calculateHash(scriptContent);
+            const expectedHashHex = base64ToHex(base64Hash);
+            if (actualHash !== expectedHashHex) throw new Error('SHA-512 hash mismatch');
+        }
+
+        const scriptElement = document.createElement("script");
+        scriptElement.textContent = scriptContent;
         document.head.prepend(scriptElement);
-        scriptElement.onload = resolve;
-        scriptElement.onerror = reject;
-    });
+
+        return Promise.resolve();
+    } catch (error) {
+        return Promise.reject(error);
+    }
 }
 
 /**
@@ -816,6 +865,7 @@ async function initVar() {
     OJBetter.state.lastReadAnnounceVer = OJB_getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
     OJBetter.typeOfPage.is_oldLatex = $('.tex-span').length;
+    OJBetter.typeOfPage.is_gym = href.includes("gym") && href.includes('/problem/');
     OJBetter.typeOfPage.is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     OJBetter.typeOfPage.is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     OJBetter.typeOfPage.is_problem = href.includes('/problem/');
@@ -949,6 +999,7 @@ async function initVar() {
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.preference.judgeStatusReplaceText = OJB_getGMValue("judgeStatusReplaceText", "");
     OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
@@ -1754,11 +1805,11 @@ async function initMonacoEditor() {
     if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         try {
             // 等待Monaco Editor加载器脚本加载完成
-            await OJB_LoadJS("https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js");
+            await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
 
             // 配置Monaco Editor
             require.config({
-                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
+                paths: { vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs" },
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
 
@@ -1827,7 +1878,6 @@ async function beautifyPreBlocksWithMonaco() {
         // 替换复制按钮事件
         if (OJBetter.typeOfPage.is_submission) {
             const button = $('div[title=Copy]');
-            console.log(button);
             button.off('click');
             button.on('click', (event) => {
                 event.stopPropagation(); // 阻止事件冒泡到 clipboard.min.js
@@ -2467,7 +2517,7 @@ header .enter-or-register-box, header .languages {
 /* 链接样式 */
 .OJBetter_setting_menu a {
     font-size: 13px;
-    color: #009688;
+    color: #009688 !important;
     background-color: #E0F2F1;
     border: 1px solid #009688;
     border-radius: 4px;
@@ -4727,7 +4777,7 @@ async function localizeWebsite() {
                         console.error(`Error processing text replacement for match: ${match}`, error);
                     }
                 });
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     traverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -4787,7 +4837,7 @@ async function localizeWebsite() {
                         }
                     }
                 }
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     strictTraverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -5459,11 +5509,10 @@ const OJBetter_setting_sidebar_HTML = `
 <div class="OJBetter_setting_sidebar">
     <ul>
         <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="settings:sidebar.basic"></a></li>
-        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="settings:sidebar.localization"></a></li>
+        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="settings:sidebar.translation"></a></li>
         <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
         <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
-        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#dev-settings" id="sidebar-dev-settings" data-i18n="settings:sidebar.dev"></a></li>
         <li><a href="#about-settings" id="sidebar-about-settings" data-i18n="settings:sidebar.about"></a></li>
     </ul>
@@ -5497,73 +5546,6 @@ const basic_settings_HTML = `
             </label>
         </div>
     </div>
-    <div class='OJBetter_setting_list'>
-        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
-        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
-        </div>
-        <input type="checkbox" id="commentPaging" name="commentPaging">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
-        </div>
-        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="hiddenProblemTag" data-i18n="settings:basic.hiddenProblemTag.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.hiddenProblemTag.helpText"></div>
-        </div>
-        <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
-    </div>
-</div>
-`;
-
-const l10n_settings_HTML = `
-<div id="l10n_settings" class="settings-page">
-    <h3 data-i18n="settings:localization.title"></h3>
-    <hr>
     <div class='OJBetter_setting_list'>
         <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localization.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
@@ -6068,6 +6050,66 @@ const preference_settings_HTML = `
     <h3 data-i18n="settings:preference.title"></h3>
     <hr>
     <div class='OJBetter_setting_list'>
+        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
+        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
+        </div>
+        <input type="checkbox" id="commentPaging" name="commentPaging">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
+        </div>
+        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="hiddenProblemTag" data-i18n="settings:basic.hiddenProblemTag.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.hiddenProblemTag.helpText"></div>
+        </div>
+        <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -6093,6 +6135,16 @@ const preference_settings_HTML = `
         </div>
         <input type='number' id='iconButtonSize' class='no_default' require=true data-i18n="[placeholder]settings:preference.iconButtonSize.placeholder">
         <span>px</span>
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for='judgeStatusReplaceText'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.judgeStatusReplaceText.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.judgeStatusReplaceText.helpText"></div>
+        </div>
+        <input type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder">
     </div>
 </div>
 `;
@@ -6229,7 +6281,6 @@ const about_settings_HTML = `
 const OJBetter_setting_content_HTML = `
 <div class="OJBetter_setting_content">
     ${basic_settings_HTML}
-    ${l10n_settings_HTML}
     ${translation_settings_HTML}
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
@@ -6760,6 +6811,7 @@ async function initSettingsPanel() {
         $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
+        $('#judgeStatusReplaceText').val(GM_getValue("judgeStatusReplaceText"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
@@ -6849,6 +6901,7 @@ async function initSettingsPanel() {
                 openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
+                judgeStatusReplaceText: $('#judgeStatusReplaceText').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -8761,7 +8814,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi; // TODO 111
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
@@ -9059,7 +9112,7 @@ function RenderPerfOpt() {
 async function SelectElementPerfOpt() {
     // TODO 10
     // 加载库资源
-    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js");
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js","sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
     /**
      * 将一个<select>元素转换为SelectPage控件
      * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
@@ -9367,9 +9420,22 @@ class ProblemPageLinkbar {
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
-    const regex = url.includes('/contest/')
-        ? /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/
-        : /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/;
+    const regexMap = new Map([
+        ['/contest/', /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/],
+        ['/problemset/', /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/],
+        ['/gym/', /\/gym\/(\d+)\/problem\/([A-Za-z\d]+)/],
+    ]);
+
+    let regex = null;
+    for (let [key, value] of regexMap) {
+        if (url.includes(key)) {
+            regex = value;
+            break;
+        }
+    }
+
+    if (!regex) return '';
+
     const matchResult = url.match(regex);
     return matchResult && matchResult.length >= 3 ? `${matchResult[1]}${matchResult[2]}` : '';
 };
@@ -9448,7 +9514,9 @@ async function CF2vjudge(problemToolbar) {
         });
     };
 
-    const VjudgeUrl = `https://vjudge.net/problem/CodeForces-${problemId}`;
+    const VjudgeUrl = OJBetter.typeOfPage.is_gym ?
+        `https://vjudge.net/problem/Gym-${problemId}` :
+        `https://vjudge.net/problem/CodeForces-${problemId}`;
     try {
         const result = await checkLinkExistence(VjudgeUrl);
         if (problemId && result) {
@@ -9645,7 +9713,7 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
     return OJB_promiseRetryWrapper(async () => {
         const response = await OJB_GMRequest({
             method: "GET",
-            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces.com`,
+            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces`,
             headers: { "Authorization": OJBetter.clist.authorization }
         });
 
@@ -9841,7 +9909,7 @@ function getClassNameByRating(rating) {
  */
 async function showRatingByClist_problem(problemToolbar) {
     // 题目名
-    const problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
     if (OJBetter.typeOfPage.is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
 
     // 创建Rating按钮元素
@@ -9849,7 +9917,7 @@ async function showRatingByClist_problem(problemToolbar) {
     // TODO
     const clistButton = problemToolbar.addLinkButton(
         'clistButton',
-        `https://clist.by/problems/?search=${problem}&resource=1`,
+        `https://clist.by/problems/?search=${problem}&resource=1&resource=64`,
         i18next.t('state.wait', { ns: 'button' }),
         $("<img>").attr("src", "https://clist.by/static/img/logo-48.png"),
         "15px"
@@ -9967,7 +10035,7 @@ async function showRatingByClist_problemset() {
 
     // 检测clist连接
     if (!await validateClistConnection()) {
-        for (let i = 0; i < rating.length; i++) {
+        for (let i = 0; i < ratingBadges.length; i++) {
             ratingBadges[i].rating.text(i18next.t('state.netError', { ns: 'button' }));
         }
         return;
@@ -10025,6 +10093,204 @@ async function recolorStandings() {
             var colorValue = getColorValue(value / maxScores[index]);
             spanElement.css('color', colorValue);
         });
+    });
+}
+
+/**
+ * 评测结果的简写
+ */
+const StatusAcronyms = {
+    "Accepted": "AC",
+    "Wrong answer": "WA",
+    "Time limit exceeded": "TLE",
+    "Memory limit exceeded": "MLE",
+    "Runtime error": "RE",
+    "Compilation error": "CE",
+    "Hacked": "Hacked",
+    "Skipped": "Skipped",
+    "Idleness limit exceeded": "ILE",
+    "Perfect result:": "AC",
+    "Partial result:": "PC",
+    "Running": "PENDING"
+};
+
+/** 
+ * 评测结果的颜色
+ */
+const StatusColors = {
+    "AC": "#52c41a",
+    "WA": "#e74c3c",
+    "PENDING": "#808080",
+};
+
+/**
+ * 替换评测结果
+ */
+async function judgeStatusReplace() {
+
+    /**
+     * 获取评测状态的名称和编号
+     * 
+     * @param {string} text 评测状态
+     * @returns {object} 评测状态的名称和编号
+     */
+    const getStatusName = (text) => {
+        const words = text.split(' ');
+        const number_of_words = words.length;
+        let status_name = "", number = "";
+        let status_name_is_over = false;
+        for (let i = 0; i < number_of_words; i++) {
+            if (words[i] === "on") {
+                status_name_is_over = true;
+            }
+            if (!status_name_is_over) {
+                status_name += words[i] + " ";
+            } else if (parseInt(words[i]).toString() !== "NaN") {
+                number = words[i];
+            }
+            if (words[i] === "result:") {
+                status_name_is_over = true;
+            }
+        }
+        status_name = status_name.trim();
+        return {
+            status_name: status_name,
+            number: number
+        }
+    };
+
+    /** 
+     * 获取当前评测状态的缩写
+     * 
+     * @param {string} status_name 评测状态
+     * @returns {string} 评测状态的缩写
+     */
+    const getStatusAcronym = (status_name) => {
+        return StatusAcronyms[status_name];
+    };
+
+    /** 
+     * 根据评测状态的缩写获取颜色
+     * 
+     * @param {string} statusAcronym 评测状态的缩写
+     * @returns {string} 颜色值
+     */
+    const getStatusColor = (statusAcronym) => {
+        let color = StatusColors[statusAcronym];
+        return color ? color : StatusColors["WA"];
+    };
+
+    /**
+     * 解析模板
+     * 
+     * @param {string} template 模板
+     * @param {object} display 各个前置标识符的bool值，决定了是否显示这一部分
+     * @returns {string} 解析后的文本
+     * 
+     * @example
+     * parseTemplate("{ac:！}{wa:呜呜}{pending:别急}", {ac: false, wa: true, pending: false}) => "呜呜"
+     */
+    const parseTemplate = (template, display) => {
+        const regex = /{(\w+):([^}]*)}/g;
+        let result = '';
+        let lastIndex = 0;
+
+        template.replace(regex, (match, key, text, offset) => {
+            // 添加模板前的普通文本部分
+            result += template.slice(lastIndex, offset);
+
+            // 根据布尔值决定是否添加模板部分
+            if (display[key]) {
+                result += text;
+            }
+            lastIndex = offset + match.length;
+        });
+
+        // 添加最后一段普通文本部分
+        result += template.slice(lastIndex);
+
+        return result;
+    }
+
+    /**
+     * 根据替换规则获取替换后的文本
+     * 
+     * @param {string} status_name 评测状态
+     * @param {string} number 评测编号
+     * @returns {string} 替换后的文本
+     */
+    const getReplaceText = (status_name, number) => {
+        const statusAcronym = getStatusAcronym(status_name);
+
+        let result = OJBetter.preference.judgeStatusReplaceText;
+        result = result.replace(/{Status}/g, status_name);
+        result = result.replace(/{Stat}/g, statusAcronym);
+        result = result.replace(/{Number}/g, number);
+
+        const statusMap = {
+            ac: statusAcronym === "AC",
+            wa: statusAcronym === "WA",
+            tle: statusAcronym === "TLE",
+            mle: statusAcronym === "MLE",
+            re: statusAcronym === "RE",
+            ce: statusAcronym === "CE",
+            hacked: statusAcronym === "Hacked",
+            skipped: statusAcronym === "Skipped",
+            ile: statusAcronym === "ILE",
+            pc: statusAcronym === "PC",
+            pending: statusAcronym === "PENDING"
+        }
+        const final_result = parseTemplate(result, statusMap);
+        return final_result;
+    };
+
+    /**
+     * 处理评测结果
+     * @param {string} text 代替换的文本
+     * @returns {object} 处理后的文本和颜色
+     */
+    const process = (text) => {
+        /**
+         * 当前评测状态
+         */
+        const { status_name, number } = getStatusName(text);
+
+        /**
+         * 当前评测状态的缩写
+         */
+        const statusAcronym = getStatusAcronym(status_name);
+
+        return {
+            text: statusAcronym ? getReplaceText(status_name, number) : text,
+            color: getStatusColor(statusAcronym)
+        }
+    };
+
+    OJB_observeElement({
+        selector: '.datatable',
+        callback: (node) => {
+            const updateElement = (element) => {
+                const { text, color } = process($(element).text());
+                $(element).text(text);
+                $(element).css({
+                    "color": color,
+                    "font-weight": "700"
+                });
+            };
+
+            // 选择器
+            const selectorCondition = "[class^='verdict-'], [submissionverdict='COMPILATION_ERROR']";
+
+            // 检查[node]本身是否符合选择器条件
+            if ($(node).is(selectorCondition)) {
+                updateElement(node);
+            }
+
+            // 更新[node]内部符合选择器条件的所有元素
+            $(node).find(selectorCondition).each(function () {
+                updateElement(this);
+            });
+        }
     });
 }
 
@@ -11554,7 +11820,6 @@ async function createMonacoEditor(language, form, support) {
                     });
                 });
 
-                return null; // 如果没有内容，则返回null
             },
         });
 
@@ -11589,7 +11854,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(references);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -11626,7 +11890,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(highlights);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -13665,6 +13928,9 @@ function initOnDOMReady() {
     if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
+    if (OJBetter.preference.judgeStatusReplaceText && (OJBetter.typeOfPage.is_submissions || OJBetter.typeOfPage.is_statePage)) {
+        judgeStatusReplace(); // 评测结果替换
+    }
 }
 
 /**
@@ -13701,7 +13967,9 @@ async function initializeSequentially(loadingMessage) {
     if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.preference.showLoading) {
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    }
 }
 
 /**

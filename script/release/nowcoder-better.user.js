@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nowcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.11
+// @version      1.12.0
 // @description  牛客竞赛题目题解markdown一键复制
 // @author       北极小狐
 // @match        https://ac.nowcoder.com/*
@@ -20,15 +20,16 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
+// @connect      sustech.edu.cn
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/nowcoder.png
-// @require      https://cdn.staticfile.org/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.org/markdown-it/13.0.1/markdown-it.min.js
-// @license      MIT
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
 // @compatible	 Edge
 // ==/UserScript==
- 
+
 // 状态与初始化
 const getGMValue = (key, defaultValue) => {
     const value = GM_getValue(key);
@@ -49,7 +50,7 @@ var opneaiConfig = getGMValue("chatgpt-config", {
 });
 if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
     const configAtIndex = opneaiConfig.configurations[opneaiConfig.choice];
- 
+
     if (configAtIndex == undefined) {
         let existingConfig = GM_getValue('chatgpt-config');
         existingConfig.choice = 0;
@@ -71,19 +72,19 @@ if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
             return { [key.trim()]: value.trim() };
         }) : [];
 }
- 
+
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const darkenPageStyle = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 9999; }`;
 const darkenPageStyle2 = `body::before { content: ""; display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 10000; }`;
- 
+
 // 语言判断
 const isEnglishLanguage = (function () {
     var metaElement = $('meta[http-equiv="Content-Language"]');
     var contentValue = metaElement.attr('content');
     return (contentValue === 'en');
 })();
- 
+
 // 样式
 GM_addStyle(`
 :root {
@@ -128,15 +129,15 @@ span.mdViewContent {
   color: red;
   border-color: red;
 }
- 
+
 .translate-problem-statement h2, .translate-problem-statement h3 {
   font-size: 16px;
 }
- 
+
 .translate-problem-statement ul {
   line-height: 100%;
 }
- 
+
 .translate-problem-statement a {
     color: #10b981;
     font-weight: 600;
@@ -150,7 +151,7 @@ span.mdViewContent {
     max-width: 100.0%;
     max-height: 100.0%;
 }
- 
+
 .translate-problem-statement .katex  {
   font-size: 14px;
 }
@@ -241,7 +242,7 @@ button.html2mdButton.NowcoderBetter_setting {
     margin: 10px;
     border: 0px;
 }
- 
+
 button.html2mdButton.NowcoderBetter_setting.open {
   background-color: #e6e6e61f;
   color: #727378;
@@ -300,7 +301,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     top: 3px;
     right: 3px;
 }
- 
+
 .NowcoderBetter_setting_menu .btn-close {
     display: flex;
     text-align: center;
@@ -319,7 +320,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     justify-content: center;
     box-sizing: border-box;
 }
- 
+
 .NowcoderBetter_setting_menu .btn-close:hover {
     width: 20px;
     height: 20px !important;
@@ -328,7 +329,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     background-color: #ff0000cc;
     box-shadow: 0 5px 5px 0 #00000026;
 }
- 
+
 .NowcoderBetter_setting_menu .btn-close:active {
     width: 20px;
     height: 20px;
@@ -337,12 +338,12 @@ button.html2mdButton.NowcoderBetter_setting.open {
     --shadow-btn-close: 0 3px 3px 0 #00000026;
     box-shadow: var(--shadow-btn-close);
 }
- 
+
 /*设置面板-checkbox*/
 .NowcoderBetter_setting_menu input[type=checkbox]:focus {
     outline: 0px;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="checkbox"] {
     margin: 0px;
 	appearance: none;
@@ -356,7 +357,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
 	position: relative;
 	box-sizing: border-box;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="checkbox"]::before {
 	content: "";
 	width: 14px;
@@ -373,39 +374,39 @@ button.html2mdButton.NowcoderBetter_setting.open {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="checkbox"]::after {
 	content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
 	position: absolute;
 	top: 0;
 	left: 24px;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="checkbox"]:checked {
 	border: 1.5px solid #C5CAE9;
 	background: #E8EAF6;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="checkbox"]:checked::before {
 	background: #C5CAE9;
 	border: 1.5px solid #7986CB;
 	transform: translate(122%, 2%);
 	transition: all 0.3s ease-in-out;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="checkbox"]:checked::after {
     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2303A9F4' fill-opacity='0.9'/%3E%3C/svg%3E");
     position: absolute;
     top: 1.5px;
     left: 4.5px;
 }
- 
+
 .NowcoderBetter_setting_menu label {
     font-size: 16px;
     font-weight: initial;
     margin-bottom: 0px;
 }
- 
+
 .NowcoderBetter_setting_list {
     display: flex;
     align-items: center;
@@ -416,7 +417,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     border-radius: 8px;
     justify-content: space-between;
 }
- 
+
 /*设置面板-radio*/
 .NowcoderBetter_setting_menu>label {
     display: flex;
@@ -428,7 +429,7 @@ button.html2mdButton.NowcoderBetter_setting.open {
     align-items: center;
     margin: 3px 0px;
 }
- 
+
 .NowcoderBetter_setting_menu_label_text {
     display: flex;
     border: 1px dashed #00aeeccc;
@@ -444,14 +445,14 @@ button.html2mdButton.NowcoderBetter_setting.open {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
- 
+
 input[type="radio"]:checked+.NowcoderBetter_setting_menu_label_text {
     background: #41e49930;
     border: 1px solid green;
     color: green;
     font-weight: 500;
 }
- 
+
 .NowcoderBetter_setting_menu>label input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
@@ -459,7 +460,7 @@ input[type="radio"]:checked+.NowcoderBetter_setting_menu_label_text {
     padding: 0px !important;
     margin: 0px;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="text"] {
     display: block;
     height: 25px !important;
@@ -474,13 +475,13 @@ input[type="radio"]:checked+.NowcoderBetter_setting_menu_label_text {
     border: 1px solid #00aeeccc;
     box-shadow: 0 0 1px #0000004d;
 }
- 
+
 .NowcoderBetter_setting_menu input[type="text"]:focus-visible{
     border-style: solid;
     border-color: #3f51b5;
     outline: none;
 }
- 
+
 .NowcoderBetter_setting_menu_input {
     width: 100%;
     display: grid;
@@ -524,7 +525,7 @@ input[type="radio"]:checked+.NowcoderBetter_setting_menu_label_text {
     color: #BDBDBD;
     font-size: 14px;
 }
- 
+
 .NowcoderBetter_setting_menu #save {
     cursor: pointer;
 	display: inline-flex;
@@ -544,7 +545,7 @@ input[type="radio"]:checked+.NowcoderBetter_setting_menu_label_text {
 .NowcoderBetter_setting_menu button#debug_button.debug_button {
     width: 18%;
 }
- 
+
 .NowcoderBetter_setting_menu span.tip {
     color: #999;
     font-size: 12px;
@@ -883,21 +884,21 @@ div#config_bar_menu_delete:hover {
     width: 450px; 
 }
 `);
- 
+
 // 获取cookie
 function getCookie(name) {
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
         const cookie = cookies[i].trim();
         const [cookieName, cookieValue] = cookie.split("=");
- 
+
         if (cookieName === name) {
             return decodeURIComponent(cookieValue);
         }
     }
     return "";
 }
- 
+
 // 防抖函数
 function debounce(callback) {
     let timer;
@@ -909,14 +910,14 @@ function debounce(callback) {
         timer = setTimeout(() => { immediateExecuted = false; }, delay);
     };
 }
- 
+
 // 为元素添加鼠标拖动
 function addDraggable(element) {
     let isDragging = false;
     let initialX, initialY; // 元素的初始位置
     let startX, startY, offsetX, offsetY; // 鼠标起始位置，移动偏移量
     let isSpecialMouseDown = false; // 选取某些元素时不拖动
- 
+
     element.on('mousedown', function (e) {
         var elem = $(this);
         var elemOffset = elem.offset();
@@ -924,17 +925,17 @@ function addDraggable(element) {
         var centerY = elemOffset.top + elem.outerHeight() / 2;
         initialX = centerX - window.pageXOffset;
         initialY = centerY - window.pageYOffset;
- 
+
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
- 
+
         isSpecialMouseDown = $(e.target).is('label, p, input, textarea, span');
- 
+
         $('body').css('cursor', 'all-scroll');
     });
- 
- 
+
+
     $(document).on('mousemove', function (e) {
         if (!isDragging) return;
         // 不执行拖动操作
@@ -944,14 +945,14 @@ function addDraggable(element) {
         offsetY = e.clientY - startY;
         element.css({ top: initialY + offsetY + 'px', left: initialX + offsetX + 'px' });
     });
- 
+
     $(document).on('mouseup', function () {
         isDragging = false;
         isSpecialMouseDown = false;
         $('body').css('cursor', 'default');
     });
 }
- 
+
 // 更新检查
 (function checkScriptVersion() {
     function compareVersions(version1 = "0", version2 = "0") {
@@ -983,7 +984,7 @@ function addDraggable(element) {
         }
         return result;
     }
- 
+
     GM_xmlhttpRequest({
         method: "GET",
         url: "https://greasyfork.org/zh-CN/scripts/473210.json",
@@ -991,7 +992,7 @@ function addDraggable(element) {
         onload: function (response) {
             const scriptData = JSON.parse(response.responseText);
             const skipUpdate = getCookie("skipUpdate");
- 
+
             if (
                 scriptData.name === GM_info.script.name &&
                 compareVersions(scriptData.version, GM_info.script.version) === 1 &&
@@ -1021,7 +1022,7 @@ function addDraggable(element) {
                         </div>
                     </div>
                 `);
- 
+
                 $("#skip_update").click(function () {
                     document.cookie = "skipUpdate=true; expires=session; path=/";
                     styleElement.remove();
@@ -1030,22 +1031,22 @@ function addDraggable(element) {
             }
         }
     });
- 
+
 })();
- 
+
 // 设置面板
 $(document).ready(function () {
     var htmlContent = "<button class='html2mdButton NowcoderBetter_setting'>Nowcoder Better设置</button>";
     if ($('.acm-nav-info').length > 0) $('.acm-nav-info > li:last-child').after("<li class='dropdown'>" + htmlContent + "</li>");
     else $('.header-bar .header-right > :last-child').after(htmlContent);
 });
- 
+
 // 配置管理函数
 function setupConfigManagement(element, tempConfig, structure, configHTML, checkable) {
     let counter = 0;
     createControlBar();
     createContextMenu();
- 
+
     // 键值对校验
     function valiKeyValue(value) {
         const keyValuePairs = value.split('\n');
@@ -1057,11 +1058,11 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         }
         return true;
     }
- 
+
     // 新增数据
     function onAdd() {
         const styleElement = createWindow();
- 
+
         const settingMenu = $("#config_edit_menu");
         settingMenu.on("click", "#save", () => {
             const config = {};
@@ -1076,7 +1077,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
                     allFieldsValid = false;
                 }
             }
- 
+
             // 校验提示
             for (let i = 0, len = checkable.length; i < len; i++) {
                 let value = $(checkable[i]).val();
@@ -1089,42 +1090,42 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
                     $(checkable[i]).prev('span.text-error').remove();
                 }
             }
- 
+
             if (!allFieldsValid) return;
             tempConfig.configurations.push(config);
- 
+
             const list = $("#config_bar_ul");
             createListItemElement(config[structure['#note']]).insertBefore($('#add_button'));
- 
+
             settingMenu.remove();
             $(styleElement).remove();
         });
- 
+
         settingMenu.on("click", ".btn-close", () => {
             settingMenu.remove();
             $(styleElement).remove();
         });
     }
- 
+
     // 编辑数据
     function onEdit() {
         const menu = $("#config_bar_menu");
         menu.css({ display: "none" });
- 
+
         const list = $("#config_bar_ul");
         const index = Array.from(list.children()).indexOf(this);
- 
+
         const styleElement = createWindow();
- 
+
         const settingMenu = $("#config_edit_menu");
         const configAtIndex = tempConfig.configurations[index];
- 
+
         if (configAtIndex) {
             for (const key in structure) {
                 $(key).val(configAtIndex[structure[key]]);
             }
         }
- 
+
         settingMenu.on("click", "#save", () => {
             const config = {};
             let allFieldsValid = true;
@@ -1151,37 +1152,37 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
                     $(checkable[i]).prev('span.text-error').remove();
                 }
             }
- 
+
             if (!allFieldsValid) return;
             tempConfig.configurations[index] = config;
- 
+
             settingMenu.remove();
             $(styleElement).remove();
             menu.css({ display: "none" });
- 
+
             list.children().eq(index).find("label").text(config.note);
         });
- 
+
         // 关闭按钮
         settingMenu.on("click", ".btn-close", () => {
             settingMenu.remove();
             $(styleElement).remove();
         });
     }
- 
+
     // 删除数据
     function onDelete() {
         const menu = $("#config_bar_menu");
         menu.css({ display: "none" });
- 
+
         const list = $("#config_bar_ul");
         const index = Array.from(list.children()).indexOf(this);
- 
+
         tempConfig.configurations.splice(index, 1);
- 
+
         list.children().eq(index).remove();
     }
- 
+
     // 创建编辑窗口
     function createWindow() {
         const styleElement = GM_addStyle(darkenPageStyle2);
@@ -1189,7 +1190,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         addDraggable($('#config_edit_menu'));
         return styleElement;
     }
- 
+
     // 创建控制面板
     function createControlBar() {
         $(element).append(`
@@ -1201,7 +1202,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
             </div>
         `);
     }
- 
+
     // 创建右键菜单
     function createContextMenu() {
         const menu = $("<div id='config_bar_menu' style='display: none;'></div>");
@@ -1211,30 +1212,30 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
 		`);
         $("body").append(menu);
     }
- 
+
     // 创建新的li元素
     function createListItemElement(text) {
         const li = $("<li></li>");
         const radio = $("<input type='radio' name='config_item'></input>").appendTo(li);
         radio.attr("value", counter).attr("id", counter++);
         const label = $("<label class='config_bar_ul_li_text'></label>").text(text).attr("for", radio.attr("value")).appendTo(li);
- 
+
         // 添加右键菜单
         li.on("contextmenu", function (event) {
             event.preventDefault();
             const menu = $("#config_bar_menu");
             menu.css({ display: "block", left: event.pageX, top: event.pageY });
- 
+
             const deleteItem = $("#config_bar_menu_delete");
             const editItem = $("#config_bar_menu_edit");
- 
+
             // 移除旧事件
             deleteItem.off("click");
             editItem.off("click");
- 
+
             deleteItem.on("click", onDelete.bind(this));
             editItem.on("click", onEdit.bind(this));
- 
+
             $(document).one("click", (event) => {
                 if (!menu.get(0).contains(event.target)) {
                     menu.css({ display: "none" });
@@ -1243,11 +1244,11 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
                 }
             });
         });
- 
- 
+
+
         return li;
     }
- 
+
     // 渲染列表
     function renderList() {
         const listContainer = $("#config_bar_list");
@@ -1256,7 +1257,7 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         tempConfig.configurations.forEach((item) => {
             list.append(createListItemElement(item[structure['#note']]));
         });
- 
+
         list.append(`
             <li id='add_button'>
                 <span>+ 添加</span>
@@ -1265,11 +1266,11 @@ function setupConfigManagement(element, tempConfig, structure, configHTML, check
         const addItem = $('#add_button');
         addItem.on("click", onAdd);
     };
- 
+
     renderList();
     return tempConfig;
 }
- 
+
 const NowcoderBetterSettingMenuHTML = `
     <div id='NowcoderBetter_setting_menu' class='NowcoderBetter_setting_menu'>
     <div class="tool-box">
@@ -1333,7 +1334,7 @@ const NowcoderBetterSettingMenuHTML = `
     <button id='save'>保存</button>
     </div>
 `;
- 
+
 const chatgptConfigEditHTML = `
     <div class='NowcoderBetter_setting_menu' id='config_edit_menu'>
         <div class="tool-box">
@@ -1423,14 +1424,14 @@ const chatgptConfigEditHTML = `
         <button id='save'>保存</button>
     </div>
 `;
- 
+
 $(document).ready(function () {
     const $settingBtns = $(".NowcoderBetter_setting");
     $settingBtns.click(() => {
         const styleElement = GM_addStyle(darkenPageStyle);
         $settingBtns.prop("disabled", true).addClass("open");
         $("body").append(NowcoderBetterSettingMenuHTML);
- 
+
         // 窗口初始化
         addDraggable($('#NowcoderBetter_setting_menu'));
         const chatgptStructure = {
@@ -1445,11 +1446,11 @@ $(document).ready(function () {
             '#_header',
             '#_data',
         ]
- 
+
         // 缓存配置信息
         let tempConfig = GM_getValue('chatgpt-config');
         tempConfig = setupConfigManagement('#chatgpt-config', tempConfig, chatgptStructure, chatgptConfigEditHTML, checkable);
- 
+
         // 状态切换
         $("#enableSegmentedTranslation").prop("checked", GM_getValue("enableSegmentedTranslation") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
@@ -1461,7 +1462,7 @@ $(document).ready(function () {
                 $("input[name='config_item'][value='" + tempConfig.choice + "']").prop("checked", true);
             }
         } 
- 
+
         // 翻译选择情况监听
         $("input[name='translation']").change(function () {
             var selected = $(this).val(); // 获取当前选中的值
@@ -1480,9 +1481,9 @@ $(document).ready(function () {
             var selected = $(this).val(); // 获取当前选中的值
             tempConfig.choice = selected;
         });
- 
+
         const $settingMenu = $(".NowcoderBetter_setting_menu");
- 
+
         $("#save").click(debounce(function () {
             const settings = {
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
@@ -1531,12 +1532,12 @@ $(document).ready(function () {
                     }
                 }
             }
- 
+
             $settingMenu.remove();
             $settingBtns.prop("disabled", false).removeClass("open");
             $(styleElement).remove();
         }));
- 
+
         // 关闭
         $settingMenu.on("click", ".btn-close", () => {
             $settingMenu.remove();
@@ -1545,14 +1546,14 @@ $(document).ready(function () {
         });
     });
 });
- 
+
 // html2md转换/处理规则
 var turndownService = new TurndownService({ bulletListMarker: '-', escape: (text) => text });
 var turndown = turndownService.turndown;
- 
+
 // 保留原始
 turndownService.keep(['del']);
- 
+
 turndownService.addRule('removeByClass', {
     filter: function (node) {
         return node.classList.contains('html2md-panel') ||
@@ -1565,7 +1566,7 @@ turndownService.addRule('removeByClass', {
         return '';
     }
 });
- 
+
 // inline math
 turndownService.addRule('inline-math1', {
     filter: function (node, options) {
@@ -1595,7 +1596,7 @@ turndownService.addRule('inline-math2', {
         return "$" + text + "$";
     }
 });
- 
+
 // block math
 turndownService.addRule('block-math', {
     filter: function (node, options) {
@@ -1605,7 +1606,7 @@ turndownService.addRule('block-math', {
         return "\n$$\n" + $(node).find('annotation').text() + "\n$$\n";
     }
 });
- 
+
 // pre
 turndownService.addRule('pre', {
     filter: function (node, options) {
@@ -1615,7 +1616,7 @@ turndownService.addRule('pre', {
         return "```\n" + content + "```\n";
     }
 });
- 
+
 // bordertable
 turndownService.addRule('bordertable', {
     filter: 'table',
@@ -1645,15 +1646,15 @@ turndownService.addRule('bordertable', {
         }
     }
 });
- 
- 
+
+
 // 随机数生成
 function getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
- 
+
 // 按钮面板
 function addButtonPanel(parent, suffix, type, is_simple = false) {
     let htmlString = `<div class='html2md-panel'>
@@ -1670,7 +1671,7 @@ function addButtonPanel(parent, suffix, type, is_simple = false) {
         $('.html2md-panel').find('.html2mdButton.html2md-view' + suffix + ', .html2mdButton.html2md-cb' + suffix).remove();
     }
 }
- 
+
 function addButtonWithHTML2MD(parent, suffix, type) {
     $(document).on("click", ".html2md-view" + suffix, function () {
         var target, removedChildren = $();
@@ -1701,7 +1702,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         if (removedChildren) $(target).prepend(removedChildren);
     });
 }
- 
+
 function addButtonWithHTML2MD(parent, suffix, type) {
     $(document).on("click", ".html2md-view" + suffix, debounce(function () {
         var target, removedChildren = $();
@@ -1731,18 +1732,18 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         // 恢复删除的元素
         if (removedChildren) $(target).prepend(removedChildren);
     }));
- 
+
     if (hoverTargetAreaDisplay) {
         var previousCSS;
         $(document).on("mouseover", ".html2md-view" + suffix, function () {
             var target;
- 
+
             if (type === "this_level") {
                 target = $(".html2md-view" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
                 target = $(".html2md-view" + suffix).parent().parent().get(0);
             }
- 
+
             $(target).append('<div class="overlay">目标转换区域</div>');
             
             previousCSS = {
@@ -1753,22 +1754,22 @@ function addButtonWithHTML2MD(parent, suffix, type) {
                 "position": "relative",
                 "display": "block"
             });
- 
+
             $(".html2md-view" + suffix).parent().css({
                 "position": "relative",
                 "z-index": "99999"
             })
         });
- 
+
         $(document).on("mouseout", ".html2md-view" + suffix, function () {
             var target;
- 
+
             if (type === "this_level") {
                 target = $(".html2md-view" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
                 target = $(".html2md-view" + suffix).parent().parent().get(0);
             }
- 
+
             $(target).find('.overlay').remove();
             $(target).css(previousCSS);
             $(".html2md-view" + suffix).parent().css({
@@ -1777,7 +1778,7 @@ function addButtonWithHTML2MD(parent, suffix, type) {
         });
     }
 }
- 
+
 function addButtonWithCopy(parent, suffix, type) {
     $(document).on("click", ".html2md-cb" + suffix, debounce(function () {
         var target, removedChildren;
@@ -1802,24 +1803,24 @@ function addButtonWithCopy(parent, suffix, type) {
         }, 2000);
         $(target).remove();
     }));
- 
+
     if (hoverTargetAreaDisplay) {
         var previousCSS;
         $(document).on("mouseover", ".html2md-cb" + suffix, function () {
             var target;
- 
+
             if (type === "this_level") {
                 target = $(".html2md-cb" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
                 target = $(".html2md-cb" + suffix).parent().parent().get(0);
             }
- 
+
             $(target).append('<div class="overlay">目标复制区域</div>');
             previousCSS = {
                 "position": $(target).css("position"),
                 "display": $(target).css("display")
             };
- 
+
             $(target).css({
                 "position": "relative",
                 "display": "block"
@@ -1829,16 +1830,16 @@ function addButtonWithCopy(parent, suffix, type) {
                 "z-index": "99999"
             })
         });
- 
+
         $(document).on("mouseout", ".html2md-cb" + suffix, function () {
             var target;
- 
+
             if (type === "this_level") {
                 target = $(".html2md-cb" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
                 target = $(".html2md-cb" + suffix).parent().parent().get(0);
             }
- 
+
             $(target).find('.overlay').remove();
             $(target).css(previousCSS);
             $(".html2md-cb" + suffix).parent().css({
@@ -1847,7 +1848,7 @@ function addButtonWithCopy(parent, suffix, type) {
         });
     }
 }
- 
+
 async function addButtonWithTranslation(parent, suffix, type) {
     var result;
     $(document).on('click', '.translateButton' + suffix, debounce(async function () {
@@ -1859,7 +1860,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
         var target, element_node, block, errerNum = 0;
         if (type === "this_level") block = $(".translateButton" + suffix).parent().next();
         else if (type === "child_level") block = $(".translateButton" + suffix).parent().parent();
- 
+
         // 重新翻译
         if (result) {
             if (result.translateDiv) {
@@ -1877,7 +1878,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
             // 重新绑定悬停事件
             if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
         }
- 
+
         // 分段翻译
         if (enableSegmentedTranslation) {
             var pElements = block.find("p, li");
@@ -1924,7 +1925,7 @@ async function addButtonWithTranslation(parent, suffix, type) {
         } else {
             $(this).prop("disabled", false);
         }
- 
+
         // 重新翻译
         let currentText, is_error;
         $(document).on("mouseover", ".translateButton" + suffix, function () {
@@ -1935,26 +1936,26 @@ async function addButtonWithTranslation(parent, suffix, type) {
                 $(this).removeClass("error");
             }
         });
- 
+
         $(document).on("mouseout", ".translateButton" + suffix, function () {
             $(this).text(currentText);
             if (is_error) $(this).addClass("error");
         });
     }));
- 
+
     // 目标区域指示
     function bindHoverEvents(suffix, type) {
         var previousCSS;
- 
+
         $(document).on("mouseover", ".translateButton" + suffix, function () {
             var target;
- 
+
             if (type === "this_level") {
                 target = $(".translateButton" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
                 target = $(".translateButton" + suffix).parent().parent().get(0);
             }
- 
+
             $(target).append('<div class="overlay">目标翻译区域</div>');
             previousCSS = {
                 "position": $(target).css("position"),
@@ -1969,16 +1970,16 @@ async function addButtonWithTranslation(parent, suffix, type) {
                 "z-index": "99999"
             });
         });
- 
+
         $(document).on("mouseout", ".translateButton" + suffix, function () {
             var target;
- 
+
             if (type === "this_level") {
                 target = $(".translateButton" + suffix).parent().next().get(0);
             } else if (type === "child_level") {
                 target = $(".translateButton" + suffix).parent().parent().get(0);
             }
- 
+
             $(target).find('.overlay').remove();
             if (previousCSS) {
                 $(target).css(previousCSS);
@@ -1988,10 +1989,10 @@ async function addButtonWithTranslation(parent, suffix, type) {
             });
         });
     }
- 
+
     if (hoverTargetAreaDisplay) bindHoverEvents(suffix, type);
 }
- 
+
 // 块处理
 async function blockProcessing(target, element_node, button) {
     if (!target.markdown) {
@@ -2018,7 +2019,7 @@ async function blockProcessing(target, element_node, button) {
     }
     return result;
 }
- 
+
 function addConversionButton() {
     // 添加按钮到题目部分
     $('.subject-question').each(function () {
@@ -2028,7 +2029,7 @@ function addConversionButton() {
         addButtonWithCopy(this, id, "this_level");
         addButtonWithTranslation(this, id, "this_level");
     });
- 
+
     // 添加按钮到question-oi-bd部分
     $('.question-oi-bd').each(function () {
         let id = "_question-oi-bd_" + getRandomNumber(8);
@@ -2037,7 +2038,7 @@ function addConversionButton() {
         addButtonWithCopy(this, id, "this_level");
         addButtonWithTranslation(this, id, "this_level");
     });
- 
+
     // 添加按钮到pre部分
     var selectorList = ['.question-oi-bd', '.CodeMirror'];//排除有这些祖宗节点的pre
     $('pre').each(function () {
@@ -2052,7 +2053,7 @@ function addConversionButton() {
         addButtonWithCopy(this, id, "this_level");
         addButtonWithTranslation(this, id, "this_level");
     });
- 
+
     // 添加按钮到题解部分
     $('div.nc-post-content').each(function () {
         let id = "_nc-post-content_" + getRandomNumber(8);
@@ -2077,7 +2078,7 @@ function addConversionButton() {
         }, 1000);       
     });
 };
- 
+
 $(document).ready(function () {
     var tip_SegmentedTranslation = $("<div></div>")
         .addClass("alert alert-danger")
@@ -2091,13 +2092,13 @@ $(document).ready(function () {
             "font-weight": "600",
             position: "relative",
         });
- 
+
     if (enableSegmentedTranslation)
         $(".content-board").before(tip_SegmentedTranslation); //显示分段翻译警告
- 
+
     addConversionButton();
 });
- 
+
 // 字数超限确认
 function showWordsExceededDialog(button) {
     return new Promise(resolve => {
@@ -2137,7 +2138,7 @@ function showWordsExceededDialog(button) {
         });
     });
 }
- 
+
 // 跳过折叠块确认
 function skiFoldingBlocks() {
     return new Promise(resolve => {
@@ -2173,7 +2174,7 @@ function skiFoldingBlocks() {
         });
     });
 }
- 
+
 // 翻译框/翻译处理器
 var translatedText = "";
 async function translateProblemStatement(text, element_node, button) {
@@ -2262,13 +2263,13 @@ async function translateProblemStatement(text, element_node, button) {
             }
         } catch (e) { }
     }
- 
+
     // 创建一个隐藏的元素来保存 translatedText 的值
     var textElement = document.createElement("div");
     textElement.style.display = "none";
     textElement.textContent = translatedText;
     translateDiv.parentNode.insertBefore(textElement, translateDiv);
- 
+
     // 翻译复制按钮
     var copyButton = document.createElement("button");
     copyButton.textContent = "Copy";
@@ -2279,7 +2280,7 @@ async function translateProblemStatement(text, element_node, button) {
     });
     $(wrapperDiv).append(copyButton);
     $(copyButton).addClass("html2mdButton html2md-cb");
- 
+
     copyButton.addEventListener("click", function () {
         var translatedText = textElement.textContent;
         GM_setClipboard(translatedText);
@@ -2291,7 +2292,7 @@ async function translateProblemStatement(text, element_node, button) {
         }, 2000);
     });
     translateDiv.parentNode.insertBefore(wrapperDiv, translateDiv);
- 
+
     // 转义LaTex中的特殊符号
     const escapeRules = [
         { pattern: /(?<!\\)>(?!\s)/g, replacement: " &gt; " }, // >符号
@@ -2300,18 +2301,18 @@ async function translateProblemStatement(text, element_node, button) {
         { pattern: /(?<!\\)&(?=\s)/g, replacement: "\\&" }, // &符号
         { pattern: /\\&/g, replacement: "\\\\&" }, // &符号
     ];
- 
+
     let latexMatches = [...translatedText.matchAll(/\$\$([\s\S]*?)\$\$|\$(.*?)\$/g)];
- 
+
     for (const match of latexMatches) {
         const matchedText = match[0];
- 
+
         for (const rule of escapeRules) {
             const escapedText = matchedText.replaceAll(rule.pattern, rule.replacement);
             translatedText = translatedText.replace(matchedText, escapedText);
         }
     }
- 
+
     // 渲染MarkDown
     var md = window.markdownit();
     var html = md.render(translatedText);
@@ -2336,9 +2337,9 @@ async function translateProblemStatement(text, element_node, button) {
         copyDiv: textElement,
         copyButton: copyButton
     };
- 
+
 }
- 
+
 // ChatGPT
 async function translate_openai(raw) {
     var openai_retext = "";
@@ -2355,7 +2356,7 @@ async function translate_openai(raw) {
         GM_xmlhttpRequest({
             method: 'POST',
             url: (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions',
- 
+
             data: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
@@ -2378,16 +2379,16 @@ async function translate_openai(raw) {
                 reject("发生了未知的错误，请确认你是否能正常访问OpenAi的接口，如果使用代理API，请检查是否正常工作\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
             },
         });
- 
+
     });
 }
- 
+
 //--谷歌翻译--start
 async function translate_gg(raw) {
     return new Promise((resolve, reject) => {
         const url = 'https://translate.google.com/m';
         const params = `tl=zh-CN&q=${encodeURIComponent(raw)}`;
- 
+
         GM_xmlhttpRequest({
             method: 'GET',
             url: `${url}?${params}`,
@@ -2404,7 +2405,7 @@ async function translate_gg(raw) {
     });
 }
 //--谷歌翻译--end
- 
+
 //--有道翻译m--start
 async function translate_youdao_mobile(raw) {
     const options = {
@@ -2422,7 +2423,7 @@ async function translate_youdao_mobile(raw) {
     return await BaseTranslate('有道翻译mobile', raw, options, res => /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res)[1])
 }
 //--有道翻译m--end
- 
+
 //--Deepl翻译--start
 function getTimeStamp(iCount) {
     const ts = Date.now();
@@ -2433,7 +2434,7 @@ function getTimeStamp(iCount) {
         return ts;
     }
 }
- 
+
 async function translate_deepl(raw) {
     const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
     const data = {
@@ -2474,9 +2475,9 @@ async function translate_deepl(raw) {
     }
     return await BaseTranslate('Deepl翻译', raw, options, res => JSON.parse(res).result.texts[0].text)
 }
- 
+
 //--Deepl翻译--end
- 
+
 //--异步请求包装工具--start
 async function PromiseRetryWrap(task, options, ...values) {
     const { RetryTimes, ErrProcesser } = options || {};
@@ -2494,7 +2495,7 @@ async function PromiseRetryWrap(task, options, ...values) {
         }
     }
 }
- 
+
 async function BaseTranslate(name, raw, options, processer) {
     let errtext;
     const toDo = async () => {
@@ -2515,15 +2516,15 @@ async function BaseTranslate(name, raw, options, processer) {
     }
     return await PromiseRetryWrap(toDo, { RetryTimes: 3, ErrProcesser: () => "翻译出错，请重试或更换翻译接口\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈  请注意打码报错信息的敏感部分\n\n报错信息：" + errtext })
 }
- 
- 
+
+
 function Request(options) {
     return new Promise((reslove, reject) => GM_xmlhttpRequest({ ...options, onload: reslove, onerror: reject }))
 }
- 
+
 //--异步请求包装工具--end
- 
- 
+
+
 // 配置自动迁移代码（将在10个小版本后移除-1.20）
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
     const newConfig = { "choice": -1, "configurations": [] };

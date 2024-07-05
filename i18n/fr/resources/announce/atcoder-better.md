@@ -1,3 +1,31 @@
+## 1.17.0
+
+- \*_Remplacer le CDN du dépôt public vers [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), voir [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ pour des raisons. \*
+
+- Correction du problème du bouton "Expand/Collapse" invalide dans le code de la page de soumission.
+
+- Ajustement de la structure de la page des paramètres
+
+## 1.16.1
+
+- Résoudre un problème d'erreurs de localisation de site web
+
+## 1.16.0
+
+- Ajouter les options "ChatGPT Translation Prompt Customisation" et "As System Prompt" Merci à **@Dawn-Xu-helloworld** pour sa collaboration !
+- Ajouter une fenêtre pop-up de confirmation de soumission de code pour afficher le nom du titre.
+- Ajouter une option de traduction automatique
+- Ajouter un échantillon par l'option Auto-Commit (désactivée par défaut)
+- Remplacement de l'interface de "Yodo Translator"
+- &nbsp;Correction des symboles ` ` dans l'embellissement des blocs de code
+- Correction de l'éditeur Monaco qui n'applique pas le thème correctement lorsque le thème est défini sur follow Merci à **@cscnk52** pour sa contribution !
+- Corrige le fait que LaTeX ne remplace pas correctement les lignes, corrige les problèmes de performance avec les règles associées.
+- Correction d'une erreur lors de la traduction de "Collecter les anciens résultats".
+- Correction des balises de script non filtrées lors de la conversion MarkDown
+- Correction de certains matchs ne sautant pas à Logan Valley
+- Modifier la couleur des évaluations de la liste en fonction des règles de couleur d'AtCoder.
+- Utiliser le polyfill pour la compatibilité avec les navigateurs qui ne supportent pas la méthode dialog.showModal() (par exemple Firefox79).
+
 ## 1.15.2
 
 - Supprimer les méthodes qui n'ont plus de sens：Déterminer si le texte est susceptible d'être un code

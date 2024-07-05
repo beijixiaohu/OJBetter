@@ -321,6 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "Para evitar fraudes, como a IA generativa, este concurso proíbe que as perguntas sejam fornecidas diretamente à IA generativa e a outros programas. Para obter mais informações, consulte as regras abaixo.",
+                "AtCoder生成AI対策ルール": "Regras de precaução da IA generativa AtCoder",
                 "現在": "estar virado para (nós)",
                 "で参加登録しています。詳細は": "se inscreveram para participar. Para mais informações, consultar",
                 "こちら": "aqui estão",
@@ -743,6 +745,7 @@
             "rules": {
                 "You have registered for this contest as an": "Inscreveu-se nesta corrida como",
                 "You have registered for this contest as a": "Inscreveu-se nesta corrida como",
+                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "É proibido introduzir toda ou parte da informação de uma pergunta colocada num concurso AtCoder em curso diretamente num software de IA generativa. Por favor, consulte",
                 "participant. Please refer to": "Participantes. Consultar",
                 "this post": "este artigo",
                 "for details.": "Para saber mais.",

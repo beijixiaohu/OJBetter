@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.15.2",
-    "1.15.2": "- 移除已无意义的方法：判断文本是否可能为代码",
-    "1.15.0": "- MarkDown 数据中不再包含行间代码块\n\n- 完善网站本地化规则\n\n- 改进了判断文本为代码片段的相关方法\n\n- 修复 “美化代码块” 功能报错 not defined 的问题\n\n- 修复 `OJB_observeElement()` 方法报错的问题\n\n- 修复网站本地化方法 `strictTraverseTextNodes()` 无效的问题",
-    "1.14.2": "- 修复黑暗模式下编辑器的一处样式错误\n\n- 修复代码编辑器语言选择初始值错误的问题\n\n- 修复在非 chrome 浏览器中，代码编辑器初始化异常的问题"
+    "lastVersion": "1.17.0",
+    "1.17.0": "- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**\n\n\n\n- 修复 submissions 页面代码\"展开/折叠\"按钮无效的问题\n\n\n\n- 调整设置页面的布局结构",
+    "1.16.1": "- 修复 网站本地化报错的问题",
+    "1.16.0": "- 添加 \"ChatGPT 翻译提示词自定义\" 和 \"作为系统提示词\"的选项 感谢 **@Dawn-Xu-helloworld** 的协作\n\n- 添加 代码提交确认弹窗显示题目名，\n\n- 添加 自动翻译 选项\n\n- 添加 样例通过自动提交 选项（默认关闭）\n\n- 更换 \"有道翻译\" 的接口\n\n- 修复 代码块美化中存在 `&nbsp;` 符号的问题\n\n- 修复 主题设置为 follow 时 Monaco 编辑器未正确应用主题的问题 感谢 **@cscnk52** 的贡献\n\n- 修复 行间 LaTeX 未正确替换的问题，修复相关正则的性能问题\n\n- 修复 重新翻译时\"收起旧的结果\"报错的问题\n\n- 修复  MarkDown 转换时未过滤 script 标签的问题\n\n- 修复 一些比赛无法跳转至洛谷的问题\n\n- 修改 clist rating 的颜色为 AtCoder 的颜色规则\n\n- 使用 polyfill 以兼容不支持 dialog.showModal() 方法的浏览器（比如 Firefox79）"
 }

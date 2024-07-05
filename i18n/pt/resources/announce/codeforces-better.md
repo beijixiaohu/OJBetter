@@ -1,3 +1,31 @@
+## 1.76.0
+
+- \*_Substituir o CDN do repositório público para [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por motivos. \*
+
+- Adicionada a funcionalidade "Substituição de texto do estado da revisão", graças à colaboração de **@wrk-123**.
+
+- Ajustar a estrutura do esquema da página de definições
+
+## 1.75.0
+
+- Melhoria de algumas regras de localização de sítios Web, graças à contribuição de **@qjwh**.
+- Adicionar as opções "Personalização do prompt de tradução do ChatGPT" e "Como prompt do sistema" Obrigado a **@Dawn-Xu-helloworld** pela colaboração!
+- Adicionar a funcionalidade "Forçar conversão de redução" Obrigado a **@wrk-123** pela contribuição!
+- Adicionar janela pop-up de confirmação de envio de código para exibir o nome do título.
+- Adicionar amostra através da opção Auto-Commit (desactivada por predefinição)
+- Adicionar a funcionalidade "Ocultar etiquetas de perguntas de tópicos", desactivada por predefinição.
+- Substituição da interface do "Yodo Translator"
+- Correção de títulos de ginásio que não saltam para vjudge
+- &nbsp;Correção de símbolos ` ` no embelezamento de blocos de código
+- Corrigir o problema de não ser possível submeter corretamente as fontes do conjunto de problemas quando o comprimento do número da pergunta não é 1.
+- Corrigir o editor do Monaco que não aplica o tema corretamente quando o tema está definido para seguir Obrigado a **@cscnk52** pela contribuição!
+- Correção do editor de código que não carrega corretamente quando as hiperligações do título do conjunto de títulos estão em minúsculas
+- Corrige o LaTeX que não substitui corretamente entre linhas, corrige problemas de desempenho com regras relacionadas
+- Correção do erro ao retraduzir "Recolher resultados antigos".
+- Corrigir o problema de o botão de cópia não funcionar na página de envio
+- Correção de etiquetas de script não filtradas durante a conversão MarkDown
+- Utilize o polyfill para compatibilidade com navegadores que não suportam o método dialog.showModal() (por exemplo, Firefox79).
+
 ## 1.74.2
 
 - Corrige problemas da última correção Obrigado a @Dechancer pelo feedback!

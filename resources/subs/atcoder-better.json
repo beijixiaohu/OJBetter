@@ -321,6 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "为了防止生成式AI等作弊行为，本比赛禁止将题目直接提供给生成式AI等程序。请查看以下规则以获取更多信息。",
+                "AtCoder生成AI対策ルール": "AtCoder生成式AI防范规则",
                 "現在": "当前",
                 "で参加登録しています。詳細は": "已报名参加。详情请阅读",
                 "こちら": "这里",
@@ -743,6 +745,7 @@
             "rules": {
                 "You have registered for this contest as an": "您已经报名参加了这场比赛，作为一个",
                 "You have registered for this contest as a": "您已经报名参加了这场比赛，作为一个",
+                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "禁止将正在进行的AtCoder比赛中发布的问题的全部或部分信息直接输入到生成式AI软件中。请参考",
                 "participant. Please refer to": "参与者。请参考",
                 "this post": "这篇文章",
                 "for details.": "了解详情。",
@@ -850,6 +853,5 @@
             "rules": {}
         }
     },
-    "dynamicReplacements": {
-    }
+    "dynamicReplacements": {}
 }

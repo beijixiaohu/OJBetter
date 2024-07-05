@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.74.2
+// @version      1.76.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -11,7 +11,7 @@
 // @connect      api.deepl.com
 // @connect      api.deeplx.org
 // @connect      www.iflyrec.com
-// @connect      m.youdao.com
+// @connect      dict.youdao.com
 // @connect      api.interpreter.caiyunai.com
 // @connect      translate.google.com
 // @connect      openai.api2d.net
@@ -22,7 +22,7 @@
 // @connect      greasyfork.org
 // @connect      rextester.com
 // @connect      wandbox.org
-// @connect      staticfile.net
+// @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
@@ -37,22 +37,24 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
-// @require      https://cdn.staticfile.net/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.net/markdown-it/13.0.1/markdown-it.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.staticfile.net/chroma-js/2.4.2/chroma.min.js
-// @require      https://cdn.staticfile.net/xterm/3.9.2/xterm.min.js
-// @require      https://cdn.staticfile.net/dexie/3.2.4/dexie.min.js
-// @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
-// @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
-// @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
-// @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
-// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
-// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
-// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/crypto-js/4.2.0/crypto-js.min.js#sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/chroma-js/2.4.2/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dexie/4.0.7/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next/23.11.5/i18next.min.js#sha512-3RSGkmT48HnO+hlmzGYDx5/w2LIBX0O5hSuYX6KWAxmvVlSjFgoxIaWa2tlMExheGvt3lLyxeTsXfpC47yb8CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next-http-backend/2.5.2/i18nextHttpBackend.min.js#sha512-bBb+wrGRTx4MvHpksYb1Iv5oJ1o8ineCqpc0cnTgdJQhuAFJJ93SEVXxUOCptvt0vAqYdjzWO5emorYUBt6Ceg==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
+// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js#sha512-JYm2AqU8EvoEOnCucDItAsNtmGcjbxccOXjnwNFp87zdlyclpEephXrgR2sMlWj/gL4DCJUN3X0JhI1omaRO0A==
+// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js#sha512-kY1lU3DCvgzkWkOl47sIlmLKdgDcO4T3NYN6p/ET4oi3fnKO74sHUt1xYGtksIHXciKF8Jt+N4RDqG3CRoeYww==
+// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
-// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
+// @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
+// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css#sha512-cRXJfA2tEcAxHEKylJfxteY17N7j9fia3waahHOVnvl63uVZT9OQ7jjjpofZMVZ4JSX3BRET+mI8UvKnsXd3NA==
+// @resource     dialogpolyfillcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css#sha512-J2+1q+RsZuJXabBfH1q/fgRr6jMy9By5SwVLk7bScEW7NFJkMUXxfeOyyxtDe6fsaJ4jsciexSlGrPYn9YbBIg==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -151,7 +153,9 @@ OJBetter.basic = {
     /** @type {boolean?} 显示跳转到Virtual Judge按钮 */
     showCF2vjudge: undefined,
     /** @type {boolean?} 比赛排行榜重新着色 */
-    standingsRecolor: undefined
+    standingsRecolor: undefined,
+    /** @type {boolean?} 隐藏题目问题标签 */
+    hiddenProblemTag: undefined
 };
 
 /**
@@ -162,6 +166,8 @@ OJBetter.basic = {
 OJBetter.typeOfPage = {
     /** @type {boolean?} 是否是轻量站 */
     is_mSite: undefined,
+    /** @type {boolean?} 是否是训练营页面 */
+    is_gym: undefined,
     /** @type {boolean?} 是否是acmsguru页面 */
     is_acmsguru: undefined,
     /** @type {boolean?} 是否是旧版LaTeX页面 */
@@ -184,6 +190,8 @@ OJBetter.typeOfPage = {
     is_statePage: undefined,
     /** @type {boolean?} 是否是提交记录页面 */
     is_submissions: undefined,
+    /** @type {boolean?} 是否是提交记录详情页面 */
+    is_submission: undefined,
 };
 
 /**
@@ -239,7 +247,9 @@ OJBetter.translation = {
     /** @type {boolean?} 替换符 */
     replaceSymbol: undefined,
     /** @type {boolean?} 过滤文本中的*号 */
-    filterTextWithoutEmphasis: undefined
+    filterTextWithoutEmphasis: undefined,
+    /** @type {boolean?} 强制使用turndown转换 */
+    forceTurndownConversion: undefined
 };
 
 /**
@@ -311,8 +321,12 @@ OJBetter.monaco = {
         alwaysConsumeMouseWheel: undefined,
         /** @type {boolean?} 提交代码二次确认 */
         isCodeSubmitDoubleConfirm: undefined,
+        /** @type {boolean?} 测试通过后自动提交 */
+        autoSubmitAfterPass: undefined,
         /** @type {string?} 提交按钮位置 */
-        submitButtonPosition: undefined
+        submitButtonPosition: undefined,
+        /** @type {boolean?} 自动保存代码 */
+        autoMemoryCode: undefined
     }
 };
 
@@ -393,7 +407,11 @@ OJBetter.chatgpt = {
         }
     },
     /** @type {boolean?} 是否为流式传输 */
-    isStream: undefined
+    isStream: undefined,
+    /** @type {string?} 是否使用自定义Prompt */
+    customPrompt: undefined,
+    /** @type {boolean?} 是否作为系统Prompt */
+    asSystemPrompt: undefined
 };
 
 /**
@@ -408,6 +426,9 @@ OJBetter.preference = {
     hoverTargetAreaDisplay: undefined,
     /** @type {string?} 按钮图标大小 */
     iconButtonSize: undefined,
+    /** @type {string?} 评测状态文本替换规则 */
+    judgeStatusReplaceText: undefined,
+
 };
 
 /**
@@ -442,7 +463,7 @@ OJBetter.supportList = {
     translationSupport: {
         'deepl': { 'zh': 'ZH', 'de': 'DE', 'fr': 'FR', 'ko': 'KO', 'pt': 'PT', 'ja': 'JA', 'es': 'ES', 'it': 'IT' },
         'iflyrec': { 'zh': '1' },
-        'youdao': { 'zh': 'AUTO' },
+        'youdao': { 'zh': 'zh-CHS', 'zh-Hant': 'zh-CHT', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
         'openai': { 'zh': 'Chinese', 'zh-Hant': 'Traditional Chinese', 'de': 'German', 'fr': 'French', 'ko': 'Korean', 'pt': 'Portuguese', 'ja': 'Japanese', 'es': 'Spanish', 'it': 'Italian', 'hi': 'Hindi' }
@@ -469,8 +490,8 @@ OJBetter.supportList = {
 // ------------------------------
 
 /**
- * 延迟函数 
- * @param {number} ms 延迟时间（毫秒） 
+ * 延迟函数
+ * @param {number} ms 延迟时间（毫秒）
  * @returns {Promise<void>}
  */
 function OJB_delay(ms) {
@@ -479,7 +500,7 @@ function OJB_delay(ms) {
 
 /**
  * 等待直到指定的条件函数返回true。
- * 
+ *
  * @param {() => boolean} conditionCheck 一个无参数的函数，用于检查条件是否满足。当函数返回true时，表示条件已满足。
  * @param {number} [interval=100] 检查条件的间隔时间，单位为毫秒。默认为100毫秒。
  * @returns {Promise<void>} 返回一个Promise，在条件满足时解决。
@@ -500,25 +521,69 @@ async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
 
 /**
  * 动态加载JavaScript库并返回一个Promise，该Promise在脚本加载完成后解决。
- * 
+ *
  * @param {string} url - 要加载的JavaScript库的URL地址。
+ * @param {string} [expectedHash] - 可选的Base64编码的SHA-512哈希值，用于校验脚本内容。格式为 "sha512-<Base64编码的哈希值>"。
  * @returns {Promise<void>} 一个Promise，它在脚本加载并执行完成后解决。
  */
-function OJB_LoadJS(url) {
-    return new Promise((resolve, reject) => {
-        let scriptElement = document.createElement("script");
-        scriptElement.src = url;
+async function OJB_LoadJS(url, expectedHash) {
+    /**
+     * 计算给定数据的SHA-512哈希值，并将其转换为十六进制字符串。
+     *
+     * @param {string} data - 要计算哈希值的数据。
+     * @returns {Promise<string>} 一个Promise，它解析为数据的SHA-512哈希值的十六进制字符串。
+     */
+    const calculateHash = async (data) => {
+        const encoder = new TextEncoder();
+        const dataBuffer = encoder.encode(data);
+        const hashBuffer = await crypto.subtle.digest('SHA-512', dataBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    /**
+     * 将Base64编码的字符串转换为十六进制字符串。
+     *
+     * @param {string} base64 - Base64编码的字符串。
+     * @returns {string} 转换后的十六进制字符串。
+     */
+    const base64ToHex = (base64) => {
+        const binaryString = atob(base64);
+        const byteArray = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            byteArray[i] = binaryString.charCodeAt(i);
+        }
+        return Array.from(byteArray).map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch script: ${response.statusText}`);
+        const scriptContent = await response.text();
+
+        if (expectedHash) {
+            // 去掉前缀 "sha512-"
+            const base64Hash = expectedHash.replace(/^sha512-/, '');
+            const actualHash = await calculateHash(scriptContent);
+            const expectedHashHex = base64ToHex(base64Hash);
+            if (actualHash !== expectedHashHex) throw new Error('SHA-512 hash mismatch');
+        }
+
+        const scriptElement = document.createElement("script");
+        scriptElement.textContent = scriptContent;
         document.head.prepend(scriptElement);
-        scriptElement.onload = resolve;
-        scriptElement.onerror = reject;
-    });
+
+        return Promise.resolve();
+    } catch (error) {
+        return Promise.reject(error);
+    }
 }
 
 /**
  * 安全地创建JQuery对象
  * @description 通过字符串创建JQuery对象时，如果字符串以空格开头，在某些Jquery版本中会发生错误，过滤空格以安全的创建元素。
  * @param {string} string - 字符串。
- * @returns JQuery对象
+ * @returns {JQuery} JQuery对象
  */
 const OJB_safeCreateJQElement = function (string) {
     return $(string.replace(/^\s+/, ""));
@@ -609,7 +674,7 @@ const OJB_removeHTMLTags = function (text) {
  * };
  * OJB_evaluatePathOrExpression(obj, "a.b"); // 1
  * OJB_evaluatePathOrExpression(obj, "a.b + c"); // 3
- * OJB_evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
+ * OJB_evaluatePathOrExpression(obj, "a.b + a.c"); // 1
  */
 function OJB_evaluatePathOrExpression(obj, pathOrExpression) {
     const hasOperator = /[\+\-\*\/]/.test(pathOrExpression);
@@ -800,6 +865,7 @@ async function initVar() {
     OJBetter.state.lastReadAnnounceVer = OJB_getGMValue("lastReadAnnounceVer", "0");
     OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
     OJBetter.typeOfPage.is_oldLatex = $('.tex-span').length;
+    OJBetter.typeOfPage.is_gym = href.includes("gym") && href.includes('/problem/');
     OJBetter.typeOfPage.is_acmsguru = href.includes("acmsguru") && href.includes('/problem/');
     OJBetter.typeOfPage.is_contest = /\/contest\/[\d\/\s]+$/.test(href) && !href.includes('/problem/');
     OJBetter.typeOfPage.is_problem = href.includes('/problem/');
@@ -809,6 +875,7 @@ async function initVar() {
     OJBetter.typeOfPage.is_submitPage = href.includes('/submit');
     OJBetter.typeOfPage.is_statePage = href.includes('/status');
     OJBetter.typeOfPage.is_submissions = href.includes('/submissions');
+    OJBetter.typeOfPage.is_submission = href.includes('/submission');
     OJBetter.typeOfPage.is_cfStandings = href.includes('/standings') &&
         $('.standings tr:first th:nth-child(n+5)')
             .map(function () {
@@ -824,6 +891,7 @@ async function initVar() {
     OJBetter.basic.showJumpToLuogu = OJB_getGMValue("showJumpToLuogu", true);
     OJBetter.basic.showCF2vjudge = OJB_getGMValue("showCF2vjudge", true);
     OJBetter.basic.standingsRecolor = OJB_getGMValue("standingsRecolor", true);
+    OJBetter.basic.hiddenProblemTag = OJB_getGMValue("hiddenProblemTag", false);
     OJBetter.state.notWaiteLoaded = OJB_getGMValue("notWaiteLoaded", false);
     OJBetter.translation.targetLang = OJB_getGMValue("transTargetLang", "zh");
     OJBetter.translation.choice = OJB_getGMValue("translation", "deepl");
@@ -839,6 +907,7 @@ async function initVar() {
     OJBetter.common.taskQueue = new TaskQueue();
     OJBetter.translation.replaceSymbol = OJB_getGMValue("replaceSymbol", "2");
     OJBetter.translation.filterTextWithoutEmphasis = OJB_getGMValue("filterTextWithoutEmphasis", false);
+    OJBetter.translation.forceTurndownConversion = OJB_getGMValue("forceTurndownConversion", false);
     OJBetter.clist.enabled.contest = OJB_getGMValue("showClistRating_contest", false);
     OJBetter.clist.enabled.problem = OJB_getGMValue("showClistRating_problem", false);
     OJBetter.clist.enabled.problemset = OJB_getGMValue("showClistRating_problemset", false);
@@ -875,6 +944,8 @@ async function initVar() {
     OJBetter.deepl.enableLinkProtection = OJB_getGMValue("enableLinkProtection", true);
     //openai
     OJBetter.chatgpt.isStream = OJB_getGMValue("openai_isStream", true);
+    OJBetter.chatgpt.customPrompt = OJB_getGMValue("openai_customPrompt", '');
+    OJBetter.chatgpt.asSystemPrompt = OJB_getGMValue("openai_asSystemPrompt", false);
     OJBetter.chatgpt.configs = OJB_getGMValue("chatgpt_config", {
         "choice": "",
         "configurations": []
@@ -910,8 +981,10 @@ async function initVar() {
     OJBetter.monaco.complet.cppCodeTemplate = OJB_getGMValue("cppCodeTemplateComplete", true);
     OJBetter.monaco.onlineCompilerChoice = OJB_getGMValue("onlineCompilerChoice", "official");
     OJBetter.monaco.setting.isCodeSubmitDoubleConfirm = OJB_getGMValue("isCodeSubmitConfirm", true);
+    OJBetter.monaco.setting.autoSubmitAfterPass = OJB_getGMValue("autoSubmitAfterPass", false);
     OJBetter.monaco.setting.alwaysConsumeMouseWheel = OJB_getGMValue("alwaysConsumeMouseWheel", true);
     OJBetter.monaco.setting.submitButtonPosition = OJB_getGMValue("submitButtonPosition", "bottom");
+    OJBetter.monaco.setting.autoMemoryCode = OJB_getGMValue("autoMemoryCode", true);
     //自定义补全
     OJBetter.monaco.complet.customConfig = OJB_getGMValue("Complet_config", {
         "choice": -1,
@@ -926,6 +999,7 @@ async function initVar() {
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
+    OJBetter.preference.judgeStatusReplaceText = OJB_getGMValue("judgeStatusReplaceText", "");
     OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
     OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
@@ -955,12 +1029,16 @@ function showWarnMessage() {
         const loadingMessage = new LoadingMessage();
         loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.is_submitPage', { ns: 'alert' })}`, 'warning');
     }
+    if (OJBetter.translation.forceTurndownConversion) {
+        const loadingMessage = new LoadingMessage();
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('warning.forceTurndownConversion', { ns: 'alert' })}`, 'warning');
+    }
 }
 
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
-const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
+const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z
 m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v65.974857h-44.78781v-65.974857h-87.698285v-145.359238h87.698285v-38.351238z m0 83.139047h-44.787809v56.05181h44.787809v-56.05181z m89.307429 0h-44.519619v56.05181h44.519619v-56.05181zM780.190476 170.666667a73.142857 73.142857 0 0 1 73.142857 73.142857v97.523809h-73.142857v-97.523809h-97.523809V170.666667h97.523809z" p-id="6326"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
@@ -1224,13 +1302,19 @@ function handleColorSchemeChange(event) {
     if (!event.matches) {
         var originalColor = $(this).data("original-color");
         $(this).css("background-color", originalColor);
-        if (OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs');
-        }
+        const intervalId = setinterval(() => {
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs');
+                clearInterval(intervalId);
+            }
+        }, 100);
     } else {
-        if (OJBetter.monaco.editor) {
-            monaco.editor.setTheme('vs-dark');
-        }
+        const intervalId = setInterval(() => {
+            if (OJBetter.monaco && OJBetter.monaco.editor) {
+                monaco.editor.setTheme('vs-dark');
+                clearInterval(intervalId);
+            }
+        }, 100);
     }
 }
 
@@ -1245,6 +1329,12 @@ function handleColorSchemeChange(event) {
         const htmlElement = document.querySelector('html');
         if (htmlElement) {
             htmlElement.setAttribute('data-theme', 'dark');
+            const intervalId = setInterval(() => {
+                if (OJBetter.monaco && OJBetter.monaco.editor) {
+                    monaco.editor.setTheme('vs-dark');
+                    clearInterval(intervalId);
+                }
+            }, 100);
         } else {
             setTimeout(setDarkTheme, 100);
         }
@@ -1308,7 +1398,7 @@ function handleColorSchemeChange(event) {
             --ojb-border-radius-small: 4px; /* 小圆角 */
             --ojb-border-radius-medium: 8px; /* 中圆角 */
             --ojb-border-radius-large: 12px; /* 大圆角 */
-            
+
             /* 组合边框样式 */
             --ojb-border-solid-primary: var(--ojb-border-width) var(--ojb-border-style-solid) var(--ojb-color-border-primary); /* 主要实线边框 */
             --ojb-border-dashed: var(--ojb-border-width) var(--ojb-border-style-dashed) var(--ojb-color-border-primary); /* 主要虚线边框 */
@@ -1321,12 +1411,12 @@ function handleColorSchemeChange(event) {
     GM_addStyle(`
         /* 主要文字颜色 */
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, 
-        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .OJBetter_setting_menu, 
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor,
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .OJBetter_setting_menu,
         html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
         html[data-theme=dark] #OJBetter_SubmitForm input, html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, 
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar,
         html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
         html[data-theme=dark] .popup .content{
             color: var(--ojb-color-text-primary);
@@ -1351,15 +1441,15 @@ function handleColorSchemeChange(event) {
         }
         /* 主要背景层次 */
         html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
-        html[data-theme=dark] .ojb_btn:hover, 
+        html[data-theme=dark] .ojb_btn:hover,
         html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
-        html[data-theme=dark] #OJBetter_SubmitForm input, 
+        html[data-theme=dark] #OJBetter_SubmitForm input,
         html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"], html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"]:checked,
-        html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select, 
+        html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select,
         html[data-theme=dark] .OJBetter_setting_sidebar li a.active, html[data-theme=dark] .OJBetter_setting_sidebar li,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
-        html[data-theme=dark] .popup .content, 
+        html[data-theme=dark] .popup .content,
         html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
@@ -1369,13 +1459,13 @@ function handleColorSchemeChange(event) {
             background-image: none;
         }
         /* 次要背景层次 */
-        html[data-theme=dark] .ojb_btn, 
+        html[data-theme=dark] .ojb_btn,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
         html[data-theme=dark] .translate-problem-statement-panel,
-        html[data-theme=dark] .translate-problem-statement, 
+        html[data-theme=dark] .translate-problem-statement,
         html[data-theme=dark] .OJBetter_setting_list,
-        html[data-theme=dark] .OJBetter_setting_menu hr, 
+        html[data-theme=dark] .OJBetter_setting_menu hr,
         html[data-theme=dark] .OJBetter_setting_sidebar li a,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] .test-for-popup pre,
@@ -1386,7 +1476,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::before,
         html[data-theme=dark] .config::before, html[data-theme=dark] .config li.tempConfig_add_button:hover,
         html[data-theme=dark] .OJBetter_setting_menu details, html[data-theme=dark] #config_bar_menu,
-        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button, 
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button,
         html[data-theme=dark] .OJBetter_setting_menu .badge, html[data-theme=dark] #OJBetter_SubmitForm #SubmitButton{
             background-color: var(--ojb-color-bg-secondary);
         }
@@ -1401,9 +1491,9 @@ function handleColorSchemeChange(event) {
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
-        html[data-theme=dark] .ojb_btn, 
+        html[data-theme=dark] .ojb_btn,
         html[data-theme=dark] .OJBetter_setting_list, html[data-theme=dark] .config_bar_list,
-        html[data-theme=dark] label.config_bar_ul_li_text, 
+        html[data-theme=dark] label.config_bar_ul_li_text,
         html[data-theme=dark] .OJBetter_setting_sidebar li, html[data-theme=dark] .OJBetter_setting_menu select,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_SubmitForm select,
         html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
@@ -1485,8 +1575,8 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .ttypography h1, html[data-theme=dark] .ttypography h2, html[data-theme=dark] .ttypography h3,
         html[data-theme=dark] .ttypography h4, html[data-theme=dark] .ttypography h5, html[data-theme=dark] .ttypography h6,
         html[data-theme=dark] .datatable table, html[data-theme=dark] .problem-statement .sample-tests pre,
-        html[data-theme=dark] .ace-chrome .ace_gutter, 
-        html[data-theme=dark] .setting-name, 
+        html[data-theme=dark] .ace-chrome .ace_gutter,
+        html[data-theme=dark] .setting-name,
         html[data-theme=dark] .user-black, html[data-theme=dark] .comments label.show-archived,
         html[data-theme=dark] .comments label.show-archived *, html[data-theme=dark] table{
             color: var(--ojb-color-text-primary) !important;
@@ -1596,7 +1686,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] #OJBetter_SubmitForm.input-output-copier{
             border: none !important;
         }
-        html[data-theme=dark] .html2md-panel.input-output-copier:hover, 
+        html[data-theme=dark] .html2md-panel.input-output-copier:hover,
         html[data-theme=dark] #OJBetter_SubmitForm.input-output-copier:hover{
             background-color: #ffffff00 !important;
         }
@@ -1607,7 +1697,7 @@ function handleColorSchemeChange(event) {
         }
         /* 图片-亮度 */
         html[data-theme=dark] img, html[data-theme=dark] #facebox .popup a{
-            opacity: .75; 
+            opacity: .75;
         }
         /* 反转 */
         html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link,
@@ -1715,11 +1805,11 @@ async function initMonacoEditor() {
     if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         try {
             // 等待Monaco Editor加载器脚本加载完成
-            await OJB_LoadJS("https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js");
+            await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
 
             // 配置Monaco Editor
             require.config({
-                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
+                paths: { vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs" },
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
 
@@ -1766,10 +1856,11 @@ async function beautifyPreBlocksWithMonaco() {
             height: calculateContainerHeight(lineCount),
             width: '100%'
         });
-        pre.replaceWith(container);
+        pre.hide();
+        pre.after(container);
 
         // 初始化 Monaco 编辑器
-        monaco.editor.create(container[0], {
+        const editor = monaco.editor.create(container[0], {
             value: code,
             language: language,
             readOnly: true,
@@ -1783,6 +1874,19 @@ async function beautifyPreBlocksWithMonaco() {
             automaticLayout: true,
             scrollBeyondLastLine: false
         });
+
+        // 替换复制按钮事件
+        if (OJBetter.typeOfPage.is_submission) {
+            const button = $('div[title=Copy]');
+            console.log(button);
+            button.off('click');
+            button.on('click', (event) => {
+                event.stopPropagation(); // 阻止事件冒泡到 clipboard.min.js
+                const text = editor.getValue(); // 获取编辑器内的内容
+                GM_setClipboard(text);
+                Codeforces.showMessage("The source code has been copied into the clipboard");
+            });
+        }
     }
     // 全局替换页面上所有的 <pre> 元素
     $('pre').each(function () {
@@ -1801,6 +1905,17 @@ async function beautifyPreBlocksWithMonaco() {
             }
         });
     }
+}
+
+/**
+ * 隐藏题目问题标签
+ */
+function hiddenProblemTag() {
+    document.querySelectorAll('.roundbox.sidebox.borderTopRound .tag-box').forEach(element => {
+        if (!element.textContent.includes('*')) {
+            element.classList.add('hover-reveal');
+        }
+    });
 }
 
 // 样式
@@ -1901,7 +2016,7 @@ span.mdViewContent {
 
 /* dialog */
 dialog {
-    margin: 0px;
+    margin: 0px !important;
 }
 dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.4);
@@ -1971,7 +2086,7 @@ dialog::backdrop {
     border: 1px solid #79bbff;
     background-color: #79bbff;
 }
-.ojb_btn.success {  
+.ojb_btn.success {
     color: #4caf50;
     border: 1px solid #C8E6C9;
     background-color: #f0f9eb;
@@ -2403,7 +2518,7 @@ header .enter-or-register-box, header .languages {
 /* 链接样式 */
 .OJBetter_setting_menu a {
     font-size: 13px;
-    color: #009688;
+    color: #009688 !important;
     background-color: #E0F2F1;
     border: 1px solid #009688;
     border-radius: 4px;
@@ -3438,7 +3553,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     border: #d0d7de solid 1px;
     border-radius: 6px;
 }
-#CompilerBox > * {  
+#CompilerBox > * {
     margin: 5px;
 }
 
@@ -3566,7 +3681,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     user-select: none;
 }
 .output_diff .removed {
-    background-color: #f7c5c5; 
+    background-color: #f7c5c5;
 }
 .output_diff .diffLine {
     display: flex;
@@ -3616,6 +3731,16 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 div.sp_clear_btn {
     padding: 0px !important;
 }
+
+/* 题目问题标签hover隐藏 */
+.hover-reveal {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+.hover-reveal:hover {
+    opacity: 1;
+}
+
 
 /* 移动设备 */
 @media (max-device-width: 450px) {
@@ -3672,6 +3797,7 @@ div.sp_clear_btn {
 function addDependencyStyles() {
     GM_addStyle(GM_getResourceText("xtermcss"));
     GM_addStyle(GM_getResourceText("selectpagecss"));
+    GM_addStyle(GM_getResourceText("dialogpolyfillcss"));
     // 自定义图标大小
     GM_addStyle(`
         .iconfont {
@@ -3805,13 +3931,13 @@ class TextBlockReplacer {
         let textCopy = text;
 
         /**
-         * 替换文本
+         * 替换回文本
          * @param {string} replacement 替换的文本
          * @param {string} regexPattern 匹配规则
          * @returns {void}
          */
         const replaceText = (replacement, regexPattern) => {
-            const latexMatch = '(?<latex_block>\\$\\$(\\\\.|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\.|[^\\$])*?\\$)|';
+            const latexMatch = '(?<latex_block>\\$\\$(\\\\\\$|[^\\$])*?\\$\\$)|(?<latex_inline>\\$(\\\\\\$|[^\\$])*?\\$)|';
             const regex = new RegExp(latexMatch + regexPattern, 'g');
             textCopy = textCopy.replace(regex, (match, ...args) => {
                 // LaTeX中的不替换
@@ -4001,11 +4127,21 @@ function OJB_isSameBrowserSession(sessionKey) {
 /**
  * 随机数生成
  * @param {number} numDigits 位数
- * @returns {number}
+ * @returns {number} 一个随机数
  */
 function OJB_getRandomNumber(numDigits) {
     let min = Math.pow(10, numDigits - 1);
     let max = Math.pow(10, numDigits) - 1;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
+ * 随机数生成-范围内
+ * @param {number} min 最小值
+ * @param {number} max 最大值
+ * @returns {number} 一个随机数
+ */
+function OJB_getRandomNumberInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -4209,6 +4345,7 @@ function OJB_createDialog(title, content, buttons, renderMarkdown = false) {
  */
 function OJB_showModal(element) {
     const dialog = element.get(0);
+    dialogPolyfill.registerDialog(dialog);
     dialog.showModal();
     OJBetter.state.openDialogCount++;
 
@@ -4330,15 +4467,18 @@ function OJB_getCodeFromPre(element) {
         }
     }
 
+    let result;
     if (element.id === "submission-code") {
-        return getCodeFromAcePre(element);
+        result = getCodeFromAcePre(element);
     } else if (element.classList.contains("prettyprint")) {
-        return getCodeFromPrettyPre(element);
+        result = getCodeFromPrettyPre(element);
     } else if (element.querySelector("code.prettyprint")) {
-        return getCodeFromPreChild(element);
+        result = getCodeFromPreChild(element);
     } else {
-        return null;
+        result = "";
     }
+    result = result.replace(/\u00A0/g, ''); // 过滤文本中的U+00a0字符（由&nbsp;造成的）
+    return result;
 }
 
 /**
@@ -4353,7 +4493,7 @@ function OJB_codeLangDetect(code) {
 
 /**
  * 获取指定命名空间下的所有i18n翻译键值对。
- * 
+ *
  * @param {string} namespace - 要获取键值对的i18next命名空间。
  * @returns {Map<string, string>} 一个包含命名空间下所有键值对的Map对象。
  */
@@ -4603,7 +4743,7 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
 
 /**
  * 网站本地化替换
- * @returns 
+ * @returns
  */
 async function localizeWebsite() {
     if (OJBetter.localization.websiteLang === "initial") return;
@@ -4638,7 +4778,7 @@ async function localizeWebsite() {
                         console.error(`Error processing text replacement for match: ${match}`, error);
                     }
                 });
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     traverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -4698,7 +4838,7 @@ async function localizeWebsite() {
                         }
                     }
                 }
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     strictTraverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -5370,11 +5510,10 @@ const OJBetter_setting_sidebar_HTML = `
 <div class="OJBetter_setting_sidebar">
     <ul>
         <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="settings:sidebar.basic"></a></li>
-        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="settings:sidebar.localization"></a></li>
+        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="settings:sidebar.translation"></a></li>
         <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
         <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
-        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#dev-settings" id="sidebar-dev-settings" data-i18n="settings:sidebar.dev"></a></li>
         <li><a href="#about-settings" id="sidebar-about-settings" data-i18n="settings:sidebar.about"></a></li>
     </ul>
@@ -5408,65 +5547,6 @@ const basic_settings_HTML = `
             </label>
         </div>
     </div>
-    <div class='OJBetter_setting_list'>
-        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
-        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
-        </div>
-        <input type="checkbox" id="commentPaging" name="commentPaging">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
-        </div>
-        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
-    </div>
-</div>
-`;
-
-const l10n_settings_HTML = `
-<div id="l10n_settings" class="settings-page">
-    <h3 data-i18n="settings:localization.title"></h3>
-    <hr>
     <div class='OJBetter_setting_list'>
         <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localization.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
@@ -5613,6 +5693,26 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="openai_isStream" name="openai_isStream">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="openai_asSystemPrompt" data-i18n="settings:translation.chatgpt.asSystemPrompt.name"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.asSystemPrompt.helpText"></div>
+        </div>
+        <input type="checkbox" id="openai_asSystemPrompt" name="openai_asSystemPrompt">
+    </div>
+    <div class="OJBetter_setting_list">
+        <label for='openai_customPrompt'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label" data-i18n="settings:translation.chatgpt.customPrompt.name"></span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text" data-i18n="[html]settings:translation.chatgpt.customPrompt.helpText"></div>
+                </div>
+            </div>
+        </label>
+        <textarea id="openai_customPrompt" placeholder='' require = false data-i18n="[placeholder]settings:translation.chatgpt.customPrompt.placeholder"></textarea>
+    </div>
     <hr>
     <h4 data-i18n="settings:translation.preference.title"></h4>
     <div class='OJBetter_setting_list'>
@@ -5737,6 +5837,14 @@ const translation_settings_HTML = `
         </div>
         <input type="checkbox" id="filterTextWithoutEmphasis" name="filterTextWithoutEmphasis">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="forceTurndownConversion" data-i18n="settings:translation.advanced.forceTurndownConversion.name"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.forceTurndownConversion.helpText"></div>
+        </div>
+        <input type="checkbox" id="forceTurndownConversion" name="forceTurndownConversion">
+    </div>
 </div>
 `;
 
@@ -5824,6 +5932,15 @@ const code_editor_settings_HTML = `
         <input type="checkbox" id="isCodeSubmitConfirm" name="isCodeSubmitConfirm">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="autoSubmitAfterPass"><span
+                data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoSubmitAfterPass.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoSubmitAfterPass" name="autoSubmitAfterPass">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="alwaysConsumeMouseWheel"><span
                 data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.label"></span></label>
         <div class="help_tip">
@@ -5831,6 +5948,15 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.alwaysConsumeMouseWheel.helpText"></div>
         </div>
         <input type="checkbox" id="alwaysConsumeMouseWheel" name="alwaysConsumeMouseWheel">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="autoMemoryCode"><span
+                data-i18n="settings:codeEditor.preferences.autoMemoryCode.label"></span></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
+        </div>
+        <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
     </div>
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
@@ -5925,6 +6051,66 @@ const preference_settings_HTML = `
     <h3 data-i18n="settings:preference.title"></h3>
     <hr>
     <div class='OJBetter_setting_list'>
+        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
+        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
+        </div>
+        <input type="checkbox" id="commentPaging" name="commentPaging">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
+        </div>
+        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="hiddenProblemTag" data-i18n="settings:basic.hiddenProblemTag.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.hiddenProblemTag.helpText"></div>
+        </div>
+        <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -5950,6 +6136,16 @@ const preference_settings_HTML = `
         </div>
         <input type='number' id='iconButtonSize' class='no_default' require=true data-i18n="[placeholder]settings:preference.iconButtonSize.placeholder">
         <span>px</span>
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for='judgeStatusReplaceText'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.judgeStatusReplaceText.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.judgeStatusReplaceText.helpText"></div>
+        </div>
+        <input type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder">
     </div>
 </div>
 `;
@@ -6049,7 +6245,7 @@ const about_settings_HTML = `
     <div class='versionInfo'>
         <p>${OJBetter.state.name}</p>
         <p><span data-i18n="settings:about.version"></span><span id="nowVersion">${OJBetter.state.version}</span></p>
-        <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a> 
+        <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a>
         <a target="_blank" href="https://greasyfork.org/zh-CN/scripts/465777">GreasyFork</a></p>
     </div>
     <hr>
@@ -6086,7 +6282,6 @@ const about_settings_HTML = `
 const OJBetter_setting_content_HTML = `
 <div class="OJBetter_setting_content">
     ${basic_settings_HTML}
-    ${l10n_settings_HTML}
     ${translation_settings_HTML}
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
@@ -6595,6 +6790,7 @@ async function initSettingsPanel() {
         $("#selectElementPerfOpt").prop("checked", GM_getValue("selectElementPerfOpt") === true);
         $("#commentPaging").prop("checked", GM_getValue("commentPaging") === true);
         $("#standingsRecolor").prop("checked", GM_getValue("standingsRecolor") === true);
+        $("#hiddenProblemTag").prop("checked", GM_getValue("hiddenProblemTag") === true);
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#showCF2vjudge").prop("checked", GM_getValue("showCF2vjudge") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
@@ -6612,8 +6808,11 @@ async function initSettingsPanel() {
         $('#enableLinkProtection').prop("checked", GM_getValue("enableLinkProtection") === true);
         $("#chatgpt_config_config_bar_ul").find(`input[name='chatgpt_config_config_item'][value='${tempConfig_chatgpt.choice}']`).prop("checked", true);
         $("#openai_isStream").prop("checked", GM_getValue("openai_isStream") === true);
+        $("#openai_asSystemPrompt").prop("checked", GM_getValue("openai_asSystemPrompt") === true);
+        $('#openai_customPrompt').val(GM_getValue("openai_customPrompt"));
         $('#comment_translation_choice').val(GM_getValue("commentTranslationChoice"));
         $('#iconButtonSize').val(GM_getValue("iconButtonSize"));
+        $('#judgeStatusReplaceText').val(GM_getValue("judgeStatusReplaceText"));
         $("#autoTranslation").prop("checked", GM_getValue("autoTranslation") === true);
         $('#shortTextLength').val(GM_getValue("shortTextLength"));
         $("#allowMixTrans").prop("checked", GM_getValue("allowMixTrans") === true);
@@ -6631,18 +6830,21 @@ async function initSettingsPanel() {
         });
         $('#transTargetLang').val(GM_getValue("transTargetLang"));
         $('#transTargetLang').change();
-        // 
+        //
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
         $("#filterTextWithoutEmphasis").prop("checked", GM_getValue("filterTextWithoutEmphasis") === true);
+        $("#forceTurndownConversion").prop("checked", GM_getValue("forceTurndownConversion") === true);
         $('#translation_retransAction').val(GM_getValue("retransAction"));
         $("#clist_Authorization").val(GM_getValue("clist_Authorization"));
         $("#problemPageCodeEditor").prop("checked", GM_getValue("problemPageCodeEditor") === true);
         $("#beautifyPreBlocks").prop("checked", GM_getValue("beautifyPreBlocks") === true);
         $("#isCodeSubmitConfirm").prop("checked", GM_getValue("isCodeSubmitConfirm") === true);
+        $("#autoSubmitAfterPass").prop("checked", GM_getValue("autoSubmitAfterPass") === true);
         $("#alwaysConsumeMouseWheel").prop("checked", GM_getValue("alwaysConsumeMouseWheel") === true);
+        $("#autoMemoryCode").prop("checked", GM_getValue("autoMemoryCode") === true);
         $("#submitButtonPosition").val(GM_getValue("submitButtonPosition"));
         $("#cppCodeTemplateComplete").prop("checked", GM_getValue("cppCodeTemplateComplete") === true);
         $("#useLSP").prop("checked", GM_getValue("useLSP") === true);
@@ -6685,6 +6887,7 @@ async function initSettingsPanel() {
                 selectElementPerfOpt: $("#selectElementPerfOpt").prop("checked"),
                 commentPaging: $("#commentPaging").prop("checked"),
                 standingsRecolor: $("#standingsRecolor").prop("checked"),
+                hiddenProblemTag: $("#hiddenProblemTag").prop("checked"),
                 showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
                 showCF2vjudge: $("#showCF2vjudge").prop("checked"),
                 scriptL10nLanguage: $('#scriptL10nLanguage').val(),
@@ -6695,8 +6898,11 @@ async function initSettingsPanel() {
                 enableEmphasisProtection: $("#enableEmphasisProtection").prop("checked"),
                 enableLinkProtection: $("#enableLinkProtection").prop("checked"),
                 openai_isStream: $("#openai_isStream").prop("checked"),
+                openai_asSystemPrompt: $("#openai_asSystemPrompt").prop("checked"),
+                openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
+                judgeStatusReplaceText: $('#judgeStatusReplaceText').val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -6714,6 +6920,7 @@ async function initSettingsPanel() {
                 transWaitTime: $('#transWaitTime').val(),
                 replaceSymbol: $('#translation_replaceSymbol').val(),
                 filterTextWithoutEmphasis: $('#filterTextWithoutEmphasis').prop("checked"),
+                forceTurndownConversion: $('#forceTurndownConversion').prop("checked"),
                 retransAction: $('#translation_retransAction').val(),
                 showClistRating_contest: $('#showClistRating_contest').prop("checked"),
                 showClistRating_problemset: $('#showClistRating_problemset').prop("checked"),
@@ -6723,7 +6930,9 @@ async function initSettingsPanel() {
                 problemPageCodeEditor: $("#problemPageCodeEditor").prop("checked"),
                 beautifyPreBlocks: $("#beautifyPreBlocks").prop("checked"),
                 isCodeSubmitConfirm: $("#isCodeSubmitConfirm").prop("checked"),
+                autoSubmitAfterPass: $("#autoSubmitAfterPass").prop("checked"),
                 alwaysConsumeMouseWheel: $("#alwaysConsumeMouseWheel").prop("checked"),
+                autoMemoryCode: $("#autoMemoryCode").prop("checked"),
                 submitButtonPosition: $('#submitButtonPosition').val(),
                 cppCodeTemplateComplete: $("#cppCodeTemplateComplete").prop("checked"),
                 useLSP: $("#useLSP").prop("checked"),
@@ -6880,7 +7089,8 @@ async function initHTML2MarkDown() {
                 node.classList.contains('overlay') ||
                 node.classList.contains('html2md-panel') ||
                 node.classList.contains('likeForm') ||
-                node.classList.contains('monaco-editor');
+                node.classList.contains('monaco-editor') ||
+                node.nodeName === 'SCRIPT';
         },
         replacement: function (content, node) {
             return "";
@@ -7114,7 +7324,7 @@ async function initButtonFunc() {
         return this;
     }
 
-    /** 
+    /**
      * 设置按钮为加载等待状态
      */
     $.fn.setButtonLoading = function () {
@@ -7313,7 +7523,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
      * 改变按钮状态
      * @param {string} state 状态
      */
-    function changeButtonState(state) {
+    const changeButtonState = (state) => {
         if (state == "loading") {
             button.setButtonLoading();
             button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
@@ -7332,6 +7542,17 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         }
     }
 
+    /**
+     * 存放目标元素的 JQueryObject
+     */
+    const target = (() => {
+        if (type = "child_level") {
+            return $(element).children(':not(.html2md-panel)');
+        } else {
+            return $(element);
+        }
+    })();
+
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
         return;
@@ -7342,10 +7563,8 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
     }
 
     button.click(OJB_debounce(function () {
-        var target = $(element).get(0);
-
         /**
-         * 检查是否是MarkDown视图 
+         * 检查是否是MarkDown视图
          * @returns {boolean} 是否是MarkDown视图
          */
         function checkViewmd() {
@@ -7372,14 +7591,14 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
 
         if (checkViewmd()) {
             setViewmd(false);
-            $(element).next(".mdViewContent").remove();
-            $(element).show();
+            target.last().next(".mdViewContent").remove();
+            target.show();
         } else {
             setViewmd(true);
-            var markdown = $(element).getMarkdown();
-            var mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
-            $(element).after(mdViewContent);
-            $(element).hide();
+            const markdown = $(element).getMarkdown();
+            const mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            target.last().after(mdViewContent);
+            target.hide();
         }
     }));
 
@@ -7476,7 +7695,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
     // 标记目标文本区域不自动翻译
     {
         let text;
-        if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+        if ((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)) {
             text = $(element).html();
         } else {
             text = $(element).getMarkdown();
@@ -7506,7 +7725,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
                         $($(element)).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
                     }
                 } else {
-                    item.translateDiv.foldMainDiv();
+                    item.translateDiv.fold();
                 }
             }
         }
@@ -7711,7 +7930,7 @@ async function process(button, target, element_node, type, is_comment, count, ov
 
 /**
  * 块处理
- * @param {JQuery<HTMLElement>} button 
+ * @param {JQuery<HTMLElement>} button
  * @param {HTMLElement} target 目标元素
  * @param {HTMLElement} element_node 目标节点
  * @param {boolean} is_comment 是否是评论
@@ -7719,7 +7938,7 @@ async function process(button, target, element_node, type, is_comment, count, ov
  * @returns {TranslateResult} 翻译结果对象
  */
 async function blockProcessing(button, target, element_node, is_comment, overrideTrans) {
-    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+    if ((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = OJBetter.common.turndownService.turndown($(target).html());
@@ -7754,13 +7973,13 @@ async function multiChoiceTranslation() {
         e.stopPropagation();
         if ($this.hasClass('block_selected')) {
             $this.removeClass('block_selected');
-            // 移除对应的按钮 
+            // 移除对应的按钮
             $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('OJBetter_p_id'));
         } else {
             let id = OJB_getRandomNumber(8);
             $this.attr('OJBetter_p_id', id);
             $this.addClass('block_selected');
-            // 添加按钮 
+            // 添加按钮
             let menu = OJB_safeCreateJQElement(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
@@ -7774,7 +7993,7 @@ async function multiChoiceTranslation() {
                     if (OJBetter.translation.retransAction == "0") {
                         result.translateDiv.close();
                     } else {
-                        result.translateDiv.foldMainDiv();
+                        result.translateDiv.fold();
                     }
                 }
                 // 翻译
@@ -7782,7 +8001,7 @@ async function multiChoiceTranslation() {
                 let result = await blockProcessing(OJBetter.translation.choice, target, $this.eq(0), $("#translateButton_selected_" + id), false);
                 $this.data("resultData", result);
                 $this.removeClass('block_selected');
-                // 移除对应的按钮 
+                // 移除对应的按钮
                 $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
                 $this.attr('translated', '1'); // 标记已翻译
             });
@@ -7879,34 +8098,13 @@ async function addConversionButton() {
     // 添加按钮到spoiler部分
     $('.spoiler-content').each((i, e) => {
         if ($(e).find('.html2md-panel').length === 0) {
-            let id = "_spoiler_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(e, id, "child_level");
+            const id = "_spoiler_" + OJB_getRandomNumber(8);
+            const panel = addButtonPanel(e, id, "child_level");
             promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "child_level"));
             promises.push(addButtonWithCopy(panel.copyButton, e, id, "child_level"));
             promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
         }
     });
-
-    // 添加按钮到titled部分
-    (function () {
-        var elements = [".Virtual.participation", ".Attention", ".Practice"];//只为部分titled添加
-        $.each(elements, (i, e) => {
-            $(e).each(function () {
-                let id = "_titled_" + OJB_getRandomNumber(8);
-                let nextDiv = $(e).next().children().get(0);
-                if (!nextDiv) return;
-                let panel = addButtonPanel(nextDiv, id, "child_level", true);
-                promises.push(addButtonWithTranslation(panel.translateButton, nextDiv, id, "child_level"));
-            });
-        });
-    })();
-    if (OJBetter.typeOfPage.is_mSite) {
-        $("div[class='_IndexPage_notice']").each((i, e) => {
-            let id = "_titled_" + OJB_getRandomNumber(8);
-            let panel = addButtonPanel(e, id, "this_level", true);
-            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
-        });
-    }
 
     // 添加按钮到比赛QA部分
     $(".question-response").each((i, e) => {
@@ -8132,6 +8330,15 @@ class TranslateDiv {
      */
     close() {
         this.closeButton.click();
+    }
+
+    /**
+     * 收起元素
+     */
+    fold() {
+        if (!this.upButton.hasClass("reverse")) {
+            this.upButton.click();
+        }
     }
 
     /**
@@ -8439,7 +8646,7 @@ class ElementsTree {
                         var topText = ne_node.topText;
                         var text = this.transResultMap[id];
                         // create element after pElement
-                        this.reCreateTransDiv(pElement, id, text, topText);
+                        this.reCreateTransDiv(pElement, id, text, topText, node.isTranslateDiv); // 如果前面一个也是翻译结果，则该结果折叠
                     }
                     pElement = pElement.next(); // go to next element
                 }
@@ -8447,8 +8654,15 @@ class ElementsTree {
         } while (node.next !== null);
     }
 
-    // 重新创建translateDiv
-    reCreateTransDiv(pElement, id, translatedText, topText) {
+    /**
+     * 重新创建translateDiv
+     * @param {*} pElement
+     * @param {*} id
+     * @param {*} translatedText
+     * @param {*} topText
+     * @param {Boolean} isFold 是否折叠
+     */
+    reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
         const translateDiv = new TranslateDiv(id);
         pElement.after(translateDiv.getDiv());
         translateDiv.setTopText(topText);
@@ -8459,13 +8673,14 @@ class ElementsTree {
         } else {
             translateDiv.disableCopyButton();
         }
-        translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+        translateDiv.updateTranslateDiv(translatedText, !((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)));
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
         if (transButton.length == 0) {
             // 如果没有找到，则应该是得在父元素中找到
             transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
         }
+        if (isFold) translateDiv.fold(); // 是否折叠该翻译
         transButton.pushResultToTransButton({
             translateDiv: translateDiv,
             status: 0
@@ -8498,7 +8713,7 @@ async function getTransDBData() {
 
 /**
  * 翻译结果恢复功能初始化
- * @returns 
+ * @returns
  */
 async function initTransResultsRecover() {
     OJBetter.translation.memory.ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
@@ -8551,7 +8766,7 @@ async function initTransWhenViewable() {
     observers.push(observer);
 }
 
-/** 
+/**
  * 翻译返回结果结构体
  * @typedef {Object} TranslateResult
  * @property {string} status 翻译状态
@@ -8600,11 +8815,11 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi; // TODO 111
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            const regex = /\$\$(\\.|[^\$])*?\$\$|\$(\\.|[^\$])*?\$/g;
+            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```
@@ -8639,7 +8854,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
 
     /**
      * 格式化翻译结果
-     * @param {string} text 
+     * @param {string} text
      * @returns {string} 处理后的翻译结果
      */
     const formatText = function (text) {
@@ -8743,7 +8958,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     const translationLimits = {
         deepl: 5000,
         iflyrec: 2000,
-        youdao: 600,
+        youdao: 5000,
         google: 5000,
         caiyun: 5000
     };
@@ -8771,7 +8986,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
      * @returns {TransRawData} 原始翻译数据
      */
     async function translate(transServer) {
-        const is_renderLaTeX = !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru);
+        const is_renderLaTeX = !((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion));
         const servername = i18next.t('servers.' + realTransServer, { ns: 'translator' });
         /** @type {TransRawData} 原始翻译数据*/
         let rawData = {};
@@ -8859,7 +9074,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     }
 
     // 翻译结果面板更新
-    translateResult.translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+    translateResult.translateDiv.updateTranslateDiv(translatedText, !((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)));
 
     return translateResult;
 }
@@ -8898,7 +9113,7 @@ function RenderPerfOpt() {
 async function SelectElementPerfOpt() {
     // TODO 10
     // 加载库资源
-    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js");
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js","sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
     /**
      * 将一个<select>元素转换为SelectPage控件
      * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
@@ -8946,9 +9161,9 @@ async function SelectElementPerfOpt() {
     $('select').each((_, select) => {
         // 选项大于500才优化
         if ($(select).find('option').length > 500) {
-          OJB_transformSelectToSelectPage(select);
+            OJB_transformSelectToSelectPage(select);
         }
-      });
+    });
 }
 
 /**
@@ -9202,20 +9417,33 @@ class ProblemPageLinkbar {
 
 /**
  * 获取题目的id
- * @param {String} url 题目的链接 
+ * @param {String} url 题目的链接
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
-    const regex = url.includes('/contest/')
-        ? /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/
-        : /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/;
+    const regexMap = new Map([
+        ['/contest/', /\/contest\/(\d+)\/problem\/([A-Za-z\d]+)/],
+        ['/problemset/', /\/problemset\/problem\/(\d+)\/([A-Za-z\d]+)/],
+        ['/gym/', /\/gym\/(\d+)\/problem\/([A-Za-z\d]+)/],
+    ]);
+
+    let regex = null;
+    for (let [key, value] of regexMap) {
+        if (url.includes(key)) {
+            regex = value;
+            break;
+        }
+    }
+
+    if (!regex) return '';
+
     const matchResult = url.match(regex);
     return matchResult && matchResult.length >= 3 ? `${matchResult[1]}${matchResult[2]}` : '';
 };
 
 /**
  * 跳转到洛谷
- * @param {ProblemPageLinkbar} problemToolbar 
+ * @param {ProblemPageLinkbar} problemToolbar
  */
 async function CF2luogu(problemToolbar) {
     const url = window.location.href;
@@ -9260,7 +9488,7 @@ async function CF2luogu(problemToolbar) {
 
 /**
  * 跳转到 Virtual Judge
- * @param {ProblemPageLinkbar} problemToolbar 
+ * @param {ProblemPageLinkbar} problemToolbar
  */
 async function CF2vjudge(problemToolbar) {
     const url = window.location.href;
@@ -9287,7 +9515,9 @@ async function CF2vjudge(problemToolbar) {
         });
     };
 
-    const VjudgeUrl = `https://vjudge.net/problem/CodeForces-${problemId}`;
+    const VjudgeUrl = OJBetter.typeOfPage.is_gym ?
+        `https://vjudge.net/problem/Gym-${problemId}` :
+        `https://vjudge.net/problem/CodeForces-${problemId}`;
     try {
         const result = await checkLinkExistence(VjudgeUrl);
         if (problemId && result) {
@@ -9469,11 +9699,11 @@ async function getRatingFromHTML(problem, problem_url, contest = null) {
  * @param {string} problem_name 题目名
  * @param {string} problem_url 题目链接
  * @returns {Promise<number>} 题目rating
- * 
+ *
  * 使用两个Map对象来存储和快速访问题目信息：
  * - problemsMap: 通过题目的URL作为键来存储题目信息。
  * - nameMap: 通过题目的名称作为键来存储题目信息。
- * 
+ *
  * 每个题目信息是一个对象，包含以下属性：
  * @typedef {Object} ProblemInfo
  * @property {string} name 题目名称
@@ -9484,19 +9714,19 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
     return OJB_promiseRetryWrapper(async () => {
         const response = await OJB_GMRequest({
             method: "GET",
-            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces.com`,
+            url: `https://clist.by:443/api/v4/problem/?name=${encodeURIComponent(problem_name)}&resource__regex=codeforces`,
             headers: { "Authorization": OJBetter.clist.authorization }
         });
 
         if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
         let data = JSON.parse(response.responseText);
-        /** 
+        /**
          * 使用题目的URL作为键来存储题目信息。
          * @type {Map<string, ProblemInfo>}
          */
         let problemsMap = new Map();
 
-        /** 
+        /**
          * 使用题目的名称作为键来存储题目信息。
          * @type {Map<string, ProblemInfo>}
          */
@@ -9675,12 +9905,12 @@ function getClassNameByRating(rating) {
 
 /**
  * problem题目页显示Rating
- * @param {ProblemPageLinkbar} problemToolbar 
+ * @param {ProblemPageLinkbar} problemToolbar
  * @returns {Promise<void>}
  */
 async function showRatingByClist_problem(problemToolbar) {
     // 题目名
-    const problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
+    let problem = $('.header .title').eq(0).text().replace(/[\s\S]*?. /, '');
     if (OJBetter.typeOfPage.is_acmsguru) problem = $('h4').eq(0).text().replace(/[\s\S]*?. /, '');
 
     // 创建Rating按钮元素
@@ -9688,7 +9918,7 @@ async function showRatingByClist_problem(problemToolbar) {
     // TODO
     const clistButton = problemToolbar.addLinkButton(
         'clistButton',
-        `https://clist.by/problems/?search=${problem}&resource=1`,
+        `https://clist.by/problems/?search=${problem}&resource=1&resource=64`,
         i18next.t('state.wait', { ns: 'button' }),
         $("<img>").attr("src", "https://clist.by/static/img/logo-48.png"),
         "15px"
@@ -9806,7 +10036,7 @@ async function showRatingByClist_problemset() {
 
     // 检测clist连接
     if (!await validateClistConnection()) {
-        for (let i = 0; i < rating.length; i++) {
+        for (let i = 0; i < ratingBadges.length; i++) {
             ratingBadges[i].rating.text(i18next.t('state.netError', { ns: 'button' }));
         }
         return;
@@ -9868,6 +10098,204 @@ async function recolorStandings() {
 }
 
 /**
+ * 评测结果的简写
+ */
+const StatusAcronyms = {
+    "Accepted": "AC",
+    "Wrong answer": "WA",
+    "Time limit exceeded": "TLE",
+    "Memory limit exceeded": "MLE",
+    "Runtime error": "RE",
+    "Compilation error": "CE",
+    "Hacked": "Hacked",
+    "Skipped": "Skipped",
+    "Idleness limit exceeded": "ILE",
+    "Perfect result:": "AC",
+    "Partial result:": "PC",
+    "Running": "PENDING"
+};
+
+/** 
+ * 评测结果的颜色
+ */
+const StatusColors = {
+    "AC": "#52c41a",
+    "WA": "#e74c3c",
+    "PENDING": "#808080",
+};
+
+/**
+ * 替换评测结果
+ */
+async function judgeStatusReplace() {
+
+    /**
+     * 获取评测状态的名称和编号
+     * 
+     * @param {string} text 评测状态
+     * @returns {object} 评测状态的名称和编号
+     */
+    const getStatusName = (text) => {
+        const words = text.split(' ');
+        const number_of_words = words.length;
+        let status_name = "", number = "";
+        let status_name_is_over = false;
+        for (let i = 0; i < number_of_words; i++) {
+            if (words[i] === "on") {
+                status_name_is_over = true;
+            }
+            if (!status_name_is_over) {
+                status_name += words[i] + " ";
+            } else if (parseInt(words[i]).toString() !== "NaN") {
+                number = words[i];
+            }
+            if (words[i] === "result:") {
+                status_name_is_over = true;
+            }
+        }
+        status_name = status_name.trim();
+        return {
+            status_name: status_name,
+            number: number
+        }
+    };
+
+    /** 
+     * 获取当前评测状态的缩写
+     * 
+     * @param {string} status_name 评测状态
+     * @returns {string} 评测状态的缩写
+     */
+    const getStatusAcronym = (status_name) => {
+        return StatusAcronyms[status_name];
+    };
+
+    /** 
+     * 根据评测状态的缩写获取颜色
+     * 
+     * @param {string} statusAcronym 评测状态的缩写
+     * @returns {string} 颜色值
+     */
+    const getStatusColor = (statusAcronym) => {
+        let color = StatusColors[statusAcronym];
+        return color ? color : StatusColors["WA"];
+    };
+
+    /**
+     * 解析模板
+     * 
+     * @param {string} template 模板
+     * @param {object} display 各个前置标识符的bool值，决定了是否显示这一部分
+     * @returns {string} 解析后的文本
+     * 
+     * @example
+     * parseTemplate("{ac:！}{wa:呜呜}{pending:别急}", {ac: false, wa: true, pending: false}) => "呜呜"
+     */
+    const parseTemplate = (template, display) => {
+        const regex = /{(\w+):([^}]*)}/g;
+        let result = '';
+        let lastIndex = 0;
+
+        template.replace(regex, (match, key, text, offset) => {
+            // 添加模板前的普通文本部分
+            result += template.slice(lastIndex, offset);
+
+            // 根据布尔值决定是否添加模板部分
+            if (display[key]) {
+                result += text;
+            }
+            lastIndex = offset + match.length;
+        });
+
+        // 添加最后一段普通文本部分
+        result += template.slice(lastIndex);
+
+        return result;
+    }
+
+    /**
+     * 根据替换规则获取替换后的文本
+     * 
+     * @param {string} status_name 评测状态
+     * @param {string} number 评测编号
+     * @returns {string} 替换后的文本
+     */
+    const getReplaceText = (status_name, number) => {
+        const statusAcronym = getStatusAcronym(status_name);
+
+        let result = OJBetter.preference.judgeStatusReplaceText;
+        result = result.replace("{Status}", status_name);
+        result = result.replace("{Stat}", statusAcronym);
+        result = result.replace("{Number}", number);
+
+        const statusMap = {
+            ac: statusAcronym === "AC",
+            wa: statusAcronym === "WA",
+            tle: statusAcronym === "TLE",
+            mle: statusAcronym === "MLE",
+            re: statusAcronym === "RE",
+            ce: statusAcronym === "CE",
+            hacked: statusAcronym === "Hacked",
+            skipped: statusAcronym === "Skipped",
+            ile: statusAcronym === "ILE",
+            pc: statusAcronym === "PC",
+            pending: statusAcronym === "PENDING"
+        }
+        const final_result = parseTemplate(result, statusMap);
+        return final_result;
+    };
+
+    /**
+     * 处理评测结果
+     * @param {string} text 代替换的文本
+     * @returns {object} 处理后的文本和颜色
+     */
+    const process = (text) => {
+        /**
+         * 当前评测状态
+         */
+        const { status_name, number } = getStatusName(text);
+
+        /**
+         * 当前评测状态的缩写
+         */
+        const statusAcronym = getStatusAcronym(status_name);
+
+        return {
+            text: statusAcronym ? getReplaceText(status_name, number) : text,
+            color: getStatusColor(statusAcronym)
+        }
+    };
+
+    OJB_observeElement({
+        selector: '.datatable',
+        callback: (node) => {
+            const updateElement = (element) => {
+                const { text, color } = process($(element).text());
+                $(element).text(text);
+                $(element).css({
+                    "color": color,
+                    "font-weight": "700"
+                });
+            };
+
+            // 选择器
+            const selectorCondition = "[class^='verdict-'], [submissionverdict='COMPILATION_ERROR']";
+
+            // 检查[node]本身是否符合选择器条件
+            if ($(node).is(selectorCondition)) {
+                updateElement(node);
+            }
+
+            // 更新[node]内部符合选择器条件的所有元素
+            $(node).find(selectorCondition).each(function () {
+                updateElement(this);
+            });
+        }
+    });
+}
+
+/**
  * 存放编辑器语言select的值与Monaco语言对应关系的map.
  * @type {Object.<string, string>}
  */
@@ -9908,7 +10336,7 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
 
 /**
  * 获取代码提交页的HTML元素
- * @param {string} submitUrl 
+ * @param {string} submitUrl
  * @returns {Promise<jQuery>}
  */
 async function getSubmitHTML(submitUrl) {
@@ -9977,7 +10405,7 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
         let matchResult = problemCode.match(/([A-Z0-9]+)/);
         problemCode = matchResult[0];
     } else if (OJBetter.typeOfPage.is_problemset_problem) {
-        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Z0-9]+?)(?!=[A-Z0-9])/);
+        let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Za-z0-9]+)/);
         problemCode = match[1] + match[2];
         selectProblem.attr('name', 'submittedProblemCode');
     } else {
@@ -10530,19 +10958,21 @@ async function createMonacoEditor(language, form, support) {
         }
 
         // 代码同步与保存
-        var nowUrl = window.location.href;
-        nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
-        const code = await getCode(nowUrl);
-        if (code) {
-            OJBetter.monaco.editor.setValue(code); // 恢复代码
-            form.sourceDiv.val(code);
+        if (OJBetter.monaco.setting.autoMemoryCode) {
+            let nowUrl = window.location.href;
+            nowUrl = nowUrl.replace(/#/, ""); // 当页面存在更改时url会多出一个#，去掉
+            const code = await getCode(nowUrl);
+            if (code) {
+                OJBetter.monaco.editor.setValue(code); // 恢复代码
+                form.sourceDiv.val(code);
+            }
+            OJBetter.monaco.editor.onDidChangeModelContent(async () => {
+                // 将monaco editor的内容同步到sourceDiv
+                const code = OJBetter.monaco.editor.getValue();
+                form.sourceDiv.val(code);
+                await saveCode(nowUrl, code);
+            });
         }
-        OJBetter.monaco.editor.onDidChangeModelContent(async () => {
-            // 将monaco editor的内容同步到sourceDiv
-            const code = OJBetter.monaco.editor.getValue();
-            form.sourceDiv.val(code);
-            await saveCode(nowUrl, code);
-        });
     })();
 
     /**
@@ -10626,9 +11056,9 @@ async function createMonacoEditor(language, form, support) {
 
     /**
      * 推送新的消息到LSP日志中
-     * @param {'error' | 'warn' | 'info'} status 
-     * @param {string} msg 
-     * @param {boolean} data 
+     * @param {'error' | 'warn' | 'info'} status
+     * @param {string} msg
+     * @param {boolean} data
      */
     function pushLSPLogMessage(status, msg, data) {
         var li = $('<li>').text('[' + new Date().toLocaleString() + '] ' + msg);
@@ -11391,7 +11821,6 @@ async function createMonacoEditor(language, form, support) {
                     });
                 });
 
-                return null; // 如果没有内容，则返回null
             },
         });
 
@@ -11426,7 +11855,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(references);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -11463,7 +11891,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(highlights);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -12496,7 +12923,7 @@ class TestCaseStatus {
 }
 
 // 样例测试函数
-async function runCode(event, runButton, sourceDiv, submitDiv) {
+async function runCode(event, runButton, sourceDiv) {
     event.preventDefault();
     const statePanel = $('#statePanel').show().empty();
     const testData = getTestData();
@@ -12565,12 +12992,15 @@ async function runCode(event, runButton, sourceDiv, submitDiv) {
         runButton.setButtonState('error', `${passedTests}/${totalTests} ` + i18next.t('runTestButton.partial', { ns: 'codeEditor' }));
     } else {
         runButton.setButtonState('success', i18next.t('runTestButton.success', { ns: 'codeEditor' }));
+        if (OJBetter.monaco.setting.autoSubmitAfterPass) {
+            $('#OJBetter_SubmitForm').submit(); // 自动提交
+        }
     }
 }
 
 /**
  * 添加题目页代码编辑器
- * @returns 
+ * @returns
  */
 async function addProblemPageCodeEditor() {
     if (typeof ace === 'undefined') {
@@ -12626,13 +13056,22 @@ async function addProblemPageCodeEditor() {
     submitButton.on('click', async function (event) {
         event.preventDefault();
         if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
+            // 获取题目名
+            const questionTitle = (() => {
+                if (OJBetter.typeOfPage.is_acmsguru) {
+                    return $('h4').eq(0).text();
+                } else {
+                    return $('.header .title').eq(0).text();
+                }
+            })();
             const submit = await OJB_createDialog(
                 i18next.t('submitCode.title', { ns: 'dialog' }),
-                i18next.t('submitCode.content', { ns: 'dialog' }),
+                i18next.t('submitCode.content', { ns: 'dialog', questionTitle: questionTitle }),
                 [
                     i18next.t('submitCode.buttons.0', { ns: 'dialog' }),
                     i18next.t('submitCode.buttons.1', { ns: 'dialog' })
-                ]
+                ],
+                true
             ); //提交确认
             if (submit) {
                 submitButton.after(`<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
@@ -12888,39 +13327,134 @@ async function translate_iflyrec(text) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_youdao_mobile(raw) {
+    /**
+     * 生成cookie
+     */
+    const getcookie = (() => {
+        // 生成IP地址
+        const generateIP = () => {
+            return `${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}`;
+        }
+        // 生成OUTFOX_SEARCH_USER_ID_NCOO的值
+        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(100000000, 999999999)}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
+        // 生成OUTFOX_SEARCH_USER_ID的值
+        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(100000000, 999999999)}@${generateIP()}`;
+        return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
+    })();
+
+    /**
+     * 生成随机时间戳
+     */
+    const gettime = (new Date()).getTime();
+
+    /**
+     * 生成sign
+     */
+    const getsign = (() => {
+        const d = "fanyideskweb";
+        const u = "webfanyi";
+        const t = "fsdsogkndfokasodnaso";
+        function A(e) {
+            return CryptoJS.MD5(e.toString()).toString(CryptoJS.enc.Hex);
+        }
+        function w(e) {
+            return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+        }
+        return w(gettime);
+    })();
+
+    /**
+     * 解码方法
+     * @param {string} src 待解码的字符串
+     * @returns {Object} 解码后的数据
+     */
+    const decode = function (src) {
+        // 解码URL安全的Base64
+        const decodeUrlSafeBase64 = (str) => {
+            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            return base64;
+        }
+
+        // 使用MD5生成key和iv，取前16字节
+        const key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl";
+        const iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4";
+        const keyHash = CryptoJS.MD5(key).toString();
+        const ivHash = CryptoJS.MD5(iv).toString();
+
+        // 使用AES-128-CBC模式进行解密
+        const keyForAES = CryptoJS.enc.Hex.parse(keyHash).toString().substring(0, 32);
+        const ivForAES = CryptoJS.enc.Hex.parse(ivHash).toString().substring(0, 32);
+
+        // 解码URL安全的Base64
+        const decodedBase64 = decodeUrlSafeBase64(src);
+
+        // 解密
+        const decrypted = CryptoJS.AES.decrypt({
+            ciphertext: CryptoJS.enc.Base64.parse(decodedBase64)
+        }, CryptoJS.enc.Hex.parse(keyForAES), {
+            iv: CryptoJS.enc.Hex.parse(ivForAES),
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        // 将解密结果转换为Utf8字符串
+        const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+
+        // 处理JSON字符串并解析
+        const jsonStr = decryptedStr.substring(0, decryptedStr.lastIndexOf("}") + 1);
+        return JSON.parse(jsonStr);
+    }
+    // 整理数据
+    const organizeTranslation = (data) => {
+        // 提取translateResult数组
+        const { translateResult } = data;
+
+        // 整理tgt字段
+        return translateResult
+            .flat()
+            .map(item => item.tgt)
+            .join('');
+    };
+    // 表单数据
+    const data = {
+        "i": raw,
+        "from": "auto",
+        "to": getTargetLanguage('youdao'),
+        "dictResult": "true",
+        "keyid": "webfanyi",
+        "sign": getsign,
+        "client": "fanyideskweb",
+        "product": "webfanyi",
+        "appVersion": "1.0.0",
+        "vendor": "web",
+        "pointParam": "client,mysticTime,product",
+        "mysticTime": gettime,
+        "keyfrom": "fanyi.web",
+        "mid": "1",
+        "screen": "1",
+        "model": "1",
+        "network": "wifi",
+        "abtest": "0",
+        "yduuid": "abcdefg"
+    };
     const options = {
         method: "POST",
-        url: 'http://m.youdao.com/translate',
-        data: "inputtext=" + encodeURIComponent(raw) + "&type=" + getTargetLanguage('youdao'),
+        url: 'https://dict.youdao.com/webtranslate',
+        data: new URLSearchParams(data),
         anonymous: true,
+        cookie: getcookie,
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            'Host': 'm.youdao.com',
-            'Origin': 'http://m.youdao.com',
-            'Referer': 'http://m.youdao.com/translate',
+            'Referer': 'https://fanyi.youdao.com/',
         }
     }
     return await BaseTranslate(options,
         res => {
-            const array = /id="translateResult">\s*?<li>([\s\S]*?)<\/li>\s*?<\/ul/.exec(res);
-            if (array && array.length > 1) {
-                return array[1];
-            } else {
-                return res;
-            }
-        },
-        res => {
-            const resObj = {
-                status: true,
-                message: 'ok'
-            };
-            if (res.includes('<title>413 Request Entity Too Large</title>')) {
-                resObj.status = false;
-                resObj.message = i18next.t('error.youdao413', { ns: 'translator' }); // Request Entity Too Large 提示
-                return resObj;
-            };
-            return resObj;
-        })
+            const decodeData = decode(res)
+            const result = organizeTranslation(decodeData);
+            return result;
+        }
+    );
 }
 
 /**
@@ -13004,25 +13538,47 @@ async function translate_caiyun(raw) {
 async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt) {
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt) {
+            prompt += `\n${raw}`;
+        };
+    } else {
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, The segment to be translated is as follows: "
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+                `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "user",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -13061,7 +13617,7 @@ async function translate_openai_stream(raw, translateDiv) {
         for await (const delta of openai_stream(raw)) {
             result.text += delta;
             // 翻译结果面板更新
-            translateDiv.updateTranslateDiv(result.text, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru), false);
+            translateDiv.updateTranslateDiv(result.text, !((OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) && (!OJBetter.translation.forceTurndownConversion)), false);
         }
         return result;
     } catch (err) {
@@ -13086,27 +13642,48 @@ async function translate_openai_stream(raw, translateDiv) {
 async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
-    const prompt = `
-I hope you can act as a professional English translator to help me translate a segment of an algorithm programming competition question into ${lang}.
-During the translation process, I would like you to use more professional terms and maintain the text format, ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
-After completing the translation, please polish the ${lang} version to ensure it conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment, which is as follows: 
-"
+    let prompt = "";
+    if (OJBetter.chatgpt.customPrompt) {
+        prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (!OJBetter.chatgpt.asSystemPrompt) {
+            prompt += `\n${raw}`;
+        };
+    } else {
+        prompt = `
+As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
+The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
+After translation, please ensure that the ${lang} version conforms to normal expression habits.
+What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
+                `The segment to be translated is as follows: "
 ${raw}
-"`;
+"`}`;
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
-        messages: [{
-            role: "assistant",
-            content: prompt
-        }],
+        messages: OJBetter.chatgpt.asSystemPrompt ?
+            [
+                {
+                    role: "system",
+                    content: prompt
+                },
+                {
+                    role: "user",
+                    content: raw
+                }
+            ] :
+            [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
         temperature: 0.7,
         stream: true,
         ...Object.assign({}, ...OJBetter.chatgpt.config.data)
-    }
+    };
     const options = {
         method: "POST",
         url: OJBetter.chatgpt.config.proxy || 'https://api.openai.com/v1/chat/completions',
@@ -13352,6 +13929,9 @@ function initOnDOMReady() {
     if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
+    if (OJBetter.preference.judgeStatusReplaceText && (OJBetter.typeOfPage.is_submissions || OJBetter.typeOfPage.is_statePage)) {
+        judgeStatusReplace(); // 评测结果替换
+    }
 }
 
 /**
@@ -13371,6 +13951,7 @@ function initializeInParallel(loadingMessage) {
     if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
     if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
+    if (OJBetter.basic.hiddenProblemTag) hiddenProblemTag()// 隐藏题目问题标签
 }
 
 /**
@@ -13387,7 +13968,9 @@ async function initializeSequentially(loadingMessage) {
     if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
         await recolorStandings(); // cf赛制榜单重新着色
     }
-    if (OJBetter.preference.showLoading) loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    if (OJBetter.preference.showLoading) {
+        loadingMessage.updateStatus(`${OJBetter.state.name} —— ${i18next.t('loadSuccess', { ns: 'alert' })}`, 'success', 3000);
+    }
 }
 
 /**

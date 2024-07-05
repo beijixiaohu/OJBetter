@@ -1,3 +1,31 @@
+## 1.76.0
+
+- \*_Remplacer le CDN du dépôt public vers [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), voir [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ pour des raisons. \*
+
+- Ajout de la fonctionnalité "Remplacement du texte de l'état de l'examen", grâce à la collaboration de **@wrk-123**.
+
+- Ajustement de la structure de la page des paramètres
+
+## 1.75.0
+
+- Amélioration de certaines règles de localisation de sites web, grâce à la contribution de **@qjwh**.
+- Ajouter les options "ChatGPT Translation Prompt Customisation" et "As System Prompt" Merci à **@Dawn-Xu-helloworld** pour sa collaboration !
+- Ajouter la fonctionnalité "Force Turndown conversion" Merci à **@wrk-123** pour sa contribution !
+- Ajouter une fenêtre pop-up de confirmation de soumission de code pour afficher le nom du titre.
+- Ajouter un échantillon par l'option Auto-Commit (désactivée par défaut)
+- Ajout de la fonctionnalité "Masquer les étiquettes des questions", désactivée par défaut.
+- Remplacement de l'interface de "Yodo Translator"
+- Correction des titres de gymnase qui ne sautent pas en vjudge
+- &nbsp;Correction des symboles ` ` dans l'embellissement des blocs de code
+- Corriger le problème que les sources de problemset ne peuvent pas être soumises correctement lorsque la longueur du numéro de la question n'est pas 1 Merci à **@WindJ0Y** pour sa contribution !
+- Correction de l'éditeur Monaco qui n'applique pas le thème correctement lorsque le thème est défini sur follow Merci à **@cscnk52** pour sa contribution !
+- Correction de l'éditeur de code qui ne se charge pas correctement lorsque les liens de l'ensemble des titres sont en minuscules
+- Corrige le fait que LaTeX ne remplace pas correctement les lignes, corrige les problèmes de performance avec les règles associées.
+- Correction d'une erreur lors de la traduction de "Collecter les anciens résultats".
+- Corriger le problème du bouton de copie qui ne fonctionne pas dans la page de soumission
+- Correction des balises de script non filtrées lors de la conversion MarkDown
+- Utiliser le polyfill pour la compatibilité avec les navigateurs qui ne supportent pas la méthode dialog.showModal() (par exemple Firefox79).
+
 ## 1.74.2
 
 - Corrige les problèmes de la dernière correction Merci à @Dechancer pour son feedback !

@@ -65,7 +65,7 @@
         "websiteLanguageLabel": "ウェブサイト言語",
         "notice": {
             "1": "<strong>翻訳の品質向上にご協力ください</strong><p>著者は簡体字中国語と英語のみ精通しています。他のすべての言語については、スクリプトとウェブサイトの言語ローカリゼーションは機械翻訳（Deepl＆Google）によって行われ、翻訳ワークフローはcrowddinによってホストされています。</p><p>特定の言語のローカライズされた翻訳の質を向上させるために、</p><p>、<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>、</a>、あなたの貢献を歓迎します！</p>",
-            "2": "<strong>ウェブサイト言語ローカライゼーションの改善支援</strong><p>ウェブサイトのどこかでローカライゼーションが必要であり、それを置き換えることで深刻なパフォーマンス問題が発生しないとお考えの方は、<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>ローカライゼーションルールの改善</a>にぜひアクセスしてください。</p><p>新しいルールを追加したい場合は、簡体字中国語版のルールを追加する必要があります：ルールファイルをフォークして修正し、プルリクエストを立ち上げてください。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。後でcrowdinにアクセスして、他の言語の翻訳の品質も向上させることができます。</p>"
+            "2": "<strong>ウェブサイトの言語ローカリゼーションを完璧にするお手伝い</strong><p>サイトの一部をローカライズする必要があり、深刻なパフォーマンスの問題を引き起こさないローカライズに置き換える必要があるとお考えでしたら、遠慮なく<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/codeforces-better.json' target='_blank'>ローカライズのルールを改良して</a>ください。</p><p>：新しいルールを追加するには、その簡体字中国語版のフォークを追加してルールファイルを修正し、プルリクエストを立ち上げる必要があります。</p><p>投稿がマージされた後、crowdinは自動的に他の言語の翻訳を完了します。また、後で<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>crowdinに</a>アクセスして他の言語の翻訳の質を向上させることもできます。</p>"
         }
     },
     "translation": {
@@ -390,6 +390,11 @@
             "title": "アイコン ボタンのサイズ",
             "helpText": "<p>翻訳ボタンのサイズ設定</p>",
             "placeholder": "ボタンサイズを入力してください。"
+        },
+        "judgeStatusReplaceText": {
+            "title": "審査状況 テキストの差し替え",
+            "helpText": "<p>将题目的评测状态文本替换为指定的文本。</p><p>支持的变量：</p><p><strong><code>{Status}</code></strong> 评测结果的完整描述，例如 \"Accepted\"。</p><p><strong><code>{Stat}</code></strong> 评测结果的缩写形式，例如 \"AC\"。</p><p><strong><code>{Number}</code></strong> 评测结果中的最后一个数字，评测状态为AC时不显示。</p><p><strong><code>{标识符:xxx}</code> </strong>当标识符为真时显示括号内的内容。支持的标识符：<code>ac</code>、<code>wa</code>、<code>tle</code>、<code>mle</code>、<code>re</code>、<code>ce</code>、<code>hacked</code>、<code>skipped</code>、<code>ile</code>、<code>pc</code>、<code>pending</code></p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>示例：</p><p><code>我怎么{Stat}了，{wa:呜呜}</code></p><p>此时如果评测结果为\"Wrong answer\"，则会显示：<p></p>我怎么WA了，呜呜</p></div>",
+            "placeholder": "交換するパターンを入力してください。 空の場合は交換されません。"
         }
     },
     "about": {

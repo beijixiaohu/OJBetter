@@ -1,3 +1,31 @@
+## 1.76.0
+
+- \*_Sustituir el repositorio público CDN a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por razones. \*
+
+- Añadida la función "Sustitución del texto del estado de revisión", gracias a la colaboración de **@wrk-123**.
+
+- Ajustar la estructura de la página de configuración
+
+## 1.75.0
+
+- Mejora de algunas normas de localización de sitios web, gracias a la contribución de **@qjwh**.
+- Añadir las opciones "Personalización del aviso de traducción de ChatGPT" y "Como aviso del sistema" ¡Gracias a **@Dawn-Xu-helloworld** por la colaboración!
+- Añadir la función "Forzar conversión Turndown" ¡Gracias a **@wrk-123** por la contribución!
+- Añadir ventana emergente de confirmación de envío de código para mostrar el nombre del título.
+- Añadir muestra mediante la opción Auto-Commit (desactivada por defecto)
+- Añadir la función "Ocultar etiquetas de preguntas temáticas", desactivada por defecto.
+- Sustitución de la interfaz de "Yodo Translator".
+- Arreglar títulos de gimnasios que no saltan a vjudge
+- &nbsp;Corrección de símbolos ` ` en el embellecimiento de bloques de código
+- Solucionar el problema de que las fuentes de problemset no se pueden enviar correctamente cuando la longitud del número de la pregunta no es 1 ¡Gracias a **@WindJ0Y** por la contribución!
+- Fix Monaco editor not applying theme correctly when theme is set to follow ¡Gracias a **@cscnk52** por la contribución!
+- Corregir el editor de código no se carga correctamente cuando los enlaces de título conjunto de títulos están en minúsculas.
+- Se corrige el problema de que LaTeX no sustituye correctamente entre líneas y se solucionan problemas de rendimiento con reglas relacionadas.
+- Corregir error al retraducir "Recopilar resultados antiguos".
+- Solucionar el problema de que el botón de copiar no funciona en la página de presentación
+- Corrección de etiquetas de script no filtradas durante la conversión MarkDown
+- Utilizar polyfill para compatibilidad con navegadores que no soportan el método dialog.showModal() (por ejemplo Firefox79).
+
 ## 1.74.2
 
 - Gracias a @Dechancer por sus comentarios.

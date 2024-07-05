@@ -65,7 +65,7 @@
         "websiteLanguageLabel": "Lingua del sito web",
         "notice": {
             "1": "<strong>Contribuisca a migliorare la qualità delle traduzioni</strong><p>L'autore conosce solo il cinese semplificato e l'inglese, per tutte le altre lingue, gli script e la localizzazione linguistica del sito web sono realizzati tramite traduzione automatica (Deepl & Google) e il flusso di traduzione è ospitato da crowddin.</p><p>Se desidera contribuire a migliorare la qualità delle traduzioni localizzate per una determinata lingua,</p><p>è invitato a<a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>andare su</a>per contribuire a migliorarla, e il suo contributo è apprezzato!</p>",
-            "2": "<strong>Contribuire a migliorare la localizzazione linguistica del sito web</strong><p>Se ritiene che la localizzazione sia necessaria in qualche punto del suo sito web e che la sua sostituzione non causerà gravi problemi di prestazioni, può<a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/Codeforces-subs.json' target='_blank'>andare a Migliorare le regole di localizzazione</a>.</p><p>Se desidera aggiungere una nuova regola, deve aggiungere la versione in cinese semplificato della regola：e modificare il file della regola, quindi lanciare una richiesta di pull.</p><p>Dopo che l'invio sarà unito, crowdin completerà automaticamente la traduzione per le altre lingue e lei potrà accedere a crowdin in seguito per migliorare la qualità della traduzione anche per le altre lingue.</p>"
+            "2": "<strong>Aiuto per perfezionare la localizzazione linguistica del sito web</strong><p> Se pensate che sia necessario localizzare una parte del vostro sito e sostituirla con una localizzazione che non causi seri problemi di prestazioni, sentitevi liberi di <a href='https://github.com/beijixiaohu/OJBetter/blob/main/resources/subs/codeforces-better.json' target='_blank'>procedere e perfezionare le regole di localizzazione</a>.</p><p>：Per aggiungere una nuova regola, è necessario aggiungere il fork della versione in cinese semplificato e modificare il file della regola, quindi lanciare una richiesta di pull.</p><p> Dopo che la richiesta è stata unita, crowdin completerà automaticamente la traduzione per le altre lingue, e si può anche <a href='https://zh.crowdin.com/project/codeforcesbetter' target='_blank'>andare su crowdin</a> in seguito per migliorare la qualità della traduzione per le altre lingue.</p>"
         }
     },
     "translation": {
@@ -390,6 +390,11 @@
             "title": "Icona Dimensione del pulsante",
             "helpText": "<p>Impostazione delle dimensioni del pulsante di traduzione</p>",
             "placeholder": "Inserisca la dimensione del pulsante"
+        },
+        "judgeStatusReplaceText": {
+            "title": "Stato di revisione Sostituzione del testo",
+            "helpText": "<p>Sostituisce il testo dello stato di revisione di un argomento con il testo specificato.</p><p>：Variabili supportate </p><p><strong><code>{Status}</code></strong> La descrizione completa del risultato della valutazione, ad esempio \"Accettato\".</p><p><strong><code>{Stat}</code></strong> La forma abbreviata del risultato della valutazione, ad esempio \"AC\".</p><p><strong><code>{Number}</code></strong> L'ultimo numero del risultato della valutazione, non visualizzato quando lo stato della valutazione è AC.</p><p><strong><code>{标识符:xxx}</code> </strong> Il contenuto delle parentesi viene visualizzato quando l'identificatore è vero.：Identificatori supportati: <code>ac</code>, <code>wa</code>, <code>tle</code>, <code>mle</code>, <code>re</code>, <code>ce</code>, <code>hacked</code>, <code>skipped</code>, <code>ile</code>, <code>pc</code>, <code>pending</code>.</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>：Esempio </p><p><code>{Stat}{wa:呜呜}Come ho ottenuto?</code></p><p>：<p></p>In questo caso, se il risultato della valutazione è \"Risposta errata\", verrà visualizzato Come ho ottenuto ?</p></div>",
+            "placeholder": "Inserire un modello per la sostituzione. Se è vuoto, non verrà sostituito."
         }
     },
     "about": {

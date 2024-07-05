@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.15.14
+// @version      1.17.0
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -20,7 +20,7 @@
 // @connect      vjudge.net
 // @connect      clist.by
 // @connect      greasyfork.org
-// @connect      staticfile.net
+// @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
 // @connect      127.0.0.1
@@ -35,24 +35,24 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/atcoder.png
-// @require      https://cdn.staticfile.net/turndown/7.1.2/turndown.min.js
-// @require      https://cdn.staticfile.net/markdown-it/13.0.1/markdown-it.min.js
-// @require      https://cdn.bootcdn.net/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
-// @require      https://cdn.staticfile.net/chroma-js/2.4.2/chroma.min.js
-// @require      https://cdn.staticfile.net/xterm/3.9.2/xterm.min.js
-// @require      https://cdn.staticfile.net/dexie/3.2.4/dexie.min.js
-// @require      https://cdn.staticfile.net/i18next/23.5.1/i18next.min.js
-// @require      https://cdn.staticfile.net/i18next-http-backend/2.2.2/i18nextHttpBackend.min.js
-// @require      https://cdn.staticfile.net/jquery-i18next/1.2.1/jquery-i18next.min.js
-// @require      https://cdn.staticfile.net/highlight.js/11.3.1/highlight.min.js
-// @require      https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.js
-// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js
-// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js
-// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/crypto-js/4.2.0/crypto-js.min.js#sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/chroma-js/2.4.2/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dexie/4.0.7/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next/23.11.5/i18next.min.js#sha512-3RSGkmT48HnO+hlmzGYDx5/w2LIBX0O5hSuYX6KWAxmvVlSjFgoxIaWa2tlMExheGvt3lLyxeTsXfpC47yb8CQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next-http-backend/2.5.2/i18nextHttpBackend.min.js#sha512-bBb+wrGRTx4MvHpksYb1Iv5oJ1o8ineCqpc0cnTgdJQhuAFJJ93SEVXxUOCptvt0vAqYdjzWO5emorYUBt6Ceg==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
+// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
+// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js#sha512-JYm2AqU8EvoEOnCucDItAsNtmGcjbxccOXjnwNFp87zdlyclpEephXrgR2sMlWj/gL4DCJUN3X0JhI1omaRO0A==
+// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js#sha512-kY1lU3DCvgzkWkOl47sIlmLKdgDcO4T3NYN6p/ET4oi3fnKO74sHUt1xYGtksIHXciKF8Jt+N4RDqG3CRoeYww==
+// @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://cdn.staticfile.net/xterm/3.9.2/xterm.min.css
-// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css
-// @resource     dialogpolyfillcss https://cdn.staticfile.net/dialog-polyfill/0.5.6/dialog-polyfill.min.css
+// @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
+// @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css#sha512-cRXJfA2tEcAxHEKylJfxteY17N7j9fia3waahHOVnvl63uVZT9OQ7jjjpofZMVZ4JSX3BRET+mI8UvKnsXd3NA==
+// @resource     dialogpolyfillcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css#sha512-J2+1q+RsZuJXabBfH1q/fgRr6jMy9By5SwVLk7bScEW7NFJkMUXxfeOyyxtDe6fsaJ4jsciexSlGrPYn9YbBIg==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -514,18 +514,62 @@ async function OJB_waitUntilTrue(conditionCheck, interval = 100) {
 
 /**
  * 动态加载JavaScript库并返回一个Promise，该Promise在脚本加载完成后解决。
- * 
+ *
  * @param {string} url - 要加载的JavaScript库的URL地址。
+ * @param {string} [expectedHash] - 可选的Base64编码的SHA-512哈希值，用于校验脚本内容。格式为 "sha512-<Base64编码的哈希值>"。
  * @returns {Promise<void>} 一个Promise，它在脚本加载并执行完成后解决。
  */
-function OJB_LoadJS(url) {
-    return new Promise((resolve, reject) => {
-        let scriptElement = document.createElement("script");
-        scriptElement.src = url;
+async function OJB_LoadJS(url, expectedHash) {
+    /**
+     * 计算给定数据的SHA-512哈希值，并将其转换为十六进制字符串。
+     *
+     * @param {string} data - 要计算哈希值的数据。
+     * @returns {Promise<string>} 一个Promise，它解析为数据的SHA-512哈希值的十六进制字符串。
+     */
+    const calculateHash = async (data) => {
+        const encoder = new TextEncoder();
+        const dataBuffer = encoder.encode(data);
+        const hashBuffer = await crypto.subtle.digest('SHA-512', dataBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    /**
+     * 将Base64编码的字符串转换为十六进制字符串。
+     *
+     * @param {string} base64 - Base64编码的字符串。
+     * @returns {string} 转换后的十六进制字符串。
+     */
+    const base64ToHex = (base64) => {
+        const binaryString = atob(base64);
+        const byteArray = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            byteArray[i] = binaryString.charCodeAt(i);
+        }
+        return Array.from(byteArray).map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch script: ${response.statusText}`);
+        const scriptContent = await response.text();
+
+        if (expectedHash) {
+            // 去掉前缀 "sha512-"
+            const base64Hash = expectedHash.replace(/^sha512-/, '');
+            const actualHash = await calculateHash(scriptContent);
+            const expectedHashHex = base64ToHex(base64Hash);
+            if (actualHash !== expectedHashHex) throw new Error('SHA-512 hash mismatch');
+        }
+
+        const scriptElement = document.createElement("script");
+        scriptElement.textContent = scriptContent;
         document.head.prepend(scriptElement);
-        scriptElement.onload = resolve;
-        scriptElement.onerror = reject;
-    });
+
+        return Promise.resolve();
+    } catch (error) {
+        return Promise.reject(error);
+    }
 }
 
 /**
@@ -1655,11 +1699,11 @@ async function initMonacoEditor() {
     if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         try {
             // 等待Monaco Editor加载器脚本加载完成
-            await OJB_LoadJS("https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs/loader.min.js");
+            await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
 
             // 配置Monaco Editor
             require.config({
-                paths: { vs: "https://cdn.staticfile.net/monaco-editor/0.44.0/min/vs" },
+                paths: { vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs" },
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
 
@@ -1677,45 +1721,66 @@ async function initMonacoEditor() {
  * 美化代码块
  */
 async function beautifyPreBlocksWithMonaco() {
-    // 判断monacoLoader是否加载完毕
+    // 等待 MonacoLoader 加载完毕
     await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
 
-    // 用于替换 <pre> 标签为 Monaco 编辑器的函数
-    function replacePreWithMonaco(preElement) {
-        const pre = $(preElement);
-        if (pre.hasClass('source-code-for-copy')) return; // 跳过复制块
-        const code = OJB_getCodeFromPre(pre.get(0));
+    const LINE_HEIGHT = 20; // 每行代码的高度
+    const MIN_HEIGHT = 100; // 容器的最小高度
+
+    /**
+     * 计算容器的高度
+     * @param {number} lineCount 代码的行数
+     * @param {string} [maxHeightStr='1000px'] 最大高度，为 'none' 时表示不限制
+     * @returns {string} 容器的高度
+     */
+    const calculateContainerHeight = (lineCount, maxHeightStr = '1000px') => {
+        const maxHeight = parseInt(maxHeightStr, 10); // 最大高度
+        const calculatedHeight = Math.max(lineCount * LINE_HEIGHT, MIN_HEIGHT);
+        return `${isNaN(maxHeight) ? calculatedHeight : Math.min(calculatedHeight, maxHeight)}px`;
+    };
+
+    /**
+     * 用于替换 <pre> 标签为 Monaco 编辑器的函数
+     * @param {HTMLElement} pre <pre> 元素
+     */
+    const replacePreWithMonaco = (pre) => {
+        if (pre.classList.contains('source-code-for-copy')) return; // 跳过复制块
+
+        const code = OJB_getCodeFromPre(pre); // 获取 <pre> 标签中的代码
         if (!code) return;
-        const language = OJB_codeLangDetect(code);
 
-        // 创建一个用于 Monaco 编辑器的容器
-        const container = $('<div></div>');
-        const lineCount = code.split('\n').length; // 代码的行数
+        const language = OJB_codeLangDetect(code); // 检测代码语言
+        const container = document.createElement('div'); // 创建一个用于 Monaco 编辑器的容器
+        const lineCount = code.split('\n').length; // 计算代码的行数
 
-        // 计算容器的高度
-        const calculateContainerHeight = (lineCount) => {
-            const lineHeight = 20; // 每行代码的高度
-            const minHeight = 100; // 最小高度
-            const maxHeight = 1000; // 最大高度
-            const dynamicHeight = lineCount * lineHeight;
-            return Math.min(Math.max(dynamicHeight, minHeight), maxHeight) + 'px';
-        };
+        // 设置容器的样式
+        container.style.height = calculateContainerHeight(lineCount);
+        container.style.width = '100%';
+        pre.style.display = 'none';
+        pre.insertAdjacentElement('afterend', container);
 
-        // 应用样式
-        container.css({
-            height: calculateContainerHeight(lineCount),
-            width: '100%'
+        // 折叠/展开按钮点击事件
+        const toggleExpandCollapse = (() => {
+            let isExpanded = false;
+            return () => {
+                console.log(calculateContainerHeight(lineCount, isExpanded ? '1000px' : 'none'));
+                container.style.height = calculateContainerHeight(lineCount, isExpanded ? '1000px' : 'none');
+                isExpanded = !isExpanded;
+            };
+        })();
+
+        // 重新注册 submission-code-expand-btn 按钮的点击事件
+        document.querySelectorAll('.submission-code-expand-btn').forEach(button => {
+            button.addEventListener('click', toggleExpandCollapse);
         });
-        pre.hide();
-        pre.after(container);
 
         // 初始化 Monaco 编辑器
-        monaco.editor.create(container[0], {
+        monaco.editor.create(container, {
             value: code,
-            language: language,
+            language,
             readOnly: true,
             tabSize: 4,
-            theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
+            theme: OJBetter.basic.darkMode === "dark" ? "vs-dark" : "vs",
             scrollbar: {
                 verticalScrollbarSize: 10,
                 horizontalScrollbarSize: 10,
@@ -1724,21 +1789,18 @@ async function beautifyPreBlocksWithMonaco() {
             automaticLayout: true,
             scrollBeyondLastLine: false
         });
-    }
+    };
+
     // 全局替换页面上所有的 <pre> 元素
-    $('pre').each(function () {
-        replacePreWithMonaco(this);
-    });
+    document.querySelectorAll('pre').forEach(replacePreWithMonaco);
+
     // 监听页面上的提交状态页面窗口的 <pre> 元素
     if (OJBetter.typeOfPage.is_statePage || OJBetter.typeOfPage.is_submissions) {
         OJB_observeElement({
             selector: '#facebox',
             callback: (node) => {
                 // 如果 facebox 中存在 pre 元素，则替换它们
-                const preElements = $(node).find('pre');
-                preElements.each(function () {
-                    replacePreWithMonaco(this);
-                });
+                node.querySelectorAll('pre').forEach(replacePreWithMonaco);
             }
         });
     }
@@ -2328,7 +2390,7 @@ header .enter-or-register-box, header .languages {
 /* 链接样式 */
 .OJBetter_setting_menu a {
     font-size: 13px;
-    color: #009688;
+    color: #009688 !important;
     background-color: #E0F2F1;
     border: 1px solid #009688;
     border-radius: 4px;
@@ -4577,7 +4639,7 @@ async function localizeWebsite() {
                         console.error(`Error processing text replacement for match: ${match}`, error);
                     }
                 });
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     traverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -4637,7 +4699,7 @@ async function localizeWebsite() {
                         }
                     }
                 }
-            } else {
+            } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName.toLowerCase() !== 'iframe') {
                 $(node).contents().each((_, childNode) => {
                     strictTraverseTextNodes($(childNode), textReplaceRules, key);
                 });
@@ -5309,11 +5371,10 @@ const OJBetter_setting_sidebar_HTML = `
 <div class="OJBetter_setting_sidebar">
     <ul>
         <li><a href="#basic-settings" id="sidebar-basic-settings" class="active" data-i18n="settings:sidebar.basic"></a></li>
-        <li><a href="#l10n_settings" id="sidebar-l10n_settings" data-i18n="settings:sidebar.localization"></a></li>
+        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#translation-settings" id="sidebar-translation-settings" data-i18n="settings:sidebar.translation"></a></li>
         <li><a href="#clist_rating-settings" id="sidebar-clist_rating-settings" data-i18n="settings:sidebar.clist"></a></li>
         <li><a href="#code_editor-settings" id="sidebar-code_editor-settings" data-i18n="settings:sidebar.monaco"></a></li>
-        <li><a href="#preference-settings" id="sidebar-preference-settings" data-i18n="settings:sidebar.preference"></a></li>
         <li><a href="#dev-settings" id="sidebar-dev-settings" data-i18n="settings:sidebar.dev"></a></li>
         <li><a href="#about-settings" id="sidebar-about-settings" data-i18n="settings:sidebar.about"></a></li>
     </ul>
@@ -5347,65 +5408,6 @@ const basic_settings_HTML = `
             </label>
         </div>
     </div>
-    <div class='OJBetter_setting_list' style="display:none;">
-        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
-        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
-    </div>
-    <div class='OJBetter_setting_list' style="display:none;">
-        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list' style="display:none;">
-        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
-        </div>
-        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
-    </div>
-    <div class='OJBetter_setting_list' style="display:none;">
-        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
-        </div>
-        <input type="checkbox" id="commentPaging" name="commentPaging">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
-    </div>
-    <div class='OJBetter_setting_list'>
-        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
-        </div>
-        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
-    </div>
-    <div class='OJBetter_setting_list' style="display:none;">
-        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
-        <div class="help_tip">
-            ${helpCircleHTML}
-            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
-        </div>
-        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
-    </div>
-</div>
-`;
-
-const l10n_settings_HTML = `
-<div id="l10n_settings" class="settings-page">
-    <h3 data-i18n="settings:localization.title"></h3>
-    <hr>
     <div class='OJBetter_setting_list'>
         <label for="scriptL10nLanguage" style="display: flex;" data-i18n="settings:localization.scriptLanguageLabel"></label>
         <select id="scriptL10nLanguage" name="scriptL10nLanguage">
@@ -5446,6 +5448,7 @@ const l10n_settings_HTML = `
     </div>
 </div>
 `;
+
 
 const translation_settings_HTML = `
 <div id="translation-settings" class="settings-page">
@@ -5905,6 +5908,58 @@ const preference_settings_HTML = `
 <div id="preference-settings" class="settings-page">
     <h3 data-i18n="settings:preference.title"></h3>
     <hr>
+    <div class='OJBetter_setting_list' style="display:none;">
+        <label for="expandFoldingblocks" data-i18n="settings:basic.expandBlocks"></label>
+        <input type="checkbox" id="expandFoldingblocks" name="expandFoldingblocks">
+    </div>
+    <div class='OJBetter_setting_list' style="display:none;">
+        <label for="renderPerfOpt" data-i18n="settings:basic.renderOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.renderOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="renderPerfOpt" name="renderPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list' style="display:none;">
+        <label for="selectElementPerfOpt" data-i18n="settings:basic.selectElementOptimization.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.selectElementOptimization.helpText"></div>
+        </div>
+        <input type="checkbox" id="selectElementPerfOpt" name="selectElementPerfOpt">
+    </div>
+    <div class='OJBetter_setting_list' style="display:none;">
+        <label for="commentPaging" data-i18n="settings:basic.paging.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.paging.helpText"></div>
+        </div>
+        <input type="checkbox" id="commentPaging" name="commentPaging">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showJumpToLuogu" data-i18n="settings:basic.luoguJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.luoguJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showJumpToLuogu" name="showJumpToLuogu">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showCF2vjudge" data-i18n="settings:basic.vjudgeJump.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.vjudgeJump.helpText"></div>
+        </div>
+        <input type="checkbox" id="showCF2vjudge" name="showCF2vjudge">
+    </div>
+    <div class='OJBetter_setting_list' style="display:none;">
+        <label for="standingsRecolor" data-i18n="settings:basic.recolor.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:basic.recolor.helpText"></div>
+        </div>
+        <input type="checkbox" id="standingsRecolor" name="standingsRecolor">
+    </div>
     <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
@@ -6067,7 +6122,6 @@ const about_settings_HTML = `
 const OJBetter_setting_content_HTML = `
 <div class="OJBetter_setting_content">
     ${basic_settings_HTML}
-    ${l10n_settings_HTML}
     ${translation_settings_HTML}
     ${clist_rating_settings_HTML}
     ${code_editor_settings_HTML}
@@ -8780,7 +8834,7 @@ function RenderPerfOpt() {
 async function SelectElementPerfOpt() {
     // TODO 10
     // 加载库资源
-    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js");
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js", "sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
     /**
      * 将一个<select>元素转换为SelectPage控件
      * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
@@ -8952,7 +9006,7 @@ class ProblemPageLinkbar {
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
-    const regex = /\/contests\/([A-Za-z\d]+)\/tasks\/([A-Za-z\d\_]+)/;
+    const regex = /\/contests\/([A-Za-z\d\-]+)\/tasks\/([A-Za-z\d\_]+)/;
     const matchResult = url.match(regex);
     return matchResult && matchResult.length >= 3
         ? `${matchResult[2]}`
@@ -11167,7 +11221,6 @@ async function createMonacoEditor(language, form, support) {
                     });
                 });
 
-                return null; // 如果没有内容，则返回null
             },
         });
 
@@ -11202,7 +11255,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(references);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -11239,7 +11291,6 @@ async function createMonacoEditor(language, form, support) {
                         resolve(highlights);
                     });
                 });
-                return []; // 如果没有内容，则返回空数组
             },
         });
 
@@ -12956,24 +13007,24 @@ async function translate_openai(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     let prompt = "";
-    if (OJBetter.chatgpt.customPrompt){
+    if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-        if (!OJBetter.chatgpt.asSystemPrompt){
+        if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
     } else {
-    prompt = `
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-            `The segment to be translated is as follows: "
+                `The segment to be translated is as follows: "
 ${raw}
 "`}`;
-};
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
@@ -13060,24 +13111,24 @@ async function* openai_stream(raw) {
     const modelDefault = 'gpt-3.5-turbo';
     const lang = getTargetLanguage('openai');
     let prompt = "";
-    if (OJBetter.chatgpt.customPrompt){
+    if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-        if (!OJBetter.chatgpt.asSystemPrompt){
+        if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
     } else {
-    prompt = `
+        prompt = `
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-            ? "keeping the LaTeX equations unchanged."
-            : "keeping the brackets【】, HTML tags, and their content unchanged."
-        }
+                ? "keeping the LaTeX equations unchanged."
+                : "keeping the brackets【】, HTML tags, and their content unchanged."
+            }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-            `The segment to be translated is as follows: "
+                `The segment to be translated is as follows: "
 ${raw}
 "`}`;
-};
+    };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
         messages: OJBetter.chatgpt.asSystemPrompt ?
