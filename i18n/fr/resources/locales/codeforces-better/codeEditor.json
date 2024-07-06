@@ -6,7 +6,7 @@
         },
         "official": {
             "getResultError": "Une erreur s'est produite lors de la demande d'un résultat d'exécution, veuillez réessayer !",
-            "pushError": "提交代码到 Codeforces 服务器时发生了错误，请重试"
+            "pushError": "Une erreur s'est produite lors de la soumission du code au serveur Codeforces, veuillez réessayer !"
         }
     },
     "customTestBlock": {
@@ -47,7 +47,7 @@
         "tip": "Les modifications sont enregistrées automatiquement",
         "fontSizeInput": {
             "helpText": "Réglage de la taille de la police de l'éditeur de code",
-            "label": "字体大小",
+            "label": "taille de la police",
             "placeholder": "Veuillez saisir une taille de police"
         },
         "validator": {
