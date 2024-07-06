@@ -64,6 +64,46 @@
                 "strict": "엄격한 일관성",
                 "wcmp": "wcmp - 문자열 일치"
             }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "제대로",
+                "mismatch": "불일치"
+            },
+            "strict": {
+                "correct": "제대로",
+                "mismatch": "불일치"
+            },
+            "ncmp": {
+                "differ": "{{count}}{{expected}}{{actual}}자릿수가 다릅니다(예상: ' ', 실제: ' ').",
+                "longerExpected": "{{expectedLength}} {{actualLength}} 더 긴 시퀀스[길이 = ]를 포함할 것으로 예상, 실제로는 요소 포함",
+                "longerActual": "{{actualLength}} {{expectedLength}} 실제로는 더 긴 시퀀스[길이 = ]를 포함하며, 요소를 포함할 것으로 예상됩니다.",
+                "correctFew": "{{count}}{{numbers}}숫자: \" \"",
+                "correctMany": "{{count}} 수치"
+            },
+            "rcmp": {
+                "differ": "{{n}}{{expected}}{{actual}}{{error}}숫자가 다릅니다(예상: ' ', 실제: ' ', 오류: ' ').",
+                "single": "{{actual}}{{expected}}{{error}}발견됨 ' ', 예상됨 ' ', 오류 ' '",
+                "total": "{{count}} 수치",
+                "invalidNumber": "{{index}}{{expected}}{{actual}}잘못된 번호 - 예상: ' ', 실제: ' '",
+                "lengthMismatch": "{{expectedLength}} {{actualLength}} 예상 수치와 실제 수치가 다릅니다 - 예상: , 실제:"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}{{expected}}{{actual}}단어가 다릅니다 - 예상: ' ', 실제: ' '.",
+                "extraTokensInParticipant": "실제 출력에는 추가 단어가 포함됩니다.",
+                "unexpectedEOF": "출력에 추가 단어가 포함될 것으로 예상",
+                "singleToken": "{{token}}\" \"",
+                "tokenCount": "{{count}}단어"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} 또는 예상 출력에 있어야 하지만 [페이지 토큰]을 발견했습니다.",
+                "expectedInOutput": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} 또는 실제 출력에 있어야 하지만 [페이지 토큰]을 찾지 못했습니다.",
+                "mismatch": "\n {{expected}}\n {{actual}} {{index}}{{ending}} 예상 불일치: 실제: [페이지 토큰]",
+                "longerInAnswer": "{{expectedLength}} {{actualLength}} 출력에 더 많은 토큰[길이 = ]이 포함될 것으로 예상되었지만 실제 출력에는 토큰만 포함되었습니다.",
+                "longerInOutput": "{{actualLength}} {{expectedLength}} 실제 출력에는 더 많은 토큰[길이 = ]이 포함되지만 예상 출력에는 토큰만 포함됩니다.",
+                "emptyOutput": "빈 출력",
+                "summary": "{{index}} {{yesCount}} {{noCount}}토큰 수: 예는 , 아니요는"
+            }
         }
     }
 }
