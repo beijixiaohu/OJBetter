@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "Custom test data (auto-saving)",
-        "onlyCustom": "Only test custom data",
-        "DontShowDiff": "Do not show differences",
-        "add": "Create New"
+    "cancelFixButton": "Unpin",
+    "compiler": {
+        "common": {
+            "error": "An unknown error has occurred. Please try again."
+        },
+        "official": {
+            "getResultError": "An error occurred while requesting a run result, please try again!",
+            "pushError": "An error occurred while submitting the code to the Codeforces server, please try again!"
+        }
     },
-    "runTestButton": {
-        "initial": "sample test",
-        "running": "under test",
-        "success": "All passed",
-        "error": "Failed all",
-        "partial": "Passed in part"
+    "customTestBlock": {
+        "add": "Create New",
+        "DontShowDiff": "Do not show differences",
+        "onlyCustom": "Only test custom data",
+        "title": "Custom test data (auto-saving)"
+    },
+    "exitFullscreenButton": "Exit fullscreen",
+    "fixToBottomButton": "Pin to bottom",
+    "fixToRightButton": "Pin to right",
+    "fullscreenButton": "Fullscreen",
+    "lsp": {
+        "connect": "Create LSP connection……",
+        "connected": "LSP connected",
+        "error": "LSP connection disconnected",
+        "waitingAnswer": "Waiting for initialization back to……"
     },
     "resultBlock": {
         "diff": "Comparison of Differences：",
@@ -21,26 +34,36 @@
             "sample": "Sample Title"
         }
     },
-    "submitButton": "Commit",
-    "fontSizeInput": "Font size",
-    "fullscreenButton": "Fullscreen",
-    "exitFullscreenButton": "Exit fullscreen",
-    "fixToBottomButton": "Pin to bottom",
-    "fixToRightButton": "Pin to right",
-    "cancelFixButton": "Unpin",
-    "lsp": {
-        "connect": "Create LSP connection……",
-        "waitingAnswer": "Waiting for initialization back to……",
-        "connected": "LSP connected",
-        "error": "LSP connection disconnected"
+    "runTestButton": {
+        "error": "Failed all",
+        "initial": "sample test",
+        "partial": "Passed in part",
+        "running": "under test",
+        "success": "All passed"
     },
-    "compiler": {
-        "official": {
-            "pushError": "An error occurred while submitting the code to the codeforces server, please try again!",
-            "getResultError": "An error occurred while requesting a run result, please try again!"
+    "submitButton": "Commit",
+    "moreSettings": {
+        "title": "More Settings",
+        "tip": "Changes are automatically saved",
+        "fontSizeInput": {
+            "helpText": "Setting the font size of the code editor",
+            "label": "font size",
+            "placeholder": "Please enter a font size"
         },
-        "common": {
-            "error": "An unknown error has occurred. Please try again."
+        "validator": {
+            "helpText": "Use the specified checker to check that the results of a sample test run match the expected results",
+            "label": "Sample Test Result Checker",
+            "messagePrefix": "Check：",
+            "options": {
+                "ignoreWhitespace": "Ignore end-of-line spaces and end-of-text line breaks",
+                "ncmp": "ncmp - match 64-bit integers",
+                "nyesno": "nyesno - matches YES and NO, case insensitive",
+                "rcmp4": "rcmp4 - matches floating point numbers with a maximum allowable error of 1e-4",
+                "rcmp6": "rcmp6 - match floating point numbers with a maximum allowable error of 1e-6",
+                "rcmp9": "rcmp9 - match floating point numbers with a maximum allowable error of 1e-9",
+                "strict": "strict consistency",
+                "wcmp": "wcmp - match string"
+            }
         }
     }
 }
