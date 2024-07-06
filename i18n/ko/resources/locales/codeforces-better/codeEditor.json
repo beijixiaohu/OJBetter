@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "사용자 지정 테스트 데이터(자동 저장)",
-        "onlyCustom": "사용자 지정 데이터만 테스트",
-        "DontShowDiff": "표시되지 않은 불일치",
-        "add": "새로 구축"
+    "cancelFixButton": "고정 취소",
+    "compiler": {
+        "common": {
+            "error": "알 수 없는 오류가 발생했습니다. 다시 시도하세요."
+        },
+        "official": {
+            "getResultError": "실행 결과를 요청하는 동안 오류가 발생했습니다. 다시 시도해 주세요!",
+            "pushError": "코드포스 서버에 코드를 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요!"
+        }
     },
-    "runTestButton": {
-        "initial": "샘플 테스트",
-        "running": "테스트 중",
-        "success": "모두 통과",
-        "error": "모두 실패",
-        "partial": "부분적으로 채택됨"
+    "customTestBlock": {
+        "add": "새로 구축",
+        "DontShowDiff": "표시되지 않은 불일치",
+        "onlyCustom": "사용자 지정 데이터만 테스트",
+        "title": "사용자 지정 테스트 데이터(자동 저장)"
+    },
+    "exitFullscreenButton": "전체 화면 종료",
+    "fixToBottomButton": "하단에 고정",
+    "fixToRightButton": "오른쪽으로 고정",
+    "fullscreenButton": "전체 화면",
+    "lsp": {
+        "connect": "LSP 연결 만들기……",
+        "connected": "LSP 연결",
+        "error": "LSP 연결이 끊어짐",
+        "waitingAnswer": "초기화 확인을 기다리는 중……"
     },
     "resultBlock": {
         "diff": "차이점 비교：",
@@ -21,26 +34,36 @@
             "sample": "샘플 제목"
         }
     },
-    "submitButton": "제출(보고서 등)",
-    "fontSizeInput": "글꼴 크기",
-    "fullscreenButton": "전체 화면",
-    "exitFullscreenButton": "전체 화면 종료",
-    "fixToBottomButton": "하단에 고정",
-    "fixToRightButton": "오른쪽으로 고정",
-    "cancelFixButton": "고정 취소",
-    "lsp": {
-        "connect": "LSP 연결 만들기……",
-        "waitingAnswer": "초기화 확인을 기다리는 중……",
-        "connected": "LSP 연결",
-        "error": "LSP 연결이 끊어짐"
+    "runTestButton": {
+        "error": "모두 실패",
+        "initial": "샘플 테스트",
+        "partial": "부분적으로 채택됨",
+        "running": "테스트 중",
+        "success": "모두 통과"
     },
-    "compiler": {
-        "official": {
-            "pushError": "코드를 코드포스 서버에 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요!",
-            "getResultError": "실행 결과를 요청하는 동안 오류가 발생했습니다. 다시 시도해 주세요!"
+    "submitButton": "제출(보고서 등)",
+    "moreSettings": {
+        "title": "추가 설정",
+        "tip": "변경 사항은 자동으로 저장됩니다.",
+        "fontSizeInput": {
+            "helpText": "코드 편집기의 글꼴 크기 설정",
+            "label": "글꼴 크기",
+            "placeholder": "글꼴 크기를 입력하세요."
         },
-        "common": {
-            "error": "알 수 없는 오류가 발생했습니다. 다시 시도하세요."
+        "validator": {
+            "helpText": "지정된 검사기를 사용하여 샘플 테스트 실행 결과가 예상 결과와 일치하는지 확인합니다.",
+            "label": "샘플 테스트 결과 검사기",
+            "messagePrefix": "：확인",
+            "options": {
+                "ignoreWhitespace": "줄 끝 공백 및 텍스트 끝 줄 바꿈 무시하기",
+                "ncmp": "ncmp - 64비트 정수 일치",
+                "nyesno": "nyesno - 예와 아니오 일치, 대소문자 구분 없음",
+                "rcmp4": "rcmp4 - 최대 허용 오차가 1e-4인 부동 소수점 숫자를 일치시킵니다.",
+                "rcmp6": "rcmp6 - 최대 허용 오차가 1e-6인 부동 소수점 숫자를 일치시킵니다.",
+                "rcmp9": "rcmp9 - 최대 허용 오차가 1e-9인 부동 소수점 숫자를 일치시킵니다.",
+                "strict": "엄격한 일관성",
+                "wcmp": "wcmp - 문자열 일치"
+            }
         }
     }
 }
