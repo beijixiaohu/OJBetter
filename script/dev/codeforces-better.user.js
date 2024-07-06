@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.1
+// @version      1.76.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -2024,6 +2024,7 @@ dialog::backdrop {
 /*题目页链接栏样式*/
 #problemToolbar {
     display: flex;
+    gap: 6px;
     flex-wrap: wrap;
     justify-content: flex-end;
     overflow: auto;
@@ -2036,12 +2037,11 @@ dialog::backdrop {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 6px;
+    padding: 5px 0px !important;
 }
 .html2md-panel a {
     text-decoration: none;
-}
-.html2md-panel > button {
-    margin: 5px;
 }
 .html2md-panel.is_simple {
     position: absolute;
@@ -2060,7 +2060,7 @@ dialog::backdrop {
     font-size: 13px;
     border-radius: 0.3rem;
     padding: 2px 5px;
-    margin: 0px 5px;
+    margin: 0px;
     border: 1px solid #dcdfe6;
 }
 .ojb_btn[disabled] {
@@ -2300,6 +2300,7 @@ html:not([data-theme='dark']) .translateDiv {
     background: none;
     border: none;
     color: #9e9e9e;
+    padding: 5px 8px;
 }
 .translate-problem-statement-panel.error, .translate-problem-statement.error {
     color: red;
@@ -3348,7 +3349,6 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     outline: none;
 }
 #OJBetter_SubmitForm .topDiv {
-    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -3359,20 +3359,15 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 0px;
+    gap: 5px;
 }
 #OJBetter_SubmitForm input[type="checkbox"], #OJBetter_SubmitForm label {
     margin: 0px;
     font-weight: initial;
 }
-#OJBetter_SubmitForm #fontSizeInput {
-    border: none;
-    background-color: #ffffff00;
-}
-
-/* 顶部区域 */
+/* 顶部右侧区域 */
 #OJBetter_SubmitForm .topRightDiv>* {
-    height: 100%;
+    height: 30px;
     box-sizing: border-box;
 }
 #OJBetter_SubmitForm .topRightDiv>button{
@@ -3483,6 +3478,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 /* 提交 */
 #OJBetter_submitDiv{
     display: flex;
+    gap: 5px;
     padding-top: 15px;
     height: 50px;
     box-sizing: border-box;
@@ -3506,7 +3502,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     background-color: red;
     animation: shake 0.07s infinite alternate;
 }
-#programTypeId{
+.topLeftDiv > select {
     height: 100%;
     padding: 5px 10px;
     border-radius: 6px;
@@ -3661,7 +3657,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 .test-case-status.success{
     color: #449d44;
 }
-.test-case-judge {
+.test-case-judge, .judge-checker {
     font-size: 13px;
 }
 
@@ -5956,7 +5952,7 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
         </div>
         <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
-    </div>
+    </div>    
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
                 data-i18n="settings:codeEditor.preferences.submitButtonPosition.label"></span></label>
@@ -6294,7 +6290,7 @@ const OJBetter_setting_content_HTML = `
 const OJBetterSettingMenu_HTML = `
     <dialog class='OJBetter_setting_menu' id='OJBetter_setting_menu'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6401,7 +6397,7 @@ const deeplConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6468,7 +6464,7 @@ const chatgptConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6535,7 +6531,7 @@ const CompletConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6874,8 +6870,7 @@ async function initSettingsPanel() {
         $('#updateChannel').change();
 
         // 关闭
-        const $settingMenu = $(".OJBetter_setting_menu");
-        $settingMenu.on("click", ".btn-close", async () => {
+        settingMenu.on("click", ".btn-close", async () => {
             // 设置的数据
             const settings = {
                 darkMode: $("input[name='darkMode']:checked").val(),
@@ -8814,7 +8809,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
             text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
         } else if (OJBetter.typeOfPage.is_acmsguru) {
-            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi; // TODO 111
+            const regex = /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
@@ -9112,7 +9107,7 @@ function RenderPerfOpt() {
 async function SelectElementPerfOpt() {
     // TODO 10
     // 加载库资源
-    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js","sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
+    await OJB_LoadJS("https://aowuucdn.oss-accelerate.aliyuncs.com/js/selectpage.min.js", "sha512-HhBheWc9nbTuTG0oVYtY9c3nkJAAiuk899lycOtB8NALvp20CNOjlYdTAYbRy9/0zXnLl0LZpiwhfLZurvK1XQ==");
     /**
      * 将一个<select>元素转换为SelectPage控件
      * @param {HTMLElement|string} selector - 要转换的<select>元素或其选择器
@@ -10389,9 +10384,16 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
 
     // 顶部区域
     let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
-    let selectLang = cloneHTML.find('select[name="programTypeId"]'); // 语言选择
-    selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
-    topDiv.append(selectLang);
+
+    // 顶部左侧区域
+    let topLeftDiv = OJB_safeCreateJQElement(`<div class="topLeftDiv"></div>`);
+    topDiv.append(topLeftDiv);
+    // 语言选择
+    let selectLang = cloneHTML.find('select[name="programTypeId"]');
+    selectLang.attr('id', 'programTypeId');
+    topLeftDiv.append(selectLang);
+
+    // 顶部右侧区域
     let topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
     topDiv.append(topRightDiv);
     formDiv.append(topDiv);
@@ -10746,17 +10748,86 @@ async function createMonacoEditor(language, form, support) {
         // 从配置信息更新字体大小
         OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
+        // 更多设置按钮
+        let moreSetting = OJB_safeCreateJQElement(`
+        <div class="ojb_btn ojb_btn_popover top">
+            <i class="iconfont">&#xe643;</i>
+            <span class="popover_content">${i18next.t('moreSetting', { ns: 'codeEditor' })}</span>
+        </div>`);
+        form.topRightDiv.append(moreSetting);
+
+        // 设置弹窗页面
+        let moreSettingPopover = OJB_safeCreateJQElement(`
+        <dialog id="moreSettingPopover" class="OJBetter_setting_menu">
+            <div class="tool-box">
+                <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
+                    <i class="iconfont">&#xe614;</i>
+                </button>
+            </div>
+            <h2>${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</h2>
+            <div class='OJBetter_setting_list alert_tip'>
+                <p>${i18next.t('moreSettings.tip', { ns: 'codeEditor' })}</p>
+            </div>    
+        </dialog>`);
+        OJB_addDraggable(moreSettingPopover);
+        $('body').append(moreSettingPopover);
+
+        // 设置弹窗的关闭按钮
+        moreSettingPopover.find('.btn-close').on('click', function () {
+            moreSettingPopover[0].close();
+        });
+
         // 调整字体大小
         let changeSize = OJB_safeCreateJQElement(`
-        <div class="ojb_btn ojb_btn_popover top">
-            <input type="number" id="fontSizeInput" value="${OJBetter.monaco.setting.fontsize}">
-            <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
-        </div>`)
-        form.topRightDiv.append(changeSize);
+        <div class='OJBetter_setting_list'>
+            <label for='fontSizeInput'>
+                <div style="display: flex;align-items: center;">${i18next.t('moreSettings.fontSizeInput.label', { ns: 'codeEditor' })}</div>
+            </label>
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">${i18next.t('moreSettings.fontSizeInput.helpText', { ns: 'codeEditor' })}</div>
+            </div>
+            <input type='number' id='fontSizeInput' class='no_default' 
+                require=true 
+                placeholder="${i18next.t('moreSettings.fontSizeInput.placeholder', { ns: 'codeEditor' })}"
+                value="${OJBetter.monaco.setting.fontsize}">
+            <span>px</span>
+        </div>`);
+        moreSettingPopover.append(changeSize);
         changeSize.find('input#fontSizeInput').on('input', function () {
             var size = $(this).val();
             OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(size) });
             GM_setValue('editorFontSize', size);
+        });
+
+        // 测试检查器选择
+        let selectValidator = OJB_safeCreateJQElement(`
+            <div class='OJBetter_setting_list'>
+                <label for="judgeResultValidator">
+                    <span>${i18next.t('moreSettings.validator.label', { ns: 'codeEditor' })}</span>
+                </label>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text">${i18next.t('moreSettings.validator.helpText', { ns: 'codeEditor' })}</div>
+                </div>
+                <select id="judgeResultValidator" name="judgeResultValidator">
+                    <option value="ignoreWhitespace">${i18next.t('moreSettings.validator.options.ignoreWhitespace', { ns: 'codeEditor' })}</option>
+                    <option value="strict">${i18next.t('moreSettings.validator.options.strict', { ns: 'codeEditor' })}</option>
+                    <option value="ncmp">${i18next.t('moreSettings.validator.options.ncmp', { ns: 'codeEditor' })}</option>
+                    <option value="rcmp4">${i18next.t('moreSettings.validator.options.rcmp4', { ns: 'codeEditor' })}</option>
+                    <option value="rcmp6">${i18next.t('moreSettings.validator.options.rcmp6', { ns: 'codeEditor' })}</option>
+                    <option value="rcmp9">${i18next.t('moreSettings.validator.options.rcmp9', { ns: 'codeEditor' })}</option>
+                    <option value="wcmp">${i18next.t('moreSettings.validator.options.wcmp', { ns: 'codeEditor' })}</option>
+                    <option value="nyesno">${i18next.t('moreSettings.validator.options.nyesno', { ns: 'codeEditor' })}</option>
+                </select>
+            </div>`);
+        // 选择默认检查器
+        const defaultValidator = OJB_getGMValue('judgeResultCheckMode', 'ignoreWhitespace');
+        selectValidator.find('select').val(defaultValidator);
+        moreSettingPopover.append(selectValidator);
+        // 注册检查器更改事件
+        selectValidator.find('select').on('change', function () {
+            GM_setValue('judgeResultCheckMode', $(this).val());
         });
 
         // 全屏按钮
@@ -10820,6 +10891,11 @@ async function createMonacoEditor(language, form, support) {
             fixToBottomButton.prop("disabled", false);
             fixToRightButton.prop("disabled", false);
         }
+
+        // 打开更多设置弹窗
+        moreSetting.on('click', () => {
+            OJB_showModal(moreSettingPopover);
+        });
 
         // 进入全屏
         function enterFullscreen() {
@@ -12855,14 +12931,32 @@ class TestCaseStatus {
         this.setStatus('Queued', 'queued');
     }
 
+    /**
+     * 设置标题
+     * 
+     * @param {string} title 标题 
+     */
     setTitle(title) {
         this.titleElement.text(title);
     }
 
+    /**
+     * 设置状态
+     * 
+     * @param {string} text 状态文本
+     * @param {string} status 状态类名
+     */
     setStatus(text, status) {
         this.statusElement.text(text).removeClass('queued running success error').addClass(status);
     }
 
+
+    /**
+     * 设置内容
+     * 
+     * @param {string} content 内容
+     * @param {string} type 内容类型
+     */
     setContent(content, type) {
         // 如果内容类型为SUCCESS，隐藏内容元素并提前返回
         if (type === TestCaseContentType.SUCCESS) {
@@ -12916,9 +13010,263 @@ class TestCaseStatus {
         }
     }
 
+    // 设置checker的评测结果
+    setJudgeChecker(message) {
+        const createJudgeCheckerElement = (message) => {
+            const judgeCheckerElement = OJB_safeCreateJQElement(`<div class="judge-checker">${i18next.t('moreSettings.validator.messagePrefix', { ns: 'codeEditor' })}${message}</div>`);
+            return judgeCheckerElement;
+        };
+        this.contentElement.append(createJudgeCheckerElement(message));
+    };
+
     setJudge(judge) {
         this.judgeElement.text(judge);
     }
+}
+
+/**
+ * 评测结果检查器基类，所有检查器类应继承此类
+ */
+class judgeResultValidator {
+    /**
+     * 检查方法，子类应覆盖此方法
+     * @param {string} expected - 预期输出
+     * @param {string} actual - 实际输出
+     * @returns {Object} 检查结果对象 { passed: boolean, message: string }
+     */
+    validate(expected, actual) {
+        throw new Error("This method should be overridden by subclasses");
+    }
+}
+
+/**
+ * 忽略行末空格和末尾换行的检查器
+ */
+class IgnoreWhitespaceValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        // 去掉字符串末尾的空格和换行符
+        expected = expected.trim().replace(/\s+$/gm, '');
+        actual = actual.trim().replace(/\s+$/gm, '');
+        const passed = expected === actual;
+        return {
+            passed: passed,
+            message: passed ? '正确' : '不匹配'
+        };
+    }
+}
+
+/**
+ * 严格检查器
+ */
+class StrictValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const passed = expected === actual;
+        return {
+            passed: passed,
+            message: passed ? '正确' : '不匹配'
+        };
+    }
+}
+
+/**
+ * 整数检查器
+ */
+class NcmpValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const expectedInts = expected.split(/\s+/).filter(Boolean).map(Number);
+        const actualInts = actual.split(/\s+/).filter(Boolean).map(Number);
+
+        const minLength = Math.min(expectedInts.length, actualInts.length);
+        let firstElems = [];
+
+        for (let i = 0; i < minLength; i++) {
+            if (expectedInts[i] !== actualInts[i]) {
+                return {
+                    passed: false,
+                    message: `不匹配\n第${i + 1}个数字不同 - 预期: ${expectedInts[i]}, 实际: ${actualInts[i]}`
+                };
+            } else if (i < 5) {
+                firstElems.push(expectedInts[i]);
+            }
+        }
+
+        if (expectedInts.length > actualInts.length) {
+            return {
+                passed: false,
+                message: `不匹配\n预期包含更长的序列 [长度 = ${expectedInts.length}], 实际包含 ${actualInts.length} 个元素`
+            };
+        }
+
+        if (actualInts.length > expectedInts.length) {
+            return {
+                passed: false,
+                message: `不匹配\n实际包含更长的序列 [长度 = ${actualInts.length}], 预期包含 ${expectedInts.length} 个元素`
+            };
+        }
+
+        return {
+            passed: true,
+            message: firstElems.length <= 5 ? `正确\n${firstElems.length} 个数字: "${firstElems.join(' ')}"` : `正确\n${expectedInts.length} 个数字`
+        };
+    }
+}
+
+/**
+ * 浮点数检查器
+ */
+class RcmpValidator extends judgeResultValidator {
+    constructor(epsilon) {
+        super();
+        this.epsilon = epsilon;
+    }
+    validate(expected, actual) {
+        const expectedFloats = expected.split(/\s+/).map(Number);
+        const actualFloats = actual.split(/\s+/).map(Number);
+        for (let i = 0; i < expectedFloats.length; i++) {
+            const error = Math.abs(expectedFloats[i] - actualFloats[i]);
+            if (error > this.epsilon) {
+                return {
+                    passed: false,
+                    message: `不匹配\n第${i + 1}个数\n预期: ${expectedFloats[i].toFixed(10)}\n实际: ${actualFloats[i].toFixed(10)}\n误差: ${error.toFixed(10)}`
+                };
+            }
+        }
+        return {
+            passed: true,
+            message: '正确'
+        };
+    }
+}
+
+/**
+ * 字符串检查器
+ */
+class WcmpValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const expectedWords = expected.split(/\s+/);
+        const actualWords = actual.split(/\s+/);
+
+        const minLength = Math.min(expectedWords.length, actualWords.length);
+
+        for (let i = 0; i < minLength; i++) {
+            if (expectedWords[i] !== actualWords[i]) {
+                return {
+                    passed: false,
+                    message: `不匹配\n第${i + 1}个单词不同 - 预期: '${expectedWords[i]}', 实际: '${actualWords[i]}'`
+                };
+            }
+        }
+
+        if (expectedWords.length !== actualWords.length) {
+            return {
+                passed: false,
+                message: expectedWords.length > actualWords.length ? '实际输出包含额外的单词' : '预期输出包含额外的单词'
+            };
+        }
+
+        return {
+            passed: true,
+            message: '正确'
+        };
+    }
+}
+
+/**
+ * YES NO大小写不敏感检查器
+ */
+class NyesnoValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const YES = "yes";
+        const NO = "no";
+
+        const expectedTokens = expected.trim().toLowerCase().split(/\s+/);
+        const actualTokens = actual.trim().toLowerCase().split(/\s+/);
+
+        let index = 0;
+        let yesCount = 0;
+        let noCount = 0;
+
+        while (index < expectedTokens.length && index < actualTokens.length) {
+            const expectedToken = expectedTokens[index];
+            const actualToken = actualTokens[index];
+            index++;
+
+            if (expectedToken !== YES && expectedToken !== NO) {
+                return {
+                    passed: false,
+                    message: `${YES} 或 ${NO} 应该在预期输出中，但找到了 ${expectedToken} [第 ${index} 个 token]`
+                };
+            }
+
+            if (actualToken === YES) {
+                yesCount++;
+            } else if (actualToken === NO) {
+                noCount++;
+            } else {
+                return {
+                    passed: false,
+                    message: `${YES} 或 ${NO} 应该在实际输出中，但找到了 ${actualToken} [第 ${index} 个 token]`
+                };
+            }
+
+            if (expectedToken !== actualToken) {
+                return {
+                    passed: false,
+                    message: `不匹配\n预期: ${expectedToken}\n实际: ${actualToken} [第 ${index} 个 token]`
+                };
+            }
+        }
+
+        if (index < expectedTokens.length) {
+            return {
+                passed: false,
+                message: `预期输出包含更多的 token [长度 = ${expectedTokens.length}]，但实际输出只包含 ${index} 个 token`
+            };
+        }
+
+        if (index < actualTokens.length) {
+            return {
+                passed: false,
+                message: `实际输出包含更多的 token [长度 = ${actualTokens.length}]，但预期输出只包含 ${index} 个 token`
+            };
+        }
+
+        return {
+            passed: true,
+            message: index === 0 ? '空输出' : index === 1 ? `${actualTokens[0]}` : `${index} 个 token: yes 的数量是 ${yesCount}, no 的数量是 ${noCount}`
+        };
+    }
+}
+
+// 创建检查器实例映射
+const judgeResultValidators = {
+    'ignoreWhitespace': new IgnoreWhitespaceValidator(),
+    'strict': new StrictValidator(),
+    'ncmp': new NcmpValidator(),
+    'rcmp4': new RcmpValidator(1e-4),
+    'rcmp6': new RcmpValidator(1e-6),
+    'rcmp9': new RcmpValidator(1e-9),
+    'wcmp': new WcmpValidator(),
+    'nyesno': new NyesnoValidator()
+};
+
+/**
+ * 检查入口函数
+ * 
+ * @param {string} 原始输出
+ * @param {string} 实际输出
+ * @return {Object} 检查结果对象 { passed: boolean, message: string }
+ */
+function judgeResultValidate(expected, actual) {
+    const judgeResultCheckMode = OJB_getGMValue('judgeResultCheckMode', 'ignoreWhitespace');
+    const validator = judgeResultValidators[judgeResultCheckMode];
+    if (!validator) {
+        throw new Error("Unsupported validator");
+    }
+    const result = validator.validate(expected, actual);
+    // message前面加上检查器的英文简写名字
+    result.message = `[${judgeResultCheckMode}] ${result.message}`;
+    return result;
 }
 
 // 样例测试函数
@@ -12960,16 +13308,21 @@ async function runCode(event, runButton, sourceDiv) {
             testCase.setStatus('Compilation error or Time limit', 'error');
             testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
             hasError = true;
-        } else if (result.Result.trim() === data.output.trim()) {
-            testCase.setStatus('Accepted', 'success');
-            testCase.setContent('The output is correct.', TestCaseContentType.SUCCESS);
-            passedTests++;
         } else {
-            testCase.setStatus('Wrong Answer', 'error');
-            const diffContent = $('#DontShowDiff').prop('checked') ? result.Result.trim() : codeDiff(data.output.trim(), result.Result.trim());
-            const contentType = $('#DontShowDiff').prop('checked') ? TestCaseContentType.NO_DIFF : TestCaseContentType.DIFF;
-            testCase.setContent(diffContent, contentType);
-            failedTests++;
+            const resultCheck = judgeResultValidate(data.output, result.Result);
+            testCase.setJudgeChecker(resultCheck.message);
+            // 根据检查结果设置样例测试状态
+            if (resultCheck.passed) {
+                testCase.setStatus('Accepted', 'success');
+                testCase.setContent('The output is correct.', TestCaseContentType.SUCCESS);
+                passedTests++;
+            } else {
+                testCase.setStatus('Wrong Answer', 'error');
+                const diffContent = $('#DontShowDiff').prop('checked') ? result.Result.trim() : codeDiff(data.output.trim(), result.Result.trim());
+                const contentType = $('#DontShowDiff').prop('checked') ? TestCaseContentType.NO_DIFF : TestCaseContentType.DIFF;
+                testCase.setContent(diffContent, contentType);
+                failedTests++;
+            }
         }
 
         const judgeStats = `${i18next.t('resultBlock.state', { ns: 'codeEditor' })}${result.Stats}`;

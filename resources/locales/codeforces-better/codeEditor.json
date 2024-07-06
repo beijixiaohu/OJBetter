@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "自定义测试数据(自动保存)",
-        "onlyCustom": "只测试自定义数据",
-        "DontShowDiff": "不显示差异",
-        "add": "新建"
+    "cancelFixButton": "取消固定",
+    "compiler": {
+        "common": {
+            "error": "发生了未知的错误，请重试"
+        },
+        "official": {
+            "getResultError": "请求运行结果时发生了错误，请重试",
+            "pushError": "提交代码到 Codeforces 服务器时发生了错误，请重试"
+        }
     },
-    "runTestButton": {
-        "initial": "样例测试",
-        "running": "测试中",
-        "success": "全部通过",
-        "error": "全部未通过",
-        "partial": "部分通过"
+    "customTestBlock": {
+        "add": "新建",
+        "DontShowDiff": "不显示差异",
+        "onlyCustom": "只测试自定义数据",
+        "title": "自定义测试数据(自动保存)"
+    },
+    "exitFullscreenButton": "退出全屏",
+    "fixToBottomButton": "固定到底部",
+    "fixToRightButton": "固定到右侧",
+    "fullscreenButton": "全屏",
+    "lsp": {
+        "connect": "创建LSP连接……",
+        "connected": "LSP已连接",
+        "error": "LSP连接已断开",
+        "waitingAnswer": "等待初始化回执……"
     },
     "resultBlock": {
         "diff": "差异对比：",
@@ -21,26 +34,36 @@
             "sample": "题目样例"
         }
     },
-    "submitButton": "提交",
-    "fontSizeInput": "字体大小",
-    "fullscreenButton": "全屏",
-    "exitFullscreenButton": "退出全屏",
-    "fixToBottomButton": "固定到底部",
-    "fixToRightButton": "固定到右侧",
-    "cancelFixButton": "取消固定",
-    "lsp": {
-        "connect": "创建LSP连接……",
-        "waitingAnswer": "等待初始化回执……",
-        "connected": "LSP已连接",
-        "error": "LSP连接已断开"
+    "runTestButton": {
+        "error": "全部未通过",
+        "initial": "样例测试",
+        "partial": "部分通过",
+        "running": "测试中",
+        "success": "全部通过"
     },
-    "compiler": {
-        "official": {
-            "pushError": "提交代码到 codeforces 服务器时发生了错误，请重试",
-            "getResultError": "请求运行结果时发生了错误，请重试"
+    "submitButton": "提交",
+    "moreSettings": {
+        "title": "更多设置",
+        "tip": "更改会自动保存",
+        "fontSizeInput": {
+            "helpText": "设置代码编辑器的字体大小",
+            "label": "字体大小",
+            "placeholder": "请输入字体大小"
         },
-        "common": {
-            "error": "发生了未知的错误，请重试"
+        "validator": {
+            "helpText": "使用指定的检查器检查样例测试的运行结果是否与预期结果匹配",
+            "label": "样例测试结果检查器",
+            "messagePrefix": "检查：",
+            "options": {
+                "ignoreWhitespace": "忽略行末空格和文末换行",
+                "ncmp": "ncmp - 匹配64位整数",
+                "nyesno": "nyesno - 匹配YES和NO，大小写不敏感",
+                "rcmp4": "rcmp4 - 匹配浮点数，最大允许误差1e-4",
+                "rcmp6": "rcmp6 - 匹配浮点数，最大允许误差1e-6",
+                "rcmp9": "rcmp9 - 匹配浮点数，最大允许误差1e-9",
+                "strict": "严格一致",
+                "wcmp": "wcmp - 匹配字符串"
+            }
         }
     }
 }
