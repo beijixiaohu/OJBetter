@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.2
+// @version      1.17.3
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -10153,7 +10153,7 @@ async function createMonacoEditor(language, form, support) {
         let moreSetting = OJB_safeCreateJQElement(`
             <div class="ojb_btn ojb_btn_popover top">
                 <i class="iconfont">&#xe643;</i>
-                <span class="popover_content">${i18next.t('moreSetting', { ns: 'codeEditor' })}</span>
+                <span class="popover_content">${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</span>
             </div>`);
         form.topRightDiv.append(moreSetting);
 

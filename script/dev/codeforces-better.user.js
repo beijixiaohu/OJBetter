@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.4
+// @version      1.76.5
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -10752,7 +10752,7 @@ async function createMonacoEditor(language, form, support) {
         let moreSetting = OJB_safeCreateJQElement(`
         <div class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe643;</i>
-            <span class="popover_content">${i18next.t('moreSetting', { ns: 'codeEditor' })}</span>
+            <span class="popover_content">${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</span>
         </div>`);
         form.topRightDiv.append(moreSetting);
 
