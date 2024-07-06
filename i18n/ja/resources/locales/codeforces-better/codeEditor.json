@@ -64,6 +64,46 @@
                 "strict": "厳格な一貫性",
                 "wcmp": "wcmp - 一致する文字列"
             }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "ちゃんと",
+                "mismatch": "不一致"
+            },
+            "strict": {
+                "correct": "ちゃんと",
+                "mismatch": "不一致"
+            },
+            "ncmp": {
+                "differ": "{{count}}{{expected}}{{actual}}桁数が異なる - 予想：「」、実際：「」。",
+                "longerExpected": "{{expectedLength}} {{actualLength}} より長いシーケンス[length = ]を含むと予想されるが、実際には要素を含む。",
+                "longerActual": "{{actualLength}} {{expectedLength}} 実際にはもっと長いシーケンス[length = ]を含み、以下の要素を含むと予想される。",
+                "correctFew": "{{count}}{{numbers}}数字： \"",
+                "correctMany": "{{count}} 数字"
+            },
+            "rcmp": {
+                "differ": "{{n}}{{expected}}{{actual}}{{error}}期待値：'、実際：'、エラー：'。",
+                "single": "{{actual}}{{expected}}{{error}}見つかった ', 期待された ', エラー '",
+                "total": "{{count}} 数字",
+                "invalidNumber": "{{index}}{{expected}}{{actual}}無効な番号 - 期待値： ' ', 実際： ' '",
+                "lengthMismatch": "{{expectedLength}} {{actualLength}} 予想と実績の数字が違う："
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}{{expected}}{{actual}}予想：「」、実際：「」という具合だ。",
+                "extraTokensInParticipant": "実際の出力には余分な単語が含まれている",
+                "unexpectedEOF": "出力に余分な単語が含まれることを期待する",
+                "singleToken": "{{token}}\" \"",
+                "tokenCount": "{{count}}言葉"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} または、期待される出力にあるはずだが、[ページ・トークン]が見つかった。",
+                "expectedInOutput": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} あるいは、実際の出力にあるはずだが、[ページ・トークン]が見つかった。",
+                "mismatch": "\n {{expected}}\n {{actual}} {{index}}{{ending}} ミスマッチ 予想：実際：［ページ・トークン］",
+                "longerInAnswer": "{{expectedLength}} {{actualLength}} 出力にはもっと多くのトークン[length = ]が含まれると予想されたが、実際の出力には以下のトークンしか含まれなかった。",
+                "longerInOutput": "{{actualLength}} {{expectedLength}} 実際の出力にはもっと多くのトークン [length = ]が含まれるが、期待される出力にはトークンしか含まれない。",
+                "emptyOutput": "空の出力",
+                "summary": "{{index}} {{yesCount}} {{noCount}}トークンの数：「はい」、「いいえ"
+            }
         }
     }
 }
