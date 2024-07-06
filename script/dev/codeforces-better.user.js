@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.3
+// @version      1.76.4
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -873,7 +873,7 @@ async function initVar() {
     OJBetter.typeOfPage.is_problemset_problem = href.includes('/problemset/') && href.includes('/problem/');
     OJBetter.typeOfPage.is_problemset = href.includes('/problemset') && !href.includes('/problem/');
     OJBetter.typeOfPage.is_submitPage = href.includes('/submit');
-    OJBetter.typeOfPage.is_statePage = href.includes('/status');
+    OJBetter.typeOfPage.is_statePage = href.includes('/status') || /\/my\/?$/.test(href);
     OJBetter.typeOfPage.is_submissions = href.includes('/submissions');
     OJBetter.typeOfPage.is_submission = href.includes('/submission');
     OJBetter.typeOfPage.is_cfStandings = href.includes('/standings') &&
