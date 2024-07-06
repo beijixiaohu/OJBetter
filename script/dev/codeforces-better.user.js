@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.2
+// @version      1.76.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -13012,11 +13012,12 @@ class TestCaseStatus {
 
     // 设置checker的评测结果
     setJudgeChecker(message) {
-        const createJudgeCheckerElement = (message) => {
+        function createJudgeCheckerElement(message) {
             const judgeCheckerElement = OJB_safeCreateJQElement(`<div class="judge-checker">${i18next.t('moreSettings.validator.messagePrefix', { ns: 'codeEditor' })}${message}</div>`);
             return judgeCheckerElement;
         };
-        this.contentElement.append(createJudgeCheckerElement(message));
+        const judgeCheckerElement = createJudgeCheckerElement(message);
+        this.contentElement.before(judgeCheckerElement);
     };
 
     setJudge(judge) {
@@ -13050,7 +13051,7 @@ class IgnoreWhitespaceValidator extends judgeResultValidator {
         const passed = expected === actual;
         return {
             passed: passed,
-            message: passed ? '正确' : '不匹配'
+            message: passed ? i18next.t('moreSettings.checkMessage.ignoreWhitespace.correct', { ns: 'codeEditor' }) : i18next.t('moreSettings.checkMessage.ignoreWhitespace.mismatch', { ns: 'codeEditor' })
         };
     }
 }
@@ -13063,10 +13064,11 @@ class StrictValidator extends judgeResultValidator {
         const passed = expected === actual;
         return {
             passed: passed,
-            message: passed ? '正确' : '不匹配'
+            message: passed ? i18next.t('moreSettings.checkMessage.strict.correct', { ns: 'codeEditor' }) : i18next.t('moreSettings.checkMessage.strict.mismatch', { ns: 'codeEditor' })
         };
     }
 }
+
 
 /**
  * 整数检查器
@@ -13083,7 +13085,7 @@ class NcmpValidator extends judgeResultValidator {
             if (expectedInts[i] !== actualInts[i]) {
                 return {
                     passed: false,
-                    message: `不匹配\n第${i + 1}个数字不同 - 预期: ${expectedInts[i]}, 实际: ${actualInts[i]}`
+                    message: i18next.t('moreSettings.checkMessage.ncmp.differ', { ns: 'codeEditor', count: i + 1, expected: expectedInts[i], actual: actualInts[i] })
                 };
             } else if (i < 5) {
                 firstElems.push(expectedInts[i]);
@@ -13093,20 +13095,20 @@ class NcmpValidator extends judgeResultValidator {
         if (expectedInts.length > actualInts.length) {
             return {
                 passed: false,
-                message: `不匹配\n预期包含更长的序列 [长度 = ${expectedInts.length}], 实际包含 ${actualInts.length} 个元素`
+                message: i18next.t('moreSettings.checkMessage.ncmp.longerExpected', { ns: 'codeEditor', expectedLength: expectedInts.length, actualLength: actualInts.length })
             };
         }
 
         if (actualInts.length > expectedInts.length) {
             return {
                 passed: false,
-                message: `不匹配\n实际包含更长的序列 [长度 = ${actualInts.length}], 预期包含 ${expectedInts.length} 个元素`
+                message: i18next.t('moreSettings.checkMessage.ncmp.longerActual', { ns: 'codeEditor', actualLength: actualInts.length, expectedLength: expectedInts.length })
             };
         }
 
         return {
             passed: true,
-            message: firstElems.length <= 5 ? `正确\n${firstElems.length} 个数字: "${firstElems.join(' ')}"` : `正确\n${expectedInts.length} 个数字`
+            message: firstElems.length <= 5 ? i18next.t('moreSettings.checkMessage.ncmp.correctFew', { ns: 'codeEditor', count: firstElems.length, numbers: firstElems.join(' ') }) : i18next.t('moreSettings.checkMessage.ncmp.correctMany', { ns: 'codeEditor', count: expectedInts.length })
         };
     }
 }
@@ -13119,21 +13121,69 @@ class RcmpValidator extends judgeResultValidator {
         super();
         this.epsilon = epsilon;
     }
+
     validate(expected, actual) {
-        const expectedFloats = expected.split(/\s+/).map(Number);
-        const actualFloats = actual.split(/\s+/).map(Number);
+        const expectedFloats = expected.split(/\s+/).filter(Boolean).map(Number);
+        const actualFloats = actual.split(/\s+/).filter(Boolean).map(Number);
+
+        if (expectedFloats.length !== actualFloats.length) {
+            return {
+                passed: false,
+                message: i18next.t('moreSettings.checkMessage.rcmp.lengthMismatch', {
+                    ns: 'codeEditor',
+                    expectedLength: expectedFloats.length,
+                    actualLength: actualFloats.length
+                })
+            };
+        }
+
         for (let i = 0; i < expectedFloats.length; i++) {
+            if (isNaN(expectedFloats[i]) || isNaN(actualFloats[i])) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.rcmp.invalidNumber', {
+                        ns: 'codeEditor',
+                        index: i + 1,
+                        expected: expected.split(/\s+/)[i],
+                        actual: actual.split(/\s+/)[i]
+                    })
+                };
+            }
+
             const error = Math.abs(expectedFloats[i] - actualFloats[i]);
             if (error > this.epsilon) {
                 return {
                     passed: false,
-                    message: `不匹配\n第${i + 1}个数\n预期: ${expectedFloats[i].toFixed(10)}\n实际: ${actualFloats[i].toFixed(10)}\n误差: ${error.toFixed(10)}`
+                    message: i18next.t('moreSettings.checkMessage.rcmp.differ', {
+                        ns: 'codeEditor',
+                        n: i + 1,
+                        expected: expectedFloats[i].toFixed(7),
+                        actual: actualFloats[i].toFixed(7),
+                        error: error.toFixed(7)
+                    })
                 };
             }
         }
+
+        if (expectedFloats.length === 1) {
+            const error = Math.abs(expectedFloats[0] - actualFloats[0]);
+            return {
+                passed: true,
+                message: i18next.t('moreSettings.checkMessage.rcmp.single', {
+                    ns: 'codeEditor',
+                    expected: expectedFloats[0].toFixed(7),
+                    actual: actualFloats[0].toFixed(7),
+                    error: error.toFixed(7)
+                })
+            };
+        }
+
         return {
             passed: true,
-            message: '正确'
+            message: i18next.t('moreSettings.checkMessage.rcmp.total', {
+                ns: 'codeEditor',
+                count: expectedFloats.length
+            })
         };
     }
 }
@@ -13152,7 +13202,12 @@ class WcmpValidator extends judgeResultValidator {
             if (expectedWords[i] !== actualWords[i]) {
                 return {
                     passed: false,
-                    message: `不匹配\n第${i + 1}个单词不同 - 预期: '${expectedWords[i]}', 实际: '${actualWords[i]}'`
+                    message: i18next.t('moreSettings.checkMessage.wcmp.wordsDiffer', {
+                        ns: 'codeEditor',
+                        count: i + 1,
+                        expected: expectedWords[i],
+                        actual: actualWords[i]
+                    })
                 };
             }
         }
@@ -13160,13 +13215,17 @@ class WcmpValidator extends judgeResultValidator {
         if (expectedWords.length !== actualWords.length) {
             return {
                 passed: false,
-                message: expectedWords.length > actualWords.length ? '实际输出包含额外的单词' : '预期输出包含额外的单词'
+                message: expectedWords.length > actualWords.length
+                    ? i18next.t('moreSettings.checkMessage.wcmp.extraTokensInParticipant', { ns: 'codeEditor' })
+                    : i18next.t('moreSettings.checkMessage.wcmp.unexpectedEOF', { ns: 'codeEditor' })
             };
         }
 
         return {
             passed: true,
-            message: '正确'
+            message: minLength === 1
+                ? i18next.t('moreSettings.checkMessage.wcmp.singleToken', { ns: 'codeEditor', token: expectedWords[0] })
+                : i18next.t('moreSettings.checkMessage.wcmp.tokenCount', { ns: 'codeEditor', count: minLength })
         };
     }
 }
@@ -13194,7 +13253,7 @@ class NyesnoValidator extends judgeResultValidator {
             if (expectedToken !== YES && expectedToken !== NO) {
                 return {
                     passed: false,
-                    message: `${YES} 或 ${NO} 应该在预期输出中，但找到了 ${expectedToken} [第 ${index} 个 token]`
+                    message: i18next.t('moreSettings.checkMessage.nyesno.expectedInAnswer', { ns: 'codeEditor', YES, NO, token: expectedToken, index, ending: this.englishEnding(index) })
                 };
             }
 
@@ -13205,14 +13264,14 @@ class NyesnoValidator extends judgeResultValidator {
             } else {
                 return {
                     passed: false,
-                    message: `${YES} 或 ${NO} 应该在实际输出中，但找到了 ${actualToken} [第 ${index} 个 token]`
+                    message: i18next.t('moreSettings.checkMessage.nyesno.expectedInOutput', { ns: 'codeEditor', YES, NO, token: actualToken, index, ending: this.englishEnding(index) })
                 };
             }
 
             if (expectedToken !== actualToken) {
                 return {
                     passed: false,
-                    message: `不匹配\n预期: ${expectedToken}\n实际: ${actualToken} [第 ${index} 个 token]`
+                    message: i18next.t('moreSettings.checkMessage.nyesno.mismatch', { ns: 'codeEditor', expected: expectedToken, actual: actualToken, index, ending: this.englishEnding(index) })
                 };
             }
         }
@@ -13220,21 +13279,45 @@ class NyesnoValidator extends judgeResultValidator {
         if (index < expectedTokens.length) {
             return {
                 passed: false,
-                message: `预期输出包含更多的 token [长度 = ${expectedTokens.length}]，但实际输出只包含 ${index} 个 token`
+                message: i18next.t('moreSettings.checkMessage.nyesno.longerInAnswer', { ns: 'codeEditor', expectedLength: expectedTokens.length, actualLength: index })
             };
         }
 
         if (index < actualTokens.length) {
             return {
                 passed: false,
-                message: `实际输出包含更多的 token [长度 = ${actualTokens.length}]，但预期输出只包含 ${index} 个 token`
+                message: i18next.t('moreSettings.checkMessage.nyesno.longerInOutput', { ns: 'codeEditor', actualLength: actualTokens.length, expectedLength: index })
             };
         }
 
-        return {
-            passed: true,
-            message: index === 0 ? '空输出' : index === 1 ? `${actualTokens[0]}` : `${index} 个 token: yes 的数量是 ${yesCount}, no 的数量是 ${noCount}`
-        };
+        if (index === 0) {
+            return {
+                passed: true,
+                message: i18next.t('moreSettings.checkMessage.nyesno.emptyOutput', { ns: 'codeEditor' })
+            };
+        } else if (index === 1) {
+            return {
+                passed: true,
+                message: `${actualTokens[0]}`
+            };
+        } else {
+            return {
+                passed: true,
+                message: i18next.t('moreSettings.checkMessage.nyesno.summary', { ns: 'codeEditor', index, yesCount, noCount })
+            };
+        }
+    }
+
+    englishEnding(number) {
+        if (number % 10 === 1 && number % 100 !== 11) {
+            return 'st';
+        } else if (number % 10 === 2 && number % 100 !== 12) {
+            return 'nd';
+        } else if (number % 10 === 3 && number % 100 !== 13) {
+            return 'rd';
+        } else {
+            return 'th';
+        }
     }
 }
 
@@ -13318,7 +13401,13 @@ async function runCode(event, runButton, sourceDiv) {
                 passedTests++;
             } else {
                 testCase.setStatus('Wrong Answer', 'error');
-                const diffContent = $('#DontShowDiff').prop('checked') ? result.Result.trim() : codeDiff(data.output.trim(), result.Result.trim());
+                const judgeResultCheckMode = OJB_getGMValue('judgeResultCheckMode', 'ignoreWhitespace');
+                // 如果检查模式为ignoreWhitespace，去掉字符串末尾的空格和换行符
+                if (judgeResultCheckMode === 'ignoreWhitespace') {
+                    data.output = data.output.trim().replace(/\s+$/gm, '');
+                    result.Result = result.Result.trim().replace(/\s+$/gm, '');
+                }
+                const diffContent = $('#DontShowDiff').prop('checked') ? result.Result : codeDiff(data.output, result.Result);
                 const contentType = $('#DontShowDiff').prop('checked') ? TestCaseContentType.NO_DIFF : TestCaseContentType.DIFF;
                 testCase.setContent(diffContent, contentType);
                 failedTests++;
