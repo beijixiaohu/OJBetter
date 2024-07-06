@@ -64,6 +64,46 @@
                 "strict": "strenge Konsistenz",
                 "wcmp": "wcmp - Zeichenkette abgleichen"
             }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "richtig",
+                "mismatch": "nicht übereinstimmen"
+            },
+            "strict": {
+                "correct": "richtig",
+                "mismatch": "nicht übereinstimmen"
+            },
+            "ncmp": {
+                "differ": "{{count}}{{expected}}{{actual}}Die Anzahl der Ziffern ist unterschiedlich - erwartet: ' ', tatsächlich: ' '.",
+                "longerExpected": "{{expectedLength}} {{actualLength}} Erwartete längere Sequenz [Länge = ], enthält tatsächlich Elemente",
+                "longerActual": "{{actualLength}} {{expectedLength}} tatsächlich eine längere Sequenz [Länge = ] enthält, von der erwartet wird, dass sie Elemente enthält",
+                "correctFew": "{{count}}{{numbers}}Zahlen: \" \"",
+                "correctMany": "{{count}} Zahlen"
+            },
+            "rcmp": {
+                "differ": "{{n}}{{expected}}{{actual}}{{error}}Die Zahl ist unterschiedlich - erwartet: ' ', tatsächlich: ' ', Fehler: ' '.",
+                "single": "{{actual}}{{expected}}{{error}}Gefunden ' ', Erwartet ' ', Fehler ' '",
+                "total": "{{count}} Zahlen",
+                "invalidNumber": "{{index}}{{expected}}{{actual}}Ungültige Zahl - Erwartet: ' ', Tatsächlich: ' '",
+                "lengthMismatch": "{{expectedLength}} {{actualLength}} Unterschiedliche Anzahl von erwarteten und tatsächlichen Zahlen - Erwartete: , Tatsächliche:"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}{{expected}}{{actual}}Die Wörter sind unterschiedlich - erwartet: ' ', tatsächlich: ' '.",
+                "extraTokensInParticipant": "Die eigentliche Ausgabe enthält zusätzliche Wörter",
+                "unexpectedEOF": "Erwarten Sie, dass die Ausgabe zusätzliche Wörter enthält",
+                "singleToken": "{{token}}\" \"",
+                "tokenCount": "{{count}}Wörter"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} oder sollte in der erwarteten Ausgabe stehen, aber gefunden [page token]",
+                "expectedInOutput": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} Oder sollte in der eigentlichen Ausgabe stehen, aber gefunden [page token]",
+                "mismatch": "\n {{expected}}\n {{actual}} {{index}}{{ending}} Unstimmigkeit Erwartet: Tatsächlich: [page token]",
+                "longerInAnswer": "{{expectedLength}} {{actualLength}} Es wurde erwartet, dass die Ausgabe mehr Token enthält [length = ], aber die tatsächliche Ausgabe enthielt nur Token",
+                "longerInOutput": "{{actualLength}} {{expectedLength}} Die tatsächliche Ausgabe enthält mehr Token [Länge = ], aber die erwartete Ausgabe enthält nur Token",
+                "emptyOutput": "leere Ausgabe",
+                "summary": "{{index}} {{yesCount}} {{noCount}}Die Anzahl der Token: ja ist , nein ist"
+            }
         }
     }
 }

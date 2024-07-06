@@ -64,6 +64,46 @@
                 "strict": "coerência rigorosa",
                 "wcmp": "wcmp - cadeia de correspondência"
             }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "corretamente",
+                "mismatch": "incompatibilidade"
+            },
+            "strict": {
+                "correct": "corretamente",
+                "mismatch": "incompatibilidade"
+            },
+            "ncmp": {
+                "differ": "{{count}}{{expected}}{{actual}}O número de dígitos é diferente - previsto: ' ', efetivo: ' '.",
+                "longerExpected": "{{expectedLength}} {{actualLength}} Esperava-se que contivesse uma sequência mais longa [comprimento = ], mas na realidade contém elementos",
+                "longerActual": "{{actualLength}} {{expectedLength}} contém efetivamente uma sequência mais longa [comprimento = ], que se espera conter elementos",
+                "correctFew": "{{count}}{{numbers}}Números: \" \"",
+                "correctMany": "{{count}} números"
+            },
+            "rcmp": {
+                "differ": "{{n}}{{expected}}{{actual}}{{error}}O número é diferente - esperado: ' ', atual: ' ', erro: ' '.",
+                "single": "{{actual}}{{expected}}{{error}}Encontrado ' ', Esperado ' ', Erro ' '",
+                "total": "{{count}} números",
+                "invalidNumber": "{{index}}{{expected}}{{actual}}Número inválido - Esperado: ' ', Real: ' '",
+                "lengthMismatch": "{{expectedLength}} {{actualLength}} Número diferente de valores previstos e reais - Previsto: , Real:"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}{{expected}}{{actual}}As palavras são diferentes - esperado: ' ', atual: ' '.",
+                "extraTokensInParticipant": "A saída real contém palavras extra",
+                "unexpectedEOF": "Esperar que o resultado contenha palavras extra",
+                "singleToken": "{{token}}\" \"",
+                "tokenCount": "{{count}}palavras"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} ou deveria estar na saída esperada, mas encontrou [token de página]",
+                "expectedInOutput": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} Ou deveria estar na saída real, mas encontrou [token de página]",
+                "mismatch": "\n {{expected}}\n {{actual}} {{index}}{{ending}} Incompatibilidade Esperado: Real: [token de página]",
+                "longerInAnswer": "{{expectedLength}} {{actualLength}} Esperava-se que a saída contivesse mais tokens [length = ], mas a saída real só continha tokens",
+                "longerInOutput": "{{actualLength}} {{expectedLength}} A saída real contém mais tokens [comprimento = ], mas a saída esperada contém apenas tokens",
+                "emptyOutput": "saída vazia",
+                "summary": "{{index}} {{yesCount}} {{noCount}}O número de símbolos: sim é , não é"
+            }
         }
     }
 }

@@ -64,6 +64,46 @@
                 "strict": "coerenza rigorosa",
                 "wcmp": "wcmp - stringa di corrispondenza"
             }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "correttamente",
+                "mismatch": "mancata corrispondenza"
+            },
+            "strict": {
+                "correct": "correttamente",
+                "mismatch": "mancata corrispondenza"
+            },
+            "ncmp": {
+                "differ": "{{count}}{{expected}}{{actual}}Il numero di cifre è diverso - previsto: ' ', effettivo: ' '.",
+                "longerExpected": "{{expectedLength}} {{actualLength}} Previsto per contenere una sequenza più lunga [lunghezza = ], in realtà contiene elementi",
+                "longerActual": "{{actualLength}} {{expectedLength}} contiene in realtà una sequenza più lunga [lunghezza = ], che ci si aspetta contenga elementi",
+                "correctFew": "{{count}}{{numbers}}Numeri: \" \"",
+                "correctMany": "{{count}} cifre"
+            },
+            "rcmp": {
+                "differ": "{{n}}{{expected}}{{actual}}{{error}}Il numero è diverso - atteso: ' ', effettivo: ' ', errore: ' '.",
+                "single": "{{actual}}{{expected}}{{error}}Trovato ' ', Atteso ' ', Errore ' '",
+                "total": "{{count}} cifre",
+                "invalidNumber": "{{index}}{{expected}}{{actual}}Numero non valido - Previsto: ' ', Effettivo: ' '",
+                "lengthMismatch": "{{expectedLength}} {{actualLength}} Numero diverso di cifre previste e reali - Previste: , effettive:"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}{{expected}}{{actual}}Le parole sono diverse - atteso: ' ', effettivo: ' '.",
+                "extraTokensInParticipant": "L'output attuale contiene parole aggiuntive",
+                "unexpectedEOF": "Aspettatevi che l'output contenga parole extra",
+                "singleToken": "{{token}}\" \"",
+                "tokenCount": "{{count}}parole"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} o dovrebbe essere nell'output previsto, ma ha trovato [page token].",
+                "expectedInOutput": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} O dovrebbe essere nell'output attuale, ma ha trovato [page token].",
+                "mismatch": "\n {{expected}}\n {{actual}} {{index}}{{ending}} Disadattamento Previsto: Attuale: [token di pagina]",
+                "longerInAnswer": "{{expectedLength}} {{actualLength}} Ci si aspettava che l'output contenesse più token [length = ], ma l'output reale contiene solo token",
+                "longerInOutput": "{{actualLength}} {{expectedLength}} L'output effettivo contiene più token [lunghezza = ], ma l'output previsto contiene solo token",
+                "emptyOutput": "uscita vuota",
+                "summary": "{{index}} {{yesCount}} {{noCount}}Il numero di gettoni: sì è , no è"
+            }
         }
     }
 }
