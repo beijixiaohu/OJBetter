@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "Données d'essai personnalisées (sauvegarde automatique)",
-        "onlyCustom": "Tester uniquement les données personnalisées",
-        "DontShowDiff": "Divergences non indiquées",
-        "add": "nouvellement construit"
+    "cancelFixButton": "Annulation de la fixation",
+    "compiler": {
+        "common": {
+            "error": "Une erreur inconnue s'est produite, veuillez réessayer."
+        },
+        "official": {
+            "getResultError": "Une erreur s'est produite lors de la demande d'un résultat d'exécution, veuillez réessayer !",
+            "pushError": "Une erreur s'est produite lors de la soumission du code au serveur d'AtCoder, veuillez réessayer !"
+        }
     },
-    "runTestButton": {
-        "initial": "échantillon de test",
-        "running": "en cours de test",
-        "success": "Tous adoptés",
-        "error": "Tous échoués",
-        "partial": "Partiellement adoptée"
+    "customTestBlock": {
+        "add": "nouvellement construit",
+        "DontShowDiff": "Divergences non indiquées",
+        "onlyCustom": "Tester uniquement les données personnalisées",
+        "title": "Données d'essai personnalisées (sauvegarde automatique)"
+    },
+    "exitFullscreenButton": "Quitter le plein écran",
+    "fixToBottomButton": "Fixé au fond",
+    "fixToRightButton": "Fixé sur le côté droit",
+    "fullscreenButton": "plein écran",
+    "lsp": {
+        "connect": "Création d'une connexion LSP……",
+        "connected": "LSP connecté",
+        "error": "Connexion LSP déconnectée",
+        "waitingAnswer": "Attente de l'accusé de réception de l'initialisation……"
     },
     "resultBlock": {
         "diff": "Comparaison des différences：",
@@ -21,26 +34,36 @@
             "sample": "Exemple de titre"
         }
     },
-    "submitButton": "soumettre (un rapport, etc.)",
-    "fontSizeInput": "taille de la police",
-    "fullscreenButton": "plein écran",
-    "exitFullscreenButton": "Quitter le plein écran",
-    "fixToBottomButton": "Fixé au fond",
-    "fixToRightButton": "Fixé sur le côté droit",
-    "cancelFixButton": "Annulation de la fixation",
-    "lsp": {
-        "connect": "Création d'une connexion LSP……",
-        "waitingAnswer": "Attente de l'accusé de réception de l'initialisation……",
-        "connected": "LSP connecté",
-        "error": "Connexion LSP déconnectée"
+    "runTestButton": {
+        "error": "Tous échoués",
+        "initial": "échantillon de test",
+        "partial": "Partiellement adoptée",
+        "running": "en cours de test",
+        "success": "Tous adoptés"
     },
-    "compiler": {
-        "official": {
-            "pushError": "Une erreur s'est produite lors de la soumission du code au serveur codeforces, veuillez réessayer !",
-            "getResultError": "Une erreur s'est produite lors de la demande d'un résultat d'exécution, veuillez réessayer !"
+    "submitButton": "soumettre (un rapport, etc.)",
+    "moreSettings": {
+        "title": "Plus de paramètres",
+        "tip": "Les modifications sont enregistrées automatiquement",
+        "fontSizeInput": {
+            "helpText": "Réglage de la taille de la police de l'éditeur de code",
+            "label": "taille de la police",
+            "placeholder": "Veuillez saisir une taille de police"
         },
-        "common": {
-            "error": "Une erreur inconnue s'est produite, veuillez réessayer."
+        "validator": {
+            "helpText": "Utilisez le vérificateur spécifié pour vérifier que les résultats de l'échantillon de test correspondent aux résultats attendus.",
+            "label": "Vérificateur de résultats de tests d'échantillons",
+            "messagePrefix": "：Vérifier",
+            "options": {
+                "ignoreWhitespace": "Ignorer les espaces en fin de ligne et les sauts de ligne en fin de texte",
+                "ncmp": "ncmp - fait correspondre des entiers de 64 bits",
+                "nyesno": "nyesno - correspond à YES et NO, insensible à la casse",
+                "rcmp4": "rcmp4 - fait correspondre des nombres à virgule flottante avec une erreur maximale autorisée de 1e-4",
+                "rcmp6": "rcmp6 - fait correspondre des nombres à virgule flottante avec une erreur maximale autorisée de 1e-6",
+                "rcmp9": "rcmp9 - fait correspondre des nombres à virgule flottante avec une erreur maximale autorisée de 1e-9",
+                "strict": "cohérence stricte",
+                "wcmp": "wcmp - chaîne de correspondance"
+            }
         }
     }
 }

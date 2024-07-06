@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "Dados de teste personalizados (gravação automática)",
-        "onlyCustom": "Teste apenas dados personalizados",
-        "DontShowDiff": "Discrepâncias não apresentadas",
-        "add": "recém-construído"
+    "cancelFixButton": "Anulação da fixação",
+    "compiler": {
+        "common": {
+            "error": "Ocorreu um erro desconhecido. Tente novamente."
+        },
+        "official": {
+            "getResultError": "Ocorreu um erro ao solicitar um resultado de execução, tente novamente!",
+            "pushError": "Ocorreu um erro ao submeter o código ao servidor AtCoder, por favor tente novamente!"
+        }
     },
-    "runTestButton": {
-        "initial": "teste de amostra",
-        "running": "em teste",
-        "success": "Todos aprovados",
-        "error": "Falhou tudo",
-        "partial": "Parcialmente adoptada"
+    "customTestBlock": {
+        "add": "recém-construído",
+        "DontShowDiff": "Discrepâncias não apresentadas",
+        "onlyCustom": "Teste apenas dados personalizados",
+        "title": "Dados de teste personalizados (gravação automática)"
+    },
+    "exitFullscreenButton": "Sair do ecrã inteiro",
+    "fixToBottomButton": "Fixado na parte inferior",
+    "fixToRightButton": "Fixado no lado direito",
+    "fullscreenButton": "ecrã inteiro",
+    "lsp": {
+        "connect": "Criar uma ligação LSP……",
+        "connected": "LSP ligado",
+        "error": "Ligação LSP desligada",
+        "waitingAnswer": "A aguardar confirmação de inicialização……"
     },
     "resultBlock": {
         "diff": "Comparação das diferenças：",
@@ -21,26 +34,36 @@
             "sample": "Título da amostra"
         }
     },
-    "submitButton": "apresentar (um relatório, etc.)",
-    "fontSizeInput": "tamanho da letra",
-    "fullscreenButton": "ecrã inteiro",
-    "exitFullscreenButton": "Sair do ecrã inteiro",
-    "fixToBottomButton": "Fixado na parte inferior",
-    "fixToRightButton": "Fixado no lado direito",
-    "cancelFixButton": "Anulação da fixação",
-    "lsp": {
-        "connect": "Criar uma ligação LSP……",
-        "waitingAnswer": "A aguardar confirmação de inicialização……",
-        "connected": "LSP ligado",
-        "error": "Ligação LSP desligada"
+    "runTestButton": {
+        "error": "Falhou tudo",
+        "initial": "teste de amostra",
+        "partial": "Parcialmente adoptada",
+        "running": "em teste",
+        "success": "Todos aprovados"
     },
-    "compiler": {
-        "official": {
-            "pushError": "Ocorreu um erro ao submeter o código ao servidor codeforces, por favor tente novamente!",
-            "getResultError": "Ocorreu um erro ao solicitar um resultado de execução, tente novamente!"
+    "submitButton": "apresentar (um relatório, etc.)",
+    "moreSettings": {
+        "title": "Mais definições",
+        "tip": "As alterações são guardadas automaticamente",
+        "fontSizeInput": {
+            "helpText": "Definir o tamanho do tipo de letra do editor de código",
+            "label": "tamanho da letra",
+            "placeholder": "Introduzir um tamanho de letra"
         },
-        "common": {
-            "error": "Ocorreu um erro desconhecido. Tente novamente."
+        "validator": {
+            "helpText": "Utilize o verificador especificado para verificar se os resultados da execução do teste de amostra correspondem aos resultados esperados",
+            "label": "Verificador de resultados de testes de amostras",
+            "messagePrefix": "：Verificar",
+            "options": {
+                "ignoreWhitespace": "Ignorar espaços no fim da linha e quebras de linha no fim do texto",
+                "ncmp": "ncmp - corresponde a números inteiros de 64 bits",
+                "nyesno": "nyesno - corresponde a YES e NO, sem distinção entre maiúsculas e minúsculas",
+                "rcmp4": "rcmp4 - corresponde a números de vírgula flutuante com um erro máximo permitido de 1e-4",
+                "rcmp6": "rcmp6 - corresponde a números de vírgula flutuante com um erro máximo permitido de 1e-6",
+                "rcmp9": "rcmp9 - faz a correspondência de números de vírgula flutuante com um erro máximo permitido de 1e-9",
+                "strict": "coerência rigorosa",
+                "wcmp": "wcmp - cadeia de correspondência"
+            }
         }
     }
 }

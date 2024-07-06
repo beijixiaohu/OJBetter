@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "Datos de prueba personalizados (autoguardado)",
-        "onlyCustom": "Probar sólo datos personalizados",
-        "DontShowDiff": "Discrepancias no mostradas",
-        "add": "de nueva construcción"
+    "cancelFixButton": "Anulación de la fijación",
+    "compiler": {
+        "common": {
+            "error": "Se ha producido un error desconocido. Por favor, inténtelo de nuevo."
+        },
+        "official": {
+            "getResultError": "Se ha producido un error al solicitar un resultado de ejecución, ¡por favor, inténtelo de nuevo!",
+            "pushError": "Se ha producido un error al enviar el código al servidor de Codeforces, inténtelo de nuevo."
+        }
     },
-    "runTestButton": {
-        "initial": "prueba de muestra",
-        "running": "a prueba",
-        "success": "Todos aprobados",
-        "error": "Falló todo",
-        "partial": "Adoptado parcialmente"
+    "customTestBlock": {
+        "add": "de nueva construcción",
+        "DontShowDiff": "Discrepancias no mostradas",
+        "onlyCustom": "Probar sólo datos personalizados",
+        "title": "Datos de prueba personalizados (autoguardado)"
+    },
+    "exitFullscreenButton": "Salir de la pantalla completa",
+    "fixToBottomButton": "Fijado al fondo",
+    "fixToRightButton": "Fijado a la derecha",
+    "fullscreenButton": "pantalla completa",
+    "lsp": {
+        "connect": "Creación de una conexión LSP……",
+        "connected": "LSP conectado",
+        "error": "Conexión LSP desconectada",
+        "waitingAnswer": "Esperando acuse de recibo de inicialización……"
     },
     "resultBlock": {
         "diff": "Comparación de diferencias：",
@@ -21,26 +34,36 @@
             "sample": "Título de la muestra"
         }
     },
-    "submitButton": "presentar (un informe, etc.)",
-    "fontSizeInput": "tamaño de letra",
-    "fullscreenButton": "pantalla completa",
-    "exitFullscreenButton": "Salir de la pantalla completa",
-    "fixToBottomButton": "Fijado al fondo",
-    "fixToRightButton": "Fijado a la derecha",
-    "cancelFixButton": "Anulación de la fijación",
-    "lsp": {
-        "connect": "Creación de una conexión LSP……",
-        "waitingAnswer": "Esperando acuse de recibo de inicialización……",
-        "connected": "LSP conectado",
-        "error": "Conexión LSP desconectada"
+    "runTestButton": {
+        "error": "Falló todo",
+        "initial": "prueba de muestra",
+        "partial": "Adoptado parcialmente",
+        "running": "a prueba",
+        "success": "Todos aprobados"
     },
-    "compiler": {
-        "official": {
-            "pushError": "Se ha producido un error al enviar el código al servidor de codeforces, ¡por favor, inténtelo de nuevo!",
-            "getResultError": "Se ha producido un error al solicitar un resultado de ejecución, ¡por favor, inténtelo de nuevo!"
+    "submitButton": "presentar (un informe, etc.)",
+    "moreSettings": {
+        "title": "Más ajustes",
+        "tip": "Los cambios se guardan automáticamente",
+        "fontSizeInput": {
+            "helpText": "Ajuste del tamaño de letra del editor de código",
+            "label": "tamaño de letra",
+            "placeholder": "Introduzca un tamaño de letra"
         },
-        "common": {
-            "error": "Se ha producido un error desconocido. Por favor, inténtelo de nuevo."
+        "validator": {
+            "helpText": "Utilice el verificador especificado para comprobar que los resultados de la ejecución de la prueba de muestra coinciden con los resultados esperados",
+            "label": "Comprobador de resultados de pruebas por muestreo",
+            "messagePrefix": "：Consulte",
+            "options": {
+                "ignoreWhitespace": "Ignorar los espacios de fin de línea y los saltos de línea de fin de texto",
+                "ncmp": "ncmp - compara enteros de 64 bits",
+                "nyesno": "nyesno - coincide con SÍ y NO, sin distinguir mayúsculas de minúsculas",
+                "rcmp4": "rcmp4 - iguala números en coma flotante con un error máximo permitido de 1e-4",
+                "rcmp6": "rcmp6 - iguala números en coma flotante con un error máximo permitido de 1e-6",
+                "rcmp9": "rcmp9 - iguala números en coma flotante con un error máximo permitido de 1e-9",
+                "strict": "estricta coherencia",
+                "wcmp": "wcmp - cadena coincidente"
+            }
         }
     }
 }
