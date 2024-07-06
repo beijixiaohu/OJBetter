@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "カスタムテストデータ（自動保存）",
-        "onlyCustom": "カスタムデータのみをテスト",
-        "DontShowDiff": "違いを非表示",
-        "add": "新規"
+    "cancelFixButton": "ピン留めを解除",
+    "compiler": {
+        "common": {
+            "error": "不明なエラーが発生しました。 もう一度お試しください。"
+        },
+        "official": {
+            "getResultError": "実行結果のリクエスト中にエラーが発生しました！",
+            "pushError": "Codeforcesサーバーへのコード送信中にエラーが発生しました！"
+        }
     },
-    "runTestButton": {
-        "initial": "サンプルテスト",
-        "running": "テスト中",
-        "success": "すべて合格",
-        "error": "すべて不合格",
-        "partial": "一部採用"
+    "customTestBlock": {
+        "add": "新規",
+        "DontShowDiff": "違いを非表示",
+        "onlyCustom": "カスタムデータのみをテスト",
+        "title": "カスタムテストデータ（自動保存）"
+    },
+    "exitFullscreenButton": "全画面表示を終了",
+    "fixToBottomButton": "下部に配置",
+    "fixToRightButton": "右側を固定します。",
+    "fullscreenButton": "フルスクリーン",
+    "lsp": {
+        "connect": "LSPコネクションの作成……",
+        "connected": "接続済みLSP:",
+        "error": "LSPコネクションの切断",
+        "waitingAnswer": "アスタリスク…… の初期化を待っています"
     },
     "resultBlock": {
         "diff": "相違点の比較：",
@@ -21,26 +34,36 @@
             "sample": "サンプル・タイトル"
         }
     },
-    "submitButton": "送信",
-    "fontSizeInput": "フォントサイズ",
-    "fullscreenButton": "フルスクリーン",
-    "exitFullscreenButton": "全画面表示を終了",
-    "fixToBottomButton": "下部に配置",
-    "fixToRightButton": "右側を固定します。",
-    "cancelFixButton": "ピン留めを解除",
-    "lsp": {
-        "connect": "LSPコネクションの作成……",
-        "waitingAnswer": "アスタリスク…… の初期化を待っています",
-        "connected": "接続済みLSP:",
-        "error": "LSPコネクションの切断"
+    "runTestButton": {
+        "error": "すべて不合格",
+        "initial": "サンプルテスト",
+        "partial": "一部採用",
+        "running": "テスト中",
+        "success": "すべて合格"
     },
-    "compiler": {
-        "official": {
-            "pushError": "codeforcesサーバーへのコード送信中にエラーが発生しました！",
-            "getResultError": "実行結果のリクエスト中にエラーが発生しました！"
+    "submitButton": "送信",
+    "moreSettings": {
+        "title": "その他の設定",
+        "tip": "変更は自動的に保存される",
+        "fontSizeInput": {
+            "helpText": "コードエディタのフォントサイズを設定する",
+            "label": "フォントサイズ",
+            "placeholder": "フォントサイズを入力してください。"
         },
-        "common": {
-            "error": "不明なエラーが発生しました。 もう一度お試しください。"
+        "validator": {
+            "helpText": "指定されたチェッカーを使用して、サンプルテストの実行結果が期待される結果と一致することを確認する。",
+            "label": "サンプル検査結果チェッカー",
+            "messagePrefix": "：チェック",
+            "options": {
+                "ignoreWhitespace": "行末の空白や改行を無視する",
+                "ncmp": "ncmp - 64 ビット整数にマッチする",
+                "nyesno": "nyesno - YESとNOにマッチし、大文字と小文字は区別されません。",
+                "rcmp4": "rcmp4 - 浮動小数点数にマッチし、最大許容誤差は1e-4です。",
+                "rcmp6": "rcmp6 - 浮動小数点数にマッチし、最大許容誤差は 1e-6 です。",
+                "rcmp9": "rcmp9 - 浮動小数点数を最大許容誤差1e-9でマッチさせる",
+                "strict": "厳格な一貫性",
+                "wcmp": "wcmp - 一致する文字列"
+            }
         }
     }
 }
