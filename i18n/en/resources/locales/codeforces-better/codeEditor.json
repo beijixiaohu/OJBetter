@@ -64,6 +64,46 @@
                 "strict": "strict consistency",
                 "wcmp": "wcmp - match string"
             }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "properly",
+                "mismatch": "mismatch"
+            },
+            "strict": {
+                "correct": "properly",
+                "mismatch": "mismatch"
+            },
+            "ncmp": {
+                "differ": "{{count}}The number of digits is different - expected: '{{expected}}', actual: '{{actual}}'",
+                "longerExpected": "Expected to contain a longer sequence [length = {{expectedLength}}], actually contains {{actualLength}} elements",
+                "longerActual": "actually contains a longer sequence [length = {{actualLength}}], expected to contain {{expectedLength}} elements",
+                "correctFew": "{{count}} Numbers: \"{{numbers}}\"",
+                "correctMany": "{{count}} figures"
+            },
+            "rcmp": {
+                "differ": "Number{{n}}is different - Expected: '{{expected}}', Actual: '{{actual}}', Error: '{{error}}'",
+                "single": "Found '{{actual}}', Expected '{{expected}}', Error '{{error}}'",
+                "total": "{{count}} figures",
+                "invalidNumber": "Invalid number{{index}}- Expected: '{{expected}}', Actual: '{{actual}}'",
+                "lengthMismatch": "Different number of expected and actual figures - Expected: {{expectedLength}} , Actual: {{actualLength}}"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}The words are different - Expected: '{{expected}}', Actual: '{{actual}}'",
+                "extraTokensInParticipant": "The actual output contains additional words",
+                "unexpectedEOF": "Expect the output to contain additional words",
+                "singleToken": "\"{{token}}\"",
+                "tokenCount": "{{count}}one word"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} or {{NO}} should be in the expected output, but found {{token}} [page {{index}}{{ending}} token]",
+                "expectedInOutput": "{{YES}} Or {{NO}} should be in the actual output, but found {{token}} [page {{index}}{{ending}} token]",
+                "mismatch": "Mismatch\nExpected: {{expected}}\nActual: {{actual}} [page {{index}}{{ending}} token]",
+                "longerInAnswer": "The output is expected to contain more tokens [length = {{expectedLength}}], but the actual output contains only {{actualLength}} tokens",
+                "longerInOutput": "The actual output contains more tokens [length = {{actualLength}}], but the expected output contains only {{expectedLength}} tokens",
+                "emptyOutput": "empty output",
+                "summary": "{{index}} The number of tokens: yes is {{yesCount}}, no is {{noCount}}"
+            }
         }
     }
 }
