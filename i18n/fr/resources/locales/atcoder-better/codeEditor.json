@@ -47,7 +47,7 @@
         "tip": "Les modifications sont enregistrées automatiquement",
         "fontSizeInput": {
             "helpText": "Réglage de la taille de la police de l'éditeur de code",
-            "label": "字体大小",
+            "label": "taille de la police",
             "placeholder": "Veuillez saisir une taille de police"
         },
         "validator": {
