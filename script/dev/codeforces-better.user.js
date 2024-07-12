@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.5
+// @version      1.76.6
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -6140,7 +6140,7 @@ const preference_settings_HTML = `
             ${helpCircleHTML}
             <div class="tip_text" data-i18n="[html]settings:preference.judgeStatusReplaceText.helpText"></div>
         </div>
-        <input type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder">
+        <textarea type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder"></textarea>
     </div>
 </div>
 `;
@@ -10106,16 +10106,18 @@ const StatusAcronyms = {
     "Idleness limit exceeded": "ILE",
     "Perfect result:": "AC",
     "Partial result:": "PC",
-    "Running": "PENDING"
+    "Running": "PENDING",
+    "In queue": "INQUEUE"
 };
 
 /** 
  * 评测结果的颜色
  */
 const StatusColors = {
-    "AC": "#52c41a",
+    "AC": "#0a0",
     "WA": "#e74c3c",
     "PENDING": "#808080",
+    "INQUEUE": "#808080",
 };
 
 /**
@@ -10233,7 +10235,8 @@ async function judgeStatusReplace() {
             skipped: statusAcronym === "Skipped",
             ile: statusAcronym === "ILE",
             pc: statusAcronym === "PC",
-            pending: statusAcronym === "PENDING"
+            pending: statusAcronym === "PENDING",
+            inqueue: statusAcronym === "INQUEUE",
         }
         const final_result = parseTemplate(result, statusMap);
         return final_result;
@@ -10241,7 +10244,7 @@ async function judgeStatusReplace() {
 
     /**
      * 处理评测结果
-     * @param {string} text 代替换的文本
+     * @param {string} text 待替换的文本
      * @returns {object} 处理后的文本和颜色
      */
     const process = (text) => {
@@ -10264,26 +10267,97 @@ async function judgeStatusReplace() {
     OJB_observeElement({
         selector: '.datatable',
         callback: (node) => {
+            /**
+             * 更新元素
+             * @param {HTMLElement} element - 要更新的元素
+             */
             const updateElement = (element) => {
-                const { text, color } = process($(element).text());
-                $(element).text(text);
-                $(element).css({
-                    "color": color,
-                    "font-weight": "700"
-                });
+
+                /**
+                 * 替换文本并着色
+                 * @param {HTMLElement} element - 要处理的元素
+                 */
+                const replaceAndColor = (element) => {
+                    const { text, color } = process(element.textContent);
+                    element.textContent = text;
+                    element.style.color = color;
+                    element.style.fontWeight = '700';
+                };
+
+                /**
+                 * 获取最小目标元素
+                 * @param {HTMLElement} element - 要检查的元素
+                 * @returns {HTMLElement} - 最小目标元素
+                 */
+                const getMinElement = (element) => {
+                    // 先获取一次text值
+                    const { text: originalText } = process(element.textContent);
+
+                    /**
+                     * 深搜
+                     * @param {HTMLElement} el - 当前遍历的元素
+                     * @returns {HTMLElement} - 能维持text不变的最小子元素
+                     */
+                    const findMinElement = (el) => {
+                        // 遍历子元素
+                        for (let child of el.children) {
+                            // 获取子元素的处理后的text值
+                            const { text: childText } = process(child.textContent);
+
+                            // 如果子元素的text与原始text相同，递归检查子元素
+                            if (childText === originalText) {
+                                return findMinElement(child);
+                            }
+                        }
+
+                        // 如果没有子元素能维持text不变，返回当前元素
+                        return el;
+                    };
+
+                    // 从初始元素开始递归
+                    return findMinElement(element);
+                };
+
+                // 获取最小目标元素
+                const minElement = getMinElement(element);
+                // 替换文本并着色
+                replaceAndColor(minElement);
             };
 
-            // 选择器
-            const selectorCondition = "[class^='verdict-'], [submissionverdict='COMPILATION_ERROR']";
+            /**
+             * 判断该元素是否在 .status-verdict-cell 内，
+             * 检查直到确认是或者遇到了 .datatable 或没有上层元素
+             * 
+             * @param {Element} element - 要检查的元素
+             * @returns {Element|null} - 如果是，则返回对应的 .status-verdict-cell 元素，否则返回 null
+             * @throws {TypeError} - 如果提供的值不是有效的 DOM 元素
+             */
+            const isDescendantOfStatusVerdictCell = (element) => {
+                if (!(element instanceof Element)) {
+                    throw new TypeError('The provided value is not a valid DOM element.');
+                }
 
-            // 检查[node]本身是否符合选择器条件
-            if ($(node).is(selectorCondition)) {
-                updateElement(node);
+                let currentElement = element;
+
+                while (currentElement && !currentElement.matches('.datatable')) {
+                    if (currentElement.matches('.status-verdict-cell')) {
+                        return currentElement;
+                    }
+                    currentElement = currentElement.parentElement;
+                }
+
+                return null;
+            };
+
+            // 检查变动元素是否在 .status-verdict-cell 内
+            const statusVerdictCell = isDescendantOfStatusVerdictCell(node);
+            if (statusVerdictCell) {
+                updateElement(statusVerdictCell);
             }
 
-            // 更新[node]内部符合选择器条件的所有元素
-            $(node).find(selectorCondition).each(function () {
-                updateElement(this);
+            // 检查node内部所有的 .status-verdict-cell 元素
+            node.querySelectorAll('.status-verdict-cell').forEach(element => {
+                updateElement(element);
             });
         }
     });
