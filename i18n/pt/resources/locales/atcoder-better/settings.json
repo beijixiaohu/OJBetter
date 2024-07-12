@@ -343,7 +343,7 @@
             "title": "Base de dados IndexedDB",
             "clear": {
                 "label": "Limpar dados",
-                "helpText": "<p>Limpar os dados locais da IndexedDB irá limpar todos os dados da base de dados CFBetter, por favor tenha cuidado</p>",
+                "helpText": "<p>Limpar os dados locais da IndexedDB irá limpar todos os dados da base de dados OJBetter, por isso tenha cuidado!</p>",
                 "button": "apuramento"
             },
             "inputOrExport": {
