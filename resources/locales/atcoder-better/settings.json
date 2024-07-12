@@ -343,7 +343,7 @@
             "title": "IndexedDB数据库",
             "clear": {
                 "label": "清除数据",
-                "helpText": "<p>清除本地的IndexedDB数据，会清除 CFBetter 数据库中的所有数据，请谨慎操作</p>",
+                "helpText": "<p>清除本地的IndexedDB数据，会清除 OJBetter 数据库中的所有数据，请谨慎操作</p>",
                 "button": "清除"
             },
             "inputOrExport": {
