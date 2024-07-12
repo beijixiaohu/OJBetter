@@ -343,7 +343,7 @@
             "title": "Base de datos IndexedDB",
             "clear": {
                 "label": "Borrar datos",
-                "helpText": "<p>Borrar los datos locales de IndexedDB borrará todos los datos de la base de datos CFBetter, por favor tenga cuidado</p>",
+                "helpText": "<p>Al borrar los datos locales de IndexedDB se borrarán todos los datos de la base de datos OJBetter, así que ¡tenga cuidado!</p>",
                 "button": "liquidación"
             },
             "inputOrExport": {
