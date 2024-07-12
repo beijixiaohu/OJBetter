@@ -343,7 +343,7 @@
             "title": "IndexedDBデータベース",
             "clear": {
                 "label": "クリアデータ",
-                "helpText": "<p>ローカルのIndexedDBのデータをクリアすると、CFBetterデータベースのすべてのデータがクリアされます。</p>、ご注意ください。",
+                "helpText": "<p>ローカルのIndexedDBのデータをクリアすると、OJBetterデータベースのすべてのデータがクリアされますので、注意してください！</p>",
                 "button": "クリアランス"
             },
             "inputOrExport": {
