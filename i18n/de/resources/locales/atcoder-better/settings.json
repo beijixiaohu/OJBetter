@@ -343,7 +343,7 @@
             "title": "IndexedDB Datenbank",
             "clear": {
                 "label": "Daten löschen",
-                "helpText": "<p>Wenn Sie die lokalen IndexedDB-Daten löschen, werden alle Daten in der CFBetter-Datenbank gelöscht. Bitte seien Sie vorsichtig</p>",
+                "helpText": "<p>Wenn Sie die lokalen IndexedDB-Daten löschen, werden alle Daten in der OJBetter-Datenbank gelöscht, seien Sie also vorsichtig!</p>",
                 "button": "Freigabe"
             },
             "inputOrExport": {

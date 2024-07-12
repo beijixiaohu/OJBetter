@@ -343,7 +343,7 @@
             "title": "Database IndexedDB",
             "clear": {
                 "label": "Cancella i dati",
-                "helpText": "<p>La cancellazione dei dati locali di IndexedDB cancellerà tutti i dati del database CFBetter, faccia attenzione</p>.",
+                "helpText": "<p>La cancellazione dei dati dell'IndexedDB locale cancellerà tutti i dati del database OJBetter, quindi fate attenzione!</p>",
                 "button": "autorizzazione"
             },
             "inputOrExport": {
