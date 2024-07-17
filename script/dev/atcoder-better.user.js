@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.3
+// @version      1.17.4
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -120,7 +120,9 @@ OJBetter.state = {
 OJBetter.common = {
     /** @type {string} 网站的主机地址 */
     hostAddress: location.origin,
-    /** @type {string?} Atcoder的CSRF令牌 */
+    /** @type {string} 网站当前真实的黑暗模式 */
+    realDarkMode: undefined,
+    /** @type {string?} AtCoder的CSRF令牌 */
     at_csrf_token: undefined,
     /** @type {Array?} 任务队列 */
     taskQueue: undefined,
@@ -298,6 +300,8 @@ OJBetter.monaco = {
     },
     /** @type {Object?} Monaco编辑器实例 */
     editor: null,
+    /** @type {Array?} 代码块美化的Monaco编辑器实例 */
+    beautifyEditor: [],
     /** @type {string?} 在线编译器选择 */
     onlineCompilerChoice: undefined,
     /** @type {string?} 记忆编译器语言选择 */
@@ -1271,26 +1275,39 @@ function elementLocalize(element, retries = 10, interval = 50) {
 // 切换系统黑暗监听
 const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
 const changeEventListeners = [];
-function handleColorSchemeChange(event) {
-    event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
-    if (!event.matches) {
-        var originalColor = $(this).data("original-color");
-        $(this).css("background-color", originalColor);
-        const intervalId = setinterval(() => {
-            if (OJBetter.monaco && OJBetter.monaco.editor) {
-                monaco.editor.setTheme('vs');
-                clearInterval(intervalId);
-            }
-        }, 100);
-    } else {
+
+/**
+ * 处理颜色模式变化事件
+ * @param {MediaQueryListEvent} event - 媒体查询事件对象
+ */
+const handleColorSchemeChange = (event) => {
+    const theme = event.matches ? 'dark' : 'light';
+
+    // 更新页面主题
+    $('html').attr('data-theme', theme);
+    OJBetter.common.realDarkMode = theme;
+
+    const updateMonacoTheme = (theme) => {
         const intervalId = setInterval(() => {
-            if (OJBetter.monaco && OJBetter.monaco.editor) {
-                monaco.editor.setTheme('vs-dark');
+            if (OJBetter?.monaco?.editor) {
+                monaco.editor.setTheme(theme);
                 clearInterval(intervalId);
             }
         }, 100);
+
+        OJBetter.monaco.beautifyEditor.forEach((editor) => {
+            editor.updateOptions({ theme });
+        });
+    };
+
+    if (event.matches) {
+        updateMonacoTheme('vs-dark');
+    } else {
+        const originalColor = $(this).data("original-color");
+        $(this).css("background-color", originalColor);
+        updateMonacoTheme('vs');
     }
-}
+};
 
 // 黑暗模式
 (function setDark() {
@@ -1309,7 +1326,12 @@ function handleColorSchemeChange(event) {
             setTimeout(setDarkTheme, 100);
         }
     }
-    OJBetter.basic.darkMode = OJB_getGMValue("darkMode", "follow")
+
+    // 获取当前的实际黑暗模式
+    OJBetter.common.realDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+    // 设置黑暗模式和监听器
+    OJBetter.basic.darkMode = OJB_getGMValue("darkMode", "follow");
     if (OJBetter.basic.darkMode == "dark") {
         setDarkTheme();
     } else if (OJBetter.basic.darkMode == "follow") {
@@ -1774,12 +1796,12 @@ async function beautifyPreBlocksWithMonaco() {
         });
 
         // 初始化 Monaco 编辑器
-        monaco.editor.create(container, {
+        const editor = monaco.editor.create(container, {
             value: code,
             language,
             readOnly: true,
             tabSize: 4,
-            theme: OJBetter.basic.darkMode === "dark" ? "vs-dark" : "vs",
+            theme: OJBetter.common.realDarkMode == "dark" ? "vs-dark" : "vs",
             scrollbar: {
                 verticalScrollbarSize: 10,
                 horizontalScrollbarSize: 10,
@@ -1788,6 +1810,9 @@ async function beautifyPreBlocksWithMonaco() {
             automaticLayout: true,
             scrollBeyondLastLine: false
         });
+
+        // 保存编辑器实例
+        OJBetter.monaco.beautifyEditor.push(editor);
     };
 
     // 全局替换页面上所有的 <pre> 元素
@@ -10120,7 +10145,7 @@ async function createMonacoEditor(language, form, support) {
         rootUri: rootUri,
         fontSize: 15,
         tabSize: 4,
-        theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
+        theme: OJBetter.common.realDarkMode == "dark" ? "vs-dark" : "vs",
         bracketPairColorization: {
             enabled: true,
             independentColorPoolPerBracketType: true,
@@ -10200,7 +10225,7 @@ async function createMonacoEditor(language, form, support) {
             OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(size) });
             GM_setValue('editorFontSize', size);
         });
-        
+
         // 测试检查器选择
         let selectValidator = OJB_safeCreateJQElement(`
             <div class='OJBetter_setting_list'>
@@ -10292,7 +10317,7 @@ async function createMonacoEditor(language, form, support) {
             fixToBottomButton.prop("disabled", false);
             fixToRightButton.prop("disabled", false);
         }
-        
+
         // 打开更多设置弹窗
         moreSetting.on('click', () => {
             OJB_showModal(moreSettingPopover);
@@ -12476,7 +12501,7 @@ class TestCaseStatus {
             initializeTerminal(content, contentElement);
         }
     }
-    
+
     // 设置checker的评测结果
     setJudgeChecker(message) {
         function createJudgeCheckerElement(message) {
