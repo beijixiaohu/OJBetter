@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.4
+// @version      1.17.5
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -1327,14 +1327,15 @@ const handleColorSchemeChange = (event) => {
         }
     }
 
-    // 获取当前的实际黑暗模式
-    OJBetter.common.realDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-
     // 设置黑暗模式和监听器
     OJBetter.basic.darkMode = OJB_getGMValue("darkMode", "follow");
     if (OJBetter.basic.darkMode == "dark") {
+        OJBetter.common.realDarkMode = 'dark';
         setDarkTheme();
+    } else if (OJBetter.basic.darkMode == "light") {
+        OJBetter.common.realDarkMode = 'light';
     } else if (OJBetter.basic.darkMode == "follow") {
+        OJBetter.common.realDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         // 添加事件监听器
         changeEventListeners.push(handleColorSchemeChange);
         mediaQueryList.addEventListener('change', handleColorSchemeChange);
