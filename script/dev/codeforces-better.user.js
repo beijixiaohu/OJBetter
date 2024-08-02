@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.8
+// @version      1.76.9
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -9036,7 +9036,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
                 rawData = await translate_iflyrec(text);
             } else if (transServer == "youdao") {
                 translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
-                rawData = await translate_youdao_mobile(text);
+                rawData = await translate_youdao_web(text);
             } else if (transServer == "google") {
                 translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_gg(text);
@@ -10133,7 +10133,8 @@ const StatusAcronyms = {
     "Perfect result:": "AC",
     "Partial result:": "PC",
     "Running": "PENDING",
-    "In queue": "INQUEUE"
+    "In queue": "INQUEUE",
+    "Pretests Passed": "PREPASS"
 };
 
 /** 
@@ -10163,7 +10164,7 @@ async function judgeStatusReplace() {
         let status_name = "", number = "";
         let status_name_is_over = false;
         for (let i = 0; i < number_of_words; i++) {
-            if (words[i] === "on") {
+            if (words[i] === "on" || words[i] === "(") {
                 status_name_is_over = true;
             }
             if (!status_name_is_over) {
@@ -10263,6 +10264,7 @@ async function judgeStatusReplace() {
             pc: statusAcronym === "PC",
             pending: statusAcronym === "PENDING",
             inqueue: statusAcronym === "INQUEUE",
+            prepass: statusAcronym === "PREPASS"
         }
         const final_result = parseTemplate(result, statusMap);
         return final_result;
@@ -13867,7 +13869,7 @@ async function translate_iflyrec(text) {
  * @param {string} raw 原文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_youdao_mobile(raw) {
+async function translate_youdao_web(raw) {
     /**
      * 生成cookie
      */
