@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.9
+// @version      1.76.10
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -13925,8 +13925,8 @@ async function translate_youdao_web(raw) {
         const ivHash = CryptoJS.MD5(iv).toString();
 
         // 使用AES-128-CBC模式进行解密
-        const keyForAES = CryptoJS.enc.Hex.parse(keyHash).toString().substring(0, 32);
-        const ivForAES = CryptoJS.enc.Hex.parse(ivHash).toString().substring(0, 32);
+        const keyForAES = keyHash.substring(0, 32);
+        const ivForAES = ivHash.substring(0, 32);
 
         // 解码URL安全的Base64
         const decodedBase64 = decodeUrlSafeBase64(src);
@@ -13995,7 +13995,7 @@ async function translate_youdao_web(raw) {
         res => {
             const decodeData = decode(res)
             const result = organizeTranslation(decodeData);
-            return result;
+            return result.replace(/\n/g, "\n\n");
         }
     );
 }

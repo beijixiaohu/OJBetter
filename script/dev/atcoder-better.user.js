@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.5
+// @version      1.17.6
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -13317,8 +13317,8 @@ async function translate_youdao_mobile(raw) {
         const ivHash = CryptoJS.MD5(iv).toString();
 
         // 使用AES-128-CBC模式进行解密
-        const keyForAES = CryptoJS.enc.Hex.parse(keyHash).toString().substring(0, 32);
-        const ivForAES = CryptoJS.enc.Hex.parse(ivHash).toString().substring(0, 32);
+        const keyForAES = keyHash.substring(0, 32);
+        const ivForAES = ivHash.substring(0, 32);
 
         // 解码URL安全的Base64
         const decodedBase64 = decodeUrlSafeBase64(src);
@@ -13387,7 +13387,7 @@ async function translate_youdao_mobile(raw) {
         res => {
             const decodeData = decode(res)
             const result = organizeTranslation(decodeData);
-            return result;
+            return result.replace(/\n/g, "\n\n");
         }
     );
 }
