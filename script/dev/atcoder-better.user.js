@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.6
+// @version      1.17.7
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -7847,7 +7847,7 @@ async function addConversionButton() {
         let nextElement = contestNavTabs.next();
         let id = "_editorial_1_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(nextElement, id, "this_level");
-        panel.panel.css('width', '100%'); // 加个样式，不然不显示
+        panel.panel.addClass('col-sm-12');
         promises.push(addButtonWithHTML2MD(panel.viewButton, nextElement, id, "this_level"));
         promises.push(addButtonWithCopy(panel.copyButton, nextElement, id, "this_level"));
         promises.push(addButtonWithTranslation(panel.translateButton, nextElement, id, "this_level"));
@@ -8658,6 +8658,10 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     // 创建翻译结果元素并放在element_node的后面
     translateResult.translateDiv = new TranslateDiv(id);
     $(element_node).after(translateResult.translateDiv.getDiv());
+
+    const isColSm12 = $(element_node).prev().hasClass("col-sm-12");
+    // 如果前一个元素的类名包含col-sm-12，则翻译面板也要加上col-sm-12
+    if (isColSm12) translateResult.translateDiv.getDiv().addClass("col-sm-12");
 
     // 顶栏左侧信息
     translateResult.translateDiv.setTopText(i18next.t('servers.' + realTransServer, { ns: 'translator' }) +
