@@ -343,7 +343,7 @@
             "title": "인덱싱된 데이터베이스",
             "clear": {
                 "label": "데이터 지우기",
-                "helpText": "<p>로컬 IndexedDB 데이터를 지우면 CFBetter 데이터베이스의 모든 데이터가 지워지므로 주의하세요</p>",
+                "helpText": "<p>로컬 IndexedDB 데이터를 지우면 OJBetter 데이터베이스의 모든 데이터가 지워지므로 주의하세요!</p>",
                 "button": "클리어런스"
             },
             "inputOrExport": {

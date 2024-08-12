@@ -343,7 +343,7 @@
             "title": "IndexedDB database",
             "clear": {
                 "label": "Clear data",
-                "helpText": "<p>Clearing the local IndexedDB data will clear all data in the CFBetter database, please be careful</p>",
+                "helpText": "<p>Clearing the local IndexedDB data will clear all data in the OJBetter database, so please be careful!</p>",
                 "button": "Clear"
             },
             "inputOrExport": {

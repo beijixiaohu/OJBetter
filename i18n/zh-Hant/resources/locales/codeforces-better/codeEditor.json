@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "自訂測試資料(自動儲存)",
-        "onlyCustom": "只測試自訂數據",
-        "DontShowDiff": "不顯示差異",
-        "add": "新建"
+    "cancelFixButton": "取消固定",
+    "compiler": {
+        "common": {
+            "error": "發生了未知的錯誤，請重試"
+        },
+        "official": {
+            "getResultError": "請求運行結果時發生了錯誤，請重試",
+            "pushError": "提交代码到 Codeforces 服务器时发生了错误，请重试"
+        }
     },
-    "runTestButton": {
-        "initial": "範例測試",
-        "running": "測試中",
-        "success": "全部透過",
-        "error": "全部未通過",
-        "partial": "部分透過"
+    "customTestBlock": {
+        "add": "新建",
+        "DontShowDiff": "不顯示差異",
+        "onlyCustom": "只測試自訂數據",
+        "title": "自訂測試資料(自動儲存)"
+    },
+    "exitFullscreenButton": "退出全螢幕",
+    "fixToBottomButton": "固定到底部",
+    "fixToRightButton": "固定到右側",
+    "fullscreenButton": "全螢幕",
+    "lsp": {
+        "connect": "建立LSP連線……",
+        "connected": "LSP已連接",
+        "error": "LSP連線已斷開",
+        "waitingAnswer": "等待初始化回執……"
     },
     "resultBlock": {
         "diff": "差異對比：",
@@ -21,26 +34,76 @@
             "sample": "題目範例"
         }
     },
-    "submitButton": "提交",
-    "fontSizeInput": "字體大小",
-    "fullscreenButton": "全螢幕",
-    "exitFullscreenButton": "退出全螢幕",
-    "fixToBottomButton": "固定到底部",
-    "fixToRightButton": "固定到右側",
-    "cancelFixButton": "取消固定",
-    "lsp": {
-        "connect": "建立LSP連線……",
-        "waitingAnswer": "等待初始化回執……",
-        "connected": "LSP已連接",
-        "error": "LSP連線已斷開"
+    "runTestButton": {
+        "error": "全部未通過",
+        "initial": "範例測試",
+        "partial": "部分透過",
+        "running": "測試中",
+        "success": "全部透過"
     },
-    "compiler": {
-        "official": {
-            "pushError": "提交程式碼到codeforces 伺服器時發生了錯誤，請重試",
-            "getResultError": "請求運行結果時發生了錯誤，請重試"
+    "submitButton": "提交",
+    "moreSettings": {
+        "title": "更多设置",
+        "tip": "更改会自动保存",
+        "fontSizeInput": {
+            "helpText": "设置代码编辑器的字体大小",
+            "label": "字体大小",
+            "placeholder": "请输入字体大小"
         },
-        "common": {
-            "error": "發生了未知的錯誤，請重試"
+        "validator": {
+            "helpText": "使用指定的检查器检查样例测试的运行结果是否与预期结果匹配",
+            "label": "样例测试结果检查器",
+            "messagePrefix": "检查：",
+            "options": {
+                "ignoreWhitespace": "忽略行末空格和文末换行",
+                "ncmp": "ncmp - 匹配64位整数",
+                "nyesno": "nyesno - 匹配YES和NO，大小写不敏感",
+                "rcmp4": "rcmp4 - 匹配浮点数，最大允许误差1e-4",
+                "rcmp6": "rcmp6 - 匹配浮点数，最大允许误差1e-6",
+                "rcmp9": "rcmp9 - 匹配浮点数，最大允许误差1e-9",
+                "strict": "严格一致",
+                "wcmp": "wcmp - 匹配字符串"
+            }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "正确",
+                "mismatch": "不匹配"
+            },
+            "strict": {
+                "correct": "正确",
+                "mismatch": "不匹配"
+            },
+            "ncmp": {
+                "differ": "{{count}}个数字不同 - 预期: '{{expected}}', 实际: '{{actual}}'",
+                "longerExpected": "预期包含更长的序列 [长度 = {{expectedLength}}], 实际包含 {{actualLength}} 个元素",
+                "longerActual": "实际包含更长的序列 [长度 = {{actualLength}}], 预期包含 {{expectedLength}} 个元素",
+                "correctFew": "{{count}} 个数字: \"{{numbers}}\"",
+                "correctMany": "{{count}} 个数字"
+            },
+            "rcmp": {
+                "differ": "第{{n}}个数不同 - 预期: '{{expected}}', 实际: '{{actual}}', 误差: '{{error}}'",
+                "single": "找到 '{{actual}}', 预期 '{{expected}}', 误差 '{{error}}'",
+                "total": "{{count}} 个数字",
+                "invalidNumber": "第{{index}}个数无效 - 预期: '{{expected}}', 实际: '{{actual}}'",
+                "lengthMismatch": "预期和实际的数字数量不同 - 预期: {{expectedLength}} 个, 实际: {{actualLength}} 个"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}个单词不同 - 预期: '{{expected}}', 实际: '{{actual}}'",
+                "extraTokensInParticipant": "实际输出包含额外的单词",
+                "unexpectedEOF": "预期输出包含额外的单词",
+                "singleToken": "\"{{token}}\"",
+                "tokenCount": "{{count}}个单词"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} 或 {{NO}} 应该在预期输出中，但找到了 {{token}} [第 {{index}}{{ending}} token]",
+                "expectedInOutput": "{{YES}} 或 {{NO}} 应该在实际输出中，但找到了 {{token}} [第 {{index}}{{ending}} token]",
+                "mismatch": "不匹配\n预期: {{expected}}\n实际: {{actual}} [第 {{index}}{{ending}} token]",
+                "longerInAnswer": "预期输出包含更多的 token [长度 = {{expectedLength}}]，但实际输出只包含 {{actualLength}} 个 token",
+                "longerInOutput": "实际输出包含更多的 token [长度 = {{actualLength}}]，但预期输出只包含 {{expectedLength}} 个 token",
+                "emptyOutput": "空输出",
+                "summary": "{{index}} 个 token: yes 的数量是 {{yesCount}}, no 的数量是 {{noCount}}"
+            }
         }
     }
 }

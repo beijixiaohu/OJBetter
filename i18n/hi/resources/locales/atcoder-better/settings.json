@@ -343,7 +343,7 @@
             "title": "IndexedDB डेटाबेस",
             "clear": {
                 "label": "स्पष्ट डेटा",
-                "helpText": "<p>स्थानीय IndexedDB डेटा साफ़ करने से CFBetter डेटाबेस का सारा डेटा साफ़ हो जाएगा, कृपया सावधानी से काम करें</p>",
+                "helpText": "<p>清除本地的IndexedDB数据，会清除 OJBetter 数据库中的所有数据，请谨慎操作</p>",
                 "button": "स्पष्ट"
             },
             "inputOrExport": {

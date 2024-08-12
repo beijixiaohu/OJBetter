@@ -343,7 +343,7 @@
             "title": "Base de données IndexedDB",
             "clear": {
                 "label": "Effacer les données",
-                "helpText": "<p>L'effacement des données locales d'IndexedDB effacera toutes les données de la base de données CFBetter, soyez prudent</p>.",
+                "helpText": "<p>L'effacement des données locales de l'IndexedDB effacera toutes les données de la base de données OJBetter.</p>",
                 "button": "dégagement"
             },
             "inputOrExport": {

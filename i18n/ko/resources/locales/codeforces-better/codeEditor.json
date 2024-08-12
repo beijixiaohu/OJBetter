@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "사용자 지정 테스트 데이터(자동 저장)",
-        "onlyCustom": "사용자 지정 데이터만 테스트",
-        "DontShowDiff": "표시되지 않은 불일치",
-        "add": "새로 구축"
+    "cancelFixButton": "고정 취소",
+    "compiler": {
+        "common": {
+            "error": "알 수 없는 오류가 발생했습니다. 다시 시도하세요."
+        },
+        "official": {
+            "getResultError": "실행 결과를 요청하는 동안 오류가 발생했습니다. 다시 시도해 주세요!",
+            "pushError": "코드포스 서버에 코드를 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요!"
+        }
     },
-    "runTestButton": {
-        "initial": "샘플 테스트",
-        "running": "테스트 중",
-        "success": "모두 통과",
-        "error": "모두 실패",
-        "partial": "부분적으로 채택됨"
+    "customTestBlock": {
+        "add": "새로 구축",
+        "DontShowDiff": "표시되지 않은 불일치",
+        "onlyCustom": "사용자 지정 데이터만 테스트",
+        "title": "사용자 지정 테스트 데이터(자동 저장)"
+    },
+    "exitFullscreenButton": "전체 화면 종료",
+    "fixToBottomButton": "하단에 고정",
+    "fixToRightButton": "오른쪽으로 고정",
+    "fullscreenButton": "전체 화면",
+    "lsp": {
+        "connect": "LSP 연결 만들기……",
+        "connected": "LSP 연결",
+        "error": "LSP 연결이 끊어짐",
+        "waitingAnswer": "초기화 확인을 기다리는 중……"
     },
     "resultBlock": {
         "diff": "차이점 비교：",
@@ -21,26 +34,76 @@
             "sample": "샘플 제목"
         }
     },
-    "submitButton": "제출(보고서 등)",
-    "fontSizeInput": "글꼴 크기",
-    "fullscreenButton": "전체 화면",
-    "exitFullscreenButton": "전체 화면 종료",
-    "fixToBottomButton": "하단에 고정",
-    "fixToRightButton": "오른쪽으로 고정",
-    "cancelFixButton": "고정 취소",
-    "lsp": {
-        "connect": "LSP 연결 만들기……",
-        "waitingAnswer": "초기화 확인을 기다리는 중……",
-        "connected": "LSP 연결",
-        "error": "LSP 연결이 끊어짐"
+    "runTestButton": {
+        "error": "모두 실패",
+        "initial": "샘플 테스트",
+        "partial": "부분적으로 채택됨",
+        "running": "테스트 중",
+        "success": "모두 통과"
     },
-    "compiler": {
-        "official": {
-            "pushError": "코드를 코드포스 서버에 제출하는 동안 오류가 발생했습니다. 다시 시도해 주세요!",
-            "getResultError": "실행 결과를 요청하는 동안 오류가 발생했습니다. 다시 시도해 주세요!"
+    "submitButton": "제출(보고서 등)",
+    "moreSettings": {
+        "title": "추가 설정",
+        "tip": "변경 사항은 자동으로 저장됩니다.",
+        "fontSizeInput": {
+            "helpText": "코드 편집기의 글꼴 크기 설정",
+            "label": "글꼴 크기",
+            "placeholder": "글꼴 크기를 입력하세요."
         },
-        "common": {
-            "error": "알 수 없는 오류가 발생했습니다. 다시 시도하세요."
+        "validator": {
+            "helpText": "지정된 검사기를 사용하여 샘플 테스트 실행 결과가 예상 결과와 일치하는지 확인합니다.",
+            "label": "샘플 테스트 결과 검사기",
+            "messagePrefix": "：확인",
+            "options": {
+                "ignoreWhitespace": "줄 끝 공백 및 텍스트 끝 줄 바꿈 무시하기",
+                "ncmp": "ncmp - 64비트 정수 일치",
+                "nyesno": "nyesno - 예와 아니오 일치, 대소문자 구분 없음",
+                "rcmp4": "rcmp4 - 최대 허용 오차가 1e-4인 부동 소수점 숫자를 일치시킵니다.",
+                "rcmp6": "rcmp6 - 최대 허용 오차가 1e-6인 부동 소수점 숫자를 일치시킵니다.",
+                "rcmp9": "rcmp9 - 최대 허용 오차가 1e-9인 부동 소수점 숫자를 일치시킵니다.",
+                "strict": "엄격한 일관성",
+                "wcmp": "wcmp - 문자열 일치"
+            }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "제대로",
+                "mismatch": "불일치"
+            },
+            "strict": {
+                "correct": "제대로",
+                "mismatch": "불일치"
+            },
+            "ncmp": {
+                "differ": "{{count}}{{expected}}{{actual}}자릿수가 다릅니다(예상: ' ', 실제: ' ').",
+                "longerExpected": "{{expectedLength}} {{actualLength}} 더 긴 시퀀스[길이 = ]를 포함할 것으로 예상, 실제로는 요소 포함",
+                "longerActual": "{{actualLength}} {{expectedLength}} 실제로는 더 긴 시퀀스[길이 = ]를 포함하며, 요소를 포함할 것으로 예상됩니다.",
+                "correctFew": "{{count}}{{numbers}}숫자: \" \"",
+                "correctMany": "{{count}} 수치"
+            },
+            "rcmp": {
+                "differ": "{{n}}{{expected}}{{actual}}{{error}}숫자가 다릅니다(예상: ' ', 실제: ' ', 오류: ' ').",
+                "single": "{{actual}}{{expected}}{{error}}발견됨 ' ', 예상됨 ' ', 오류 ' '",
+                "total": "{{count}} 수치",
+                "invalidNumber": "{{index}}{{expected}}{{actual}}잘못된 번호 - 예상: ' ', 실제: ' '",
+                "lengthMismatch": "{{expectedLength}} {{actualLength}} 예상 수치와 실제 수치가 다릅니다 - 예상: , 실제:"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}{{expected}}{{actual}}단어가 다릅니다 - 예상: ' ', 실제: ' '.",
+                "extraTokensInParticipant": "실제 출력에는 추가 단어가 포함됩니다.",
+                "unexpectedEOF": "출력에 추가 단어가 포함될 것으로 예상",
+                "singleToken": "{{token}}\" \"",
+                "tokenCount": "{{count}}단어"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} 또는 예상 출력에 있어야 하지만 [페이지 토큰]을 발견했습니다.",
+                "expectedInOutput": "{{YES}} {{NO}} {{token}} {{index}}{{ending}} 또는 실제 출력에 있어야 하지만 [페이지 토큰]을 찾지 못했습니다.",
+                "mismatch": "\n {{expected}}\n {{actual}} {{index}}{{ending}} 예상 불일치: 실제: [페이지 토큰]",
+                "longerInAnswer": "{{expectedLength}} {{actualLength}} 출력에 더 많은 토큰[길이 = ]이 포함될 것으로 예상되었지만 실제 출력에는 토큰만 포함되었습니다.",
+                "longerInOutput": "{{actualLength}} {{expectedLength}} 실제 출력에는 더 많은 토큰[길이 = ]이 포함되지만 예상 출력에는 토큰만 포함됩니다.",
+                "emptyOutput": "빈 출력",
+                "summary": "{{index}} {{yesCount}} {{noCount}}토큰 수: 예는 , 아니요는"
+            }
         }
     }
 }

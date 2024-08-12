@@ -1,16 +1,29 @@
 {
-    "customTestBlock": {
-        "title": "Custom test data (auto-saving)",
-        "onlyCustom": "Only test custom data",
-        "DontShowDiff": "Do not show differences",
-        "add": "Create New"
+    "cancelFixButton": "Unpin",
+    "compiler": {
+        "common": {
+            "error": "An unknown error has occurred. Please try again."
+        },
+        "official": {
+            "getResultError": "An error occurred while requesting a run result, please try again!",
+            "pushError": "An error occurred while submitting code to the AtCoder server, please try again!"
+        }
     },
-    "runTestButton": {
-        "initial": "sample test",
-        "running": "under test",
-        "success": "All passed",
-        "error": "Failed all",
-        "partial": "Passed in part"
+    "customTestBlock": {
+        "add": "Create New",
+        "DontShowDiff": "Do not show differences",
+        "onlyCustom": "Only test custom data",
+        "title": "Custom test data (auto-saving)"
+    },
+    "exitFullscreenButton": "Exit fullscreen",
+    "fixToBottomButton": "Pin to bottom",
+    "fixToRightButton": "Pin to right",
+    "fullscreenButton": "Fullscreen",
+    "lsp": {
+        "connect": "Create LSP connection……",
+        "connected": "LSP connected",
+        "error": "LSP connection disconnected",
+        "waitingAnswer": "Waiting for initialization back to……"
     },
     "resultBlock": {
         "diff": "Comparison of Differences：",
@@ -21,26 +34,76 @@
             "sample": "Sample Title"
         }
     },
-    "submitButton": "Submit",
-    "fontSizeInput": "Font size",
-    "fullscreenButton": "Fullscreen",
-    "exitFullscreenButton": "Exit fullscreen",
-    "fixToBottomButton": "Pin to bottom",
-    "fixToRightButton": "Pin to right",
-    "cancelFixButton": "Unpin",
-    "lsp": {
-        "connect": "Create LSP connection……",
-        "waitingAnswer": "Waiting for initialization back to……",
-        "connected": "LSP connected",
-        "error": "LSP connection disconnected"
+    "runTestButton": {
+        "error": "Failed all",
+        "initial": "sample test",
+        "partial": "Passed in part",
+        "running": "under test",
+        "success": "All passed"
     },
-    "compiler": {
-        "official": {
-            "pushError": "An error occurred while submitting the code to the codeforces server, please try again!",
-            "getResultError": "An error occurred while requesting a run result, please try again!"
+    "submitButton": "Submit",
+    "moreSettings": {
+        "title": "More Settings",
+        "tip": "Changes are automatically saved",
+        "fontSizeInput": {
+            "helpText": "Setting the font size of the code editor",
+            "label": "font size",
+            "placeholder": "Please enter a font size"
         },
-        "common": {
-            "error": "An unknown error has occurred. Please try again."
+        "validator": {
+            "helpText": "Use the specified checker to check that the results of a sample test run match the expected results",
+            "label": "Sample Test Result Checker",
+            "messagePrefix": "Check：",
+            "options": {
+                "ignoreWhitespace": "Ignore end-of-line spaces and end-of-text line breaks",
+                "ncmp": "ncmp - match 64-bit integers",
+                "nyesno": "nyesno - matches YES and NO, case insensitive",
+                "rcmp4": "rcmp4 - matches floating point numbers with a maximum allowable error of 1e-4",
+                "rcmp6": "rcmp6 - match floating point numbers with a maximum allowable error of 1e-6",
+                "rcmp9": "rcmp9 - match floating point numbers with a maximum allowable error of 1e-9",
+                "strict": "strict consistency",
+                "wcmp": "wcmp - match string"
+            }
+        },
+        "checkMessage": {
+            "ignoreWhitespace": {
+                "correct": "properly",
+                "mismatch": "mismatch"
+            },
+            "strict": {
+                "correct": "properly",
+                "mismatch": "mismatch"
+            },
+            "ncmp": {
+                "differ": "{{count}}The number of digits is different - expected: '{{expected}}', actual: '{{actual}}'",
+                "longerExpected": "Expected to contain a longer sequence [length = {{expectedLength}}], actually contains {{actualLength}} elements",
+                "longerActual": "actually contains a longer sequence [length = {{actualLength}}], expected to contain {{expectedLength}} elements",
+                "correctFew": "{{count}} Numbers: \"{{numbers}}\"",
+                "correctMany": "{{count}} figures"
+            },
+            "rcmp": {
+                "differ": "Number{{n}}is different - Expected: '{{expected}}', Actual: '{{actual}}', Error: '{{error}}'",
+                "single": "Found '{{actual}}', Expected '{{expected}}', Error '{{error}}'",
+                "total": "{{count}} figures",
+                "invalidNumber": "Invalid number{{index}}- Expected: '{{expected}}', Actual: '{{actual}}'",
+                "lengthMismatch": "Different number of expected and actual figures - Expected: {{expectedLength}} , Actual: {{actualLength}}"
+            },
+            "wcmp": {
+                "wordsDiffer": "{{count}}The words are different - Expected: '{{expected}}', Actual: '{{actual}}'",
+                "extraTokensInParticipant": "The actual output contains additional words",
+                "unexpectedEOF": "Expect the output to contain additional words",
+                "singleToken": "\"{{token}}\"",
+                "tokenCount": "{{count}}one word"
+            },
+            "nyesno": {
+                "expectedInAnswer": "{{YES}} or {{NO}} should be in the expected output, but found {{token}} [page {{index}}{{ending}} token]",
+                "expectedInOutput": "{{YES}} Or {{NO}} should be in the actual output, but found {{token}} [page {{index}}{{ending}} token]",
+                "mismatch": "Mismatch\nExpected: {{expected}}\nActual: {{actual}} [page {{index}}{{ending}} token]",
+                "longerInAnswer": "The output is expected to contain more tokens [length = {{expectedLength}}], but the actual output contains only {{actualLength}} tokens",
+                "longerInOutput": "The actual output contains more tokens [length = {{actualLength}}], but the expected output contains only {{expectedLength}} tokens",
+                "emptyOutput": "empty output",
+                "summary": "{{index}} The number of tokens: yes is {{yesCount}}, no is {{noCount}}"
+            }
         }
     }
 }
