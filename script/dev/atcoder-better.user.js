@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.7
+// @version      1.17.8
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -7669,7 +7669,7 @@ async function transTask(button, element, type, is_comment, overrideTrans) {
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        let pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
+        let pElements = $(element).find("p:not(:scope > li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];

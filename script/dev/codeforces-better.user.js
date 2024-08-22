@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.10
+// @version      1.76.11
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -7875,7 +7875,7 @@ async function transTask(button, element, type, is_comment, overrideTrans) {
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        let pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
+        let pElements = $(element).find("p:not(:scope > li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
