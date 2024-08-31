@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.12
+// @version      1.76.13
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -10142,6 +10142,7 @@ const StatusAcronyms = {
  */
 const StatusColors = {
     "AC": "#0a0",
+    "PREPASS": "#0a0",
     "WA": "#e74c3c",
     "PENDING": "#808080",
     "INQUEUE": "#808080",
@@ -10400,7 +10401,7 @@ const value_monacoLanguageMap = {
     "32": "go", "34": "javascript", "36": "java", "40": "python", "41": "python", "43": "cpp",
     "50": "cpp", "51": "pascal", "52": "cpp", "54": "cpp", "55": "javascript", "59": "cpp", "60": "java",
     "61": "cpp", "65": "csharp", "67": "ruby", "70": "python", "73": "cpp", "74": "java", "75": "rust",
-    "77": "kotlin", "79": "csharp", "80": "cpp", "83": "kotlin", "87": "java", "89" :"cpp"
+    "77": "kotlin", "79": "csharp", "80": "cpp", "83": "kotlin", "87": "java", "89": "cpp"
 };
 
 /**
