@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.13
+// @version      1.76.14
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -9227,7 +9227,7 @@ function CommentPagination() {
         `);
 
     let batchSize = 5;
-    let elements = $(".comments > .comment").slice(0, -1);
+    let elements = $(".comments > .comment");
     let start = 0;
     let end = batchSize;
     let currentPage = 1;
