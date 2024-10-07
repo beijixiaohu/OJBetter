@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.8
+// @version      1.17.9
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -3805,7 +3805,8 @@ class TextBlockReplacer {
                         break;
                 }
                 text = text.replace(match, replacement);
-                if (isOrdinal(match)) this.replacements.set(id, ordinalTranslation(match));
+                if (isOrdinal(match) && OJBetter.translation.targetLang === 'zh') 
+                    this.replacements.set(id, ordinalTranslation(match));
                 else this.replacements.set(id, match);
             }
         } catch (e) { }
@@ -8570,8 +8571,10 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            // 匹配行内公式时对序数词特殊判断以优化翻译
-            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
+            let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+            // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
+            if (OJBetter.translation.targetLang === 'zh') 
+                regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```
@@ -8658,7 +8661,8 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
             { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
             // { pattern: /：/g, replacement: ":" }, // 中文：
-            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" }, // 加粗
+            { pattern: /\* \*(.*?)\* \*/g, replacement: "\*\*$1\*\*" } // 加粗
         ];
         mdRuleMap.forEach(({ pattern, replacement }) => {
             text = text.replace(pattern, replacement);
