@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.10
+// @version      1.76.16
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -3915,6 +3915,15 @@ class TextBlockReplacer {
      * @returns {string} 替换后的文本
      */
     replace(text, regex) {
+        // 优化序数词翻译
+        let isOrdinal = (text) => {
+            return Boolean(text.match(/\$\d+?\$[(st)(nd)(rd)(th)]/g));
+        }
+        let ordinalTranslation = (text) => {
+            return '第 ' + text.match(/\$\d+?\$/g)[0] + ' 个';
+        };
+
+
         this.matches = text.match(regex) || [];
         try {
             for (let i = 0; i < this.matches.length; i++) {
@@ -3936,7 +3945,9 @@ class TextBlockReplacer {
                         break;
                 }
                 text = text.replace(match, replacement);
-                this.replacements.set(id, match);
+                if (isOrdinal(match) && OJBetter.translation.targetLang === 'zh') 
+                    this.replacements.set(id, ordinalTranslation(match));
+                else this.replacements.set(id, match);
             }
         } catch (e) { }
         return text;
@@ -3968,7 +3979,8 @@ class TextBlockReplacer {
                 const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
                 let leftSpace = "", rightSpace = "";
                 if (!/\s/.test(textCopy[offset - 1])) leftSpace = " ";
-                if (!/\s/.test(textCopy[offset + match.length])) rightSpace = " ";
+                if (!/\s/.test(textCopy[offset + match.length]) && /[\x20-\x7E]/.test(replacement[replacement.length - 1]))
+                    rightSpace = " ";
                 return leftSpace + replacement + rightSpace;
             });
         };
@@ -7875,7 +7887,7 @@ async function transTask(button, element, type, is_comment, overrideTrans) {
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        let pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
+        let pElements = $(element).find("p:not(:scope > li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
@@ -8839,7 +8851,10 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+            let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+            // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
+            if (OJBetter.translation.targetLang === 'zh') 
+                regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```
@@ -8925,7 +8940,8 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
             { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
             // { pattern: /：/g, replacement: ":" }, // 中文：
-            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" }, // 加粗
+            { pattern: /\* \*(.*?)\* \*/g, replacement: "\*\*$1\*\*" } // 加粗
         ];
         mdRuleMap.forEach(({ pattern, replacement }) => {
             text = text.replace(pattern, replacement);
@@ -9227,7 +9243,7 @@ function CommentPagination() {
         `);
 
     let batchSize = 5;
-    let elements = $(".comments > .comment").slice(0, -1);
+    let elements = $(".comments > .comment:not(.comment-reply-prototype)");
     let start = 0;
     let end = batchSize;
     let currentPage = 1;
@@ -10142,6 +10158,7 @@ const StatusAcronyms = {
  */
 const StatusColors = {
     "AC": "#0a0",
+    "PREPASS": "#0a0",
     "WA": "#e74c3c",
     "PENDING": "#808080",
     "INQUEUE": "#808080",
@@ -10400,7 +10417,7 @@ const value_monacoLanguageMap = {
     "32": "go", "34": "javascript", "36": "java", "40": "python", "41": "python", "43": "cpp",
     "50": "cpp", "51": "pascal", "52": "cpp", "54": "cpp", "55": "javascript", "59": "cpp", "60": "java",
     "61": "cpp", "65": "csharp", "67": "ruby", "70": "python", "73": "cpp", "74": "java", "75": "rust",
-    "77": "kotlin", "79": "csharp", "80": "cpp", "83": "kotlin", "87": "java"
+    "77": "kotlin", "79": "csharp", "80": "cpp", "83": "kotlin", "87": "java", "89": "cpp"
 };
 
 /**
