@@ -352,7 +352,19 @@
                 "バーチャル順位表": "वर्चुअल लीग टेबल",
                 "順位表": "रैंकिंग सूची",
                 "コードテスト": "कोड परीक्षण",
-                "解説": "उत्तर"
+                "解説": "उत्तर",
+                "Home": "मुखपृष्ठ",
+                "Tasks": "सवाल",
+                "Clarifications": "प्रश्न पूछें",
+                "Submit": "जमा करना",
+                "Results": "परिणाम सबमिट करें",
+                "All Submissions": "सभी प्रस्तुतियाँ",
+                "My Submissions": "मेरा समर्पण",
+                "My Score": "मेरे अंक",
+                "Virtual Standings": "वर्चुअल लीग टेबल",
+                "Standings": "रैंकिंग सूची",
+                "Custom Test": "कोड परीक्षण",
+                "Editorial": "उत्तर"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "पुरालेख खोजें",
+                "Active Contests": "正在进行的比赛",
                 "Permanent Contests": "लंबे समय तक चलने वाला खेल",
                 "Upcoming Contests": "आगामी प्रतियोगिताएं",
                 "Recent Contests": "हाल के खेल",
