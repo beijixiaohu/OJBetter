@@ -352,7 +352,19 @@
                 "バーチャル順位表": "virtuelle Rangliste",
                 "順位表": "Rangliste",
                 "コードテスト": "Code-Prüfung",
-                "解説": "Notizen"
+                "解説": "Notizen",
+                "Home": "Abb. Anfang",
+                "Tasks": "Ausgaben",
+                "Clarifications": "Fragen stellen",
+                "Submit": "einreichen (einen Bericht usw.)",
+                "Results": "Einreichung der Ergebnisse",
+                "All Submissions": "Alle Einsendungen",
+                "My Submissions": "Meine Einreichung",
+                "My Score": "Wie ich gepunktet habe.",
+                "Virtual Standings": "virtuelle Rangliste",
+                "Standings": "Rangliste",
+                "Custom Test": "Code-Prüfung",
+                "Editorial": "Notizen"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "Suche im Archiv",
+                "Active Contests": "laufende Übereinstimmung",
                 "Permanent Contests": "Langfristige Wettbewerbe",
                 "Upcoming Contests": "Kommende Auswahlverfahren",
                 "Recent Contests": "Jüngste Spiele",
