@@ -352,7 +352,19 @@
                 "バーチャル順位表": "虚拟排名表",
                 "順位表": "排名表",
                 "コードテスト": "代码测试",
-                "解説": "题解"
+                "解説": "题解",
+                "Home": "首页",
+                "Tasks": "问题",
+                "Clarifications": "提问",
+                "Submit": "提交",
+                "Results": "提交结果",
+                "All Submissions": "所有提交",
+                "My Submissions": "我的提交",
+                "My Score": "我的得分情况",
+                "Virtual Standings": "虚拟排名表",
+                "Standings": "排名表",
+                "Custom Test": "代码测试",
+                "Editorial": "题解"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "搜索存档",
+                "Active Contests": "正在进行的比赛",
                 "Permanent Contests": "长期持续的比赛",
                 "Upcoming Contests": "即将举行的比赛",
                 "Recent Contests": "最近的比赛",
