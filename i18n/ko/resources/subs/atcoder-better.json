@@ -352,7 +352,19 @@
                 "バーチャル順位表": "가상 리그 테이블",
                 "順位表": "리그 테이블",
                 "コードテスト": "코드 테스트",
-                "解説": "메모"
+                "解説": "메모",
+                "Home": "무화과 시작",
+                "Tasks": "이슈",
+                "Clarifications": "질문하기",
+                "Submit": "제출(보고서 등)",
+                "Results": "결과 제출",
+                "All Submissions": "모든 제출물",
+                "My Submissions": "내 제출물",
+                "My Score": "득점 방법.",
+                "Virtual Standings": "가상 리그 테이블",
+                "Standings": "리그 테이블",
+                "Custom Test": "코드 테스트",
+                "Editorial": "메모"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "아카이브 검색",
+                "Active Contests": "진행 중인 경기",
                 "Permanent Contests": "오래 지속되는 대회",
                 "Upcoming Contests": "예정된 대회",
                 "Recent Contests": "최근 경기",
