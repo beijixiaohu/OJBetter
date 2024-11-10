@@ -352,7 +352,19 @@
                 "バーチャル順位表": "虛擬排名表",
                 "順位表": "排名表",
                 "コードテスト": "程式碼測試",
-                "解説": "題解"
+                "解説": "題解",
+                "Home": "首頁",
+                "Tasks": "問題",
+                "Clarifications": "提問",
+                "Submit": "提交",
+                "Results": "提交結果",
+                "All Submissions": "所有提交",
+                "My Submissions": "我的提交",
+                "My Score": "我的得分狀況",
+                "Virtual Standings": "虛擬排名表",
+                "Standings": "排名表",
+                "Custom Test": "程式碼測試",
+                "Editorial": "題解"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "搜尋存檔",
+                "Active Contests": "正在进行的比赛",
                 "Permanent Contests": "長期持續的比賽",
                 "Upcoming Contests": "即將舉行的比賽",
                 "Recent Contests": "最近的比賽",
