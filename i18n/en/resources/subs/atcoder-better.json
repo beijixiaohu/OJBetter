@@ -352,7 +352,19 @@
                 "バーチャル順位表": "virtual league table",
                 "順位表": "league table",
                 "コードテスト": "code testing",
-                "解説": "notes"
+                "解説": "notes",
+                "Home": "fig. beginning",
+                "Tasks": "concern",
+                "Clarifications": "ask questions",
+                "Submit": "Submit",
+                "Results": "Submission of results",
+                "All Submissions": "All submissions",
+                "My Submissions": "My Submission",
+                "My Score": "How I scored.",
+                "Virtual Standings": "virtual league table",
+                "Standings": "league table",
+                "Custom Test": "code testing",
+                "Editorial": "notes"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "Search Archives",
+                "Active Contests": "ongoing match",
                 "Permanent Contests": "Long lasting matches",
                 "Upcoming Contests": "Upcoming competitions",
                 "Recent Contests": "Recent matches",
