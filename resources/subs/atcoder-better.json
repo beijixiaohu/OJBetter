@@ -758,10 +758,11 @@
             "rules": {
                 "You have registered for this contest as an": "您已经报名参加了这场比赛，作为一个",
                 "You have registered for this contest as a": "您已经报名参加了这场比赛，作为一个",
-                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "禁止将正在进行的AtCoder比赛中发布的问题的全部或部分信息直接输入到生成式AI软件中。请参考",
                 "participant. Please refer to": "参与者。请参考",
                 "this post": "这篇文章",
                 "for details.": "了解详情。",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder对于生成式AI的规定 - 20241115版本",
                 "participant": "参与者",
                 "Registered": "已报名",
                 "Canceled registration": "已取消报名",
