@@ -321,8 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "本コンテストでは、ジェネレーティブAIなどの不正行為を防止するため、ジェネレーティブAIなどのプログラムに直接問題を提供することを禁止しています。詳しくは以下のルールをご確認ください。",
-                "AtCoder生成AI対策ルール": "AtCoder生成AI予防規則",
+                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "進行中のAtCoderコンペティションでのジェネレーティブAIの使用は禁止されています。詳細は以下のルールを参照してください。",
+                "AtCoder生成AI対策ルール - 20241115版": "AtCoderの生成AIに関する規定 - バージョン 20241115",
                 "現在": "対す",
                 "で参加登録しています。詳細は": "が参加を表明した。詳しくは",
                 "こちら": "ここに",
@@ -758,10 +758,11 @@
             "rules": {
                 "You have registered for this contest as an": "あなたはこのレースに",
                 "You have registered for this contest as a": "あなたはこのレースに",
-                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "進行中のAtCoderコンテストに投稿された質問の情報の全部または一部を、生成AIソフトウェアに直接入力することは禁止されています。以下をご参照ください。",
                 "participant. Please refer to": "参加者以下をご参照ください。",
                 "this post": "この記事",
                 "for details.": "詳細はこちら。",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "進行中のAtCoderコンペティションでのジェネレーティブAIの使用は禁止されています。詳細は以下のルールを参照してください。",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoderの生成AIに関する規定 - バージョン 20241115",
                 "participant": "参加者",
                 "Registered": "在籍",
                 "Canceled registration": "登録取り消し",
