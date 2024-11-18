@@ -321,8 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "为了防止生成式AI等作弊行为，本比赛禁止将题目直接提供给生成式AI等程序。请查看以下规则以获取更多信息。",
-                "AtCoder生成AI対策ルール": "AtCoder生成式AI防范规则",
+                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
+                "AtCoder生成AI対策ルール - 20241115版": "AtCoder对于生成式AI的规定 - 20241115版本",
                 "現在": "目前",
                 "で参加登録しています。詳細は": "已報名參加。詳情請閱讀",
                 "こちら": "這裡",
@@ -352,7 +352,19 @@
                 "バーチャル順位表": "虛擬排名表",
                 "順位表": "排名表",
                 "コードテスト": "程式碼測試",
-                "解説": "題解"
+                "解説": "題解",
+                "Home": "首頁",
+                "Tasks": "問題",
+                "Clarifications": "提問",
+                "Submit": "提交",
+                "Results": "提交結果",
+                "All Submissions": "所有提交",
+                "My Submissions": "我的提交",
+                "My Score": "我的得分狀況",
+                "Virtual Standings": "虛擬排名表",
+                "Standings": "排名表",
+                "Custom Test": "程式碼測試",
+                "Editorial": "題解"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "搜尋存檔",
+                "Active Contests": "正在进行的比赛",
                 "Permanent Contests": "長期持續的比賽",
                 "Upcoming Contests": "即將舉行的比賽",
                 "Recent Contests": "最近的比賽",
@@ -745,10 +758,11 @@
             "rules": {
                 "You have registered for this contest as an": "您已經報名參加了這場比賽，作為一個",
                 "You have registered for this contest as a": "您已經報名參加了這場比賽，作為一個",
-                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "禁止将正在进行的AtCoder比赛中发布的问题的全部或部分信息直接输入到生成式AI软件中。请参考",
                 "participant. Please refer to": "參與者。請參考",
                 "this post": "這篇文章",
                 "for details.": "了解詳情。",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder对于生成式AI的规定 - 20241115版本",
                 "participant": "參與者",
                 "Registered": "已報名",
                 "Canceled registration": "已取消報名",

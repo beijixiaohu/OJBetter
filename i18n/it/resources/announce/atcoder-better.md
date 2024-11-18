@@ -36,7 +36,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2

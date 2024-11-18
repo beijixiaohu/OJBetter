@@ -321,8 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "In order to prevent cheating by generative AIs and other programs, this tournament prohibits providing questions directly to generative AIs and other programs. Please review the rules below for more information.",
-                "AtCoder生成AI対策ルール": "AtCoder Generative AI Precautionary Rules",
+                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "The use of generative AI in ongoing AtCoder competitions is prohibited. please refer to the rules below for details.",
+                "AtCoder生成AI対策ルール - 20241115版": "AtCoder's Provisions for Generative AI - Version 20241115",
                 "現在": "be facing (us)",
                 "で参加登録しています。詳細は": "Signed up to participate. For more information, please read",
                 "こちら": "here are",
@@ -352,7 +352,19 @@
                 "バーチャル順位表": "virtual league table",
                 "順位表": "league table",
                 "コードテスト": "code testing",
-                "解説": "notes"
+                "解説": "notes",
+                "Home": "fig. beginning",
+                "Tasks": "concern",
+                "Clarifications": "ask questions",
+                "Submit": "Submit",
+                "Results": "Submission of results",
+                "All Submissions": "All submissions",
+                "My Submissions": "My Submission",
+                "My Score": "How I scored.",
+                "Virtual Standings": "virtual league table",
+                "Standings": "league table",
+                "Custom Test": "code testing",
+                "Editorial": "notes"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "Search Archives",
+                "Active Contests": "ongoing match",
                 "Permanent Contests": "Long lasting matches",
                 "Upcoming Contests": "Upcoming competitions",
                 "Recent Contests": "Recent matches",
@@ -745,10 +758,11 @@
             "rules": {
                 "You have registered for this contest as an": "You have signed up for this race as a",
                 "You have registered for this contest as a": "You have signed up for this race as a",
-                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "It is prohibited to enter all or part of the information from a question posted in an ongoing AtCoder contest directly into generative AI software. Please refer to",
                 "participant. Please refer to": "Participants. Please refer to",
                 "this post": "this article",
                 "for details.": "Learn more.",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "The use of generative AI in ongoing AtCoder competitions is prohibited. please refer to the rules below for details.",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder's Provisions for Generative AI - Version 20241115",
                 "participant": "participant",
                 "Registered": "Enrolled",
                 "Canceled registration": "Cancelled enrollment",

@@ -321,8 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "Um Betrügereien wie generative KI zu verhindern, ist es bei diesem Wettbewerb verboten, Fragen direkt an generative KI und andere Programme zu stellen. Bitte lesen Sie die unten stehenden Regeln für weitere Informationen.",
-                "AtCoder生成AI対策ルール": "AtCoder Generative KI Vorsorgliche Regeln",
+                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "Die Verwendung von generativer KI in laufenden AtCoder-Wettbewerben ist untersagt. Einzelheiten entnehmen Sie bitte den unten stehenden Regeln.",
+                "AtCoder生成AI対策ルール - 20241115版": "AtCoder's Bestimmungen für generative KI - Version 20241115",
                 "現在": "zugewandt sein (uns)",
                 "で参加登録しています。詳細は": "haben sich zur Teilnahme angemeldet. Für weitere Informationen lesen Sie bitte",
                 "こちら": "hier sind",
@@ -352,7 +352,19 @@
                 "バーチャル順位表": "virtuelle Rangliste",
                 "順位表": "Rangliste",
                 "コードテスト": "Code-Prüfung",
-                "解説": "Notizen"
+                "解説": "Notizen",
+                "Home": "Abb. Anfang",
+                "Tasks": "Ausgaben",
+                "Clarifications": "Fragen stellen",
+                "Submit": "einreichen (einen Bericht usw.)",
+                "Results": "Einreichung der Ergebnisse",
+                "All Submissions": "Alle Einsendungen",
+                "My Submissions": "Meine Einreichung",
+                "My Score": "Wie ich gepunktet habe.",
+                "Virtual Standings": "virtuelle Rangliste",
+                "Standings": "Rangliste",
+                "Custom Test": "Code-Prüfung",
+                "Editorial": "Notizen"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "Suche im Archiv",
+                "Active Contests": "laufende Übereinstimmung",
                 "Permanent Contests": "Langfristige Wettbewerbe",
                 "Upcoming Contests": "Kommende Auswahlverfahren",
                 "Recent Contests": "Jüngste Spiele",
@@ -745,10 +758,11 @@
             "rules": {
                 "You have registered for this contest as an": "Sie haben sich für dieses Rennen angemeldet als",
                 "You have registered for this contest as a": "Sie haben sich für dieses Rennen angemeldet als",
-                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "Es ist verboten, alle oder einen Teil der Informationen aus einer Frage, die in einem laufenden AtCoder-Wettbewerb gestellt wurde, direkt in generative KI-Software einzugeben. Bitte beachten Sie",
                 "participant. Please refer to": "Teilnehmer. Bitte beziehen Sie sich auf",
                 "this post": "dieser Artikel",
                 "for details.": "Erfahren Sie mehr.",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "Die Verwendung von generativer KI in laufenden AtCoder-Wettbewerben ist untersagt. Einzelheiten entnehmen Sie bitte den unten stehenden Regeln.",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder's Bestimmungen für generative KI - Version 20241115",
                 "participant": "Teilnehmer",
                 "Registered": "Eingeschrieben",
                 "Canceled registration": "Annullierte Anmeldung",

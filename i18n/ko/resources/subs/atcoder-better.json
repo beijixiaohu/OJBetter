@@ -321,8 +321,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "このコンテストでは、生成AI対策のため、問題文を直接生成AIなどのプログラムに与えることを禁止しております。詳しくは以下のルールをご確認ください。": "본 대회에서는 생성 인공지능 등의 부정행위를 방지하기 위해 생성 인공지능 및 기타 프로그램에 직접 문제를 제공하는 것을 금지합니다. 자세한 내용은 아래 규정을 참조하세요.",
-                "AtCoder生成AI対策ルール": "AtCoder 제너레이티브 AI 예방 규칙",
+                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "현재 진행 중인 AtCoder 대회에서 생성 AI를 사용하는 것은 금지됩니다. 자세한 내용은 아래 규정을 참조하세요.",
+                "AtCoder生成AI対策ルール - 20241115版": "AtCoder의 제너레이티브 AI 규정 - 버전 20241115",
                 "現在": "(우리를) 마주보고",
                 "で参加登録しています。詳細は": "에 참여하겠다고 등록했습니다. 자세한 내용은 다음을 참조하세요.",
                 "こちら": "다음은 다음과 같습니다.",
@@ -352,7 +352,19 @@
                 "バーチャル順位表": "가상 리그 테이블",
                 "順位表": "리그 테이블",
                 "コードテスト": "코드 테스트",
-                "解説": "메모"
+                "解説": "메모",
+                "Home": "무화과 시작",
+                "Tasks": "이슈",
+                "Clarifications": "질문하기",
+                "Submit": "제출(보고서 등)",
+                "Results": "결과 제출",
+                "All Submissions": "모든 제출물",
+                "My Submissions": "내 제출물",
+                "My Score": "득점 방법.",
+                "Virtual Standings": "가상 리그 테이블",
+                "Standings": "리그 테이블",
+                "Custom Test": "코드 테스트",
+                "Editorial": "메모"
             }
         },
         ".panel-heading": {
@@ -531,6 +543,7 @@
             "isStrict": false,
             "rules": {
                 "Search in Archive": "아카이브 검색",
+                "Active Contests": "진행 중인 경기",
                 "Permanent Contests": "오래 지속되는 대회",
                 "Upcoming Contests": "예정된 대회",
                 "Recent Contests": "최근 경기",
@@ -745,10 +758,11 @@
             "rules": {
                 "You have registered for this contest as an": "귀하는 이 레이스에",
                 "You have registered for this contest as a": "귀하는 이 레이스에",
-                "It is prohibited to directly input all or part of the information issued as problems in ongoing AtCoder contests into software. Please refer to ": "현재 진행 중인 AtCoder 콘테스트에 게시된 문제의 전체 또는 일부 정보를 생성 AI 소프트웨어에 직접 입력하는 것은 금지되어 있습니다. 다음을 참조하세요.",
                 "participant. Please refer to": "참가자 다음을 참조하세요.",
                 "this post": "이 문서",
                 "for details.": "자세히 알아보세요.",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "현재 진행 중인 AtCoder 대회에서 생성 AI를 사용하는 것은 금지됩니다. 자세한 내용은 아래 규정을 참조하세요.",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder의 제너레이티브 AI 규정 - 버전 20241115",
                 "participant": "참가자",
                 "Registered": "등록",
                 "Canceled registration": "등록 취소",
