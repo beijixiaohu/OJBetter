@@ -382,6 +382,10 @@
             "title": "图标按钮大小",
             "helpText": "<p>设置翻译按钮的大小</p>",
             "placeholder": "请输入按钮大小"
+        },
+        "showSameContestProblems": {
+            "title": "显示同场题目列表",
+            "helpText": "开启后在题目界面中会显示本场比赛的题目列表"
         }
     },
     "about": {
