@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.9
+// @version      1.17.10
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -9717,7 +9717,7 @@ async function showRatingByClist_problemset() {
 async function ShowSameContestProblems(){
     // 获取当前页面的URL信息
     const url = window.location.href;
-    const match_ = url.match("https://atcoder\.jp/contests/[a-z0-9]*/tasks/");
+    const match_ = url.match("https://atcoder.jp/contests/[a-z0-9]*/tasks/");
     const match = match_[0];
     console.log(match);
     console.log(match.split('/'));
