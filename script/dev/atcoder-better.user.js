@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.10
+// @version      1.17.11
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -9719,8 +9719,6 @@ async function ShowSameContestProblems(){
     const url = window.location.href;
     const match_ = url.match("https://atcoder.jp/contests/[a-z0-9]*/tasks/");
     const match = match_[0];
-    console.log(match);
-    console.log(match.split('/'));
     if (!match_) {
         console.error('URL不匹配');
         return;
@@ -9734,7 +9732,6 @@ async function ShowSameContestProblems(){
         console.error('找不到目标元素');
         return;
     }
-    console.log(mainSpan);
 
     const select = document.createElement('span');
     select.style.display = 'block';
@@ -9752,7 +9749,6 @@ async function ShowSameContestProblems(){
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const table = doc.querySelector('.table.table-bordered.table-striped');
-            console.log(table);
             if (!table) {
                 console.error('找不到任务表格');
                 return;
@@ -13950,6 +13946,7 @@ function initOnDOMReady() {
     if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
+    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem)ShowSameContestProblems(); //显示同比赛题目列表
 }
 
 /**
@@ -13969,7 +13966,6 @@ function initializeInParallel(loadingMessage) {
     // if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
     if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
-    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem)ShowSameContestProblems(); //显示同比赛题目列表
 }
 
 /**
