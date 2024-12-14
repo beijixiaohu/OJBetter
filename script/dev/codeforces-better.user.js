@@ -8807,6 +8807,7 @@ async function transTask(button, element, type, is_comment, overrideTrans) {
         count,
         overrideTrans
       );
+      await new Promise(resolve => setTimeout(resolve, OJBetter.translation.waitTime));
     }
   } else if (OJBetter.translation.comment.transMode == "2") {
     // 选段翻译
