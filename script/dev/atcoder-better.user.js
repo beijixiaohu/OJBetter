@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.11
+// @version      1.17.12
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -7053,16 +7053,13 @@ async function initHTML2MarkDown() {
 class TaskQueue {
     constructor() {
         this.taskQueues = {};
-        this.isProcessing = {}; // 处理状态
+        this.timers = {}; // 定时器
         this.delays = {}; // 等待时间（毫秒）
+        this.isProcessing = {}; // 处理状态
     }
 
     getDelay(type) {
-        if (type === 'openai') {
-            return 0;
-        } else {
-            return OJBetter.translation.waitTime;
-        }
+        return type === "openai" ? 0 : OJBetter.translation.waitTime;
     }
 
     /**
@@ -7070,42 +7067,46 @@ class TaskQueue {
      * @param {string} type 任务类型
      * @param {function} fn 任务函数
      * @param {boolean} isNonQueueTask 是否为非队列任务
+     * @returns {Promise<*>} 任务执行的结果
      */
     addTask(type, fn, isNonQueueTask = false) {
+        if (isNonQueueTask) return fn();
+
         if (!this.taskQueues[type]) {
             this.taskQueues[type] = [];
+            this.isProcessing[type] = false;
         }
 
-        if (isNonQueueTask) {
-            fn();
-        } else {
-            this.taskQueues[type].push(fn);
-
+        return new Promise((resolve, reject) => {
+            this.taskQueues[type].push({ fn, resolve, reject });
             if (!this.isProcessing[type]) {
-                this.processQueue(type);
+                this.processNextTask(type);
             }
-        }
-    }
-
-    async processQueue(type) {
-        this.isProcessing[type] = true;
-
-        while (this.taskQueues[type].length > 0) {
-            const task = this.taskQueues[type].shift();
-            await task();
-
-            if (this.taskQueues[type].length > 0) {
-                await this.wait(this.getDelay(type));
-            }
-        }
-
-        this.isProcessing[type] = false;
-    }
-
-    wait(delay) {
-        return new Promise(resolve => {
-            setTimeout(resolve, delay);
         });
+    }
+
+    async processNextTask(type) {
+        if (!this.taskQueues[type] || this.taskQueues[type].length === 0) {
+            this.isProcessing[type] = false;
+            return;
+        }
+
+        this.isProcessing[type] = true;
+        const { fn, resolve, reject } = this.taskQueues[type].shift();
+
+        try {
+            const result = await fn();
+            resolve(result);
+        } catch (error) {
+            reject(error);
+        }
+
+        const delay = this.getDelay(type);
+        if (delay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+
+        this.processNextTask(type);
     }
 }
 
@@ -7523,7 +7524,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
      */
     button.data("translatedItBy", function (translation) {
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        OJBetter.common.taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
+        executeTranslation(button, element, type, is_comment, translation);
     });
 
     // 等待MathJax队列完成
@@ -7571,7 +7572,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // 翻译
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        OJBetter.common.taskQueue.addTask(OJBetter.translation.choice, () => transTask(button, element, type, is_comment), OJBetter.translation.choice == 'openai');
+        executeTranslation(button, element, type, is_comment);
     }));
 
     // 重新翻译提示
@@ -7672,14 +7673,14 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 }
 
 /**
- * 创建翻译任务
+ * 处理按钮的翻译事件
  * @param {JQuery<HTMLElement>} button 按钮
  * @param {HTMLElement} element 目标元素
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
-async function transTask(button, element, type, is_comment, overrideTrans) {
+async function executeTranslation(button, element, type, is_comment, overrideTrans) {
     /** @type {HTMLElement} 目标元素 */
     let target;
     /**
@@ -7783,7 +7784,18 @@ async function blockProcessing(button, target, element_node, is_comment, overrid
         target.markdown = OJBetter.common.turndownService.turndown($(target).html());
     }
 
-    const result = await translateProblemStatement(target.markdown, element_node, is_comment, overrideTrans);
+    const result = await OJBetter.common.taskQueue.addTask(
+        OJBetter.translation.choice,
+        () =>
+            translateMain(
+                target.markdown,
+                element_node,
+                is_comment,
+                overrideTrans
+            ),
+        OJBetter.translation.choice == "openai"
+    );
+
     if (result.status == "skip") {
         button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
         result.translateDiv.close();
@@ -8547,7 +8559,7 @@ async function initTransWhenViewable() {
  * @param {string} overrideTrans 覆盖全局翻译服务设定
  * @returns {TranslateResult} 翻译结果对象
  */
-async function translateProblemStatement(text, element_node, is_comment, overrideTrans) {
+async function translateMain(text, element_node, is_comment, overrideTrans) {
     /** @type {number} 翻译结果的ID*/
     const id = OJB_getRandomNumber(8);
     /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
@@ -9714,7 +9726,7 @@ async function showRatingByClist_problemset() {
     }
 }
 
-async function ShowSameContestProblems(){
+async function ShowSameContestProblems() {
     // 获取当前页面的URL信息
     const url = window.location.href;
     const match_ = url.match("https://atcoder.jp/contests/[a-z0-9]*/tasks/");
@@ -13946,7 +13958,7 @@ function initOnDOMReady() {
     if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
-    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem)ShowSameContestProblems(); //显示同比赛题目列表
+    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem) ShowSameContestProblems(); //显示同比赛题目列表
 }
 
 /**
