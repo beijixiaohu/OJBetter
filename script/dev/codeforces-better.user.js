@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.18
+// @version      1.76.19
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -16604,8 +16604,12 @@ async function queryServerBalance(quotaConfig) {
     headers: {
       ...Object.assign({}, ...quotaConfig.header),
     },
-    data: JSON.stringify({ ...Object.assign({}, ...quotaConfig.data) }),
   };
+
+  // 只有在 method 不是 'GET' 时才添加 data
+  if (requestOptions.method.toUpperCase() !== 'GET' && quotaConfig.data) {
+    requestOptions.data = JSON.stringify({ ...Object.assign({}, ...quotaConfig.data) });
+  }
 
   // 发送请求并返回 Promise
   return OJB_GMRequest(requestOptions)
