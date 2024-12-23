@@ -24,7 +24,7 @@
 - 修复 重新翻译时"收起旧的结果"报错的问题
 - 修复 submission 页面中复制按钮失效的问题
 - 修复 MarkDown 转换时未过滤 script 标签的问题
-- 使用 polyfill 以兼容不支持 dialog.showModal() 方法的浏览器（比如 Firefox79）
+- 使用 polyfill 以兼容不支持 dialog.showModal() 方法的瀏覽器（比如 Firefox79）
 
 ## 1.74.2
 
