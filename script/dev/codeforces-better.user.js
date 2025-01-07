@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.20
+// @version      1.76.21
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -11531,6 +11531,7 @@ async function recolorStandings() {
  */
 const StatusAcronyms = {
   Accepted: "AC",
+  "Happy New Year!": "AC",
   "Wrong answer": "WA",
   "Time limit exceeded": "TLE",
   "Memory limit exceeded": "MLE",
