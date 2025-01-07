@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.19
+// @version      1.76.20
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1811,7 +1811,7 @@ const handleColorSchemeChange = (event) => {
             border: none;
         }
         /* 区域遮罩 */
-        html[data-theme=dark] .overlay::before {
+        html[data-theme=dark] .ojb-overlay::before {
             background: var(--ojb-overlay-background);
             color: var(--ojb-color-text-secondary);
             text-shadow: 0px 0px 2px #000000;
@@ -4117,7 +4117,7 @@ function addDependencyStyles() {
 function addI18nStyles() {
   GM_addStyle(`
     /* 加载鼠标悬浮覆盖层css */
-    .overlay::before {
+    .ojb-overlay::before {
         content: '';
         position: absolute;
         top: 0;
@@ -4127,7 +4127,7 @@ function addI18nStyles() {
         background: repeating-linear-gradient(135deg, rgb(77 208 225 / 30%), rgb(77 208 225 / 30%) 30px, rgb(77 208 225 / 10%) 0px, rgb(77 208 225 / 10%) 55px);
         z-index: 100;
     }
-    .overlay::after {
+    .ojb-overlay::after {
         content: '${i18next.t("targetArea", { ns: "common" })}';
         position: absolute;
         top: 50%;
@@ -7864,7 +7864,7 @@ async function initHTML2MarkDown() {
       return (
         node.classList.contains("sample-tests") ||
         node.classList.contains("header") ||
-        node.classList.contains("overlay") ||
+        node.classList.contains("ojb-overlay") ||
         node.classList.contains("html2md-panel") ||
         node.classList.contains("likeForm") ||
         node.classList.contains("monaco-editor") ||
@@ -8098,13 +8098,13 @@ async function initButtonFunc() {
 
     this.hover(
       () => {
-        $(target).addClass("overlay").css("position", "relative");
+        $(target).addClass("ojb-overlay").css("position", "relative");
         if (display == "inline" || display == "contents") {
           $(target).css("display", "block");
         }
       },
       () => {
-        $(target).removeClass("overlay").css("position", position);
+        $(target).removeClass("ojb-overlay").css("position", position);
         if (display == "inline" || display == "contents") {
           $(target).css("display", display);
         }
