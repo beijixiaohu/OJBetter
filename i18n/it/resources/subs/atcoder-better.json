@@ -226,7 +226,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "ーチャル参加とは、コンテストに仮想的に参加できる機能です。": "La partecipazione virtuale è una funzione che consente di partecipare a un concorso in modo virtuale.",
+                "バーチャル参加とは、コンテストに仮想的に参加できる機能です。": "La partecipazione virtuale è una funzione che consente di partecipare a un concorso in modo virtuale.",
                 "バーチャル参加を開始すると、": "Dopo aver iniziato a partecipare virtualmente, il",
                 "バーチャル順位表": "classifica virtuale",
                 "が経過時間に応じてリアルタイムに更新されていきます。": "Verrà aggiornato in tempo reale in base al tempo trascorso.",
@@ -352,6 +352,7 @@
                 "バーチャル順位表": "classifica virtuale",
                 "順位表": "classifica",
                 "コードテスト": "test del codice",
+                "バーチャル参加": "partecipazione virtuale",
                 "解説": "note",
                 "Home": "inizio fig.",
                 "Tasks": "problemi",
