@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Atcoder Better!
+// @name         AtCoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.14
+// @version      1.17.15
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -61,16 +61,16 @@
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
 // @downloadURL  https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.user.js
 // @updateURL    https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.meta.js
-// @name:zh-TW   Atcoder Better!
-// @name:en      Atcoder Better!
-// @name:de      Atcoder Better!
-// @name:fr      Atcoder Better!
-// @name:ko      Atcoder Better!
-// @name:pt      Atcoder Better!
-// @name:ja      Atcoder Better!
-// @name:es      Atcoder Better!
-// @name:it      Atcoder Better!
-// @name:hi      Atcoder Better!
+// @name:zh-TW   AtCoder Better!
+// @name:en      AtCoder Better!
+// @name:de      AtCoder Better!
+// @name:fr      AtCoder Better!
+// @name:ko      AtCoder Better!
+// @name:pt      AtCoder Better!
+// @name:ja      AtCoder Better!
+// @name:es      AtCoder Better!
+// @name:it      AtCoder Better!
+// @name:hi      AtCoder Better!
 // @description         一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @description:zh-TW   一個適用於 AtCoder 的 Tampermonkey 腳本，增強功能與界面。
 // @description:en      A Tampermonkey script for AtCoder that enhances functionality and interface.
