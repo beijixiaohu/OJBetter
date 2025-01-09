@@ -49,7 +49,7 @@
             "tipText": "<strong>Description:</strong><p><a target='_blank' href='https://www.deepl.com/zh/pro#developer'>DeepL Membership</a> is divided into Individual Membership and API Membership, you need to be API Member,</p><p>where API Membership is divided into Free Plan (api-free) and Pro Plan (api-pro), they have different request address, please don't choose the wrong one.</p><p>You need to fill in the key. If you need to use the proxy address to access it, fill in the Proxy API.</p><p><a target='_blank' href='https://github.com/OwO-Network/DeepLX'>deeplx</a> is an unofficial API project which is accessed by simulating the IOS side, so it doesn't support all the parameters of the official API, and you can deploy it by yourself or use the public API. Fill in the Proxy API field with the address of your service.</p><p>If you don't fill in the field, the public interface will be used by default：https://api.deeplx.org/translate</p><p>If you don't enable token authentication, then the Key field can be left empty.</p>"
         },
         "basic": {
-            "title": "fundamental",
+            "title": "General Settings",
             "name": {
                 "label": "Name.",
                 "placeholder": "Please enter a name for this configuration"
@@ -68,7 +68,7 @@
     "chatgpt": {
         "title": "Configuration",
         "basic": {
-            "title": "fundamental",
+            "title": "General Settings",
             "name": {
                 "label": "Name.",
                 "placeholder": "Please enter a name for this configuration"

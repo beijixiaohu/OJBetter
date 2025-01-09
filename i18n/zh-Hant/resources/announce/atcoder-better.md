@@ -24,7 +24,7 @@
 - 修复  MarkDown 转换时未过滤 script 标签的问题
 - 修复 一些比赛无法跳转至洛谷的问题
 - 修改 clist rating 的颜色为 AtCoder 的颜色规则
-- 使用 polyfill 以兼容不支持 dialog.showModal() 方法的浏览器（比如 Firefox79）
+- 使用 polyfill 以兼容不支持 dialog.showModal() 方法的瀏覽器（比如 Firefox79）
 
 ## 1.15.2
 
