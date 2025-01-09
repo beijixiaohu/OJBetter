@@ -18,7 +18,7 @@
                 "パスワードの変更": "修改密码",
                 "お気に入り管理": "收藏夹管理",
                 "ログアウト": "注销",
-                "AtCoderInfo": "AtCoder信息"
+                "AtCoderInfo": "AtCoder 信息"
             }
         },
         ".a-title_ttl": {
@@ -65,9 +65,9 @@
             "rules": {
                 "解けた！を": "解决了！",
                 "世界に届けたい。": "告诉全世界。",
-                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder是世界顶尖的竞技编程网站。",
+                "AtCoderは、世界最高峰の競技プログラミングサイトです。": "AtCoder 是世界顶尖的竞技编程网站。",
                 "リアルタイムのオンラインコンテストで競い合うことや、": "您可以参加实时在线比赛，",
-                "5,000以上の過去問にいつでもチャレンジすることができます。": "随时挑战超过5,000道历年题目。"
+                "5,000以上の過去問にいつでもチャレンジすることができます。": "随时挑战超过 5,000 道历年题目。"
             }
         },
         "strictTraverseTextNodes": {
@@ -90,7 +90,7 @@
                 "過去のコンテスト": "过去的比赛",
                 "過去のコンテストを検索": "搜索过去的比赛",
                 "コンテスト": "比赛",
-                "AtCoder練習・活用サービス": "AtCoder练习/应用服务"
+                "AtCoder練習・活用サービス": "AtCoder 练习 / 应用服务"
             }
         },
         "traverseTextNodes": {
@@ -147,7 +147,7 @@
                 "プロフィール": "个人资料",
                 "コンテスト成績表": "比赛成绩表",
                 "設定": "设置",
-                "メールアドレスの更新・認証": "更新/认证电子邮件地址",
+                "メールアドレスの更新・認証": "更新 / 认证电子邮件地址",
                 "收藏管理": "收藏管理",
                 "ユーザ名照会": "用户名查询",
                 "ユーザ名の変更": "更改用户名",
@@ -174,25 +174,25 @@
             "isStrict": false,
             "rules": {
                 "Rated対象": "限定范围",
-                "ABCクラス": "ABC类别",
-                "\\(Rated上限: 1999\\)": "(Rated上限: 1999)",
-                "ARCクラス": "ARC类别",
-                "\\(Rated上限: 2799\\)": "(Rated上限: 2799)",
-                "AGCクラス": "AGC类别",
-                "\\(Rated上限なし\\)": "(无Rated上限)",
-                "AHCクラス": "AHC类别",
+                "ABCクラス": "ABC 类别",
+                "\\(Rated上限: 1999\\)": "(Rated 上限: 1999)",
+                "ARCクラス": "ARC 类别",
+                "\\(Rated上限: 2799\\)": "(Rated 上限: 2799)",
+                "AGCクラス": "AGC 类别",
+                "\\(Rated上限なし\\)": "(无 Rated 上限)",
+                "AHCクラス": "AHC 类别",
                 "カテゴリ": "分类",
                 "全て": "全部",
-                "AtCoder Typical Contest": "AtCoder经典比赛",
-                "PAST過去問": "PAST历年问题",
-                "AtCoder Daily Training": "AtCoder每日训练",
+                "AtCoder Typical Contest": "AtCoder 经典比赛",
+                "PAST過去問": "PAST 历年问题",
+                "AtCoder Daily Training": "AtCoder 每日训练",
                 "非公式コンテスト\\(unrated\\)": "非官方比赛（未评级）",
-                "JOI過去問": "JOI历年问题",
+                "JOI過去問": "JOI 历年问题",
                 "企業コンテスト決勝": "企业比赛决赛",
                 "企業オープンコンテスト\\(rated\\)": "企业公开比赛（已评级）",
                 "企業オープンコンテスト\\(unrated\\)": "企业公开比赛（未评级）",
-                "企業ABC": "企业ABC",
-                "企業ARC": "企业ARC",
+                "企業ABC": "企业 ABC",
+                "企業ARC": "企业 ARC",
                 "ヒューリスティック": "启发式",
                 "企業ヒューリスティック": "企业启发式",
                 "企業启发式": "企业启发式",
@@ -249,22 +249,22 @@
                 "コンテスト": "比赛",
                 "ランキング": "排名",
                 "便利リンク集": "实用链接",
-                "AtCoderJobs": "AtCoder职位",
-                "AtCoder职位トップ": "AtCoder职位首页",
-                "AtCoderJobsトップ": "AtCoder职位首页",
-                "2024年新卒採用求人一覧": "2024年应届毕业生招聘职位列表",
-                "2025年新卒採用求人一覧": "2025年应届毕业生招聘职位列表",
+                "AtCoderJobs": "AtCoder 职位",
+                "AtCoder职位トップ": "AtCoder 职位首页",
+                "AtCoderJobsトップ": "AtCoder 职位首页",
+                "2024年新卒採用求人一覧": "2024 年应届毕业生招聘职位列表",
+                "2025年新卒採用求人一覧": "2025 年应届毕业生招聘职位列表",
                 "中途採用求人一覧": "社会人招聘职位列表",
                 "インターン求人一覧": "实习职位列表",
                 "アルバイト求人一覧": "兼职职位列表",
                 "その他求人一覧": "其他职位列表",
-                "AtCoder社による職業紹介求人一覧": "由AtCoder公司提供的职业介绍职位列表",
+                "AtCoder社による職業紹介求人一覧": "由 AtCoder 公司提供的职业介绍职位列表",
                 "採用担当者の方へ": "给招聘负责人的信息",
                 "検定": "认证考试",
                 "検定トップ": "认证考试首页",
                 "认证考试トップ": "认证考试首页",
                 "マイページ": "个人主页",
-                "AtCoderCareerDesign": "AtCoder职业设计",
+                "AtCoderCareerDesign": "AtCoder 职业设计",
                 "キャリアデザイントップ": "职业设计首页",
                 "About": "关于",
                 "企業情報": "企业信息",
@@ -276,7 +276,7 @@
                 "用語集": "术语表",
                 "プライバシーポリシー": "隐私政策",
                 "個人情報保護方針": "个人信息保护政策",
-                "Copyright Since 2012 \\(C\\) AtCoder Inc. All rights reserved.": "版权所有 © 2012年起 AtCoder公司。保留所有权利。"
+                "Copyright Since 2012 \\(C\\) AtCoder Inc. All rights reserved.": "版权所有 © 2012 年起 AtCoder 公司。保留所有权利。"
             }
         },
         ".editor-buttons-jp": {
@@ -321,8 +321,9 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
-                "AtCoder生成AI対策ルール - 20241115版": "AtCoder对于生成式AI的规定 - 20241115版本",
+                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。请参考下面的规则了解详情。",
+                "AtCoder生成AI対策ルール - 20241115版": "AtCoder 对于生成式 AI 的规定 - 20241115 版本",
+                "AtCoder生成AI対策ルール - 20241206版": "AtCoder 对于生成式 AI 的规定 - 20241206 版本",
                 "現在": "当前",
                 "で参加登録しています。詳細は": "已报名参加。详情请阅读",
                 "こちら": "这里",
@@ -330,7 +331,7 @@
                 "参加登録を取り消しました。": "已取消报名。",
                 "ログアウトしました。": "已退出登录。",
                 "ようこそ、": "欢迎，",
-                "さん": "先生/女士"
+                "さん": "先生 / 女士"
             }
         },
         ".h2, h2": {
@@ -412,7 +413,7 @@
                 "Rated対象": "计分对象",
                 "時間": "时长",
                 "開始時刻": "开始时间",
-                "Rated/Unrated参加についての詳細は": "有关Rated/Unrated参加的详细信息，请参考",
+                "Rated/Unrated参加についての詳細は": "有关 Rated / Unrated 参加的详细信息，请参考",
                 "こちら": "这里"
             }
         },
@@ -510,7 +511,7 @@
                 "Competition History": "比赛记录",
                 "General Settings": "常规设置",
                 "Settings": "设置",
-                "Change/Verify Email address": "更改/验证电子邮件地址",
+                "Change/Verify Email address": "更改 / 验证电子邮件地址",
                 "Remind Username": "提醒用户名",
                 "Change Username": "更改用户名",
                 "Delete Account": "删除账户",
@@ -601,7 +602,7 @@
                 "Sign In": "登录",
                 "Sign Up": "注册",
                 "Nickname": "昵称",
-                "Country/Region": "国家/地区",
+                "Country/Region": "国家 / 地区",
                 "Birth Year": "出生年份",
                 "Affiliation": "机构",
                 "Email Notifications": "邮件通知",
@@ -621,7 +622,7 @@
                 "Other": "其他",
                 "Organization Name \\(Company Name or School Name\\)": "组织名称（公司名称或学校名称）",
                 "Depertment \\(For Students\\)": "部门（适用于学生）",
-                "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "您是否有意向或计划在2023年或2024年找工作或换工作？",
+                "Do you have any intention or plan to find a job or change jobs in 2023 or 2024?": "您是否有意向或计划在 2023 年或 2024 年找工作或换工作？",
                 "Graduation Schedule": "毕业时间表",
                 "I'm already employed.": "我已经就业了。",
                 "Later years": "以后的几年",
@@ -762,8 +763,9 @@
                 "participant. Please refer to": "参与者。请参考",
                 "this post": "这篇文章",
                 "for details.": "了解详情。",
-                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
-                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder对于生成式AI的规定 - 20241115版本",
+                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。请参考下面的规则了解详情。",
+                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder 对于生成式 AI 的规定 - 20241115 版本",
+                "AtCoder Rules against Generative AI - Version 20241206": "AtCoder 对于生成式 AI 的规定 - 20241206 版本",
                 "participant": "参与者",
                 "Registered": "已报名",
                 "Canceled registration": "已取消报名",
@@ -793,7 +795,7 @@
             "rules": {
                 "Please refer to ": "请参考",
                 "this post": "这篇文章",
-                " for detailed information on Rated/Unrated registration.": "以获取有关评级/非评级报名的详细信息。"
+                " for detailed information on Rated/Unrated registration.": "以获取有关评级 / 非评级报名的详细信息。"
             }
         },
         "footer": {
