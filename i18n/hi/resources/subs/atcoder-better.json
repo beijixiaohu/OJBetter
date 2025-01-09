@@ -323,6 +323,7 @@
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
                 "AtCoder生成AI対策ルール - 20241115版": "AtCoder对于生成式AI的规定 - 20241115版本",
+                "AtCoder生成AI対策ルール - 20241206版": "AtCoder 对于生成式 AI 的规定 - 20241206 版本",
                 "現在": "मौजूदा",
                 "で参加登録しています。詳細は": "भाग लेने के लिए पहले ही साइन अप कर लिया गया है. विवरण के लिए कृपया पढ़ें",
                 "こちら": "यहाँ",
@@ -764,6 +765,7 @@
                 "for details.": "और अधिक जानें।",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
                 "AtCoder Rules against Generative AI - Version 20241115": "AtCoder对于生成式AI的规定 - 20241115版本",
+                "AtCoder Rules against Generative AI - Version 20241206": "AtCoder 对于生成式 AI 的规定 - 20241206 版本",
                 "participant": "प्रतिभागियों",
                 "Registered": "दर्ज कराई",
                 "Canceled registration": "पंजीकरण रद्द कर दिया गया",
