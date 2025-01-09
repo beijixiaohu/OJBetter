@@ -323,6 +323,7 @@
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "L'uso dell'IA generativa nelle competizioni AtCoder in corso è vietato. Per maggiori dettagli, consultare le regole qui di seguito.",
                 "AtCoder生成AI対策ルール - 20241115版": "Disposizioni di AtCoder per l'IA generativa - Versione 20241115",
+                "AtCoder生成AI対策ルール - 20241206版": "Disposizioni AtCoder per l'IA generativa - Versione 20241206",
                 "現在": "essere di fronte a (noi)",
                 "で参加登録しています。詳細は": "si sono iscritti per partecipare. Per ulteriori informazioni, leggere",
                 "こちら": "qui ci sono",
@@ -764,6 +765,7 @@
                 "for details.": "Per saperne di più.",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "L'uso dell'IA generativa nelle competizioni AtCoder in corso è vietato. Per maggiori dettagli, consultare le regole qui di seguito.",
                 "AtCoder Rules against Generative AI - Version 20241115": "Disposizioni di AtCoder per l'IA generativa - Versione 20241115",
+                "AtCoder Rules against Generative AI - Version 20241206": "Disposizioni AtCoder per l'IA generativa - Versione 20241206",
                 "participant": "partecipanti",
                 "Registered": "Iscritta",
                 "Canceled registration": "Registrazione annullata",
