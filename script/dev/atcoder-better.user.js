@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         AtCoder Better!
+// @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.15
+// @version      1.17.16
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
