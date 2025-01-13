@@ -1,3 +1,17 @@
+## 1.77.0
+
+- Add "Sample Test Results Checker" option
+- Fix code block landscaping not switching theme correctly when dark mode is "follow system"
+- Fix "Review Status Text Replacement" not replaced correctly
+- Fix the problem of wrong translation of Yodo
+- Fix the problem that the translation result is not displayed in the reply part of the comment in segmented mode
+- Fix for missing last comment on comment differentiation page
+- Fix the problem that LaTeX color is overwritten in dark mode.
+- Fix the issue that the wait interval is invalid in "Segmented Translation" mode.
+- Fix an issue when querying API balances, thanks to **@x1uc**.
+- Fix overlay class name conflicts
+- Improve website localization rules, thanks to **@xiezheyuan**, **@Acfboy** for their contribution!
+
 ## 1.76.0
 
 - **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
