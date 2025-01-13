@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.16
+// @version      1.17.17
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -13362,77 +13362,124 @@ async function translate_youdao_mobile(raw) {
     const getcookie = (() => {
         // 生成IP地址
         const generateIP = () => {
-            return `${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}`;
-        }
+            return `${OJB_getRandomNumberInRange(
+                1,
+                255
+            )}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(
+                1,
+                255
+            )}.${OJB_getRandomNumberInRange(1, 255)}`;
+        };
         // 生成OUTFOX_SEARCH_USER_ID_NCOO的值
-        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(100000000, 999999999)}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
+        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(
+            100000000,
+            999999999
+        )}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
         // 生成OUTFOX_SEARCH_USER_ID的值
-        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(100000000, 999999999)}@${generateIP()}`;
+        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(
+            100000000,
+            999999999
+        )}@${generateIP()}`;
         return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
     })();
 
-    /**
-     * 生成随机时间戳
-     */
-    const gettime = (new Date()).getTime();
 
     /**
      * 生成sign
      */
-    const getsign = (() => {
+    const getsign = (e, t) => {
         const d = "fanyideskweb";
         const u = "webfanyi";
-        const t = "fsdsogkndfokasodnaso";
+
         function A(e) {
             return CryptoJS.MD5(e.toString()).toString(CryptoJS.enc.Hex);
         }
-        function w(e) {
-            return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+        return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+    };
+
+    // 获取key
+    const getKey = async (sign, time) => {
+        const urlData = {
+            "keyid": "webfanyi-key-getter",
+            "sign": sign,
+            "client": "fanyideskweb",
+            "product": "webfanyi",
+            "appVersion": "1.0.0",
+            "vendor": "web",
+            "pointParam": "client,mysticTime,product",
+            "mysticTime": time,
+            "keyfrom": "fanyi.web",
+            "mid": "1",
+            "screen": "1",
+            "model": "1",
+            "network": "wifi",
+            "abtest": "0",
+            "yduuid": "abcdefg"
         }
-        return w(gettime);
-    })();
+        const options = {
+            method: "GET",
+            url: `https://dict.youdao.com/webtranslate/key?${new URLSearchParams(urlData)}`,
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                Origin: "https://fanyi.youdao.com",
+                Referer: "https://fanyi.youdao.com/",
+            },
+        };
+        const response = await OJB_GMRequest(options);
+        if (!response.responseText)
+            throw new OJB_GMError(
+                "network",
+                "An unknown network error occurred!",
+                response
+            );
+        const { data } = JSON.parse(response.responseText);
+        return data;
+    }
 
     /**
      * 解码方法
      * @param {string} src 待解码的字符串
      * @returns {Object} 解码后的数据
      */
-    const decode = function (src) {
+    const decode = function (src, key, iv) {
         // 解码URL安全的Base64
         const decodeUrlSafeBase64 = (str) => {
-            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
             return base64;
-        }
+        };
 
-        // 使用MD5生成key和iv，取前16字节
-        const key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl";
-        const iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4";
         const keyHash = CryptoJS.MD5(key).toString();
         const ivHash = CryptoJS.MD5(iv).toString();
 
-        // 使用AES-128-CBC模式进行解密
         const keyForAES = keyHash.substring(0, 32);
         const ivForAES = ivHash.substring(0, 32);
 
-        // 解码URL安全的Base64
+        // 解码
         const decodedBase64 = decodeUrlSafeBase64(src);
 
         // 解密
-        const decrypted = CryptoJS.AES.decrypt({
-            ciphertext: CryptoJS.enc.Base64.parse(decodedBase64)
-        }, CryptoJS.enc.Hex.parse(keyForAES), {
-            iv: CryptoJS.enc.Hex.parse(ivForAES),
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        });
+        const decrypted = CryptoJS.AES.decrypt(
+            {
+                ciphertext: CryptoJS.enc.Base64.parse(decodedBase64),
+            },
+            CryptoJS.enc.Hex.parse(keyForAES),
+            {
+                iv: CryptoJS.enc.Hex.parse(ivForAES),
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7,
+            }
+        );
 
         // 将解密结果转换为Utf8字符串
         const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
 
         // 处理JSON字符串并解析
-        const jsonStr = decryptedStr.substring(0, decryptedStr.lastIndexOf("}") + 1);
+        const jsonStr = decryptedStr.substring(
+            0,
+            decryptedStr.lastIndexOf("}") + 1
+        );
         return JSON.parse(jsonStr);
-    }
+    };
     // 整理数据
     const organizeTranslation = (data) => {
         // 提取translateResult数组
@@ -13441,49 +13488,59 @@ async function translate_youdao_mobile(raw) {
         // 整理tgt字段
         return translateResult
             .flat()
-            .map(item => item.tgt)
-            .join('');
+            .map((item) => item.tgt)
+            .join("");
     };
+
+    /**
+     * 生成随机时间戳
+     */
+    const time = new Date().getTime();
+    const t = "asdjnjfenknafdfsdfsd";
+    const sign = getsign(time, t);
+    const { secretKey, aesKey, aesIv } = await getKey(sign, time);
     // 表单数据
     const data = {
-        "i": raw,
-        "from": "auto",
-        "to": getTargetLanguage('youdao'),
-        "dictResult": "true",
-        "keyid": "webfanyi",
-        "sign": getsign,
-        "client": "fanyideskweb",
-        "product": "webfanyi",
-        "appVersion": "1.0.0",
-        "vendor": "web",
-        "pointParam": "client,mysticTime,product",
-        "mysticTime": gettime,
-        "keyfrom": "fanyi.web",
-        "mid": "1",
-        "screen": "1",
-        "model": "1",
-        "network": "wifi",
-        "abtest": "0",
-        "yduuid": "abcdefg"
+        i: raw,
+        from: "auto",
+        to: getTargetLanguage("youdao"),
+        useTerm: "false",
+        domain: "0",
+        dictResult: "true",
+        keyid: "webfanyi",
+        sign: getsign(time, secretKey),
+        client: "fanyideskweb",
+        product: "webfanyi",
+        appVersion: "1.0.0",
+        vendor: "web",
+        pointParam: "client,mysticTime,product",
+        mysticTime: time,
+        keyfrom: "fanyi.web",
+        mid: "1",
+        screen: "1",
+        model: "1",
+        network: "wifi",
+        abtest: "0",
+        yduuid: "abcdefg",
     };
     const options = {
         method: "POST",
-        url: 'https://dict.youdao.com/webtranslate',
+        url: "https://dict.youdao.com/webtranslate",
         data: new URLSearchParams(data),
         anonymous: true,
         cookie: getcookie,
         headers: {
+            "Accept": "application/json, text/plain, */*",
+            'Sec-Fetch-Site': 'same-site',
             "Content-Type": "application/x-www-form-urlencoded",
-            'Referer': 'https://fanyi.youdao.com/',
-        }
-    }
-    return await BaseTranslate(options,
-        res => {
-            const decodeData = decode(res)
-            const result = organizeTranslation(decodeData);
-            return result.replace(/\n/g, "\n\n");
-        }
-    );
+            Referer: "https://fanyi.youdao.com/",
+        },
+    };
+    return await BaseTranslate(options, (res) => {
+        const decodeData = decode(res, aesKey, aesIv);
+        const result = organizeTranslation(decodeData);
+        return result.replace(/\n/g, "\n\n");
+    });
 }
 
 /**

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.21
+// @version      1.76.22
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -16030,52 +16030,78 @@ async function translate_youdao_web(raw) {
     return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
   })();
 
-  /**
-   * 生成随机时间戳
-   */
-  const gettime = new Date().getTime();
-
+  
   /**
    * 生成sign
    */
-  const getsign = (() => {
+  const getsign = (e, t) => {
     const d = "fanyideskweb";
     const u = "webfanyi";
-    const t = "fsdsogkndfokasodnaso";
+
     function A(e) {
       return CryptoJS.MD5(e.toString()).toString(CryptoJS.enc.Hex);
     }
-    function w(e) {
-      return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+    return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+  };
+
+  // 获取key
+  const getKey = async (sign, time) => {
+    const urlData = {
+      "keyid": "webfanyi-key-getter",
+      "sign": sign,
+      "client": "fanyideskweb",
+      "product": "webfanyi",
+      "appVersion": "1.0.0",
+      "vendor": "web",
+      "pointParam": "client,mysticTime,product",
+      "mysticTime": time,
+      "keyfrom": "fanyi.web",
+      "mid": "1",
+      "screen": "1",
+      "model": "1",
+      "network": "wifi",
+      "abtest": "0",
+      "yduuid": "abcdefg"
     }
-    return w(gettime);
-  })();
+    const options = {
+      method: "GET",
+      url: `https://dict.youdao.com/webtranslate/key?${new URLSearchParams(urlData)}`,
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        Origin: "https://fanyi.youdao.com",
+        Referer: "https://fanyi.youdao.com/",
+      },
+    };
+    const response = await OJB_GMRequest(options);
+    if (!response.responseText)
+      throw new OJB_GMError(
+        "network",
+        "An unknown network error occurred!",
+        response
+      );
+    const {data} = JSON.parse(response.responseText);
+    return data;
+  }
 
   /**
    * 解码方法
    * @param {string} src 待解码的字符串
    * @returns {Object} 解码后的数据
    */
-  const decode = function (src) {
+  const decode = function (src, key, iv) {
     // 解码URL安全的Base64
     const decodeUrlSafeBase64 = (str) => {
       let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
       return base64;
     };
 
-    // 使用MD5生成key和iv，取前16字节
-    const key =
-      "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl";
-    const iv =
-      "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4";
     const keyHash = CryptoJS.MD5(key).toString();
     const ivHash = CryptoJS.MD5(iv).toString();
 
-    // 使用AES-128-CBC模式进行解密
     const keyForAES = keyHash.substring(0, 32);
     const ivForAES = ivHash.substring(0, 32);
 
-    // 解码URL安全的Base64
+    // 解码
     const decodedBase64 = decodeUrlSafeBase64(src);
 
     // 解密
@@ -16112,20 +16138,30 @@ async function translate_youdao_web(raw) {
       .map((item) => item.tgt)
       .join("");
   };
+
+  /**
+   * 生成随机时间戳
+   */
+  const time = new Date().getTime();
+  const t = "asdjnjfenknafdfsdfsd";
+  const sign = getsign(time, t);
+  const {secretKey, aesKey, aesIv} = await getKey(sign, time);
   // 表单数据
   const data = {
     i: raw,
     from: "auto",
     to: getTargetLanguage("youdao"),
+    useTerm: "false",
+    domain: "0",
     dictResult: "true",
     keyid: "webfanyi",
-    sign: getsign,
+    sign: getsign(time, secretKey),
     client: "fanyideskweb",
     product: "webfanyi",
     appVersion: "1.0.0",
     vendor: "web",
     pointParam: "client,mysticTime,product",
-    mysticTime: gettime,
+    mysticTime: time,
     keyfrom: "fanyi.web",
     mid: "1",
     screen: "1",
@@ -16141,12 +16177,14 @@ async function translate_youdao_web(raw) {
     anonymous: true,
     cookie: getcookie,
     headers: {
+      "Accept": "application/json, text/plain, */*",
+      'Sec-Fetch-Site': 'same-site',
       "Content-Type": "application/x-www-form-urlencoded",
       Referer: "https://fanyi.youdao.com/",
     },
   };
   return await BaseTranslate(options, (res) => {
-    const decodeData = decode(res);
+    const decodeData = decode(res, aesKey, aesIv);
     const result = organizeTranslation(decodeData);
     return result.replace(/\n/g, "\n\n");
   });
