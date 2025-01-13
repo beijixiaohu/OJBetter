@@ -1,3 +1,14 @@
+## 1.18.0
+
+- Aggiungere l'opzione "Controllo dei risultati dei test campione".
+- Aggiunta della funzione "Mostra elenco di domande nello stesso campo", grazie al contributo di **@wrk-123**.
+- Correggere l'abbellimento dei blocchi di codice che non cambia correttamente tema quando la modalità scura è "Segui il sistema".
+- Risolvere il problema dell'errore di traduzione di Arigatou
+- Risolvere il problema dell'intervallo di attesa non valido in modalità "Traduzione segmentata".
+- Correzione di un problema durante l'interrogazione dei saldi API, grazie a **@x1uc**.
+- Correggere il conflitto tra i nomi delle classi di sovrapposizione
+- Migliorate le regole di localizzazione del sito web, grazie al contributo di **@nr0728**, **@user111192**, **@qjwh**
+
 ## 1.17.0
 
 - \*_Sostituire il CDN del repository pubblico a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), vedere [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ per i motivi. \*
@@ -36,7 +47,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2
