@@ -2,15 +2,15 @@
 
 - Ajouter l'option "Vérificateur de résultats de tests d'échantillons".
 - Correction de l'embellissement des blocs de code qui ne change pas de thème correctement lorsque le mode sombre est "Follow System".
-- 修复 "评测状态文本替换" 未正确替换的问题
+- Correction du problème de remplacement du texte de l'état d'avancement de l'examen.
 - Corriger le problème de l'erreur de traduction d'Arigatou
-- 修复分段模式下，评论回复部分不显示翻译结果的问题
-- 修复评论区分页缺少最后一个评论的问题
-- 修复黑暗模式下 LaTeX color 颜色被覆盖的问题
+- Correction du problème d'affichage du résultat de la traduction dans la partie réponse du commentaire en mode segmenté
+- Correction du problème de disparition du dernier commentaire sur la page de différenciation des commentaires
+- Correction de l'écrasement des couleurs LaTeX en mode sombre
 - Correction du problème d'invalidité de l'intervalle d'attente en mode "Traduction segmentée".
 - Correction d'un problème lors de l'interrogation des soldes de l'API, grâce à **@x1uc**.
 - Correction d'un conflit de nom de classe de superposition
-- 完善网站本地化规则，感谢 **@xiezheyuan**、**@Acfboy** 的贡献
+- Amélioration des règles de localisation des sites web, merci à **@xiezheyuan**, **@Acfboy** pour leur contribution !
 
 ## 1.76.0
 

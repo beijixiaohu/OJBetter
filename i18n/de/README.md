@@ -31,7 +31,7 @@ Das Installationsskript können Sie unter：abrufen.
 
 > [!NOTE]
 >
-> Klicken Sie auf die Schaltfläche **\\\\\\\\\\\\\\\\\\\\\\\\\\`xxxBetter! Einstellungen** in der oberen rechten Ecke der **Webseite**, um das Einstellungsfeld zu öffnen.
+> Klicken Sie auf die Schaltfläche **\\\\\\\\\\\\\\\\\\\\\\\\\\\`xxxBetter! Einstellungen** in der oberen rechten Ecke der **Webseite**, um das Einstellungsfeld zu öffnen.
 >
 > Für die meisten Funktionen steht ein Hilfetext zur Verfügung, den Sie anzeigen können, indem Sie mit dem Mauszeiger auf das "? Symbol" bewegen, um ihn anzuzeigen.
 
