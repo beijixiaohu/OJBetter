@@ -1,3 +1,14 @@
+## 1.18.0
+
+- Adicionar a opção "Verificador de resultados de testes de amostras
+- Adicionar a função "Mostrar a lista de perguntas no mesmo campo", graças à contribuição de **@wrk-123**.
+- Correção do embelezamento do bloco de código que não muda corretamente de tema quando o modo escuro é "Seguir o sistema"
+- Corrigir o problema do erro de tradução do Arigatou
+- Corrigir o problema de o intervalo de espera ser inválido no modo "Tradução segmentada".
+- Correção de um problema ao consultar os saldos da API, graças a **@x1uc**.
+- Corrigir conflito de nome de classe de sobreposição
+- Melhorar as regras de localização do sítio Web, graças à contribuição de **@nr0728**, **@user111192**, **@qjwh**
+
 ## 1.17.0
 
 - \*_Substituir o CDN do repositório público para [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ por motivos. \*
