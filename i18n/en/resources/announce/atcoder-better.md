@@ -1,3 +1,14 @@
+## 1.18.0
+
+- Add "Sample Test Results Checker" option
+- Add the "Show list of same topic" function, thanks to the contribution of **@wrk-123**.
+- Fix code block landscaping not switching theme correctly when dark mode is "follow system"
+- Fix the problem of wrong translation of Yodo
+- Fix the issue that the wait interval is invalid in "Segmented Translation" mode.
+- Fix an issue when querying API balances, thanks to **@x1uc**.
+- Fix overlay class name conflicts
+- Improve website localization rules, thanks to the contribution of **@nr0728**, **@user111192**, **@qjwh**
+
 ## 1.17.0
 
 - **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**

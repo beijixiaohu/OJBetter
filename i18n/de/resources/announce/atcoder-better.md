@@ -1,3 +1,14 @@
+## 1.18.0
+
+- Hinzufügen der Option "Prüfen der Testergebnisse".
+- Hinzufügen der Funktion "Liste der Fragen im gleichen Feld anzeigen", dank des Beitrags von **@wrk-123**.
+- Korrektur der Codeblockverschönerung, die das Thema nicht korrekt umschaltet, wenn der dunkle Modus "System folgen" ist
+- Behebung des Yodo-Übersetzungsfehlers
+- Behebung des Problems, dass das Warteintervall im Modus "Segmentierte Übersetzung" ungültig ist.
+- Behebung eines Problems bei der Abfrage von API-Salden, danke an **@x1uc**.
+- Namenskonflikt der Overlay-Klasse beheben
+- Verbesserung der Website-Lokalisierungsregeln, dank des Beitrags von **@nr0728**, **@user111192**, **@qjwh**
+
 ## 1.17.0
 
 - \*_Ersetzen Sie das CDN des öffentlichen Repositorys durch [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), siehe [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ für Gründe. \*

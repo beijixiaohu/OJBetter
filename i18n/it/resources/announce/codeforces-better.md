@@ -1,3 +1,17 @@
+## 1.77.0
+
+- Aggiungere l'opzione "Controllo dei risultati dei test campione".
+- Correggere l'abbellimento dei blocchi di codice che non cambia correttamente tema quando la modalità scura è "Segui il sistema".
+- Risolvere il problema per cui "Sostituzione testo stato di revisione" non viene sostituito correttamente.
+- Risolvere il problema dell'errore di traduzione di Arigatou
+- Correggere il problema per cui il risultato della traduzione non viene mostrato nella parte di risposta del commento in modalità segmentata
+- Risolvere il problema della mancanza dell'ultimo commento nella pagina di differenziazione dei commenti
+- Corregge la sovrascrittura del colore LaTeX in modalità scura
+- Risolvere il problema dell'intervallo di attesa non valido in modalità "Traduzione segmentata".
+- Correzione di un problema durante l'interrogazione dei saldi API, grazie a **@x1uc**.
+- Correggere il conflitto tra i nomi delle classi di sovrapposizione
+- Miglioramento delle regole di localizzazione del sito web, grazie a **@xiezheyuan**, **@Acfboy** per il loro contributo!
+
 ## 1.76.0
 
 - \*_Sostituire il CDN del repository pubblico a [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), vedere [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ per i motivi. \*

@@ -1,3 +1,17 @@
+## 1.77.0
+
+- Hinzufügen der Option "Prüfen der Testergebnisse".
+- Korrektur der Codeblockverschönerung, die das Thema nicht korrekt umschaltet, wenn der dunkle Modus "System folgen" ist
+- Behebung des Problems, dass "Review Status Text Replacement" nicht korrekt ersetzt wird.
+- Behebung des Yodo-Übersetzungsfehlers
+- Behebung des Problems, dass das Übersetzungsergebnis nicht im Antwortteil des Kommentars im segmentierten Modus angezeigt wird
+- Behebung des Problems des fehlenden letzten Kommentars auf der Seite zur Unterscheidung der Kommentare
+- Behebt das Überschreiben von LaTeX-Farben im Dark Mode
+- Behebung des Problems, dass das Warteintervall im Modus "Segmentierte Übersetzung" ungültig ist.
+- Behebung eines Problems bei der Abfrage von API-Salden, danke an **@x1uc**.
+- Namenskonflikt der Overlay-Klasse beheben
+- Verbesserung der Website-Lokalisierungsregeln, Dank an **@xiezheyuan**, **@Acfboy** für ihren Beitrag!
+
 ## 1.76.0
 
 - \*_Ersetzen Sie das CDN des öffentlichen Repositorys durch [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), siehe [issue](https://github.com/beijixiaohu/OJBetter/issues/151)_ für Gründe. \*
