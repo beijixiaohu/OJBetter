@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.0
+// @version      1.18.0
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -61,16 +61,16 @@
 // @supportURL   https://github.com/beijixiaohu/OJBetter/issues
 // @downloadURL  https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.user.js
 // @updateURL    https://update.greasyfork.org/scripts/471106/Atcoder%20Better%21.meta.js
-// @name:zh-TW   Atcoder Better!
-// @name:en      Atcoder Better!
-// @name:de      Atcoder Better!
-// @name:fr      Atcoder Better!
-// @name:ko      Atcoder Better!
-// @name:pt      Atcoder Better!
-// @name:ja      Atcoder Better!
-// @name:es      Atcoder Better!
-// @name:it      Atcoder Better!
-// @name:hi      Atcoder Better!
+// @name:zh-TW   AtCoder Better!
+// @name:en      AtCoder Better!
+// @name:de      AtCoder Better!
+// @name:fr      AtCoder Better!
+// @name:ko      AtCoder Better!
+// @name:pt      AtCoder Better!
+// @name:ja      AtCoder Better!
+// @name:es      AtCoder Better!
+// @name:it      AtCoder Better!
+// @name:hi      AtCoder Better!
 // @description         一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @description:zh-TW   一個適用於 AtCoder 的 Tampermonkey 腳本，增強功能與界面。
 // @description:en      A Tampermonkey script for AtCoder that enhances functionality and interface.
@@ -120,7 +120,9 @@ OJBetter.state = {
 OJBetter.common = {
     /** @type {string} 网站的主机地址 */
     hostAddress: location.origin,
-    /** @type {string?} Atcoder的CSRF令牌 */
+    /** @type {string} 网站当前真实的黑暗模式 */
+    realDarkMode: undefined,
+    /** @type {string?} AtCoder的CSRF令牌 */
     at_csrf_token: undefined,
     /** @type {Array?} 任务队列 */
     taskQueue: undefined,
@@ -298,6 +300,8 @@ OJBetter.monaco = {
     },
     /** @type {Object?} Monaco编辑器实例 */
     editor: null,
+    /** @type {Array?} 代码块美化的Monaco编辑器实例 */
+    beautifyEditor: [],
     /** @type {string?} 在线编译器选择 */
     onlineCompilerChoice: undefined,
     /** @type {string?} 记忆编译器语言选择 */
@@ -422,6 +426,8 @@ OJBetter.preference = {
     hoverTargetAreaDisplay: undefined,
     /** @type {string?} 按钮图标大小 */
     iconButtonSize: undefined,
+    /** @type {boolean?} 是否显示同比赛题目列表*/
+    showSameContestProblems: undefined,
 };
 
 /**
@@ -483,8 +489,8 @@ OJBetter.supportList = {
 // ------------------------------
 
 /**
- * 延迟函数 
- * @param {number} ms 延迟时间（毫秒） 
+ * 延迟函数
+ * @param {number} ms 延迟时间（毫秒）
  * @returns {Promise<void>}
  */
 function OJB_delay(ms) {
@@ -493,7 +499,7 @@ function OJB_delay(ms) {
 
 /**
  * 等待直到指定的条件函数返回true。
- * 
+ *
  * @param {() => boolean} conditionCheck 一个无参数的函数，用于检查条件是否满足。当函数返回true时，表示条件已满足。
  * @param {number} [interval=100] 检查条件的间隔时间，单位为毫秒。默认为100毫秒。
  * @returns {Promise<void>} 返回一个Promise，在条件满足时解决。
@@ -668,7 +674,7 @@ const OJB_removeHTMLTags = function (text) {
  * };
  * OJB_evaluatePathOrExpression(obj, "a.b"); // 1
  * OJB_evaluatePathOrExpression(obj, "a.b + c"); // 3
- * OJB_evaluatePathOrExpression(obj, "a.b + a.c"); // 1 
+ * OJB_evaluatePathOrExpression(obj, "a.b + a.c"); // 1
  */
 function OJB_evaluatePathOrExpression(obj, pathOrExpression) {
     const hasOperator = /[\+\-\*\/]/.test(pathOrExpression);
@@ -976,6 +982,7 @@ async function initVar() {
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
     OJBetter.preference.showLoading = OJB_getGMValue("showLoading", true);
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
+    OJBetter.preference.showSameContestProblems = OJB_getGMValue("showSameContestProblems", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
     OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
@@ -1012,7 +1019,7 @@ function showWarnMessage() {
 // 常量
 const helpCircleHTML = '<div class="help-icon"><svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896zm23.744 191.488c-52.096 0-92.928 14.784-123.2 44.352-30.976 29.568-45.76 70.4-45.76 122.496h80.256c0-29.568 5.632-52.8 17.6-68.992 13.376-19.712 35.2-28.864 66.176-28.864 23.936 0 42.944 6.336 56.32 19.712 12.672 13.376 19.712 31.68 19.712 54.912 0 17.6-6.336 34.496-19.008 49.984l-8.448 9.856c-45.76 40.832-73.216 70.4-82.368 89.408-9.856 19.008-14.08 42.24-14.08 68.992v9.856h80.96v-9.856c0-16.896 3.52-31.68 10.56-45.76 6.336-12.672 15.488-24.64 28.16-35.2 33.792-29.568 54.208-48.576 60.544-55.616 16.896-22.528 26.048-51.392 26.048-86.592 0-42.944-14.08-76.736-42.24-101.376-28.16-25.344-65.472-37.312-111.232-37.312zm-12.672 406.208a54.272 54.272 0 0 0-38.72 14.784 49.408 49.408 0 0 0-15.488 38.016c0 15.488 4.928 28.16 15.488 38.016A54.848 54.848 0 0 0 523.072 768c15.488 0 28.16-4.928 38.72-14.784a51.52 51.52 0 0 0 16.192-38.72 51.968 51.968 0 0 0-15.488-38.016 55.936 55.936 0 0 0-39.424-14.784z"></path></svg></div>';
 const closeIcon = `<svg t="1696693011050" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4322" width="14" height="14"><path d="M0 0h1024v1024H0z" fill-opacity="0" p-id="4323"></path><path d="M240.448 168l2.346667 2.154667 289.92 289.941333 279.253333-279.253333a42.666667 42.666667 0 0 1 62.506667 58.026666l-2.133334 2.346667-279.296 279.210667 279.274667 279.253333a42.666667 42.666667 0 0 1-58.005333 62.528l-2.346667-2.176-279.253333-279.253333-289.92 289.962666a42.666667 42.666667 0 0 1-62.506667-58.005333l2.154667-2.346667 289.941333-289.962666-289.92-289.92a42.666667 42.666667 0 0 1 57.984-62.506667z" p-id="4324"></path></svg>`;
-const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z 
+const translateIcon = `<svg t="1696837407077" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6325" width="22" height="22"><path d="M536.380952 121.904762a73.142857 73.142857 0 0 1 73.142858 73.142857v219.428571h219.428571a73.142857 73.142857 0 0 1 73.142857 73.142858v341.333333a73.142857 73.142857 0 0 1-73.142857 73.142857H487.619048a73.142857 73.142857 0 0 1-73.142858-73.142857v-219.428571H195.047619a73.142857 73.142857 0 0 1-73.142857-73.142858V195.047619a73.142857 73.142857 0 0 1 73.142857-73.142857h341.333333zM243.809524 682.666667v97.523809h97.523809v73.142857h-97.523809a73.142857 73.142857 0 0 1-73.142857-73.142857v-97.523809h73.142857z m585.142857-195.047619h-219.428571v48.761904a73.142857 73.142857 0 0 1-73.142858 73.142858h-48.761904v219.428571h341.333333V487.619048z m-115.760762 89.526857L787.21219 780.190476h-62.025142l-14.043429-42.715428h-76.068571L620.739048 780.190476h-60.854858l74.605715-203.044571h78.701714z m-38.034286 50.029714h-3.510857l-21.065143 63.488h45.348572l-20.772572-63.488zM536.380952 195.047619H195.047619v341.333333h341.333333V195.047619z
 m-195.072 49.883429l44.78781 1.072762v37.278476h87.698286v145.359238h-87.698286v65.974857h-44.78781v-65.974857h-87.698285v-145.359238h87.698285v-38.351238z m0 83.139047h-44.787809v56.05181h44.787809v-56.05181z m89.307429 0h-44.519619v56.05181h44.519619v-56.05181zM780.190476 170.666667a73.142857 73.142857 0 0 1 73.142857 73.142857v97.523809h-73.142857v-97.523809h-97.523809V170.666667h97.523809z" p-id="6326"></path></svg>`;
 const clistIcon = `<svg width="37.7pt" height="10pt" viewBox="0 0 181 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="#0057b8ff"><path fill="#0057b8" opacity="1.00" d=" M 17.36 0.00 L 18.59 0.00 C 23.84 6.49 30.28 11.92 36.01 17.98 C 34.01 19.99 32.01 21.99 30.00 23.99 C 26.02 19.97 22.02 15.98 18.02 11.99 C 14.01 15.98 10.01 19.99 6.00 23.99 C 4.16 22.04 2.30 20.05 0.00 18.61 L 0.00 17.37 C 3.44 15.11 6.00 11.84 8.96 9.03 C 11.79 6.05 15.09 3.47 17.36 0.00 Z" /></g><g id="#a0a0a0ff"><path fill="#a0a0a0" opacity="1.00" d=" M 56.76 13.74 C 61.48 4.80 76.07 3.90 81.77 12.27 C 83.09 13.94 83.44 16.10 83.91 18.12 C 81.53 18.23 79.16 18.24 76.78 18.23 C 75.81 15.72 73.99 13.31 71.14 12.95 C 67.14 12.02 63.45 15.29 62.48 18.99 C 61.30 23.27 61.71 28.68 65.34 31.70 C 67.82 34.05 72.19 33.93 74.61 31.55 C 75.97 30.18 76.35 28.23 76.96 26.48 C 79.36 26.43 81.77 26.44 84.17 26.56 C 83.79 30.09 82.43 33.49 79.89 36.02 C 74.14 41.35 64.17 40.80 58.77 35.25 C 53.52 29.56 53.18 20.38 56.76 13.74 Z" />
 <path fill="#a0a0a0" opacity="1.00" d=" M 89.01 7.20 C 91.37 7.21 93.74 7.21 96.11 7.22 C 96.22 15.71 96.10 24.20 96.18 32.69 C 101.25 32.76 106.32 32.63 111.39 32.79 C 111.40 34.86 111.41 36.93 111.41 39.00 C 103.94 39.00 96.47 39.00 89.00 39.00 C 89.00 28.40 88.99 17.80 89.01 7.20 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 115.00 7.21 C 117.33 7.21 119.66 7.21 121.99 7.21 C 122.01 17.81 122.00 28.40 122.00 39.00 C 119.67 39.00 117.33 39.00 115.00 39.00 C 115.00 28.40 114.99 17.80 115.00 7.21 Z" /><path fill="#a0a0a0" opacity="1.00" d=" M 133.35 7.47 C 139.11 5.56 146.93 6.28 150.42 11.87 C 151.42 13.39 151.35 15.31 151.72 17.04 C 149.33 17.05 146.95 17.05 144.56 17.03 C 144.13 12.66 138.66 11.12 135.34 13.30 C 133.90 14.24 133.54 16.87 135.35 17.61 C 139.99 20.02 145.90 19.54 149.92 23.19 C 154.43 26.97 153.16 35.36 147.78 37.72 C 143.39 40.03 137.99 40.11 133.30 38.69 C 128.80 37.34 125.34 32.90 125.91 28.10 C 128.22 28.10 130.53 28.11 132.84 28.16 C 132.98 34.19 142.68 36.07 145.18 30.97 C 146.11 27.99 142.17 27.05 140.05 26.35 C 135.54 25.04 129.83 24.33 127.50 19.63 C 125.30 14.78 128.42 9.00 133.35 7.47 Z" />
@@ -1271,26 +1278,39 @@ function elementLocalize(element, retries = 10, interval = 50) {
 // 切换系统黑暗监听
 const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
 const changeEventListeners = [];
-function handleColorSchemeChange(event) {
-    event.matches ? $('html').attr('data-theme', 'dark') : $('html').attr('data-theme', 'light');
-    if (!event.matches) {
-        var originalColor = $(this).data("original-color");
-        $(this).css("background-color", originalColor);
-        const intervalId = setinterval(() => {
-            if (OJBetter.monaco && OJBetter.monaco.editor) {
-                monaco.editor.setTheme('vs');
-                clearInterval(intervalId);
-            }
-        }, 100);
-    } else {
+
+/**
+ * 处理颜色模式变化事件
+ * @param {MediaQueryListEvent} event - 媒体查询事件对象
+ */
+const handleColorSchemeChange = (event) => {
+    const theme = event.matches ? 'dark' : 'light';
+
+    // 更新页面主题
+    $('html').attr('data-theme', theme);
+    OJBetter.common.realDarkMode = theme;
+
+    const updateMonacoTheme = (theme) => {
         const intervalId = setInterval(() => {
-            if (OJBetter.monaco && OJBetter.monaco.editor) {
-                monaco.editor.setTheme('vs-dark');
+            if (OJBetter?.monaco?.editor) {
+                monaco.editor.setTheme(theme);
                 clearInterval(intervalId);
             }
         }, 100);
+
+        OJBetter.monaco.beautifyEditor.forEach((editor) => {
+            editor.updateOptions({ theme });
+        });
+    };
+
+    if (event.matches) {
+        updateMonacoTheme('vs-dark');
+    } else {
+        const originalColor = $(this).data("original-color");
+        $(this).css("background-color", originalColor);
+        updateMonacoTheme('vs');
     }
-}
+};
 
 // 黑暗模式
 (function setDark() {
@@ -1309,10 +1329,16 @@ function handleColorSchemeChange(event) {
             setTimeout(setDarkTheme, 100);
         }
     }
-    OJBetter.basic.darkMode = OJB_getGMValue("darkMode", "follow")
+
+    // 设置黑暗模式和监听器
+    OJBetter.basic.darkMode = OJB_getGMValue("darkMode", "follow");
     if (OJBetter.basic.darkMode == "dark") {
+        OJBetter.common.realDarkMode = 'dark';
         setDarkTheme();
+    } else if (OJBetter.basic.darkMode == "light") {
+        OJBetter.common.realDarkMode = 'light';
     } else if (OJBetter.basic.darkMode == "follow") {
+        OJBetter.common.realDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         // 添加事件监听器
         changeEventListeners.push(handleColorSchemeChange);
         mediaQueryList.addEventListener('change', handleColorSchemeChange);
@@ -1368,7 +1394,7 @@ function handleColorSchemeChange(event) {
             --ojb-border-radius-small: 4px; /* 小圆角 */
             --ojb-border-radius-medium: 8px; /* 中圆角 */
             --ojb-border-radius-large: 12px; /* 大圆角 */
-            
+
             /* 组合边框样式 */
             --ojb-border-solid-primary: var(--ojb-border-width) var(--ojb-border-style-solid) var(--ojb-color-border-primary); /* 主要实线边框 */
             --ojb-border-dashed: var(--ojb-border-width) var(--ojb-border-style-dashed) var(--ojb-color-border-primary); /* 主要虚线边框 */
@@ -1381,12 +1407,12 @@ function handleColorSchemeChange(event) {
     GM_addStyle(`
         /* 主要文字颜色 */
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
-        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor, 
-        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .OJBetter_setting_menu, 
+        html[data-theme=dark] .alert-warning, html[data-theme=dark] .markItUpEditor,
+        html[data-theme=dark] .translate-problem-statement, html[data-theme=dark] .OJBetter_setting_menu,
         html[data-theme=dark] .help_tip .tip_text,
         html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
         html[data-theme=dark] #OJBetter_SubmitForm input, html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select,
-        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar, 
+        html[data-theme=dark] #items-per-page, html[data-theme=dark] #pagBar,
         html[data-theme=dark] .OJBetter_setting_sidebar li a:link,
         html[data-theme=dark] .popup .content{
             color: var(--ojb-color-text-primary);
@@ -1411,15 +1437,15 @@ function handleColorSchemeChange(event) {
         }
         /* 主要背景层次 */
         html[data-theme=dark] .OJBetter_setting_menu, html[data-theme=dark] .help_tip .tip_text, html[data-theme=dark] li#add_button:hover,
-        html[data-theme=dark] .ojb_btn:hover, 
+        html[data-theme=dark] .ojb_btn:hover,
         html[data-theme=dark] .OJBetter_setting_menu input, html[data-theme=dark] .OJBetter_setting_menu textarea,
-        html[data-theme=dark] #OJBetter_SubmitForm input, 
+        html[data-theme=dark] #OJBetter_SubmitForm input,
         html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"], html[data-theme=dark] .OJBetter_setting_menu input[type="checkbox"]:checked,
-        html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select, 
+        html[data-theme=dark] #OJBetter_SubmitForm textarea, html[data-theme=dark] #OJBetter_SubmitForm select,
         html[data-theme=dark] .OJBetter_setting_sidebar li a.active, html[data-theme=dark] .OJBetter_setting_sidebar li,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-track, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-track,
         html[data-theme=dark] .OJBetter_modal, html[data-theme=dark] .OJBetter_modal button:hover,
-        html[data-theme=dark] .popup .content, 
+        html[data-theme=dark] .popup .content,
         html[data-theme=dark] .config_bar_list, html[data-theme=dark] #LSPLog,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs,
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]::before,
@@ -1429,13 +1455,13 @@ function handleColorSchemeChange(event) {
             background-image: none;
         }
         /* 次要背景层次 */
-        html[data-theme=dark] .ojb_btn, 
+        html[data-theme=dark] .ojb_btn,
         html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-error,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .SumoSelect>.optWrapper>.options li.opt:hover,
         html[data-theme=dark] .translate-problem-statement-panel,
-        html[data-theme=dark] .translate-problem-statement, 
+        html[data-theme=dark] .translate-problem-statement,
         html[data-theme=dark] .OJBetter_setting_list,
-        html[data-theme=dark] .OJBetter_setting_menu hr, 
+        html[data-theme=dark] .OJBetter_setting_menu hr,
         html[data-theme=dark] .OJBetter_setting_sidebar li a,
         html[data-theme=dark] .OJBetter_setting_menu::-webkit-scrollbar-thumb, html[data-theme=dark] .OJBetter_setting_content::-webkit-scrollbar-thumb,
         html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] .test-for-popup pre,
@@ -1446,7 +1472,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .OJBetter_setting_menu .OJBetter_checkboxs input[type="checkbox"]:checked::before,
         html[data-theme=dark] .config::before, html[data-theme=dark] .config li.tempConfig_add_button:hover,
         html[data-theme=dark] .OJBetter_setting_menu details, html[data-theme=dark] #config_bar_menu,
-        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button, 
+        html[data-theme=dark] .OJBetter_setting_menu .OJBetter_setting_list button,
         html[data-theme=dark] .OJBetter_setting_menu .badge, html[data-theme=dark] #OJBetter_SubmitForm #SubmitButton{
             background-color: var(--ojb-color-bg-secondary);
         }
@@ -1461,9 +1487,9 @@ function handleColorSchemeChange(event) {
             border-radius: 2px;
         }
         /* 实线边框颜色-无圆角 */
-        html[data-theme=dark] .ojb_btn, 
+        html[data-theme=dark] .ojb_btn,
         html[data-theme=dark] .OJBetter_setting_list, html[data-theme=dark] .config_bar_list,
-        html[data-theme=dark] label.config_bar_ul_li_text, 
+        html[data-theme=dark] label.config_bar_ul_li_text,
         html[data-theme=dark] .OJBetter_setting_sidebar li, html[data-theme=dark] .OJBetter_setting_menu select,
         html[data-theme=dark] .translate-problem-statement-panel, html[data-theme=dark] .OJBetter_modal button, html[data-theme=dark] #OJBetter_SubmitForm select,
         html[data-theme=dark] #OJBetter_editor, html[data-theme=dark] #OJBetter_statusBar,
@@ -1505,7 +1531,7 @@ function handleColorSchemeChange(event) {
             border: none;
         }
         /* 区域遮罩 */
-        html[data-theme=dark] .overlay::before {
+        html[data-theme=dark] .ojb-overlay::before {
             background: var(--ojb-overlay-background);
             color: var(--ojb-color-text-secondary);
             text-shadow: 0px 0px 2px #000000;
@@ -1574,7 +1600,7 @@ function handleColorSchemeChange(event) {
         /* 按钮 */
         html[data-theme=dark] input:hover, html[data-theme=dark] .btn-default:hover{
             background-color: var(--ojb-color-bg-primary) !important;
-        } 
+        }
         /* 背景层次1 */
         html[data-theme=dark] body, html[data-theme=dark] #main-div.float-container, html[data-theme=dark] pre,
         html[data-theme=dark] .html2mdButton:hover, html[data-theme=dark] .pagination>.active>a, html[data-theme=dark] .ace-tm,
@@ -1593,7 +1619,7 @@ function handleColorSchemeChange(event) {
         html[data-theme=dark] .float-container>#main-container, html[data-theme=dark] #contest-nav-tabs,
         html[data-theme=dark] .btn-default, html[data-theme=dark] .html2mdButton,
         html[data-theme=dark] .nav-tabs>li.active>a, html[data-theme=dark] .nav-tabs>li.active>a:hover, html[data-theme=dark] .nav-tabs>li.active>a:focus,
-        html[data-theme=dark] .nav>li>a:hover, html[data-theme=dark] .nav>li>a:focus, html[data-theme=dark] .panel, 
+        html[data-theme=dark] .nav>li>a:hover, html[data-theme=dark] .nav>li>a:focus, html[data-theme=dark] .panel,
         html[data-theme=dark] .table-striped>tbody>tr:nth-of-type(odd), html[data-theme=dark] .insert-participant-box,
         html[data-theme=dark] .btn-pre, html[data-theme=dark] .alert-success, html[data-theme=dark] .alert-info, html[data-theme=dark] .alert-danger,
         html[data-theme=dark] .alert-warning, html[data-theme=dark] .panel-default>.panel-heading,
@@ -1645,14 +1671,14 @@ function handleColorSchemeChange(event) {
         }
         /* 图片-亮度 */
         html[data-theme=dark] img{
-            opacity: .75; 
+            opacity: .75;
         }
         /* 反转 */
         html[data-theme=dark] .ace_content, html[data-theme=dark] #header .header-logo img, html[data-theme=dark] pre code{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
-        html[data-theme=dark] .overlay {
+        html[data-theme=dark] .ojb-overlay {
             background: repeating-linear-gradient(135deg, #49525f6e, #49525f6e 30px, #49525f29 0px, #49525f29 55px);
             color: #9099a3;
             text-shadow: 0px 0px 2px #000000;
@@ -1763,7 +1789,6 @@ async function beautifyPreBlocksWithMonaco() {
         const toggleExpandCollapse = (() => {
             let isExpanded = false;
             return () => {
-                console.log(calculateContainerHeight(lineCount, isExpanded ? '1000px' : 'none'));
                 container.style.height = calculateContainerHeight(lineCount, isExpanded ? '1000px' : 'none');
                 isExpanded = !isExpanded;
             };
@@ -1775,12 +1800,12 @@ async function beautifyPreBlocksWithMonaco() {
         });
 
         // 初始化 Monaco 编辑器
-        monaco.editor.create(container, {
+        const editor = monaco.editor.create(container, {
             value: code,
             language,
             readOnly: true,
             tabSize: 4,
-            theme: OJBetter.basic.darkMode === "dark" ? "vs-dark" : "vs",
+            theme: OJBetter.common.realDarkMode == "dark" ? "vs-dark" : "vs",
             scrollbar: {
                 verticalScrollbarSize: 10,
                 horizontalScrollbarSize: 10,
@@ -1789,6 +1814,9 @@ async function beautifyPreBlocksWithMonaco() {
             automaticLayout: true,
             scrollBeyondLastLine: false
         });
+
+        // 保存编辑器实例
+        OJBetter.monaco.beautifyEditor.push(editor);
     };
 
     // 全局替换页面上所有的 <pre> 元素
@@ -1897,6 +1925,7 @@ dialog::backdrop {
 /*题目页链接栏样式*/
 #problemToolbar {
     display: flex;
+    gap: 6px;
     flex-wrap: wrap;
     justify-content: flex-end;
     overflow: auto;
@@ -1909,12 +1938,11 @@ dialog::backdrop {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    gap: 6px;
+    padding: 5px 0px !important;
 }
 .html2md-panel a {
     text-decoration: none;
-}
-.html2md-panel > button {
-    margin: 5px;
 }
 .html2md-panel.is_simple {
     position: absolute;
@@ -1933,7 +1961,7 @@ dialog::backdrop {
     font-size: 13px;
     border-radius: 0.3rem;
     padding: 2px 5px;
-    margin: 0px 5px;
+    margin: 0px;
     border: 1px solid #dcdfe6;
 }
 .ojb_btn[disabled] {
@@ -1958,7 +1986,7 @@ dialog::backdrop {
     border: 1px solid #79bbff;
     background-color: #79bbff;
 }
-.ojb_btn.success {  
+.ojb_btn.success {
     color: #4caf50;
     border: 1px solid #C8E6C9;
     background-color: #f0f9eb;
@@ -2173,6 +2201,7 @@ html:not([data-theme='dark']) .translateDiv {
     background: none;
     border: none;
     color: #9e9e9e;
+    padding: 5px 8px;
 }
 .translate-problem-statement-panel.error, .translate-problem-statement.error {
     color: red;
@@ -3221,7 +3250,6 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     outline: none;
 }
 #OJBetter_SubmitForm .topDiv {
-    height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -3232,20 +3260,16 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     height: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 0px;
+    gap: 5px;
 }
 #OJBetter_SubmitForm input[type="checkbox"], #OJBetter_SubmitForm label {
     margin: 0px;
     font-weight: initial;
 }
-#OJBetter_SubmitForm #fontSizeInput {
-    border: none;
-    background-color: #ffffff00;
-}
 
-/* 顶部区域 */
+/* 顶部右侧区域 */
 #OJBetter_SubmitForm .topRightDiv>* {
-    height: 100%;
+    height: 30px;
     box-sizing: border-box;
 }
 #OJBetter_SubmitForm .topRightDiv>button{
@@ -3352,6 +3376,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 /* 提交 */
 #OJBetter_submitDiv{
     display: flex;
+    gap: 5px;
     padding-top: 15px;
     height: 50px;
     box-sizing: border-box;
@@ -3375,7 +3400,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     background-color: red;
     animation: shake 0.07s infinite alternate;
 }
-#programTypeId{
+.topLeftDiv > select {
     height: 100%;
     padding: 5px 10px;
     border-radius: 6px;
@@ -3421,7 +3446,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     border: #d0d7de solid 1px;
     border-radius: 6px;
 }
-#CompilerBox > * {  
+#CompilerBox > * {
     margin: 5px;
 }
 
@@ -3530,7 +3555,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
 .test-case-status.success{
     color: #449d44;
 }
-.test-case-judge {
+.test-case-judge, .judge-checker {
     font-size: 13px;
 }
 
@@ -3549,7 +3574,7 @@ input[type="radio"]:checked+.OJBetter_contextmenu_label_text {
     user-select: none;
 }
 .output_diff .removed {
-    background-color: #f7c5c5; 
+    background-color: #f7c5c5;
 }
 .output_diff .diffLine {
     display: flex;
@@ -3670,7 +3695,7 @@ function addDependencyStyles() {
 function addI18nStyles() {
     GM_addStyle(`
     /* 加载鼠标悬浮覆盖层css */
-    .overlay::before {
+    .ojb-overlay::before {
         content: '';
         position: absolute;
         top: 0;
@@ -3680,7 +3705,7 @@ function addI18nStyles() {
         background: repeating-linear-gradient(135deg, rgb(77 208 225 / 30%), rgb(77 208 225 / 30%) 30px, rgb(77 208 225 / 10%) 0px, rgb(77 208 225 / 10%) 55px);
         z-index: 100;
     }
-    .overlay::after {
+    .ojb-overlay::after {
         content: '${i18next.t('targetArea', { ns: 'common' })}';
         position: absolute;
         top: 50%;
@@ -3753,6 +3778,15 @@ class TextBlockReplacer {
      * @returns {string} 替换后的文本
      */
     replace(text, regex) {
+        // 优化序数词翻译
+        let isOrdinal = (text) => {
+            return Boolean(text.match(/\$\d+?\$[(st)(nd)(rd)(th)]/g));
+        }
+        let ordinalTranslation = (text) => {
+            return '第 ' + text.match(/\$\d+?\$/g)[0] + ' 个';
+        };
+
+
         this.matches = text.match(regex) || [];
         try {
             for (let i = 0; i < this.matches.length; i++) {
@@ -3774,7 +3808,9 @@ class TextBlockReplacer {
                         break;
                 }
                 text = text.replace(match, replacement);
-                this.replacements.set(id, match);
+                if (isOrdinal(match) && OJBetter.translation.targetLang === 'zh')
+                    this.replacements.set(id, ordinalTranslation(match));
+                else this.replacements.set(id, match);
             }
         } catch (e) { }
         return text;
@@ -3806,7 +3842,8 @@ class TextBlockReplacer {
                 const offset = args[args.length - 3]; // offset是replace方法的倒数第三个参数
                 let leftSpace = "", rightSpace = "";
                 if (!/\s/.test(textCopy[offset - 1])) leftSpace = " ";
-                if (!/\s/.test(textCopy[offset + match.length])) rightSpace = " ";
+                if (!/\s/.test(textCopy[offset + match.length]) && /[\x20-\x7E]/.test(replacement[replacement.length - 1]))
+                    rightSpace = " ";
                 return leftSpace + replacement + rightSpace;
             });
         };
@@ -4352,7 +4389,7 @@ function OJB_codeLangDetect(code) {
 
 /**
  * 获取指定命名空间下的所有i18n翻译键值对。
- * 
+ *
  * @param {string} namespace - 要获取键值对的i18next命名空间。
  * @returns {Map<string, string>} 一个包含命名空间下所有键值对的Map对象。
  */
@@ -4604,7 +4641,7 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
 
 /**
  * 网站本地化替换
- * @returns 
+ * @returns
  */
 async function localizeWebsite() {
     if (OJBetter.localization.websiteLang === "initial") return;
@@ -5987,6 +6024,14 @@ const preference_settings_HTML = `
         <input type='number' id='iconButtonSize' class='no_default' require=true data-i18n="[placeholder]settings:preference.iconButtonSize.placeholder">
         <span>px</span>
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for="showSameContestProblems" data-i18n="settings:preference.showSameContestProblems.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.showSameContestProblems.helpText"></div>
+        </div>
+        <input type="checkbox" id="showSameContestProblems" name="showSameContestProblems">
+    </div>
 </div>
 `;
 
@@ -6085,7 +6130,7 @@ const about_settings_HTML = `
     <div class='versionInfo'>
         <p>${OJBetter.state.name}</p>
         <p><span data-i18n="settings:about.version"></span><span id="nowVersion">${OJBetter.state.version}</span></p>
-        <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a> 
+        <p> @北极小狐 <a target="_blank" href="https://github.com/beijixiaohu/OJBetter">Github</a>
         <a target="_blank" href="https://greasyfork.org/zh-CN/scripts/465777">GreasyFork</a></p>
     </div>
     <hr>
@@ -6135,7 +6180,7 @@ const OJBetter_setting_content_HTML = `
 const OJBetterSettingMenu_HTML = `
     <dialog class='OJBetter_setting_menu' id='OJBetter_setting_menu'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6242,7 +6287,7 @@ const deeplConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6309,7 +6354,7 @@ const chatgptConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6376,7 +6421,7 @@ const CompletConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
         <div class="tool-box">
-            <button class='ojb_btn ojb_btn_popover top btn-close'>
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
                 <i class="iconfont">&#xe614;</i>
             </button>
         </div>
@@ -6636,6 +6681,7 @@ async function initSettingsPanel() {
         $("#showJumpToLuogu").prop("checked", GM_getValue("showJumpToLuogu") === true);
         $("#showCF2vjudge").prop("checked", GM_getValue("showCF2vjudge") === true);
         $("#hoverTargetAreaDisplay").prop("checked", GM_getValue("hoverTargetAreaDisplay") === true);
+        $("#showSameContestProblems").prop("checked", GM_getValue("showSameContestProblems") === true);
         $("#showClistRating_contest").prop("checked", GM_getValue("showClistRating_contest") === true);
         $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
         $("#showClistRating_problem").prop("checked", GM_getValue("showClistRating_problem") === true);
@@ -6671,7 +6717,7 @@ async function initSettingsPanel() {
         });
         $('#transTargetLang').val(GM_getValue("transTargetLang"));
         $('#transTargetLang').change();
-        // 
+        //
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
@@ -6715,13 +6761,13 @@ async function initSettingsPanel() {
         $('#updateChannel').change();
 
         // 关闭
-        const $settingMenu = $(".OJBetter_setting_menu");
-        $settingMenu.on("click", ".btn-close", async () => {
+        settingMenu.on("click", ".btn-close", async () => {
             // 设置的数据
             const settings = {
                 darkMode: $("input[name='darkMode']:checked").val(),
                 showLoading: $("#showLoading").prop("checked"),
                 hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
+                showSameContestProblems: $("#showSameContestProblems").prop("checked"),
                 expandFoldingblocks: $("#expandFoldingblocks").prop("checked"),
                 renderPerfOpt: $("#renderPerfOpt").prop("checked"),
                 selectElementPerfOpt: $("#selectElementPerfOpt").prop("checked"),
@@ -6923,7 +6969,7 @@ async function initHTML2MarkDown() {
             return node.classList.contains('html2md-panel') ||
                 node.classList.contains('div-btn-copy') ||
                 node.classList.contains('btn-copy') ||
-                node.classList.contains('overlay') ||
+                node.classList.contains('ojb-overlay') ||
                 node.classList.contains('monaco-editor') ||
                 node.nodeName === 'SCRIPT';
         },
@@ -7007,16 +7053,13 @@ async function initHTML2MarkDown() {
 class TaskQueue {
     constructor() {
         this.taskQueues = {};
-        this.isProcessing = {}; // 处理状态
+        this.timers = {}; // 定时器
         this.delays = {}; // 等待时间（毫秒）
+        this.isProcessing = {}; // 处理状态
     }
 
     getDelay(type) {
-        if (type === 'openai') {
-            return 0;
-        } else {
-            return OJBetter.translation.waitTime;
-        }
+        return type === "openai" ? 0 : OJBetter.translation.waitTime;
     }
 
     /**
@@ -7024,42 +7067,46 @@ class TaskQueue {
      * @param {string} type 任务类型
      * @param {function} fn 任务函数
      * @param {boolean} isNonQueueTask 是否为非队列任务
+     * @returns {Promise<*>} 任务执行的结果
      */
     addTask(type, fn, isNonQueueTask = false) {
+        if (isNonQueueTask) return fn();
+
         if (!this.taskQueues[type]) {
             this.taskQueues[type] = [];
+            this.isProcessing[type] = false;
         }
 
-        if (isNonQueueTask) {
-            fn();
-        } else {
-            this.taskQueues[type].push(fn);
-
+        return new Promise((resolve, reject) => {
+            this.taskQueues[type].push({ fn, resolve, reject });
             if (!this.isProcessing[type]) {
-                this.processQueue(type);
+                this.processNextTask(type);
             }
-        }
-    }
-
-    async processQueue(type) {
-        this.isProcessing[type] = true;
-
-        while (this.taskQueues[type].length > 0) {
-            const task = this.taskQueues[type].shift();
-            await task();
-
-            if (this.taskQueues[type].length > 0) {
-                await this.wait(this.getDelay(type));
-            }
-        }
-
-        this.isProcessing[type] = false;
-    }
-
-    wait(delay) {
-        return new Promise(resolve => {
-            setTimeout(resolve, delay);
         });
+    }
+
+    async processNextTask(type) {
+        if (!this.taskQueues[type] || this.taskQueues[type].length === 0) {
+            this.isProcessing[type] = false;
+            return;
+        }
+
+        this.isProcessing[type] = true;
+        const { fn, resolve, reject } = this.taskQueues[type].shift();
+
+        try {
+            const result = await fn();
+            resolve(result);
+        } catch (error) {
+            reject(error);
+        }
+
+        const delay = this.getDelay(type);
+        if (delay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+
+        this.processNextTask(type);
     }
 }
 
@@ -7086,14 +7133,14 @@ async function initButtonFunc() {
 
         this.hover(() => {
             $(target)
-                .addClass('overlay')
+                .addClass('ojb-overlay')
                 .css('position', 'relative');
             if (display == "inline" || display == "contents") {
                 $(target).css('display', 'block');
             }
         }, () => {
             $(target)
-                .removeClass('overlay')
+                .removeClass('ojb-overlay')
                 .css('position', position);
             if (display == "inline" || display == "contents") {
                 $(target).css('display', display);
@@ -7117,7 +7164,7 @@ async function initButtonFunc() {
         return this;
     }
 
-    /** 
+    /**
      * 设置按钮为加载等待状态
      */
     $.fn.setButtonLoading = function () {
@@ -7357,7 +7404,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
 
     button.click(OJB_debounce(function () {
         /**
-         * 检查是否是MarkDown视图 
+         * 检查是否是MarkDown视图
          * @returns {boolean} 是否是MarkDown视图
          */
         function checkViewmd() {
@@ -7477,7 +7524,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
      */
     button.data("translatedItBy", function (translation) {
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        OJBetter.common.taskQueue.addTask(translation, () => transTask(button, element, type, is_comment, translation), translation == 'openai');
+        executeTranslation(button, element, type, is_comment, translation);
     });
 
     // 等待MathJax队列完成
@@ -7525,7 +7572,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 
         // 翻译
         button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        OJBetter.common.taskQueue.addTask(OJBetter.translation.choice, () => transTask(button, element, type, is_comment), OJBetter.translation.choice == 'openai');
+        executeTranslation(button, element, type, is_comment);
     }));
 
     // 重新翻译提示
@@ -7626,14 +7673,14 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 }
 
 /**
- * 创建翻译任务
+ * 处理按钮的翻译事件
  * @param {JQuery<HTMLElement>} button 按钮
  * @param {HTMLElement} element 目标元素
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
-async function transTask(button, element, type, is_comment, overrideTrans) {
+async function executeTranslation(button, element, type, is_comment, overrideTrans) {
     /** @type {HTMLElement} 目标元素 */
     let target;
     /**
@@ -7648,7 +7695,7 @@ async function transTask(button, element, type, is_comment, overrideTrans) {
     };
     if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        let pElements = $(element).find("p:not(li p), li, .OJBetter_acmsguru");
+        let pElements = $(element).find("p:not(:scope > li p), li, .OJBetter_acmsguru");
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
@@ -7723,7 +7770,7 @@ async function process(button, target, element_node, type, is_comment, count, ov
 
 /**
  * 块处理
- * @param {JQuery<HTMLElement>} button 
+ * @param {JQuery<HTMLElement>} button
  * @param {HTMLElement} target 目标元素
  * @param {HTMLElement} element_node 目标节点
  * @param {boolean} is_comment 是否是评论
@@ -7737,7 +7784,18 @@ async function blockProcessing(button, target, element_node, is_comment, overrid
         target.markdown = OJBetter.common.turndownService.turndown($(target).html());
     }
 
-    const result = await translateProblemStatement(target.markdown, element_node, is_comment, overrideTrans);
+    const result = await OJBetter.common.taskQueue.addTask(
+        OJBetter.translation.choice,
+        () =>
+            translateMain(
+                target.markdown,
+                element_node,
+                is_comment,
+                overrideTrans
+            ),
+        OJBetter.translation.choice == "openai"
+    );
+
     if (result.status == "skip") {
         button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
         result.translateDiv.close();
@@ -7766,13 +7824,13 @@ async function multiChoiceTranslation() {
         e.stopPropagation();
         if ($this.hasClass('block_selected')) {
             $this.removeClass('block_selected');
-            // 移除对应的按钮 
+            // 移除对应的按钮
             $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + $this.attr('OJBetter_p_id'));
         } else {
             let id = OJB_getRandomNumber(8);
             $this.attr('OJBetter_p_id', id);
             $this.addClass('block_selected');
-            // 添加按钮 
+            // 添加按钮
             let menu = OJB_safeCreateJQElement(`<div class="OJBetter_MiniTranslateButton" id='translateButton_selected_${id}'>${translateIcon}</div>`)
                 .css({
                     left: $($this).outerWidth(true) + $($this).position().left + 10 + 'px',
@@ -7794,7 +7852,7 @@ async function multiChoiceTranslation() {
                 let result = await blockProcessing(OJBetter.translation.choice, target, $this.eq(0), $("#translateButton_selected_" + id), false);
                 $this.data("resultData", result);
                 $this.removeClass('block_selected');
-                // 移除对应的按钮 
+                // 移除对应的按钮
                 $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
                 $this.attr('translated', '1'); // 标记已翻译
             });
@@ -7826,7 +7884,7 @@ async function addConversionButton() {
         let nextElement = contestNavTabs.next();
         let id = "_editorial_1_" + OJB_getRandomNumber(8);
         let panel = addButtonPanel(nextElement, id, "this_level");
-        panel.panel.css('width', '100%'); // 加个样式，不然不显示
+        panel.panel.addClass('col-sm-12');
         promises.push(addButtonWithHTML2MD(panel.viewButton, nextElement, id, "this_level"));
         promises.push(addButtonWithCopy(panel.copyButton, nextElement, id, "this_level"));
         promises.push(addButtonWithTranslation(panel.translateButton, nextElement, id, "this_level"));
@@ -7995,7 +8053,7 @@ class TranslateDiv {
 
     /**
      * 渲染一个元素内的LaTeX公式
-     * @param {*} element 
+     * @param {*} element
      */
     renderLaTeX(element) {
         const latexRenderOptions = {
@@ -8374,10 +8432,10 @@ class ElementsTree {
 
     /**
      * 重新创建translateDiv
-     * @param {*} pElement 
-     * @param {*} id 
-     * @param {*} translatedText 
-     * @param {*} topText 
+     * @param {*} pElement
+     * @param {*} id
+     * @param {*} translatedText
+     * @param {*} topText
      * @param {Boolean} isFold 是否折叠
      */
     reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
@@ -8431,7 +8489,7 @@ async function getTransDBData() {
 
 /**
  * 翻译结果恢复功能初始化
- * @returns 
+ * @returns
  */
 async function initTransResultsRecover() {
     OJBetter.translation.memory.ttTree = new ElementsTree("#task-statement"); // 初始化当前页面#task-statement元素的结构树
@@ -8485,7 +8543,7 @@ async function initTransWhenViewable() {
     observers.push(observer);
 }
 
-/** 
+/**
  * 翻译返回结果结构体
  * @typedef {Object} TranslateResult
  * @property {string} status 翻译状态
@@ -8501,7 +8559,7 @@ async function initTransWhenViewable() {
  * @param {string} overrideTrans 覆盖全局翻译服务设定
  * @returns {TranslateResult} 翻译结果对象
  */
-async function translateProblemStatement(text, element_node, is_comment, overrideTrans) {
+async function translateMain(text, element_node, is_comment, overrideTrans) {
     /** @type {number} 翻译结果的ID*/
     const id = OJB_getRandomNumber(8);
     /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
@@ -8538,7 +8596,10 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             text = textBlockReplacer.replace(text, regex);
         } else if (realTransServer != "openai") {
             // 使用GPT翻译时不必替换latex公式
-            const regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+            let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+            // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
+            if (OJBetter.translation.targetLang === 'zh')
+                regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块```
@@ -8573,7 +8634,7 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
 
     /**
      * 格式化翻译结果
-     * @param {string} text 
+     * @param {string} text
      * @returns {string} 处理后的翻译结果
      */
     const formatText = function (text) {
@@ -8625,7 +8686,8 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
             { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
             { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
             // { pattern: /：/g, replacement: ":" }, // 中文：
-            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" } // 加粗
+            { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" }, // 加粗
+            { pattern: /\* \*(.*?)\* \*/g, replacement: "\*\*$1\*\*" } // 加粗
         ];
         mdRuleMap.forEach(({ pattern, replacement }) => {
             text = text.replace(pattern, replacement);
@@ -8637,6 +8699,10 @@ async function translateProblemStatement(text, element_node, is_comment, overrid
     // 创建翻译结果元素并放在element_node的后面
     translateResult.translateDiv = new TranslateDiv(id);
     $(element_node).after(translateResult.translateDiv.getDiv());
+
+    const isColSm12 = $(element_node).prev().hasClass("col-sm-12");
+    // 如果前一个元素的类名包含col-sm-12，则翻译面板也要加上col-sm-12
+    if (isColSm12) translateResult.translateDiv.getDiv().addClass("col-sm-12");
 
     // 顶栏左侧信息
     translateResult.translateDiv.setTopText(i18next.t('servers.' + realTransServer, { ns: 'translator' }) +
@@ -9002,7 +9068,7 @@ class ProblemPageLinkbar {
 
 /**
  * 获取题目的id
- * @param {String} url 题目的链接 
+ * @param {String} url 题目的链接
  * @returns 题目的id，形如2000A
  */
 function getProblemId(url) {
@@ -9015,7 +9081,7 @@ function getProblemId(url) {
 
 /**
  * 跳转到洛谷
- * @param {ProblemPageLinkbar} problemToolbar 
+ * @param {ProblemPageLinkbar} problemToolbar
  */
 async function CF2luogu(problemToolbar) {
     const url = window.location.href;
@@ -9060,7 +9126,7 @@ async function CF2luogu(problemToolbar) {
 
 /**
  * 跳转到 Virtual Judge
- * @param {ProblemPageLinkbar} problemToolbar 
+ * @param {ProblemPageLinkbar} problemToolbar
  */
 async function CF2vjudge(problemToolbar) {
     const url = window.location.href;
@@ -9269,11 +9335,11 @@ async function getRatingFromHTML(problem, problem_url, contest = null) {
  * @param {string} problem_name 题目名
  * @param {string} problem_url 题目链接
  * @returns {Promise<number>} 题目rating
- * 
+ *
  * 使用两个Map对象来存储和快速访问题目信息：
  * - problemsMap: 通过题目的URL作为键来存储题目信息。
  * - nameMap: 通过题目的名称作为键来存储题目信息。
- * 
+ *
  * 每个题目信息是一个对象，包含以下属性：
  * @typedef {Object} ProblemInfo
  * @property {string} name 题目名称
@@ -9291,13 +9357,13 @@ async function getRatingFromApi_problem(problem_name, problem_url) {
 
         if (!response.responseText) throw new OJB_GMError('network', 'An unknown network error occurred!', response);
         let data = JSON.parse(response.responseText);
-        /** 
+        /**
          * 使用题目的URL作为键来存储题目信息。
          * @type {Map<string, ProblemInfo>}
          */
         let problemsMap = new Map();
 
-        /** 
+        /**
          * 使用题目的名称作为键来存储题目信息。
          * @type {Map<string, ProblemInfo>}
          */
@@ -9478,7 +9544,7 @@ function getClassNameByRating(rating) {
 
 /**
  * problem题目页显示Rating
- * @param {ProblemPageLinkbar} problemToolbar 
+ * @param {ProblemPageLinkbar} problemToolbar
  * @returns {Promise<void>}
  */
 async function showRatingByClist_problem(problemToolbar) {
@@ -9660,6 +9726,55 @@ async function showRatingByClist_problemset() {
     }
 }
 
+async function ShowSameContestProblems() {
+    // 获取当前页面的URL信息
+    const url = window.location.href;
+    const match_ = url.match("https://atcoder.jp/contests/[a-z0-9]*/tasks/");
+    const match = match_[0];
+    if (!match_) {
+        console.error('URL不匹配');
+        return;
+    }
+
+    const contestId = match.split('/')[4];
+    const taskIdPrefix = url.split('/')[6].split('_')[0];
+    // 获取页面中的指定元素
+    const mainSpan = document.querySelector('#main-container .row .col-sm-12');
+    if (!mainSpan) {
+        console.error('找不到目标元素');
+        return;
+    }
+
+    const select = document.createElement('span');
+    select.style.display = 'block';
+
+    // 异步请求获取所有题目链接
+    fetch(`https://atcoder.jp/contests/${contestId}/tasks`)
+        .then(response => {
+            if (!response.ok) {
+                console.log('获取任务页面失败');
+                return "";
+            }
+            return response.text();
+        })
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const table = doc.querySelector('.table.table-bordered.table-striped');
+            if (!table) {
+                console.error('找不到任务表格');
+                return;
+            }
+            select.appendChild(table);;
+
+            // 添加到页面中
+            mainSpan.parentNode.insertBefore(select, mainSpan.nextSibling);
+        })
+        .catch(error => {
+            console.error('发生错误:', error);
+        });
+}
+
 /**
  * 存放编辑器语言select的值与Monaco语言对应关系的map.
  * @type {Object.<string, string>}
@@ -9721,7 +9836,7 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
 
 /**
  * 获取代码提交页的HTML元素
- * @param {string} submitUrl 
+ * @param {string} submitUrl
  * @returns {Promise<jQuery>}
  */
 async function getSubmitHTML(submitUrl) {
@@ -9779,9 +9894,16 @@ async function createCodeEditorForm(submitUrl) {
 
     // 顶部区域
     let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
-    let selectLang = $('#select-lang').clone(); // 语言选择
-    // selectLang.css({ 'margin': '10px 0px' }).attr('id', 'programTypeId');
-    topDiv.append(selectLang);
+
+    // 顶部左侧区域
+    let topLeftDiv = OJB_safeCreateJQElement(`<div class="topLeftDiv"></div>`);
+    topDiv.append(topLeftDiv);
+    // 语言选择
+    let selectLang = $('#select-lang').clone();
+    // selectLang.attr('id', 'programTypeId');
+    topLeftDiv.append(selectLang);
+
+    // 顶部右侧区域
     let topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
     topDiv.append(topRightDiv);
     formDiv.append(topDiv);
@@ -10118,7 +10240,7 @@ async function createMonacoEditor(language, form, support) {
         rootUri: rootUri,
         fontSize: 15,
         tabSize: 4,
-        theme: OJBetter.basic.darkMode == "dark" ? "vs-dark" : "vs",
+        theme: OJBetter.common.realDarkMode == "dark" ? "vs-dark" : "vs",
         bracketPairColorization: {
             enabled: true,
             independentColorPoolPerBracketType: true,
@@ -10147,17 +10269,86 @@ async function createMonacoEditor(language, form, support) {
         // 从配置信息更新字体大小
         OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
+        // 更多设置按钮
+        let moreSetting = OJB_safeCreateJQElement(`
+            <div class="ojb_btn ojb_btn_popover top">
+                <i class="iconfont">&#xe643;</i>
+                <span class="popover_content">${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</span>
+            </div>`);
+        form.topRightDiv.append(moreSetting);
+
+        // 设置弹窗页面
+        let moreSettingPopover = OJB_safeCreateJQElement(`
+            <dialog id="moreSettingPopover" class="OJBetter_setting_menu">
+                <div class="tool-box">
+                    <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
+                        <i class="iconfont">&#xe614;</i>
+                    </button>
+                </div>
+                <h2>${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</h2>
+                <div class='OJBetter_setting_list alert_tip'>
+                    <p>${i18next.t('moreSettings.tip', { ns: 'codeEditor' })}</p>
+                </div>
+            </dialog>`);
+        OJB_addDraggable(moreSettingPopover);
+        $('body').append(moreSettingPopover);
+
+        // 设置弹窗的关闭按钮
+        moreSettingPopover.find('.btn-close').on('click', function () {
+            moreSettingPopover[0].close();
+        });
+
         // 调整字体大小
         let changeSize = OJB_safeCreateJQElement(`
-        <div class="ojb_btn ojb_btn_popover top">
-            <input type="number" id="fontSizeInput" value="${OJBetter.monaco.setting.fontsize}">
-            <span class="popover_content">${i18next.t('fontSizeInput', { ns: 'codeEditor' })}</span>
-        </div>`)
-        form.topRightDiv.append(changeSize);
+        <div class='OJBetter_setting_list'>
+            <label for='fontSizeInput'>
+                <div style="display: flex;align-items: center;">${i18next.t('moreSettings.fontSizeInput.label', { ns: 'codeEditor' })}</div>
+            </label>
+            <div class="help_tip">
+                ${helpCircleHTML}
+                <div class="tip_text">${i18next.t('moreSettings.fontSizeInput.helpText', { ns: 'codeEditor' })}</div>
+            </div>
+            <input type='number' id='fontSizeInput' class='no_default'
+                require=true
+                placeholder="${i18next.t('moreSettings.fontSizeInput.placeholder', { ns: 'codeEditor' })}"
+                value="${OJBetter.monaco.setting.fontsize}">
+            <span>px</span>
+        </div>`);
+        moreSettingPopover.append(changeSize);
         changeSize.find('input#fontSizeInput').on('input', function () {
             var size = $(this).val();
             OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(size) });
             GM_setValue('editorFontSize', size);
+        });
+
+        // 测试检查器选择
+        let selectValidator = OJB_safeCreateJQElement(`
+            <div class='OJBetter_setting_list'>
+                <label for="judgeResultValidator">
+                    <span>${i18next.t('moreSettings.validator.label', { ns: 'codeEditor' })}</span>
+                </label>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text">${i18next.t('moreSettings.validator.helpText', { ns: 'codeEditor' })}</div>
+                </div>
+                <select id="judgeResultValidator" name="judgeResultValidator">
+                    <option value="ignoreWhitespace">${i18next.t('moreSettings.validator.options.ignoreWhitespace', { ns: 'codeEditor' })}</option>
+                    <option value="strict">${i18next.t('moreSettings.validator.options.strict', { ns: 'codeEditor' })}</option>
+                    <option value="ncmp">${i18next.t('moreSettings.validator.options.ncmp', { ns: 'codeEditor' })}</option>
+                    <option value="rcmp4">${i18next.t('moreSettings.validator.options.rcmp4', { ns: 'codeEditor' })}</option>
+                    <option value="rcmp6">${i18next.t('moreSettings.validator.options.rcmp6', { ns: 'codeEditor' })}</option>
+                    <option value="rcmp9">${i18next.t('moreSettings.validator.options.rcmp9', { ns: 'codeEditor' })}</option>
+                    <option value="wcmp">${i18next.t('moreSettings.validator.options.wcmp', { ns: 'codeEditor' })}</option>
+                    <option value="nyesno">${i18next.t('moreSettings.validator.options.nyesno', { ns: 'codeEditor' })}</option>
+                </select>
+            </div>`);
+        // 选择默认检查器
+        const defaultValidator = OJB_getGMValue('judgeResultCheckMode', 'ignoreWhitespace');
+        selectValidator.find('select').val(defaultValidator);
+        moreSettingPopover.append(selectValidator);
+        // 注册检查器更改事件
+        selectValidator.find('select').on('change', function () {
+            GM_setValue('judgeResultCheckMode', $(this).val());
         });
 
         // 全屏按钮
@@ -10221,6 +10412,11 @@ async function createMonacoEditor(language, form, support) {
             fixToBottomButton.prop("disabled", false);
             fixToRightButton.prop("disabled", false);
         }
+
+        // 打开更多设置弹窗
+        moreSetting.on('click', () => {
+            OJB_showModal(moreSettingPopover);
+        });
 
         // 进入全屏
         function enterFullscreen() {
@@ -10456,9 +10652,9 @@ async function createMonacoEditor(language, form, support) {
 
     /**
      * 推送新的消息到LSP日志中
-     * @param {'error' | 'warn' | 'info'} status 
-     * @param {string} msg 
-     * @param {boolean} data 
+     * @param {'error' | 'warn' | 'info'} status
+     * @param {string} msg
+     * @param {boolean} data
      */
     function pushLSPLogMessage(status, msg, data) {
         var li = $('<li>').text('[' + new Date().toLocaleString() + '] ' + msg);
@@ -12037,7 +12233,6 @@ async function rextesterCompilerRequest(code, input) {
 }
 
 // wandbox编译器参数列表
-var wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
 function wandboxCompilerArgsChange(nowSelect) {
     // let LanguageChoiceList = {
     //     "6": "PHP", "7": "Python", "9": "C#", "12": "Haskell", "13": "Perl", "19": "OCaml",
@@ -12058,6 +12253,7 @@ function wandboxCompilerArgsChange(nowSelect) {
 
     if (nowSelect in LanguageChoiceList) {
         $('#RunTestButton').prop("disabled", false);
+        const wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
         const Languagefiltered = wandboxlist.filter(obj => obj.language === LanguageChoiceList[nowSelect]);
 
         // 创建编译器下拉框
@@ -12323,14 +12519,31 @@ class TestCaseStatus {
         this.setStatus('Queued', 'queued');
     }
 
+    /**
+     * 设置标题
+     *
+     * @param {string} title 标题
+     */
     setTitle(title) {
         this.titleElement.text(title);
     }
 
+    /**
+     * 设置状态
+     *
+     * @param {string} text 状态文本
+     * @param {string} status 状态类名
+     */
     setStatus(text, status) {
         this.statusElement.text(text).removeClass('queued running success error').addClass(status);
     }
 
+    /**
+     * 设置内容
+     *
+     * @param {string} content 内容
+     * @param {string} type 内容类型
+     */
     setContent(content, type) {
         // 如果内容类型为SUCCESS，隐藏内容元素并提前返回
         if (type === TestCaseContentType.SUCCESS) {
@@ -12384,9 +12597,346 @@ class TestCaseStatus {
         }
     }
 
+    // 设置checker的评测结果
+    setJudgeChecker(message) {
+        function createJudgeCheckerElement(message) {
+            const judgeCheckerElement = OJB_safeCreateJQElement(`<div class="judge-checker">${i18next.t('moreSettings.validator.messagePrefix', { ns: 'codeEditor' })}${message}</div>`);
+            return judgeCheckerElement;
+        };
+        const judgeCheckerElement = createJudgeCheckerElement(message);
+        this.contentElement.before(judgeCheckerElement);
+    };
+
     setJudge(judge) {
         this.judgeElement.text(judge);
     }
+}
+
+/**
+ * 评测结果检查器基类，所有检查器类应继承此类
+ */
+class judgeResultValidator {
+    /**
+     * 检查方法，子类应覆盖此方法
+     * @param {string} expected - 预期输出
+     * @param {string} actual - 实际输出
+     * @returns {Object} 检查结果对象 { passed: boolean, message: string }
+     */
+    validate(expected, actual) {
+        throw new Error("This method should be overridden by subclasses");
+    }
+}
+
+/**
+ * 忽略行末空格和末尾换行的检查器
+ */
+class IgnoreWhitespaceValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        // 去掉字符串末尾的空格和换行符
+        expected = expected.trim().replace(/\s+$/gm, '');
+        actual = actual.trim().replace(/\s+$/gm, '');
+        const passed = expected === actual;
+        return {
+            passed: passed,
+            message: passed ? i18next.t('moreSettings.checkMessage.ignoreWhitespace.correct', { ns: 'codeEditor' }) : i18next.t('moreSettings.checkMessage.ignoreWhitespace.mismatch', { ns: 'codeEditor' })
+        };
+    }
+}
+
+/**
+ * 严格检查器
+ */
+class StrictValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const passed = expected === actual;
+        return {
+            passed: passed,
+            message: passed ? i18next.t('moreSettings.checkMessage.strict.correct', { ns: 'codeEditor' }) : i18next.t('moreSettings.checkMessage.strict.mismatch', { ns: 'codeEditor' })
+        };
+    }
+}
+
+
+/**
+ * 整数检查器
+ */
+class NcmpValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const expectedInts = expected.split(/\s+/).filter(Boolean).map(Number);
+        const actualInts = actual.split(/\s+/).filter(Boolean).map(Number);
+
+        const minLength = Math.min(expectedInts.length, actualInts.length);
+        let firstElems = [];
+
+        for (let i = 0; i < minLength; i++) {
+            if (expectedInts[i] !== actualInts[i]) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.ncmp.differ', { ns: 'codeEditor', count: i + 1, expected: expectedInts[i], actual: actualInts[i] })
+                };
+            } else if (i < 5) {
+                firstElems.push(expectedInts[i]);
+            }
+        }
+
+        if (expectedInts.length > actualInts.length) {
+            return {
+                passed: false,
+                message: i18next.t('moreSettings.checkMessage.ncmp.longerExpected', { ns: 'codeEditor', expectedLength: expectedInts.length, actualLength: actualInts.length })
+            };
+        }
+
+        if (actualInts.length > expectedInts.length) {
+            return {
+                passed: false,
+                message: i18next.t('moreSettings.checkMessage.ncmp.longerActual', { ns: 'codeEditor', actualLength: actualInts.length, expectedLength: expectedInts.length })
+            };
+        }
+
+        return {
+            passed: true,
+            message: firstElems.length <= 5 ? i18next.t('moreSettings.checkMessage.ncmp.correctFew', { ns: 'codeEditor', count: firstElems.length, numbers: firstElems.join(' ') }) : i18next.t('moreSettings.checkMessage.ncmp.correctMany', { ns: 'codeEditor', count: expectedInts.length })
+        };
+    }
+}
+
+/**
+ * 浮点数检查器
+ */
+class RcmpValidator extends judgeResultValidator {
+    constructor(epsilon) {
+        super();
+        this.epsilon = epsilon;
+    }
+
+    validate(expected, actual) {
+        const expectedFloats = expected.split(/\s+/).filter(Boolean).map(Number);
+        const actualFloats = actual.split(/\s+/).filter(Boolean).map(Number);
+
+        if (expectedFloats.length !== actualFloats.length) {
+            return {
+                passed: false,
+                message: i18next.t('moreSettings.checkMessage.rcmp.lengthMismatch', {
+                    ns: 'codeEditor',
+                    expectedLength: expectedFloats.length,
+                    actualLength: actualFloats.length
+                })
+            };
+        }
+
+        for (let i = 0; i < expectedFloats.length; i++) {
+            if (isNaN(expectedFloats[i]) || isNaN(actualFloats[i])) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.rcmp.invalidNumber', {
+                        ns: 'codeEditor',
+                        index: i + 1,
+                        expected: expected.split(/\s+/)[i],
+                        actual: actual.split(/\s+/)[i]
+                    })
+                };
+            }
+
+            const error = Math.abs(expectedFloats[i] - actualFloats[i]);
+            if (error > this.epsilon) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.rcmp.differ', {
+                        ns: 'codeEditor',
+                        n: i + 1,
+                        expected: expectedFloats[i].toFixed(7),
+                        actual: actualFloats[i].toFixed(7),
+                        error: error.toFixed(7)
+                    })
+                };
+            }
+        }
+
+        if (expectedFloats.length === 1) {
+            const error = Math.abs(expectedFloats[0] - actualFloats[0]);
+            return {
+                passed: true,
+                message: i18next.t('moreSettings.checkMessage.rcmp.single', {
+                    ns: 'codeEditor',
+                    expected: expectedFloats[0].toFixed(7),
+                    actual: actualFloats[0].toFixed(7),
+                    error: error.toFixed(7)
+                })
+            };
+        }
+
+        return {
+            passed: true,
+            message: i18next.t('moreSettings.checkMessage.rcmp.total', {
+                ns: 'codeEditor',
+                count: expectedFloats.length
+            })
+        };
+    }
+}
+
+/**
+ * 字符串检查器
+ */
+class WcmpValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const expectedWords = expected.split(/\s+/);
+        const actualWords = actual.split(/\s+/);
+
+        const minLength = Math.min(expectedWords.length, actualWords.length);
+
+        for (let i = 0; i < minLength; i++) {
+            if (expectedWords[i] !== actualWords[i]) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.wcmp.wordsDiffer', {
+                        ns: 'codeEditor',
+                        count: i + 1,
+                        expected: expectedWords[i],
+                        actual: actualWords[i]
+                    })
+                };
+            }
+        }
+
+        if (expectedWords.length !== actualWords.length) {
+            return {
+                passed: false,
+                message: expectedWords.length > actualWords.length
+                    ? i18next.t('moreSettings.checkMessage.wcmp.extraTokensInParticipant', { ns: 'codeEditor' })
+                    : i18next.t('moreSettings.checkMessage.wcmp.unexpectedEOF', { ns: 'codeEditor' })
+            };
+        }
+
+        return {
+            passed: true,
+            message: minLength === 1
+                ? i18next.t('moreSettings.checkMessage.wcmp.singleToken', { ns: 'codeEditor', token: expectedWords[0] })
+                : i18next.t('moreSettings.checkMessage.wcmp.tokenCount', { ns: 'codeEditor', count: minLength })
+        };
+    }
+}
+
+/**
+ * YES NO大小写不敏感检查器
+ */
+class NyesnoValidator extends judgeResultValidator {
+    validate(expected, actual) {
+        const YES = "yes";
+        const NO = "no";
+
+        const expectedTokens = expected.trim().toLowerCase().split(/\s+/);
+        const actualTokens = actual.trim().toLowerCase().split(/\s+/);
+
+        let index = 0;
+        let yesCount = 0;
+        let noCount = 0;
+
+        while (index < expectedTokens.length && index < actualTokens.length) {
+            const expectedToken = expectedTokens[index];
+            const actualToken = actualTokens[index];
+            index++;
+
+            if (expectedToken !== YES && expectedToken !== NO) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.nyesno.expectedInAnswer', { ns: 'codeEditor', YES, NO, token: expectedToken, index, ending: this.englishEnding(index) })
+                };
+            }
+
+            if (actualToken === YES) {
+                yesCount++;
+            } else if (actualToken === NO) {
+                noCount++;
+            } else {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.nyesno.expectedInOutput', { ns: 'codeEditor', YES, NO, token: actualToken, index, ending: this.englishEnding(index) })
+                };
+            }
+
+            if (expectedToken !== actualToken) {
+                return {
+                    passed: false,
+                    message: i18next.t('moreSettings.checkMessage.nyesno.mismatch', { ns: 'codeEditor', expected: expectedToken, actual: actualToken, index, ending: this.englishEnding(index) })
+                };
+            }
+        }
+
+        if (index < expectedTokens.length) {
+            return {
+                passed: false,
+                message: i18next.t('moreSettings.checkMessage.nyesno.longerInAnswer', { ns: 'codeEditor', expectedLength: expectedTokens.length, actualLength: index })
+            };
+        }
+
+        if (index < actualTokens.length) {
+            return {
+                passed: false,
+                message: i18next.t('moreSettings.checkMessage.nyesno.longerInOutput', { ns: 'codeEditor', actualLength: actualTokens.length, expectedLength: index })
+            };
+        }
+
+        if (index === 0) {
+            return {
+                passed: true,
+                message: i18next.t('moreSettings.checkMessage.nyesno.emptyOutput', { ns: 'codeEditor' })
+            };
+        } else if (index === 1) {
+            return {
+                passed: true,
+                message: `${actualTokens[0]}`
+            };
+        } else {
+            return {
+                passed: true,
+                message: i18next.t('moreSettings.checkMessage.nyesno.summary', { ns: 'codeEditor', index, yesCount, noCount })
+            };
+        }
+    }
+
+    englishEnding(number) {
+        if (number % 10 === 1 && number % 100 !== 11) {
+            return 'st';
+        } else if (number % 10 === 2 && number % 100 !== 12) {
+            return 'nd';
+        } else if (number % 10 === 3 && number % 100 !== 13) {
+            return 'rd';
+        } else {
+            return 'th';
+        }
+    }
+}
+
+// 创建检查器实例映射
+const judgeResultValidators = {
+    'ignoreWhitespace': new IgnoreWhitespaceValidator(),
+    'strict': new StrictValidator(),
+    'ncmp': new NcmpValidator(),
+    'rcmp4': new RcmpValidator(1e-4),
+    'rcmp6': new RcmpValidator(1e-6),
+    'rcmp9': new RcmpValidator(1e-9),
+    'wcmp': new WcmpValidator(),
+    'nyesno': new NyesnoValidator()
+};
+
+/**
+ * 检查入口函数
+ *
+ * @param {string} 原始输出
+ * @param {string} 实际输出
+ * @return {Object} 检查结果对象 { passed: boolean, message: string }
+ */
+function judgeResultValidate(expected, actual) {
+    const judgeResultCheckMode = OJB_getGMValue('judgeResultCheckMode', 'ignoreWhitespace');
+    const validator = judgeResultValidators[judgeResultCheckMode];
+    if (!validator) {
+        throw new Error("Unsupported validator");
+    }
+    const result = validator.validate(expected, actual);
+    // message前面加上检查器的英文简写名字
+    result.message = `[${judgeResultCheckMode}] ${result.message}`;
+    return result;
 }
 
 // 样例测试函数
@@ -12428,16 +12978,27 @@ async function runCode(event, runButton, sourceDiv) {
             testCase.setStatus('Compilation error or Time limit', 'error');
             testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
             hasError = true;
-        } else if (result.Result.trim() === data.output.trim()) {
-            testCase.setStatus('Accepted', 'success');
-            testCase.setContent('The output is correct.', TestCaseContentType.SUCCESS);
-            passedTests++;
         } else {
-            testCase.setStatus('Wrong Answer', 'error');
-            const diffContent = $('#DontShowDiff').prop('checked') ? result.Result.trim() : codeDiff(data.output.trim(), result.Result.trim());
-            const contentType = $('#DontShowDiff').prop('checked') ? TestCaseContentType.NO_DIFF : TestCaseContentType.DIFF;
-            testCase.setContent(diffContent, contentType);
-            failedTests++;
+            const resultCheck = judgeResultValidate(data.output, result.Result);
+            testCase.setJudgeChecker(resultCheck.message);
+            // 根据检查结果设置样例测试状态
+            if (resultCheck.passed) {
+                testCase.setStatus('Accepted', 'success');
+                testCase.setContent('The output is correct.', TestCaseContentType.SUCCESS);
+                passedTests++;
+            } else {
+                testCase.setStatus('Wrong Answer', 'error');
+                const judgeResultCheckMode = OJB_getGMValue('judgeResultCheckMode', 'ignoreWhitespace');
+                // 如果检查模式为ignoreWhitespace，去掉字符串末尾的空格和换行符
+                if (judgeResultCheckMode === 'ignoreWhitespace') {
+                    data.output = data.output.trim().replace(/\s+$/gm, '');
+                    result.Result = result.Result.trim().replace(/\s+$/gm, '');
+                }
+                const diffContent = $('#DontShowDiff').prop('checked') ? result.Result : codeDiff(data.output, result.Result);
+                const contentType = $('#DontShowDiff').prop('checked') ? TestCaseContentType.NO_DIFF : TestCaseContentType.DIFF;
+                testCase.setContent(diffContent, contentType);
+                failedTests++;
+            }
         }
 
         const judgeStats = `${i18next.t('resultBlock.state', { ns: 'codeEditor' })}${result.Stats}`;
@@ -12467,7 +13028,7 @@ async function runCode(event, runButton, sourceDiv) {
 
 /**
  * 添加题目页代码编辑器
- * @returns 
+ * @returns
  */
 async function addProblemPageCodeEditor() {
     // if (typeof ace === 'undefined') {
@@ -12801,77 +13362,124 @@ async function translate_youdao_mobile(raw) {
     const getcookie = (() => {
         // 生成IP地址
         const generateIP = () => {
-            return `${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(1, 255)}`;
-        }
+            return `${OJB_getRandomNumberInRange(
+                1,
+                255
+            )}.${OJB_getRandomNumberInRange(1, 255)}.${OJB_getRandomNumberInRange(
+                1,
+                255
+            )}.${OJB_getRandomNumberInRange(1, 255)}`;
+        };
         // 生成OUTFOX_SEARCH_USER_ID_NCOO的值
-        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(100000000, 999999999)}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
+        const OUTFOX_SEARCH_USER_ID_NCOO = `${OJB_getRandomNumberInRange(
+            100000000,
+            999999999
+        )}.${OJB_getRandomNumberInRange(100000000, 999999999)}`;
         // 生成OUTFOX_SEARCH_USER_ID的值
-        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(100000000, 999999999)}@${generateIP()}`;
+        const OUTFOX_SEARCH_USER_ID = `${OJB_getRandomNumberInRange(
+            100000000,
+            999999999
+        )}@${generateIP()}`;
         return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
     })();
 
-    /**
-     * 生成随机时间戳
-     */
-    const gettime = (new Date()).getTime();
 
     /**
      * 生成sign
      */
-    const getsign = (() => {
+    const getsign = (e, t) => {
         const d = "fanyideskweb";
         const u = "webfanyi";
-        const t = "fsdsogkndfokasodnaso";
+
         function A(e) {
             return CryptoJS.MD5(e.toString()).toString(CryptoJS.enc.Hex);
         }
-        function w(e) {
-            return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+        return A(`client=${d}&mysticTime=${e}&product=${u}&key=${t}`);
+    };
+
+    // 获取key
+    const getKey = async (sign, time) => {
+        const urlData = {
+            "keyid": "webfanyi-key-getter",
+            "sign": sign,
+            "client": "fanyideskweb",
+            "product": "webfanyi",
+            "appVersion": "1.0.0",
+            "vendor": "web",
+            "pointParam": "client,mysticTime,product",
+            "mysticTime": time,
+            "keyfrom": "fanyi.web",
+            "mid": "1",
+            "screen": "1",
+            "model": "1",
+            "network": "wifi",
+            "abtest": "0",
+            "yduuid": "abcdefg"
         }
-        return w(gettime);
-    })();
+        const options = {
+            method: "GET",
+            url: `https://dict.youdao.com/webtranslate/key?${new URLSearchParams(urlData)}`,
+            headers: {
+                Accept: "application/json, text/plain, */*",
+                Origin: "https://fanyi.youdao.com",
+                Referer: "https://fanyi.youdao.com/",
+            },
+        };
+        const response = await OJB_GMRequest(options);
+        if (!response.responseText)
+            throw new OJB_GMError(
+                "network",
+                "An unknown network error occurred!",
+                response
+            );
+        const { data } = JSON.parse(response.responseText);
+        return data;
+    }
 
     /**
      * 解码方法
      * @param {string} src 待解码的字符串
      * @returns {Object} 解码后的数据
      */
-    const decode = function (src) {
+    const decode = function (src, key, iv) {
         // 解码URL安全的Base64
         const decodeUrlSafeBase64 = (str) => {
-            let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+            let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
             return base64;
-        }
+        };
 
-        // 使用MD5生成key和iv，取前16字节
-        const key = "ydsecret://query/key/B*RGygVywfNBwpmBaZg*WT7SIOUP2T0C9WHMZN39j^DAdaZhAnxvGcCY6VYFwnHl";
-        const iv = "ydsecret://query/iv/C@lZe2YzHtZ2CYgaXKSVfsb7Y4QWHjITPPZ0nQp87fBeJ!Iv6v^6fvi2WN@bYpJ4";
         const keyHash = CryptoJS.MD5(key).toString();
         const ivHash = CryptoJS.MD5(iv).toString();
 
-        // 使用AES-128-CBC模式进行解密
-        const keyForAES = CryptoJS.enc.Hex.parse(keyHash).toString().substring(0, 32);
-        const ivForAES = CryptoJS.enc.Hex.parse(ivHash).toString().substring(0, 32);
+        const keyForAES = keyHash.substring(0, 32);
+        const ivForAES = ivHash.substring(0, 32);
 
-        // 解码URL安全的Base64
+        // 解码
         const decodedBase64 = decodeUrlSafeBase64(src);
 
         // 解密
-        const decrypted = CryptoJS.AES.decrypt({
-            ciphertext: CryptoJS.enc.Base64.parse(decodedBase64)
-        }, CryptoJS.enc.Hex.parse(keyForAES), {
-            iv: CryptoJS.enc.Hex.parse(ivForAES),
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        });
+        const decrypted = CryptoJS.AES.decrypt(
+            {
+                ciphertext: CryptoJS.enc.Base64.parse(decodedBase64),
+            },
+            CryptoJS.enc.Hex.parse(keyForAES),
+            {
+                iv: CryptoJS.enc.Hex.parse(ivForAES),
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7,
+            }
+        );
 
         // 将解密结果转换为Utf8字符串
         const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
 
         // 处理JSON字符串并解析
-        const jsonStr = decryptedStr.substring(0, decryptedStr.lastIndexOf("}") + 1);
+        const jsonStr = decryptedStr.substring(
+            0,
+            decryptedStr.lastIndexOf("}") + 1
+        );
         return JSON.parse(jsonStr);
-    }
+    };
     // 整理数据
     const organizeTranslation = (data) => {
         // 提取translateResult数组
@@ -12880,49 +13488,59 @@ async function translate_youdao_mobile(raw) {
         // 整理tgt字段
         return translateResult
             .flat()
-            .map(item => item.tgt)
-            .join('');
+            .map((item) => item.tgt)
+            .join("");
     };
+
+    /**
+     * 生成随机时间戳
+     */
+    const time = new Date().getTime();
+    const t = "asdjnjfenknafdfsdfsd";
+    const sign = getsign(time, t);
+    const { secretKey, aesKey, aesIv } = await getKey(sign, time);
     // 表单数据
     const data = {
-        "i": raw,
-        "from": "auto",
-        "to": getTargetLanguage('youdao'),
-        "dictResult": "true",
-        "keyid": "webfanyi",
-        "sign": getsign,
-        "client": "fanyideskweb",
-        "product": "webfanyi",
-        "appVersion": "1.0.0",
-        "vendor": "web",
-        "pointParam": "client,mysticTime,product",
-        "mysticTime": gettime,
-        "keyfrom": "fanyi.web",
-        "mid": "1",
-        "screen": "1",
-        "model": "1",
-        "network": "wifi",
-        "abtest": "0",
-        "yduuid": "abcdefg"
+        i: raw,
+        from: "auto",
+        to: getTargetLanguage("youdao"),
+        useTerm: "false",
+        domain: "0",
+        dictResult: "true",
+        keyid: "webfanyi",
+        sign: getsign(time, secretKey),
+        client: "fanyideskweb",
+        product: "webfanyi",
+        appVersion: "1.0.0",
+        vendor: "web",
+        pointParam: "client,mysticTime,product",
+        mysticTime: time,
+        keyfrom: "fanyi.web",
+        mid: "1",
+        screen: "1",
+        model: "1",
+        network: "wifi",
+        abtest: "0",
+        yduuid: "abcdefg",
     };
     const options = {
         method: "POST",
-        url: 'https://dict.youdao.com/webtranslate',
+        url: "https://dict.youdao.com/webtranslate",
         data: new URLSearchParams(data),
         anonymous: true,
         cookie: getcookie,
         headers: {
+            "Accept": "application/json, text/plain, */*",
+            'Sec-Fetch-Site': 'same-site',
             "Content-Type": "application/x-www-form-urlencoded",
-            'Referer': 'https://fanyi.youdao.com/',
-        }
-    }
-    return await BaseTranslate(options,
-        res => {
-            const decodeData = decode(res)
-            const result = organizeTranslation(decodeData);
-            return result;
-        }
-    );
+            Referer: "https://fanyi.youdao.com/",
+        },
+    };
+    return await BaseTranslate(options, (res) => {
+        const decodeData = decode(res, aesKey, aesIv);
+        const result = organizeTranslation(decodeData);
+        return result.replace(/\n/g, "\n\n");
+    });
 }
 
 /**
@@ -13319,8 +13937,12 @@ async function queryServerBalance(quotaConfig) {
         headers: {
             ...Object.assign({}, ...quotaConfig.header)
         },
-        data: JSON.stringify({ ...Object.assign({}, ...quotaConfig.data) })
     };
+
+    // 只有在 method 不是 'GET' 时才添加 data
+    if (requestOptions.method.toUpperCase() !== 'GET' && quotaConfig.data) {
+        requestOptions.data = JSON.stringify({ ...Object.assign({}, ...quotaConfig.data) });
+    }
 
     // 发送请求并返回 Promise
     return OJB_GMRequest(requestOptions).then(response => {
@@ -13397,6 +14019,7 @@ function initOnDOMReady() {
     if (OJBetter.typeOfPage.is_problem && OJBetter.monaco.enableOnProblemPage) {
         addProblemPageCodeEditor(); // 添加题目页代码编辑器
     }
+    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem) ShowSameContestProblems(); //显示同比赛题目列表
 }
 
 /**
