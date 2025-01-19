@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.76.22
+// @version      1.76.23
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -14605,7 +14605,6 @@ async function rextesterCompilerRequest(code, input) {
 }
 
 // wandbox编译器参数列表
-var wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
 function wandboxCompilerArgsChange(nowSelect) {
   let LanguageChoiceList = {
     6: "PHP",
@@ -14645,6 +14644,7 @@ function wandboxCompilerArgsChange(nowSelect) {
 
   if (nowSelect in LanguageChoiceList) {
     $("#RunTestButton").prop("disabled", false);
+    const wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
     const Languagefiltered = wandboxlist.filter(
       (obj) => obj.language === LanguageChoiceList[nowSelect]
     );

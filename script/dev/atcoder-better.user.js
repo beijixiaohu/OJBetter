@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.17.17
+// @version      1.17.18
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -12233,7 +12233,6 @@ async function rextesterCompilerRequest(code, input) {
 }
 
 // wandbox编译器参数列表
-var wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
 function wandboxCompilerArgsChange(nowSelect) {
     // let LanguageChoiceList = {
     //     "6": "PHP", "7": "Python", "9": "C#", "12": "Haskell", "13": "Perl", "19": "OCaml",
@@ -12254,6 +12253,7 @@ function wandboxCompilerArgsChange(nowSelect) {
 
     if (nowSelect in LanguageChoiceList) {
         $('#RunTestButton').prop("disabled", false);
+        const wandboxlist = JSON.parse(GM_getResourceText("wandboxlist"));
         const Languagefiltered = wandboxlist.filter(obj => obj.language === LanguageChoiceList[nowSelect]);
 
         // 创建编译器下拉框
