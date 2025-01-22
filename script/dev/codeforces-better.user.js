@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.78.0
+// @version      1.78.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -15547,9 +15547,17 @@ async function runCode(event, runButton, sourceDiv) {
     const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
 
     if (result.Errors) {
-      testCase.setStatus("Compilation error or Time limit", "error");
-      testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
-      hasError = true;
+      if (result.Errors === "Verdict not ready, retrying...") {
+        testCase.setStatus(
+          "Server communication timeout. Judge service may be busy.",
+          "error"
+        );
+        hasError = true;
+      } else {
+        testCase.setStatus("Compilation error or Time limit", "error");
+        testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
+        hasError = true;
+      }
     } else {
       const resultCheck = judgeResultValidate(data.output, result.Result);
       testCase.setJudgeChecker(resultCheck.message);
@@ -16079,7 +16087,7 @@ async function translate_youdao_web(raw) {
         "An unknown network error occurred!",
         response
       );
-    const {data} = JSON.parse(response.responseText);
+    const { data } = JSON.parse(response.responseText);
     return data;
   }
 
@@ -16145,7 +16153,7 @@ async function translate_youdao_web(raw) {
   const time = new Date().getTime();
   const t = "asdjnjfenknafdfsdfsd";
   const sign = getsign(time, t);
-  const {secretKey, aesKey, aesIv} = await getKey(sign, time);
+  const { secretKey, aesKey, aesIv } = await getKey(sign, time);
   // 表单数据
   const data = {
     i: raw,

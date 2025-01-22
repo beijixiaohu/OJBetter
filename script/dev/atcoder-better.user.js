@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.18.0
+// @version      1.18.1
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -12975,9 +12975,17 @@ async function runCode(event, runButton, sourceDiv) {
         const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
 
         if (result.Errors) {
-            testCase.setStatus('Compilation error or Time limit', 'error');
-            testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
-            hasError = true;
+            if (result.Errors === "Verdict not ready, retrying...") {
+                testCase.setStatus(
+                    "Server communication timeout. Judge service may be busy.",
+                    "error"
+                );
+                hasError = true;
+            } else {
+                testCase.setStatus("Compilation error or Time limit", "error");
+                testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
+                hasError = true;
+            }
         } else {
             const resultCheck = judgeResultValidate(data.output, result.Result);
             testCase.setJudgeChecker(resultCheck.message);
