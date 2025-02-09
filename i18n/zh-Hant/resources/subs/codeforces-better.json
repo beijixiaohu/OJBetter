@@ -51,8 +51,8 @@
                 "Verdict": "判題狀態",
                 "Time": "時間",
                 "Memory": "运行内存",
-                "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded"
+                "时间 limit exceeded": "超過時間限制",
+                "内存 limit exceeded": "超過內存限制"
             }
         },
         ".menu-list.main-menu-list": {
@@ -67,7 +67,7 @@
                 "Catalog": "指南目錄",
                 "Contests": "比賽",
                 "Gym": "訓練營",
-                "Problemset": "题库",
+                "Problemset": "題庫",
                 "Groups": "團體",
                 "Rating": "Rating排行榜",
                 "Edu": "訓練",
@@ -165,7 +165,7 @@
                 "Register now": "現在報名",
                 "No tag edit access": "沒有標籤編輯權限",
                 "Problem([\\s]*)$": "問題",
-                "Submission": "提交编号",
+                "Submission": "提交編號",
                 "Time": "時間",
                 "Verdict": "判題狀態",
                 "Language:": "語言:",
@@ -175,12 +175,12 @@
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虛擬比賽是一種參加過去比賽的方式，盡可能接近即時參賽。目前只支援ICPC模式的虛擬賽事。",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已經看過這些題目，虛擬賽事就不適合你──應該在題庫中解決這些題目。",
                 "If you just want to solve some problem from a contest, a virtual contest is not for you - solve this problem in the archive.": "如果你只是想解決比賽中的某個問題，虛擬賽事也不適合你——應該在題庫中解決這個問題。",
-                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "在虚拟比赛期间，切勿使用别人的代码，阅读题解或与他人交流。",
+                "Never use someone else's code, read the tutorials or communicate with other person during a virtual contest.": "在虛擬比賽期間，切勿使用別人的代碼，閲讀題解或與他人交流。",
                 "You can clone this contest to a mashup.": "您可以將此比賽克隆到混搭比賽中。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一種特殊類型的訓練比賽，由過去Codeforces比賽的公開問題組成。還可以添加",
                 "problems to mashup contest.": "問題到混搭比賽。",
                 "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。",
-                "时间 limit exceeded": "Time limit exceeded"
+                "时间 limit exceeded": "超過時間限制"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -211,7 +211,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "公告",
-                "Statements": "题面陈述",
+                "Statements": "題面陳述",
                 "Tutorial": "題解"
             }
         },
@@ -231,9 +231,9 @@
                 "Edit": "編輯",
                 "Custom Invocation": "自訂偵錯",
                 "Common standings": "全部排行",
-                "Friends standings": "只看关注",
-                "Rating Changes": "全部评级变化",
-                "Friends 全部评级变化": "关注评级变化",
+                "Friends standings": "只看關注",
+                "Rating Changes": "所有評級變化",
+                "Friends 全部评级变化": "關注評級變化",
                 "Submit": "提交",
                 "Hacks": "駭客",
                 "Room": "房間",
@@ -243,7 +243,7 @@
                 "Submissions": "提交記錄",
                 "Groups": "團體",
                 "Rating": "評級",
-                "Friends rating": "关注的评级",
+                "Friends rating": "關注的評級",
                 "Favourites": "收藏",
                 "Contests": "比賽",
                 "Magic": "魔法",
@@ -350,7 +350,7 @@
             "rules": {
                 "Enter": "登入",
                 "Register": "註冊",
-                "Contest rating": "比赛rating",
+                "Contest rating": "比賽rating",
                 "Logout": "登出登入"
             }
         },
@@ -648,13 +648,13 @@
                 "combine-tags-by-or": "按邏輯或組合我選擇的標籤（combine-tags-by-or）",
                 "2-sat": "2-SAT（2-sat）",
                 "binary search": "二分（binary search）",
-                "bitmasks": "状态压缩（bitmasks）",
+                "bitmasks": "狀態壓縮（bitmasks）",
                 "brute force": "暴力枚舉（brute force）",
                 "chinese remainder theorem": "中國剩餘定理（chinese remainder theorem）",
                 "combinatorics": "組合數學（combinatorics）",
-                "constructive algorithms": "构造（constructive algorithms）",
+                "constructive algorithms": "構造（constructive algorithms）",
                 "data structures": "資料結構（data structures）",
-                "dfs and similar": "DFS及其变种（dfs and similar）",
+                "dfs and similar": "DFS及其變種（dfs and similar）",
                 "divide and conquer": "分治（divide and conquer）",
                 "dp": "動態規劃（dp）",
                 "dsu": "並查集（dsu）",
@@ -665,13 +665,13 @@
                 "geometry": "計算幾何（geometry）",
                 "graph matchings": "圖匹配（graph matchings）",
                 "graphs": "圖論（graphs）",
-                "greedy": "贪心（greedy）",
+                "greedy": "貪心（greedy）",
                 "hashing": "哈希表（hashing）",
-                "implementation": "模拟（implementation）",
-                "interactive": "交互题（interactive）",
+                "implementation": "模擬（implementation）",
+                "interactive": "交互題（interactive）",
                 "math": "數學（math）",
                 "matrices": "矩陣（matrices）",
-                "meet-in-the-middle": "双向搜索（meet-in-the-middle）",
+                "meet-in-the-middle": "雙向搜索（meet-in-the-middle）",
                 "number theory": "數論（number theory）",
                 "probabilities": "機率論（probabilities）",
                 "schedules": "調度演算法（schedules）",
@@ -681,7 +681,7 @@
                 "strings": "字串處理（strings）",
                 "ternary search": "三分（ternary search）",
                 "trees": "樹形結構（trees）",
-                "two pointers": "双指针（two pointers）"
+                "two pointers": "雙指針（two pointers）"
             }
         },
         "SettingField-name": {
@@ -788,7 +788,7 @@
                 "Logo \\(Russian\\):": "徽標（俄語）:",
                 "End time:": "結束時間:",
                 "Name:": "名稱:",
-                "Contest\\(s\\):": "比赛:",
+                "Contest\\(s\\):": "比賽:",
                 "Add contest:": "新增比賽:",
                 "Show Contestants:": "顯示參賽選手:",
                 "Show Out of Competition Participants:": "顯示非競賽參與者:",
@@ -841,7 +841,7 @@
         },
         "choose-order": {
             "class": [
-                ".choose-order"
+                "選擇順序"
             ],
             "description": "",
             "isStrict": false,
@@ -886,23 +886,23 @@
         },
         "button": {
             "class": [
-                "button"
+                "按鈕"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "Compare": "比较"
+                "Compare": "比較"
             }
         },
         ".click-to-view-tests-div": {
             "class": [
-                ".click-to-view-tests-div"
+                "點擊查看測試"
             ],
             "description": "",
             "isStrict": false,
             "rules": {
-                "Click": "点击",
-                "to see test details": "查看测试详情"
+                "Click": "點擊",
+                "to see test details": "查看測試詳情"
             }
         }
     },
@@ -927,7 +927,7 @@
                 "Clone Contest": "複製比賽",
                 "Submit": "提交",
                 "Save changes": "儲存設定",
-                "Filter": "濾",
+                "Filter": "過濾",
                 "Find": "尋找",
                 "Save": "儲存",
                 "Create Mashup Contest": "創建混搭比賽",
@@ -949,8 +949,8 @@
                 "Delete contest": "刪除比賽",
                 "Preview": "預覽",
                 "Delete": "刪除",
-                "Save draft": "保存草稿",
-                "Post": "发布"
+                "Save draft": "儲存草稿",
+                "Post": "發布"
             }
         }
     },
@@ -967,8 +967,8 @@
                 "Looking forward to seeing you at Codeforces.": "期待在Codeforces見到你。",
                 "You have been successfully registered": "您已成功報名",
                 "No such contests": "沒有該比賽",
-                "The example input has been copied into the clipboard": "样例输入已复制到剪贴板",
-                "The example output has been copied into the clipboard": "样例输出已复制到剪贴板",
+                "The example input has been copied into the clipboard": "用例輸入已複製到剪貼板",
+                "The example output has been copied into the clipboard": "用例輸出已複製到剪貼板",
                 "The source code has been copied into the clipboard": "原始碼已複製到剪貼簿",
                 "Settings have been updated": "設定已更新",
                 "Solution to the problem": "問題",
@@ -981,8 +981,8 @@
                 "No such blog entry": "沒有該部落格條目",
                 "Compilation error": "編譯錯誤",
                 "No registration is opened now": "現在沒有開放報名",
-                "Blog entry has been deleted": "博客条目已删除",
-                "Added to liked": "已点击喜欢"
+                "Blog entry has been deleted": "部落格條目已刪除",
+                "Added to liked": "已點擊喜歡"
             }
         }
     }
