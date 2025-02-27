@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.78.1
+// @version      1.78.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -2338,7 +2338,7 @@ dialog::backdrop {
     flex-wrap: wrap;
     justify-content: flex-end;
     overflow: auto;
-    height: 100%;
+    height: auto;
     margin: 0.5em;
 }
 
