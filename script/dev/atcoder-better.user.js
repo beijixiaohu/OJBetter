@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.18.2
+// @version      1.18.3
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -13643,7 +13643,7 @@ async function translate_openai(raw) {
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
                 ? "keeping the LaTeX equations unchanged."
-                : "keeping the brackets【】, HTML tags, and their content unchanged."
+                : "keeping the brackets [], HTML tags, and their content unchanged."
             }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
@@ -13747,7 +13747,7 @@ async function* openai_stream(raw) {
 As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
 The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
                 ? "keeping the LaTeX equations unchanged."
-                : "keeping the brackets【】, HTML tags, and their content unchanged."
+                : "keeping the brackets [], HTML tags, and their content unchanged."
             }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :

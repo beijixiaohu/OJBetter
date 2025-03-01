@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.78.2
+// @version      1.78.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -16305,7 +16305,7 @@ As a professional English translator, your task is to accurately translate a seg
 The translation should use professional terms and maintain the text format, including ${
       OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
         ? "keeping the LaTeX equations unchanged."
-        : "keeping the brackets【】, HTML tags, and their content unchanged."
+        : "keeping the brackets [], HTML tags, and their content unchanged."
     }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${
@@ -16429,7 +16429,7 @@ As a professional English translator, your task is to accurately translate a seg
 The translation should use professional terms and maintain the text format, including ${
       OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
         ? "keeping the LaTeX equations unchanged."
-        : "keeping the brackets【】, HTML tags, and their content unchanged."
+        : "keeping the brackets [], HTML tags, and their content unchanged."
     }
 After translation, please ensure that the ${lang} version conforms to normal expression habits.
 What I need is a carefully polished ${lang} translation of my question segment. ${
