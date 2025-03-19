@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.18.3
+// @version      1.18.4
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -13639,17 +13639,20 @@ async function translate_openai(raw) {
             prompt += `\n${raw}`;
         };
     } else {
-        prompt = `
-As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
-The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-                ? "keeping the LaTeX equations unchanged."
-                : "keeping the brackets [], HTML tags, and their content unchanged."
-            }
-After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-                `The segment to be translated is as follows: "
+        prompt = `You are a professional English translator specializing in algorithm programming competitions. 
+Translate the following text into ${lang} with precision, using appropriate technical terminology.
+
+Rules:
+1. Output ONLY the translation, with no explanations, notes, or other text
+2. Maintain all original formatting
+3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+4. Ensure the translation follows natural ${lang} expression patterns
+5. Use professional terminology common in programming competitions
+
+Text to translate:
+"
 ${raw}
-"`}`;
+"`;
     };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
@@ -13743,17 +13746,20 @@ async function* openai_stream(raw) {
             prompt += `\n${raw}`;
         };
     } else {
-        prompt = `
-As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
-The translation should use professional terms and maintain the text format, including ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-                ? "keeping the LaTeX equations unchanged."
-                : "keeping the brackets [], HTML tags, and their content unchanged."
-            }
-After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment. ${OJBetter.chatgpt.asSystemPrompt ? '' :
-                `The segment to be translated is as follows: "
+        prompt = `You are a professional English translator specializing in algorithm programming competitions. 
+Translate the following text into ${lang} with precision, using appropriate technical terminology.
+
+Rules:
+1. Output ONLY the translation, with no explanations, notes, or other text
+2. Maintain all original formatting
+3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+4. Ensure the translation follows natural ${lang} expression patterns
+5. Use professional terminology common in programming competitions
+
+Text to translate:
+"
 ${raw}
-"`}`;
+"`;
     };
     const data = {
         model: OJBetter.chatgpt.config.model || modelDefault,
