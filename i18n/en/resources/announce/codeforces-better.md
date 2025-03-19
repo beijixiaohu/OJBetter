@@ -1,3 +1,11 @@
+## 1.78.0
+
+- Remove dependency on Greasyfork script repository
+- Replace the default update source with AliCloud OSS
+- Fix the problem of wrong style of buttons on some title pages
+- Improvements：Adjusting GPT Default Prompt Words
+- Improvements：Give clear indication when online code runs out of time
+
 ## 1.77.0
 
 - Add "Sample Test Results Checker" option
