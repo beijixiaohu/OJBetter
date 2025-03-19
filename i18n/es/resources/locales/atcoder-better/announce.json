@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.18.0",
+    "lastVersion": "1.19.0",
+    "1.19.0": "- Se ha eliminado la dependencia del repositorio de scripts Greasyfork\n\n- Se ha cambiado la fuente de actualización predeterminada a AliCloud OSS\n\n- Se ha solucionado un problema de estilo incorrecto de los botones en algunas páginas de título\n\n- Mejoras：Ajuste de las palabras de aviso predeterminadas de GPT",
     "1.18.0": "\n\n\n\n\n\n\n\n\n\n- Añadir la opción \"Comprobador de resultados de pruebas de muestra\" - Añadir la función \"Mostrar lista del mismo tema\", gracias a la contribución de **@wrk-123** - Solucionar el problema de que el embellecimiento de bloques de código no cambiaba el tema correctamente cuando el modo oscuro es \"Seguir sistema\" - Solucionar el problema del error de traducción Arigatou - Solucionar el problema de que fallaba el intervalo de espera en el modo \"Traducción segmentada\" - Solucionar el problema que existe al consultar el saldo de la API.\n\n\n\nGracias a la contribución de **@x1uc** - Arreglar el problema de conflicto de nombres de clases de superposición - Mejorar las reglas de localización del sitio web, gracias a la contribución de **@nr0728**, **@user111192**, y **@qjwh**.",
-    "1.17.0": "- Reemplazar el repositorio público CDN con [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151) para la razón.\n\n\n\n\n\n\n\n** Arreglar el problema de que el botón \"Expandir/Contraer\" del código de la página de envíos no es válido.",
-    "1.16.1": "- Solucionar un problema de errores de localización del sitio web"
+    "1.17.0": "- Reemplazar el repositorio público CDN con [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), ver [issue](https://github.com/beijixiaohu/OJBetter/issues/151) para la razón.\n\n\n\n\n\n\n\n** Arreglar el problema de que el botón \"Expandir/Contraer\" del código de la página de envíos no es válido."
 }
