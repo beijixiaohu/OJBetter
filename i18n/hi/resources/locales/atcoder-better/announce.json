@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.18.0",
+    "lastVersion": "1.19.0",
+    "1.19.0": "- 移除了对 Greasyfork 脚本仓库的依赖\n\n- 更换默认更新源为阿里云OSS\n\n- 修复某些题目页按钮样式错误的问题\n\n- 改进：调整 GPT 默认提示词",
     "1.18.0": "- 添加 \"样例测试结果检查器\" 选项\n\n- 添加 \"显示同场题目列表\" 功能，感谢 **@wrk-123** 的贡献\n\n- 修复黑暗模式为 \"跟随系统\" 时，代码块美化未正确切换主题的问题\n\n- 修复有道翻译错误的问题\n\n- 修复 \"分段翻译\" 模式下等待间隔失效的问题\n\n- 修复查询 API 余量时存在的问题，感谢 **@x1uc** 的贡献\n\n- 修复覆盖层类名冲突的问题\n\n- 完善网站本地化规则，感谢 **@nr0728**、**@user111192**、**@qjwh**  的贡献",
-    "1.17.0": "- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**\n\n\n\n- 修复 submissions 页面代码\"展开/折叠\"按钮无效的问题\n\n\n\n- 调整设置页面的布局结构",
-    "1.16.1": "- 修复 网站本地化报错的问题"
+    "1.17.0": "- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**\n\n\n\n- 修复 submissions 页面代码\"展开/折叠\"按钮无效的问题\n\n\n\n- 调整设置页面的布局结构"
 }
