@@ -1,3 +1,11 @@
+## 1.78.0
+
+- Abhängigkeit von Greasyfork-Skript-Repository entfernen
+- Ersetzen Sie die Standard-Aktualisierungsquelle durch AliCloud OSS
+- Behebung des Problems des falschen Stils der Schaltflächen auf einigen Titelseiten
+- Verbesserungen：Anpassen des GPT-Standard-Eingabeworts
+- Verbesserungen：Deutlicher Hinweis, wenn die Zeit für den Online-Code abgelaufen ist
+
 ## 1.77.0
 
 - Hinzufügen der Option "Prüfen der Testergebnisse".
