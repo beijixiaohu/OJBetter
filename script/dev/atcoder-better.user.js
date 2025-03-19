@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.18.5
+// @version      1.18.6
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -985,7 +985,7 @@ async function initVar() {
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
     OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue("isRuleMarkingEnabled", false);
     OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
-    OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
+    OJBetter.about.updateSource = OJB_getGMValue("updateSource", "aliyunoss");
 }
 
 /**
@@ -6452,9 +6452,9 @@ const about_settings_HTML = `
             <div class="tip_text" data-i18n="[html]settings:about.update.source.helpText"></div>
         </div>
         <select id="updateSource" name="updateSource">
+            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
             <option value="greasyfork" data-i18n="settings:about.update.source.options.greasyfork"></option>
             <option value="github" data-i18n="settings:about.update.source.options.github"></option>
-            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
         </select>
     </div>
 </div>
@@ -14400,7 +14400,7 @@ if (document.readyState === 'loading') {
 // ------------------------------
 
 // ------------------------------
-// 配置自动迁移代码（将在10个小版本后移除-1.19）
+// 配置自动迁移代码 -1.09
 // ------------------------------
 
 if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
@@ -14443,7 +14443,7 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
 
 
 // ------------------------------
-// 配置自动迁移代码（将在10个小版本后移除-1.23）
+// 配置自动迁移代码 -1.13
 // ------------------------------
 
 {
@@ -14475,7 +14475,7 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
 }
 
 // ------------------------------
-// 配置自动迁移代码（将在10个小版本后移除-1.24）
+// 配置自动迁移代码 -1.14
 // ------------------------------
 
 {
@@ -14485,5 +14485,18 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
             GM_setValue("compilerSelection", "5001");
             location.reload();
         }
+    }
+}
+
+// ------------------------------
+// 配置自动迁移代码 - 1.18
+// ------------------------------
+{
+    const config_changed = GM_getValue("config_changed_118"); // 设置一个迁移标志
+    const updateSource = GM_getValue("updateSource");
+    if (!config_changed && updateSource === 'greasyfork') {
+      GM_setValue("config_changed", true);
+      GM_setValue("updateSource", 'aliyunoss');
+      location.reload();
     }
 }

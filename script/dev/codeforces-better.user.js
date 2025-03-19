@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.78.5
+// @version      1.78.6
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -1200,7 +1200,7 @@ async function initVar() {
     false
   );
   OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
-  OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
+  OJBetter.about.updateSource = OJB_getGMValue("updateSource", "aliyunoss");
 }
 
 /**
@@ -7102,9 +7102,9 @@ const about_settings_HTML = `
             <div class="tip_text" data-i18n="[html]settings:about.update.source.helpText"></div>
         </div>
         <select id="updateSource" name="updateSource">
+            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
             <option value="greasyfork" data-i18n="settings:about.update.source.options.greasyfork"></option>
             <option value="github" data-i18n="settings:about.update.source.options.github"></option>
-            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
         </select>
     </div>
 </div>
@@ -17116,7 +17116,7 @@ if (document.readyState === "loading") {
 // ------------------------------
 
 // ------------------------------
-// 配置自动迁移代码（将在10个小版本后移除-1.83）
+// 配置自动迁移代码 -1.73
 // ------------------------------
 
 {
@@ -17157,6 +17157,19 @@ if (document.readyState === "loading") {
       }
     });
     GM_setValue("Complet_config", config);
+    location.reload();
+  }
+}
+
+// ------------------------------
+// 配置自动迁移代码 - 1.78
+// ------------------------------
+{
+  const config_changed = GM_getValue("config_changed_178"); // 设置一个迁移标志
+  const updateSource = GM_getValue("updateSource");
+  if (!config_changed && updateSource === 'greasyfork') {
+    GM_setValue("config_changed", true);
+    GM_setValue("updateSource", 'aliyunoss');
     location.reload();
   }
 }
