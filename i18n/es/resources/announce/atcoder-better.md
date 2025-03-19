@@ -1,3 +1,10 @@
+## 1.19.0
+
+- Eliminar la dependencia del repositorio de scripts Greasyfork
+- Sustituir la fuente de actualización por defecto por AliCloud OSS
+- Solucionar el problema del estilo incorrecto de los botones en algunas páginas de título
+- Mejoras：Ajuste de la palabra de aviso por defecto GPT
+
 ## 1.18.0
 
 - Añadir la opción "Comprobador de resultados de pruebas de muestras".
