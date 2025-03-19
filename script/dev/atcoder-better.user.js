@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.18.4
+// @version      1.18.5
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -46,8 +46,6 @@
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
-// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js#sha512-JYm2AqU8EvoEOnCucDItAsNtmGcjbxccOXjnwNFp87zdlyclpEephXrgR2sMlWj/gL4DCJUN3X0JhI1omaRO0A==
-// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js#sha512-kY1lU3DCvgzkWkOl47sIlmLKdgDcO4T3NYN6p/ET4oi3fnKO74sHUt1xYGtksIHXciKF8Jt+N4RDqG3CRoeYww==
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
@@ -4847,6 +4845,304 @@ async function localizeWebsite() {
     //     })();
     // }
 };
+
+// i18next 本地缓存
+const i18nextLocalStorageBackend = (function () {
+    class Storage {
+        constructor(options) {
+            this.store = options.store;
+        }
+
+        setItem(key, value) {
+            if (this.store) {
+                try {
+                    this.store.setItem(key, value);
+                } catch (e) {
+                    // 存储失败时静默处理
+                }
+            }
+        }
+
+        getItem(key) {
+            if (this.store) {
+                try {
+                    return this.store.getItem(key);
+                } catch (e) {
+                    // 获取失败时静默处理
+                }
+            }
+            return undefined;
+        }
+    }
+
+    function getDefaults() {
+        let store = null;
+        try {
+            store = window.localStorage;
+        } catch (e) {
+            if (typeof window !== 'undefined') {
+                console.log('Failed to load local storage.', e);
+            }
+        }
+        return {
+            prefix: 'i18next_res_',
+            expirationTime: 7 * 24 * 60 * 60 * 1000,
+            defaultVersion: undefined,
+            versions: {},
+            store: store
+        };
+    }
+
+    class Cache {
+        constructor(services, options = {}) {
+            this.init(services, options);
+            this.type = 'backend';
+        }
+
+        init(services, options = {}) {
+            this.services = services;
+            this.options = { ...getDefaults(), ...this.options, ...options };
+            this.storage = new Storage(this.options);
+        }
+
+        read(language, namespace, callback) {
+            const nowMS = Date.now();
+            if (!this.storage.store) {
+                return callback(null, null);
+            }
+
+            const local = this.storage.getItem(`${this.options.prefix}${language}-${namespace}`);
+            if (local) {
+                const parsed = JSON.parse(local);
+                const version = this.getVersion(language);
+
+                if (parsed.i18nStamp &&
+                    parsed.i18nStamp + this.options.expirationTime > nowMS &&
+                    version === parsed.i18nVersion) {
+                    const i18nStamp = parsed.i18nStamp;
+                    delete parsed.i18nVersion;
+                    delete parsed.i18nStamp;
+                    return callback(null, parsed, i18nStamp);
+                }
+            }
+
+            return callback(null, null);
+        }
+
+        save(language, namespace, data) {
+            if (this.storage.store) {
+                data.i18nStamp = Date.now();
+
+                const version = this.getVersion(language);
+                if (version) {
+                    data.i18nVersion = version;
+                }
+
+                this.storage.setItem(
+                    `${this.options.prefix}${language}-${namespace}`,
+                    JSON.stringify(data)
+                );
+            }
+        }
+
+        getVersion(language) {
+            return this.options.versions[language] || this.options.defaultVersion;
+        }
+    }
+
+    Cache.type = 'backend';
+    return Cache;
+})();
+
+// i18next 后端链
+const i18nextChainedBackend = (function () {
+    'use strict';
+
+    const arr = [];
+    const each = arr.forEach;
+    const slice = arr.slice;
+
+    function defaults(obj) {
+        each.call(slice.call(arguments, 1), function (source) {
+            if (source) {
+                for (var prop in source) {
+                    if (obj[prop] === undefined) obj[prop] = source[prop];
+                }
+            }
+        });
+        return obj;
+    }
+
+    function createClassOnDemand(ClassOrObject) {
+        if (!ClassOrObject) return null;
+        if (typeof ClassOrObject === 'function') return new ClassOrObject();
+        return ClassOrObject;
+    }
+
+    function getDefaults() {
+        return {
+            handleEmptyResourcesAsFailed: true,
+            cacheHitMode: 'none'
+        };
+    }
+
+    function handleCorrectReadFunction(backend, language, namespace, resolver) {
+        const fc = backend.read.bind(backend);
+        if (fc.length === 2) {
+            try {
+                const r = fc(language, namespace);
+                if (r && typeof r.then === 'function') {
+                    r.then(function (data) {
+                        return resolver(null, data);
+                    }).catch(resolver);
+                } else {
+                    resolver(null, r);
+                }
+            } catch (err) {
+                resolver(err);
+            }
+            return;
+        }
+        fc(language, namespace, resolver);
+    }
+
+    class Backend {
+        constructor(services, options = {}, i18nextOptions = {}) {
+            this.backends = [];
+            this.type = 'backend';
+            this.allOptions = i18nextOptions;
+            this.init(services, options);
+        }
+
+        init(services, options = {}, i18nextOptions = {}) {
+            this.services = services;
+            this.options = defaults(options, this.options || {}, getDefaults());
+            this.allOptions = i18nextOptions;
+
+            this.options.backends && this.options.backends.forEach((b, i) => {
+                this.backends[i] = this.backends[i] || createClassOnDemand(b);
+                this.backends[i].init(services, this.options.backendOptions && this.options.backendOptions[i] || {}, i18nextOptions);
+            });
+
+            if (this.services && this.options.reloadInterval) {
+                setInterval(() => this.reload(), this.options.reloadInterval);
+            }
+        }
+
+        read(language, namespace, callback) {
+            const bLen = this.backends.length;
+
+            const loadPosition = (pos) => {
+                if (pos >= bLen) return callback(new Error('non of the backend loaded data', true));
+                const isLastBackend = pos === bLen - 1;
+                const lengthCheckAmount = this.options.handleEmptyResourcesAsFailed && !isLastBackend ? 0 : -1;
+                const backend = this.backends[pos];
+
+                if (backend.read) {
+                    handleCorrectReadFunction(backend, language, namespace, (err, data, savedAt) => {
+                        if (!err && data && Object.keys(data).length > lengthCheckAmount) {
+                            callback(null, data, pos);
+                            savePosition(pos - 1, data);
+
+                            if (backend.save && this.options.cacheHitMode && ['refresh', 'refreshAndUpdateStore'].indexOf(this.options.cacheHitMode) > -1) {
+                                if (savedAt && this.options.refreshExpirationTime && savedAt + this.options.refreshExpirationTime > Date.now()) return;
+                                const nextBackend = this.backends[pos + 1];
+                                if (nextBackend && nextBackend.read) {
+                                    handleCorrectReadFunction(nextBackend, language, namespace, (err, data) => {
+                                        if (err) return;
+                                        if (!data) return;
+                                        if (Object.keys(data).length <= lengthCheckAmount) return;
+                                        savePosition(pos, data);
+                                        if (this.options.cacheHitMode !== 'refreshAndUpdateStore') return;
+                                        if (this.services && this.services.resourceStore) {
+                                            this.services.resourceStore.addResourceBundle(language, namespace, data);
+                                        }
+                                    });
+                                }
+                            }
+                        } else {
+                            loadPosition(pos + 1);
+                        }
+                    });
+                } else {
+                    loadPosition(pos + 1);
+                }
+            };
+
+            const savePosition = (pos, data) => {
+                if (pos < 0) return;
+                const backend = this.backends[pos];
+                if (backend.save) {
+                    backend.save(language, namespace, data);
+                    savePosition(pos - 1, data);
+                } else {
+                    savePosition(pos - 1, data);
+                }
+            };
+
+            loadPosition(0);
+        }
+
+        create(languages, namespace, key, fallbackValue, clb = () => { }, opts = {}) {
+            this.backends.forEach(b => {
+                if (!b.create) return;
+                const fc = b.create.bind(b);
+                if (fc.length < 6) {
+                    try {
+                        let r;
+                        if (fc.length === 5) {
+                            r = fc(languages, namespace, key, fallbackValue, opts);
+                        } else {
+                            r = fc(languages, namespace, key, fallbackValue);
+                        }
+                        if (r && typeof r.then === 'function') {
+                            r.then(data => clb(null, data)).catch(clb);
+                        } else {
+                            clb(null, r);
+                        }
+                    } catch (err) {
+                        clb(err);
+                    }
+                    return;
+                }
+                fc(languages, namespace, key, fallbackValue, clb, opts);
+            });
+        }
+
+        reload() {
+            const { backendConnector, languageUtils, logger } = this.services;
+            const currentLanguage = backendConnector.language;
+
+            if (currentLanguage && currentLanguage.toLowerCase() === 'cimode') return;
+
+            const toLoad = [];
+            const append = (lng) => {
+                const lngs = languageUtils.toResolveHierarchy(lng);
+                lngs.forEach(l => {
+                    if (toLoad.indexOf(l) < 0) toLoad.push(l);
+                });
+            };
+
+            append(currentLanguage);
+            if (this.allOptions.preload) this.allOptions.preload.forEach(l => append(l));
+
+            toLoad.forEach(lng => {
+                this.allOptions.ns.forEach(ns => {
+                    backendConnector.read(lng, ns, 'read', null, null, (err, data) => {
+                        if (err) logger.warn(`loading namespace ${ns} for language ${lng} failed`, err);
+                        if (!err && data) logger.log(`loaded namespace ${ns} for language ${lng}`, data);
+                        backendConnector.loaded(`${lng}|${ns}`, err, data);
+                    });
+                });
+            });
+        }
+    }
+
+    Backend.type = 'backend';
+
+    return Backend;
+})();
+
 
 /**
  * i18next初始化
