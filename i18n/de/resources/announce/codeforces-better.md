@@ -1,4 +1,4 @@
-## 1.78.0
+## 1.79.0
 
 - Abhängigkeit von Greasyfork-Skript-Repository entfernen
 - Ersetzen Sie die Standard-Aktualisierungsquelle durch AliCloud OSS
