@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.78.0
+// @version      1.79.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -48,8 +48,6 @@
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
-// @require      https://update.greasyfork.org/scripts/484742/1311040/i18nextChainedBackendjs.js#sha512-JYm2AqU8EvoEOnCucDItAsNtmGcjbxccOXjnwNFp87zdlyclpEephXrgR2sMlWj/gL4DCJUN3X0JhI1omaRO0A==
-// @require      https://update.greasyfork.org/scripts/484743/1311041/i18next-localstorage-backendjs.js#sha512-kY1lU3DCvgzkWkOl47sIlmLKdgDcO4T3NYN6p/ET4oi3fnKO74sHUt1xYGtksIHXciKF8Jt+N4RDqG3CRoeYww==
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
 // @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
@@ -1202,7 +1200,7 @@ async function initVar() {
     false
   );
   OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
-  OJBetter.about.updateSource = OJB_getGMValue("updateSource", "greasyfork");
+  OJBetter.about.updateSource = OJB_getGMValue("updateSource", "aliyunoss");
 }
 
 /**
@@ -2338,7 +2336,7 @@ dialog::backdrop {
     flex-wrap: wrap;
     justify-content: flex-end;
     overflow: auto;
-    height: 100%;
+    height: auto;
     margin: 0.5em;
 }
 
@@ -4232,7 +4230,7 @@ class TextBlockReplacer {
           this.replacements.set(id, ordinalTranslation(match));
         else this.replacements.set(id, match);
       }
-    } catch (e) {}
+    } catch (e) { }
     return text;
   }
 
@@ -4422,11 +4420,11 @@ function OJB_GMRequest(options, isStream = false) {
       ...options,
       ...(isStream
         ? {
-            onloadstart: resolve,
-          }
+          onloadstart: resolve,
+        }
         : {
-            onload: resolve,
-          }),
+          onload: resolve,
+        }),
       onerror: (error) =>
         reject(
           new OJB_GMError(
@@ -4735,9 +4733,8 @@ function OJB_showModal(element) {
         "--original-margin-right",
         originalMarginRight
       );
-      document.documentElement.style.marginRight = `${
-        marginRightValue + scrollbarWidth
-      }px`;
+      document.documentElement.style.marginRight = `${marginRightValue + scrollbarWidth
+        }px`;
     }
 
     // 保存原始的overflow样式
@@ -4982,9 +4979,8 @@ async function showAnnounce() {
       OJBetter.state.lastAnnounceVer
     ) === 1
   ) {
-    const title = `🎉${i18next.t("announce.title", { ns: "dialog" })} ${
-      OJBetter.state.version
-    }`;
+    const title = `🎉${i18next.t("announce.title", { ns: "dialog" })} ${OJBetter.state.version
+      }`;
     /** @type {Boolean} 是否是新的公告 */
     const isNewAnnounceVer =
       OJB_compareVersions(
@@ -5447,6 +5443,303 @@ async function localizeWebsite() {
   }
 }
 
+// i18next 本地缓存
+const i18nextLocalStorageBackend = (function () {
+  class Storage {
+    constructor(options) {
+      this.store = options.store;
+    }
+
+    setItem(key, value) {
+      if (this.store) {
+        try {
+          this.store.setItem(key, value);
+        } catch (e) {
+          // 存储失败时静默处理
+        }
+      }
+    }
+
+    getItem(key) {
+      if (this.store) {
+        try {
+          return this.store.getItem(key);
+        } catch (e) {
+          // 获取失败时静默处理
+        }
+      }
+      return undefined;
+    }
+  }
+
+  function getDefaults() {
+    let store = null;
+    try {
+      store = window.localStorage;
+    } catch (e) {
+      if (typeof window !== 'undefined') {
+        console.log('Failed to load local storage.', e);
+      }
+    }
+    return {
+      prefix: 'i18next_res_',
+      expirationTime: 7 * 24 * 60 * 60 * 1000,
+      defaultVersion: undefined,
+      versions: {},
+      store: store
+    };
+  }
+
+  class Cache {
+    constructor(services, options = {}) {
+      this.init(services, options);
+      this.type = 'backend';
+    }
+
+    init(services, options = {}) {
+      this.services = services;
+      this.options = { ...getDefaults(), ...this.options, ...options };
+      this.storage = new Storage(this.options);
+    }
+
+    read(language, namespace, callback) {
+      const nowMS = Date.now();
+      if (!this.storage.store) {
+        return callback(null, null);
+      }
+
+      const local = this.storage.getItem(`${this.options.prefix}${language}-${namespace}`);
+      if (local) {
+        const parsed = JSON.parse(local);
+        const version = this.getVersion(language);
+
+        if (parsed.i18nStamp &&
+          parsed.i18nStamp + this.options.expirationTime > nowMS &&
+          version === parsed.i18nVersion) {
+          const i18nStamp = parsed.i18nStamp;
+          delete parsed.i18nVersion;
+          delete parsed.i18nStamp;
+          return callback(null, parsed, i18nStamp);
+        }
+      }
+
+      return callback(null, null);
+    }
+
+    save(language, namespace, data) {
+      if (this.storage.store) {
+        data.i18nStamp = Date.now();
+
+        const version = this.getVersion(language);
+        if (version) {
+          data.i18nVersion = version;
+        }
+
+        this.storage.setItem(
+          `${this.options.prefix}${language}-${namespace}`,
+          JSON.stringify(data)
+        );
+      }
+    }
+
+    getVersion(language) {
+      return this.options.versions[language] || this.options.defaultVersion;
+    }
+  }
+
+  Cache.type = 'backend';
+  return Cache;
+})();
+
+// i18next 后端链
+const i18nextChainedBackend = (function () {
+  'use strict';
+
+  const arr = [];
+  const each = arr.forEach;
+  const slice = arr.slice;
+
+  function defaults(obj) {
+    each.call(slice.call(arguments, 1), function (source) {
+      if (source) {
+        for (var prop in source) {
+          if (obj[prop] === undefined) obj[prop] = source[prop];
+        }
+      }
+    });
+    return obj;
+  }
+
+  function createClassOnDemand(ClassOrObject) {
+    if (!ClassOrObject) return null;
+    if (typeof ClassOrObject === 'function') return new ClassOrObject();
+    return ClassOrObject;
+  }
+
+  function getDefaults() {
+    return {
+      handleEmptyResourcesAsFailed: true,
+      cacheHitMode: 'none'
+    };
+  }
+
+  function handleCorrectReadFunction(backend, language, namespace, resolver) {
+    const fc = backend.read.bind(backend);
+    if (fc.length === 2) {
+      try {
+        const r = fc(language, namespace);
+        if (r && typeof r.then === 'function') {
+          r.then(function (data) {
+            return resolver(null, data);
+          }).catch(resolver);
+        } else {
+          resolver(null, r);
+        }
+      } catch (err) {
+        resolver(err);
+      }
+      return;
+    }
+    fc(language, namespace, resolver);
+  }
+
+  class Backend {
+    constructor(services, options = {}, i18nextOptions = {}) {
+      this.backends = [];
+      this.type = 'backend';
+      this.allOptions = i18nextOptions;
+      this.init(services, options);
+    }
+
+    init(services, options = {}, i18nextOptions = {}) {
+      this.services = services;
+      this.options = defaults(options, this.options || {}, getDefaults());
+      this.allOptions = i18nextOptions;
+
+      this.options.backends && this.options.backends.forEach((b, i) => {
+        this.backends[i] = this.backends[i] || createClassOnDemand(b);
+        this.backends[i].init(services, this.options.backendOptions && this.options.backendOptions[i] || {}, i18nextOptions);
+      });
+
+      if (this.services && this.options.reloadInterval) {
+        setInterval(() => this.reload(), this.options.reloadInterval);
+      }
+    }
+
+    read(language, namespace, callback) {
+      const bLen = this.backends.length;
+
+      const loadPosition = (pos) => {
+        if (pos >= bLen) return callback(new Error('non of the backend loaded data', true));
+        const isLastBackend = pos === bLen - 1;
+        const lengthCheckAmount = this.options.handleEmptyResourcesAsFailed && !isLastBackend ? 0 : -1;
+        const backend = this.backends[pos];
+
+        if (backend.read) {
+          handleCorrectReadFunction(backend, language, namespace, (err, data, savedAt) => {
+            if (!err && data && Object.keys(data).length > lengthCheckAmount) {
+              callback(null, data, pos);
+              savePosition(pos - 1, data);
+
+              if (backend.save && this.options.cacheHitMode && ['refresh', 'refreshAndUpdateStore'].indexOf(this.options.cacheHitMode) > -1) {
+                if (savedAt && this.options.refreshExpirationTime && savedAt + this.options.refreshExpirationTime > Date.now()) return;
+                const nextBackend = this.backends[pos + 1];
+                if (nextBackend && nextBackend.read) {
+                  handleCorrectReadFunction(nextBackend, language, namespace, (err, data) => {
+                    if (err) return;
+                    if (!data) return;
+                    if (Object.keys(data).length <= lengthCheckAmount) return;
+                    savePosition(pos, data);
+                    if (this.options.cacheHitMode !== 'refreshAndUpdateStore') return;
+                    if (this.services && this.services.resourceStore) {
+                      this.services.resourceStore.addResourceBundle(language, namespace, data);
+                    }
+                  });
+                }
+              }
+            } else {
+              loadPosition(pos + 1);
+            }
+          });
+        } else {
+          loadPosition(pos + 1);
+        }
+      };
+
+      const savePosition = (pos, data) => {
+        if (pos < 0) return;
+        const backend = this.backends[pos];
+        if (backend.save) {
+          backend.save(language, namespace, data);
+          savePosition(pos - 1, data);
+        } else {
+          savePosition(pos - 1, data);
+        }
+      };
+
+      loadPosition(0);
+    }
+
+    create(languages, namespace, key, fallbackValue, clb = () => { }, opts = {}) {
+      this.backends.forEach(b => {
+        if (!b.create) return;
+        const fc = b.create.bind(b);
+        if (fc.length < 6) {
+          try {
+            let r;
+            if (fc.length === 5) {
+              r = fc(languages, namespace, key, fallbackValue, opts);
+            } else {
+              r = fc(languages, namespace, key, fallbackValue);
+            }
+            if (r && typeof r.then === 'function') {
+              r.then(data => clb(null, data)).catch(clb);
+            } else {
+              clb(null, r);
+            }
+          } catch (err) {
+            clb(err);
+          }
+          return;
+        }
+        fc(languages, namespace, key, fallbackValue, clb, opts);
+      });
+    }
+
+    reload() {
+      const { backendConnector, languageUtils, logger } = this.services;
+      const currentLanguage = backendConnector.language;
+
+      if (currentLanguage && currentLanguage.toLowerCase() === 'cimode') return;
+
+      const toLoad = [];
+      const append = (lng) => {
+        const lngs = languageUtils.toResolveHierarchy(lng);
+        lngs.forEach(l => {
+          if (toLoad.indexOf(l) < 0) toLoad.push(l);
+        });
+      };
+
+      append(currentLanguage);
+      if (this.allOptions.preload) this.allOptions.preload.forEach(l => append(l));
+
+      toLoad.forEach(lng => {
+        this.allOptions.ns.forEach(ns => {
+          backendConnector.read(lng, ns, 'read', null, null, (err, data) => {
+            if (err) logger.warn(`loading namespace ${ns} for language ${lng} failed`, err);
+            if (!err && data) logger.log(`loaded namespace ${ns} for language ${lng}`, data);
+            backendConnector.loaded(`${lng}|${ns}`, err, data);
+          });
+        });
+      });
+    }
+  }
+
+  Backend.type = 'backend';
+
+  return Backend;
+})();
+
 /**
  * i18next初始化
  */
@@ -5511,8 +5804,8 @@ async function initI18next() {
  * 抽象命令类
  */
 class Command {
-  execute() {}
-  undo() {}
+  execute() { }
+  undo() { }
 }
 
 /**
@@ -5911,9 +6204,8 @@ class ConfigManager {
     });
 
     // 添加按钮
-    let addButton = OJB_safeCreateJQElement(`<li id='${
-      this.prefix
-    }add_button' class="tempConfig_add_button">
+    let addButton = OJB_safeCreateJQElement(`<li id='${this.prefix
+      }add_button' class="tempConfig_add_button">
             <span>+ ${i18next.t("add", { ns: "common" })}</span>
         </li>`);
     this.config_add_button = addButton;
@@ -6810,9 +7102,9 @@ const about_settings_HTML = `
             <div class="tip_text" data-i18n="[html]settings:about.update.source.helpText"></div>
         </div>
         <select id="updateSource" name="updateSource">
+            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
             <option value="greasyfork" data-i18n="settings:about.update.source.options.greasyfork"></option>
             <option value="github" data-i18n="settings:about.update.source.options.github"></option>
-            <option value="aliyunoss" data-i18n="settings:about.update.source.options.aliyunoss"></option>
         </select>
     </div>
 </div>
@@ -7234,8 +7526,8 @@ async function initSettingsPanel() {
           const optionValue = $(this).val();
           const isEnabled = OJBetter.supportList.translationSupport[optionValue]
             ? OJBetter.supportList.translationSupport[optionValue][
-                targetLanguage
-              ]
+            targetLanguage
+            ]
             : true;
           $(this).prop("disabled", !isEnabled);
         });
@@ -7255,7 +7547,7 @@ async function initSettingsPanel() {
           const checkboxValue = $(this).val();
           const isEnabled =
             OJBetter.supportList.translationSupport[checkboxValue][
-              targetLanguage
+            targetLanguage
             ];
           $(this).prop("disabled", !isEnabled);
           if (!isEnabled) {
@@ -7280,7 +7572,7 @@ async function initSettingsPanel() {
           const optionValue = $(this).val();
           const isEnabled =
             OJBetter.supportList.updateSourceSupportList[optionValue][
-              updateChannel
+            updateChannel
             ];
           $(this).prop("disabled", !isEnabled);
         });
@@ -7570,8 +7862,8 @@ async function initSettingsPanel() {
     );
     $(
       "input[name='compiler'][value='" +
-        OJBetter.monaco.onlineCompilerChoice +
-        "']"
+      OJBetter.monaco.onlineCompilerChoice +
+      "']"
     ).prop("checked", true);
     $("input[name='compiler']").css("color", "gray");
     // 调试
@@ -8296,23 +8588,22 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
   else text = i18next.t("trans.normal", { ns: "button" });
 
   let panel = OJB_safeCreateJQElement(
-    `<div class='html2md-panel input-output-copier ${
-      is_simple ? "is_simple" : ""
+    `<div class='html2md-panel input-output-copier ${is_simple ? "is_simple" : ""
     }'></div>`
   );
   let viewButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
             <i class="iconfont">&#xe7e5;</i>
             <span class="popover_content">${i18next.t("md.normal", {
-              ns: "button",
-            })}</span>
+    ns: "button",
+  })}</span>
         </button>`);
   let copyButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t("copy.normal", {
-              ns: "button",
-            })}</span>
+    ns: "button",
+  })}</span>
         </button>`);
   let translateButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
@@ -8682,7 +8973,7 @@ async function addButtonWithTranslation(
       return (
         OJBetter.supportList.translationSupport[service] &&
         OJBetter.supportList.translationSupport[service][targetLang] !==
-          undefined
+        undefined
       );
     }
 
@@ -8691,9 +8982,9 @@ async function addButtonWithTranslation(
         OJB_safeCreateJQElement(`<label><input type="radio" name="translation" value="0">
             <span class="OJBetter_contextmenu_label_text">
             ${i18next.t(
-              "translation.preference.comment_translation_choice.services.follow",
-              { ns: "settings" }
-            )}
+          "translation.preference.comment_translation_choice.services.follow",
+          { ns: "settings" }
+        )}
             </span></label>`);
       menu.append(label);
     }
@@ -9316,40 +9607,40 @@ class TranslateDiv {
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe641;</i>
             <span class="popover_content">${i18next.t("rawData.normal", {
-              ns: "button",
-            })}</span>
+      ns: "button",
+    })}</span>
         </button>`).hide();
     this.rightDiv.append(this.debugButton);
     this.queryBalanceButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe6ae;</i>
             <span class="popover_content">${i18next.t("queryBalance.normal", {
-              ns: "button",
-            })}</span>
+      ns: "button",
+    })}</span>
         </button>`).hide();
     this.rightDiv.append(this.queryBalanceButton);
     this.copyButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t("copy.normal", {
-              ns: "button",
-            })}</span>
+      ns: "button",
+    })}</span>
         </button>`);
     this.rightDiv.append(this.copyButton);
     this.upButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe601;</i>
             <span class="popover_content">${i18next.t("fold.normal", {
-              ns: "button",
-            })}</span>
+      ns: "button",
+    })}</span>
         </button>`);
     this.rightDiv.append(this.upButton);
     this.closeButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top'>
             <i class="iconfont">&#xe614;</i>
             <span class="popover_content">${i18next.t("close.normal", {
-              ns: "button",
-            })}</span>
+      ns: "button",
+    })}</span>
         </button>`);
     this.rightDiv.append(this.closeButton);
   }
@@ -9589,8 +9880,7 @@ class TranslateDiv {
       } catch (error) {
         this.queryBalanceButton.setButtonState(
           "error",
-          `${i18next.t("queryBalance.error", { ns: "button" })} ${
-            error.message
+          `${i18next.t("queryBalance.error", { ns: "button" })} ${error.message
           }`
         );
       }
@@ -10096,7 +10386,7 @@ async function translateMain(
   // 顶栏左侧信息
   translateResult.translateDiv.setTopText(
     i18next.t("servers." + realTransServer, { ns: "translator" }) +
-      i18next.t("translateDiv.topTextSuffix", { ns: "translator" })
+    i18next.t("translateDiv.topTextSuffix", { ns: "translator" })
   );
 
   // 注册按钮
@@ -10266,10 +10556,9 @@ async function translateMain(
           `${i18next.t("transingTip.openai", {
             ns: "translator",
             openai_name: OJBetter.chatgpt.config.name,
-          })}${
-            !OJBetter.chatgpt.isStream
-              ? i18next.t("transingTip.openai_isStream", { ns: "translator" })
-              : ""
+          })}${!OJBetter.chatgpt.isStream
+            ? i18next.t("transingTip.openai_isStream", { ns: "translator" })
+            : ""
           }`,
           is_renderLaTeX
         );
@@ -10461,8 +10750,8 @@ function CommentPagination() {
   $(".comments").after(`
             <div id="pagBar" style="display: flex; align-items: center; justify-content: center; color: #606266;">
                 <label for="items-per-page">${i18next.t("perpage", {
-                  ns: "comments",
-                })}</label>
+    ns: "comments",
+  })}</label>
                 <select id="items-per-page" style="margin-right: 15px;">
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -10472,19 +10761,19 @@ function CommentPagination() {
                     <span id="current-page">1</span> / <span id="total-pages"></span>
                 </div>
                 <input type="text" id="jump-input" placeholder="${i18next.t(
-                  "jumpTo",
-                  { ns: "comments" }
-                )}">
+    "jumpTo",
+    { ns: "comments" }
+  )}">
                 <button type="button" id="jump-btn" class="ojb_btn">${i18next.t(
-                  "jump",
-                  { ns: "comments" }
-                )}</button>
+    "jump",
+    { ns: "comments" }
+  )}</button>
                 <button id="prev-page-btn" class="ojb_btn">${i18next.t("prev", {
-                  ns: "comments",
-                })}</button>
+    ns: "comments",
+  })}</button>
                 <button id="next-page-btn" class="ojb_btn">${i18next.t("next", {
-                  ns: "comments",
-                })}</button>
+    ns: "comments",
+  })}</button>
             </div>
         `);
 
@@ -10571,7 +10860,7 @@ function CommentPagination() {
     if (
       inputPage >= 1 &&
       inputPage <=
-        Math.ceil(elements.length / parseInt($("#items-per-page").val()))
+      Math.ceil(elements.length / parseInt($("#items-per-page").val()))
     ) {
       var itemsPerPage = parseInt($("#items-per-page").val());
       start = (inputPage - 1) * itemsPerPage;
@@ -10951,9 +11240,8 @@ function creatRatingCss(hasBorder = true) {
   for (let cssClass in cssMap) {
     dynamicCss += `a.${cssClass}${hoverSelector}, a.${cssClass}${hoverSelector}:link {\n`;
     let borderColor = hasBorder ? cssMap[cssClass] : defaultBorderColor;
-    dynamicCss += `    color: ${cssMap[cssClass]} ${
-      OJBetter.clist.ratingHidden ? "!important" : ""
-    };\n`;
+    dynamicCss += `    color: ${cssMap[cssClass]} ${OJBetter.clist.ratingHidden ? "!important" : ""
+      };\n`;
     dynamicCss += `}\n`;
   }
   GM_addStyle(dynamicCss);
@@ -11991,29 +12279,29 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
   let customTestDiv = OJB_safeCreateJQElement(`
         <details id="customTestBlock">
             <summary >${i18next.t("customTestBlock.title", {
-              ns: "codeEditor",
-            })}</summary>
+    ns: "codeEditor",
+  })}</summary>
             <div id="customTests" style="min-height: 30px;"></div>
             <div id="control" style="display:flex;">
                 <div style="display: flex;margin: 5px;">
                     <input type="checkbox" id="onlyCustomTest"}><label for="onlyCustomTest">
                     ${i18next.t("customTestBlock.onlyCustom", {
-                      ns: "codeEditor",
-                    })}
+    ns: "codeEditor",
+  })}
                     </label>
                 </div>
                 <div style="display: flex;margin: 5px;">
                     <input type="checkbox" id="DontShowDiff"}>
                     <label for="DontShowDiff">
                         ${i18next.t("customTestBlock.DontShowDiff", {
-                          ns: "codeEditor",
-                        })}
+    ns: "codeEditor",
+  })}
                     </label>
                 </div>
                 <button type="button" id="addCustomTest">${i18next.t(
-                  "customTestBlock.add",
-                  { ns: "codeEditor" }
-                )}</button>
+    "customTestBlock.add",
+    { ns: "codeEditor" }
+  )}</button>
             </div>
         </details>
     `);
@@ -12028,16 +12316,16 @@ async function createCodeEditorForm(submitUrl, cloneHTML) {
         <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe6c1;</i>
             <span class="popover_content">${i18next.t("runTestButton.initial", {
-              ns: "codeEditor",
-            })}</span>
+    ns: "codeEditor",
+  })}</span>
         </button>
     `);
   let submitButton = OJB_safeCreateJQElement(`
         <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
             <i class="iconfont">&#xe633;</i>
             <span class="popover_content">${i18next.t("submitButton", {
-              ns: "codeEditor",
-            })}</span>
+    ns: "codeEditor",
+  })}</span>
         </button>
     `);
   if (OJBetter.monaco.setting.submitButtonPosition == "bottom") {
@@ -12139,10 +12427,10 @@ async function createMonacoEditor(language, form, support) {
     language === "cpp"
       ? ".cpp"
       : language === "python"
-      ? ".py"
-      : language === "java"
-      ? ".java"
-      : "";
+        ? ".py"
+        : language === "java"
+          ? ".java"
+          : "";
   var uri = rootUri + "/" + filename + fileExtension;
   var initialized = false; // 是否已初始化
   var serverInfo; // 服务器返回的支持信息
@@ -12333,8 +12621,8 @@ async function createMonacoEditor(language, form, support) {
         <div class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe643;</i>
             <span class="popover_content">${i18next.t("moreSettings.title", {
-              ns: "codeEditor",
-            })}</span>
+      ns: "codeEditor",
+    })}</span>
         </div>`);
     form.topRightDiv.append(moreSetting);
 
@@ -12364,23 +12652,23 @@ async function createMonacoEditor(language, form, support) {
         <div class='OJBetter_setting_list'>
             <label for='fontSizeInput'>
                 <div style="display: flex;align-items: center;">${i18next.t(
-                  "moreSettings.fontSizeInput.label",
-                  { ns: "codeEditor" }
-                )}</div>
+      "moreSettings.fontSizeInput.label",
+      { ns: "codeEditor" }
+    )}</div>
             </label>
             <div class="help_tip">
                 ${helpCircleHTML}
                 <div class="tip_text">${i18next.t(
-                  "moreSettings.fontSizeInput.helpText",
-                  { ns: "codeEditor" }
-                )}</div>
+      "moreSettings.fontSizeInput.helpText",
+      { ns: "codeEditor" }
+    )}</div>
             </div>
             <input type='number' id='fontSizeInput' class='no_default' 
                 require=true 
                 placeholder="${i18next.t(
-                  "moreSettings.fontSizeInput.placeholder",
-                  { ns: "codeEditor" }
-                )}"
+      "moreSettings.fontSizeInput.placeholder",
+      { ns: "codeEditor" }
+    )}"
                 value="${OJBetter.monaco.setting.fontsize}">
             <span>px</span>
         </div>`);
@@ -12396,49 +12684,49 @@ async function createMonacoEditor(language, form, support) {
             <div class='OJBetter_setting_list'>
                 <label for="judgeResultValidator">
                     <span>${i18next.t("moreSettings.validator.label", {
-                      ns: "codeEditor",
-                    })}</span>
+      ns: "codeEditor",
+    })}</span>
                 </label>
                 <div class="help_tip">
                     ${helpCircleHTML}
                     <div class="tip_text">${i18next.t(
-                      "moreSettings.validator.helpText",
-                      { ns: "codeEditor" }
-                    )}</div>
+      "moreSettings.validator.helpText",
+      { ns: "codeEditor" }
+    )}</div>
                 </div>
                 <select id="judgeResultValidator" name="judgeResultValidator">
                     <option value="ignoreWhitespace">${i18next.t(
-                      "moreSettings.validator.options.ignoreWhitespace",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.ignoreWhitespace",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="strict">${i18next.t(
-                      "moreSettings.validator.options.strict",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.strict",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="ncmp">${i18next.t(
-                      "moreSettings.validator.options.ncmp",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.ncmp",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="rcmp4">${i18next.t(
-                      "moreSettings.validator.options.rcmp4",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.rcmp4",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="rcmp6">${i18next.t(
-                      "moreSettings.validator.options.rcmp6",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.rcmp6",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="rcmp9">${i18next.t(
-                      "moreSettings.validator.options.rcmp9",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.rcmp9",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="wcmp">${i18next.t(
-                      "moreSettings.validator.options.wcmp",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.wcmp",
+      { ns: "codeEditor" }
+    )}</option>
                     <option value="nyesno">${i18next.t(
-                      "moreSettings.validator.options.nyesno",
-                      { ns: "codeEditor" }
-                    )}</option>
+      "moreSettings.validator.options.nyesno",
+      { ns: "codeEditor" }
+    )}</option>
                 </select>
             </div>`);
     // 选择默认检查器
@@ -12458,8 +12746,8 @@ async function createMonacoEditor(language, form, support) {
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe606;</i>
             <span class="popover_content">${i18next.t("fullscreenButton", {
-              ns: "codeEditor",
-            })}</span>
+      ns: "codeEditor",
+    })}</span>
         </button>
         `);
     form.topRightDiv.append(fullscreenButton);
@@ -12470,8 +12758,8 @@ async function createMonacoEditor(language, form, support) {
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe607;</i>
             <span class="popover_content">${i18next.t("fixToBottomButton", {
-              ns: "codeEditor",
-            })}</span>
+      ns: "codeEditor",
+    })}</span>
         </button>
         `);
     form.topRightDiv.append(fixToBottomButton);
@@ -12482,8 +12770,8 @@ async function createMonacoEditor(language, form, support) {
         <button type="button" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe605;</i>
             <span class="popover_content">${i18next.t("fixToRightButton", {
-              ns: "codeEditor",
-            })}</span>
+      ns: "codeEditor",
+    })}</span>
         </button>
         `);
     form.topRightDiv.append(fixToRightButton);
@@ -12536,9 +12824,9 @@ async function createMonacoEditor(language, form, support) {
                 <button type="button" class="ojb_btn ojb_btn_popover top primary exit_button_bottom">
                     <i class="iconfont">&#xe60b;</i>
                     <span class="popover_content">${i18next.t(
-                      "exitFullscreenButton",
-                      { ns: "codeEditor" }
-                    )}</span>
+        "exitFullscreenButton",
+        { ns: "codeEditor" }
+      )}</span>
                 </button>
             `).on("click", () => exitFullscreen(cancelButton));
       $("body").append(cancelButton);
@@ -12572,9 +12860,9 @@ async function createMonacoEditor(language, form, support) {
                 <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
                     <i class="iconfont">&#xe625;</i>
                     <span class="popover_content">${i18next.t(
-                      "cancelFixButton",
-                      { ns: "codeEditor" }
-                    )}</span>
+        "cancelFixButton",
+        { ns: "codeEditor" }
+      )}</span>
                 </button>
             `).on("click", () =>
         cancelFixingToBottom(cancelButton, blankSpace)
@@ -12644,9 +12932,9 @@ async function createMonacoEditor(language, form, support) {
                 <button type="button" class="ojb_btn ojb_btn_popover top enabled exit_button_bottom">
                     <i class="iconfont">&#xe625;</i>
                     <span class="popover_content">${i18next.t(
-                      "cancelFixButton",
-                      { ns: "codeEditor" }
-                    )}</span>
+        "cancelFixButton",
+        { ns: "codeEditor" }
+      )}</span>
                 </button>
             `)
         .on("click", () =>
@@ -12776,8 +13064,8 @@ async function createMonacoEditor(language, form, support) {
     <div id="lspStateDiv" class="ojb_btn ojb_btn_popover top loading">
         <i class="iconfont">&#xe658;</i>
         <span class="popover_content">${i18next.t("lsp.connect", {
-          ns: "codeEditor",
-        })}</span>
+    ns: "codeEditor",
+  })}</span>
     </div>
     `).on("click", () => {
     OJB_showModal(LSPLogDiv);
@@ -13089,15 +13377,15 @@ async function createMonacoEditor(language, form, support) {
                 language == "java"
                   ? []
                   : [
-                      "",
-                      "quickfix",
-                      "refactor",
-                      "refactor.extract",
-                      "refactor.inline",
-                      "refactor.rewrite",
-                      "source",
-                      "source.organizeImports",
-                    ],
+                    "",
+                    "quickfix",
+                    "refactor",
+                    "refactor.extract",
+                    "refactor.inline",
+                    "refactor.rewrite",
+                    "source",
+                    "source.organizeImports",
+                  ],
             },
           },
         },
@@ -13353,9 +13641,9 @@ async function createMonacoEditor(language, form, support) {
                 }) => ({
                   additionalTextEdits: additionalTextEdits
                     ? additionalTextEdits.map(({ newText, range }) => ({
-                        text: newText,
-                        range: OJBetter_monaco.lspRangeToMonacoRange(range),
-                      }))
+                      text: newText,
+                      range: OJBetter_monaco.lspRangeToMonacoRange(range),
+                    }))
                     : [],
                   documentation: documentation ? documentation.value : "",
                   filterText,
@@ -13363,9 +13651,9 @@ async function createMonacoEditor(language, form, support) {
                   insertTextRules:
                     insertTextFormat === 2
                       ? monaco.languages.CompletionItemInsertTextRule
-                          .InsertAsSnippet
+                        .InsertAsSnippet
                       : monaco.languages.CompletionItemInsertTextRule
-                          .KeepWhitespace,
+                        .KeepWhitespace,
                   kind,
                   label,
                   sortText,
@@ -13419,17 +13707,17 @@ async function createMonacoEditor(language, form, support) {
                 tags: item.tags,
                 relatedInformation: item.relatedInformation
                   ? item.relatedInformation.map((item) => ({
-                      location: {
-                        uri: item.resource.toString(),
-                        range: OJBetter_monaco.MonacoRangeTolspRange({
-                          startLineNumber: item.startLineNumber,
-                          startColumn: item.startColumn,
-                          endLineNumber: item.endLineNumber,
-                          endColumn: item.endColumn,
-                        }),
-                      },
-                      message: item.message,
-                    }))
+                    location: {
+                      uri: item.resource.toString(),
+                      range: OJBetter_monaco.MonacoRangeTolspRange({
+                        startLineNumber: item.startLineNumber,
+                        startColumn: item.startColumn,
+                        endLineNumber: item.endLineNumber,
+                        endColumn: item.endColumn,
+                      }),
+                    },
+                    message: item.message,
+                  }))
                   : null,
               })),
               only: context.only ? [context.only] : [],
@@ -13456,35 +13744,35 @@ async function createMonacoEditor(language, form, support) {
                 command: item.command
                   ? item.command.command
                     ? {
-                        id: item.command.command,
-                        arguments: item.command.arguments,
-                        title: item.command.title,
-                      }
+                      id: item.command.command,
+                      arguments: item.command.arguments,
+                      title: item.command.title,
+                    }
                     : null
                   : null,
                 diagnostics: item.diagnostics
                   ? item.diagnostics.map((item) => ({
-                      code: item.code,
-                      message: item.message,
-                      range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
-                      severity: OJBetter_monaco.lspSeverityToMonacoSeverity(
-                        item.severity
-                      ),
-                      source: item.source,
-                    }))
+                    code: item.code,
+                    message: item.message,
+                    range: OJBetter_monaco.lspRangeToMonacoRange(item.range),
+                    severity: OJBetter_monaco.lspSeverityToMonacoSeverity(
+                      item.severity
+                    ),
+                    source: item.source,
+                  }))
                   : null,
                 edit: item.edit
                   ? OJBetter_monaco.lspEditToMonacoEdit(item.edit)
                   : item.arguments
-                  ? {
+                    ? {
                       edits: item.arguments.flatMap(
                         (item1) =>
                           OJBetter_monaco.lspEditToMonacoEdit(item1).edits
                       ),
                     }
-                  : null,
+                    : null,
               })),
-              dispose: () => {},
+              dispose: () => { },
             };
             pushLSPLogMessage(
               "info",
@@ -13529,20 +13817,20 @@ async function createMonacoEditor(language, form, support) {
               range: result.range
                 ? OJBetter_monaco.lspRangeToMonacoRange(result.range)
                 : new monaco.Range(
-                    position.lineNumber,
-                    position.column,
-                    position.lineNumber,
-                    position.column
-                  ),
+                  position.lineNumber,
+                  position.column,
+                  position.lineNumber,
+                  position.column
+                ),
               contents: Array.isArray(result.contents)
                 ? result.contents.map((item) => ({
-                    value: item.value ? item.value : item,
-                  }))
+                  value: item.value ? item.value : item,
+                }))
                 : [
-                    {
-                      value: result.contents.value,
-                    },
-                  ],
+                  {
+                    value: result.contents.value,
+                  },
+                ],
             };
             pushLSPLogMessage(
               "info",
@@ -14011,7 +14299,7 @@ async function createMonacoEditor(language, form, support) {
                 activeSignature: result.activeSignature,
                 signatures: result.signatures,
               },
-              dispose: () => {},
+              dispose: () => { },
             };
 
             pushLSPLogMessage(
@@ -14100,12 +14388,12 @@ async function createMonacoEditor(language, form, support) {
         ...OJBetter_monaco.lspRangeToMonacoRange(item1.range),
         relatedInformation: item1.relatedInformation
           ? item1.relatedInformation.map((item2) => ({
-              ...(item2.location.range
-                ? OJBetter_monaco.lspRangeToMonacoRange(item2.location.range)
-                : OJBetter_monaco.lspRangeToMonacoRange(item2.location)),
-              message: item2.message,
-              resource: monaco.Uri.parse(item2.location.uri),
-            }))
+            ...(item2.location.range
+              ? OJBetter_monaco.lspRangeToMonacoRange(item2.location.range)
+              : OJBetter_monaco.lspRangeToMonacoRange(item2.location)),
+            message: item2.message,
+            resource: monaco.Uri.parse(item2.location.uri),
+          }))
           : null,
         severity: OJBetter_monaco.lspSeverityToMonacoSeverity(item1.severity),
         source: item1.source,
@@ -14707,12 +14995,10 @@ function wandboxCompilerArgsChange(nowSelect) {
         if (switche.type == "single") {
           let single = OJB_safeCreateJQElement(`
                     <div>
-                        <input type='checkbox' id='${switche.name}' value='${
-            switche["display-flags"]
-          }' ${switche.default ? "checked" : ""}></input>
-                        <label for='${switche.name}'>${
-            switche["display-name"]
-          }</label>
+                        <input type='checkbox' id='${switche.name}' value='${switche["display-flags"]
+            }' ${switche.default ? "checked" : ""}></input>
+                        <label for='${switche.name}'>${switche["display-name"]
+            }</label>
                     </div>
                     `);
           div.append(single);
@@ -15114,11 +15400,11 @@ class IgnoreWhitespaceValidator extends judgeResultValidator {
       passed: passed,
       message: passed
         ? i18next.t("moreSettings.checkMessage.ignoreWhitespace.correct", {
-            ns: "codeEditor",
-          })
+          ns: "codeEditor",
+        })
         : i18next.t("moreSettings.checkMessage.ignoreWhitespace.mismatch", {
-            ns: "codeEditor",
-          }),
+          ns: "codeEditor",
+        }),
     };
   }
 }
@@ -15133,11 +15419,11 @@ class StrictValidator extends judgeResultValidator {
       passed: passed,
       message: passed
         ? i18next.t("moreSettings.checkMessage.strict.correct", {
-            ns: "codeEditor",
-          })
+          ns: "codeEditor",
+        })
         : i18next.t("moreSettings.checkMessage.strict.mismatch", {
-            ns: "codeEditor",
-          }),
+          ns: "codeEditor",
+        }),
     };
   }
 }
@@ -15196,14 +15482,14 @@ class NcmpValidator extends judgeResultValidator {
       message:
         firstElems.length <= 5
           ? i18next.t("moreSettings.checkMessage.ncmp.correctFew", {
-              ns: "codeEditor",
-              count: firstElems.length,
-              numbers: firstElems.join(" "),
-            })
+            ns: "codeEditor",
+            count: firstElems.length,
+            numbers: firstElems.join(" "),
+          })
           : i18next.t("moreSettings.checkMessage.ncmp.correctMany", {
-              ns: "codeEditor",
-              count: expectedInts.length,
-            }),
+            ns: "codeEditor",
+            count: expectedInts.length,
+          }),
     };
   }
 }
@@ -15313,12 +15599,12 @@ class WcmpValidator extends judgeResultValidator {
         message:
           expectedWords.length > actualWords.length
             ? i18next.t(
-                "moreSettings.checkMessage.wcmp.extraTokensInParticipant",
-                { ns: "codeEditor" }
-              )
+              "moreSettings.checkMessage.wcmp.extraTokensInParticipant",
+              { ns: "codeEditor" }
+            )
             : i18next.t("moreSettings.checkMessage.wcmp.unexpectedEOF", {
-                ns: "codeEditor",
-              }),
+              ns: "codeEditor",
+            }),
       };
     }
 
@@ -15327,13 +15613,13 @@ class WcmpValidator extends judgeResultValidator {
       message:
         minLength === 1
           ? i18next.t("moreSettings.checkMessage.wcmp.singleToken", {
-              ns: "codeEditor",
-              token: expectedWords[0],
-            })
+            ns: "codeEditor",
+            token: expectedWords[0],
+          })
           : i18next.t("moreSettings.checkMessage.wcmp.tokenCount", {
-              ns: "codeEditor",
-              count: minLength,
-            }),
+            ns: "codeEditor",
+            count: minLength,
+          }),
     };
   }
 }
@@ -15547,9 +15833,17 @@ async function runCode(event, runButton, sourceDiv) {
     const result = await onlineCompilerConnect(sourceDiv.val(), data.input);
 
     if (result.Errors) {
-      testCase.setStatus("Compilation error or Time limit", "error");
-      testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
-      hasError = true;
+      if (result.Errors === "Verdict not ready, retrying...") {
+        testCase.setStatus(
+          "Server communication timeout. Judge service may be busy.",
+          "error"
+        );
+        hasError = true;
+      } else {
+        testCase.setStatus("Compilation error or Time limit", "error");
+        testCase.setContent(result.Errors, TestCaseContentType.TERMINAL);
+        hasError = true;
+      }
     } else {
       const resultCheck = judgeResultValidate(data.output, result.Result);
       testCase.setJudgeChecker(resultCheck.message);
@@ -15607,7 +15901,7 @@ async function runCode(event, runButton, sourceDiv) {
     runButton.setButtonState(
       "error",
       `${passedTests}/${totalTests} ` +
-        i18next.t("runTestButton.partial", { ns: "codeEditor" })
+      i18next.t("runTestButton.partial", { ns: "codeEditor" })
     );
   } else {
     runButton.setButtonState(
@@ -15738,7 +16032,7 @@ async function addProblemPageCodeEditor() {
 function getTargetLanguage(serverName) {
   let targetLanguage =
     OJBetter.supportList.translationSupport[serverName][
-      OJBetter.translation.targetLang
+    OJBetter.translation.targetLang
     ];
   if (targetLanguage) return targetLanguage;
   else return OJBetter.supportList.translationSupport[serverName]["zh"];
@@ -15861,7 +16155,7 @@ async function translate_deepl_api_free(raw) {
     target_lang: getTargetLanguage("deepl"),
     split_sentences: "1",
     ...(OJBetter.deepl.enableEmphasisProtection ||
-    OJBetter.deepl.enableLinkProtection
+      OJBetter.deepl.enableLinkProtection
       ? { tag_handling: "html" }
       : {}),
     ...Object.assign({}, ...OJBetter.deepl.config.data),
@@ -15898,7 +16192,7 @@ async function translate_deepl_api_pro(raw) {
     target_lang: getTargetLanguage("deepl"),
     split_sentences: "1",
     ...(OJBetter.deepl.enableEmphasisProtection ||
-    OJBetter.deepl.enableLinkProtection
+      OJBetter.deepl.enableLinkProtection
       ? { tag_handling: "html" }
       : {}),
     ...Object.assign({}, ...OJBetter.deepl.config.data),
@@ -16030,7 +16324,7 @@ async function translate_youdao_web(raw) {
     return `OUTFOX_SEARCH_USER_ID_NCOO=${OUTFOX_SEARCH_USER_ID_NCOO}; OUTFOX_SEARCH_USER_ID=${OUTFOX_SEARCH_USER_ID}`;
   })();
 
-  
+
   /**
    * 生成sign
    */
@@ -16079,7 +16373,7 @@ async function translate_youdao_web(raw) {
         "An unknown network error occurred!",
         response
       );
-    const {data} = JSON.parse(response.responseText);
+    const { data } = JSON.parse(response.responseText);
     return data;
   }
 
@@ -16145,7 +16439,7 @@ async function translate_youdao_web(raw) {
   const time = new Date().getTime();
   const t = "asdjnjfenknafdfsdfsd";
   const sign = getsign(time, t);
-  const {secretKey, aesKey, aesIv} = await getKey(sign, time);
+  const { secretKey, aesKey, aesIv } = await getKey(sign, time);
   // 表单数据
   const data = {
     i: raw,
@@ -16292,41 +16586,40 @@ async function translate_openai(raw) {
       prompt += `\n${raw}`;
     }
   } else {
-    prompt = `
-As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
-The translation should use professional terms and maintain the text format, including ${
-      OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-        ? "keeping the LaTeX equations unchanged."
-        : "keeping the brackets【】, HTML tags, and their content unchanged."
-    }
-After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment. ${
-      OJBetter.chatgpt.asSystemPrompt
-        ? ""
-        : `The segment to be translated is as follows: "
+    prompt = `You are a professional English translator specializing in algorithm programming competitions. 
+Translate the following text into ${lang} with precision, using appropriate technical terminology.
+
+Rules:
+1. Output ONLY the translation, with no explanations, notes, or other text
+2. Maintain all original formatting
+3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+4. Ensure the translation follows natural ${lang} expression patterns
+5. Use professional terminology common in programming competitions
+
+Text to translate:
+"
 ${raw}
-"`
-    }`;
+"`;
   }
   const data = {
     model: OJBetter.chatgpt.config.model || modelDefault,
     messages: OJBetter.chatgpt.asSystemPrompt
       ? [
-          {
-            role: "system",
-            content: prompt,
-          },
-          {
-            role: "user",
-            content: raw,
-          },
-        ]
+        {
+          role: "system",
+          content: prompt,
+        },
+        {
+          role: "user",
+          content: raw,
+        },
+      ]
       : [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
     temperature: 0.7,
     ...Object.assign({}, ...OJBetter.chatgpt.config.data),
   };
@@ -16416,41 +16709,40 @@ async function* openai_stream(raw) {
       prompt += `\n${raw}`;
     }
   } else {
-    prompt = `
-As a professional English translator, your task is to accurately translate a segment of an algorithm programming competition question into ${lang}.
-The translation should use professional terms and maintain the text format, including ${
-      OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru
-        ? "keeping the LaTeX equations unchanged."
-        : "keeping the brackets【】, HTML tags, and their content unchanged."
-    }
-After translation, please ensure that the ${lang} version conforms to normal expression habits.
-What I need is a carefully polished ${lang} translation of my question segment. ${
-      OJBetter.chatgpt.asSystemPrompt
-        ? ""
-        : `The segment to be translated is as follows: "
+    prompt = `You are a professional English translator specializing in algorithm programming competitions. 
+Translate the following text into ${lang} with precision, using appropriate technical terminology.
+
+Rules:
+1. Output ONLY the translation, with no explanations, notes, or other text
+2. Maintain all original formatting
+3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+4. Ensure the translation follows natural ${lang} expression patterns
+5. Use professional terminology common in programming competitions
+
+Text to translate:
+"
 ${raw}
-"`
-    }`;
+"`;
   }
   const data = {
     model: OJBetter.chatgpt.config.model || modelDefault,
     messages: OJBetter.chatgpt.asSystemPrompt
       ? [
-          {
-            role: "system",
-            content: prompt,
-          },
-          {
-            role: "user",
-            content: raw,
-          },
-        ]
+        {
+          role: "system",
+          content: prompt,
+        },
+        {
+          role: "user",
+          content: raw,
+        },
+      ]
       : [
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
     temperature: 0.7,
     stream: true,
     ...Object.assign({}, ...OJBetter.chatgpt.config.data),
@@ -16824,7 +17116,7 @@ if (document.readyState === "loading") {
 // ------------------------------
 
 // ------------------------------
-// 配置自动迁移代码（将在10个小版本后移除-1.83）
+// 配置自动迁移代码 -1.73
 // ------------------------------
 
 {
@@ -16865,6 +17157,19 @@ if (document.readyState === "loading") {
       }
     });
     GM_setValue("Complet_config", config);
+    location.reload();
+  }
+}
+
+// ------------------------------
+// 配置自动迁移代码 - 1.78
+// ------------------------------
+{
+  const config_changed = GM_getValue("config_changed_178"); // 设置一个迁移标志
+  const updateSource = GM_getValue("updateSource");
+  if (!config_changed && updateSource === 'greasyfork') {
+    GM_setValue("config_changed", true);
+    GM_setValue("updateSource", 'aliyunoss');
     location.reload();
   }
 }
