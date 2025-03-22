@@ -101,7 +101,8 @@
             "isStrict": false,
             "rules": {
                 "Before contest": "upcoming competition",
-                "Contest is running": "Match in progress"
+                "Contest is running": "Match in progress",
+                "Registration is running": "Enrollment in progress"
             }
         },
         ".notice": {
