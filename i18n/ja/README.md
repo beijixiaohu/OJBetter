@@ -37,7 +37,7 @@ OJBetterはTampermonkeyのスクリプトプロジェクトで、様々なOnline
 
 ## ドキュメントの使用
 
-より詳細な情報や使用ガイドラインについては、**[Wikiページ](https://github.com/beijixiaohu/OJBetter/wiki)をご覧ください。**
+より詳細な情報や使用ガイドラインについては、\*\*[Wikiページ](https://github.com/beijixiaohu/OJBetter/wiki)をご覧ください。……
 
 ## 投稿方法
 
