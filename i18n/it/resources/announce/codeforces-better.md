@@ -1,3 +1,11 @@
+## 1.78.0
+
+- Rimuovere la dipendenza dal repository di script Greasyfork
+- Sostituire la fonte di aggiornamento predefinita con AliCloud OSS
+- Risolvere il problema dello stile errato dei pulsanti su alcune pagine del titolo
+- Miglioramenti：Regolazione della parola di richiesta predefinita di GPT
+- Miglioramenti：Fornire una chiara indicazione quando il codice online si esaurisce
+
 ## 1.77.0
 
 - Aggiungere l'opzione "Controllo dei risultati dei test campione".
@@ -34,7 +42,7 @@
 - Risolvere il problema per cui i sorgenti del problemset non possono essere inviati correttamente quando la lunghezza del numero di domanda non è 1 Grazie a **@WindJ0Y** per il contributo!
 - Correggere l'editor di Monaco che non applica correttamente il tema quando il tema è impostato su follow Grazie a **@cscnk52** per il contributo!
 - Correggere l'editor di codice che non viene caricato correttamente quando i link al titolo sono in minuscolo.
-- Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
+- Correzione di un problema durante l'interrogazione dei saldi API, grazie a **@x1uc**.
 - Correggere l'errore durante la ritraduzione di "Raccogli i vecchi risultati".
 - Risolvere il problema che il pulsante di copia non funziona nella pagina di invio.
 - Correzione dei tag di script non filtrati durante la conversione di MarkDown

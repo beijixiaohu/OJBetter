@@ -1,3 +1,10 @@
+## 1.19.0
+
+- Remove dependency on Greasyfork script repository
+- Replace the default update source with AliCloud OSS
+- Fix the problem of wrong style of buttons on some title pages
+- Improvements：Adjusting GPT Default Prompt Words
+
 ## 1.18.0
 
 - Add "Sample Test Results Checker" option

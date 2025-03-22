@@ -1,3 +1,10 @@
+## 1.19.0
+
+- Rimuovere la dipendenza dal repository di script Greasyfork
+- Sostituire la fonte di aggiornamento predefinita con AliCloud OSS
+- Risolvere il problema dello stile errato dei pulsanti su alcune pagine del titolo
+- Miglioramenti：Regolazione della parola di richiesta predefinita di GPT
+
 ## 1.18.0
 
 - Aggiungere l'opzione "Controllo dei risultati dei test campione".
@@ -30,7 +37,7 @@
 - Sostituzione dell'interfaccia di "Yodo Translator"
 - &nbsp;Correggere i simboli ` ` nell'abbellimento dei blocchi di codice
 - Correggere l'editor di Monaco che non applica correttamente il tema quando il tema è impostato su follow Grazie a **@cscnk52** per il contributo!
-- Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
+- Correzione di un problema durante l'interrogazione dei saldi API, grazie a **@x1uc**.
 - Correggere l'errore durante la ritraduzione di "Raccogli i vecchi risultati".
 - Correzione dei tag di script non filtrati durante la conversione di MarkDown
 - Correzione di alcune partite che non saltavano a Logan Valley
@@ -47,7 +54,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2

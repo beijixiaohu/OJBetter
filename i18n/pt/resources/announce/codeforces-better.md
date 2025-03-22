@@ -1,3 +1,11 @@
+## 1.78.0
+
+- Remover a dependência do repositório de scripts Greasyfork
+- Substituir a fonte de atualização predefinida por AliCloud OSS
+- Corrigir o problema do estilo errado dos botões em algumas páginas de título
+- Melhorias：Ajustar a palavra de prompt padrão do GPT
+- Melhorias：Indicar claramente quando o código em linha se esgota
+
 ## 1.77.0
 
 - Adicionar a opção "Verificador de resultados de testes de amostras

@@ -1,3 +1,10 @@
+## 1.19.0
+
+- Remover a dependência do repositório de scripts Greasyfork
+- Substituir a fonte de atualização predefinida por AliCloud OSS
+- Corrigir o problema do estilo errado dos botões em algumas páginas de título
+- Melhorias：Ajustar a palavra de prompt padrão do GPT
+
 ## 1.18.0
 
 - Adicionar a opção "Verificador de resultados de testes de amostras

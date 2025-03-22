@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.18.0",
+    "lastVersion": "1.19.0",
+    "1.19.0": "- Greasyfork 스크립트 저장소에 대한 종속성 제거\n\n- 기본 업데이트 소스를 AliCloud OSS로 변경\n\n- 일부 제목 페이지에서 잘못된 스타일의 버튼 문제 수정\n\n- 개선 사항：GPT 기본 프롬프트 단어 조정",
     "1.18.0": "\n\n\n\n\n\n\n\n\n\n- \"샘플 테스트 결과 검사기\" 옵션 추가 - **@wrk-123**의 기여로 \"동일 주제 목록 표시\" 기능 추가 - 다크 모드가 \"팔로우 시스템\"일 때 코드 블록 미화가 주제를 제대로 전환하지 못하는 문제 수정 - 아리가투 번역 오류 문제 수정 - \"분할 번역\" 모드에서 대기 간격 실패 문제 수정 - API 잔액 조회 시 존재하는 문제 수정.\n\n\n\n**@x1uc**의 기여 덕분에 - 오버레이 클래스 이름 충돌 문제 수정 - **@nr0728**, **@user111192**, **@qjwh**의 기여 덕분에 웹사이트 현지화 규칙 개선.",
-    "1.17.0": "- 공개 리파지토리 CDN을 [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)로 교체, 이유는 [이슈](https://github.com/beijixiaohu/OJBetter/issues/151)를 참고하세요.\n\n\n\n\n\n\n\n** - 제출 페이지 코드의 '펼치기/접기' 버튼이 유효하지 않은 문제 수정 - 설정 페이지의 레이아웃 구조 조정.",
-    "1.16.1": "- 웹사이트 현지화 오류 문제 해결"
+    "1.17.0": "- 공개 리파지토리 CDN을 [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)로 교체, 이유는 [이슈](https://github.com/beijixiaohu/OJBetter/issues/151)를 참고하세요.\n\n\n\n\n\n\n\n** - 제출 페이지 코드의 '펼치기/접기' 버튼이 유효하지 않은 문제 수정 - 설정 페이지의 레이아웃 구조 조정."
 }

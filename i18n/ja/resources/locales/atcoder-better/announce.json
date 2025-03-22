@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.18.0",
+    "lastVersion": "1.19.0",
+    "1.19.0": "- Greasyfork スクリプトリポジトリへの依存を削除\n\n- デフォルトのアップデートソースを AliCloud OSS に変更\n\n- 一部のタイトルページでボタンのスタイルが正しくない問題を修正\n\n- 改善：GPT デフォルトのプロンプトの単語を調整",
     "1.18.0": "\n\n\n\n\n\n\n\n\n\n- サンプルテスト結果チェッカー」オプションの追加 - 「同じトピックの一覧を表示」機能の追加、**@wrk-123** さんの貢献による - ダークモードが「システムに従う」の場合に、コードブロックの美化が正しくトピックを切り替えない問題を修正 - 有言翻訳エラーの問題を修正 - 「分割翻訳」モードで待機間隔に失敗する問題を修正 - API残高の問い合わせに存在する問題を修正。\n\n\n\nまた、**@x1uc** さんの貢献に感謝します。 - オーバーレイクラス名の衝突の問題を修正しました。 - **@nr0728** さん、**@user111192** さん、**@qjwh** さんの貢献に感謝します。",
-    "1.17.0": "- パブリックリポジトリのCDNを[SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)に置き換える。理由は[issue](https://github.com/beijixiaohu/OJBetter/issues/151)を参照。\n\n\n\n\n\n\n\n** 設定ページのレイアウト構造を調整。",
-    "1.16.1": "- ウェブサイトのローカライズエラーの問題を修正"
+    "1.17.0": "- パブリックリポジトリのCDNを[SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html)に置き換える。理由は[issue](https://github.com/beijixiaohu/OJBetter/issues/151)を参照。\n\n\n\n\n\n\n\n** 設定ページのレイアウト構造を調整。"
 }

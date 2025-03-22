@@ -1,3 +1,10 @@
+## 1.19.0
+
+- Abhängigkeit von Greasyfork-Skript-Repository entfernen
+- Ersetzen Sie die Standard-Aktualisierungsquelle durch AliCloud OSS
+- Behebung des Problems des falschen Stils der Schaltflächen auf einigen Titelseiten
+- Verbesserungen：Anpassen des GPT-Standard-Eingabeworts
+
 ## 1.18.0
 
 - Hinzufügen der Option "Prüfen der Testergebnisse".

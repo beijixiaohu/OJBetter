@@ -1,6 +1,6 @@
 {
-    "lastVersion": "1.18.0",
+    "lastVersion": "1.19.0",
+    "1.19.0": "- Removed dependency on Greasyfork script repository\n\n- Changed default update source to AliCloud OSS\n\n- Fixed issue with incorrectly styled buttons on some title pages\n\n- Improvements：Adjustments to GPT default prompt words",
     "1.18.0": "- Add \"Sample test result checker\" option\n\n- Add \"Show list of same topic\" function, thanks to the contribution of **@wrk-123**\n\n- Fix the problem that code block beautification didn't switch the topic correctly when the dark mode is \"Follow system\"\n\n- Fix the problem of Arigatou Translation Error\n\n- Fix the problem of waiting interval failure in \"Segmented Translation\" mode\n\n- Fix the problem that exists when querying API balance. Thanks to the contribution of **@x1uc**\n\n- Fix the problem of overlay class name conflict\n\n- Improve the website localization rules, thanks to the contribution of **@nr0728**, **@user111192**, **@qjwh**.",
-    "1.17.0": "- **Replace the public repository CDN with [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), see [issue](https://github.com/beijixiaohu/OJBetter/issues/151) for the reason.**\n\n\n\n- Fix the issue that the \"Expand/Collapse\" button of submissions page code is invalid\n\n\n\n- Adjust the layout structure of settings page.",
-    "1.16.1": "- Fix a problem with website localization errors"
+    "1.17.0": "- **Replace the public repository CDN with [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), see [issue](https://github.com/beijixiaohu/OJBetter/issues/151) for the reason.**\n\n\n\n- Fix the issue that the \"Expand/Collapse\" button of submissions page code is invalid\n\n\n\n- Adjust the layout structure of settings page."
 }
