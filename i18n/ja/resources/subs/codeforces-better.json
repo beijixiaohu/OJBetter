@@ -101,7 +101,8 @@
             "isStrict": false,
             "rules": {
                 "Before contest": "今後のコンペティション",
-                "Contest is running": "試合中"
+                "Contest is running": "試合中",
+                "Registration is running": "登録手続き中"
             }
         },
         ".notice": {
