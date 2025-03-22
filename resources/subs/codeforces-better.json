@@ -101,7 +101,8 @@
             "isStrict": false,
             "rules": {
                 "Before contest": "即将进行的比赛",
-                "Contest is running": "比赛进行中"
+                "Contest is running": "比赛进行中",
+                "Registration is running": "报名进行中"
             }
         },
         ".notice": {
