@@ -101,7 +101,8 @@
             "isStrict": false,
             "rules": {
                 "Before contest": "bevorstehender Wettbewerb",
-                "Contest is running": "Spiel im Gange"
+                "Contest is running": "Spiel im Gange",
+                "Registration is running": "Die Registrierung ist im Gange"
             }
         },
         ".notice": {
