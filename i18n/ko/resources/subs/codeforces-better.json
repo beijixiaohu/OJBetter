@@ -101,7 +101,8 @@
             "isStrict": false,
             "rules": {
                 "Before contest": "다가오는 대회",
-                "Contest is running": "경기 진행 중"
+                "Contest is running": "경기 진행 중",
+                "Registration is running": "등록이 진행 중입니다."
             }
         },
         ".notice": {

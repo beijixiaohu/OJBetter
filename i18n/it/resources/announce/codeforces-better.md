@@ -1,4 +1,4 @@
-## 1.78.0
+## 1.79.0
 
 - Rimuovere la dipendenza dal repository di script Greasyfork
 - Sostituire la fonte di aggiornamento predefinita con AliCloud OSS
