@@ -101,7 +101,8 @@
             "isStrict": false,
             "rules": {
                 "Before contest": "即將進行的比賽",
-                "Contest is running": "比賽進行中"
+                "Contest is running": "比賽進行中",
+                "Registration is running": "报名进行中"
             }
         },
         ".notice": {
