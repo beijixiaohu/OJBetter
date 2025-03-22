@@ -1,4 +1,4 @@
-## 1.78.0
+## 1.79.0
 
 - Remove dependency on Greasyfork script repository
 - Replace the default update source with AliCloud OSS
