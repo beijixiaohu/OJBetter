@@ -31,13 +31,13 @@ Para el script de instalación, puede obtener：
 
 > [!NOTA]
 >
-> Haz clic en el botón **\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`xxx¡Mejor! Configuración** situado en la esquina superior derecha de la **página web** para abrir el panel de configuración.
+> Haz clic en el botón **\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`xxx¡Mejor! Configuración** situado en la esquina superior derecha de la **página web** para abrir el panel de configuración.
 >
 > La mayoría de las funciones disponen de texto de ayuda que puede consultarse pasando el ratón por encima del icono "? para verlo.
 
 ## Utilización de documentos
 
-Para obtener información más detallada e instrucciones, **visite la [página Wiki](https://github.com/beijixiaohu/OJBetter/wiki).**\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+Para obtener información más detallada e instrucciones, **visite la [página Wiki](https://github.com/beijixiaohu/OJBetter/wiki).**\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
 
 ## Cómo contribuir
 
