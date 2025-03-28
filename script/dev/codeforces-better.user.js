@@ -430,6 +430,8 @@ OJBetter.preference = {
   iconButtonSize: undefined,
   /** @type {string?} 评测状态文本替换规则 */
   judgeStatusReplaceText: undefined,
+  /** @type {string?} 翻译文本颜色 */
+  TranslateTextColor: undefined
 };
 
 /**
@@ -1193,6 +1195,10 @@ async function initVar() {
   OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
   OJBetter.preference.judgeStatusReplaceText = OJB_getGMValue(
     "judgeStatusReplaceText",
+    ""
+  );
+  OJBetter.preference.TranslateTextColor = OJB_getGMValue(
+    "TranslateTextColor",
     ""
   );
   OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue(
@@ -6978,6 +6984,16 @@ const preference_settings_HTML = `
         </div>
         <textarea type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder"></textarea>
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for='TranslateTextColor'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.TranslateTextColor.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.TranslateTextColor.helpText"></div>
+        </div>
+        <textarea type="text" id='TranslateTextColor' class='no_default' data-i18n="[placeholder]settings:preference.TranslateTextColor.placeholder"></textarea>
+    </div>
 </div>
 `;
 
@@ -7781,6 +7797,7 @@ async function initSettingsPanel() {
     );
     $("#iconButtonSize").val(GM_getValue("iconButtonSize"));
     $("#judgeStatusReplaceText").val(GM_getValue("judgeStatusReplaceText"));
+    $("#TranslateTextColor").val(GM_getValue("TranslateTextColor"));
     $("#autoTranslation").prop(
       "checked",
       GM_getValue("autoTranslation") === true
@@ -7941,6 +7958,7 @@ async function initSettingsPanel() {
         commentTranslationChoice: $("#comment_translation_choice").val(),
         iconButtonSize: $("#iconButtonSize").val(),
         judgeStatusReplaceText: $("#judgeStatusReplaceText").val(),
+        TranslateTextColor: $("#TranslateTextColor").val(),
         autoTranslation: $("#autoTranslation").prop("checked"),
         shortTextLength: $("#shortTextLength").val(),
         allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -9705,6 +9723,11 @@ class TranslateDiv {
     //         this.renderLaTeX(element);
     //     }
     // });
+    
+    // 渲染翻译文本颜色
+    if(OJBetter.preference.TranslateTextColor){
+      this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
+    }
   }
 
   /**

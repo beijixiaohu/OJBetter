@@ -426,6 +426,8 @@ OJBetter.preference = {
     iconButtonSize: undefined,
     /** @type {boolean?} 是否显示同比赛题目列表*/
     showSameContestProblems: undefined,
+    /** @type {string?} 翻译文本颜色 */
+    TranslateTextColor: undefined
 };
 
 /**
@@ -980,6 +982,7 @@ async function initVar() {
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
     OJBetter.preference.showLoading = OJB_getGMValue("showLoading", true);
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
+    OJBetter.preference.TranslateTextColor = OJB_getGMValue("TranslateTextColor","");
     OJBetter.preference.showSameContestProblems = OJB_getGMValue("showSameContestProblems", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
@@ -6328,6 +6331,16 @@ const preference_settings_HTML = `
         </div>
         <input type="checkbox" id="showSameContestProblems" name="showSameContestProblems">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for='TranslateTextColor'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.TranslateTextColor.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.TranslateTextColor.helpText"></div>
+        </div>
+        <textarea type="text" id='TranslateTextColor' class='no_default' data-i18n="[placeholder]settings:preference.TranslateTextColor.placeholder"></textarea>
+    </div>
 </div>
 `;
 
@@ -6981,6 +6994,7 @@ async function initSettingsPanel() {
         $("#showClistRating_contest").prop("checked", GM_getValue("showClistRating_contest") === true);
         $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
         $("#showClistRating_problem").prop("checked", GM_getValue("showClistRating_problem") === true);
+        $("#TranslateTextColor").val(GM_getValue("TranslateTextColor"));
         $("#RatingHidden").prop("checked", GM_getValue("RatingHidden") === true);
         $('#scriptL10nLanguage').val(GM_getValue("scriptL10nLanguage"));
         $('#localizationLanguage').val(GM_getValue("localizationLanguage"));
@@ -7083,6 +7097,7 @@ async function initSettingsPanel() {
                 openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
+                TranslateTextColor: $("#TranslateTextColor").val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -8394,6 +8409,10 @@ class TranslateDiv {
                 this.renderLaTeX(element);
             }
         });
+        // 渲染翻译文本颜色
+        if(OJBetter.preference.TranslateTextColor){
+            this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
+        }
     }
 
     /**
