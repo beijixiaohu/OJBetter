@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "Liste der Kohortenfragen anzeigen",
       "helpText": "Die Liste der Fragen für dieses Spiel wird auf dem Bildschirm mit den Fragen angezeigt, wenn es eingeschaltet ist."
+    },
+    "TranslateTextColor": {
+      "title": "Übersetzung Farbeinstellungen",
+      "helpText": "<p>Legen Sie die Zielfarbe im Übersetzungsfeld im css-Format fest. Zum Beispiel rot oder #ABCDEF.</p>",
+      "placeholder": "Die Zielfarbe des Übersetzungsfeldes, leer ist die Standardeinstellung."
     }
   },
   "about": {
