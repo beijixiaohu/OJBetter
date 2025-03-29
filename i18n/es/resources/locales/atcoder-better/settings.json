@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "Mostrar la lista de preguntas de la cohorte",
       "helpText": "La lista de preguntas de este juego se mostrará en la pantalla de preguntas cuando esté activada."
+    },
+    "TranslateTextColor": {
+      "title": "Traducción Ajustes de color",
+      "helpText": "<p>Establezca el color de destino en el cuadro de traducción en formato css. Por ejemplo rojo o #ABCDEF.</p>",
+      "placeholder": "El color de destino de la caja de traducción, vacío es el predeterminado."
     }
   },
   "about": {

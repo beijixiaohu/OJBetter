@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "코호트 질문 목록 표시",
       "helpText": "이 게임을 켜면 문제 화면에 이 게임의 문제 목록이 표시됩니다."
+    },
+    "TranslateTextColor": {
+      "title": "번역 색상 설정",
+      "helpText": "<p>번역 상자에 대상 색상을 CSS 형식으로 설정합니다. 예를 들어 빨간색 또는 #ABCDEF.</p>",
+      "placeholder": "번역 상자의 대상 색상은 비어 있음이 기본값입니다."
     }
   },
   "about": {
