@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "显示同场题目列表",
       "helpText": "开启后在题目界面中会显示本场比赛的题目列表"
+    },
+    "TranslateTextColor": {
+        "title": "翻译颜色设置",
+        "helpText": "<p>设置翻译框内目标颜色，格式为css格式。例如 red 或者 #ABCDEF。</p>",
+        "placeholder": "翻译框内目标颜色，空则默认。"
     }
   },
   "about": {
