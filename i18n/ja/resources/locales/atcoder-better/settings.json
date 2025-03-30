@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "コホートの質問リストを表示する",
       "helpText": "このゲームの問題リストは、オンにすると問題画面に表示されます。"
+    },
+    "TranslateTextColor": {
+      "title": "翻訳カラー設定",
+      "helpText": "<p>トランスレーション・ボックスにcss形式でターゲット・カラーを設定します。例えば赤や#ABCDEFのように。</p>",
+      "placeholder": "翻訳ボックスのターゲットカラー。"
     }
   },
   "about": {

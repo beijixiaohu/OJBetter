@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "Display a list of questions from the same field",
       "helpText": "The list of questions for this game will be displayed in the question screen when it is turned on"
+    },
+    "TranslateTextColor": {
+      "title": "Translation color settings",
+      "helpText": "<p>Set the target color in the translation box in css format. For example red or #ABCDEF.</p>",
+      "placeholder": "The target color of the translation box, empty is the default."
     }
   },
   "about": {
