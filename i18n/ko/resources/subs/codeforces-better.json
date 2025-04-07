@@ -965,7 +965,7 @@
             "rules": {
                 "Welcome": "wellcome",
                 "Goodbye, ": "안녕히 계세요.",
-                "Looking forward to seeing you at Codeforces.": "코드포스에서 뵙기를 기대합니다.",
+                "Looking forward to seeing you at Codeforces.": "코드포스에서 다시 뵙기를 기대합니다.",
                 "You have been successfully registered": "등록에 성공했습니다.",
                 "No such contests": "그런 콘테스트는 없습니다.",
                 "The example input has been copied into the clipboard": "클립보드에 복사된 샘플 입력",
