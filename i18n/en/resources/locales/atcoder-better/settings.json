@@ -133,7 +133,7 @@
       }
     },
     "autoTranslation": {
-      "title": "automatic translation",
+      "title": "Automatic Translation",
       "enable": "Enable Auto Translate",
       "helpText": "<p>For short texts in <strong> the #task-statement area</strong>, the</p><p> It is automatically translated when it enters the visible area of the browser window.</p>",
       "shortTextLength": {
@@ -302,7 +302,7 @@
         "helpText": "<p>Template from<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
       },
       "customization": "Custom",
-      "performanceWarning": "Note：Too many static complementary rules can affect performance"
+      "performanceWarning": "Attention: Too many static complementary rules can affect performance"
     }
   },
   "dev": {
