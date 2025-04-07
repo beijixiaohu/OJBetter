@@ -965,7 +965,7 @@
             "rules": {
                 "Welcome": "ウェルカム",
                 "Goodbye, ": "さようなら。",
-                "Looking forward to seeing you at Codeforces.": "Codeforcesでお会いできるのを楽しみにしています。",
+                "Looking forward to seeing you at Codeforces.": "またCodeforcesでお会いできるのを楽しみにしています。",
                 "You have been successfully registered": "登録が完了しました",
                 "No such contests": "そんなコンテストはない。",
                 "The example input has been copied into the clipboard": "クリップボードにコピーされたサンプル入力",

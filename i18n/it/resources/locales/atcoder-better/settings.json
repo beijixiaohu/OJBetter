@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "Mostra l'elenco delle domande della coorte",
       "helpText": "L'elenco delle domande di questo gioco viene visualizzato nella schermata delle domande quando è acceso."
+    },
+    "TranslateTextColor": {
+      "title": "Impostazioni del colore di traduzione",
+      "helpText": "<p>Impostare il colore di destinazione nella casella di traduzione in formato css. Ad esempio rosso o #ABCDEF.</p>",
+      "placeholder": "Il colore di destinazione del riquadro di traduzione, vuoto è quello predefinito."
     }
   },
   "about": {
