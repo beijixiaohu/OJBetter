@@ -26,13 +26,13 @@
     },
     "error": {
         "clist": {
-            "404": "Attualmente l'accesso a Clist.by è congestionato, la richiesta è stata interrotta, la preghiamo di riprovare più tardi!",
+            "404": "Attualmente si sta accedendo a Clist.per congestione della rete, la richiesta è stata interrotta, si prega di riprovare più tardi!",
             "cookie": "Il cookie di accesso a Clist.by del suo browser attuale potrebbe non funzionare più, apra<a target='_blank' href='https://clist.by/'>Clist.by</a>per accedere nuovamente<br>Descrizione：L'implementazione dello script per la visualizzazione del punteggio di valutazione di Clist si basa sulle informazioni del cookie dell'utente connesso di Clist.by,<br>lo script non otterrà le informazioni del suo cookie specifico sul sito Clist.by, legga la pagina dello script. Per i dettagli, legga le istruzioni della pagina dello script.",
-            "other": "Si è verificato un errore sconosciuto durante l'accesso a Clist.by, la richiesta è stata interrotta, la preghiamo di riprovare più tardi!"
+            "other": "Si è verificato un errore sconosciuto durante l'attuale accesso a Clist.by, la richiesta è stata interrotta, si prega di riprovare più tardi!"
         },
         "codeEditor": {
             "load": "Impossibile caricare i dati necessari per l'editor, potrebbe non aver effettuato il login/non essersi registrato/non avere una pagina del titolo/durante la fine del congelamento del torneo/pratica dopo la fine del divieto per quel torneo",
-            "submit": "L'invio dell'editor di codice non è riuscito, riprovi più tardi!"
+            "submit": "L'invio dell'editor di codice non è riuscito, riprova più tardi!"
         }
     }
 }
