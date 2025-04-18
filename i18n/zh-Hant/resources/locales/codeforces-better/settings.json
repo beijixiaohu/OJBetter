@@ -79,8 +79,8 @@
                 "google": "Google翻譯",
                 "caiyun": "彩雲小譯",
                 "openai": {
-                    "name": "ChatGPT翻譯",
-                    "helpText": "<p>需要在下方ChatGPT配置中添加並選定你想使用的配置信息，右鍵可以修改和刪除配置，具體請閱讀Github wiki</p>"
+                    "name": "AI 翻译",
+                    "helpText": "<p>需要在下方配置中添加并选定你想使用的配置信息，右键可以修改和删除配置，具体请阅读 Github wiki</p>"
                 }
             }
         },
@@ -109,7 +109,7 @@
             },
             "customPrompt": {
                 "name": "自定义提示词",
-                "helpText": "<p>使用你自定义提示词来让 ChatGPT 翻译文本</p>",
+                "helpText": "<p>使用你自定义提示词来让 AI 翻译文本</p>",
                 "placeholder": "可以在这里自定义提示词，如果为空则使用预置的提示词"
             },
             "asSystemPrompt": {
@@ -132,7 +132,7 @@
                     "youdao": "有道翻譯",
                     "google": "Google翻譯",
                     "caiyun": "彩雲小譯",
-                    "openai": "ChatGPT翻譯"
+                    "openai": "AI 翻译"
                 }
             }
         },
@@ -183,13 +183,13 @@
             },
             "transWaitTime": {
                 "name": "等待間隔",
-                "helpText": "<p>設置兩次翻譯請求間的等待間隔，該設置會全局生效，各個翻譯服務之間獨立計算</p><p>建議 200 + 毫秒</p><p>說明：ChatGPT 翻譯時會忽略該設置，不等待</p>",
+                "helpText": "<p>设置两次翻译请求间的等待间隔，该设置会全局生效，各个翻译服务之间独立计算</p><p>建议 200 + 毫秒</p><p>说明：AI 翻译时会忽略该设置，不等待</p>",
                 "end": "毫秒",
                 "placeholder": "請輸入間隔"
             },
             "replaceSymbol": {
                 "name": "LaTeX替換符",
-                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读Github wiki</p><p>注意：使用ChatGPT翻译时不需要上述操作, 因此不受此选项影响</p>",
+                "helpText": "<p>脚本通过先取出所有的LaTeX公式，并使用替换符占位，来保证公式不会被翻译接口所破坏</p><p>对于各个翻译服务，不同的替换符本身遭到破坏的概率有所不同，具体请阅读Github wiki</p><p>注意：使用 AI 翻译时不需要上述操作, 因此不受此选项影响</p>",
                 "options": {
                     "1": "使用【】",
                     "2": "使用{}",
@@ -198,7 +198,7 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "過濾文字中的**號",
-                "helpText": " <p>有些翻譯服務(例如DeepL)會錯誤處理MarkDown 中的著重號 <strong>**</strong> </p><p>這可能會導致翻譯結果漏掉其包裹的內容，你可以選擇將著重號去掉(使用ChatGPT會忽略該項) </p>"
+                "helpText": " <p>一些翻译服务(比如 DeepL)会错误处理 MarkDown 中的着重号 <strong>**</strong> </p><p>这可能会导致翻译结果漏掉其包裹的内容，你可以选择将着重号去掉 (使用 AI 会忽略该项) </p>"
             },
             "forceTurndownConversion": {
                 "name": "强制使用Turndown转换",
