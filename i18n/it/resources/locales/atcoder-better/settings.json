@@ -75,8 +75,8 @@
         "google": "Google Translate",
         "caiyun": "illuminato. nuvole colorate e piccole traduzioni",
         "openai": {
-          "name": "Traduzione ChatGPT",
-          "helpText": "<p>Deve aggiungere e selezionare le informazioni di configurazione che desidera utilizzare nella configurazione di ChatGPT qui sotto, e fare clic con il tasto destro del mouse per modificare ed eliminare la configurazione, leggendo il wiki di Github all'indirizzo</p>."
+          "name": "Traduzione AI",
+          "helpText": "<p>È necessario aggiungere e selezionare le informazioni di configurazione che si desidera utilizzare nella configurazione sottostante, fare clic con il tasto destro del mouse per modificare ed eliminare la configurazione, leggere il wiki Github per i dettagli</p>"
         }
       }
     },
@@ -105,7 +105,7 @@
       },
       "customPrompt": {
         "name": "Stecche personalizzate",
-        "helpText": "<p>Utilizzate i vostri prompt personalizzati per far sì che ChatGPT traduca il testo</p>",
+        "helpText": "<p>Utilizzate le vostre richieste personalizzate per far sì che l'intelligenza artificiale traduca il testo</p>",
         "placeholder": "I segnali possono essere personalizzati, se sono vuoti vengono utilizzati i segnali preimpostati."
       },
       "asSystemPrompt": {
@@ -128,7 +128,7 @@
           "youdao": "Traduzione su Youtube",
           "google": "Google Translate",
           "caiyun": "illuminato. nuvole colorate e piccole traduzioni",
-          "openai": "Traduzione ChatGPT"
+          "openai": "Traduzione AI"
         }
       }
     },
@@ -179,13 +179,13 @@
       },
       "transWaitTime": {
         "name": "Intervallo di attesa",
-        "helpText": "<p>Imposta l'intervallo di attesa tra due richieste di traduzione; questa impostazione ha effetto a livello globale ed è calcolata in modo indipendente per ogni servizio di traduzione</p><p>Raccomandazione 200 + millisecondi</p><p>Descrizione：Le traduzioni ChatGPT ignorano questa impostazione e non attendono</p>",
+        "helpText": "<p>Impostare l'intervallo di attesa tra le richieste di traduzione; questa impostazione è applicata globalmente e viene calcolata indipendentemente per ogni servizio di traduzione.</p><p> Consigliato 200 + millisecondi</p><p> Descrizione：AI ignorerà questa impostazione durante le traduzioni e non attenderà</p>",
         "end": "millisecondo",
         "placeholder": "Inserisca l'intervallo"
       },
       "replaceSymbol": {
         "name": "Sostituzione di LaTeX",
-        "helpText": "<p>Lo script assicura che le formule non vengano corrotte dall'interfaccia di traduzione, eliminando prima tutte le formule LaTeX e utilizzando dei segnaposto per esse</p><p>La probabilità che le sostituzioni stesse vengano corrotte varia da servizio di traduzione a servizio di traduzione, leggere il wiki Github per i dettagli</p><p>Notare che：La traduzione con ChatGPT non richiede quanto sopra e quindi non è influenzata da questa opzione</p>",
+        "helpText": "<p>Lo script assicura che le formule non vengano corrotte dall'interfaccia di traduzione, eliminando prima tutte le formule LaTeX e usando dei segnaposto per esse.</p><p> Le sostituzioni stesse hanno una diversa probabilità di essere corrotte per ogni servizio di traduzione; si legga il wiki di Github per i dettagli.</p><p> Si noti che：non richiede questo per le traduzioni AI, quindi non è influenzato da questa opzione.</p>",
         "options": {
           "1": "Utilizzi [ ]",
           "2": "Utilizzi {}",
@@ -194,7 +194,7 @@
       },
       "filterTextWithoutEmphasis": {
         "name": "Filtrazione dei segni ** nel testo",
-        "helpText": " <p>Alcuni servizi di traduzione (ad esempio DeepL) gestiscono in modo errato l'enfasi in MarkDown <strong>**</strong> </p><p>Questo può far sì che la traduzione manchi il suo involucro; può scegliere di rimuovere l'enfasi (usando ChatGPT la ignora) </p>"
+        "helpText": " <p>Alcuni servizi di traduzione (ad esempio DeepL) gestiscono in modo errato l'enfasi in MarkDown <strong>**.</strong> </p><p> Questo può far sì che la traduzione perda il suo contenuto avvolto e si può scegliere di rimuovere l'enfasi (questo viene ignorato con l'AI). </p>"
       }
     }
   },
