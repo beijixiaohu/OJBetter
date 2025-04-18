@@ -5,12 +5,12 @@
         "youdao": "有道",
         "google": "Google",
         "caiyun": "彩雲小譯",
-        "openai": "ChatGPT"
+        "openai": "AI"
     },
     "transingTip": {
         "basic": "正在使用 {{server}} 翻譯中……請稍等",
         "deeplApi": "正在使用DeepL API 翻譯中……請稍等\n\n應用的配置： {{deepl_configName}}\n\n",
-        "openai": "正在使用ChatGPT 翻譯中……請稍等\n\n應用的設定： {{openai_name}}\n\n",
+        "openai": "正在使用 AI 翻译中……请稍等\n\n应用的配置： {{openai_name}}\n\n",
         "openai_isStream": "目前未開啟串流傳輸，你需要等待很長時間才能看到結果，請耐心等待"
     },
     "error": {
