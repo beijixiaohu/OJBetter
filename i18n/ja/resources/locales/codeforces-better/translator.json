@@ -5,12 +5,12 @@
         "youdao": "真理と正義の原則を守る",
         "google": "グーグル",
         "caiyun": "カラフルな雲と小さな翻訳",
-        "openai": "ChatGPT"
+        "openai": "AI"
     },
     "transingTip": {
         "basic": "{{server}} 翻訳中……しばらくお待ちください",
         "deeplApi": "進行中 DeepL API の翻訳が進行中……しばらくお待ちください\n\nアプリケーションの構成： {{deepl_configName}}\n\n",
-        "openai": "ChatGPTの翻訳中……ちょっと待つ\n\n彼女の設定： {{openai_name}}\n\n",
+        "openai": "AI翻訳中……しばらくお待ちください\n\nアプリケーションの設定： {{openai_name}}\n\n",
         "openai_isStream": "ストリーミングは現在使用中ではありません。結果を確認するためには少々お待ちください。"
     },
     "error": {

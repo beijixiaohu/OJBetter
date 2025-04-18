@@ -75,8 +75,8 @@
         "google": "Google Translation",
         "caiyun": "Caiyun Translation",
         "openai": {
-          "name": "ChatGPT Translation",
-          "helpText": "<p>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right-click to modify and delete the configuration, read the Github wiki at</p>"
+          "name": "AI translation",
+          "helpText": "<p>You need to add and select the configuration information you want to use in the configuration below, and right-click to modify and delete the configuration, read the Github wiki for more details</p>"
         }
       }
     },
@@ -105,7 +105,7 @@
       },
       "customPrompt": {
         "name": "Customized Cues",
-        "helpText": "<p>Use your customized prompts to have ChatGPT translate the text.</p>",
+        "helpText": "<p>Use your customized prompts to get AI to translate text</p>",
         "placeholder": "Cues can be customized here, if empty then the preset cues are used"
       },
       "asSystemPrompt": {
@@ -128,12 +128,12 @@
           "youdao": "Youdao translation",
           "google": "Google Translation",
           "caiyun": "Caiyun Translation",
-          "openai": "ChatGPT Translation"
+          "openai": "AI translation"
         }
       }
     },
     "autoTranslation": {
-      "title": "automatic translation",
+      "title": "Automatic Translation",
       "enable": "Enable Auto Translate",
       "helpText": "<p>For short texts in <strong> the #task-statement area</strong>, the</p><p> It is automatically translated when it enters the visible area of the browser window.</p>",
       "shortTextLength": {
@@ -179,13 +179,13 @@
       },
       "transWaitTime": {
         "name": "Waiting Interval",
-        "helpText": "<p>Sets the waiting interval between two translation requests, this setting takes effect globally and is calculated independently for each translation service</p><p>Recommendation 200 + milliseconds</p><p>Description：ChatGPT translations ignore this setting and do not wait</p>",
+        "helpText": "<p>Set the waiting interval between translation requests, this setting is applied globally and is calculated independently for each translation service</p><p> Recommended 200 + milliseconds</p><p> Description：AI will ignore this setting when translating and will not wait</p>",
         "end": "ms",
         "placeholder": "Please enter interval"
       },
       "replaceSymbol": {
         "name": "LaTeX Replacement",
-        "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them</p><p>The probability of the substitutions themselves being corrupted varies between translation services, read the Github wiki for details</p><p>Note that：Translating with ChatGPT does not require the above, and is therefore not affected by this option</p>",
+        "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them.</p><p> The substitutions themselves have a different probability of being corrupted for each translation service, read the Github wiki for details.</p><p> Note that：does not require this for AI translations, so it is not affected by this option.</p>",
         "options": {
           "1": "use【】",
           "2": "use{}",
@@ -194,7 +194,7 @@
       },
       "filterTextWithoutEmphasis": {
         "name": "Filtering of ** symbols in text",
-        "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
+        "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle the emphasis in MarkDown <strong>**</strong> </p><p> This may cause the translation to miss its wrapped content, you can choose to remove the emphasis (this is ignored with AI) </p>"
       }
     }
   },
@@ -302,7 +302,7 @@
         "helpText": "<p>Template from<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
       },
       "customization": "Custom",
-      "performanceWarning": "Note：Too many static complementary rules can affect performance"
+      "performanceWarning": "Attention: Too many static complementary rules can affect performance"
     }
   },
   "dev": {
@@ -386,6 +386,11 @@
     "showSameContestProblems": {
       "label": "Display a list of questions from the same field",
       "helpText": "The list of questions for this game will be displayed in the question screen when it is turned on"
+    },
+    "TranslateTextColor": {
+      "title": "Translation color settings",
+      "helpText": "<p>Set the target color in the translation box in css format. For example red or #ABCDEF.</p>",
+      "placeholder": "The target color of the translation box, empty is the default."
     }
   },
   "about": {

@@ -27,7 +27,7 @@
         "clist": {
             "404": "Currently accessing Clist.by is congested, the request has been interrupted, please try again later!",
             "cookie": "The Clist.by login cookie of the current browser may have expired, please open<a target='_blank' href='https://clist.by/'>Clist.by</a>Log in again<br>Description：The Clist Rating sub-display implementation of the script relies on the login user cookie information of Clist.by,<br>The script will not obtain your login information For specific cookie information on the Clist.by site, please read the instructions on the script page.",
-            "other": "An unknown error occurred while accessing Clist.by, request interrupted, please try again later"
+            "other": "An unknown error has occurred during the current access to Clist.by, the request has been interrupted, please try again later!"
         },
         "codeEditor": {
             "load": "Unable to load the necessary data for the editor, may not be currently logged in/not enrolled/non-title page/during end-of-contest freeze/practicing after the end of the ban for that contest",

@@ -25,13 +25,13 @@
     },
     "error": {
         "clist": {
-            "404": "目前存取Clist.by網路擁堵，請求已中斷，請稍後再重試",
+            "404": "当前访问Clist.by网络拥堵，请求已中断，请稍后重试",
             "cookie": "目前瀏覽器的Clist.by登入Cookie可能已失效，請開啟<a target='_blank' href='https://clist.by/'>Clist.by</a>重新登入<br>說明：腳本的Clist Rating分顯示實現依賴於Clist.by的登入使用者Cookie訊息，<br>腳本不會取得你在Clist.by網站上的具體Cookie訊息，請閱讀腳本頁的說明",
-            "other": "目前存取Clist.by時發生未知錯誤，請求已中斷，請稍後再重試"
+            "other": "当前访问Clist.by时发生未知错误，请求已中断，请稍后重试"
         },
         "codeEditor": {
             "load": "無法載入編輯器必要的數據，可能目前未登入/未報名/非題目頁/比賽結束凍結期間/該比賽禁止結束後練習",
-            "submit": "程式碼編輯器提交失敗，請稍後再重試"
+            "submit": "代码编辑器提交失败，请稍后重试"
         }
     }
 }

@@ -79,8 +79,8 @@
                 "google": "Google Translation",
                 "caiyun": "Caiyun Translation",
                 "openai": {
-                    "name": "ChatGPT Translation",
-                    "helpText": "<p>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right-click to modify and delete the configuration, read the Github wiki at</p>"
+                    "name": "AI translation",
+                    "helpText": "<p>You need to add and select the configuration information you want to use in the configuration below, and right-click to modify and delete the configuration, read the Github wiki for more details</p>"
                 }
             }
         },
@@ -109,7 +109,7 @@
             },
             "customPrompt": {
                 "name": "Customized Cues",
-                "helpText": "<p>Use your customized prompts to have ChatGPT translate the text.</p>",
+                "helpText": "<p>Use your customized prompts to get AI to translate text</p>",
                 "placeholder": "Cues can be customized here, if empty then the preset cues are used"
             },
             "asSystemPrompt": {
@@ -132,12 +132,12 @@
                     "youdao": "Youdao translation",
                     "google": "Google Translation",
                     "caiyun": "Caiyun Translation",
-                    "openai": "ChatGPT Translation"
+                    "openai": "AI translation"
                 }
             }
         },
         "autoTranslation": {
-            "title": "automatic translation",
+            "title": "Automatic Translation",
             "enable": "Enable Auto Translate",
             "helpText": "<p>For short texts in the<strong>.ttypography, .comments area</strong></p><p>are automatically translated when they enter the visible area of the browser window</p>",
             "shortTextLength": {
@@ -183,13 +183,13 @@
             },
             "transWaitTime": {
                 "name": "Waiting Interval",
-                "helpText": "<p>Sets the waiting interval between two translation requests, this setting takes effect globally and is calculated independently for each translation service</p><p>Recommendation 200 + milliseconds</p><p>Description：ChatGPT translations ignore this setting and do not wait</p>",
+                "helpText": "<p>Set the waiting interval between translation requests, this setting is applied globally and is calculated independently for each translation service</p><p> Recommended 200 + milliseconds</p><p> Description：AI will ignore this setting when translating and will not wait</p>",
                 "end": "ms",
                 "placeholder": "Please enter interval"
             },
             "replaceSymbol": {
                 "name": "LaTeX Replacement",
-                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them</p><p>The probability of the substitutions themselves being corrupted varies between translation services, read the Github wiki for details</p><p>Note that：Translating with ChatGPT does not require the above, and is therefore not affected by this option</p>",
+                "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them.</p><p> The substitutions themselves have different probabilities of being corrupted for different translation services, read the Github wiki for details.</p><p> Note that：does not require this for AI translations, so it is not affected by this option.</p>",
                 "options": {
                     "1": "use【】",
                     "2": "use{}",
@@ -198,7 +198,7 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtering of ** symbols in text",
-                "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
+                "helpText": " <p>Some translation services (e.g. DeepL) will incorrectly handle the emphasis in MarkDown <strong>**</strong> </p><p> This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (which will be ignored with AI) </p>"
             },
             "forceTurndownConversion": {
                 "name": "Forcing the use of Turndown conversions",
@@ -310,7 +310,7 @@
                 "helpText": "<p>Template from<a href=\"https://www.acwing.com/file_system/file/content/whole/index/content/2145234/\"target=\"_blank\">AcWing</a></p>"
             },
             "customization": "Custom",
-            "performanceWarning": "Note：Too many static complementary rules can affect performance"
+            "performanceWarning": "Attention: Too many static complementary rules can affect performance"
         }
     },
     "dev": {
@@ -395,6 +395,11 @@
             "title": "Review Status Text Replacement",
             "helpText": "<p>Replaces the review status text of a topic with the specified text.</p><p> Supported variables：</p><p><strong><code>{Status}</code></strong> The full description of the rubric result, e.g. \"Accepted\".</p><p><strong><code>{Stat}</code></strong> The abbreviated form of the rubric result, e.g. \"AC\".</p><p><strong><code>{Number}</code></strong> The last number in the evaluation result, not displayed when the evaluation status is AC.</p><p><strong><code>{标识符:xxx}</code> </strong> The contents of the parentheses are displayed when the identifier is true. Supported identifiers：<code>ac</code>, <code>wa</code>, <code>tle</code>, <code>mle</code>, <code>re</code>, <code>ce</code>, <code>hacked</code>, <code>skipped</code>, <code>ile</code>, <code>pc</code>, <code>pending</code>, <code>inqueue</code>, <code>prepass</code></p><div style=\"border: 1px solid #795548; padding: 10px;\"><p> Example：</p><p><code> What about{Stat}?{wa:呜呜}</code></p><p> At this point, if the evaluation result is \"Wrong answer\", it will show：<p></p>How did I WA?</p></div>",
             "placeholder": "Please enter a pattern for the replacement. If it is empty, it will not be replaced."
+        },
+        "TranslateTextColor": {
+            "title": "Translation color settings",
+            "helpText": "<p>Set the target color in the translation box in css format. For example red or #ABCDEF.</p>",
+            "placeholder": "The target color of the translation box, empty is the default."
         }
     },
     "about": {

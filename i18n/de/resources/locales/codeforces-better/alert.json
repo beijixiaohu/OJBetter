@@ -26,9 +26,9 @@
     },
     "error": {
         "clist": {
-            "404": "Der Zugriff auf Clist.by ist derzeit überlastet, die Anfrage wurde unterbrochen. Bitte versuchen Sie es später noch einmal!",
+            "404": "Der Zugriff auf Clist.by wurde durch eine Netzwerküberlastung unterbrochen, bitte versuchen Sie es später noch einmal!",
             "cookie": "Das Login-Cookie Ihres aktuellen Browsers funktioniert möglicherweise nicht mehr. Bitte öffnen Sie<a target='_blank' href='https://clist.by/'>Clist.by</a>, um sich wieder anzumelden<br>Beschreibung：Die Implementierung des Skripts für die Anzeige der Clist-Bewertungspunkte beruht auf den Cookie-Informationen des angemeldeten Benutzers von Clist.by.<br>Das Skript erhält nicht Ihre spezifischen Cookie-Informationen auf der Clist.by-Website, bitte lesen Sie die Für Details lesen Sie bitte die Anweisungen auf der Skriptseite.",
-            "other": "Beim Zugriff auf Clist.by ist ein unbekannter Fehler aufgetreten. Die Anfrage wurde unterbrochen, bitte versuchen Sie es später noch einmal!"
+            "other": "Während des aktuellen Zugriffs auf Clist.by ist ein unbekannter Fehler aufgetreten, die Anfrage wurde abgebrochen, bitte versuchen Sie es später noch einmal!"
         },
         "codeEditor": {
             "load": "Kann die erforderlichen Daten für den Editor nicht laden, ist möglicherweise nicht angemeldet/nicht registriert/keine Titelseite/nach Ende der Turniersperre/nach Ende der Sperre für dieses Turnier",

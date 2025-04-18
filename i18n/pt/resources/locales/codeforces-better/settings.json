@@ -79,8 +79,8 @@
                 "google": "Google Tradutor",
                 "caiyun": "lit. nuvens coloridas e pequenas traduções",
                 "openai": {
-                    "name": "Tradução do ChatGPT",
-                    "helpText": "<p>Tem de adicionar e selecionar as informações de configuração que pretende utilizar na configuração do ChatGPT abaixo e clicar com o botão direito do rato para modificar e eliminar a configuração, leia a wiki do Github em</p>"
+                    "name": "Tradução de IA",
+                    "helpText": "<p>É necessário adicionar e selecionar as informações de configuração que pretende utilizar na configuração abaixo, clicar com o botão direito do rato para modificar e eliminar a configuração.</p>"
                 }
             }
         },
@@ -109,7 +109,7 @@
             },
             "customPrompt": {
                 "name": "Tacos personalizados",
-                "helpText": "<p>Utilize os seus comandos personalizados para que o ChatGPT traduza texto</p>",
+                "helpText": "<p>Utilize as suas instruções personalizadas para que a IA traduza texto</p>",
                 "placeholder": "Os sinais podem ser personalizados aqui; se estiverem vazios, são utilizados os sinais predefinidos"
             },
             "asSystemPrompt": {
@@ -132,7 +132,7 @@
                     "youdao": "Tradução do Youtube",
                     "google": "Google Tradutor",
                     "caiyun": "lit. nuvens coloridas e pequenas traduções",
-                    "openai": "Tradução do ChatGPT"
+                    "openai": "Tradução de IA"
                 }
             }
         },
@@ -183,13 +183,13 @@
             },
             "transWaitTime": {
                 "name": "Intervalo de espera",
-                "helpText": "<p>Defina o intervalo de espera entre dois pedidos de tradução, esta definição terá efeito global e é calculada independentemente para cada serviço de tradução</p><p>Recomendação 200 + milissegundos</p><p>Descrição：As traduções ChatGPT ignoram esta definição e não esperam</p>",
+                "helpText": "<p>Defina o intervalo de espera entre os pedidos de tradução, esta definição é aplicada globalmente e é calculada independentemente para cada serviço de tradução.</p><p> Recomendado 200 + milissegundos</p><p> Descrição：AI irá ignorar esta definição quando traduzir e não irá esperar</p>",
                 "end": "milissegundo",
                 "placeholder": "Introduza o intervalo"
             },
             "replaceSymbol": {
                 "name": "Substituição do LaTeX",
-                "helpText": "<p>O script garante que as fórmulas não são corrompidas pela interface de tradução, retirando primeiro todas as fórmulas LaTeX e usando marcadores de lugar para elas</p><p>A probabilidade de as próprias substituições serem corrompidas varia de serviço de tradução para serviço de tradução, leia a wiki do Github para obter detalhes</p><p>Note que：Traduzir com ChatGPT não requer o acima, e, portanto, não é afetado por esta opção</p>",
+                "helpText": "<p>O script garante que as fórmulas não são corrompidas pela interface de tradução, retirando primeiro todas as fórmulas LaTeX e usando espaços reservados para elas.</p><p> As próprias substituições têm uma probabilidade diferente de serem corrompidas para cada serviço de tradução, leia a wiki do Github para mais detalhes.</p><p> Note que：não requer isto para traduções de IA, por isso não é afetado por esta opção.</p>",
                 "options": {
                     "1": "Utilize [ ]",
                     "2": "Utilize {}",
@@ -198,7 +198,7 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtragem de sinais ** no texto",
-                "helpText": " <p>Alguns serviços de tradução (por exemplo, DeepL) tratam incorretamente a ênfase no MarkDown <strong>**</strong> </p><p>Isto pode fazer com que a tradução não atinja o seu invólucro, pode optar por remover a ênfase (o ChatGPT ignora-a) </p>"
+                "helpText": " <p>Alguns serviços de tradução (por exemplo, DeepL) tratam incorretamente a ênfase em MarkDown <strong>**.</strong> </p><p> Isto pode fazer com que a tradução não atinja o seu invólucro, e pode optar por remover a ênfase (que será ignorada com a IA). </p>"
             },
             "forceTurndownConversion": {
                 "name": "Forçar a utilização de conversões Turndown",
@@ -395,6 +395,11 @@
             "title": "Estado da revisão Substituição de texto",
             "helpText": "<p>Substitui o texto do status da revisão de um tópico pelo texto especificado.</p><p>：Variáveis suportadas </p><p><strong><code>{Status}</code></strong> A descrição completa do resultado da rubrica, por exemplo, \"Aceito\".</p><p><strong><code>{Stat}</code></strong> A forma abreviada do resultado da avaliação, por exemplo, \"AC\".</p><p><strong><code>{Number}</code></strong> O último número no resultado da avaliação, não apresentado quando o estado da avaliação é AC.</p><p><strong><code>{标识符:xxx}</code> </strong> O conteúdo dos parêntesis é apresentado quando o identificador é verdadeiro.：Identificadores suportados <code>ac</code>, <code>wa</code>, <code>tle</code>, <code>mle</code>, <code>re</code>, <code>ce</code>, <code>hacked</code>, <code>skipped</code>, <code>ile</code>, <code>pc</code>, <code>pending</code>, <code>inqueue</code>, <code>prepass</code></p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>：Exemplo </p><p><code>{Stat}{wa:呜呜}Como é que cheguei a ?</code></p><p>：<p></p>Nesta altura, se o resultado da avaliação for \"Resposta errada\", será mostrado Como cheguei a WA?</p></div>",
             "placeholder": "Introduza um padrão para a substituição. Se estiver vazio, não será substituído."
+        },
+        "TranslateTextColor": {
+            "title": "Definições de cor da tradução",
+            "helpText": "<p>Defina a cor de destino na caixa de tradução em formato css. Por exemplo, vermelho ou #ABCDEF.</p>",
+            "placeholder": "A cor de destino da caixa de tradução, vazia é a predefinição."
         }
     },
     "about": {
