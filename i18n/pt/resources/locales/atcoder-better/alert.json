@@ -25,9 +25,9 @@
     },
     "error": {
         "clist": {
-            "404": "Atualmente o acesso a Clist.by está congestionado, o pedido foi interrompido, tente novamente mais tarde!",
+            "404": "Atualmente a aceder a Clist.por congestionamento da rede, o pedido foi interrompido, por favor tente novamente mais tarde!",
             "cookie": "O cookie de início de sessão do seu browser atual do Clist.by pode já não funcionar, por favor abra<a target='_blank' href='https://clist.by/'>Clist.by</a>para voltar a iniciar sessão<br>Descrição A implementação do script：da apresentação da pontuação do Clist Rating baseia-se nas informações do cookie do utilizador com sessão iniciada do Clist.by, o script<br>não obterá as suas informações específicas do cookie no sítio Clist.by, por favor leia as instruções da página do script Para mais pormenores, leia as instruções na página do script.",
-            "other": "Ocorreu um erro desconhecido ao aceder a Clist.by, o pedido foi interrompido, tente novamente mais tarde!"
+            "other": "Ocorreu um erro desconhecido durante o acesso atual a Clist.by, o pedido foi interrompido, por favor tente novamente mais tarde!"
         },
         "codeEditor": {
             "load": "Não é possível carregar os dados necessários para o editor, pode não estar atualmente com sessão iniciada/não estar registado/não ter uma página de título/durante o fim do congelamento do torneio/praticar após o fim da proibição para esse torneio",
