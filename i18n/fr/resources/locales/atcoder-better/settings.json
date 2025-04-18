@@ -75,8 +75,8 @@
         "google": "Google Translate",
         "caiyun": "lit. nuages colorés et petites traductions",
         "openai": {
-          "name": "ChatGPT Traduction",
-          "helpText": "<p>Vous devez ajouter et sélectionner les informations de configuration que vous souhaitez utiliser dans la configuration ChatGPT ci-dessous, et faire un clic droit pour modifier et supprimer la configuration, lisez le wiki Github à</p>."
+          "name": "Traduction de l'IA",
+          "helpText": "<p>Vous devez ajouter et sélectionner les informations de configuration que vous souhaitez utiliser dans la configuration ci-dessous, faire un clic droit pour modifier et supprimer la configuration, veuillez lire le wiki Github pour plus de détails.</p>"
         }
       }
     },
@@ -105,7 +105,7 @@
       },
       "customPrompt": {
         "name": "Queues de billard sur mesure",
-        "helpText": "<p>Utilisez vos invites personnalisées pour demander à ChatGPT de traduire un texte.</p>",
+        "helpText": "<p>Utilisez vos invites personnalisées pour demander à l'IA de traduire un texte.</p>",
         "placeholder": "Les repères peuvent être personnalisés ici ; s'ils sont vides, les repères prédéfinis sont utilisés."
       },
       "asSystemPrompt": {
@@ -128,7 +128,7 @@
           "youdao": "Traduction sur Youtube",
           "google": "Google Translate",
           "caiyun": "lit. nuages colorés et petites traductions",
-          "openai": "ChatGPT Traduction"
+          "openai": "Traduction de l'IA"
         }
       }
     },
@@ -179,13 +179,13 @@
       },
       "transWaitTime": {
         "name": "Intervalle d'attente",
-        "helpText": "<p>Définir l'intervalle d'attente entre deux demandes de traduction, ce paramètre prend effet globalement et est calculé indépendamment pour chaque service de traduction</p><p>Recommandation 200 + millisecondes</p><p>Description：Les traductions ChatGPT ignorent ce paramètre et n'attendent pas</p>",
+        "helpText": "<p>Définir l'intervalle d'attente entre les demandes de traduction. Ce paramètre est appliqué globalement et est calculé indépendamment pour chaque service de traduction.</p><p> Recommandé 200 + millisecondes</p><p> Description：AI ignorera ce paramètre lors de la traduction et n'attendra pas.</p>",
         "end": "milliseconde",
         "placeholder": "Veuillez saisir l'intervalle"
       },
       "replaceSymbol": {
         "name": "Remplacement de LaTeX",
-        "helpText": "<p>Le script s'assure que les formules ne sont pas corrompues par l'interface de traduction en supprimant d'abord toutes les formules LaTeX et en utilisant des caractères de remplacement pour elles</p><p>La probabilité que les substitutions elles-mêmes soient corrompues varie d'un service de traduction à l'autre, lisez le wiki Github pour plus de détails</p><p>Notez que：La traduction avec ChatGPT ne nécessite pas ce qui précède et n'est donc pas affectée par cette option</p>",
+        "helpText": "<p>Le script s'assure que les formules ne sont pas corrompues par l'interface de traduction en supprimant d'abord toutes les formules LaTeX et en les remplaçant par des substituts.</p><p> Les substitutions elles-mêmes ont une probabilité différente d'être corrompues pour chaque service de traduction, lisez le wiki Github pour plus de détails.</p><p> Notez que：n'a pas besoin de cela pour les traductions AI, donc il n'est pas affecté par cette option.</p>",
         "options": {
           "1": "Utilisez [ ]",
           "2": "Utilisez {}",
@@ -194,7 +194,7 @@
       },
       "filterTextWithoutEmphasis": {
         "name": "Filtrage des signes ** dans le texte",
-        "helpText": " <p>Certains services de traduction (par exemple DeepL) ne traitent pas correctement l'accent dans MarkDown <strong>**</strong> </p><p>La traduction peut alors manquer son wrapper, vous pouvez choisir de supprimer l'accent (l'utilisation de ChatGPT n'en tient pas compte) </p>"
+        "helpText": " <p>Certains services de traduction (par exemple DeepL) ne traitent pas correctement l'accentuation dans MarkDown <strong>**.</strong> </p><p> La traduction peut alors manquer le contenu intégré, et vous pouvez choisir de supprimer l'emphase (ce qui est ignoré avec AI). </p>"
       }
     }
   },
