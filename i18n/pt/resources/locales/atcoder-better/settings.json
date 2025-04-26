@@ -75,8 +75,8 @@
         "google": "Google Tradutor",
         "caiyun": "lit. nuvens coloridas e pequenas traduções",
         "openai": {
-          "name": "Tradução de IA",
-          "helpText": "<p>É necessário adicionar e selecionar as informações de configuração que pretende utilizar na configuração abaixo, clicar com o botão direito do rato para modificar e eliminar a configuração.</p>"
+          "name": "Tradução do ChatGPT",
+          "helpText": "<p>Tem de adicionar e selecionar as informações de configuração que pretende utilizar na configuração do ChatGPT abaixo e clicar com o botão direito do rato para modificar e eliminar a configuração, leia a wiki do Github em</p>"
         }
       }
     },
@@ -105,7 +105,7 @@
       },
       "customPrompt": {
         "name": "Tacos personalizados",
-        "helpText": "<p>Utilize as suas instruções personalizadas para que a IA traduza texto</p>",
+        "helpText": "<p>Utilize os seus comandos personalizados para que o ChatGPT traduza texto</p>",
         "placeholder": "Os sinais podem ser personalizados aqui; se estiverem vazios, são utilizados os sinais predefinidos"
       },
       "asSystemPrompt": {
@@ -128,7 +128,7 @@
           "youdao": "Tradução do Youtube",
           "google": "Google Tradutor",
           "caiyun": "lit. nuvens coloridas e pequenas traduções",
-          "openai": "Tradução de IA"
+          "openai": "Tradução do ChatGPT"
         }
       }
     },
@@ -179,13 +179,13 @@
       },
       "transWaitTime": {
         "name": "Intervalo de espera",
-        "helpText": "<p>Defina o intervalo de espera entre os pedidos de tradução, esta definição é aplicada globalmente e é calculada independentemente para cada serviço de tradução.</p><p> Recomendado 200 + milissegundos</p><p> Descrição：AI irá ignorar esta definição quando traduzir e não irá esperar</p>",
+        "helpText": "<p>Defina o intervalo de espera entre dois pedidos de tradução, esta definição terá efeito global e é calculada independentemente para cada serviço de tradução</p><p>Recomendação 200 + milissegundos</p><p>Descrição：As traduções ChatGPT ignoram esta definição e não esperam</p>",
         "end": "milissegundo",
         "placeholder": "Introduza o intervalo"
       },
       "replaceSymbol": {
         "name": "Substituição do LaTeX",
-        "helpText": "<p>O script garante que as fórmulas não são corrompidas pela interface de tradução, retirando primeiro todas as fórmulas LaTeX e usando espaços reservados para elas.</p><p> As próprias substituições têm uma probabilidade diferente de serem corrompidas para cada serviço de tradução, leia a wiki do Github para mais detalhes.</p><p> Note que：não requer isto para traduções de IA, por isso não é afetado por esta opção.</p>",
+        "helpText": "<p>O script garante que as fórmulas não são corrompidas pela interface de tradução, retirando primeiro todas as fórmulas LaTeX e usando marcadores de lugar para elas</p><p>A probabilidade de as próprias substituições serem corrompidas varia de serviço de tradução para serviço de tradução, leia a wiki do Github para obter detalhes</p><p>Note que：Traduzir com ChatGPT não requer o acima, e, portanto, não é afetado por esta opção</p>",
         "options": {
           "1": "Utilize [ ]",
           "2": "Utilize {}",
@@ -194,7 +194,7 @@
       },
       "filterTextWithoutEmphasis": {
         "name": "Filtragem de sinais ** no texto",
-        "helpText": " <p>Alguns serviços de tradução (por exemplo, DeepL) tratam incorretamente a ênfase em MarkDown <strong>**.</strong> </p><p> Isso pode fazer com que a tradução perca o seu conteúdo embrulhado, pode optar por remover a ênfase (isto é ignorado com IA). </p>"
+        "helpText": " <p>Alguns serviços de tradução (por exemplo, DeepL) tratam incorretamente a ênfase no MarkDown <strong>**</strong> </p><p>Isto pode fazer com que a tradução não atinja o seu invólucro, pode optar por remover a ênfase (o ChatGPT ignora-a) </p>"
       }
     }
   },
