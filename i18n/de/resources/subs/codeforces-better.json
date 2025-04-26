@@ -965,7 +965,7 @@
             "rules": {
                 "Welcome": "herzlich willkommen",
                 "Goodbye, ": "Auf Wiedersehen.",
-                "Looking forward to seeing you at Codeforces.": "Ich freue mich darauf, Sie bei Codeforces wiederzusehen.",
+                "Looking forward to seeing you at Codeforces.": "Ich freue mich darauf, Sie bei Codeforces zu sehen.",
                 "You have been successfully registered": "Sie haben sich erfolgreich angemeldet",
                 "No such contests": "Einen solchen Wettbewerb gibt es nicht.",
                 "The example input has been copied into the clipboard": "Beispieleingabe in die Zwischenablage kopiert",
