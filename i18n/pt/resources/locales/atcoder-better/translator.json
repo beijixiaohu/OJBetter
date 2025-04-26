@@ -5,12 +5,12 @@
         "youdao": "aderir aos princípios da verdade e do direito",
         "google": "google",
         "caiyun": "lit. nuvens coloridas e pequenas traduções",
-        "openai": "IA"
+        "openai": "ChatGPT"
     },
     "transingTip": {
         "basic": "Em utilização {{server}} Tradução em curso……Aguarde.",
         "deeplApi": "Em curso DeepL Tradução da API em curso……Aguarde\n\nConfiguração da aplicação： {{deepl_configName}}\n\n",
-        "openai": "Tradução AI em curso……Aguarde\n\nConfiguração da aplicação： {{openai_name}}\n\n",
+        "openai": "Tradução ChatGPT em curso……Aguarde por favor\n\nConfiguração da aplicação： {{openai_name}}\n\n",
         "openai_isStream": "A transmissão em fluxo contínuo não está atualmente activada, pelo que terá de esperar muito tempo para ver os resultados, por favor seja paciente!"
     },
     "error": {
