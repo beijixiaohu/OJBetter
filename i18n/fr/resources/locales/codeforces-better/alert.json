@@ -26,9 +26,9 @@
     },
     "error": {
         "clist": {
-            "404": "Actuellement en train d'accéder à Clist.par congestion du réseau, la requête a été interrompue, veuillez réessayer plus tard !",
+            "404": "L'accès à Clist.by est actuellement saturé, la requête a été interrompue, veuillez réessayer plus tard !",
             "cookie": "Le cookie de connexion de votre navigateur Clist.by peut ne plus fonctionner, veuillez ouvrir<a target='_blank' href='https://clist.by/'>Clist.by</a>pour vous reconnecter<br>Description：L'implémentation par le script de l'affichage du score de Clist Rating repose sur les informations du cookie de l'utilisateur connecté à Clist.by,<br>Le script n'obtiendra pas vos informations de cookie spécifiques sur le site Clist.by, veuillez lire les instructions de la page du script. Pour plus de détails, veuillez lire les instructions de la page du script.",
-            "other": "Une erreur inconnue s'est produite lors de l'accès actuel à Clist.by, la requête a été interrompue, veuillez réessayer plus tard !"
+            "other": "Une erreur inconnue s'est produite lors de l'accès à Clist.by, la requête a été interrompue, veuillez réessayer plus tard !"
         },
         "codeEditor": {
             "load": "Impossible de charger les données nécessaires à l'éditeur, il se peut que vous ne soyez pas connecté, que vous ne soyez pas enregistré, que vous n'ayez pas de page de titre, que vous soyez bloqué à la fin du tournoi ou que vous vous entraîniez après la fin de l'interdiction pour ce tournoi.",
