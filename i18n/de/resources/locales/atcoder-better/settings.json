@@ -75,8 +75,8 @@
         "google": "Google Übersetzen",
         "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
         "openai": {
-          "name": "AI-Übersetzung",
-          "helpText": "<p>Sie müssen die Konfigurationsinformationen, die Sie in der unten stehenden Konfiguration verwenden möchten, hinzufügen und auswählen. Klicken Sie mit der rechten Maustaste, um die Konfiguration zu ändern oder zu löschen, lesen Sie dazu bitte das Github-Wiki</p>"
+          "name": "ChatGPT Übersetzung",
+          "helpText": "<p>Sie müssen die Konfigurationsinformationen, die Sie in der ChatGPT-Konfiguration unten verwenden möchten, hinzufügen und auswählen und mit der rechten Maustaste anklicken, um die Konfiguration zu ändern oder zu löschen. Lesen Sie dazu das Github-Wiki unter</p>"
         }
       }
     },
@@ -105,7 +105,7 @@
       },
       "customPrompt": {
         "name": "Benutzerdefinierte Queues",
-        "helpText": "<p>Verwenden Sie Ihre benutzerdefinierten Prompts, um AI zum Übersetzen von Text zu veranlassen</p>",
+        "helpText": "<p>Verwenden Sie Ihre benutzerdefinierten Eingabeaufforderungen, um ChatGPT zum Übersetzen von Text zu veranlassen</p>",
         "placeholder": "Hier können die Cues angepasst werden, wenn sie leer sind, werden die voreingestellten Cues verwendet."
       },
       "asSystemPrompt": {
@@ -128,7 +128,7 @@
           "youdao": "Youtube Übersetzung",
           "google": "Google Übersetzen",
           "caiyun": "lit. bunte Wolken und kleine Übersetzungen",
-          "openai": "AI-Übersetzung"
+          "openai": "ChatGPT Übersetzung"
         }
       }
     },
@@ -179,13 +179,13 @@
       },
       "transWaitTime": {
         "name": "Wartezeit Intervall",
-        "helpText": "<p>Legen Sie das Warteintervall zwischen Übersetzungsanfragen fest. Diese Einstellung gilt global und wird unabhängig für jeden Übersetzungsdienst berechnet.</p><p> Empfohlen 200 + Millisekunden</p><p> Beschreibung：AI ignoriert diese Einstellung beim Übersetzen und wartet nicht</p>",
+        "helpText": "<p>Legen Sie das Warteintervall zwischen zwei Übersetzungsanfragen fest. Diese Einstellung wird global wirksam und wird für jeden Übersetzungsdienst unabhängig berechnet</p><p>Empfehlung 200 + Millisekunden</p><p>Beschreibung：ChatGPT-Übersetzungen ignorieren diese Einstellung und warten nicht</p>",
         "end": "Millisekunde",
         "placeholder": "Bitte geben Sie das Intervall ein"
       },
       "replaceSymbol": {
         "name": "LaTeX-Ersatz",
-        "helpText": "<p>Das Skript stellt sicher, dass die Formeln nicht von der Übersetzungsschnittstelle beschädigt werden, indem es zunächst alle LaTeX-Formeln entfernt und Platzhalter für sie verwendet.</p><p> Die Ersetzungen selbst haben für jeden Übersetzungsdienst eine andere Wahrscheinlichkeit, beschädigt zu werden, lesen Sie das Github-Wiki für Details.</p><p> Beachten Sie, dass：dies für KI-Übersetzungen nicht erfordert, so dass es von dieser Option nicht betroffen ist.</p>",
+        "helpText": "<p>Das Skript stellt sicher, dass die Formeln nicht durch die Übersetzungsschnittstelle beschädigt werden, indem es zunächst alle LaTeX-Formeln entfernt und Platzhalter für sie verwendet</p><p>Die Wahrscheinlichkeit, dass die Ersetzungen selbst beschädigt werden, variiert von Übersetzungsdienst zu Übersetzungsdienst, lesen Sie das Github-Wiki für Details</p><p>Beachten Sie, dass：Übersetzen mit ChatGPT das oben genannte nicht erfordert und daher von dieser Option nicht betroffen ist</p>",
         "options": {
           "1": "Verwenden Sie [ ]",
           "2": "Verwenden Sie {}",
@@ -194,7 +194,7 @@
       },
       "filterTextWithoutEmphasis": {
         "name": "Filtern von ** Zeichen im Text",
-        "helpText": " <p>Einige Übersetzungsdienste (z. B. DeepL) behandeln die Betonung in MarkDown <strong>**</strong> falsch <strong>.</strong> </p><p> Dies kann dazu führen, dass die Übersetzung ihren umbrochenen Inhalt nicht erhält, und Sie können die Hervorhebung entfernen (bei AI wird dies ignoriert). </p>"
+        "helpText": " <p>Einige Übersetzungsdienste (z.B. DeepL) behandeln die Hervorhebung in MarkDown nicht korrekt <strong>**</strong> </p><p>Dies kann dazu führen, dass die Übersetzung ihren Wrapper vermisst. Sie können die Hervorhebung entfernen (mit ChatGPT wird sie ignoriert) </p>"
       }
     }
   },
