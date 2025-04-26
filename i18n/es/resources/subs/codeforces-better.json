@@ -965,7 +965,7 @@
             "rules": {
                 "Welcome": "bienvenido",
                 "Goodbye, ": "Adiós.",
-                "Looking forward to seeing you at Codeforces.": "Espero verte de nuevo en Codeforces.",
+                "Looking forward to seeing you at Codeforces.": "Espero verte en Codeforces.",
                 "You have been successfully registered": "Se ha inscrito correctamente",
                 "No such contests": "No existe tal concurso.",
                 "The example input has been copied into the clipboard": "Ejemplo de entrada copiado en el portapapeles",
