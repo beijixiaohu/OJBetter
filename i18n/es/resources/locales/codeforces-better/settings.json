@@ -79,8 +79,8 @@
                 "google": "Google Translate",
                 "caiyun": "lit. nubes de colores y pequeñas traducciones",
                 "openai": {
-                    "name": "Traducción IA",
-                    "helpText": "<p>Es necesario añadir y seleccionar la información de configuración que desea utilizar en la configuración de abajo, haga clic derecho para modificar y eliminar la configuración, por favor, lea el wiki de Github para más detalles</p>"
+                    "name": "ChatGPT Traducción",
+                    "helpText": "<p>Es necesario añadir y seleccionar la información de configuración que desea utilizar en la configuración ChatGPT a continuación, y haga clic derecho para modificar y eliminar la configuración, lea el wiki de Github en</p>."
                 }
             }
         },
@@ -109,7 +109,7 @@
             },
             "customPrompt": {
                 "name": "Tacos personalizados",
-                "helpText": "<p>Utiliza tus instrucciones personalizadas para que la IA traduzca el texto</p>",
+                "helpText": "<p>Utiliza tus instrucciones personalizadas para que ChatGPT traduzca el texto</p>",
                 "placeholder": "Las señales pueden personalizarse aquí; si están vacías, se utilizan las señales predefinidas."
             },
             "asSystemPrompt": {
@@ -132,7 +132,7 @@
                     "youdao": "Traducción de Youtube",
                     "google": "Google Translate",
                     "caiyun": "lit. nubes de colores y pequeñas traducciones",
-                    "openai": "Traducción IA"
+                    "openai": "ChatGPT Traducción"
                 }
             }
         },
@@ -183,13 +183,13 @@
             },
             "transWaitTime": {
                 "name": "Intervalo de espera",
-                "helpText": "<p>Establezca el intervalo de espera entre solicitudes de traducción, este ajuste se aplica globalmente y se calcula independientemente para cada servicio de traducción.</p><p> Recomendado 200 + milisegundos</p><p> Descripción：AI ignorará este ajuste al traducir y no esperará</p>",
+                "helpText": "<p>Establezca el intervalo de espera entre dos solicitudes de traducción, este ajuste tendrá efecto globalmente y se calcula de forma independiente para cada servicio de traducción</p><p>Recomendación 200 + milisegundos</p><p>Descripción：Las traducciones ChatGPT ignoran este ajuste y no esperan</p>",
                 "end": "milisegundo",
                 "placeholder": "Introduzca el intervalo"
             },
             "replaceSymbol": {
                 "name": "Sustitución de LaTeX",
-                "helpText": "<p>El script asegura que las fórmulas no sean corrompidas por la interfaz de traducción eliminando primero todas las fórmulas LaTeX y usando marcadores de posición para ellas.</p><p> Las sustituciones en sí tienen una probabilidad diferente de ser corrompidas para cada servicio de traducción, lee el wiki de Github para más detalles.</p><p> Tenga en cuenta que：no requiere esto para las traducciones de IA, por lo que no se ve afectado por esta opción.</p>",
+                "helpText": "<p>El script se asegura de que las fórmulas no sean corrompidas por la interfaz de traducción sacando primero todas las fórmulas LaTeX y utilizando marcadores de posición para ellas</p><p>La probabilidad de que las propias sustituciones sean corrompidas varía de un servicio de traducción a otro, lea la wiki de Github para más detalles</p><p>Tenga en cuenta que：Traducir con ChatGPT no requiere lo anterior, y por lo tanto no se ve afectado por esta opción</p>",
                 "options": {
                     "1": "Utilice [ ]",
                     "2": "Utilice {}",
@@ -198,7 +198,7 @@
             },
             "filterTextWithoutEmphasis": {
                 "name": "Filtrado de signos ** en el texto",
-                "helpText": " <p>Algunos servicios de traducción (por ejemplo, DeepL) manejan incorrectamente el énfasis en MarkDown <strong>**.</strong> </p><p> Esto puede hacer que la traducción se pierda su envoltura, y usted puede optar por eliminar el énfasis (que será ignorado con AI). </p>"
+                "helpText": " <p>Algunos servicios de traducción (por ejemplo, DeepL) manejan incorrectamente el énfasis en MarkDown <strong>**</strong> </p><p>Esto puede hacer que la traducción pierda su envoltorio, puede optar por eliminar el énfasis (el uso de ChatGPT lo ignora) </p>"
             },
             "forceTurndownConversion": {
                 "name": "Forzar el uso de conversiones Turndown",
