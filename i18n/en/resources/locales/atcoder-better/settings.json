@@ -75,8 +75,8 @@
         "google": "Google Translation",
         "caiyun": "Caiyun Translation",
         "openai": {
-          "name": "AI translation",
-          "helpText": "<p>You need to add and select the configuration information you want to use in the configuration below, and right-click to modify and delete the configuration, read the Github wiki for more details</p>"
+          "name": "ChatGPT Translation",
+          "helpText": "<p>You need to add and select the configuration information you want to use in the ChatGPT configuration below, and right-click to modify and delete the configuration, read the Github wiki at</p>"
         }
       }
     },
@@ -105,7 +105,7 @@
       },
       "customPrompt": {
         "name": "Customized Cues",
-        "helpText": "<p>Use your customized prompts to get AI to translate text</p>",
+        "helpText": "<p>Use your customized prompts to have ChatGPT translate the text.</p>",
         "placeholder": "Cues can be customized here, if empty then the preset cues are used"
       },
       "asSystemPrompt": {
@@ -128,7 +128,7 @@
           "youdao": "Youdao translation",
           "google": "Google Translation",
           "caiyun": "Caiyun Translation",
-          "openai": "AI translation"
+          "openai": "ChatGPT Translation"
         }
       }
     },
@@ -179,13 +179,13 @@
       },
       "transWaitTime": {
         "name": "Waiting Interval",
-        "helpText": "<p>Set the waiting interval between translation requests, this setting is applied globally and is calculated independently for each translation service</p><p> Recommended 200 + milliseconds</p><p> Description：AI will ignore this setting when translating and will not wait</p>",
+        "helpText": "<p>Sets the waiting interval between two translation requests, this setting takes effect globally and is calculated independently for each translation service</p><p>Recommendation 200 + milliseconds</p><p>Description：ChatGPT translations ignore this setting and do not wait</p>",
         "end": "ms",
         "placeholder": "Please enter interval"
       },
       "replaceSymbol": {
         "name": "LaTeX Replacement",
-        "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them.</p><p> The substitutions themselves have a different probability of being corrupted for each translation service, read the Github wiki for details.</p><p> Note that：does not require this for AI translations, so it is not affected by this option.</p>",
+        "helpText": "<p>The script ensures that formulas are not corrupted by the translation interface by first taking out all LaTeX formulas and using placeholders for them</p><p>The probability of the substitutions themselves being corrupted varies between translation services, read the Github wiki for details</p><p>Note that：Translating with ChatGPT does not require the above, and is therefore not affected by this option</p>",
         "options": {
           "1": "use【】",
           "2": "use{}",
@@ -194,7 +194,7 @@
       },
       "filterTextWithoutEmphasis": {
         "name": "Filtering of ** symbols in text",
-        "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle the emphasis in MarkDown <strong>**</strong> </p><p> This may cause the translation to miss its wrapped content, you can choose to remove the emphasis (this is ignored with AI) </p>"
+        "helpText": " <p>Some translation services (e.g. DeepL) incorrectly handle emphasis in MarkDown <strong>**</strong> </p><p>This may cause the translation to miss its wrapper, and you can choose to remove the emphasis (this is ignored with ChatGPT) </p>"
       }
     }
   },
