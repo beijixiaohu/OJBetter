@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.1
+// @version      1.79.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -8610,21 +8610,21 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     }'></div>`
   );
   let viewButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}' type='button'>
             <i class="iconfont">&#xe7e5;</i>
             <span class="popover_content">${i18next.t("md.normal", {
     ns: "button",
   })}</span>
         </button>`);
   let copyButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}' type='button'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t("copy.normal", {
     ns: "button",
   })}</span>
         </button>`);
   let translateButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
+        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}' type='button'>
             <i class="iconfont">&#xe6be;</i>
             <span class="popover_content">${text}</span>
         </button>`);
