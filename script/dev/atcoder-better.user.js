@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.19.2
+// @version      1.19.3
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -10576,6 +10576,15 @@ async function createMonacoEditor(language, form, support) {
             selectionMode: 'never' // 代码建议不自动选择
         }
     });
+
+    // 在编辑器中添加快捷命令：Ctrl+Enter (或 macOS 下的 Cmd+Enter)
+    OJBetter.monaco.editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+        function () {
+            // 当用户按下 Ctrl+Enter 后，触发传入的 form 对象中的提交按钮点击事件
+            form.submitButton.click();
+        }
+    );
 
     /**
      * 添加快捷功能

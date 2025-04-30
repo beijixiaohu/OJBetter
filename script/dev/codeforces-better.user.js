@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.2
+// @version      1.79.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -12627,6 +12627,15 @@ async function createMonacoEditor(language, form, support) {
       suggest: {
         selectionMode: "never", // 代码建议不自动选择
       },
+    }
+  );
+  
+  // 在编辑器中添加快捷命令：Ctrl+Enter (或 macOS 下的 Cmd+Enter)
+  OJBetter.monaco.editor.addCommand(
+    monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+    function () {
+      // 当用户按下 Ctrl+Enter 后，触发传入的 form 对象中的提交按钮点击事件
+      form.submitButton.click();
     }
   );
 
