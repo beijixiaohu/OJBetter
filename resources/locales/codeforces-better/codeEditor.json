@@ -41,7 +41,7 @@
         "running": "测试中",
         "success": "全部通过"
     },
-    "submitButton": "提交",
+    "submitButton": "提交（Ctrl+Enter）",
     "moreSettings": {
         "title": "更多设置",
         "tip": "更改会自动保存",
