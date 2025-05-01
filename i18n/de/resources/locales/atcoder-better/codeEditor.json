@@ -41,7 +41,7 @@
         "running": "im Test",
         "success": "Alle bestanden"
     },
-    "submitButton": "einreichen (einen Bericht usw.)",
+    "submitButton": "Abschicken (Strg+Eingabe)",
     "moreSettings": {
         "title": "Mehr Einstellungen",
         "tip": "Änderungen werden automatisch gespeichert",
