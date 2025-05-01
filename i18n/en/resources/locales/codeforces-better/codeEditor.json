@@ -41,7 +41,7 @@
         "running": "under test",
         "success": "All passed"
     },
-    "submitButton": "Commit",
+    "submitButton": "Submit (Ctrl+Enter)",
     "moreSettings": {
         "title": "More Settings",
         "tip": "Changes are automatically saved",
