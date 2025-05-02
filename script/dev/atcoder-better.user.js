@@ -14381,7 +14381,6 @@ function initializeInParallel(loadingMessage) {
     // if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
     if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
-    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem)ShowSameContestProblems(); //显示同比赛题目列表
 }
 
 /**
