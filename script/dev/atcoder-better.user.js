@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.19.3
+// @version      1.19.4
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -4360,7 +4360,11 @@ function OJB_getCodeFromPre(element) {
         if (code.classList.contains("linenums")) {
             return getCodeFromPrettyPre(element);
         } else {
-            return element.querySelector("code.prettyprint").textContent;
+            // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+            // 用 DOMParser 转换 HTML 代码，正确替换换行。
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+            return doc.body.textContent;
         }
     }
 
