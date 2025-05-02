@@ -4360,7 +4360,11 @@ function OJB_getCodeFromPre(element) {
         if (code.classList.contains("linenums")) {
             return getCodeFromPrettyPre(element);
         } else {
-            return element.querySelector("code.prettyprint").textContent;
+            // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+            // 用 DOMParser 转换 HTML 代码，正确替换换行。
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+            return doc.body.textContent;
         }
     }
 
@@ -14377,6 +14381,7 @@ function initializeInParallel(loadingMessage) {
     // if (OJBetter.basic.commentPaging) CommentPagination(); // 评论区分页
     if (OJBetter.translation.comment.transMode == "2") multiChoiceTranslation(); // 选段翻译支持
     if (OJBetter.monaco.beautifyPreBlocks) beautifyPreBlocksWithMonaco(); // 美化Pre代码块
+    if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem)ShowSameContestProblems(); //显示同比赛题目列表
 }
 
 /**

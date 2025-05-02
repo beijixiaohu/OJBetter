@@ -2148,7 +2148,7 @@ async function beautifyPreBlocksWithMonaco() {
     // 创建一个用于 Monaco 编辑器的容器
     const container = $("<div></div>");
     const lineCount = code.split("\n").length; // 代码的行数
-
+    
     // 计算容器的高度
     const calculateContainerHeight = (lineCount) => {
       const lineHeight = 20; // 每行代码的高度
@@ -4858,7 +4858,11 @@ function OJB_getCodeFromPre(element) {
     if (code.classList.contains("linenums")) {
       return getCodeFromPrettyPre(element);
     } else {
-      return element.querySelector("code.prettyprint").textContent;
+      // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+      // 用 DOMParser 转换 HTML 代码，正确替换换行。
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+      return doc.body.textContent;
     }
   };
 
