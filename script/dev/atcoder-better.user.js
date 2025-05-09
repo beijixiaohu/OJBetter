@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.19.4
+// @version      1.19.5
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -9003,7 +9003,13 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
             { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
             { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
             { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
-            { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+            // { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+            {
+                // 将 ]（xxxxxx） 或 ］（xxxxxx） 或 】（xxxxxx） 等形式替换成 ](xxxxxx)
+                // 使用非捕获组 (?:\]|］|】) 来匹配 ]、］ 或 】，后面允许有任意空白字符，再匹配全角括号中的内容
+                pattern: /(?:\]|］|】)\s*（([\s\S]*?)）/g,
+                replacement: "]($1)",
+            },
             // { pattern: /：/g, replacement: ":" }, // 中文：
             { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" }, // 加粗
             { pattern: /\* \*(.*?)\* \*/g, replacement: "\*\*$1\*\*" } // 加粗
