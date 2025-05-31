@@ -52,7 +52,10 @@
                 "Time": "times",
                 "Memory": "실행 중인 메모리",
                 "时间 limit exceeded": "시간 제한 초과",
-                "内存 limit exceeded": "메모리 제한 초과"
+                "内存 limit exceeded": "메모리 제한 초과",
+                "Author": "제출자",
+                "Sent": "제출 시간",
+                "Judged": "질문 시간"
             }
         },
         ".menu-list.main-menu-list": {
