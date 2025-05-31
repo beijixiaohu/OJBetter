@@ -52,7 +52,10 @@
                 "Time": "समय",
                 "Memory": "运行内存",
                 "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded"
+                "内存 limit exceeded": "Memory limit exceeded",
+                "Author": "提交者",
+                "Sent": "सबमिशन का समय",
+                "Judged": "निर्णय करने का समय"
             }
         },
         ".menu-list.main-menu-list": {
