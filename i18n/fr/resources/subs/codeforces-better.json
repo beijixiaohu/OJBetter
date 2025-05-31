@@ -52,7 +52,10 @@
                 "Time": "fois",
                 "Memory": "Mémoire vive",
                 "时间 limit exceeded": "Limite de temps dépassée",
-                "内存 limit exceeded": "Limite de mémoire dépassée"
+                "内存 limit exceeded": "Limite de mémoire dépassée",
+                "Author": "déposant",
+                "Sent": "Date de soumission",
+                "Judged": "Heure des questions"
             }
         },
         ".menu-list.main-menu-list": {
