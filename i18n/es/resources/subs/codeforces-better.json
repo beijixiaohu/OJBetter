@@ -52,7 +52,10 @@
                 "Time": "veces",
                 "Memory": "Memoria de funcionamiento",
                 "时间 limit exceeded": "Tiempo límite superado",
-                "内存 limit exceeded": "Límite de memoria superado"
+                "内存 limit exceeded": "Límite de memoria superado",
+                "Author": "remitente",
+                "Sent": "Hora de presentación",
+                "Judged": "Turno de preguntas"
             }
         },
         ".menu-list.main-menu-list": {
