@@ -3,7 +3,7 @@
 - Remove dependency on Greasyfork script repository
 - Replace the default update source with AliCloud OSS
 - Fix the problem of wrong style of buttons on some title pages
-- Improvements：Adjusting GPT Default Prompt Words
+- Improvements: Adjusting GPT Default Prompt Words
 - Improvements：Give clear indication when online code runs out of time
 
 ## 1.77.0
@@ -11,7 +11,7 @@
 - Add "Sample Test Results Checker" option
 - Fix code block landscaping not switching theme correctly when dark mode is "follow system"
 - Fix "Review Status Text Replacement" not replaced correctly
-- Fix the problem of wrong translation of Yodo
+- Fix the problem of wrong translation of Youdao
 - Fix the problem that the translation result is not displayed in the reply part of the comment in segmented mode
 - Fix for missing last comment on comment differentiation page
 - Fix the problem that LaTeX color is overwritten in dark mode.
