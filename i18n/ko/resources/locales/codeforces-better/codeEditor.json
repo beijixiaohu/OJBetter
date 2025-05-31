@@ -41,7 +41,7 @@
         "running": "테스트 중",
         "success": "모두 통과"
     },
-    "submitButton": "제출(보고서 등)",
+    "submitButton": "제출(Ctrl+Enter)",
     "moreSettings": {
         "title": "추가 설정",
         "tip": "변경 사항은 자동으로 저장됩니다.",

@@ -52,7 +52,10 @@
                 "Time": "回",
                 "Memory": "ランニングメモリー",
                 "时间 limit exceeded": "制限時間超過",
-                "内存 limit exceeded": "メモリの上限を超えた"
+                "内存 limit exceeded": "メモリの上限を超えた",
+                "Author": "投稿者",
+                "Sent": "提出時期",
+                "Judged": "質問時間"
             }
         },
         ".menu-list.main-menu-list": {
