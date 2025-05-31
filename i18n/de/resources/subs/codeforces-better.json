@@ -52,7 +52,10 @@
                 "Time": "mal",
                 "Memory": "Laufender Speicher",
                 "时间 limit exceeded": "Zeitlimit überschritten",
-                "内存 limit exceeded": "Speichergrenze überschritten"
+                "内存 limit exceeded": "Speichergrenze überschritten",
+                "Author": "Einreicher",
+                "Sent": "Zeitpunkt der Einreichung",
+                "Judged": "Fragestunde"
             }
         },
         ".menu-list.main-menu-list": {
