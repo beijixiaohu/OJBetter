@@ -52,7 +52,10 @@
                 "Time": "tempi",
                 "Memory": "Memoria di esercizio",
                 "时间 limit exceeded": "Limite di tempo superato",
-                "内存 limit exceeded": "Limite di memoria superato"
+                "内存 limit exceeded": "Limite di memoria superato",
+                "Author": "proponente",
+                "Sent": "Ora di invio",
+                "Judged": "Tempo di domande"
             }
         },
         ".menu-list.main-menu-list": {
