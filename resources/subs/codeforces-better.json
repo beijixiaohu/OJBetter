@@ -52,7 +52,10 @@
                 "Time": "时间",
                 "Memory": "内存",
                 "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded"
+                "内存 limit exceeded": "Memory limit exceeded",
+                "Author": "提交者",
+                "Sent": "提交时间",
+                "Judged": "判题时间",
             }
         },
         ".menu-list.main-menu-list": {
