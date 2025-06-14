@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.19.5
+// @version      1.19.6
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -10209,143 +10209,103 @@ async function getCode(url) {
 // 创建代码编辑调试表单元素
 // async function createCodeEditorForm(submitUrl, cloneHTML) {
 async function createCodeEditorForm(submitUrl) {
-    // 表单
-    let formDiv = $('<form method="post" id="OJBetter_SubmitForm" class="input-output-copier"></form>');
-    // $('.ttypography').after(formDiv);
+    // 表单容器
+    const formDiv = $('<form>', {
+        id: 'OJBetter_SubmitForm',
+        class: 'input-output-copier',
+        method: 'POST',
+        action: submitUrl
+    });
     $('#task-statement').after(formDiv);
-    // formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.at_csrf_token);
-    formDiv.attr('action', submitUrl);
-    formDiv.attr('method', 'POST');
 
-    // 顶部区域
-    let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
-
-    // 顶部左侧区域
-    let topLeftDiv = OJB_safeCreateJQElement(`<div class="topLeftDiv"></div>`);
-    topDiv.append(topLeftDiv);
-    // 语言选择
-    let selectLang = $('#select-lang').clone();
-    // selectLang.attr('id', 'programTypeId');
+    // 顶部区：语言选择
+    const topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
+    const topLeftDiv = OJB_safeCreateJQElement(`<div class="topLeftDiv"></div>`);
+    const selectLang = $('#select-lang').clone();
     topLeftDiv.append(selectLang);
-
-    // 顶部右侧区域
-    let topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
-    topDiv.append(topRightDiv);
+    const topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
+    topDiv.append(topLeftDiv, topRightDiv);
     formDiv.append(topDiv);
 
-    // 问题选择/编号
-    // let selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
-    // let problemCode;
-    // if (OJBetter.typeOfPage.is_acmsguru) {
-    //     problemCode = $('h4').eq(0).text();
-    //     let matchResult = problemCode.match(/([A-Z0-9]+)/);
-    //     problemCode = matchResult[0];
-    // } else if (OJBetter.typeOfPage.is_problemset_problem) {
-    //     let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Za-z0-9]+?)(?!=[A-Za-z0-9])/);
-    //     problemCode = match[1] + match[2];
-    //     selectProblem.attr('name', 'submittedProblemCode');
-    // } else {
-    //     problemCode = $('.header .title').eq(0).text();
-    //     let matchResult = problemCode.match(/([A-Z0-9]+)/);
-    //     problemCode = matchResult[0];
-    // }
-    // selectProblem.val(problemCode);
-    let selectProblem = $('input[name="data.TaskScreenName"]').clone();
-    formDiv.append(selectProblem);
+    // 隐藏字段：TaskScreenName & 源码 & csrf
+    const selectProblem = $('input[name="data.TaskScreenName"]').clone();
+    const sourceDiv = $('<textarea>', { id: 'plain-textarea', name: 'sourceCode', style: 'display:none' });
+    const csrfDiv = $('<input>', { type: 'hidden', name: 'csrf_token', value: OJBetter.common.at_csrf_token });
+    formDiv.append(selectProblem, sourceDiv, csrfDiv);
 
-    // 隐藏的代码记录
-    // let sourceDiv = $('<textarea id="sourceCodeTextarea" name="source" style="display: none;"></textarea>');
-    let sourceDiv = $('<textarea id="plain-textarea" name="sourceCode" style="display: none;"></textarea>');
-    formDiv.append(sourceDiv);
+    // 获取 Turnstile Token（不移动 DOM 元素）
+    const turnstileInput = document.querySelector('input[name="cf-turnstile-response"]');
+    if (!turnstileInput) {
+        console.warn('未检测到 Cloudflare Turnstile 验证框，可能是rated比赛赛时。');
+    } else {
+        const clonedInput = $(turnstileInput).clone();
+        formDiv.append(clonedInput);
+    }
 
-    // 隐藏的crsf token
-    let csrfDiv = $(`<input type="hidden" name="csrf_token" value=${OJBetter.common.at_csrf_token}>`);
-    formDiv.append(csrfDiv);
-
-    // 代码编辑器
-    let editorDiv = $('<div id="OJBetter_editor"></div>');
+    // 编辑器容器
+    const editorDiv = $('<div>', { id: 'OJBetter_editor' });
+    const monacoDiv = $('<div>', { id: 'OJBetter_monaco' });
+    editorDiv.append(monacoDiv);
     formDiv.append(editorDiv);
 
-    // monaco
-    let monaco = $('<div id="OJBetter_monaco"></div>');
-    editorDiv.append(monaco);
-
-    // 自定义调试
-    let customTestDiv = OJB_safeCreateJQElement(`
+    // 自定义测试区
+    const customTestDiv = OJB_safeCreateJQElement(`
         <details id="customTestBlock">
-            <summary >${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
-            <div id="customTests" style="min-height: 30px;"></div>
-            <div id="control" style="display:flex;">
-                <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="onlyCustomTest"}><label for="onlyCustomTest">
-                    ${i18next.t('customTestBlock.onlyCustom', { ns: 'codeEditor' })}
-                    </label>
-                </div>
-                <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="DontShowDiff"}>
-                    <label for="DontShowDiff">
-                        ${i18next.t('customTestBlock.DontShowDiff', { ns: 'codeEditor' })}
-                    </label>
-                </div>
+            <summary>${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
+            <div id="customTests" style="min-height:30px"></div>
+            <div id="control" style="display:flex">
+                <div style="margin:5px"><input type="checkbox" id="onlyCustomTest"><label for="onlyCustomTest">${i18next.t('customTestBlock.onlyCustom', { ns: 'codeEditor' })}</label></div>
+                <div style="margin:5px"><input type="checkbox" id="DontShowDiff"><label for="DontShowDiff">${i18next.t('customTestBlock.DontShowDiff', { ns: 'codeEditor' })}</label></div>
                 <button type="button" id="addCustomTest">${i18next.t('customTestBlock.add', { ns: 'codeEditor' })}</button>
             </div>
         </details>
-    `)
+    `);
     formDiv.append(customTestDiv);
 
-    // 调试/提交
-    let submitDiv = $('<div id="OJBetter_submitDiv"></div>');
-    let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
+    // 调试/提交区
+    const submitDiv = $('<div>', { id: 'OJBetter_submitDiv' });
+    const CompilerArgsInput = $('<input>', { type: 'text', id: 'CompilerArgsInput' });
     submitDiv.append(CompilerArgsInput);
-
-    let runButton = OJB_safeCreateJQElement(`
+    const runButton = OJB_safeCreateJQElement(`
         <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe6c1;</i>
             <span class="popover_content">${i18next.t('runTestButton.initial', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    let submitButton = OJB_safeCreateJQElement(`
+    const submitButton = OJB_safeCreateJQElement(`
         <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
             <i class="iconfont">&#xe633;</i>
             <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    if (OJBetter.monaco.setting.submitButtonPosition == "bottom") {
-        // 添加测试/提交按钮到底部
-        submitDiv.append(runButton);
-        submitDiv.append(submitButton);
-    }
-
+    if (OJBetter.monaco.setting.submitButtonPosition === 'bottom') submitDiv.append(runButton, submitButton);
     formDiv.append(submitDiv);
-    let CompilerSetting = OJB_safeCreateJQElement(`
-        <div id="CompilerSetting"></div>
-    `);
-    formDiv.append(CompilerSetting);
-    let statePanel = OJB_safeCreateJQElement(`
-        <div id="statePanel"></div>
-    `);
-    formDiv.append(statePanel);
+    const CompilerSetting = OJB_safeCreateJQElement(`<div id="CompilerSetting"></div>`);
+    const statePanel = OJB_safeCreateJQElement(`<div id="statePanel"></div>`);
+    formDiv.append(CompilerSetting, statePanel);
 
-    //==================================
-    // 去除原有的编辑器
-    //==================================
-    $('.form-code-submit').remove();
+    // 移除原 editor
+    // 保留原有的cloudflare标记，不全删除
+    $('.form-code-submit .form-group').eq(1).remove();
+    $('.form-code-submit .form-group').eq(0).remove();
+    $('.form-code-submit .form-group .btn').remove();
 
-    let from = {
-        formDiv: formDiv,
+    return {
+        formDiv,
         selectLang: selectLang.find('select:first'),
-        topRightDiv: topRightDiv,
-        sourceDiv: sourceDiv,
-        editorDiv: editorDiv,
-        monaco: monaco,
-        runButton: runButton,
-        submitButton: submitButton,
-        submitDiv: submitDiv,
-        CompilerSetting: CompilerSetting,
-        statePanel: statePanel
+        topRightDiv,
+        monaco: monacoDiv,
+        runButton,
+        submitButton,
+        sourceDiv,
+        editorDiv,
+        submitDiv,
+        CompilerSetting,
+        statePanel
     };
-    return from;
 }
+
+
 
 // 解析ace格式的补全规则(acwing)
 function parseAceCompleter(rules, range) {
