@@ -10293,15 +10293,15 @@ async function createCodeEditorForm(submitUrl) {
     return {
         formDiv,
         selectLang: selectLang.find('select:first'),
-        topRightDiv,
+        topRightDiv: topRightDiv,
         monaco: monacoDiv,
-        runButton,
-        submitButton,
-        sourceDiv,
-        editorDiv,
-        submitDiv,
-        CompilerSetting,
-        statePanel
+        runButton: runButton,
+        submitButton: submitButton,
+        sourceDiv: sourceDiv,
+        editorDiv: editorDiv,
+        submitDiv: submitDiv,
+        CompilerSetting: CompilerSetting,
+        statePanel: statePanel
     };
 }
 
