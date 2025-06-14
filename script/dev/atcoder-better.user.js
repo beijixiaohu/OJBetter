@@ -10291,14 +10291,14 @@ async function createCodeEditorForm(submitUrl) {
     $('.form-code-submit .form-group .btn').remove();
 
     return {
-        formDiv,
+        formDiv: formDiv,
         selectLang: selectLang.find('select:first'),
         topRightDiv: topRightDiv,
+        sourceDiv: sourceDiv,
+        editorDiv: editorDiv,
         monaco: monacoDiv,
         runButton: runButton,
         submitButton: submitButton,
-        sourceDiv: sourceDiv,
-        editorDiv: editorDiv,
         submitDiv: submitDiv,
         CompilerSetting: CompilerSetting,
         statePanel: statePanel
