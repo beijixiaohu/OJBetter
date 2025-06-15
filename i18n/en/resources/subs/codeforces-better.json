@@ -52,7 +52,10 @@
                 "Time": "timing",
                 "Memory": "Running memory",
                 "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded"
+                "内存 limit exceeded": "Memory limit exceeded",
+                "Author": "submitter",
+                "Sent": "Submission time",
+                "Judged": "Question time"
             }
         },
         ".menu-list.main-menu-list": {
