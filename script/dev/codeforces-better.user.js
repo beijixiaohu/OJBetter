@@ -8182,7 +8182,8 @@ async function initHTML2MarkDown() {
         node.classList.contains("html2md-panel") ||
         node.classList.contains("likeForm") ||
         node.classList.contains("monaco-editor") ||
-        node.nodeName === "SCRIPT"
+        node.nodeName === "SCRIPT" ||
+        node.nodeName === "STYLE"
       );
     },
     replacement: function (content, node) {
