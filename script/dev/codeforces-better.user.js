@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.6
+// @version      1.79.7
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -2387,7 +2387,6 @@ dialog::backdrop {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
-    z-index: 150;
 }
 .ojb_btn.primary {
     color: #ffffff;
