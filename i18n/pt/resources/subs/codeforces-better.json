@@ -339,10 +339,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "As alterações de classificação da ronda anterior foram temporariamente anuladas. Serão restauradas em breve.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Lembrete：Em caso de problemas técnicos, pode utilizar o sítio ligeiro",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "Por favor, subscreva o canal oficial do Telegram da Codeforces através do link!",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "Ao enviar uma resposta em C++, seleccione C++14 (GCC 6-32) ou C++17 (GCC 7-32) como o seu compilador.",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "Obrigado pelo seu interesse na Codeforces. O seu registo foi efectuado com sucesso.",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "Agora tem de confirmar o seu correio eletrónico. Foi enviada uma carta para o seu correio eletrónico. Siga as instruções para concluir o registo.",
-                "If for any reason the letter did not come, it can be sent again": "Se, por qualquer motivo, a carta não chegar, pode ser enviada novamente"
+                "If for any reason the letter did not come, it can be sent again": "Se, por qualquer motivo, a carta não chegar, pode ser enviada novamente",
+                "The user is disabled.": "Este utilizador foi banido."
             }
         },
         ".lang-chooser": {
@@ -991,3 +991,4 @@
         }
     }
 }
+
