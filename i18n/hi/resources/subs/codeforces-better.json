@@ -339,10 +339,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "रेटिंग परिवर्तन के पिछले दौर को अस्थायी रूप से वापस ले लिया गया है। वे जल्द ही ठीक हो जायेंगे.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "अनुस्मारक：यदि कोई तकनीकी समस्या आती है, तो आप एक हल्की वेबसाइट का उपयोग कर सकते हैं",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "कृपया लिंक के माध्यम से कोडफोर्स के आधिकारिक टेलीग्राम चैनल की सदस्यता लें",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ उत्तर सबमिट करते समय, कृपया अपने कंपाइलर के रूप में C++14 (GCC 6-32) या C++17 (GCC 7-32) चुनें।",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "कोडफोर्सेस में आपकी रुचि के लिए धन्यवाद। आपको सफलतापूर्वक रजिस्टर कर लिया है।",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "अब आपको अपना ईमेल कन्फर्म करना होगा। आपके ईमेल पर एक पत्र भेजा गया है, कृपया अपना पंजीकरण पूरा करने के लिए निर्देशों का पालन करें।",
-                "If for any reason the letter did not come, it can be sent again": "यदि किसी कारणवश पत्र नहीं आता है तो उसे दोबारा भेजा जा सकता है"
+                "If for any reason the letter did not come, it can be sent again": "यदि किसी कारणवश पत्र नहीं आता है तो उसे दोबारा भेजा जा सकता है",
+                "The user is disabled.": "该用户已被封禁。"
             }
         },
         ".lang-chooser": {
@@ -991,3 +991,4 @@
         }
     }
 }
+
