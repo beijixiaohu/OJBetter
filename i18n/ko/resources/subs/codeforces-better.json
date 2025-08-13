@@ -339,10 +339,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "이전 라운드의 등급 변경 사항이 일시적으로 롤백되었습니다. 곧 복구될 예정입니다.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "알림：기술적인 문제가 발생하면 라이트웨이트 사이트를 이용할 수 있습니다.",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "링크를 통해 코드포스의 공식 텔레그램 채널을 구독해 주세요!",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ 답안을 제출할 때는 컴파일러로 C++14(GCC 6-32) 또는 C++17(GCC 7-32)을 선택해 주세요.",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "코드포스에 관심을 가져주셔서 감사합니다. 성공적으로 등록되었습니다.",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "이제 이메일을 확인해야 합니다. 이메일로 안내 메일이 발송되었으니 안내에 따라 등록을 완료하세요.",
-                "If for any reason the letter did not come, it can be sent again": "어떤 이유로든 편지가 도착하지 않으면 다시 보낼 수 있습니다."
+                "If for any reason the letter did not come, it can be sent again": "어떤 이유로든 편지가 도착하지 않으면 다시 보낼 수 있습니다.",
+                "The user is disabled.": "이 사용자는 차단되었습니다."
             }
         },
         ".lang-chooser": {
@@ -991,3 +991,4 @@
         }
     }
 }
+
