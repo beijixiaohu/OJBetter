@@ -339,10 +339,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "The rating changes from the previous round have been temporarily rolled back. They will be restored shortly.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Reminder：If any technical issues arise, you can use the lightweight site",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "Please subscribe to Codeforces' official Telegram channel via the link!",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "When submitting a C++ answer, please select C++14 (GCC 6-32) or C++17 (GCC 7-32) as your compiler.",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "Thank you for your interest in Codeforces. You have been successfully registered.",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "Now you need to confirm your e-mail. A letter has been sent to your email, please follow the instructions to complete the registration.",
-                "If for any reason the letter did not come, it can be sent again": "If for any reason the letter does not arrive, it can be sent again"
+                "If for any reason the letter did not come, it can be sent again": "If for any reason the letter does not arrive, it can be sent again",
+                "The user is disabled.": "This user has been banned."
             }
         },
         ".lang-chooser": {
@@ -991,3 +991,4 @@
         }
     }
 }
+
