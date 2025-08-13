@@ -339,10 +339,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "上一輪的評級變化暫時回滾。它們將很快恢復。",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "提醒：如果出現任何技術問題，您可以使用輕量網站",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "請透過連結訂閱Codeforces的官方Telegram頻道",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "在提交C++解答時，請選擇C++14（GCC 6-32）或C++17（GCC 7-32）作為您的編譯器。",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "感謝您對Codeforces的關注。您已成功註冊。",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "現在您需要確認您的電子郵件。一封信已發送到您的電子郵件，請按照指示完成註冊。",
-                "If for any reason the letter did not come, it can be sent again": "如果因任何原因信件未到達，可以再次發送"
+                "If for any reason the letter did not come, it can be sent again": "如果因任何原因信件未到達，可以再次發送",
+                "The user is disabled.": "该用户已被封禁。"
             }
         },
         ".lang-chooser": {
@@ -991,3 +991,4 @@
         }
     }
 }
+
