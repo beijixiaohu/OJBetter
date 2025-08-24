@@ -20,7 +20,7 @@
 - Fix overlay class name conflicts
 - Improve website localization rules, thanks to **@xiezheyuan**, **@Acfboy** for their contribution!
 
-## 1.76.0
+##
 
 - **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
 
