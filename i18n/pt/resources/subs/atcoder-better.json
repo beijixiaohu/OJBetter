@@ -322,8 +322,7 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "É proibida a utilização de IA generativa nos concursos AtCoder em curso. Para mais informações, consulte as regras abaixo.",
-                "AtCoder生成AI対策ルール - 20241115版": "Disposições do AtCoder para a IA generativa - Versão 20241115",
-                "AtCoder生成AI対策ルール - 20241206版": "Disposições do AtCoder para IA generativa - Versão 20241206",
+                "AtCoder生成AI対策ルール - 20250718版": "Disposições do AtCoder para a IA generativa - Versão 20250718",
                 "現在": "estar virado para (nós)",
                 "で参加登録しています。詳細は": "se inscreveram para participar. Para mais informações, consultar",
                 "こちら": "aqui estão",
@@ -766,8 +765,7 @@
                 "this post": "este artigo",
                 "for details.": "Para saber mais.",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "É proibida a utilização de IA generativa nos concursos AtCoder em curso. Para mais informações, consulte as regras abaixo.",
-                "AtCoder Rules against Generative AI - Version 20241115": "Disposições do AtCoder para a IA generativa - Versão 20241115",
-                "AtCoder Rules against Generative AI - Version 20241206": "Disposições do AtCoder para IA generativa - Versão 20241206",
+                "AtCoder Rules against Generative AI - Version 20250718": "Disposições do AtCoder para a IA generativa - Versão 20250718",
                 "participant": "participantes",
                 "Registered": "Inscrito",
                 "Canceled registration": "Registo cancelado",
@@ -874,3 +872,4 @@
     },
     "dynamicReplacements": {}
 }
+
