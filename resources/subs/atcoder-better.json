@@ -322,8 +322,7 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。请参考下面的规则了解详情。",
-                "AtCoder生成AI対策ルール - 20241115版": "AtCoder 对于生成式 AI 的规定 - 20241115 版本",
-                "AtCoder生成AI対策ルール - 20241206版": "AtCoder 对于生成式 AI 的规定 - 20241206 版本",
+                "AtCoder生成AI対策ルール - 20250718版": "AtCoder 对于生成式 AI 的规定 - 20250718 版本",
                 "現在": "当前",
                 "で参加登録しています。詳細は": "已报名参加。详情请阅读",
                 "こちら": "这里",
@@ -766,8 +765,7 @@
                 "this post": "这篇文章",
                 "for details.": "了解详情。",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。请参考下面的规则了解详情。",
-                "AtCoder Rules against Generative AI - Version 20241115": "AtCoder 对于生成式 AI 的规定 - 20241115 版本",
-                "AtCoder Rules against Generative AI - Version 20241206": "AtCoder 对于生成式 AI 的规定 - 20241206 版本",
+                "AtCoder Rules against Generative AI - Version 20250718": "AtCoder 对于生成式 AI 的规定 - 20250718 版本",
                 "participant": "参与者",
                 "Registered": "已报名",
                 "Canceled registration": "已取消报名",
@@ -874,3 +872,4 @@
     },
     "dynamicReplacements": {}
 }
+
