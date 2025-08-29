@@ -9424,7 +9424,7 @@ async function CF2luogu(problemToolbar) {
                 method: "GET",
                 url
             });
-            return response.status<300&&!response.responseText.match(/出错了/g);
+            return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
         }, {
             maxRetries: 3,
             retryInterval: 1000
@@ -14498,3 +14498,4 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
       location.reload();
     }
 }
+
