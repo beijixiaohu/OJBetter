@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.7
+// @version      1.79.8
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -11079,7 +11079,7 @@ async function CF2luogu(problemToolbar) {
           method: "GET",
           url,
         });
-        return !response.responseText.match(/出错了/g);
+        return response.status<300&&!response.responseText.match(/出错了/g);
       },
       {
         maxRetries: 3,
