@@ -8743,7 +8743,18 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       if (checkViewmd()) {
         setViewmd(false);
         target.last().next(".mdViewContent").remove();
-        target.show();
+        if(!OJBetter.monaco.beautifyPreBlocks){
+          target.show();
+        }else{
+          // 不显示本来被隐藏的代码块
+          target.each(function() {
+            if (!$(this).is("pre")) {
+              $(this).show();
+            }else{
+              console.log(-1);
+            }
+          });
+        }
       } else {
         setViewmd(true);
         const markdown = $(element).getMarkdown();
