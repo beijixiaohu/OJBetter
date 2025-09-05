@@ -32,6 +32,14 @@
             "passer outre"
         ]
     },
+    "skipCodeBlock": {
+        "title": "Saute-t-il des blocs de code ?",
+        "content": "La zone sur le point d'être traduite contient des blocs de code, qui n'ont généralement pas besoin d'être traduits, et vous devez maintenant choisir de les ignorer ou non.：\n\nVoulez-vous ignorer les blocs de code ?",
+        "buttons": [
+            "bouché",
+            "passer outre"
+        ]
+    },
     "transTextLimits": {
         "title": "Dépassement du nombre de caractères ! ",
         "content": "Le contenu à traduire a un total de **{{realTextLength}}** caractères\n\nCela dépasse la limite de **{{textLength}}** caractères du service de traduction actuel, veuillez changer de service de traduction ou activer la \"Traduction segmentée\" dans le panneau Paramètres\n\nNotez que vous avez peut-être sélectionné le mauvais bouton de traduction\n\nEn raison de la façon dont il est réalisé, il y aura plus d'un bouton de traduction dans le champ, veuillez cliquer sur le bouton Traduire dans le sous-champ le plus petit. bouton\n\nÊtes-vous sûr de vouloir continuer la traduction ?",
