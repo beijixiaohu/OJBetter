@@ -8750,8 +8750,6 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
           target.each(function() {
             if (!$(this).is("pre")) {
               $(this).show();
-            }else{
-              console.log(-1);
             }
           });
         }
