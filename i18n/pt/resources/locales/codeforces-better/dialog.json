@@ -32,6 +32,14 @@
             "saltar"
         ]
     },
+    "skipCodeBlock": {
+        "title": "Salta blocos de código?",
+        "content": "A área que está prestes a ser traduzida contém blocos de código, que normalmente não precisam de ser traduzidos, e agora precisa de escolher se os quer saltar ou não：\n\nQuer saltar os blocos de código?",
+        "buttons": [
+            "entupido",
+            "saltar"
+        ]
+    },
     "transTextLimits": {
         "title": "Contagem de caracteres ultrapassada! ",
         "content": "O conteúdo a traduzir tem um total de **{{realTextLength}}** caracteres\n\nIsto excede o limite de **{{textLength}}** caracteres do serviço de tradução atual. Por favor, mude de serviço de tradução ou active a \"Tradução segmentada\" no painel de Definições\n\nNote que pode ter selecionado o botão de tradução errado\n\nDevido à forma como é realizado, haverá mais do que um botão de tradução no campo. Por favor, clique no botão Traduzir no subcampo mais pequeno botão\n\nTem a certeza de que quer continuar a traduzir?",

@@ -41,7 +41,7 @@
         "running": "em teste",
         "success": "Todos aprovados"
     },
-    "submitButton": "apresentar (um relatório, etc.)",
+    "submitButton": "Submeter (Ctrl+Enter)",
     "moreSettings": {
         "title": "Mais definições",
         "tip": "As alterações são guardadas automaticamente",
