@@ -11119,7 +11119,6 @@ async function CF2luogu(problemToolbar) {
           url,
         });
         return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
-        return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
       },
       {
         maxRetries: 3,
