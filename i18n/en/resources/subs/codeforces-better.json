@@ -175,6 +175,7 @@
                 "Language:": "Language:",
                 "Participant": "Players",
                 "Choose file:": "Select file:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "Want to fix a match after the official match is over? Simply log in or register an account and you can submit a code.",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "This puzzle packet is not updated by the issuer or Codeforce management team after we upgrade the rating server. In order to adjust the constraints of the time limit, an answer execution time will be multiplied by 2. For example, if your answers run 400 milliseconds on the rating server, a value of 800 milliseconds will be displayed and used to determine the results.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "A virtual match is a way to take part in past competitions, as close as possible to real-time competition. Only virtual competitions in ICPC mode are currently supported.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "If you have already seen these topics, virtual competitions are not good for you – they should be addressed in the puzzle pool.",
@@ -445,6 +446,16 @@
                 "Rated:": "Rated：",
                 "Tried:": "attempted",
                 "Substring:": "Keywords."
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "Search in Contest Title & Writer"
             }
         },
         ".by-form": {
@@ -840,7 +851,7 @@
             "description": "Tips for the top right of the list",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "You can double click on a cell (or hold to Ctrl and click) to view submissions or attack a solution."
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "You can double-click on a cell (or hold Ctrl and click) to see the commit history or to attack other people's code."
             }
         },
         "choose-order": {
@@ -907,6 +918,16 @@
             "rules": {
                 "Click": "strike (on the keyboard)",
                 "to see test details": "View Test Details"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "Allow unrated enrollment"
             }
         }
     },
@@ -991,4 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
