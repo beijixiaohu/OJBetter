@@ -175,6 +175,7 @@
                 "Language:": "भाषा:",
                 "Participant": "प्रतियोगियों",
                 "Choose file:": "एक दस्तावेज़ चुनें:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "हमारे द्वारा मूल्यांकन सर्वर को अपग्रेड करने के बाद इस प्रश्न के डेटा पैकेज को प्रश्न लेखक या कोडफोर्स प्रबंधन टीम द्वारा अपडेट नहीं किया गया है। समय-सीमित बाधाओं को समायोजित करने के लिए, समाधान के निष्पादन समय को दो से गुणा किया जाएगा। उदाहरण के लिए, यदि आपके उत्तर को समीक्षा सर्वर पर चलने में 400 मिलीसेकंड लगे, तो 800 मिलीसेकंड का मान प्रदर्शित किया जाएगा और परिणाम निर्धारित करने के लिए उपयोग किया जाएगा।",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "वर्चुअल दौड़ पिछली दौड़ में यथासंभव लाइव प्रविष्टि के करीब प्रतिस्पर्धा करने का एक तरीका है। वर्तमान में केवल ICPC मोड में वर्चुअल इवेंट समर्थित हैं।",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "यदि आपने ये प्रश्न पहले ही देख लिए हैं, तो वर्चुअल इवेंट आपके लिए नहीं है - इन प्रश्नों को प्रश्न बैंक में हल किया जाना चाहिए।",
@@ -445,6 +446,16 @@
                 "Rated:": "रेटेड：",
                 "Tried:": "कोशिश की",
                 "Substring:": "कीवर्ड"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "在比赛标题与编写者中搜索"
             }
         },
         ".by-form": {
@@ -840,7 +851,7 @@
             "description": "सूची पृष्ठ के ऊपरी दाएँ कोने में युक्तियाँ",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "आप प्रतिबद्ध इतिहास देखने या समाधान पर हमला करने के लिए किसी सेल पर डबल-क्लिक कर सकते हैं (या Ctrl-क्लिक कर सकते हैं)।"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
             }
         },
         "choose-order": {
@@ -907,6 +918,16 @@
             "rules": {
                 "Click": "点击",
                 "to see test details": "查看测试详情"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "允许未评级报名"
             }
         }
     },
@@ -991,4 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
