@@ -175,6 +175,7 @@
                 "Language:": "Lingue.",
                 "Participant": "concorrenti",
                 "Choose file:": "Selezioni il file.",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "Volete risolvere un problema della partita dopo che la partita ufficiale è finita? Basta accedere o registrare un account per inviare un codice.",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "Il pacchetto per questo argomento non è stato aggiornato dall'autore della domanda o dal team di amministrazione di Codeforces da quando abbiamo aggiornato il server di valutazione. Per adeguarsi ai vincoli di tempo, il tempo di esecuzione di una risposta sarà moltiplicato per 2. Ad esempio, se la sua risposta è stata eseguita per 400 millisecondi sul server di valutazione, sarà visualizzato un valore di 800 millisecondi, utilizzato per determinare il risultato.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "I tornei virtuali sono un modo per partecipare a tornei passati il più vicino possibile alla partecipazione in tempo reale. Attualmente sono supportati solo i tornei virtuali in modalità ICPC.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "Se ha già affrontato questi argomenti, i tornei virtuali non fanno per lei: dovrebbero essere risolti nella banca delle domande.",
@@ -445,6 +446,16 @@
                 "Rated:": "：",
                 "Tried:": "tentato",
                 "Substring:": "parole chiave"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "在比赛标题与编写者中搜索"
             }
         },
         ".by-form": {
@@ -840,7 +851,7 @@
             "description": "Suggerimento nell'angolo in alto a destra della pagina delle inserzioni.",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Può fare doppio clic su una cella (o tenere premuto Ctrl e cliccare) per visualizzare la cronologia degli impegni o attaccare la soluzione."
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
             }
         },
         "choose-order": {
@@ -907,6 +918,16 @@
             "rules": {
                 "Click": "colpire (sulla tastiera)",
                 "to see test details": "Visualizza i dettagli del test"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "允许未评级报名"
             }
         }
     },
@@ -991,4 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
