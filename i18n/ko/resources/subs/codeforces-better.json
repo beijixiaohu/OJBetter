@@ -175,6 +175,7 @@
                 "Language:": "언어.",
                 "Participant": "참가자",
                 "Choose file:": "파일을 선택합니다.",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "공식 경기가 끝난 후 경기 문제를 해결하고 싶으신가요? 로그인하거나 계정을 등록하면 코드를 제출할 수 있습니다.",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "이 주제에 대한 패킷은 평가 서버를 업그레이드한 이후 문제 작성자나 코드포스 운영팀에서 업데이트하지 않았습니다. 시간 제한 제약을 조정하기 위해 답안 실행 시간에 2를 곱합니다. 예를 들어, 평가 서버에서 답안이 400밀리초 동안 실행된 경우 800밀리초의 값이 표시되고 결과를 결정하는 데 사용됩니다.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "가상 토너먼트는 지난 토너먼트에 최대한 실시간 참여에 가깝게 참여할 수 있는 방법입니다. 현재는 ICPC 모드의 가상 토너먼트만 지원됩니다.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "이미 이러한 주제를 살펴본 적이 있다면 가상 토너먼트가 적합하지 않으므로 문제은행에서 문제를 풀어야 합니다.",
@@ -445,6 +446,16 @@
                 "Rated:": "평가：",
                 "Tried:": "시도됨",
                 "Substring:": "키워드"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "콘테스트 제목 및 작가로 검색"
             }
         },
         ".by-form": {
@@ -840,7 +851,7 @@
             "description": "목록 페이지의 오른쪽 상단에 있는 팁",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "셀을 두 번 클릭(또는 Ctrl 키를 누른 채 클릭)하여 커밋 기록을 보거나 솔루션을 공격할 수 있습니다."
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "셀을 두 번 클릭(또는 Ctrl 키를 누른 채 클릭)하여 커밋 기록을 보거나 다른 사람의 코드를 공격할 수 있습니다."
             }
         },
         "choose-order": {
@@ -907,6 +918,16 @@
             "rules": {
                 "Click": "스트라이크(키보드에서)",
                 "to see test details": "테스트 세부 정보 보기"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "무등급 등록 허용"
             }
         }
     },
@@ -991,4 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
