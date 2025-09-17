@@ -455,7 +455,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "In contest title and writers": "在比赛标题与编写者中搜索"
+                "In contest title and writers": "Ricerca per titolo e autore del concorso"
             }
         },
         ".by-form": {
@@ -851,7 +851,7 @@
             "description": "Suggerimento nell'angolo in alto a destra della pagina delle inserzioni.",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "È possibile fare doppio clic su una cella (o tenere premuto Ctrl e fare clic) per vedere la cronologia dei commit o per attaccare il codice di altre persone."
             }
         },
         "choose-order": {
@@ -927,7 +927,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Unrated allowed": "允许未评级报名"
+                "Unrated allowed": "Consentire l'iscrizione senza rating"
             }
         }
     },
