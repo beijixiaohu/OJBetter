@@ -175,6 +175,7 @@
                 "Language:": "語言:",
                 "Participant": "參賽者",
                 "Choose file:": "選擇檔案:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "這個題目的資料包未在我們升級評測伺服器後由出題人或Codeforces管理團隊更新。為了調整時間限制的約束，一個解答的執行時間將會被乘以2。例如，如果你的解答在評測伺服器上運行了400毫秒，那麼將顯示並使用800毫秒的值來確定結果。",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虛擬比賽是一種參加過去比賽的方式，盡可能接近即時參賽。目前只支援ICPC模式的虛擬賽事。",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已經看過這些題目，虛擬賽事就不適合你──應該在題庫中解決這些題目。",
@@ -445,6 +446,16 @@
                 "Rated:": "已評級：",
                 "Tried:": "已嘗試",
                 "Substring:": "關鍵字"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "在比赛标题与编写者中搜索"
             }
         },
         ".by-form": {
@@ -840,7 +851,7 @@
             "description": "榜單頁右上角的小提示",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以雙擊單元格（或按住Ctrl並點擊）來查看提交歷史記錄或對解決方案進行攻擊。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
             }
         },
         "choose-order": {
@@ -907,6 +918,16 @@
             "rules": {
                 "Click": "點擊",
                 "to see test details": "查看測試詳情"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "允许未评级报名"
             }
         }
     },
@@ -991,4 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
