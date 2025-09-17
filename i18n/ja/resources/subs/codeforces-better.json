@@ -175,6 +175,7 @@
                 "Language:": "言語:",
                 "Participant": "参加者",
                 "Choose file:": "ファイルを選択:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "公式戦終了後、試合の問題を解決したいですか？ログインするかアカウントを登録するだけで、コードを送信できます。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "タイトルデータパケットはアップグレード後にテストサーバーを追加した後に、出題またはCodeforcess チームによって更新されていません。時間制限の制約を決定するため，回答の執行時間は 2 乗れます。例えば、問題を測る時に、問題を測るには400ms，800ミリ秒後に実行し，解かれます。",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "バーチャルゲームは、リアルタイムで参加できる古いゲームの一形態のプレイに勝っております。現在、仮想ゲームの場合は ICPC のみサポートされています。",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "あなたはこれらの問題を見たことがあるなら、仮想マシンでは問題に対処しないといけません—問題ありません。",
@@ -445,6 +446,16 @@
                 "Rated:": "定格：",
                 "Tried:": "未遂",
                 "Substring:": "キーワード"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                "シフトアップ"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "在比赛标题与编写者中搜索"
             }
         },
         ".by-form": {
@@ -840,7 +851,7 @@
             "description": "チェックリストの右上のヒント",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "一度セルをダブルクリックするか、Ctrlを押したままクリックして提出するか、組み合わせで攻撃することができます。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
             }
         },
         "choose-order": {
@@ -907,6 +918,16 @@
             "rules": {
                 "Click": "打込む",
                 "to see test details": "テストの詳細を見る"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "允许未评级报名"
             }
         }
     },
@@ -991,4 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
