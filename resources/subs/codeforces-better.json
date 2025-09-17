@@ -919,16 +919,6 @@
                 "Click": "点击",
                 "to see test details": "查看测试详情"
             }
-        },
-        ".unrated-allowed": {
-            "class": [
-                ".unrated-allowed"
-            ],
-            "description": "",
-            "isStrict": false,
-            "rules": {
-                "Unrated allowed": "允许未评级报名"
-            }
         }
     },
     "InputValueReplacements": {
@@ -1012,6 +1002,7 @@
         }
     }
 }
+
 
 
 
