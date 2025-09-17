@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.7
+// @version      1.79.9
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -8268,12 +8268,23 @@ async function initHTML2MarkDown() {
 
   // pre
   OJBetter.common.turndownService.addRule("pre", {
-    filter: function (node, options) {
-      return node.tagName.toLowerCase() == "pre";
+    filter: function (node) {
+      return node.tagName.toLowerCase() === "pre";
     },
     replacement: function (content, node) {
-      if (!!node.querySelector("code.prettyprint")) {
-        return "";
+      const code = node.querySelector("code.prettyprint");
+      if (code) {
+        // 克隆一份 DOM，避免破坏原结构
+        const clone = code.cloneNode(true);
+
+        // 把 <br> 全部换成换行符
+        clone.querySelectorAll("br").forEach(br => {
+          br.replaceWith("\n");
+        });
+
+        // 最终拿纯文本
+        const text = clone.textContent;
+        return "```\n" + text + "```\n";
       } else {
         return "```\n" + content + "```\n";
       }
@@ -8732,7 +8743,16 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       if (checkViewmd()) {
         setViewmd(false);
         target.last().next(".mdViewContent").remove();
-        target.show();
+        if(!OJBetter.monaco.beautifyPreBlocks){
+          target.show();
+        }else{
+          // 不显示本来被隐藏的代码块
+          target.each(function() {
+            if (!$(this).is("pre")) {
+              $(this).show();
+            }
+          });
+        }
       } else {
         setViewmd(true);
         const markdown = $(element).getMarkdown();
@@ -9182,7 +9202,7 @@ async function process(
     element_node = div.get(0);
   }
 
-  //是否跳过折叠块
+  // 是否跳过折叠块
   if ($(target).find(".spoiler").length > 0) {
     const shouldSkip = await OJB_createDialog(
       i18next.t("skipFold.title", { ns: "dialog" }),
@@ -9192,11 +9212,28 @@ async function process(
         i18next.t("skipFold.buttons.1", { ns: "dialog" }),
       ],
       true
-    ); //跳过折叠块确认
+    ); // 跳过折叠块确认
     if (shouldSkip) {
       $(target).find(".spoiler").remove();
     } else {
       $(target).find(".html2md-panel").remove();
+    }
+  }
+
+  // 是否跳过代码块
+  if ($(target).find("code").length > 0 || $(target).find(".monaco-editor").length > 0) {
+    const shouldSkip = await OJB_createDialog(
+      i18next.t("skipCodeBlock.title", { ns: "dialog" }),
+      i18next.t("skipCodeBlock.content", { ns: "dialog" }),
+      [
+        i18next.t("skipCodeBlock.buttons.0", { ns: "dialog" }),
+        i18next.t("skipCodeBlock.buttons.1", { ns: "dialog" }),
+      ],
+      true
+    ); // 跳过代码块确认
+    if (shouldSkip) {
+      $(target).find("code").remove();
+      $(target).find(".monaco-editor").remove();
     }
   }
 
@@ -11079,7 +11116,7 @@ async function CF2luogu(problemToolbar) {
           method: "GET",
           url,
         });
-        return !response.responseText.match(/出错了/g);
+        return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
       },
       {
         maxRetries: 3,
@@ -17216,3 +17253,5 @@ if (document.readyState === "loading") {
     location.reload();
   }
 }
+
+
