@@ -9,7 +9,7 @@
             "isStrict": false,
             "rules": {
                 "Virtual participation": "가상 재연 토너먼트에 참여하기",
-                "Enter": "로 이동",
+                "Enter": "이동",
                 "Current standings": "현재 목록",
                 "Final standings": "최종 목록",
                 "Preliminary results": "예비 결과",
@@ -23,7 +23,7 @@
                 "China": "sino",
                 "Statements": "제목 설명",
                 "in Chinese": "중국어",
-                "Trainings": "기차",
+                "Trainings": "트레이닝",
                 "Prepared by": "작성자",
                 "Current or upcoming contests": "현재 진행 중이거나 예정된 대회",
                 "Rating: users participated in recent 6 months": "평가：지난 6개월 동안 참여한 적이 있는 사용자",
@@ -52,7 +52,10 @@
                 "Time": "times",
                 "Memory": "실행 중인 메모리",
                 "时间 limit exceeded": "시간 제한 초과",
-                "内存 limit exceeded": "메모리 제한 초과"
+                "内存 limit exceeded": "메모리 제한 초과",
+                "Author": "제출자",
+                "Sent": "제출 시간",
+                "Judged": "질문 시간"
             }
         },
         ".menu-list.main-menu-list": {
@@ -63,14 +66,14 @@
             "isStrict": false,
             "rules": {
                 "Home": "홈페이지",
-                "Top": "유행 중",
-                "Catalog": "가이드 카탈로그",
-                "Contests": "대회(스포츠 등)",
-                "Gym": "훈련 캠프",
-                "Problemset": "질문 은행",
-                "Groups": "조직",
+                "Top": "최근 글",
+                "Catalog": "카탈로그",
+                "Contests": "콘테스트",
+                "Gym": "연습",
+                "Problemset": "문제",
+                "Groups": "그룹",
                 "Rating": "평가",
-                "Edu": "재배",
+                "Edu": "교육",
                 "Calendar": "캘린더",
                 "ICPC Challenge": "ICPC 챌린지",
                 "Help": "손"
@@ -172,6 +175,7 @@
                 "Language:": "언어.",
                 "Participant": "참가자",
                 "Choose file:": "파일을 선택합니다.",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "공식 경기가 끝난 후 경기 문제를 해결하고 싶으신가요? 로그인하거나 계정을 등록하면 코드를 제출할 수 있습니다.",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "이 주제에 대한 패킷은 평가 서버를 업그레이드한 이후 문제 작성자나 코드포스 운영팀에서 업데이트하지 않았습니다. 시간 제한 제약을 조정하기 위해 답안 실행 시간에 2를 곱합니다. 예를 들어, 평가 서버에서 답안이 400밀리초 동안 실행된 경우 800밀리초의 값이 표시되고 결과를 결정하는 데 사용됩니다.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "가상 토너먼트는 지난 토너먼트에 최대한 실시간 참여에 가깝게 참여할 수 있는 방법입니다. 현재는 ICPC 모드의 가상 토너먼트만 지원됩니다.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "이미 이러한 주제를 살펴본 적이 있다면 가상 토너먼트가 적합하지 않으므로 문제은행에서 문제를 풀어야 합니다.",
@@ -336,10 +340,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "이전 라운드의 등급 변경 사항이 일시적으로 롤백되었습니다. 곧 복구될 예정입니다.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "알림：기술적인 문제가 발생하면 라이트웨이트 사이트를 이용할 수 있습니다.",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "링크를 통해 코드포스의 공식 텔레그램 채널을 구독해 주세요!",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ 답안을 제출할 때는 컴파일러로 C++14(GCC 6-32) 또는 C++17(GCC 7-32)을 선택해 주세요.",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "코드포스에 관심을 가져주셔서 감사합니다. 성공적으로 등록되었습니다.",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "이제 이메일을 확인해야 합니다. 이메일로 안내 메일이 발송되었으니 안내에 따라 등록을 완료하세요.",
-                "If for any reason the letter did not come, it can be sent again": "어떤 이유로든 편지가 도착하지 않으면 다시 보낼 수 있습니다."
+                "If for any reason the letter did not come, it can be sent again": "어떤 이유로든 편지가 도착하지 않으면 다시 보낼 수 있습니다.",
+                "The user is disabled.": "이 사용자는 차단되었습니다."
             }
         },
         ".lang-chooser": {
@@ -442,6 +446,16 @@
                 "Rated:": "평가：",
                 "Tried:": "시도됨",
                 "Substring:": "키워드"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "콘테스트 제목 및 작가로 검색"
             }
         },
         ".by-form": {
@@ -837,7 +851,7 @@
             "description": "목록 페이지의 오른쪽 상단에 있는 팁",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "셀을 두 번 클릭(또는 Ctrl 키를 누른 채 클릭)하여 커밋 기록을 보거나 솔루션을 공격할 수 있습니다."
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "셀을 두 번 클릭(또는 Ctrl 키를 누른 채 클릭)하여 커밋 기록을 보거나 다른 사람의 코드를 공격할 수 있습니다."
             }
         },
         "choose-order": {
@@ -904,6 +918,16 @@
             "rules": {
                 "Click": "스트라이크(키보드에서)",
                 "to see test details": "테스트 세부 정보 보기"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "무등급 등록 허용"
             }
         }
     },
@@ -988,3 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

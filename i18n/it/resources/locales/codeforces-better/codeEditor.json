@@ -41,7 +41,7 @@
         "running": "in fase di test",
         "success": "Tutti approvati"
     },
-    "submitButton": "presentare (un rapporto, ecc.)",
+    "submitButton": "Invia (Ctrl+Invio)",
     "moreSettings": {
         "title": "Altre impostazioni",
         "tip": "Le modifiche vengono salvate automaticamente",

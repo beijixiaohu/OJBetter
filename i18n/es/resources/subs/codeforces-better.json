@@ -52,7 +52,10 @@
                 "Time": "veces",
                 "Memory": "Memoria de funcionamiento",
                 "时间 limit exceeded": "Tiempo límite superado",
-                "内存 limit exceeded": "Límite de memoria superado"
+                "内存 limit exceeded": "Límite de memoria superado",
+                "Author": "remitente",
+                "Sent": "Hora de presentación",
+                "Judged": "Turno de preguntas"
             }
         },
         ".menu-list.main-menu-list": {
@@ -172,6 +175,7 @@
                 "Language:": "Idiomas.",
                 "Participant": "concursantes",
                 "Choose file:": "Seleccione el archivo.",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "¿Quieres resolver un problema del partido una vez finalizado el partido oficial? Solo tienes que iniciar sesión o registrar una cuenta y podrás enviar un código.",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "El paquete de este tema no ha sido actualizado por el autor de la pregunta ni por el equipo de administración de Codeforces desde que actualizamos el servidor de evaluación. Para ajustarse a las limitaciones de tiempo, el tiempo de ejecución de una respuesta se multiplicará por 2. Por ejemplo, si su respuesta se ejecutó durante 400 milisegundos en el servidor de evaluación, se mostrará un valor de 800 milisegundos y se utilizará para determinar el resultado.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "Los torneos virtuales son una forma de participar en torneos pasados lo más parecida posible a la participación en tiempo real. Actualmente sólo se admiten torneos virtuales en modo CIPC.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "Si ya ha estudiado estos temas, los torneos virtuales no son para usted: debe resolverlos en el banco de preguntas.",
@@ -336,10 +340,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "Los cambios de calificación de la ronda anterior se han anulado temporalmente. Se restablecerán en breve.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Recordatorio：Si surge algún problema técnico, puede utilizar el sitio ligero",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "Suscríbase al canal oficial de Codeforces en Telegram a través del enlace.",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "Cuando envíe una respuesta C++, seleccione C++14 (GCC 6-32) o C++17 (GCC 7-32) como compilador.",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "Gracias por su interés en Codeforces. Se ha registrado correctamente.",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "Ahora debe confirmar su correo electrónico. Se ha enviado una carta a su correo electrónico, por favor, siga las instrucciones para completar el registro.",
-                "If for any reason the letter did not come, it can be sent again": "Si por cualquier motivo la carta no llega, puede enviarse de nuevo"
+                "If for any reason the letter did not come, it can be sent again": "Si por cualquier motivo la carta no llega, puede enviarse de nuevo",
+                "The user is disabled.": "Este usuario ha sido expulsado."
             }
         },
         ".lang-chooser": {
@@ -442,6 +446,16 @@
                 "Rated:": "Clasificado：",
                 "Tried:": "intento",
                 "Substring:": "palabras clave"
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "Buscar en Título del concurso y autor"
             }
         },
         ".by-form": {
@@ -837,7 +851,7 @@
             "description": "Consejo en la esquina superior derecha de la página de listados",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Puede hacer doble clic en una celda (o mantener pulsada la tecla Ctrl y hacer clic) para ver el historial de confirmaciones o atacar la solución."
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Puedes hacer doble clic en una celda (o mantener pulsada la tecla Ctrl y hacer clic) para ver el historial de confirmaciones o atacar el código de otras personas."
             }
         },
         "choose-order": {
@@ -904,6 +918,16 @@
             "rules": {
                 "Click": "golpe (en el teclado)",
                 "to see test details": "Ver detalles de la prueba"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "Permitir la inscripción sin calificación"
             }
         }
     },
@@ -988,3 +1012,16 @@
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -32,6 +32,14 @@
             "Überspringen"
         ]
     },
+    "skipCodeBlock": {
+        "title": "Überspringt es Codeblöcke?",
+        "content": "Der zu übersetzende Bereich enthält Codeblöcke, die in der Regel nicht übersetzt werden müssen, und Sie müssen nun entscheiden, ob Sie diese überspringen möchten oder nicht：\n\nMöchten Sie die Codeblöcke überspringen?",
+        "buttons": [
+            "Verstopft",
+            "Überspringen"
+        ]
+    },
     "transTextLimits": {
         "title": "Zeichenanzahl überschritten! ",
         "content": "Der zu übersetzende Inhalt hat insgesamt **{{realTextLength}}** Zeichen\n\nDies überschreitet die **{{textLength}}** Zeichengrenze des aktuellen Übersetzungsdienstes, bitte wechseln Sie den Übersetzungsdienst oder aktivieren Sie \"Segmentierte Übersetzung\" im Einstellungsbereich\n\nBeachten Sie, dass Sie möglicherweise die falsche Übersetzungsschaltfläche ausgewählt haben\n\nAufgrund der Art der Realisierung gibt es mehr als eine Übersetzungsschaltfläche im Feld, bitte klicken Sie auf die Schaltfläche Übersetzen im kleineren Unterfeld\n\nSind Sie sicher, dass Sie mit der Übersetzung fortfahren möchten?",

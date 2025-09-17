@@ -32,6 +32,14 @@
             "Skip"
         ]
     },
+    "skipCodeBlock": {
+        "title": "Does it skip code blocks?",
+        "content": "The area about to be translated contains code blocks, which usually don't need to be translated, and now you need to choose whether to skip them or not：\n\nWant to skip the code blocks?",
+        "buttons": [
+            "clogged",
+            "Skip"
+        ]
+    },
     "transTextLimits": {
         "title": "The number of characters is out of limit! ",
         "content": "The content to be translated has a total of **{{realTextLength}}** characters\n\nThis exceeds the **{{textLength}}** character limit of the current translation service, please change the translation service or turn on \"Segmented Translation\" in the Settings panel\n\nNote that you may have selected the wrong translation button\n\nDue to the way it is implemented, there will be multiple translation buttons in the area, so please click on the translation button in the smaller sub area button\n\nAre you sure you want to continue translating?",
