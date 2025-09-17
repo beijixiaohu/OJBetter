@@ -175,7 +175,7 @@
                 "Language:": "语言:",
                 "Participant": "参赛者",
                 "Choose file:": "选择文件:",
-                "Want to solve": "想在正式比赛结束后解决比赛问题吗？只需注册练习，您就可以提交解决方案。",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需注册练习，您就可以提交解决方案。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "这个题目的数据包未在我们升级评测服务器后由出题人或Codeforces管理团队更新。为了调整时间限制的约束，一个解答的执行时间将被乘以2。例如，如果你的解答在评测服务器上运行了400毫秒，那么将显示并使用800毫秒的值来确定结果。",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虚拟比赛是一种参加过去比赛的方式，尽可能接近实时参赛。目前只支持ICPC模式的虚拟赛事。",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已经看过这些题目，虚拟赛事就不适合你——应该在题库中解决这些题目。",
@@ -993,6 +993,7 @@
         }
     }
 }
+
 
 
 
