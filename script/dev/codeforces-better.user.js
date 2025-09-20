@@ -11903,7 +11903,7 @@ const StatusAcronyms = {
   "Partial result:": "PC",
   Running: "PENDING",
   "In queue": "INQUEUE",
-  "Pretests Passed": "PREPASS",
+  "Pretests passed": "PREPASS",
 };
 
 /**
@@ -17253,5 +17253,6 @@ if (document.readyState === "loading") {
     location.reload();
   }
 }
+
 
 
