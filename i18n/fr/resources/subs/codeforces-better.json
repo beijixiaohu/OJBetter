@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "Participez au tournoi de reconstitution virtuelle",
-                "Enter": "entrer dans",
+                "Virtual participation »": "Participez au tournoi de reconstitution virtuelle \"",
+                "Enter »": "Aller à \"",
                 "Current standings": "Liste actuelle",
                 "Final standings": "Liste finale",
                 "Preliminary results": "Résultats préliminaires",
@@ -43,7 +43,17 @@
                 "Contest status": "état du jeu",
                 "Invited users": "Utilisateurs invités",
                 "Invitation links": "Lien d'invitation",
-                "API keys": "Clé API",
+                "API keys": "Clé API"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "Date de soumission",
                 "Who": "déposant",
                 "Problem": "questions",
@@ -51,11 +61,28 @@
                 "Verdict": "état d'avancement de l'adjudication",
                 "Time": "fois",
                 "Memory": "Mémoire vive",
-                "时间 limit exceeded": "Limite de temps dépassée",
-                "内存 limit exceeded": "Limite de mémoire dépassée",
                 "Author": "déposant",
                 "Sent": "Date de soumission",
-                "Judged": "Heure des questions"
+                "Judged": "Heure des questions",
+                "Name": "Nom du concours",
+                "Writers": "编写者",
+                "Start": "Heure de début",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +99,7 @@
                 "Gym": "camp d'entraînement",
                 "Problemset": "banque de questions",
                 "Groups": "organisations",
-                "Rating": "Evaluation",
+                "Rating": "排行榜",
                 "Edu": "cultiver",
                 "Calendar": "calendrier",
                 "ICPC Challenge": "Défi de l'ICPC",
@@ -89,9 +116,10 @@
                 "Settings": "mettre en place",
                 "Blog": "blog (mot d'emprunt)",
                 "Teams": "file d'attente",
-                "Submissions": "soumettre (un rapport, etc.)",
+                "Submissions": "Soumission des dossiers",
                 "Favourites": "signet (Internet)",
-                "Problemsetting": "Définition du problème",
+                "Problemsetting": "Participation à la préparation des questions",
+                "Groups": "organisations",
                 "Talks": "lettre privée",
                 "Contests": "compétition (sports, etc.)"
             }
@@ -146,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "dédier"
             }
         },
@@ -168,11 +197,10 @@
             "rules": {
                 "Register now": "S'inscrire maintenant",
                 "No tag edit access": "Pas de privilèges d'édition de tags",
-                "Problem([\\s]*)$": "questions",
-                "Submission": "Numéro de soumission",
-                "Time": "fois",
-                "Verdict": "état d'avancement de l'adjudication",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "Langues.",
+                "Test:": "测试点数量:",
                 "Participant": "candidats",
                 "Choose file:": "Sélectionnez un fichier.",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "Vous souhaitez résoudre un problème de match après la fin du match officiel ? Il vous suffit de vous connecter ou de créer un compte pour soumettre un code.",
@@ -184,8 +212,55 @@
                 "You can clone this contest to a mashup.": "Vous pouvez transformer ce concours en un concours de mashup.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup est un type spécial de concours de formation composé de questions ouvertes provenant de concours Codeforces antérieurs. Il est également possible d'ajouter",
                 "problems to mashup contest.": "Question au concours de mashup.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Ces compétitions ne peuvent pas être rendues publiques et ne sont utilisées qu'à des fins d'entraînement personnel. Les mashups peuvent également être ajoutés à des groupes. Pour spécifier des informations supplémentaires sur un concours de mashups, utilisez le formulaire Modifier un concours de camp d'entraînement.",
-                "时间 limit exceeded": "Limite de temps dépassée"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Ces compétitions ne peuvent pas être rendues publiques et ne sont utilisées qu'à des fins d'entraînement personnel. Les mashups peuvent également être ajoutés à des groupes. Pour spécifier des informations supplémentaires sur un concours de mashups, utilisez le formulaire Modifier un concours de camp d'entraînement."
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "Nom du concours",
+                "Time": "Heure de début",
+                "Enter »": "Aller à \""
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "ID de l'utilisateur",
+                "Rating": "等级分",
+                "Contrib.": "dédier"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "Date de soumission",
+                "Verdict": "état d'avancement de l'adjudication"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "reprovision"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +430,7 @@
             "rules": {
                 "Enter": "s'inscrire",
                 "Register": "inscription",
-                "Contest rating": "Classement des courses",
+                "Contest rating": "等级分",
                 "Logout": "Déconnexion"
             }
         },
@@ -367,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "Remplacement des images",
-                "Contest rating": "Course",
+                "Contest rating": "等级分",
                 "Contribution": "dédier",
+                "Friend of": "粉丝",
                 "My friends": "Ma meilleure amie.",
                 "Change settings": "Modifier les paramètres",
                 "Last visit": "dernier accès",
@@ -444,8 +520,8 @@
             "rules": {
                 "Contest type:": "Type de concours：",
                 "Rated:": "Classé：",
-                "Tried:": "tenté",
-                "Substring:": "mots-clés"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
             }
         },
         ".shiftUp": {
@@ -517,6 +593,7 @@
                 "Last unsolved": "Non résolu la dernière fois",
                 "Attention": "prenez note",
                 "Past contests filter": "Dépistage des anciens matches",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "À propos du concours",
                 "Last submissions": "Historique de la soumission",
                 "Streams": "diffusion directe sur l'internet",
@@ -864,7 +941,7 @@
                 "Default order": "Commande par défaut",
                 "Submission time": "Date de soumission",
                 "Judging Time": "Heure des questions",
-                "Solution Size": "Taille de la solution",
+                "Solution Size": "代码长度",
                 "Execution Time": "temps d'exécution"
             }
         },
@@ -1012,16 +1089,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
