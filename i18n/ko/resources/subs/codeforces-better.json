@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "가상 재연 토너먼트에 참여하기",
-                "Enter": "이동",
+                "Virtual participation »": "가상 재연 토너먼트에 참여하기 \"",
+                "Enter »": "\"",
                 "Current standings": "현재 목록",
                 "Final standings": "최종 목록",
                 "Preliminary results": "예비 결과",
@@ -43,7 +43,17 @@
                 "Contest status": "게임 상태",
                 "Invited users": "초대된 사용자",
                 "Invitation links": "초대 링크",
-                "API keys": "API 키",
+                "API keys": "API 키"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "제출 시간",
                 "Who": "제출자",
                 "Problem": "이슈",
@@ -51,11 +61,28 @@
                 "Verdict": "판결 상태",
                 "Time": "times",
                 "Memory": "실행 중인 메모리",
-                "时间 limit exceeded": "시간 제한 초과",
-                "内存 limit exceeded": "메모리 제한 초과",
                 "Author": "제출자",
                 "Sent": "제출 시간",
-                "Judged": "질문 시간"
+                "Judged": "질문 시간",
+                "Name": "대회 이름",
+                "Writers": "编写者",
+                "Start": "시작 시간",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +99,7 @@
                 "Gym": "연습",
                 "Problemset": "문제",
                 "Groups": "그룹",
-                "Rating": "평가",
+                "Rating": "排行榜",
                 "Edu": "교육",
                 "Calendar": "캘린더",
                 "ICPC Challenge": "ICPC 챌린지",
@@ -89,9 +116,10 @@
                 "Settings": "설정",
                 "Blog": "블로그(외래어)",
                 "Teams": "대기열",
-                "Submissions": "제출(보고서 등)",
+                "Submissions": "기록 제출",
                 "Favourites": "북마크(인터넷)",
-                "Problemsetting": "문제 설정",
+                "Problemsetting": "이슈 준비에 참여",
+                "Groups": "그룹",
                 "Talks": "비공개 편지",
                 "Contests": "대회(스포츠 등)"
             }
@@ -146,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "헌신"
             }
         },
@@ -168,11 +197,10 @@
             "rules": {
                 "Register now": "지금 등록하기",
                 "No tag edit access": "태그 편집 권한 없음",
-                "Problem([\\s]*)$": "이슈",
-                "Submission": "제출 번호",
-                "Time": "times",
-                "Verdict": "판결 상태",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "언어.",
+                "Test:": "测试点数量:",
                 "Participant": "참가자",
                 "Choose file:": "파일을 선택합니다.",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "공식 경기가 끝난 후 경기 문제를 해결하고 싶으신가요? 로그인하거나 계정을 등록하면 코드를 제출할 수 있습니다.",
@@ -184,8 +212,55 @@
                 "You can clone this contest to a mashup.": "이 콘테스트를 매시업 콘테스트로 복제할 수 있습니다.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "매시업은 과거 코드포스 콘테스트의 공개 문제로 구성된 특별한 유형의 교육 콘테스트입니다. 또한",
                 "problems to mashup contest.": "매시업 콘테스트에 대한 질문입니다.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "이러한 대회는 공개할 수 없으며 개인 트레이닝 목적으로만 사용됩니다. 매시업은 그룹에 추가할 수도 있습니다. 매시업 경연대회에 대한 추가 정보를 지정하려면 합숙 경연대회 수정 양식을 사용하세요.",
-                "时间 limit exceeded": "시간 제한 초과"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "이러한 대회는 공개할 수 없으며 개인 트레이닝 목적으로만 사용됩니다. 매시업은 그룹에 추가할 수도 있습니다. 매시업 경연대회에 대한 추가 정보를 지정하려면 합숙 경연대회 수정 양식을 사용하세요."
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "대회 이름",
+                "Time": "시작 시간",
+                "Enter »": "\""
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "사용자 ID",
+                "Rating": "等级分",
+                "Contrib.": "헌신"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "제출 시간",
+                "Verdict": "판결 상태"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "재프로비저닝"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +430,7 @@
             "rules": {
                 "Enter": "로그인",
                 "Register": "등록",
-                "Contest rating": "레이스 등급",
+                "Contest rating": "等级分",
                 "Logout": "로그아웃"
             }
         },
@@ -367,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "사진 교체",
-                "Contest rating": "레이싱",
+                "Contest rating": "等级分",
                 "Contribution": "헌신",
+                "Friend of": "粉丝",
                 "My friends": "내 가장 친한 친구.",
                 "Change settings": "설정 변경",
                 "Last visit": "마지막 액세스",
@@ -444,8 +520,8 @@
             "rules": {
                 "Contest type:": "대회 유형：",
                 "Rated:": "평가：",
-                "Tried:": "시도됨",
-                "Substring:": "키워드"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
             }
         },
         ".shiftUp": {
@@ -517,6 +593,7 @@
                 "Last unsolved": "지난번에 해결되지 않음",
                 "Attention": "다음 사항에 유의하세요.",
                 "Past contests filter": "지난 경기 심사",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "대회 정보",
                 "Last submissions": "제출 기록",
                 "Streams": "직접 인터넷 방송",
@@ -864,7 +941,7 @@
                 "Default order": "기본 주문",
                 "Submission time": "제출 시간",
                 "Judging Time": "질문 시간",
-                "Solution Size": "솔루션 크기",
+                "Solution Size": "代码长度",
                 "Execution Time": "실행 시간"
             }
         },
@@ -1012,16 +1089,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
