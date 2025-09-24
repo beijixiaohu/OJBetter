@@ -43,7 +43,17 @@
                 "Contest status": "比赛状态",
                 "Invited users": "邀请的用户",
                 "Invitation links": "邀请链接",
-                "API keys": "API密钥",
+                "API keys": "API密钥"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "提交时间",
                 "Who": "提交者",
                 "Problem": "问题",
@@ -51,11 +61,24 @@
                 "Verdict": "判题状态",
                 "Time": "时间",
                 "Memory": "内存",
-                "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded",
                 "Author": "提交者",
                 "Sent": "提交时间",
                 "Judged": "判题时间"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +95,7 @@
                 "Gym": "训练营",
                 "Problemset": "题库",
                 "Groups": "团体",
-                "Rating": "Rating排行榜",
+                "Rating": "排行榜",
                 "Edu": "培训",
                 "Calendar": "日历",
                 "ICPC Challenge": "ICPC挑战赛",
@@ -92,6 +115,7 @@
                 "Submissions": "提交",
                 "Favourites": "收藏",
                 "Problemsetting": "问题设置",
+                "Groups": "团体",
                 "Talks": "私信",
                 "Contests": "比赛"
             }
@@ -146,6 +170,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "贡献"
             }
         },
@@ -168,11 +193,10 @@
             "rules": {
                 "Register now": "现在报名",
                 "No tag edit access": "没有标签编辑权限",
-                "Problem([\\s]*)$": "问题",
-                "Submission": "提交编号",
-                "Time": "时间",
-                "Verdict": "判题状态",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "语言:",
+                "Test:": "测试点数量:",
                 "Participant": "参赛者",
                 "Choose file:": "选择文件:",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
@@ -184,8 +208,19 @@
                 "You can clone this contest to a mashup.": "您可以将此比赛克隆到混搭比赛中。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一种特殊类型的训练比赛，由过去Codeforces比赛的公开问题组成。还可以添加",
                 "problems to mashup contest.": "问题到混搭比赛。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "这样的比赛不能公开，只用于个人训练目的。还可以将混搭添加到团体中。要指定有关混搭比赛的其他信息，请使用训练营比赛编辑表单。",
-                "时间 limit exceeded": "Time limit exceeded"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "这样的比赛不能公开，只用于个人训练目的。还可以将混搭添加到团体中。要指定有关混搭比赛的其他信息，请使用训练营比赛编辑表单。"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "重置"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +390,7 @@
             "rules": {
                 "Enter": "登录",
                 "Register": "注册",
-                "Contest rating": "比赛rating",
+                "Contest rating": "比赛等级分",
                 "Logout": "退出登录"
             }
         },
@@ -367,8 +402,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "更换图片",
-                "Contest rating": "比赛Rating",
+                "Contest rating": "比赛等级分",
                 "Contribution": "贡献",
+                "Friend of": "粉丝",
                 "My friends": "我的好友",
                 "Change settings": "改变设置",
                 "Last visit": "最后访问",
@@ -864,7 +900,7 @@
                 "Default order": "默认顺序",
                 "Submission time": "提交时间",
                 "Judging Time": "判题时间",
-                "Solution Size": "解答大小",
+                "Solution Size": "代码长度",
                 "Execution Time": "执行时间"
             }
         },
@@ -1012,16 +1048,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
