@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.9
+// @version      1.79.10
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -11903,7 +11903,7 @@ const StatusAcronyms = {
   "Partial result:": "PC",
   Running: "PENDING",
   "In queue": "INQUEUE",
-  "Pretests Passed": "PREPASS",
+  "Pretests passed": "PREPASS",
 };
 
 /**
@@ -17253,5 +17253,6 @@ if (document.readyState === "loading") {
     location.reload();
   }
 }
+
 
 
