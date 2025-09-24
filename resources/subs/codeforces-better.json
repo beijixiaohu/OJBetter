@@ -480,8 +480,8 @@
             "rules": {
                 "Contest type:": "比赛类型：",
                 "Rated:": "已评级：",
-                "Tried:": "已尝试",
-                "Substring:": "关键字"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
             }
         },
         ".shiftUp": {
