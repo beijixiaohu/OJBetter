@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "Participate in the virtual reenactment tournament",
-                "Enter": "go into",
+                "Virtual participation »": "Participate in the Virtual Reenactment Tournament \"",
+                "Enter »": "Go to \"",
                 "Current standings": "Current List",
                 "Final standings": "Final List",
                 "Preliminary results": "Preliminary results",
@@ -43,19 +43,46 @@
                 "Contest status": "competition status",
                 "Invited users": "Invited users",
                 "Invitation links": "Invitation Links",
-                "API keys": "API key",
+                "API keys": "API key"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "Submission time",
                 "Who": "submitter",
                 "Problem": "concern",
                 "Lang": "multilingualism",
-                "Verdict": "Case Status",
+                "Verdict": "status of adjudication",
                 "Time": "timing",
                 "Memory": "Running memory",
-                "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded",
                 "Author": "submitter",
                 "Sent": "Submission time",
-                "Judged": "Question time"
+                "Judged": "Question time",
+                "Name": "Name of the competition",
+                "Writers": "author",
+                "Start": "Starting time",
+                "Length": "duration"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +99,7 @@
                 "Gym": "training camp",
                 "Problemset": "question bank",
                 "Groups": "organizations",
-                "Rating": "Rating",
+                "Rating": "the charts (of best-sellers)",
                 "Edu": "cultivate",
                 "Calendar": "calendar",
                 "ICPC Challenge": "ICPC Challenge",
@@ -89,9 +116,10 @@
                 "Settings": "Settings",
                 "Blog": "blog (loanword)",
                 "Teams": "cadre",
-                "Submissions": "Submit",
+                "Submissions": "Submission of records",
                 "Favourites": "favorite",
-                "Problemsetting": "Problem Setting",
+                "Problemsetting": "Participation in the preparation of issues",
+                "Groups": "organizations",
                 "Talks": "private letter",
                 "Contests": "competition (sports etc)"
             }
@@ -146,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "grade",
                 "Contribution": "dedicate"
             }
         },
@@ -168,11 +197,10 @@
             "rules": {
                 "Register now": "Sign Up Now",
                 "No tag edit access": "No tag edit permission",
-                "Problem([\\s]*)$": "concern",
-                "Submission": "Submission Number",
-                "Time": "timing",
-                "Verdict": "Case Status",
+                "Problem:": "Question.",
+                "Verdict:": "Judgment Status.",
                 "Language:": "Language:",
+                "Test:": "Number of test points.",
                 "Participant": "Players",
                 "Choose file:": "Select file:",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "Want to fix a match after the official match is over? Simply log in or register an account and you can submit a code.",
@@ -184,8 +212,55 @@
                 "You can clone this contest to a mashup.": "You can clone this match into a mixed match.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "A mashup is a special type of training contest consisting of open questions from past Codeforces contests. It is also possible to add",
                 "problems to mashup contest.": "Question to the mashup contest.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Such competitions cannot be publicized and are only used for personal training purposes. Mashups can also be added to groups. To specify additional information about a mashup contest, use the Boot Camp Contest Edit form.",
-                "时间 limit exceeded": "Time limit exceeded"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Such competitions cannot be publicized and are only used for personal training purposes. Mashups can also be added to groups. To specify additional information about a mashup contest, use the Boot Camp Contest Edit form."
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "Name of the competition",
+                "Time": "Starting time",
+                "Enter »": "Go to \""
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "user ID",
+                "Rating": "grade",
+                "Contrib.": "dedicate"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "Submission time",
+                "Verdict": "status of adjudication"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "Status filtering is enabled, click",
+                "here": "here (literary)",
+                " to reset ": "reprovision"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +430,7 @@
             "rules": {
                 "Enter": "log in",
                 "Register": "enrollment",
-                "Contest rating": "Racing",
+                "Contest rating": "grade",
                 "Logout": "Log out"
             }
         },
@@ -367,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "Replacement of pictures",
-                "Contest rating": "Racing",
+                "Contest rating": "grade",
                 "Contribution": "dedicate",
+                "Friend of": "Chinese vermicelli",
                 "My friends": "My best friend.",
                 "Change settings": "Change settings",
                 "Last visit": "last access",
@@ -444,8 +520,8 @@
             "rules": {
                 "Contest type:": "Type of competition：",
                 "Rated:": "Rated：",
-                "Tried:": "attempted",
-                "Substring:": "Keywords."
+                "Tried:": "Tried：",
+                "Substring:": "Keywords："
             }
         },
         ".shiftUp": {
@@ -517,6 +593,7 @@
                 "Last unsolved": "Not resolved last time",
                 "Attention": "take note of",
                 "Past contests filter": "Past Match Screening",
+                "Recent virt. contests": "Past Virtual Entries",
                 "About Contest": "About the competition",
                 "Last submissions": "Submission History",
                 "Streams": "live broadcast (not recorded)",
@@ -864,7 +941,7 @@
                 "Default order": "Default order",
                 "Submission time": "Submission time",
                 "Judging Time": "Question time",
-                "Solution Size": "Solution Size",
+                "Solution Size": "Code length",
                 "Execution Time": "execution time"
             }
         },
@@ -1012,16 +1089,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
