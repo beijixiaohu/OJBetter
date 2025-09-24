@@ -227,6 +227,18 @@
                 "Enter »": "进入 »"
             }
         },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "用户名",
+                "Rating": "等级分",
+                "Contrib.": "贡献"
+            }
+        },
         ".roundbox.sidebox.borderTopRound .rtable.smaller": {
             "class": [
                 ".roundbox.sidebox.borderTopRound .rtable.smaller"
@@ -418,7 +430,7 @@
             "rules": {
                 "Enter": "登录",
                 "Register": "注册",
-                "Contest rating": "比赛等级分",
+                "Contest rating": "等级分",
                 "Logout": "退出登录"
             }
         },
@@ -430,7 +442,7 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "更换图片",
-                "Contest rating": "比赛等级分",
+                "Contest rating": "等级分",
                 "Contribution": "贡献",
                 "Friend of": "粉丝",
                 "My friends": "我的好友",
