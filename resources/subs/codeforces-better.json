@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "参加虚拟重现赛",
-                "Enter": "进入",
+                "Virtual participation »": "参加虚拟重现赛 »",
+                "Enter »": "进入 »",
                 "Current standings": "当前榜单",
                 "Final standings": "最终榜单",
                 "Preliminary results": "初步结果",
@@ -63,7 +63,11 @@
                 "Memory": "内存",
                 "Author": "提交者",
                 "Sent": "提交时间",
-                "Judged": "判题时间"
+                "Judged": "判题时间",
+                "Name": "比赛名称",
+                "Writers": "编写者",
+                "Start": "开始时间",
+                "Length": "持续时长"
             }
         },
         ".problems": {
@@ -209,6 +213,18 @@
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一种特殊类型的训练比赛，由过去Codeforces比赛的公开问题组成。还可以添加",
                 "problems to mashup contest.": "问题到混搭比赛。",
                 "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "这样的比赛不能公开，只用于个人训练目的。还可以将混搭添加到团体中。要指定有关混搭比赛的其他信息，请使用训练营比赛编辑表单。"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "比赛名称",
+                "Time": "开始时间",
+                "Enter »": "进入 »"
             }
         },
         ".reset-status-filter": {
