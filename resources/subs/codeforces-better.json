@@ -227,6 +227,18 @@
                 "Enter »": "进入 »"
             }
         },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "提交时间",
+                "Verdict": "判题状态"
+            }
+        },
         ".reset-status-filter": {
             "class": [
                 ".reset-status-filter"
