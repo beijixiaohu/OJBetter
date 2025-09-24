@@ -65,9 +65,9 @@
                 "Sent": "提出時期",
                 "Judged": "質問時間",
                 "Name": "大会名",
-                "Writers": "编写者",
+                "Writers": "著者",
                 "Start": "開始時間",
-                "Length": "持续时长"
+                "Length": "存続期間"
             }
         },
         ".problems": {
@@ -78,11 +78,11 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "进入": "Enter",
-                "题目描述": "Statements",
-                "训练": "Trainings",
-                "问题集": "Problems",
-                "榜单": "Standings"
+                "进入": "入る",
+                "题目描述": "ステートメント",
+                "训练": "トレーニング",
+                "问题集": "問題点",
+                "榜单": "順位"
             }
         },
         ".menu-list.main-menu-list": {
@@ -99,7 +99,7 @@
                 "Gym": "トレーニングキャンプ",
                 "Problemset": "問題集",
                 "Groups": "組織",
-                "Rating": "排行榜",
+                "Rating": "ヒットチャート",
                 "Edu": "耕す",
                 "Calendar": "カレンダー",
                 "ICPC Challenge": "ICPCの挑戦",
@@ -174,7 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Rating": "等级分",
+                "Rating": "グレード",
                 "Contribution": "捧げる"
             }
         },
@@ -197,10 +197,10 @@
             "rules": {
                 "Register now": "今すぐ登録",
                 "No tag edit access": "タグ編集権限がありません",
-                "Problem:": "问题:",
-                "Verdict:": "判题状态:",
+                "Problem:": "質問だ。",
+                "Verdict:": "判定状況",
                 "Language:": "言語:",
-                "Test:": "测试点数量:",
+                "Test:": "テストポイントの数。",
                 "Participant": "参加者",
                 "Choose file:": "ファイルを選択:",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "公式戦終了後、試合の問題を解決したいですか？ログインするかアカウントを登録するだけで、コードを送信できます。",
@@ -235,7 +235,7 @@
             "isStrict": false,
             "rules": {
                 "User": "利用者ID",
-                "Rating": "等级分",
+                "Rating": "グレード",
                 "Contrib.": "捧げる"
             }
         },
@@ -258,8 +258,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Status filter is used, click ": "状态筛选已启用，点击",
-                "here": "此处",
+                "Status filter is used, click ": "ステータスのフィルタリングが有効になっている場合は",
+                "here": "こちら",
                 " to reset ": "リビジョン"
             }
         },
@@ -430,7 +430,7 @@
             "rules": {
                 "Enter": "サインイン",
                 "Register": "在籍",
-                "Contest rating": "等级分",
+                "Contest rating": "グレード",
                 "Logout": "ログアウト"
             }
         },
@@ -442,9 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "写真の差し替え",
-                "Contest rating": "等级分",
+                "Contest rating": "グレード",
                 "Contribution": "捧げる",
-                "Friend of": "粉丝",
+                "Friend of": "中国春雨",
                 "My friends": "親友だよ。",
                 "Change settings": "設定の変更",
                 "Last visit": "ラストアクセス",
@@ -520,8 +520,8 @@
             "rules": {
                 "Contest type:": "競技の種類：",
                 "Rated:": "定格：",
-                "Tried:": "已尝试：",
-                "Substring:": "关键字："
+                "Tried:": "：",
+                "Substring:": "キーワード："
             }
         },
         ".shiftUp": {
@@ -593,7 +593,7 @@
                 "Last unsolved": "前回未解決",
                 "Attention": "銘記する",
                 "Past contests filter": "過去のマッチング",
-                "Recent virt. contests": "过去的虚拟参赛",
+                "Recent virt. contests": "過去のバーチャル・エントリー",
                 "About Contest": "コンペティションについて",
                 "Last submissions": "投稿履歴",
                 "Streams": "インターネット直接放送",
@@ -941,7 +941,7 @@
                 "Default order": "デフォルトオーダー",
                 "Submission time": "提出時期",
                 "Judging Time": "質問時間",
-                "Solution Size": "代码长度",
+                "Solution Size": "コードの長さ",
                 "Execution Time": "実行時間"
             }
         },
