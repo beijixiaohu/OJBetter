@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "參加虛擬重現賽",
-                "Enter": "進入",
+                "Virtual participation »": "参加虚拟重现赛 »",
+                "Enter »": "进入 »",
                 "Current standings": "目前榜單",
                 "Final standings": "最終榜單",
                 "Preliminary results": "初步結果",
@@ -43,19 +43,46 @@
                 "Contest status": "比賽狀態",
                 "Invited users": "邀請的用戶",
                 "Invitation links": "邀請連結",
-                "API keys": "API金鑰",
+                "API keys": "API金鑰"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "提交時間",
                 "Who": "提交者",
                 "Problem": "問題",
                 "Lang": "語言",
-                "Verdict": "判題狀態",
+                "Verdict": "判题状态",
                 "Time": "時間",
                 "Memory": "运行内存",
-                "时间 limit exceeded": "超過時間限制",
-                "内存 limit exceeded": "超過內存限制",
                 "Author": "提交者",
                 "Sent": "提交時間",
-                "Judged": "判題時間"
+                "Judged": "判題時間",
+                "Name": "比賽名稱",
+                "Writers": "编写者",
+                "Start": "開始時間",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +99,7 @@
                 "Gym": "訓練營",
                 "Problemset": "題庫",
                 "Groups": "團體",
-                "Rating": "Rating排行榜",
+                "Rating": "排行榜",
                 "Edu": "訓練",
                 "Calendar": "日曆",
                 "ICPC Challenge": "ICPC挑戰賽",
@@ -89,9 +116,10 @@
                 "Settings": "設定",
                 "Blog": "部落格",
                 "Teams": "隊伍",
-                "Submissions": "提交",
+                "Submissions": "提交記錄",
                 "Favourites": "收藏",
-                "Problemsetting": "問題設定",
+                "Problemsetting": "參與編寫的問題",
+                "Groups": "團體",
                 "Talks": "私訊",
                 "Contests": "比賽"
             }
@@ -146,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "貢獻"
             }
         },
@@ -168,11 +197,10 @@
             "rules": {
                 "Register now": "現在報名",
                 "No tag edit access": "沒有標籤編輯權限",
-                "Problem([\\s]*)$": "問題",
-                "Submission": "提交編號",
-                "Time": "時間",
-                "Verdict": "判題狀態",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "語言:",
+                "Test:": "测试点数量:",
                 "Participant": "參賽者",
                 "Choose file:": "選擇檔案:",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
@@ -184,8 +212,55 @@
                 "You can clone this contest to a mashup.": "您可以將此比賽克隆到混搭比賽中。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一種特殊類型的訓練比賽，由過去Codeforces比賽的公開問題組成。還可以添加",
                 "problems to mashup contest.": "問題到混搭比賽。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。",
-                "时间 limit exceeded": "超過時間限制"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "比賽名稱",
+                "Time": "開始時間",
+                "Enter »": "进入 »"
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "使用者名稱",
+                "Rating": "等级分",
+                "Contrib.": "貢獻"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "提交時間",
+                "Verdict": "判题状态"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "重置"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +430,7 @@
             "rules": {
                 "Enter": "登入",
                 "Register": "註冊",
-                "Contest rating": "比賽rating",
+                "Contest rating": "等级分",
                 "Logout": "登出登入"
             }
         },
@@ -367,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "更換圖片",
-                "Contest rating": "比賽Rating",
+                "Contest rating": "等级分",
                 "Contribution": "貢獻",
+                "Friend of": "粉丝",
                 "My friends": "我的好友",
                 "Change settings": "改變設定",
                 "Last visit": "最後訪問",
@@ -444,8 +520,8 @@
             "rules": {
                 "Contest type:": "比賽類型：",
                 "Rated:": "已評級：",
-                "Tried:": "已嘗試",
-                "Substring:": "關鍵字"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
             }
         },
         ".shiftUp": {
@@ -517,6 +593,7 @@
                 "Last unsolved": "上次未解決",
                 "Attention": "注意",
                 "Past contests filter": "過去的比賽篩選",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "關於比賽",
                 "Last submissions": "提交歷史",
                 "Streams": "直播",
@@ -864,7 +941,7 @@
                 "Default order": "預設順序",
                 "Submission time": "提交時間",
                 "Judging Time": "判題時間",
-                "Solution Size": "解答大小",
+                "Solution Size": "代码长度",
                 "Execution Time": "執行時間"
             }
         },
@@ -1012,16 +1089,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
