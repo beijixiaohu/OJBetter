@@ -65,9 +65,9 @@
                 "Sent": "제출 시간",
                 "Judged": "질문 시간",
                 "Name": "대회 이름",
-                "Writers": "编写者",
+                "Writers": "작성자",
                 "Start": "시작 시간",
-                "Length": "持续时长"
+                "Length": "기간"
             }
         },
         ".problems": {
@@ -78,11 +78,11 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "进入": "Enter",
-                "题目描述": "Statements",
-                "训练": "Trainings",
-                "问题集": "Problems",
-                "榜单": "Standings"
+                "进入": "입력",
+                "题目描述": "진술서",
+                "训练": "교육",
+                "问题集": "문제",
+                "榜单": "순위"
             }
         },
         ".menu-list.main-menu-list": {
@@ -99,7 +99,7 @@
                 "Gym": "연습",
                 "Problemset": "문제",
                 "Groups": "그룹",
-                "Rating": "排行榜",
+                "Rating": "차트(베스트셀러)",
                 "Edu": "교육",
                 "Calendar": "캘린더",
                 "ICPC Challenge": "ICPC 챌린지",
@@ -174,7 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Rating": "等级分",
+                "Rating": "학년",
                 "Contribution": "헌신"
             }
         },
@@ -197,10 +197,10 @@
             "rules": {
                 "Register now": "지금 등록하기",
                 "No tag edit access": "태그 편집 권한 없음",
-                "Problem:": "问题:",
-                "Verdict:": "判题状态:",
+                "Problem:": "질문.",
+                "Verdict:": "판단 상태.",
                 "Language:": "언어.",
-                "Test:": "测试点数量:",
+                "Test:": "테스트 포인트 수입니다.",
                 "Participant": "참가자",
                 "Choose file:": "파일을 선택합니다.",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "공식 경기가 끝난 후 경기 문제를 해결하고 싶으신가요? 로그인하거나 계정을 등록하면 코드를 제출할 수 있습니다.",
@@ -235,7 +235,7 @@
             "isStrict": false,
             "rules": {
                 "User": "사용자 ID",
-                "Rating": "等级分",
+                "Rating": "학년",
                 "Contrib.": "헌신"
             }
         },
@@ -258,8 +258,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Status filter is used, click ": "状态筛选已启用，点击",
-                "here": "此处",
+                "Status filter is used, click ": "상태 필터링이 활성화된 경우",
+                "here": "여기(문학)",
                 " to reset ": "재프로비저닝"
             }
         },
@@ -430,7 +430,7 @@
             "rules": {
                 "Enter": "로그인",
                 "Register": "등록",
-                "Contest rating": "等级分",
+                "Contest rating": "학년",
                 "Logout": "로그아웃"
             }
         },
@@ -442,9 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "사진 교체",
-                "Contest rating": "等级分",
+                "Contest rating": "학년",
                 "Contribution": "헌신",
-                "Friend of": "粉丝",
+                "Friend of": "중국 당면",
                 "My friends": "내 가장 친한 친구.",
                 "Change settings": "설정 변경",
                 "Last visit": "마지막 액세스",
@@ -520,8 +520,8 @@
             "rules": {
                 "Contest type:": "대회 유형：",
                 "Rated:": "평가：",
-                "Tried:": "已尝试：",
-                "Substring:": "关键字："
+                "Tried:": "시도：",
+                "Substring:": "키워드："
             }
         },
         ".shiftUp": {
@@ -593,7 +593,7 @@
                 "Last unsolved": "지난번에 해결되지 않음",
                 "Attention": "다음 사항에 유의하세요.",
                 "Past contests filter": "지난 경기 심사",
-                "Recent virt. contests": "过去的虚拟参赛",
+                "Recent virt. contests": "과거 가상 항목",
                 "About Contest": "대회 정보",
                 "Last submissions": "제출 기록",
                 "Streams": "직접 인터넷 방송",
@@ -941,7 +941,7 @@
                 "Default order": "기본 주문",
                 "Submission time": "제출 시간",
                 "Judging Time": "질문 시간",
-                "Solution Size": "代码长度",
+                "Solution Size": "코드 길이",
                 "Execution Time": "실행 시간"
             }
         },
