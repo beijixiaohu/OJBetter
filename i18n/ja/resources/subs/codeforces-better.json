@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "バーチャル再現トーナメントに参加する",
-                "Enter": "入る",
+                "Virtual participation »": "バーチャル再現トーナメントに参加 \"",
+                "Enter »": "詳細 \"",
                 "Current standings": "現在のリスト",
                 "Final standings": "最終リスト",
                 "Preliminary results": "速報結果",
@@ -43,19 +43,46 @@
                 "Contest status": "ゲームステート",
                 "Invited users": "招待ユーザー",
                 "Invitation links": "招待リンク",
-                "API keys": "APIキー",
+                "API keys": "APIキー"
+            }
+        },
+        ".first-row": {
+            "class": [
+                "一行目",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "提出時期",
                 "Who": "投稿者",
                 "Problem": "課題",
                 "Lang": "多言語主義",
-                "Verdict": "タクティクス",
+                "Verdict": "裁定状況",
                 "Time": "回",
                 "Memory": "ランニングメモリー",
-                "时间 limit exceeded": "制限時間超過",
-                "内存 limit exceeded": "メモリの上限を超えた",
                 "Author": "投稿者",
                 "Sent": "提出時期",
-                "Judged": "質問時間"
+                "Judged": "質問時間",
+                "Name": "大会名",
+                "Writers": "编写者",
+                "Start": "開始時間",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +99,7 @@
                 "Gym": "トレーニングキャンプ",
                 "Problemset": "問題集",
                 "Groups": "組織",
-                "Rating": "評価",
+                "Rating": "排行榜",
                 "Edu": "耕す",
                 "Calendar": "カレンダー",
                 "ICPC Challenge": "ICPCの挑戦",
@@ -89,9 +116,10 @@
                 "Settings": "セットアップ",
                 "Blog": "ブログ",
                 "Teams": "キュー",
-                "Submissions": "だす",
+                "Submissions": "記録の提出",
                 "Favourites": "ブックマーク",
-                "Problemsetting": "問題設定",
+                "Problemsetting": "問題作成への参加",
+                "Groups": "組織",
                 "Talks": "ししょ",
                 "Contests": "競技"
             }
@@ -146,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "捧げる"
             }
         },
@@ -168,11 +197,10 @@
             "rules": {
                 "Register now": "今すぐ登録",
                 "No tag edit access": "タグ編集権限がありません",
-                "Problem([\\s]*)$": "課題",
-                "Submission": "提出番号",
-                "Time": "回",
-                "Verdict": "タクティクス",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "言語:",
+                "Test:": "测试点数量:",
                 "Participant": "参加者",
                 "Choose file:": "ファイルを選択:",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "公式戦終了後、試合の問題を解決したいですか？ログインするかアカウントを登録するだけで、コードを送信できます。",
@@ -184,8 +212,55 @@
                 "You can clone this contest to a mashup.": "この試合をマッシュアップ試合に複製できます。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "マッシュアップとは、過去のCodeforcesコンテストで出題された問題を集めた特別なトレーニングコンテストのことです。また",
                 "problems to mashup contest.": "マッシュアップコンテストへの質問。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "このような大会は公開されることはなく、個人的なトレーニング目的にのみ使用されます。マッシュアップはグループに追加することもできます。マッシュアップコンテストに関する追加情報を指定するには、トレーニングキャンプコンテスト編集フォームを使用してください。",
-                "时间 limit exceeded": "制限時間超過"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "このような大会は公開されることはなく、個人的なトレーニング目的にのみ使用されます。マッシュアップはグループに追加することもできます。マッシュアップコンテストに関する追加情報を指定するには、トレーニングキャンプコンテスト編集フォームを使用してください。"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "大会名",
+                "Time": "開始時間",
+                "Enter »": "詳細 \""
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "利用者ID",
+                "Rating": "等级分",
+                "Contrib.": "捧げる"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "提出時期",
+                "Verdict": "裁定状況"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "リビジョン"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +430,7 @@
             "rules": {
                 "Enter": "サインイン",
                 "Register": "在籍",
-                "Contest rating": "レース評価",
+                "Contest rating": "等级分",
                 "Logout": "ログアウト"
             }
         },
@@ -367,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "写真の差し替え",
-                "Contest rating": "レース",
+                "Contest rating": "等级分",
                 "Contribution": "捧げる",
+                "Friend of": "粉丝",
                 "My friends": "親友だよ。",
                 "Change settings": "設定の変更",
                 "Last visit": "ラストアクセス",
@@ -444,8 +520,8 @@
             "rules": {
                 "Contest type:": "競技の種類：",
                 "Rated:": "定格：",
-                "Tried:": "未遂",
-                "Substring:": "キーワード"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
             }
         },
         ".shiftUp": {
@@ -517,6 +593,7 @@
                 "Last unsolved": "前回未解決",
                 "Attention": "銘記する",
                 "Past contests filter": "過去のマッチング",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "コンペティションについて",
                 "Last submissions": "投稿履歴",
                 "Streams": "インターネット直接放送",
@@ -864,7 +941,7 @@
                 "Default order": "デフォルトオーダー",
                 "Submission time": "提出時期",
                 "Judging Time": "質問時間",
-                "Solution Size": "ソリューションサイズ",
+                "Solution Size": "代码长度",
                 "Execution Time": "実行時間"
             }
         },
@@ -1012,16 +1089,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
