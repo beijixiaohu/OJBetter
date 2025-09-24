@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "एक आभासी पुनर्मूल्यांकन प्रतियोगिता में भाग लें",
-                "Enter": "प्रवेश करना",
+                "Virtual participation »": "参加虚拟重现赛 »",
+                "Enter »": "进入 »",
                 "Current standings": "वर्तमान सूची",
                 "Final standings": "अंतिम सूची",
                 "Preliminary results": "प्रारंभिक परिणाम",
@@ -43,19 +43,46 @@
                 "Contest status": "खेल की स्थिति",
                 "Invited users": "उपयोगकर्ताओं को आमंत्रित किया गया",
                 "Invitation links": "आमंत्रण लिंक",
-                "API keys": "एपीआई कुंजी",
+                "API keys": "एपीआई कुंजी"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "सबमिशन का समय",
                 "Who": "提交者",
                 "Problem": "सवाल",
                 "Lang": "भाषा",
-                "Verdict": "फैसले की स्थिति",
+                "Verdict": "判题状态",
                 "Time": "समय",
                 "Memory": "运行内存",
-                "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded",
                 "Author": "提交者",
                 "Sent": "सबमिशन का समय",
-                "Judged": "निर्णय करने का समय"
+                "Judged": "निर्णय करने का समय",
+                "Name": "प्रतियोगिता का नाम",
+                "Writers": "编写者",
+                "Start": "प्रारम्भ का समय",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -72,7 +99,7 @@
                 "Gym": "प्रशिक्षण शिविर",
                 "Problemset": "题库",
                 "Groups": "समूह",
-                "Rating": "Rating排行榜",
+                "Rating": "排行榜",
                 "Edu": "प्रशिक्षण",
                 "Calendar": "पंचांग",
                 "ICPC Challenge": "आईसीपीसी चुनौती",
@@ -89,9 +116,10 @@
                 "Settings": "स्थापित करना",
                 "Blog": "ब्लॉग",
                 "Teams": "टीम",
-                "Submissions": "जमा करना",
+                "Submissions": "रिकॉर्ड जमा करें",
                 "Favourites": "इकट्ठा करना",
-                "Problemsetting": "प्रश्न सेटिंग",
+                "Problemsetting": "लेखन मुद्दों में भाग लें",
+                "Groups": "समूह",
                 "Talks": "निजी पत्र",
                 "Contests": "प्रतियोगिता"
             }
@@ -146,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "योगदान देना"
             }
         },
@@ -168,11 +197,10 @@
             "rules": {
                 "Register now": "अभी साइनअप करें",
                 "No tag edit access": "कोई टैग संपादन अनुमति नहीं",
-                "Problem([\\s]*)$": "सवाल",
-                "Submission": "提交编号",
-                "Time": "समय",
-                "Verdict": "फैसले की स्थिति",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "भाषा:",
+                "Test:": "测试点数量:",
                 "Participant": "प्रतियोगियों",
                 "Choose file:": "एक दस्तावेज़ चुनें:",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
@@ -184,8 +212,55 @@
                 "You can clone this contest to a mashup.": "आप इस मैच को मैशअप मैच में क्लोन कर सकते हैं।",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "मैशअप एक विशेष प्रकार की प्रशिक्षण प्रतियोगिता है जिसमें पिछले कोडफोर्स प्रतियोगिताओं के खुले प्रश्न शामिल होते हैं। आप भी जोड़ सकते हैं",
                 "problems to mashup contest.": "मिक्स मैच के लिए प्रश्न.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "ऐसी प्रतियोगिताओं को सार्वजनिक नहीं किया जा सकता है और इनका उपयोग केवल व्यक्तिगत प्रशिक्षण उद्देश्यों के लिए किया जाता है। मिक्स-एंड-मैच को भी समूहों में जोड़ा जा सकता है। मैशअप मैच के बारे में अतिरिक्त जानकारी निर्दिष्ट करने के लिए, कैंप मैच संपादन फॉर्म का उपयोग करें।",
-                "时间 limit exceeded": "Time limit exceeded"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "ऐसी प्रतियोगिताओं को सार्वजनिक नहीं किया जा सकता है और इनका उपयोग केवल व्यक्तिगत प्रशिक्षण उद्देश्यों के लिए किया जाता है। मिक्स-एंड-मैच को भी समूहों में जोड़ा जा सकता है। मैशअप मैच के बारे में अतिरिक्त जानकारी निर्दिष्ट करने के लिए, कैंप मैच संपादन फॉर्म का उपयोग करें।"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "प्रतियोगिता का नाम",
+                "Time": "प्रारम्भ का समय",
+                "Enter »": "进入 »"
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "उपयोगकर्ता नाम",
+                "Rating": "等级分",
+                "Contrib.": "योगदान देना"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "सबमिशन का समय",
+                "Verdict": "判题状态"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "रीसेट"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -355,7 +430,7 @@
             "rules": {
                 "Enter": "लॉग इन करें",
                 "Register": "पंजीकरण करवाना",
-                "Contest rating": "比赛rating",
+                "Contest rating": "等级分",
                 "Logout": "साइन आउट"
             }
         },
@@ -367,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "चित्र बदलें",
-                "Contest rating": "प्रतिस्पर्धा रेटिंग",
+                "Contest rating": "等级分",
                 "Contribution": "योगदान देना",
+                "Friend of": "粉丝",
                 "My friends": "मेरी अच्छी दोस्त",
                 "Change settings": "सेटिंग्स परिवर्तित करना",
                 "Last visit": "अंतिम बार दौरा किया",
@@ -444,8 +520,8 @@
             "rules": {
                 "Contest type:": "खेल प्रकार：",
                 "Rated:": "रेटेड：",
-                "Tried:": "कोशिश की",
-                "Substring:": "कीवर्ड"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
             }
         },
         ".shiftUp": {
@@ -517,6 +593,7 @@
                 "Last unsolved": "पिछली बार अनसुलझा",
                 "Attention": "सूचना",
                 "Past contests filter": "पिछले खेलों के आधार पर फ़िल्टर करें",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "प्रतियोगिता के बारे में",
                 "Last submissions": "इतिहास प्रतिबद्ध करें",
                 "Streams": "सीधा आ रहा है",
@@ -864,7 +941,7 @@
                 "Default order": "डिफ़ॉल्ट आदेश",
                 "Submission time": "सबमिशन का समय",
                 "Judging Time": "निर्णय करने का समय",
-                "Solution Size": "समाधान का आकार",
+                "Solution Size": "代码长度",
                 "Execution Time": "निष्पादन समय"
             }
         },
@@ -1012,16 +1089,3 @@
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
