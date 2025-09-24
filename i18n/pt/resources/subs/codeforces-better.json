@@ -65,9 +65,9 @@
                 "Sent": "Hora da apresentação",
                 "Judged": "Período de perguntas",
                 "Name": "Nome do concurso",
-                "Writers": "编写者",
+                "Writers": "autor",
                 "Start": "Hora de início",
-                "Length": "持续时长"
+                "Length": "duração"
             }
         },
         ".problems": {
@@ -78,11 +78,11 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "进入": "Enter",
-                "题目描述": "Statements",
-                "训练": "Trainings",
-                "问题集": "Problems",
-                "榜单": "Standings"
+                "进入": "Entrar",
+                "题目描述": "Declarações",
+                "训练": "Formações",
+                "问题集": "Problemas",
+                "榜单": "Classificação"
             }
         },
         ".menu-list.main-menu-list": {
@@ -99,7 +99,7 @@
                 "Gym": "campo de treino",
                 "Problemset": "banco de perguntas",
                 "Groups": "organizações",
-                "Rating": "排行榜",
+                "Rating": "as tabelas (de best-sellers)",
                 "Edu": "cultivar",
                 "Calendar": "calendário",
                 "ICPC Challenge": "Desafio ICPC",
@@ -174,7 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Rating": "等级分",
+                "Rating": "grau",
                 "Contribution": "dedicar"
             }
         },
@@ -197,10 +197,10 @@
             "rules": {
                 "Register now": "Inscreva-se agora",
                 "No tag edit access": "Não tem privilégios de edição de etiquetas",
-                "Problem:": "问题:",
-                "Verdict:": "判题状态:",
+                "Problem:": "Pergunta.",
+                "Verdict:": "Estado do acórdão.",
                 "Language:": "Línguas.",
-                "Test:": "测试点数量:",
+                "Test:": "Número de pontos de ensaio.",
                 "Participant": "concorrentes",
                 "Choose file:": "Seleccione o ficheiro.",
                 "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "Quer resolver um problema de jogo depois de o jogo oficial ter terminado? Basta iniciar sessão ou registar uma conta e pode enviar um código.",
@@ -235,7 +235,7 @@
             "isStrict": false,
             "rules": {
                 "User": "ID do utilizador",
-                "Rating": "等级分",
+                "Rating": "grau",
                 "Contrib.": "dedicar"
             }
         },
@@ -258,8 +258,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Status filter is used, click ": "状态筛选已启用，点击",
-                "here": "此处",
+                "Status filter is used, click ": "A filtragem de estado está activada, clique em",
+                "here": "aqui (literário)",
                 " to reset ": "reprovisão"
             }
         },
@@ -430,7 +430,7 @@
             "rules": {
                 "Enter": "inicie sessão",
                 "Register": "inscrição",
-                "Contest rating": "等级分",
+                "Contest rating": "grau",
                 "Logout": "Termine a sessão"
             }
         },
@@ -442,9 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "Substituição de imagens",
-                "Contest rating": "等级分",
+                "Contest rating": "grau",
                 "Contribution": "dedicar",
-                "Friend of": "粉丝",
+                "Friend of": "Aletria chinesa",
                 "My friends": "O meu melhor amigo.",
                 "Change settings": "Alterar definições",
                 "Last visit": "último acesso",
@@ -520,8 +520,8 @@
             "rules": {
                 "Contest type:": "Tipo de concurso：",
                 "Rated:": "Classificado：",
-                "Tried:": "已尝试：",
-                "Substring:": "关键字："
+                "Tried:": "Experimentado：",
+                "Substring:": "Palavras-chave："
             }
         },
         ".shiftUp": {
@@ -593,7 +593,7 @@
                 "Last unsolved": "Não resolvido da última vez",
                 "Attention": "tome nota de",
                 "Past contests filter": "Seleção de jogos anteriores",
-                "Recent virt. contests": "过去的虚拟参赛",
+                "Recent virt. contests": "Entradas virtuais anteriores",
                 "About Contest": "Sobre o concurso",
                 "Last submissions": "Histórico de submissão",
                 "Streams": "transmissão em direto (não gravada)",
@@ -941,7 +941,7 @@
                 "Default order": "Ordem por defeito",
                 "Submission time": "Hora da apresentação",
                 "Judging Time": "Período de perguntas",
-                "Solution Size": "代码长度",
+                "Solution Size": "Comprimento do código",
                 "Execution Time": "tempo de execução"
             }
         },
