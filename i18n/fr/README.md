@@ -14,8 +14,8 @@ Améliorer l'interface du site web et l'interaction avec les utilisateurs en ajo
 
 | scripts             | Télécharger                                                                                                                                                                                                         | Téléchargement de la version bêta                                                                                                                                                                                                                                                                |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Codeforces Meilleur | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/) main/script/release/codeforces-better.user.js) | \| \\| [GitHub] (https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \| |
-| AtCoder Mieux       | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main) /script/release/atcoder-better.user.js)       | \| \\| [GitHub] (https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \| |
+| Codeforces Meilleur | [GreasyFork](https://greasyfork.org/zh-CN/scripts/465777-codeforces-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/) main/script/release/codeforces-better.user.js) | \| [GitHub] (https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/codeforces-better.user.js) \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\| \| |
+| AtCoder Mieux       | [GreasyFork](https://greasyfork.org/zh-CN/scripts/471106-atcoder-better) / [GitHub](https://github.com/beijixiaohu/OJBetter/raw/main) /script/release/atcoder-better.user.js)       | \| [GitHub] (https\://github.com/beijixiaohu/OJBetter/raw/main/script/dev/atcoder-better.user.js)    \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\| \| |
 
 ## fonction des touches
 
@@ -37,7 +37,7 @@ Pour le script d'installation, vous pouvez obtenir：
 
 ## Utilisation des documents
 
-Pour des informations et des instructions plus détaillées, **visiter la [page Wiki] (https\://github.com/beijixiaohu/OJBetter/wiki).**\*\*\*\*\*\*\*\*\*\*\*\*\\\\\| \\\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|
+Pour des informations et des instructions plus détaillées, **visiter la [page Wiki] (https\://github.com/beijixiaohu/OJBetter/wiki).**\*\*\*\*\*\*\*\*\*\*\*\*\\\\\| \\\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|\|
 
 ## Comment contribuer
 

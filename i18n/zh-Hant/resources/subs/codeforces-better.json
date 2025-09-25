@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "參加虛擬重現賽",
-                "Enter": "進入",
+                "Virtual participation »": "参加虚拟重现赛 »",
+                "Enter »": "进入 »",
                 "Current standings": "目前榜單",
                 "Final standings": "最終榜單",
                 "Preliminary results": "初步結果",
@@ -43,16 +43,46 @@
                 "Contest status": "比賽狀態",
                 "Invited users": "邀請的用戶",
                 "Invitation links": "邀請連結",
-                "API keys": "API金鑰",
+                "API keys": "API金鑰"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "提交時間",
                 "Who": "提交者",
                 "Problem": "問題",
                 "Lang": "語言",
-                "Verdict": "判題狀態",
+                "Verdict": "判题状态",
                 "Time": "時間",
                 "Memory": "运行内存",
-                "时间 limit exceeded": "超過時間限制",
-                "内存 limit exceeded": "超過內存限制"
+                "Author": "提交者",
+                "Sent": "提交時間",
+                "Judged": "判題時間",
+                "Name": "比賽名稱",
+                "Writers": "编写者",
+                "Start": "開始時間",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -69,7 +99,7 @@
                 "Gym": "訓練營",
                 "Problemset": "題庫",
                 "Groups": "團體",
-                "Rating": "Rating排行榜",
+                "Rating": "排行榜",
                 "Edu": "訓練",
                 "Calendar": "日曆",
                 "ICPC Challenge": "ICPC挑戰賽",
@@ -86,9 +116,10 @@
                 "Settings": "設定",
                 "Blog": "部落格",
                 "Teams": "隊伍",
-                "Submissions": "提交",
+                "Submissions": "提交記錄",
                 "Favourites": "收藏",
-                "Problemsetting": "問題設定",
+                "Problemsetting": "參與編寫的問題",
+                "Groups": "團體",
                 "Talks": "私訊",
                 "Contests": "比賽"
             }
@@ -143,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "貢獻"
             }
         },
@@ -165,13 +197,13 @@
             "rules": {
                 "Register now": "現在報名",
                 "No tag edit access": "沒有標籤編輯權限",
-                "Problem([\\s]*)$": "問題",
-                "Submission": "提交編號",
-                "Time": "時間",
-                "Verdict": "判題狀態",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "語言:",
+                "Test:": "测试点数量:",
                 "Participant": "參賽者",
                 "Choose file:": "選擇檔案:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "這個題目的資料包未在我們升級評測伺服器後由出題人或Codeforces管理團隊更新。為了調整時間限制的約束，一個解答的執行時間將會被乘以2。例如，如果你的解答在評測伺服器上運行了400毫秒，那麼將顯示並使用800毫秒的值來確定結果。",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "虛擬比賽是一種參加過去比賽的方式，盡可能接近即時參賽。目前只支援ICPC模式的虛擬賽事。",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "如果你已經看過這些題目，虛擬賽事就不適合你──應該在題庫中解決這些題目。",
@@ -180,8 +212,55 @@
                 "You can clone this contest to a mashup.": "您可以將此比賽克隆到混搭比賽中。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "混搭是一種特殊類型的訓練比賽，由過去Codeforces比賽的公開問題組成。還可以添加",
                 "problems to mashup contest.": "問題到混搭比賽。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。",
-                "时间 limit exceeded": "超過時間限制"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "這樣的比賽不能公開，只用於個人訓練目的。也可以將混搭添加到團體中。要指定有關混搭比賽的其他信息，請使用訓練營比賽編輯表單。"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "比賽名稱",
+                "Time": "開始時間",
+                "Enter »": "进入 »"
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "使用者名稱",
+                "Rating": "等级分",
+                "Contrib.": "貢獻"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "提交時間",
+                "Verdict": "判题状态"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "重置"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -336,10 +415,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "上一輪的評級變化暫時回滾。它們將很快恢復。",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "提醒：如果出現任何技術問題，您可以使用輕量網站",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "請透過連結訂閱Codeforces的官方Telegram頻道",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "在提交C++解答時，請選擇C++14（GCC 6-32）或C++17（GCC 7-32）作為您的編譯器。",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "感謝您對Codeforces的關注。您已成功註冊。",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "現在您需要確認您的電子郵件。一封信已發送到您的電子郵件，請按照指示完成註冊。",
-                "If for any reason the letter did not come, it can be sent again": "如果因任何原因信件未到達，可以再次發送"
+                "If for any reason the letter did not come, it can be sent again": "如果因任何原因信件未到達，可以再次發送",
+                "The user is disabled.": "该用户已被封禁。"
             }
         },
         ".lang-chooser": {
@@ -351,7 +430,7 @@
             "rules": {
                 "Enter": "登入",
                 "Register": "註冊",
-                "Contest rating": "比賽rating",
+                "Contest rating": "等级分",
                 "Logout": "登出登入"
             }
         },
@@ -363,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "更換圖片",
-                "Contest rating": "比賽Rating",
+                "Contest rating": "等级分",
                 "Contribution": "貢獻",
+                "Friend of": "粉丝",
                 "My friends": "我的好友",
                 "Change settings": "改變設定",
                 "Last visit": "最後訪問",
@@ -440,8 +520,18 @@
             "rules": {
                 "Contest type:": "比賽類型：",
                 "Rated:": "已評級：",
-                "Tried:": "已嘗試",
-                "Substring:": "關鍵字"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "在比赛标题与编写者中搜索"
             }
         },
         ".by-form": {
@@ -503,6 +593,7 @@
                 "Last unsolved": "上次未解決",
                 "Attention": "注意",
                 "Past contests filter": "過去的比賽篩選",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "關於比賽",
                 "Last submissions": "提交歷史",
                 "Streams": "直播",
@@ -837,7 +928,7 @@
             "description": "榜單頁右上角的小提示",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以雙擊單元格（或按住Ctrl並點擊）來查看提交歷史記錄或對解決方案進行攻擊。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
             }
         },
         "choose-order": {
@@ -850,7 +941,7 @@
                 "Default order": "預設順序",
                 "Submission time": "提交時間",
                 "Judging Time": "判題時間",
-                "Solution Size": "解答大小",
+                "Solution Size": "代码长度",
                 "Execution Time": "執行時間"
             }
         },
@@ -904,6 +995,16 @@
             "rules": {
                 "Click": "點擊",
                 "to see test details": "查看測試詳情"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "允许未评级报名"
             }
         }
     },

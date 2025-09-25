@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "バーチャル再現トーナメントに参加する",
-                "Enter": "入る",
+                "Virtual participation »": "バーチャル再現トーナメントに参加 \"",
+                "Enter »": "詳細 \"",
                 "Current standings": "現在のリスト",
                 "Final standings": "最終リスト",
                 "Preliminary results": "速報結果",
@@ -43,16 +43,46 @@
                 "Contest status": "ゲームステート",
                 "Invited users": "招待ユーザー",
                 "Invitation links": "招待リンク",
-                "API keys": "APIキー",
+                "API keys": "APIキー"
+            }
+        },
+        ".first-row": {
+            "class": [
+                "一行目",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "提出時期",
                 "Who": "投稿者",
                 "Problem": "課題",
                 "Lang": "多言語主義",
-                "Verdict": "タクティクス",
+                "Verdict": "裁定状況",
                 "Time": "回",
                 "Memory": "ランニングメモリー",
-                "时间 limit exceeded": "制限時間超過",
-                "内存 limit exceeded": "メモリの上限を超えた"
+                "Author": "投稿者",
+                "Sent": "提出時期",
+                "Judged": "質問時間",
+                "Name": "大会名",
+                "Writers": "著者",
+                "Start": "開始時間",
+                "Length": "存続期間"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "入る",
+                "题目描述": "ステートメント",
+                "训练": "トレーニング",
+                "问题集": "問題点",
+                "榜单": "順位"
             }
         },
         ".menu-list.main-menu-list": {
@@ -69,7 +99,7 @@
                 "Gym": "トレーニングキャンプ",
                 "Problemset": "問題集",
                 "Groups": "組織",
-                "Rating": "評価",
+                "Rating": "ヒットチャート",
                 "Edu": "耕す",
                 "Calendar": "カレンダー",
                 "ICPC Challenge": "ICPCの挑戦",
@@ -86,9 +116,10 @@
                 "Settings": "セットアップ",
                 "Blog": "ブログ",
                 "Teams": "キュー",
-                "Submissions": "だす",
+                "Submissions": "記録の提出",
                 "Favourites": "ブックマーク",
-                "Problemsetting": "問題設定",
+                "Problemsetting": "問題作成への参加",
+                "Groups": "組織",
                 "Talks": "ししょ",
                 "Contests": "競技"
             }
@@ -143,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "グレード",
                 "Contribution": "捧げる"
             }
         },
@@ -165,13 +197,13 @@
             "rules": {
                 "Register now": "今すぐ登録",
                 "No tag edit access": "タグ編集権限がありません",
-                "Problem([\\s]*)$": "課題",
-                "Submission": "提出番号",
-                "Time": "回",
-                "Verdict": "タクティクス",
+                "Problem:": "質問だ。",
+                "Verdict:": "判定状況",
                 "Language:": "言語:",
+                "Test:": "テストポイントの数。",
                 "Participant": "参加者",
                 "Choose file:": "ファイルを選択:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "公式戦終了後、試合の問題を解決したいですか？ログインするかアカウントを登録するだけで、コードを送信できます。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "タイトルデータパケットはアップグレード後にテストサーバーを追加した後に、出題またはCodeforcess チームによって更新されていません。時間制限の制約を決定するため，回答の執行時間は 2 乗れます。例えば、問題を測る時に、問題を測るには400ms，800ミリ秒後に実行し，解かれます。",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "バーチャルゲームは、リアルタイムで参加できる古いゲームの一形態のプレイに勝っております。現在、仮想ゲームの場合は ICPC のみサポートされています。",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "あなたはこれらの問題を見たことがあるなら、仮想マシンでは問題に対処しないといけません—問題ありません。",
@@ -180,8 +212,55 @@
                 "You can clone this contest to a mashup.": "この試合をマッシュアップ試合に複製できます。",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "マッシュアップとは、過去のCodeforcesコンテストで出題された問題を集めた特別なトレーニングコンテストのことです。また",
                 "problems to mashup contest.": "マッシュアップコンテストへの質問。",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "このような大会は公開されることはなく、個人的なトレーニング目的にのみ使用されます。マッシュアップはグループに追加することもできます。マッシュアップコンテストに関する追加情報を指定するには、トレーニングキャンプコンテスト編集フォームを使用してください。",
-                "时间 limit exceeded": "制限時間超過"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "このような大会は公開されることはなく、個人的なトレーニング目的にのみ使用されます。マッシュアップはグループに追加することもできます。マッシュアップコンテストに関する追加情報を指定するには、トレーニングキャンプコンテスト編集フォームを使用してください。"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "大会名",
+                "Time": "開始時間",
+                "Enter »": "詳細 \""
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "利用者ID",
+                "Rating": "グレード",
+                "Contrib.": "捧げる"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "提出時期",
+                "Verdict": "裁定状況"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "ステータスのフィルタリングが有効になっている場合は",
+                "here": "こちら",
+                " to reset ": "リビジョン"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -336,10 +415,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "前回のレーティング変更は一時的に戻されました。まもなく元に戻ります。",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "備考：技術的な問題が発生した場合は、軽量サイトをご利用ください。",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "リンクからCodeforcesの公式テレグラムチャンネルを購読してください！",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++の回答を提出する場合は、コンパイラとしてC++14（GCC 6-32）またはC++17（GCC 7-32）を選択してください。",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "Codeforcesにご興味をお持ちいただきありがとうございます。登録が完了しました。",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "Eメールの確認が必要です。あなたのEメールに手紙が届きましたので、指示に従って登録を完了してください。",
-                "If for any reason the letter did not come, it can be sent again": "何らかの理由で手紙が届かなかった場合は、再度送ることができる。"
+                "If for any reason the letter did not come, it can be sent again": "何らかの理由で手紙が届かなかった場合は、再度送ることができる。",
+                "The user is disabled.": "このユーザーは追放されました。"
             }
         },
         ".lang-chooser": {
@@ -351,7 +430,7 @@
             "rules": {
                 "Enter": "サインイン",
                 "Register": "在籍",
-                "Contest rating": "レース評価",
+                "Contest rating": "グレード",
                 "Logout": "ログアウト"
             }
         },
@@ -363,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "写真の差し替え",
-                "Contest rating": "レース",
+                "Contest rating": "グレード",
                 "Contribution": "捧げる",
+                "Friend of": "中国春雨",
                 "My friends": "親友だよ。",
                 "Change settings": "設定の変更",
                 "Last visit": "ラストアクセス",
@@ -440,8 +520,18 @@
             "rules": {
                 "Contest type:": "競技の種類：",
                 "Rated:": "定格：",
-                "Tried:": "未遂",
-                "Substring:": "キーワード"
+                "Tried:": "：",
+                "Substring:": "キーワード："
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                "シフトアップ"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "コンテストタイトル＆ライターで検索"
             }
         },
         ".by-form": {
@@ -503,6 +593,7 @@
                 "Last unsolved": "前回未解決",
                 "Attention": "銘記する",
                 "Past contests filter": "過去のマッチング",
+                "Recent virt. contests": "過去のバーチャル・エントリー",
                 "About Contest": "コンペティションについて",
                 "Last submissions": "投稿履歴",
                 "Streams": "インターネット直接放送",
@@ -837,7 +928,7 @@
             "description": "チェックリストの右上のヒント",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "一度セルをダブルクリックするか、Ctrlを押したままクリックして提出するか、組み合わせで攻撃することができます。"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "セルをダブルクリック（またはCtrlを押しながらクリック）すると、コミット履歴を見たり、他の人のコードを攻撃したりできる。"
             }
         },
         "choose-order": {
@@ -850,7 +941,7 @@
                 "Default order": "デフォルトオーダー",
                 "Submission time": "提出時期",
                 "Judging Time": "質問時間",
-                "Solution Size": "ソリューションサイズ",
+                "Solution Size": "コードの長さ",
                 "Execution Time": "実行時間"
             }
         },
@@ -904,6 +995,16 @@
             "rules": {
                 "Click": "打込む",
                 "to see test details": "テストの詳細を見る"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "未格付け登録の許可"
             }
         }
     },

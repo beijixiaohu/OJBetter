@@ -41,7 +41,7 @@
         "running": "a prueba",
         "success": "Todos aprobados"
     },
-    "submitButton": "presentar (un informe, etc.)",
+    "submitButton": "Enviar (Ctrl+Enter)",
     "moreSettings": {
         "title": "Más ajustes",
         "tip": "Los cambios se guardan automáticamente",

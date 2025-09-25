@@ -41,7 +41,7 @@
         "running": "परिक्षण",
         "success": "सब बीत गए"
     },
-    "submitButton": "जमा करना",
+    "submitButton": "提交（Ctrl+Enter）",
     "moreSettings": {
         "title": "更多设置",
         "tip": "更改会自动保存",
