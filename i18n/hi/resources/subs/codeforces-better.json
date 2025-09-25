@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "एक आभासी पुनर्मूल्यांकन प्रतियोगिता में भाग लें",
-                "Enter": "प्रवेश करना",
+                "Virtual participation »": "参加虚拟重现赛 »",
+                "Enter »": "进入 »",
                 "Current standings": "वर्तमान सूची",
                 "Final standings": "अंतिम सूची",
                 "Preliminary results": "प्रारंभिक परिणाम",
@@ -43,16 +43,46 @@
                 "Contest status": "खेल की स्थिति",
                 "Invited users": "उपयोगकर्ताओं को आमंत्रित किया गया",
                 "Invitation links": "आमंत्रण लिंक",
-                "API keys": "एपीआई कुंजी",
+                "API keys": "एपीआई कुंजी"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "सबमिशन का समय",
                 "Who": "提交者",
                 "Problem": "सवाल",
                 "Lang": "भाषा",
-                "Verdict": "फैसले की स्थिति",
+                "Verdict": "判题状态",
                 "Time": "समय",
                 "Memory": "运行内存",
-                "时间 limit exceeded": "Time limit exceeded",
-                "内存 limit exceeded": "Memory limit exceeded"
+                "Author": "提交者",
+                "Sent": "सबमिशन का समय",
+                "Judged": "निर्णय करने का समय",
+                "Name": "प्रतियोगिता का नाम",
+                "Writers": "编写者",
+                "Start": "प्रारम्भ का समय",
+                "Length": "持续时长"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Enter",
+                "题目描述": "Statements",
+                "训练": "Trainings",
+                "问题集": "Problems",
+                "榜单": "Standings"
             }
         },
         ".menu-list.main-menu-list": {
@@ -69,7 +99,7 @@
                 "Gym": "प्रशिक्षण शिविर",
                 "Problemset": "题库",
                 "Groups": "समूह",
-                "Rating": "Rating排行榜",
+                "Rating": "排行榜",
                 "Edu": "प्रशिक्षण",
                 "Calendar": "पंचांग",
                 "ICPC Challenge": "आईसीपीसी चुनौती",
@@ -86,9 +116,10 @@
                 "Settings": "स्थापित करना",
                 "Blog": "ब्लॉग",
                 "Teams": "टीम",
-                "Submissions": "जमा करना",
+                "Submissions": "रिकॉर्ड जमा करें",
                 "Favourites": "इकट्ठा करना",
-                "Problemsetting": "प्रश्न सेटिंग",
+                "Problemsetting": "लेखन मुद्दों में भाग लें",
+                "Groups": "समूह",
                 "Talks": "निजी पत्र",
                 "Contests": "प्रतियोगिता"
             }
@@ -143,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "等级分",
                 "Contribution": "योगदान देना"
             }
         },
@@ -165,13 +197,13 @@
             "rules": {
                 "Register now": "अभी साइनअप करें",
                 "No tag edit access": "कोई टैग संपादन अनुमति नहीं",
-                "Problem([\\s]*)$": "सवाल",
-                "Submission": "提交编号",
-                "Time": "समय",
-                "Verdict": "फैसले की स्थिति",
+                "Problem:": "问题:",
+                "Verdict:": "判题状态:",
                 "Language:": "भाषा:",
+                "Test:": "测试点数量:",
                 "Participant": "प्रतियोगियों",
                 "Choose file:": "एक दस्तावेज़ चुनें:",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "想在正式比赛结束后解决比赛问题吗？只需登录或注册账号，您就可以提交代码。",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "हमारे द्वारा मूल्यांकन सर्वर को अपग्रेड करने के बाद इस प्रश्न के डेटा पैकेज को प्रश्न लेखक या कोडफोर्स प्रबंधन टीम द्वारा अपडेट नहीं किया गया है। समय-सीमित बाधाओं को समायोजित करने के लिए, समाधान के निष्पादन समय को दो से गुणा किया जाएगा। उदाहरण के लिए, यदि आपके उत्तर को समीक्षा सर्वर पर चलने में 400 मिलीसेकंड लगे, तो 800 मिलीसेकंड का मान प्रदर्शित किया जाएगा और परिणाम निर्धारित करने के लिए उपयोग किया जाएगा।",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "वर्चुअल दौड़ पिछली दौड़ में यथासंभव लाइव प्रविष्टि के करीब प्रतिस्पर्धा करने का एक तरीका है। वर्तमान में केवल ICPC मोड में वर्चुअल इवेंट समर्थित हैं।",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "यदि आपने ये प्रश्न पहले ही देख लिए हैं, तो वर्चुअल इवेंट आपके लिए नहीं है - इन प्रश्नों को प्रश्न बैंक में हल किया जाना चाहिए।",
@@ -180,8 +212,55 @@
                 "You can clone this contest to a mashup.": "आप इस मैच को मैशअप मैच में क्लोन कर सकते हैं।",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "मैशअप एक विशेष प्रकार की प्रशिक्षण प्रतियोगिता है जिसमें पिछले कोडफोर्स प्रतियोगिताओं के खुले प्रश्न शामिल होते हैं। आप भी जोड़ सकते हैं",
                 "problems to mashup contest.": "मिक्स मैच के लिए प्रश्न.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "ऐसी प्रतियोगिताओं को सार्वजनिक नहीं किया जा सकता है और इनका उपयोग केवल व्यक्तिगत प्रशिक्षण उद्देश्यों के लिए किया जाता है। मिक्स-एंड-मैच को भी समूहों में जोड़ा जा सकता है। मैशअप मैच के बारे में अतिरिक्त जानकारी निर्दिष्ट करने के लिए, कैंप मैच संपादन फॉर्म का उपयोग करें।",
-                "时间 limit exceeded": "Time limit exceeded"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "ऐसी प्रतियोगिताओं को सार्वजनिक नहीं किया जा सकता है और इनका उपयोग केवल व्यक्तिगत प्रशिक्षण उद्देश्यों के लिए किया जाता है। मिक्स-एंड-मैच को भी समूहों में जोड़ा जा सकता है। मैशअप मैच के बारे में अतिरिक्त जानकारी निर्दिष्ट करने के लिए, कैंप मैच संपादन फॉर्म का उपयोग करें।"
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.virtual-contests.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "प्रतियोगिता का नाम",
+                "Time": "प्रारम्भ का समय",
+                "Enter »": "进入 »"
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "उपयोगकर्ता नाम",
+                "Rating": "等级分",
+                "Contrib.": "योगदान देना"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "सबमिशन का समय",
+                "Verdict": "判题状态"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "状态筛选已启用，点击",
+                "here": "此处",
+                " to reset ": "रीसेट"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -336,10 +415,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "रेटिंग परिवर्तन के पिछले दौर को अस्थायी रूप से वापस ले लिया गया है। वे जल्द ही ठीक हो जायेंगे.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "अनुस्मारक：यदि कोई तकनीकी समस्या आती है, तो आप एक हल्की वेबसाइट का उपयोग कर सकते हैं",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "कृपया लिंक के माध्यम से कोडफोर्स के आधिकारिक टेलीग्राम चैनल की सदस्यता लें",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "C++ उत्तर सबमिट करते समय, कृपया अपने कंपाइलर के रूप में C++14 (GCC 6-32) या C++17 (GCC 7-32) चुनें।",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "कोडफोर्सेस में आपकी रुचि के लिए धन्यवाद। आपको सफलतापूर्वक रजिस्टर कर लिया है।",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "अब आपको अपना ईमेल कन्फर्म करना होगा। आपके ईमेल पर एक पत्र भेजा गया है, कृपया अपना पंजीकरण पूरा करने के लिए निर्देशों का पालन करें।",
-                "If for any reason the letter did not come, it can be sent again": "यदि किसी कारणवश पत्र नहीं आता है तो उसे दोबारा भेजा जा सकता है"
+                "If for any reason the letter did not come, it can be sent again": "यदि किसी कारणवश पत्र नहीं आता है तो उसे दोबारा भेजा जा सकता है",
+                "The user is disabled.": "该用户已被封禁。"
             }
         },
         ".lang-chooser": {
@@ -351,7 +430,7 @@
             "rules": {
                 "Enter": "लॉग इन करें",
                 "Register": "पंजीकरण करवाना",
-                "Contest rating": "比赛rating",
+                "Contest rating": "等级分",
                 "Logout": "साइन आउट"
             }
         },
@@ -363,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "चित्र बदलें",
-                "Contest rating": "प्रतिस्पर्धा रेटिंग",
+                "Contest rating": "等级分",
                 "Contribution": "योगदान देना",
+                "Friend of": "粉丝",
                 "My friends": "मेरी अच्छी दोस्त",
                 "Change settings": "सेटिंग्स परिवर्तित करना",
                 "Last visit": "अंतिम बार दौरा किया",
@@ -440,8 +520,18 @@
             "rules": {
                 "Contest type:": "खेल प्रकार：",
                 "Rated:": "रेटेड：",
-                "Tried:": "कोशिश की",
-                "Substring:": "कीवर्ड"
+                "Tried:": "已尝试：",
+                "Substring:": "关键字："
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "在比赛标题与编写者中搜索"
             }
         },
         ".by-form": {
@@ -503,6 +593,7 @@
                 "Last unsolved": "पिछली बार अनसुलझा",
                 "Attention": "सूचना",
                 "Past contests filter": "पिछले खेलों के आधार पर फ़िल्टर करें",
+                "Recent virt. contests": "过去的虚拟参赛",
                 "About Contest": "प्रतियोगिता के बारे में",
                 "Last submissions": "इतिहास प्रतिबद्ध करें",
                 "Streams": "सीधा आ रहा है",
@@ -837,7 +928,7 @@
             "description": "सूची पृष्ठ के ऊपरी दाएँ कोने में युक्तियाँ",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "आप प्रतिबद्ध इतिहास देखने या समाधान पर हमला करने के लिए किसी सेल पर डबल-क्लिक कर सकते हैं (या Ctrl-क्लिक कर सकते हैं)।"
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "你可以双击单元格（或者按住Ctrl并点击）来查看提交历史或者对其他人的代码进行攻击。"
             }
         },
         "choose-order": {
@@ -850,7 +941,7 @@
                 "Default order": "डिफ़ॉल्ट आदेश",
                 "Submission time": "सबमिशन का समय",
                 "Judging Time": "निर्णय करने का समय",
-                "Solution Size": "समाधान का आकार",
+                "Solution Size": "代码长度",
                 "Execution Time": "निष्पादन समय"
             }
         },
@@ -904,6 +995,16 @@
             "rules": {
                 "Click": "点击",
                 "to see test details": "查看测试详情"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "允许未评级报名"
             }
         }
     },

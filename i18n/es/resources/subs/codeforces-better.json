@@ -8,8 +8,8 @@
             "description": "",
             "isStrict": false,
             "rules": {
-                "Virtual participation": "Participe en el torneo de recreación virtual",
-                "Enter": "entrar en",
+                "Virtual participation »": "Participe en el Torneo Virtual de Recreación \"",
+                "Enter »": "Ir a \"",
                 "Current standings": "Lista actual",
                 "Final standings": "Lista final",
                 "Preliminary results": "Resultados preliminares",
@@ -43,7 +43,17 @@
                 "Contest status": "estado del juego",
                 "Invited users": "Usuarios invitados",
                 "Invitation links": "Enlace de invitación",
-                "API keys": "Clave API",
+                "API keys": "Clave API"
+            }
+        },
+        ".first-row": {
+            "class": [
+                ".first-row",
+                ".datatable .top"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
                 "When": "Hora de presentación",
                 "Who": "remitente",
                 "Problem": "cuestiones",
@@ -51,8 +61,28 @@
                 "Verdict": "estado de la adjudicación",
                 "Time": "veces",
                 "Memory": "Memoria de funcionamiento",
-                "时间 limit exceeded": "Tiempo límite superado",
-                "内存 limit exceeded": "Límite de memoria superado"
+                "Author": "remitente",
+                "Sent": "Hora de presentación",
+                "Judged": "Turno de preguntas",
+                "Name": "Nombre del concurso",
+                "Writers": "autor",
+                "Start": "Hora de inicio",
+                "Length": "duración"
+            }
+        },
+        ".problems": {
+            "class": [
+                ".datatable .problems",
+                ".datatable .status-small"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "进入": "Entre en",
+                "题目描述": "Declaraciones",
+                "训练": "Formación",
+                "问题集": "Problemas",
+                "榜单": "Clasificación"
             }
         },
         ".menu-list.main-menu-list": {
@@ -69,7 +99,7 @@
                 "Gym": "campo de entrenamiento",
                 "Problemset": "banco de preguntas",
                 "Groups": "organizaciones",
-                "Rating": "Clasificación",
+                "Rating": "las listas (de best-sellers)",
                 "Edu": "cultive",
                 "Calendar": "calendario",
                 "ICPC Challenge": "Desafío del CIPC",
@@ -86,9 +116,10 @@
                 "Settings": "establecer",
                 "Blog": "blog (préstamo)",
                 "Teams": "cola",
-                "Submissions": "presentar (un informe, etc.)",
+                "Submissions": "Presentación de registros",
                 "Favourites": "marcador (Internet)",
-                "Problemsetting": "Planteamiento del problema",
+                "Problemsetting": "Participación en la preparación de los temas",
+                "Groups": "organizaciones",
                 "Talks": "carta privada",
                 "Contests": "competición (deportes, etc.)"
             }
@@ -143,6 +174,7 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Rating": "grado",
                 "Contribution": "dedicar"
             }
         },
@@ -165,13 +197,13 @@
             "rules": {
                 "Register now": "Inscríbase ahora",
                 "No tag edit access": "Sin privilegios de edición de etiquetas",
-                "Problem([\\s]*)$": "cuestiones",
-                "Submission": "Número de presentación",
-                "Time": "veces",
-                "Verdict": "estado de la adjudicación",
+                "Problem:": "Pregunta.",
+                "Verdict:": "Estado de la sentencia.",
                 "Language:": "Idiomas.",
+                "Test:": "Número de puntos de prueba.",
                 "Participant": "concursantes",
                 "Choose file:": "Seleccione el archivo.",
+                "Want to solve the contest problems after the official contest ends\\? Just register for practice and you will be able to submit solutions.": "¿Quieres resolver un problema del partido una vez finalizado el partido oficial? Solo tienes que iniciar sesión o registrar una cuenta y podrás enviar un código.",
                 "The package for this problem was not updated by the problem writer or Codeforces administration after we've upgraded the judging servers. To adjust the time limit constraint, a solution execution time will be multiplied by 2. For example, if your solution works for 400 ms on judging servers, then the value 800 ms will be displayed and used to determine the verdict.": "El paquete de este tema no ha sido actualizado por el autor de la pregunta ni por el equipo de administración de Codeforces desde que actualizamos el servidor de evaluación. Para ajustarse a las limitaciones de tiempo, el tiempo de ejecución de una respuesta se multiplicará por 2. Por ejemplo, si su respuesta se ejecutó durante 400 milisegundos en el servidor de evaluación, se mostrará un valor de 800 milisegundos y se utilizará para determinar el resultado.",
                 "Virtual contest is a way to take part in past contest, as close as possible to participation on time. It is supported only ICPC mode for virtual contests.": "Los torneos virtuales son una forma de participar en torneos pasados lo más parecida posible a la participación en tiempo real. Actualmente sólo se admiten torneos virtuales en modo CIPC.",
                 "If you've seen these problems, a virtual contest is not for you - solve these problems in the archive.": "Si ya ha estudiado estos temas, los torneos virtuales no son para usted: debe resolverlos en el banco de preguntas.",
@@ -180,8 +212,55 @@
                 "You can clone this contest to a mashup.": "Puede clonar este concurso para convertirlo en un concurso de mashups.",
                 "Mashup is a special type of training contest, which consists of public problems from past Codeforces rounds. Also it is possible to add": "Un mashup es un tipo especial de concurso de formación que consiste en preguntas abiertas de concursos anteriores de Codeforces. También es posible añadir",
                 "problems to mashup contest.": "Pregunta para el concurso de mashups.",
-                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estas competiciones no pueden hacerse públicas y sólo se utilizan con fines de entrenamiento personal. Los concursos mashup también pueden añadirse a los grupos. Para especificar información adicional sobre un concurso de mashups, utilice el formulario Editar concurso de campo de entrenamiento.",
-                "时间 limit exceeded": "Tiempo límite superado"
+                "Such contests can not be made public, they are only for personal training purpose. Also it is allowed to add mashups to groups. To specify additional information about mashup contest, use Gym contest edit form.": "Estas competiciones no pueden hacerse públicas y sólo se utilizan con fines de entrenamiento personal. Los concursos mashup también pueden añadirse a los grupos. Para especificar información adicional sobre un concurso de mashups, utilice el formulario Editar concurso de campo de entrenamiento."
+            }
+        },
+        ".roundbox.sidebox.virtual-contests.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.concursos.virtuales.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Contest": "Nombre del concurso",
+                "Time": "Hora de inicio",
+                "Enter »": "Ir a \""
+            }
+        },
+        ".roundbox.sidebox.top-contributed.borderTopRound": {
+            "class": [
+                ".roundbox.sidebox.top-contributed.borderTopRound"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "User": "ID de usuario",
+                "Rating": "grado",
+                "Contrib.": "dedicar"
+            }
+        },
+        ".roundbox.sidebox.borderTopRound .rtable.smaller": {
+            "class": [
+                ".roundbox.sidebox.borderTopRound .rtable.smaller"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Submission": "#",
+                "Time": "Hora de presentación",
+                "Verdict": "estado de la adjudicación"
+            }
+        },
+        ".reset-status-filter": {
+            "class": [
+                ".reset-status-filter"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Status filter is used, click ": "El filtrado de estado está activado, haga clic en",
+                "here": "aquí (literario)",
+                " to reset ": "reprovisión"
             }
         },
         ".icon-eye-close.icon-large": {
@@ -336,10 +415,10 @@
                 "Rating changes for last rounds are temporarily rolled back. They will be returned soon.": "Los cambios de calificación de la ronda anterior se han anulado temporalmente. Se restablecerán en breve.",
                 "Reminder: in case of any technical issues, you can use the lightweight website": "Recordatorio：Si surge algún problema técnico, puede utilizar el sitio ligero",
                 "Please subscribe to the official Codeforces channel in Telegram via the link": "Suscríbase al canal oficial de Codeforces en Telegram a través del enlace.",
-                "When submitting a solution in C\\+\\+, please select either C\\+\\+14 \\(GCC 6\\-32\\) or C\\+\\+17 \\(GCC 7\\-32\\) as your compiler.": "Cuando envíe una respuesta C++, seleccione C++14 (GCC 6-32) o C++17 (GCC 7-32) como compilador.",
                 "Thank you for your interest in Codeforces. You have been successfully registered.": "Gracias por su interés en Codeforces. Se ha registrado correctamente.",
                 "Now you need to confirm your email. A letter was sent to your email, follow the instructions to complete the registration.": "Ahora debe confirmar su correo electrónico. Se ha enviado una carta a su correo electrónico, por favor, siga las instrucciones para completar el registro.",
-                "If for any reason the letter did not come, it can be sent again": "Si por cualquier motivo la carta no llega, puede enviarse de nuevo"
+                "If for any reason the letter did not come, it can be sent again": "Si por cualquier motivo la carta no llega, puede enviarse de nuevo",
+                "The user is disabled.": "Este usuario ha sido expulsado."
             }
         },
         ".lang-chooser": {
@@ -351,7 +430,7 @@
             "rules": {
                 "Enter": "Regístrese",
                 "Register": "inscripción",
-                "Contest rating": "Clasificación racial",
+                "Contest rating": "grado",
                 "Logout": "Cerrar sesión"
             }
         },
@@ -363,8 +442,9 @@
             "isStrict": false,
             "rules": {
                 "Change photo": "Sustitución de imágenes",
-                "Contest rating": "Carreras",
+                "Contest rating": "grado",
                 "Contribution": "dedicar",
+                "Friend of": "Fideos chinos",
                 "My friends": "Mi mejor amigo.",
                 "Change settings": "Cambiar ajustes",
                 "Last visit": "último acceso",
@@ -440,8 +520,18 @@
             "rules": {
                 "Contest type:": "Tipo de competición：",
                 "Rated:": "Clasificado：",
-                "Tried:": "intento",
-                "Substring:": "palabras clave"
+                "Tried:": "Probado：",
+                "Substring:": "Palabras clave："
+            }
+        },
+        ".shiftUp": {
+            "class": [
+                ".shiftUp"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "In contest title and writers": "Buscar en Título del concurso y autor"
             }
         },
         ".by-form": {
@@ -503,6 +593,7 @@
                 "Last unsolved": "No se resolvió la última vez",
                 "Attention": "tome nota de",
                 "Past contests filter": "Revisión de partidos anteriores",
+                "Recent virt. contests": "Entradas virtuales anteriores",
                 "About Contest": "Sobre el concurso",
                 "Last submissions": "Historial de envíos",
                 "Streams": "difusión directa por Internet",
@@ -837,7 +928,7 @@
             "description": "Consejo en la esquina superior derecha de la página de listados",
             "isStrict": false,
             "rules": {
-                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Puede hacer doble clic en una celda (o mantener pulsada la tecla Ctrl y hacer clic) para ver el historial de confirmaciones o atacar la solución."
+                "You may double click into cells \\(or ctrl\\+click\\) to view the submissions(\\s)*history or hack the solution": "Puedes hacer doble clic en una celda (o mantener pulsada la tecla Ctrl y hacer clic) para ver el historial de confirmaciones o atacar el código de otras personas."
             }
         },
         "choose-order": {
@@ -850,7 +941,7 @@
                 "Default order": "Orden por defecto",
                 "Submission time": "Hora de presentación",
                 "Judging Time": "Turno de preguntas",
-                "Solution Size": "Tamaño de la solución",
+                "Solution Size": "Longitud del código",
                 "Execution Time": "tiempo de ejecución"
             }
         },
@@ -904,6 +995,16 @@
             "rules": {
                 "Click": "golpe (en el teclado)",
                 "to see test details": "Ver detalles de la prueba"
+            }
+        },
+        ".unrated-allowed": {
+            "class": [
+                ".unrated-allowed"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "Unrated allowed": "Permitir la inscripción sin calificación"
             }
         }
     },

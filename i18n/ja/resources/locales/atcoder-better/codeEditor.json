@@ -41,7 +41,7 @@
         "running": "テスト中",
         "success": "すべて合格"
     },
-    "submitButton": "だす",
+    "submitButton": "送信 (Ctrl+Enter)",
     "moreSettings": {
         "title": "その他の設定",
         "tip": "変更は自動的に保存される",

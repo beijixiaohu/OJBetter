@@ -32,6 +32,14 @@
             "omitir"
         ]
     },
+    "skipCodeBlock": {
+        "title": "¿Se salta bloques de código?",
+        "content": "El área que se va a traducir contiene bloques de código, que normalmente no es necesario traducir, y ahora debe elegir si desea omitirlos o no：\n\n¿Desea omitir los bloques de código?",
+        "buttons": [
+            "obstruido",
+            "omitir"
+        ]
+    },
     "transTextLimits": {
         "title": "¡Recuento de caracteres superado! ",
         "content": "El contenido a traducir tiene un total de **{{realTextLength}}** caracteres\n\nEsto excede el límite de **{{textLength}}** caracteres del servicio de traducción actual, por favor cambie el servicio de traducción o active la \"Traducción Segmentada\" en el panel de Ajustes\n\nTenga en cuenta que puede haber seleccionado el botón de traducción equivocado\n\nDebido a la forma en que está realizado, habrá más de un botón de traducción en el campo, por favor haga clic en el botón Traducir en el subcampo más pequeño botón\n\n¿Está seguro de que desea continuar traduciendo?",

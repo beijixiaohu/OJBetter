@@ -45,7 +45,7 @@
         "content": "The topic you are submitting is\n\n**{{questionTitle}}**\n\n",
         "buttons": [
             "Cancel",
-            "Submit"
+            "submit (a report etc)"
         ]
     },
     "isLikelyCodeSnippet": {

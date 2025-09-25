@@ -41,7 +41,7 @@
         "running": "en cours de test",
         "success": "Tous adoptés"
     },
-    "submitButton": "soumettre (un rapport, etc.)",
+    "submitButton": "Soumettre (Ctrl+Entrée)",
     "moreSettings": {
         "title": "Plus de paramètres",
         "tip": "Les modifications sont enregistrées automatiquement",
