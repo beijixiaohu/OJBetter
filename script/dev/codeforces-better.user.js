@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.10
+// @version      1.79.11
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -12212,6 +12212,9 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
       const response = await OJB_GMRequest({
         method: "GET",
         url: submitUrl,
+        cookiePartition: {
+          topLevelSite: "https://codeforces.com"
+        }
       });
       const html = response.responseText;
       const parser = new DOMParser();
@@ -12243,7 +12246,7 @@ async function getSubmitHTML(submitUrl) {
   const cookieKey = "OJBetter_CloneOriginalHTML_time";
   if (OJB_getCookie(cookieKey) === "1") {
     // 存在缓存
-    CloneOriginalHTML(submitUrl, cacheKey);
+    void CloneOriginalHTML(submitUrl, cacheKey);
     // 校验
     let cloneHTML = $(localStorage.getItem(cacheKey));
     if (cloneHTML.find("form.submit-form").length > 0) {
@@ -14788,6 +14791,9 @@ async function officialCompiler(code, input) {
     headers: {
       "X-Csrf-Token": OJBetter.common.cf_csrf_token,
     },
+    cookiePartition: {
+      topLevelSite: "https://codeforces.com"
+    }
   };
 
   const result = {
@@ -14837,6 +14843,9 @@ async function getOfficialCompilerVerdict(customTestSubmitId) {
     headers: {
       "X-Csrf-Token": OJBetter.common.cf_csrf_token,
     },
+    cookiePartition: {
+      topLevelSite: "https://codeforces.com"
+    }
   };
 
   const responseDetails = await OJB_GMRequest(requestOptions);
