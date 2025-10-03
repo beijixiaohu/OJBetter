@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.12
+// @version      1.79.13
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -718,6 +718,19 @@ const OJB_parseLinePairArray = (val) => {
 const OJB_removeHTMLTags = function (text) {
   return text.replace(/<\/?[a-zA-Z]+("[^"]*"|'[^']*'|[^'">])*>/g, "");
 };
+
+/**
+ * 解码被转义的字符串为普通字符
+ * @param {string} text - 包含 &lt;、&gt; 的字符串
+ * @returns {string} - 解码后的字符串
+ */
+const OJB_unescapeHtml = (function() {
+  const textarea = document.createElement("textarea");
+  return function(text) {
+    textarea.innerHTML = text;
+    return textarea.value;
+  };
+})();
 
 /**
  * 获取对象中指定路径表达式的值
@@ -8225,6 +8238,7 @@ async function initHTML2MarkDown() {
     },
     replacement: function (content, node) {
       var latex = $(node).next().text();
+      // 替换防止 < >
       latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return "\n$$\n" + latex + "\n$$\n";
     },
@@ -8819,7 +8833,8 @@ async function addButtonWithCopy(button, element, suffix, type) {
 
       var markdown = $(element).getMarkdown();
 
-      GM_setClipboard(markdown);
+      // 得到的应当是原字符串，getMarkdown得到的字符被转义
+      GM_setClipboard(OJB_unescapeHtml(markdown));
 
       $(this).addClass("success");
       changeButtonState("copied");
