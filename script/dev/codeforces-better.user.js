@@ -9861,6 +9861,7 @@ class TranslateDiv {
   disableCopyButton() {
     this.copyButton.css({ fill: "#ccc" });
     this.copyButton.off("click");
+    this.copyButton.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
   }
 
   /**
