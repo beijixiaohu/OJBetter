@@ -1084,8 +1084,11 @@
                 "Compilation error": "Kompilierungsfehler",
                 "No registration is opened now": "Die Registrierung ist zur Zeit nicht möglich.",
                 "Blog entry has been deleted": "Blogeintrag gelöscht",
-                "Added to liked": "Geklickt wie"
+                "Added to liked": "Geklickt wie",
+                "Hold Ctrl\\+Alt and click to hide column. Also, you can drag\\&drop columns to reorder them.": "Sie können eine Spalte ausblenden, indem Sie Strg+Alt gedrückt halten und auf die Spalte klicken. Darüber hinaus können Sie Spalten durch Ziehen und Ablegen neu anordnen."
             }
         }
     }
 }
+
+
