@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.19.10
+// @version      1.19.11
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -8506,6 +8506,7 @@ class TranslateDiv {
     disableCopyButton() {
         this.copyButton.css({ 'fill': '#ccc' });
         this.copyButton.off("click");
+        this.copyButton.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
     }
 
     /**
@@ -14513,4 +14514,5 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
       location.reload();
     }
 }
+
 
