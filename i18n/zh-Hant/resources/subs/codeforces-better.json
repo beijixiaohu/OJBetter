@@ -1084,8 +1084,11 @@
                 "Compilation error": "編譯錯誤",
                 "No registration is opened now": "現在沒有開放報名",
                 "Blog entry has been deleted": "部落格條目已刪除",
-                "Added to liked": "已點擊喜歡"
+                "Added to liked": "已點擊喜歡",
+                "Hold Ctrl\\+Alt and click to hide column. Also, you can drag\\&drop columns to reorder them.": "按住Ctrl+Alt并点击一列可以隐藏该列。此外，您还可以通过拖放列来重新排序它们。"
             }
         }
     }
 }
+
+

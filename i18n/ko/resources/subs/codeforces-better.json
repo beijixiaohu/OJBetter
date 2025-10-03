@@ -1084,8 +1084,11 @@
                 "Compilation error": "컴파일 오류",
                 "No registration is opened now": "현재 등록이 불가능합니다.",
                 "Blog entry has been deleted": "블로그 항목 삭제됨",
-                "Added to liked": "좋아요 클릭"
+                "Added to liked": "좋아요 클릭",
+                "Hold Ctrl\\+Alt and click to hide column. Also, you can drag\\&drop columns to reorder them.": "열을 숨기려면 Ctrl+Alt를 누른 상태에서 열을 클릭하면 됩니다. 또한 열을 끌어서 놓아 열을 재정렬할 수 있습니다."
             }
         }
     }
 }
+
+
