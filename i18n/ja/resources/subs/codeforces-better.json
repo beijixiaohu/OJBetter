@@ -1084,8 +1084,11 @@
                 "Compilation error": "コンパイルエラー",
                 "No registration is opened now": "現在、参加登録は受け付けておりません。",
                 "Blog entry has been deleted": "ブログエントリー削除",
-                "Added to liked": "のようにクリックした。"
+                "Added to liked": "のようにクリックした。",
+                "Hold Ctrl\\+Alt and click to hide column. Also, you can drag\\&drop columns to reorder them.": "Ctrl+Altを押しながら列をクリックすると非表示にできる。また、ドラッグ＆ドロップで列の並び替えができます。"
             }
         }
     }
 }
+
+

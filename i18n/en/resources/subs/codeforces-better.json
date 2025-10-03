@@ -1084,8 +1084,11 @@
                 "Compilation error": "compilation error",
                 "No registration is opened now": "Registration is not open right now.",
                 "Blog entry has been deleted": "Blog entry deleted",
-                "Added to liked": "Liked"
+                "Added to liked": "Liked",
+                "Hold Ctrl\\+Alt and click to hide column. Also, you can drag\\&drop columns to reorder them.": "You can hide a column by holding Ctrl+Alt and clicking on it. In addition, you can reorder columns by dragging and dropping them."
             }
         }
     }
 }
+
+

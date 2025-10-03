@@ -1084,8 +1084,11 @@
                 "Compilation error": "erreur de compilation",
                 "No registration is opened now": "L'inscription n'est pas ouverte pour le moment",
                 "Blog entry has been deleted": "Article de blog supprimé",
-                "Added to liked": "Cliquer comme"
+                "Added to liked": "Cliquer comme",
+                "Hold Ctrl\\+Alt and click to hide column. Also, you can drag\\&drop columns to reorder them.": "Vous pouvez masquer une colonne en maintenant les touches Ctrl+Alt enfoncées et en cliquant dessus. En outre, vous pouvez réorganiser les colonnes en les faisant glisser et en les déposant."
             }
         }
     }
 }
+
+
