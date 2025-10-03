@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.11
+// @version      1.79.12
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -14610,7 +14610,7 @@ function getTestData() {
         .find("pre")
         .find("div")
         .each(function () {
-          inputText += getTextFromPre($(this)) + "\n";
+          outputText += getTextFromPre($(this)) + "\n";
         });
     } else {
       outputText = getTextFromPre($(".output").eq(index).find("pre"));
