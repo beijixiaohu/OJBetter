@@ -39,7 +39,7 @@
     "copy": {
         "normal": "Copy",
         "copied": "Copied",
-        "disabled": "Copying is not supported"
+        "disabled": "Prohibition of copying"
     },
     "state": {
         "wait": "… waiting",

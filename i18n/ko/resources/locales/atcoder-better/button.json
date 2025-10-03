@@ -39,7 +39,7 @@
     "copy": {
         "normal": "사본 만들기",
         "copied": "복제",
-        "disabled": "복사는 지원되지 않습니다."
+        "disabled": "복사 금지"
     },
     "state": {
         "wait": "대기 중…",

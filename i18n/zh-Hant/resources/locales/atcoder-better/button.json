@@ -39,7 +39,7 @@
     "copy": {
         "normal": "複製",
         "copied": "已複製",
-        "disabled": "不支援複製"
+        "disabled": "禁止复制"
     },
     "state": {
         "wait": "等待中…",
