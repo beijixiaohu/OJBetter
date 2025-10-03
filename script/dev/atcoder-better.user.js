@@ -662,7 +662,7 @@ const OJB_removeHTMLTags = function (text) {
 
 /**
  * 解码被转义的字符串为普通字符
- * @param {string} text - 包含 & lt;、& gt; 的字符串
+ * @param {string} text - 包含 &lt;、&gt; 的字符串
  * @returns {string} - 解码后的字符串
  */
 const OJB_unescapeHtml = (function() {
