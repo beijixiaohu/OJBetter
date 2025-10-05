@@ -322,7 +322,10 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
-                "AtCoder生成AI対策ルール - 20250718版": "AtCoder对于生成式AI的规定 - 20250718版本",
+                "AtCoder生成AI対策ルール - 20251003版": "AtCoder对于生成式AI的规定 - 20251003版本",
+                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "注意此规则已于 2025 年 10 月 3 日更新。",
+                "詳しくは": "详情请见",
+                "をご覧ください。": "。",
                 "現在": "मौजूदा",
                 "で参加登録しています。詳細は": "भाग लेने के लिए पहले ही साइन अप कर लिया गया है. विवरण के लिए कृपया पढ़ें",
                 "こちら": "यहाँ",
@@ -331,6 +334,16 @@
                 "ログアウトしました。": "बाहर आ गये।",
                 "ようこそ、": "स्वागत,",
                 "さん": "देवियो और सज्जनों"
+            }
+        },
+        ".alert-link-jp": {
+            "class": [
+                ".alert-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "这里の記事": "यह लेख"
             }
         },
         ".h2, h2": {
@@ -765,7 +778,10 @@
                 "this post": "यह लेख",
                 "for details.": "और अधिक जानें।",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
-                "AtCoder Rules against Generative AI - Version 20250718": "AtCoder对于生成式AI的规定 - 20250718版本",
+                "AtCoder Rules against Generative AI - Version 20251003": "AtCoder对于生成式AI的规定 - 20251003版本",
+                "Please note that the rules were updated on October 3\\, 2025.": "注意此规则已于 2025 年 10 月 3 日更新。",
+                " For details\\, please see ": "详情请见",
+                "\\.": "。",
                 "participant": "प्रतिभागियों",
                 "Registered": "दर्ज कराई",
                 "Canceled registration": "पंजीकरण रद्द कर दिया गया",
@@ -872,4 +888,5 @@
     },
     "dynamicReplacements": {}
 }
+
 
