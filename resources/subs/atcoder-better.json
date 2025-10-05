@@ -322,7 +322,10 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。请参考下面的规则了解详情。",
-                "AtCoder生成AI対策ルール - 20250718版": "AtCoder 对于生成式 AI 的规定 - 20250718 版本",
+                "AtCoder生成AI対策ルール - 20251003版": "AtCoder 对于生成式 AI 的规定 - 20251003 版本",
+                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "注意此规则已于 2025 年 10 月 3 日更新。",
+                "詳しくは": "详情请见",
+                "をご覧ください。": "。",
                 "現在": "当前",
                 "で参加登録しています。詳細は": "已报名参加。详情请阅读",
                 "こちら": "这里",
@@ -331,6 +334,16 @@
                 "ログアウトしました。": "已退出登录。",
                 "ようこそ、": "欢迎，",
                 "さん": "先生 / 女士"
+            }
+        },
+        ".alert-link-jp": {
+            "class": [
+                ".alert-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "这里の記事": "这篇文章"
             }
         },
         ".h2, h2": {
@@ -765,7 +778,10 @@
                 "this post": "这篇文章",
                 "for details.": "了解详情。",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。请参考下面的规则了解详情。",
-                "AtCoder Rules against Generative AI - Version 20250718": "AtCoder 对于生成式 AI 的规定 - 20250718 版本",
+                "AtCoder Rules against Generative AI - Version 20251003": "AtCoder 对于生成式 AI 的规定 - 20251003 版本",
+                "Please note that the rules were updated on October 3\\, 2025.": "注意此规则已于 2025 年 10 月 3 日更新。",
+                " For details\\, please see ": "详情请见",
+                "\\.": "。",
                 "participant": "参与者",
                 "Registered": "已报名",
                 "Canceled registration": "已取消报名",
@@ -872,4 +888,5 @@
     },
     "dynamicReplacements": {}
 }
+
 
