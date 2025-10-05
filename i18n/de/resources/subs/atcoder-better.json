@@ -322,7 +322,10 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "Die Verwendung von generativer KI in laufenden AtCoder-Wettbewerben ist untersagt. Einzelheiten entnehmen Sie bitte den unten stehenden Regeln.",
-                "AtCoder生成AI対策ルール - 20250718版": "AtCoder's Bestimmungen für generative KI - Version 20250718",
+                "AtCoder生成AI対策ルール - 20251003版": "AtCoder's Bestimmungen für generative KI - Version 20251003",
+                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "Beachten Sie, dass diese Vorschrift mit Wirkung vom 3. Oktober 2025 aktualisiert worden ist.",
+                "詳しくは": "Weitere Informationen finden Sie unter",
+                "をご覧ください。": ".",
                 "現在": "zugewandt sein (uns)",
                 "で参加登録しています。詳細は": "haben sich zur Teilnahme angemeldet. Für weitere Informationen lesen Sie bitte",
                 "こちら": "hier sind",
@@ -331,6 +334,16 @@
                 "ログアウトしました。": "Ausgeloggt.",
                 "ようこそ、": "Herzlich willkommen.",
                 "さん": "Herr/Frau"
+            }
+        },
+        ".alert-link-jp": {
+            "class": [
+                ".alert-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "这里の記事": "dieser Artikel"
             }
         },
         ".h2, h2": {
@@ -765,7 +778,10 @@
                 "this post": "dieser Artikel",
                 "for details.": "Erfahren Sie mehr.",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "Die Verwendung von generativer KI in laufenden AtCoder-Wettbewerben ist untersagt. Einzelheiten entnehmen Sie bitte den unten stehenden Regeln.",
-                "AtCoder Rules against Generative AI - Version 20250718": "AtCoder's Bestimmungen für generative KI - Version 20250718",
+                "AtCoder Rules against Generative AI - Version 20251003": "AtCoder's Bestimmungen für generative KI - Version 20251003",
+                "Please note that the rules were updated on October 3\\, 2025.": "Beachten Sie, dass diese Vorschrift mit Wirkung vom 3. Oktober 2025 aktualisiert worden ist.",
+                " For details\\, please see ": "Weitere Informationen finden Sie unter",
+                "\\.": ".",
                 "participant": "Teilnehmer",
                 "Registered": "Eingeschrieben",
                 "Canceled registration": "Annullierte Anmeldung",
@@ -872,4 +888,5 @@
     },
     "dynamicReplacements": {}
 }
+
 
