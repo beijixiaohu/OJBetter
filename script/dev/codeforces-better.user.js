@@ -8218,7 +8218,7 @@ async function initHTML2MarkDown() {
   OJBetter.common.turndownService.addRule("inline-math", {
     filter: function (node, options) {
       if (node.tagName.toLowerCase() !== "span") return false;
-      return /\bMathJax(_\w+)?\b/.test(node.className);
+      return node.className && /\bMathJax(_\w+)?\b/.test(node.className);
     },
     replacement: function (content, node) {
       var latex = $(node).next().text();
