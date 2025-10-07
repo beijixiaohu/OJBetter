@@ -1,3 +1,23 @@
+## 1.80.0
+
+- Añadida la función personalizada "Color del texto de la traducción", puedes configurar el color del texto del resultado de la traducción en los ajustes, gracias por la contribución de **@wrk-123**.
+- Se ha añadido un cuadro de diálogo de confirmación para "Omitir bloques de código" al traducir, para evitar traducir erróneamente el contenido del código.
+- Añadido atajo Ctrl+Enter para enviar código, gracias a **@wrk-123**.
+- Corrección de la falta de saltos de línea en ` <br>` durante la conversión MarkDown, ¡gracias a **@wrk-123** por su contribución!
+- Solucionado el problema de los caracteres de escape HTML al copiar MarkDown (por ejemplo `&lt;` `&gt;`), ¡gracias a **@wrk-123** por la contribución!
+- Corrección del tratamiento de los saltos de línea en los bloques de código (` <pre>`) en las conversiones MarkDown, ¡gracias a **@wrk-123** por su contribución!
+- Corrección de la conversión MarkDown sin filtrar las etiquetas ` <style>`.
+- Corrección del problema de error de sintaxis de enlace Markdown causado por la regla china de sustitución de corchetes, gracias a la contribución de **@wrk-123**.
+- Corrección de la lógica de evaluación del código de estado HTTP de Yodo Translator, gracias a la contribución de **@wrk-123**.
+- Arreglado el problema de coincidencia de mayúsculas y minúsculas en PP, ¡gracias a **@awerty-noob** por la contribución!
+- Arreglar problemas de cambios de nivel redundantes, ¡gracias a **@wrk-123** por la contribución!
+- Mejora de la robustez del reconocimiento de elementos MathJax, soporte para más variantes de nombres de clases MathJax, gracias a **@wrk-123**.
+- Mejorar la lógica de visualización de la función embellecer bloque de código, ya no mostrar el bloque de código que estaba oculto, gracias a la contribución de **@wrk-123**.
+- Mejorar el elemento botón añadiendo el atributo `type='button'` para evitar falsos envíos de formularios.
+- Mejorar el texto del botón de copiar traducción cuando está desactivado.
+- Mejora de la decisión de tema no encontrado para saltar a Luogu, ¡gracias a **@wrk-123** por la contribución!
+- Mejora de las normas de localización de sitios web, gracias a las contribuciones de **@qjwh**, **@wrk-123**
+
 ## 1.79.0
 
 - Eliminar la dependencia del repositorio de scripts Greasyfork
