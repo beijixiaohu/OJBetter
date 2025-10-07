@@ -8221,7 +8221,7 @@ async function initHTML2MarkDown() {
       return /\bMathJax(_\w+)?\b/.test(node.className);
     },
     replacement: function (content, node) {
-      var latex = $(node).find('annotation').text();
+      var latex = $(node).next().text();
       // 替换防止 < >
       latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return "$" + latex + "$";
@@ -8237,7 +8237,7 @@ async function initHTML2MarkDown() {
       );
     },
     replacement: function (content, node) {
-      var latex = $(node).find('annotation').text();
+      var latex = $(node).next().text();
       // 替换防止 < >
       latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return "\n$$\n" + latex + "\n$$\n";
