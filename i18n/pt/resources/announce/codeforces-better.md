@@ -1,3 +1,23 @@
+## 1.80.0
+
+- Adicionada a função personalizada "Cor do texto da tradução", pode configurar a cor do texto do resultado da tradução nas definições, graças à contribuição de **@wrk-123**.
+- Foi adicionada uma caixa de diálogo de confirmação para "Saltar blocos de código" durante a tradução, para evitar a tradução incorrecta do conteúdo do código.
+- Adicionado o atalho Ctrl+Enter para enviar código, graças a **@wrk-123**.
+- Corrigir ` <br>` quebras de linha ausentes durante a conversão MarkDown, graças a **@wrk-123** pela contribuição!
+- Corrigir o problema de caracteres de escape HTML ao copiar MarkDown (por exemplo, `&lt;` `&gt;`), graças a **@wrk-123** pela contribuição!
+- Correção do tratamento de quebra de linha para blocos de código (` <pre>`) em conversões MarkDown, graças a **@wrk-123** pela contribuição!
+- Correção da conversão MarkDown sem filtrar as etiquetas ` <style>`
+- Corrigido o problema de erro de sintaxe de ligação Markdown causado pela regra de substituição de parêntesis chineses, graças à contribuição de **@wrk-123**.
+- Correção da lógica de avaliação do código de estado HTTP do Yodo Translator, graças à contribuição de **@wrk-123**.
+- Corrigir o problema de correspondência de maiúsculas e minúsculas do PP, graças a **@awerty-noob** pela contribuição!
+- Corrigir problemas redundantes de alteração de nível, graças a **@wrk-123** pela contribuição!
+- Melhoria da robustez do reconhecimento de elementos MathJax, suporte para mais variantes de nomes de classes MathJax, graças a **@wrk-123**.
+- Melhorar a lógica de visualização da função embelezar bloco de código, deixando de mostrar o bloco de código que estava escondido, graças à contribuição de **@wrk-123**.
+- Melhorar o elemento botão, adicionando o atributo `type='button'` para evitar submissões de formulários por engano
+- Melhorar o texto do botão de cópia de tradução quando este está desativado.
+- Melhoria da decisão de tópico não encontrado para saltar para Luogu, graças a **@wrk-123** pela contribuição!
+- Melhoria das regras de localização do sítio Web, graças às contribuições de **@qjwh**, **@wrk-123**
+
 ## 1.79.0
 
 - Remover a dependência do repositório de scripts Greasyfork
