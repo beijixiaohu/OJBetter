@@ -1,18 +1,3 @@
-## 1.80.0
-
-- Add "Translation Text Color" customization feature to configure the text color of translation results in settings
-- Add "Skip Code Blocks" confirmation dialog when translating to avoid mistranslating code content
-- Fix issue where `<br>` line breaks were lost during MarkDown conversion
-- Fix issue where characters were HTML-escaped when copying MarkDown (e.g., `&lt;` `&gt;`)
-- Fix line break handling in code blocks (`<pre>`) during MarkDown conversion
-- Fix issue where `<style>` tags were not filtered during MarkDown conversion
-- Fix Chinese bracket replacement rule that caused Markdown link syntax errors
-- Fix HTTP status code judgment logic for Youdao translation
-- Improve MathJax element recognition robustness to support more MathJax class name variants
-- Improve display logic for beautify code blocks feature, no longer showing originally hidden code blocks
-- Improve button elements by adding `type='button'` attribute to prevent form mis-submission
-- Improve tooltip text for translation copy button when disabled
-
 ## 1.79.0
 
 - Remove dependency on Greasyfork script repository
