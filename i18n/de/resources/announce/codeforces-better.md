@@ -1,3 +1,23 @@
+## 1.80.0
+
+- Benutzerdefinierte Funktion "Übersetzungstextfarbe" hinzugefügt, Sie können die Textfarbe des Übersetzungsergebnisses in den Einstellungen konfigurieren, danke für den Beitrag von **@wrk-123**.
+- Es wurde ein Bestätigungsdialog für "Codeblöcke überspringen" beim Übersetzen hinzugefügt, um eine Fehlübersetzung von Codeinhalten zu vermeiden.
+- Dank **@wrk-123** wurde die Tastenkombination Strg+Eingabe zum Übermitteln von Code hinzugefügt.
+- Fix ` <br>` fehlende Zeilenumbrüche bei der MarkDown-Konvertierung, danke an **@wrk-123** für den Beitrag!
+- Behebt das Problem der HTML-Escaping-Zeichen beim Kopieren von MarkDown (z.B. `&lt;` `&gt;`), danke an **@wrk-123** für den Beitrag!
+- Korrektur der Behandlung von Zeilenumbrüchen bei Codeblöcken (` <pre>`) in MarkDown-Konvertierungen, danke an **@wrk-123** für den Beitrag!
+- Fix MarkDown Konvertierung ohne Filterung ` <style>` Tags
+- Behebung des Fehlers in der Markdown-Link-Syntax, der durch die chinesische Klammer-Ersetzungsregel verursacht wurde, dank des Beitrags von **@wrk-123**.
+- Korrektur der HTTP-Statuscode-Beurteilungslogik des Yodo Translators, danke an **@wrk-123** für den Beitrag.
+- Behebung des Problems mit der Groß-/Kleinschreibung in PP, danke an **@awerty-noob** für den Beitrag!
+- Behebt redundante Tierwechselprobleme, danke an **@wrk-123** für den Beitrag!
+- Verbesserte Robustheit der MathJax-Element-Erkennung, Unterstützung für mehr MathJax-Klassennamenvarianten, dank **@wrk-123**.
+- Verbesserung der Anzeigelogik der Funktion zur Verschönerung von Codeblöcken, so dass Codeblöcke, die versteckt waren, nicht mehr angezeigt werden, dank des Beitrags von **@wrk-123**.
+- Verbessern Sie das Button-Element durch Hinzufügen des Attributs `type='button'`, um falsche Formulareingaben zu vermeiden
+- Verbessern Sie den Text der Schaltfläche "Übersetzung kopieren", wenn diese deaktiviert ist.
+- Verbesserung des Themas nicht gefunden Entscheidung für den Sprung zu Luogu, Dank an **@wrk-123** für den Beitrag!
+- Verbesserung der Website-Lokalisierungsregeln, dank der Beiträge von **@qjwh**, **@wrk-123**
+
 ## 1.79.0
 
 - Abhängigkeit von Greasyfork-Skript-Repository entfernen

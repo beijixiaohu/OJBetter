@@ -1,3 +1,20 @@
+## 1.20.0
+
+- Add "Translation text color" customization function, you can configure the text color of translation result in the settings, thanks for the contribution of **@wrk-123**.
+- Added Ctrl+Enter shortcut to submit code, thanks to **@wrk-123**.
+- Fix ` <br>` line breaks missing in MarkDown conversions, thanks to **@wrk-123**.
+- Fix the problem of characters being escaped by HTML when copying MarkDown (e.g. `&lt;` `&gt;`), thanks to **@wrk-123** for the contribution!
+- Fix MarkDown conversion without filtering ` <style>` tags
+- Fix the problem of Markdown link syntax error caused by Chinese bracket replacement rule, thanks to the contribution of **@wrk-123**.
+- Fix the HTTP status code judgment logic of Arigatou Translation, thanks to the contribution of **@wrk-123**.
+- Fix CloudFlare panel validation issue, thanks to **@wrk-123** for contributing!
+- Fix redundant tier change issue, thanks to **@wrk-123** contribution
+- Improve the button element by adding the `type='button'` attribute to avoid form submissions by mistake
+- Improve the text of the translation copy button when it is disabled.
+- Improve the way code submission forms are built to simplify the code structure
+- Improve the not found decision for jumping to Luogu, thanks to **@wrk-123** for the contribution!
+- Improvement of website localization rules, thanks to the contribution of **@qjwh**, **@nr0728**, **@wrk-123**
+
 ## 1.19.0
 
 - Remove dependency on Greasyfork script repository

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.14
+// @version      1.79.15
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -8217,12 +8217,12 @@ async function initHTML2MarkDown() {
   // inline math
   OJBetter.common.turndownService.addRule("inline-math", {
     filter: function (node, options) {
-      return (
-        node.tagName.toLowerCase() == "span" && node.className == "MathJax"
-      );
+      if (node.tagName.toLowerCase() !== "span") return false;
+      return node.className && /\bMathJax(_\w+)?\b/.test(node.className);
     },
     replacement: function (content, node) {
       var latex = $(node).next().text();
+      // 替换防止 < >
       latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return "$" + latex + "$";
     },
@@ -8233,7 +8233,7 @@ async function initHTML2MarkDown() {
     filter: function (node, options) {
       return (
         node.tagName.toLowerCase() == "div" &&
-        node.className == "MathJax_Display"
+        node.classList.contains("MathJax_Display")
       );
     },
     replacement: function (content, node) {

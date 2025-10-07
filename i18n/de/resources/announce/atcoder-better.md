@@ -1,3 +1,20 @@
+## 1.20.0
+
+- Benutzerdefinierte Funktion "Übersetzungstextfarbe" hinzugefügt, Sie können die Textfarbe des Übersetzungsergebnisses in den Einstellungen konfigurieren, danke für den Beitrag von **@wrk-123**.
+- Dank **@wrk-123** wurde die Tastenkombination Strg+Eingabe zum Übermitteln von Code hinzugefügt.
+- Fix ` <br>` fehlende Zeilenumbrüche bei der MarkDown-Konvertierung, danke an **@wrk-123** für den Beitrag!
+- Behebt das Problem der HTML-Escaping-Zeichen beim Kopieren von MarkDown (z.B. `&lt;` `&gt;`), danke an **@wrk-123** für den Beitrag!
+- Fix MarkDown Konvertierung ohne Filterung ` <style>` Tags
+- Behebung des Fehlers in der Markdown-Link-Syntax, der durch die chinesische Klammer-Ersetzungsregel verursacht wurde, dank des Beitrags von **@wrk-123**.
+- Korrektur der HTTP-Statuscode-Beurteilungslogik des Yodo Translators, danke an **@wrk-123** für den Beitrag.
+- Behebung des CloudFlare-Panel-Validierungsproblems, danke an **@wrk-123** für den Beitrag!
+- Behebt redundante Tierwechselprobleme, danke an **@wrk-123** für den Beitrag!
+- Verbessern Sie das Button-Element durch Hinzufügen des Attributs `type='button'`, um falsche Formulareingaben zu vermeiden
+- Verbessern Sie den Text der Schaltfläche "Übersetzung kopieren", wenn diese deaktiviert ist.
+- Verbesserung des Aufbaus der Formulare für die Übermittlung von Code zur Vereinfachung der Codestruktur
+- Verbesserung des Themas nicht gefunden Entscheidung für den Sprung zu Luogu, Dank an **@wrk-123** für den Beitrag!
+- Verbesserung der Website-Lokalisierungsregeln, dank der Beiträge von **@qjwh**, **@nr0728**, **@wrk-123**.
+
 ## 1.19.0
 
 - Abhängigkeit von Greasyfork-Skript-Repository entfernen
