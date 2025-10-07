@@ -39,7 +39,7 @@
     "copy": {
         "normal": "コピー",
         "copied": "コピーしました",
-        "disabled": "コピーはサポートされていません"
+        "disabled": "コピーの禁止"
     },
     "state": {
         "wait": "待機…",

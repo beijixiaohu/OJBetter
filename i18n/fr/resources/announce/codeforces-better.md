@@ -1,3 +1,23 @@
+## 1.80.0
+
+- Ajout de la fonction personnalisée "Couleur du texte de la traduction", vous pouvez configurer la couleur du texte du résultat de la traduction dans les paramètres, merci pour la contribution de **@wrk-123**.
+- Ajout d'une boîte de dialogue de confirmation pour "Sauter le bloc de code ou non" lors de la traduction afin d'éviter de mal traduire le contenu du code.
+- Ajout du raccourci Ctrl+Enter pour soumettre le code, merci à **@wrk-123**.
+- Corrige les sauts de ligne ` <br>` manquants lors de la conversion MarkDown, merci à **@wrk-123** pour sa contribution !
+- Correction du problème des caractères d'échappement HTML lors de la copie de MarkDown (par exemple `&lt;` `&gt;`), merci à **@wrk-123** pour sa contribution !
+- Correction de la gestion des sauts de ligne pour les blocs de code (` <pre>`) dans les conversions MarkDown, merci à **@wrk-123** pour sa contribution !
+- Correction de la conversion MarkDown sans filtrage des balises ` <style>`.
+- Correction du problème d'erreur de syntaxe des liens Markdown causé par la règle chinoise de remplacement des crochets, grâce à la contribution de **@wrk-123**.
+- Correction de la logique de jugement du code d'état HTTP de Yodo Translator, grâce à la contribution de **@wrk-123**.
+- Correction d'un problème de correspondance des cas de PP, merci à **@awerty-noob** pour sa contribution !
+- Corriger les problèmes redondants de changement de niveau, merci à **@wrk-123** pour sa contribution !
+- Amélioration de la robustesse de la reconnaissance des éléments MathJax, prise en charge d'un plus grand nombre de variantes de noms de classes MathJax, grâce à **@wrk-123**.
+- Amélioration de la logique d'affichage de la fonction d'embellissement du bloc de code, n'affichant plus le bloc de code qui était caché, grâce à la contribution de **@wrk-123**.
+- Améliorer l'élément button en ajoutant l'attribut `type='button'` pour éviter les fausses soumissions de formulaire.
+- Améliorer le texte du bouton de copie de traduction lorsqu'il est désactivé.
+- Amélioration de la décision "topic not found" pour le saut à Luogu, merci à **@wrk-123** pour sa contribution !
+- Amélioration des règles de localisation des sites web, grâce aux contributions de **@qjwh**, **@wrk-123**.
+
 ## 1.79.0
 
 - Suppression de la dépendance au dépôt de scripts Greasyfork

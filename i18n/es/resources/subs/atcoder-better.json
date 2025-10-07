@@ -322,7 +322,10 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "Queda prohibido el uso de IA generativa en los concursos de AtCoder en curso. Para más detalles, consulte las normas que figuran a continuación.",
-                "AtCoder生成AI対策ルール - 20250718版": "Disposiciones de AtCoder para la IA Generativa - Versión 20250718",
+                "AtCoder生成AI対策ルール - 20251003版": "Disposiciones de AtCoder para la IA Generativa - Versión 20251003",
+                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "Esta norma se actualizó el 3 de octubre de 2025.",
+                "詳しくは": "Para más información, consulte",
+                "をご覧ください。": ".",
                 "現在": "estar de cara (a nosotros)",
                 "で参加登録しています。詳細は": "se han inscrito para participar. Para más información, lea",
                 "こちら": "aquí están",
@@ -331,6 +334,16 @@
                 "ログアウトしました。": "Desconectado.",
                 "ようこそ、": "Bienvenido.",
                 "さん": "Sr./Sra."
+            }
+        },
+        ".alert-link-jp": {
+            "class": [
+                ".enlace-alerta"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "这里の記事": "este artículo"
             }
         },
         ".h2, h2": {
@@ -765,7 +778,10 @@
                 "this post": "este artículo",
                 "for details.": "Más información.",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "Queda prohibido el uso de IA generativa en los concursos de AtCoder en curso. Para más detalles, consulte las normas que figuran a continuación.",
-                "AtCoder Rules against Generative AI - Version 20250718": "Disposiciones de AtCoder para la IA Generativa - Versión 20250718",
+                "AtCoder Rules against Generative AI - Version 20251003": "Disposiciones de AtCoder para la IA Generativa - Versión 20251003",
+                "Please note that the rules were updated on October 3\\, 2025.": "Esta norma se actualizó el 3 de octubre de 2025.",
+                " For details\\, please see ": "Para más información, consulte",
+                "\\.": ".",
                 "participant": "participantes",
                 "Registered": "Inscrito",
                 "Canceled registration": "Inscripción cancelada",
@@ -872,4 +888,5 @@
     },
     "dynamicReplacements": {}
 }
+
 

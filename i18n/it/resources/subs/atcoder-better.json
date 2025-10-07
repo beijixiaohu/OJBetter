@@ -322,7 +322,10 @@
             "isStrict": false,
             "rules": {
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "L'uso dell'IA generativa nelle competizioni AtCoder in corso è vietato. Per maggiori dettagli, consultare le regole qui di seguito.",
-                "AtCoder生成AI対策ルール - 20250718版": "Disposizioni di AtCoder per l'IA generativa - Versione 20250718",
+                "AtCoder生成AI対策ルール - 20251003版": "Disposizioni di AtCoder per l'IA generativa - Versione 20251003",
+                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "Si noti che questa regola è stata aggiornata a partire dal 3 ottobre 2025.",
+                "詳しくは": "Per ulteriori informazioni, consultare",
+                "をご覧ください。": ".",
                 "現在": "essere di fronte a (noi)",
                 "で参加登録しています。詳細は": "si sono iscritti per partecipare. Per ulteriori informazioni, leggere",
                 "こちら": "qui ci sono",
@@ -331,6 +334,16 @@
                 "ログアウトしました。": "Disconnesso.",
                 "ようこそ、": "Benvenuti.",
                 "さん": "Signore e signori"
+            }
+        },
+        ".alert-link-jp": {
+            "class": [
+                ".alert-link"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "这里の記事": "questo articolo"
             }
         },
         ".h2, h2": {
@@ -765,7 +778,10 @@
                 "this post": "questo articolo",
                 "for details.": "Per saperne di più.",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "L'uso dell'IA generativa nelle competizioni AtCoder in corso è vietato. Per maggiori dettagli, consultare le regole qui di seguito.",
-                "AtCoder Rules against Generative AI - Version 20250718": "Disposizioni di AtCoder per l'IA generativa - Versione 20250718",
+                "AtCoder Rules against Generative AI - Version 20251003": "Disposizioni di AtCoder per l'IA generativa - Versione 20251003",
+                "Please note that the rules were updated on October 3\\, 2025.": "Si noti che questa regola è stata aggiornata a partire dal 3 ottobre 2025.",
+                " For details\\, please see ": "Per ulteriori informazioni, consultare",
+                "\\.": ".",
                 "participant": "partecipanti",
                 "Registered": "Iscritta",
                 "Canceled registration": "Registrazione annullata",
@@ -872,4 +888,5 @@
     },
     "dynamicReplacements": {}
 }
+
 

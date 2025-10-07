@@ -1,3 +1,20 @@
+## 1.20.0
+
+- Ajout de la fonction personnalisée "Couleur du texte de la traduction", vous pouvez configurer la couleur du texte du résultat de la traduction dans les paramètres, merci pour la contribution de **@wrk-123**.
+- Ajout du raccourci Ctrl+Enter pour soumettre le code, merci à **@wrk-123**.
+- Corrige les sauts de ligne ` <br>` manquants lors de la conversion MarkDown, merci à **@wrk-123** pour sa contribution !
+- Correction du problème des caractères d'échappement HTML lors de la copie de MarkDown (par exemple `&lt;` `&gt;`), merci à **@wrk-123** pour sa contribution !
+- Correction de la conversion MarkDown sans filtrage des balises ` <style>`.
+- Correction du problème d'erreur de syntaxe des liens Markdown causé par la règle chinoise de remplacement des crochets, grâce à la contribution de **@wrk-123**.
+- Correction de la logique de jugement du code d'état HTTP de Yodo Translator, grâce à la contribution de **@wrk-123**.
+- Correction d'un problème de validation du panneau CloudFlare, merci à **@wrk-123** pour sa contribution !
+- Corriger les problèmes redondants de changement de niveau, merci à **@wrk-123** pour sa contribution !
+- Améliorer l'élément button en ajoutant l'attribut `type='button'` pour éviter les fausses soumissions de formulaire.
+- Améliorer le texte du bouton de copie de traduction lorsqu'il est désactivé.
+- Améliorer la façon dont les formulaires de soumission de code sont construits pour simplifier la structure du code
+- Amélioration de la décision "topic not found" pour le saut à Luogu, merci à **@wrk-123** pour sa contribution !
+- Amélioration des règles de localisation des sites web, grâce aux contributions de **@qjwh**, **@nr0728**, **@wrk-123**
+
 ## 1.19.0
 
 - Suppression de la dépendance au dépôt de scripts Greasyfork

@@ -39,7 +39,7 @@
     "copy": {
         "normal": "haga una copia de",
         "copied": "Reproducido",
-        "disabled": "No se admite la copia"
+        "disabled": "Prohibición de copia"
     },
     "state": {
         "wait": "Esperando…",

@@ -1,3 +1,23 @@
+## 1.80.0
+
+- Aggiunta la funzione personalizzata "Colore del testo della traduzione", che consente di configurare il colore del testo del risultato della traduzione nelle impostazioni, grazie al contributo di **@wrk-123**.
+- Aggiunta una finestra di dialogo di conferma per "Salta o no il blocco di codice" durante la traduzione, per evitare di tradurre erroneamente il contenuto del codice.
+- Aggiunta scorciatoia Ctrl+Invio per inviare il codice, grazie a **@wrk-123**.
+- Correggere le interruzioni di riga ` <br>` mancanti durante la conversione di MarkDown, grazie a **@wrk-123** per il contributo!
+- Correggere il problema dell'escape dei caratteri HTML durante la copia di MarkDown (ad esempio `&lt;` `&gt;`), grazie a **@wrk-123** per il contributo!
+- Correggere la gestione delle interruzioni di riga per i blocchi di codice (` <pre>`) nelle conversioni MarkDown, grazie a **@wrk-123** per il contributo!
+- Correggere la conversione di MarkDown senza filtrare i tag \` <style>
+- Corretto il problema dell'errore di sintassi dei collegamenti Markdown causato dalla regola di sostituzione delle parentesi cinesi, grazie al contributo di **@wrk-123**.
+- Correzione della logica di valutazione del codice di stato HTTP di Yodo Translator, grazie al contributo di **@wrk-123**.
+- Correggere il problema della corrispondenza dei casi in PP, grazie a **@awerty-noob** per il contributo!
+- Risolvere i problemi di cambio di livello ridondanti, grazie a **@wrk-123** per il contributo!
+- Migliorare la robustezza del riconoscimento degli elementi MathJax, supportare più varianti di nomi di classi MathJax, grazie a **@wrk-123**.
+- Migliorata la logica di visualizzazione della funzione di abbellimento del blocco di codice, che non mostra più il blocco di codice che era nascosto, grazie al contributo di **@wrk-123**.
+- Migliorare l'elemento pulsante aggiungendo l'attributo `type='button'` per evitare falsi invii di moduli.
+- Migliorare il testo del pulsante di copia della traduzione quando è disattivato.
+- Miglioramento della decisione di argomento non trovato per il salto a Luogu, grazie a **@wrk-123** per il contributo!
+- Miglioramento delle regole di localizzazione dei siti web, grazie ai contributi di **@qjwh**, **@wrk-123**
+
 ## 1.79.0
 
 - Rimuovere la dipendenza dal repository di script Greasyfork
