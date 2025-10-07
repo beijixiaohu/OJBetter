@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.19.0
+// @version      1.20.0
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -426,6 +426,8 @@ OJBetter.preference = {
     iconButtonSize: undefined,
     /** @type {boolean?} 是否显示同比赛题目列表*/
     showSameContestProblems: undefined,
+    /** @type {string?} 翻译文本颜色 */
+    TranslateTextColor: undefined
 };
 
 /**
@@ -657,6 +659,19 @@ const OJB_parseLinePairArray = val => {
 const OJB_removeHTMLTags = function (text) {
     return text.replace(/<\/?[a-zA-Z]+("[^"]*"|'[^']*'|[^'">])*>/g, '');
 }
+
+/**
+ * 解码被转义的字符串为普通字符
+ * @param {string} text - 包含 &lt;、&gt; 的字符串
+ * @returns {string} - 解码后的字符串
+ */
+const OJB_unescapeHtml = (function() {
+  const textarea = document.createElement("textarea");
+  return function(text) {
+    textarea.innerHTML = text;
+    return textarea.value;
+  };
+})();
 
 /**
  * 获取对象中指定路径表达式的值
@@ -980,6 +995,7 @@ async function initVar() {
     OJBetter.monaco.lsp.socketUrl = OJB_getGMValue("OJBetter_Bridge_SocketUrl", "ws://127.0.0.1:2323/");
     OJBetter.preference.showLoading = OJB_getGMValue("showLoading", true);
     OJBetter.preference.hoverTargetAreaDisplay = OJB_getGMValue("hoverTargetAreaDisplay", false);
+    OJBetter.preference.TranslateTextColor = OJB_getGMValue("TranslateTextColor","");
     OJBetter.preference.showSameContestProblems = OJB_getGMValue("showSameContestProblems", false);
     OJBetter.basic.expandFoldingblocks = OJB_getGMValue("expandFoldingblocks", true);
     OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
@@ -1972,7 +1988,6 @@ dialog::backdrop {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
-    z-index: 150;
 }
 .ojb_btn.primary {
     color: #ffffff;
@@ -4357,7 +4372,11 @@ function OJB_getCodeFromPre(element) {
         if (code.classList.contains("linenums")) {
             return getCodeFromPrettyPre(element);
         } else {
-            return element.querySelector("code.prettyprint").textContent;
+            // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+            // 用 DOMParser 转换 HTML 代码，正确替换换行。
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+            return doc.body.textContent;
         }
     }
 
@@ -6328,6 +6347,16 @@ const preference_settings_HTML = `
         </div>
         <input type="checkbox" id="showSameContestProblems" name="showSameContestProblems">
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for='TranslateTextColor'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.TranslateTextColor.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.TranslateTextColor.helpText"></div>
+        </div>
+        <textarea type="text" id='TranslateTextColor' class='no_default' data-i18n="[placeholder]settings:preference.TranslateTextColor.placeholder"></textarea>
+    </div>
 </div>
 `;
 
@@ -6981,6 +7010,7 @@ async function initSettingsPanel() {
         $("#showClistRating_contest").prop("checked", GM_getValue("showClistRating_contest") === true);
         $("#showClistRating_problemset").prop("checked", GM_getValue("showClistRating_problemset") === true);
         $("#showClistRating_problem").prop("checked", GM_getValue("showClistRating_problem") === true);
+        $("#TranslateTextColor").val(GM_getValue("TranslateTextColor"));
         $("#RatingHidden").prop("checked", GM_getValue("RatingHidden") === true);
         $('#scriptL10nLanguage').val(GM_getValue("scriptL10nLanguage"));
         $('#localizationLanguage').val(GM_getValue("localizationLanguage"));
@@ -7083,6 +7113,7 @@ async function initSettingsPanel() {
                 openai_customPrompt: $('#openai_customPrompt').val(),
                 commentTranslationChoice: $('#comment_translation_choice').val(),
                 iconButtonSize: $('#iconButtonSize').val(),
+                TranslateTextColor: $("#TranslateTextColor").val(),
                 autoTranslation: $("#autoTranslation").prop("checked"),
                 shortTextLength: $('#shortTextLength').val(),
                 allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -7267,7 +7298,8 @@ async function initHTML2MarkDown() {
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('ojb-overlay') ||
                 node.classList.contains('monaco-editor') ||
-                node.nodeName === 'SCRIPT';
+                node.nodeName === 'SCRIPT' ||
+                node.nodeName === 'STYLE';
         },
         replacement: function () {
             return '';
@@ -7281,6 +7313,7 @@ async function initHTML2MarkDown() {
         },
         replacement: function (content, node) {
             var latex = $(node).find('annotation').text();
+            // 替换防止 < >
             latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             return "$" + latex + "$";
         }
@@ -7615,17 +7648,17 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
 
     let panel = OJB_safeCreateJQElement(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
     let viewButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}' type='button'>
             <i class="iconfont">&#xe7e5;</i>
             <span class="popover_content">${i18next.t('md.normal', { ns: 'button' })}</span>
         </button>`);
     let copyButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}' type='button'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t('copy.normal', { ns: 'button' })}</span>
         </button>`);
     let translateButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
+        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}' type='button'>
             <i class="iconfont">&#xe6be;</i>
             <span class="popover_content">${text}</span>
         </button>`);
@@ -7787,7 +7820,8 @@ async function addButtonWithCopy(button, element, suffix, type) {
 
         var markdown = $(element).getMarkdown();
 
-        GM_setClipboard(markdown);
+        // 得到的应当是原字符串，getMarkdown得到的字符被转义
+        GM_setClipboard(OJB_unescapeHtml(markdown));
 
         $(this).addClass("success");
         changeButtonState("copied");
@@ -8394,6 +8428,10 @@ class TranslateDiv {
                 this.renderLaTeX(element);
             }
         });
+        // 渲染翻译文本颜色
+        if(OJBetter.preference.TranslateTextColor){
+            this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
+        }
     }
 
     /**
@@ -8468,6 +8506,7 @@ class TranslateDiv {
     disableCopyButton() {
         this.copyButton.css({ 'fill': '#ccc' });
         this.copyButton.off("click");
+        this.copyButton.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
     }
 
     /**
@@ -8980,7 +9019,13 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
             { pattern: /(\s_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: "$1 $2" }, // 斜体
             { pattern: /(_[\u4e00-\u9fa5]+_\s)([\u4e00-\u9fa5]+)/g, replacement: " $1$2" },
             { pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g, replacement: " $1 $2" },
-            { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+            // { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+            {
+                // 将 ]（xxxxxx） 或 ］（xxxxxx） 或 】（xxxxxx） 等形式替换成 ](xxxxxx)
+                // 使用非捕获组 (?:\]|］|】) 来匹配 ]、］ 或 】，后面允许有任意空白字符，再匹配全角括号中的内容
+                pattern: /(?:\]|］|】)\s*（([\s\S]*?)）/g,
+                replacement: "]($1)",
+            },
             // { pattern: /：/g, replacement: ":" }, // 中文：
             { pattern: /\*\* (.*?) \*\*/g, replacement: "\*\*$1\*\*" }, // 加粗
             { pattern: /\* \*(.*?)\* \*/g, replacement: "\*\*$1\*\*" } // 加粗
@@ -9395,7 +9440,7 @@ async function CF2luogu(problemToolbar) {
                 method: "GET",
                 url
             });
-            return !response.responseText.match(/出错了/g);
+            return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
         }, {
             maxRetries: 3,
             retryInterval: 1000
@@ -10180,143 +10225,103 @@ async function getCode(url) {
 // 创建代码编辑调试表单元素
 // async function createCodeEditorForm(submitUrl, cloneHTML) {
 async function createCodeEditorForm(submitUrl) {
-    // 表单
-    let formDiv = $('<form method="post" id="OJBetter_SubmitForm" class="input-output-copier"></form>');
-    // $('.ttypography').after(formDiv);
+    // 表单容器
+    const formDiv = $('<form>', {
+        id: 'OJBetter_SubmitForm',
+        class: 'input-output-copier',
+        method: 'POST',
+        action: submitUrl
+    });
     $('#task-statement').after(formDiv);
-    // formDiv.attr('action', submitUrl + "?csrf_token=" + OJBetter.common.at_csrf_token);
-    formDiv.attr('action', submitUrl);
-    formDiv.attr('method', 'POST');
 
-    // 顶部区域
-    let topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
-
-    // 顶部左侧区域
-    let topLeftDiv = OJB_safeCreateJQElement(`<div class="topLeftDiv"></div>`);
-    topDiv.append(topLeftDiv);
-    // 语言选择
-    let selectLang = $('#select-lang').clone();
-    // selectLang.attr('id', 'programTypeId');
+    // 顶部区：语言选择
+    const topDiv = OJB_safeCreateJQElement(`<div class="topDiv"></div>`);
+    const topLeftDiv = OJB_safeCreateJQElement(`<div class="topLeftDiv"></div>`);
+    const selectLang = $('#select-lang').clone();
     topLeftDiv.append(selectLang);
-
-    // 顶部右侧区域
-    let topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
-    topDiv.append(topRightDiv);
+    const topRightDiv = OJB_safeCreateJQElement(`<div class="topRightDiv"></div>`);
+    topDiv.append(topLeftDiv, topRightDiv);
     formDiv.append(topDiv);
 
-    // 问题选择/编号
-    // let selectProblem = $('<input name="submittedProblemIndex" style="display:none;"></input>');
-    // let problemCode;
-    // if (OJBetter.typeOfPage.is_acmsguru) {
-    //     problemCode = $('h4').eq(0).text();
-    //     let matchResult = problemCode.match(/([A-Z0-9]+)/);
-    //     problemCode = matchResult[0];
-    // } else if (OJBetter.typeOfPage.is_problemset_problem) {
-    //     let match = window.location.href.match(/\/problem\/([0-9]+?)\/([A-Za-z0-9]+?)(?!=[A-Za-z0-9])/);
-    //     problemCode = match[1] + match[2];
-    //     selectProblem.attr('name', 'submittedProblemCode');
-    // } else {
-    //     problemCode = $('.header .title').eq(0).text();
-    //     let matchResult = problemCode.match(/([A-Z0-9]+)/);
-    //     problemCode = matchResult[0];
-    // }
-    // selectProblem.val(problemCode);
-    let selectProblem = $('input[name="data.TaskScreenName"]').clone();
-    formDiv.append(selectProblem);
+    // 隐藏字段：TaskScreenName & 源码 & csrf
+    const selectProblem = $('input[name="data.TaskScreenName"]').clone();
+    const sourceDiv = $('<textarea>', { id: 'plain-textarea', name: 'sourceCode', style: 'display:none' });
+    const csrfDiv = $('<input>', { type: 'hidden', name: 'csrf_token', value: OJBetter.common.at_csrf_token });
+    formDiv.append(selectProblem, sourceDiv, csrfDiv);
 
-    // 隐藏的代码记录
-    // let sourceDiv = $('<textarea id="sourceCodeTextarea" name="source" style="display: none;"></textarea>');
-    let sourceDiv = $('<textarea id="plain-textarea" name="sourceCode" style="display: none;"></textarea>');
-    formDiv.append(sourceDiv);
+    // 获取 Turnstile Token（不移动 DOM 元素）
+    const turnstileInput = document.querySelector('input[name="cf-turnstile-response"]');
+    if (!turnstileInput) {
+        console.warn('未检测到 Cloudflare Turnstile 验证框，可能是rated比赛赛时。');
+    } else {
+        const clonedInput = $(turnstileInput).clone();
+        formDiv.append(clonedInput);
+    }
 
-    // 隐藏的crsf token
-    let csrfDiv = $(`<input type="hidden" name="csrf_token" value=${OJBetter.common.at_csrf_token}>`);
-    formDiv.append(csrfDiv);
-
-    // 代码编辑器
-    let editorDiv = $('<div id="OJBetter_editor"></div>');
+    // 编辑器容器
+    const editorDiv = $('<div>', { id: 'OJBetter_editor' });
+    const monacoDiv = $('<div>', { id: 'OJBetter_monaco' });
+    editorDiv.append(monacoDiv);
     formDiv.append(editorDiv);
 
-    // monaco
-    let monaco = $('<div id="OJBetter_monaco"></div>');
-    editorDiv.append(monaco);
-
-    // 自定义调试
-    let customTestDiv = OJB_safeCreateJQElement(`
+    // 自定义测试区
+    const customTestDiv = OJB_safeCreateJQElement(`
         <details id="customTestBlock">
-            <summary >${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
-            <div id="customTests" style="min-height: 30px;"></div>
-            <div id="control" style="display:flex;">
-                <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="onlyCustomTest"}><label for="onlyCustomTest">
-                    ${i18next.t('customTestBlock.onlyCustom', { ns: 'codeEditor' })}
-                    </label>
-                </div>
-                <div style="display: flex;margin: 5px;">
-                    <input type="checkbox" id="DontShowDiff"}>
-                    <label for="DontShowDiff">
-                        ${i18next.t('customTestBlock.DontShowDiff', { ns: 'codeEditor' })}
-                    </label>
-                </div>
+            <summary>${i18next.t('customTestBlock.title', { ns: 'codeEditor' })}</summary>
+            <div id="customTests" style="min-height:30px"></div>
+            <div id="control" style="display:flex">
+                <div style="margin:5px"><input type="checkbox" id="onlyCustomTest"><label for="onlyCustomTest">${i18next.t('customTestBlock.onlyCustom', { ns: 'codeEditor' })}</label></div>
+                <div style="margin:5px"><input type="checkbox" id="DontShowDiff"><label for="DontShowDiff">${i18next.t('customTestBlock.DontShowDiff', { ns: 'codeEditor' })}</label></div>
                 <button type="button" id="addCustomTest">${i18next.t('customTestBlock.add', { ns: 'codeEditor' })}</button>
             </div>
         </details>
-    `)
+    `);
     formDiv.append(customTestDiv);
 
-    // 调试/提交
-    let submitDiv = $('<div id="OJBetter_submitDiv"></div>');
-    let CompilerArgsInput = $('<input type="text" id="CompilerArgsInput">');
+    // 调试/提交区
+    const submitDiv = $('<div>', { id: 'OJBetter_submitDiv' });
+    const CompilerArgsInput = $('<input>', { type: 'text', id: 'CompilerArgsInput' });
     submitDiv.append(CompilerArgsInput);
-
-    let runButton = OJB_safeCreateJQElement(`
+    const runButton = OJB_safeCreateJQElement(`
         <button type="button" id="RunTestButton" class="ojb_btn ojb_btn_popover top">
             <i class="iconfont">&#xe6c1;</i>
             <span class="popover_content">${i18next.t('runTestButton.initial', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    let submitButton = OJB_safeCreateJQElement(`
+    const submitButton = OJB_safeCreateJQElement(`
         <button id="SubmitButton" class="ojb_btn ojb_btn_popover top" type="submit">
             <i class="iconfont">&#xe633;</i>
             <span class="popover_content">${i18next.t('submitButton', { ns: 'codeEditor' })}</span>
         </button>
     `);
-    if (OJBetter.monaco.setting.submitButtonPosition == "bottom") {
-        // 添加测试/提交按钮到底部
-        submitDiv.append(runButton);
-        submitDiv.append(submitButton);
-    }
-
+    if (OJBetter.monaco.setting.submitButtonPosition === 'bottom') submitDiv.append(runButton, submitButton);
     formDiv.append(submitDiv);
-    let CompilerSetting = OJB_safeCreateJQElement(`
-        <div id="CompilerSetting"></div>
-    `);
-    formDiv.append(CompilerSetting);
-    let statePanel = OJB_safeCreateJQElement(`
-        <div id="statePanel"></div>
-    `);
-    formDiv.append(statePanel);
+    const CompilerSetting = OJB_safeCreateJQElement(`<div id="CompilerSetting"></div>`);
+    const statePanel = OJB_safeCreateJQElement(`<div id="statePanel"></div>`);
+    formDiv.append(CompilerSetting, statePanel);
 
-    //==================================
-    // 去除原有的编辑器
-    //==================================
-    $('.form-code-submit').remove();
+    // 移除原 editor
+    // 保留原有的cloudflare标记，不全删除
+    $('.form-code-submit .form-group').eq(1).remove();
+    $('.form-code-submit .form-group').eq(0).remove();
+    $('.form-code-submit .form-group .btn').remove();
 
-    let from = {
+    return {
         formDiv: formDiv,
         selectLang: selectLang.find('select:first'),
         topRightDiv: topRightDiv,
         sourceDiv: sourceDiv,
         editorDiv: editorDiv,
-        monaco: monaco,
+        monaco: monacoDiv,
         runButton: runButton,
         submitButton: submitButton,
         submitDiv: submitDiv,
         CompilerSetting: CompilerSetting,
         statePanel: statePanel
     };
-    return from;
 }
+
+
 
 // 解析ace格式的补全规则(acwing)
 function parseAceCompleter(rules, range) {
@@ -10557,6 +10562,15 @@ async function createMonacoEditor(language, form, support) {
             selectionMode: 'never' // 代码建议不自动选择
         }
     });
+
+    // 在编辑器中添加快捷命令：Ctrl+Enter (或 macOS 下的 Cmd+Enter)
+    OJBetter.monaco.editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+        function () {
+            // 当用户按下 Ctrl+Enter 后，触发传入的 form 对象中的提交按钮点击事件
+            form.submitButton.click();
+        }
+    );
 
     /**
      * 添加快捷功能
@@ -14500,3 +14514,5 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
       location.reload();
     }
 }
+
+
