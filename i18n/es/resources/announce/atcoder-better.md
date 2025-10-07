@@ -1,3 +1,20 @@
+## 1.20.0
+
+- Añadida la función personalizada "Color del texto de la traducción", puedes configurar el color del texto del resultado de la traducción en los ajustes, gracias por la contribución de **@wrk-123**.
+- Añadido atajo Ctrl+Enter para enviar código, gracias a **@wrk-123**.
+- Corrección de la falta de saltos de línea en ` <br>` durante la conversión MarkDown, ¡gracias a **@wrk-123** por su contribución!
+- Solucionado el problema de los caracteres de escape HTML al copiar MarkDown (por ejemplo `&lt;` `&gt;`), ¡gracias a **@wrk-123** por la contribución!
+- Corrección de la conversión MarkDown sin filtrar las etiquetas ` <style>`.
+- Corrección del problema de error de sintaxis de enlace Markdown causado por la regla china de sustitución de corchetes, gracias a la contribución de **@wrk-123**.
+- Corrección de la lógica de evaluación del código de estado HTTP de Yodo Translator, gracias a la contribución de **@wrk-123**.
+- Solucionado el problema de validación del panel de CloudFlare, ¡gracias a **@wrk-123** por la contribución!
+- Arreglar problemas de cambios de nivel redundantes, ¡gracias a **@wrk-123** por la contribución!
+- Mejorar el elemento botón añadiendo el atributo `type='button'` para evitar falsos envíos de formularios.
+- Mejorar el texto del botón de copiar traducción cuando está desactivado.
+- Mejorar la construcción de los formularios de envío de código para simplificar su estructura.
+- Mejora de la decisión de tema no encontrado para saltar a Luogu, ¡gracias a **@wrk-123** por la contribución!
+- Mejora de las normas de localización de sitios web, gracias a las contribuciones de **@qjwh**, **@nr0728**, **@wrk-123**.
+
 ## 1.19.0
 
 - Eliminar la dependencia del repositorio de scripts Greasyfork
