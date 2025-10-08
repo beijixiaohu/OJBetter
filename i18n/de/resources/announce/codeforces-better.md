@@ -8,7 +8,6 @@
 - Korrektur der Behandlung von Zeilenumbrüchen bei Codeblöcken (` <pre>`) in MarkDown-Konvertierungen, danke an **@wrk-123** für den Beitrag!
 - Fix MarkDown Konvertierung ohne Filterung ` <style>` Tags
 - Behebung des Fehlers in der Markdown-Link-Syntax, der durch die chinesische Klammer-Ersetzungsregel verursacht wurde, dank des Beitrags von **@wrk-123**.
-- Korrektur der HTTP-Statuscode-Beurteilungslogik des Yodo Translators, danke an **@wrk-123** für den Beitrag.
 - Behebung des Problems mit der Groß-/Kleinschreibung in PP, danke an **@awerty-noob** für den Beitrag!
 - Behebt redundante Tierwechselprobleme, danke an **@wrk-123** für den Beitrag!
 - Verbesserte Robustheit der MathJax-Element-Erkennung, Unterstützung für mehr MathJax-Klassennamenvarianten, dank **@wrk-123**.
