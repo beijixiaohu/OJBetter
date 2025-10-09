@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.79.0
+// @version      1.80.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -430,6 +430,8 @@ OJBetter.preference = {
   iconButtonSize: undefined,
   /** @type {string?} 评测状态文本替换规则 */
   judgeStatusReplaceText: undefined,
+  /** @type {string?} 翻译文本颜色 */
+  TranslateTextColor: undefined
 };
 
 /**
@@ -716,6 +718,19 @@ const OJB_parseLinePairArray = (val) => {
 const OJB_removeHTMLTags = function (text) {
   return text.replace(/<\/?[a-zA-Z]+("[^"]*"|'[^']*'|[^'">])*>/g, "");
 };
+
+/**
+ * 解码被转义的字符串为普通字符
+ * @param {string} text - 包含 &lt;、&gt; 的字符串
+ * @returns {string} - 解码后的字符串
+ */
+const OJB_unescapeHtml = (function() {
+  const textarea = document.createElement("textarea");
+  return function(text) {
+    textarea.innerHTML = text;
+    return textarea.value;
+  };
+})();
 
 /**
  * 获取对象中指定路径表达式的值
@@ -1193,6 +1208,10 @@ async function initVar() {
   OJBetter.preference.iconButtonSize = OJB_getGMValue("iconButtonSize", "16");
   OJBetter.preference.judgeStatusReplaceText = OJB_getGMValue(
     "judgeStatusReplaceText",
+    ""
+  );
+  OJBetter.preference.TranslateTextColor = OJB_getGMValue(
+    "TranslateTextColor",
     ""
   );
   OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue(
@@ -2142,7 +2161,7 @@ async function beautifyPreBlocksWithMonaco() {
     // 创建一个用于 Monaco 编辑器的容器
     const container = $("<div></div>");
     const lineCount = code.split("\n").length; // 代码的行数
-
+    
     // 计算容器的高度
     const calculateContainerHeight = (lineCount) => {
       const lineHeight = 20; // 每行代码的高度
@@ -2381,7 +2400,6 @@ dialog::backdrop {
     color: #409eff;
     border-color: #409eff;
     background-color: #f1f8ff;
-    z-index: 150;
 }
 .ojb_btn.primary {
     color: #ffffff;
@@ -4852,7 +4870,11 @@ function OJB_getCodeFromPre(element) {
     if (code.classList.contains("linenums")) {
       return getCodeFromPrettyPre(element);
     } else {
-      return element.querySelector("code.prettyprint").textContent;
+      // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+      // 用 DOMParser 转换 HTML 代码，正确替换换行。
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+      return doc.body.textContent;
     }
   };
 
@@ -6978,6 +7000,16 @@ const preference_settings_HTML = `
         </div>
         <textarea type="text" id='judgeStatusReplaceText' class='no_default' data-i18n="[placeholder]settings:preference.judgeStatusReplaceText.placeholder"></textarea>
     </div>
+    <div class='OJBetter_setting_list'>
+        <label for='TranslateTextColor'>
+            <div style="display: flex;align-items: center;" data-i18n="settings:preference.TranslateTextColor.title"></div>
+        </label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.TranslateTextColor.helpText"></div>
+        </div>
+        <textarea type="text" id='TranslateTextColor' class='no_default' data-i18n="[placeholder]settings:preference.TranslateTextColor.placeholder"></textarea>
+    </div>
 </div>
 `;
 
@@ -7781,6 +7813,7 @@ async function initSettingsPanel() {
     );
     $("#iconButtonSize").val(GM_getValue("iconButtonSize"));
     $("#judgeStatusReplaceText").val(GM_getValue("judgeStatusReplaceText"));
+    $("#TranslateTextColor").val(GM_getValue("TranslateTextColor"));
     $("#autoTranslation").prop(
       "checked",
       GM_getValue("autoTranslation") === true
@@ -7941,6 +7974,7 @@ async function initSettingsPanel() {
         commentTranslationChoice: $("#comment_translation_choice").val(),
         iconButtonSize: $("#iconButtonSize").val(),
         judgeStatusReplaceText: $("#judgeStatusReplaceText").val(),
+        TranslateTextColor: $("#TranslateTextColor").val(),
         autoTranslation: $("#autoTranslation").prop("checked"),
         shortTextLength: $("#shortTextLength").val(),
         allowMixTrans: $("#allowMixTrans").prop("checked"),
@@ -8160,7 +8194,8 @@ async function initHTML2MarkDown() {
         node.classList.contains("html2md-panel") ||
         node.classList.contains("likeForm") ||
         node.classList.contains("monaco-editor") ||
-        node.nodeName === "SCRIPT"
+        node.nodeName === "SCRIPT" ||
+        node.nodeName === "STYLE"
       );
     },
     replacement: function (content, node) {
@@ -8182,12 +8217,12 @@ async function initHTML2MarkDown() {
   // inline math
   OJBetter.common.turndownService.addRule("inline-math", {
     filter: function (node, options) {
-      return (
-        node.tagName.toLowerCase() == "span" && node.className == "MathJax"
-      );
+      if (node.tagName.toLowerCase() !== "span") return false;
+      return node.className && /\bMathJax(_\w+)?\b/.test(node.className);
     },
     replacement: function (content, node) {
       var latex = $(node).next().text();
+      // 替换防止 < >
       latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return "$" + latex + "$";
     },
@@ -8198,11 +8233,12 @@ async function initHTML2MarkDown() {
     filter: function (node, options) {
       return (
         node.tagName.toLowerCase() == "div" &&
-        node.className == "MathJax_Display"
+        node.classList.contains("MathJax_Display")
       );
     },
     replacement: function (content, node) {
       var latex = $(node).next().text();
+      // 替换防止 < >
       latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
       return "\n$$\n" + latex + "\n$$\n";
     },
@@ -8246,12 +8282,23 @@ async function initHTML2MarkDown() {
 
   // pre
   OJBetter.common.turndownService.addRule("pre", {
-    filter: function (node, options) {
-      return node.tagName.toLowerCase() == "pre";
+    filter: function (node) {
+      return node.tagName.toLowerCase() === "pre";
     },
     replacement: function (content, node) {
-      if (!!node.querySelector("code.prettyprint")) {
-        return "";
+      const code = node.querySelector("code.prettyprint");
+      if (code) {
+        // 克隆一份 DOM，避免破坏原结构
+        const clone = code.cloneNode(true);
+
+        // 把 <br> 全部换成换行符
+        clone.querySelectorAll("br").forEach(br => {
+          br.replaceWith("\n");
+        });
+
+        // 最终拿纯文本
+        const text = clone.textContent;
+        return "```\n" + text + "```\n";
       } else {
         return "```\n" + content + "```\n";
       }
@@ -8592,21 +8639,21 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
     }'></div>`
   );
   let viewButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}'>
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}' type='button'>
             <i class="iconfont">&#xe7e5;</i>
             <span class="popover_content">${i18next.t("md.normal", {
     ns: "button",
   })}</span>
         </button>`);
   let copyButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}'>
+        <button class='ojb_btn ojb_btn_popover top' id='html2md-cb${suffix}' type='button'>
             <i class="iconfont">&#xe608;</i>
             <span class="popover_content">${i18next.t("copy.normal", {
     ns: "button",
   })}</span>
         </button>`);
   let translateButton = OJB_safeCreateJQElement(`
-        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}'>
+        <button class='ojb_btn translateButton ojb_btn_popover top' id='translateButton${suffix}' type='button'>
             <i class="iconfont">&#xe6be;</i>
             <span class="popover_content">${text}</span>
         </button>`);
@@ -8710,7 +8757,16 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       if (checkViewmd()) {
         setViewmd(false);
         target.last().next(".mdViewContent").remove();
-        target.show();
+        if(!OJBetter.monaco.beautifyPreBlocks){
+          target.show();
+        }else{
+          // 不显示本来被隐藏的代码块
+          target.each(function() {
+            if (!$(this).is("pre")) {
+              $(this).show();
+            }
+          });
+        }
       } else {
         setViewmd(true);
         const markdown = $(element).getMarkdown();
@@ -8777,7 +8833,8 @@ async function addButtonWithCopy(button, element, suffix, type) {
 
       var markdown = $(element).getMarkdown();
 
-      GM_setClipboard(markdown);
+      // 得到的应当是原字符串，getMarkdown得到的字符被转义
+      GM_setClipboard(OJB_unescapeHtml(markdown));
 
       $(this).addClass("success");
       changeButtonState("copied");
@@ -9160,7 +9217,7 @@ async function process(
     element_node = div.get(0);
   }
 
-  //是否跳过折叠块
+  // 是否跳过折叠块
   if ($(target).find(".spoiler").length > 0) {
     const shouldSkip = await OJB_createDialog(
       i18next.t("skipFold.title", { ns: "dialog" }),
@@ -9170,11 +9227,28 @@ async function process(
         i18next.t("skipFold.buttons.1", { ns: "dialog" }),
       ],
       true
-    ); //跳过折叠块确认
+    ); // 跳过折叠块确认
     if (shouldSkip) {
       $(target).find(".spoiler").remove();
     } else {
       $(target).find(".html2md-panel").remove();
+    }
+  }
+
+  // 是否跳过代码块
+  if ($(target).find("code").length > 0 || $(target).find(".monaco-editor").length > 0) {
+    const shouldSkip = await OJB_createDialog(
+      i18next.t("skipCodeBlock.title", { ns: "dialog" }),
+      i18next.t("skipCodeBlock.content", { ns: "dialog" }),
+      [
+        i18next.t("skipCodeBlock.buttons.0", { ns: "dialog" }),
+        i18next.t("skipCodeBlock.buttons.1", { ns: "dialog" }),
+      ],
+      true
+    ); // 跳过代码块确认
+    if (shouldSkip) {
+      $(target).find("code").remove();
+      $(target).find(".monaco-editor").remove();
     }
   }
 
@@ -9705,6 +9779,11 @@ class TranslateDiv {
     //         this.renderLaTeX(element);
     //     }
     // });
+    
+    // 渲染翻译文本颜色
+    if(OJBetter.preference.TranslateTextColor){
+      this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
+    }
   }
 
   /**
@@ -9797,6 +9876,7 @@ class TranslateDiv {
   disableCopyButton() {
     this.copyButton.css({ fill: "#ccc" });
     this.copyButton.off("click");
+    this.copyButton.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
   }
 
   /**
@@ -10367,11 +10447,18 @@ async function translateMain(
         pattern: /(_[\u4e00-\u9fa5]+_)([\u4e00-\u9fa5]+)/g,
         replacement: " $1 $2",
       },
-      { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+      // { pattern: /（([\s\S]*?)）/g, replacement: "($1)" }, // 中文（）
+      {
+        // 将 ]（xxxxxx） 或 ］（xxxxxx） 或 】（xxxxxx） 等形式替换成 ](xxxxxx)
+        // 使用非捕获组 (?:\]|］|】) 来匹配 ]、］ 或 】，后面允许有任意空白字符，再匹配全角括号中的内容
+        pattern: /(?:\]|］|】)\s*（([\s\S]*?)）/g,
+        replacement: "]($1)",
+      },
       // { pattern: /：/g, replacement: ":" }, // 中文：
       { pattern: /\*\* (.*?) \*\*/g, replacement: "**$1**" }, // 加粗
       { pattern: /\* \*(.*?)\* \*/g, replacement: "**$1**" }, // 加粗
     ];
+    // 替换markdown语法
     mdRuleMap.forEach(({ pattern, replacement }) => {
       text = text.replace(pattern, replacement);
     });
@@ -11045,7 +11132,7 @@ async function CF2luogu(problemToolbar) {
           method: "GET",
           url,
         });
-        return !response.responseText.match(/出错了/g);
+        return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
       },
       {
         maxRetries: 3,
@@ -11832,7 +11919,7 @@ const StatusAcronyms = {
   "Partial result:": "PC",
   Running: "PENDING",
   "In queue": "INQUEUE",
-  "Pretests Passed": "PREPASS",
+  "Pretests passed": "PREPASS",
 };
 
 /**
@@ -12141,6 +12228,9 @@ async function CloneOriginalHTML(submitUrl, cacheKey) {
       const response = await OJB_GMRequest({
         method: "GET",
         url: submitUrl,
+        cookiePartition: {
+          topLevelSite: "https://codeforces.com"
+        }
       });
       const html = response.responseText;
       const parser = new DOMParser();
@@ -12172,7 +12262,7 @@ async function getSubmitHTML(submitUrl) {
   const cookieKey = "OJBetter_CloneOriginalHTML_time";
   if (OJB_getCookie(cookieKey) === "1") {
     // 存在缓存
-    CloneOriginalHTML(submitUrl, cacheKey);
+    void CloneOriginalHTML(submitUrl, cacheKey);
     // 校验
     let cloneHTML = $(localStorage.getItem(cacheKey));
     if (cloneHTML.find("form.submit-form").length > 0) {
@@ -12604,6 +12694,15 @@ async function createMonacoEditor(language, form, support) {
       suggest: {
         selectionMode: "never", // 代码建议不自动选择
       },
+    }
+  );
+  
+  // 在编辑器中添加快捷命令：Ctrl+Enter (或 macOS 下的 Cmd+Enter)
+  OJBetter.monaco.editor.addCommand(
+    monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+    function () {
+      // 当用户按下 Ctrl+Enter 后，触发传入的 form 对象中的提交按钮点击事件
+      form.submitButton.click();
     }
   );
 
@@ -14527,7 +14626,7 @@ function getTestData() {
         .find("pre")
         .find("div")
         .each(function () {
-          inputText += getTextFromPre($(this)) + "\n";
+          outputText += getTextFromPre($(this)) + "\n";
         });
     } else {
       outputText = getTextFromPre($(".output").eq(index).find("pre"));
@@ -14708,6 +14807,9 @@ async function officialCompiler(code, input) {
     headers: {
       "X-Csrf-Token": OJBetter.common.cf_csrf_token,
     },
+    cookiePartition: {
+      topLevelSite: "https://codeforces.com"
+    }
   };
 
   const result = {
@@ -14757,6 +14859,9 @@ async function getOfficialCompilerVerdict(customTestSubmitId) {
     headers: {
       "X-Csrf-Token": OJBetter.common.cf_csrf_token,
     },
+    cookiePartition: {
+      topLevelSite: "https://codeforces.com"
+    }
   };
 
   const responseDetails = await OJB_GMRequest(requestOptions);
@@ -17173,3 +17278,7 @@ if (document.readyState === "loading") {
     location.reload();
   }
 }
+
+
+
+

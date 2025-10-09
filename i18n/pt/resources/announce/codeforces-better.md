@@ -8,7 +8,6 @@
 - Correção do tratamento de quebra de linha para blocos de código (` <pre>`) em conversões MarkDown, graças a **@wrk-123** pela contribuição!
 - Correção da conversão MarkDown sem filtrar as etiquetas ` <style>`
 - Corrigido o problema de erro de sintaxe de ligação Markdown causado pela regra de substituição de parêntesis chineses, graças à contribuição de **@wrk-123**.
-- Correção da lógica de avaliação do código de estado HTTP do Yodo Translator, graças à contribuição de **@wrk-123**.
 - Corrigir o problema de correspondência de maiúsculas e minúsculas do PP, graças a **@awerty-noob** pela contribuição!
 - Corrigir problemas redundantes de alteração de nível, graças a **@wrk-123** pela contribuição!
 - Melhoria da robustez do reconhecimento de elementos MathJax, suporte para mais variantes de nomes de classes MathJax, graças a **@wrk-123**.

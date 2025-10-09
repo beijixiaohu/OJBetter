@@ -8,7 +8,6 @@
 - Fix line break handling for code blocks (` <pre>`) in MarkDown conversions, thanks to **@wrk-123** for the contribution!
 - Fix MarkDown conversion without filtering ` <style>` tags
 - Fix the problem of Markdown link syntax error caused by Chinese bracket replacement rule, thanks to the contribution of **@wrk-123**.
-- Fix the HTTP status code judgment logic of Arigatou Translation, thanks to the contribution of **@wrk-123**.
 - Fix PP case matching issue, thanks to **@awerty-noob** for the contribution!
 - Fix redundant tier change issue, thanks to **@wrk-123** contribution
 - Improve robustness of MathJax element recognition, support more MathJax class name variants, thanks to **@wrk-123**.
