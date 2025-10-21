@@ -37,7 +37,7 @@ To install the script, you can get：
 
 ## Using Documents
 
-For more detailed information and usage guidelines, please visit the **[Wiki page](https://github.com/beijixiaohu/OJBetter/wiki)**.\*\*
+For more detailed information and usage guidelines, please visit the **[Wiki page](https://github.com/beijixiaohu/OJBetter/wiki)**.\*\*\*\*
 
 ## How to contribute
 
