@@ -41,11 +41,11 @@
 
 ##
 
-- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
+- Switch public library CDN to [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), as per [this issue](https://github.com/beijixiaohu/OJBetter/issues/151).
 
 - 添加 "评测状态文本替换" 功能，感谢 **@wrk-123** 的协作
 
-- 调整设置页面的布局结构
+- Adjust the layout structure of the settings page
 
 ## 1.75.0
 
