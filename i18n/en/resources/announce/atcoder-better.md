@@ -35,11 +35,11 @@
 
 ## 1.17.0
 
-- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
+- Switch public library CDN to [SUSTech Mirror](https://mirrors.sustech.edu.cn/help/cdnjs.html), as per [this issue](https://github.com/beijixiaohu/OJBetter/issues/151).
 
-- 修复 submissions 页面代码"展开/折叠"按钮无效的问题
+- Fix the issue where the "Expand/Collapse" button for code on the submissions page was unresponsive
 
-- 调整设置页面的布局结构
+- Adjust the layout structure of the settings page
 
 ## 1.16.1
 

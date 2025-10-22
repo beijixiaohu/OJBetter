@@ -291,7 +291,7 @@
             "isStrict": false,
             "rules": {
                 "Announcement": "bulletin",
-                "Statements": "presentation of the topic",
+                "Statements": "Problem Statement",
                 "Tutorial": "notes"
             }
         },
