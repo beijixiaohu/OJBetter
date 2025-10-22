@@ -248,7 +248,8 @@
             "rules": {
                 "Submission": "#",
                 "Time": "Hora da apresentação",
-                "Verdict": "estado da adjudicação"
+                "Verdict": "estado da adjudicação",
+                "提交时间 limit exceeded": "Tempo limite excedido"
             }
         },
         ".reset-status-filter": {
@@ -1090,5 +1091,6 @@
         }
     }
 }
+
 
 
