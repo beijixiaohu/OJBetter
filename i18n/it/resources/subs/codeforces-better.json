@@ -248,7 +248,8 @@
             "rules": {
                 "Submission": "#",
                 "Time": "Ora di invio",
-                "Verdict": "stato di avanzamento del giudizio"
+                "Verdict": "stato di avanzamento del giudizio",
+                "提交时间 limit exceeded": "Limite di tempo superato"
             }
         },
         ".reset-status-filter": {
@@ -1090,5 +1091,6 @@
         }
     }
 }
+
 
 
