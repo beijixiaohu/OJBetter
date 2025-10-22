@@ -249,7 +249,7 @@
                 "Submission": "#",
                 "Time": "Date de soumission",
                 "Verdict": "état d'avancement de l'adjudication",
-                "提交时间 limit exceeded": "Time limit exceeded"
+                "提交时间 limit exceeded": "Limite de temps dépassée"
             }
         },
         ".reset-status-filter": {
