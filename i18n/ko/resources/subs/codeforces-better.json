@@ -248,7 +248,8 @@
             "rules": {
                 "Submission": "#",
                 "Time": "제출 시간",
-                "Verdict": "판결 상태"
+                "Verdict": "판결 상태",
+                "提交时间 limit exceeded": "시간 제한 초과"
             }
         },
         ".reset-status-filter": {
@@ -1090,5 +1091,6 @@
         }
     }
 }
+
 
 

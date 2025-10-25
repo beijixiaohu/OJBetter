@@ -248,7 +248,8 @@
             "rules": {
                 "Submission": "#",
                 "Time": "Zeitpunkt der Einreichung",
-                "Verdict": "Stand der Rechtsprechung"
+                "Verdict": "Stand der Rechtsprechung",
+                "提交时间 limit exceeded": "Zeitlimit überschritten"
             }
         },
         ".reset-status-filter": {
@@ -1090,5 +1091,6 @@
         }
     }
 }
+
 
 
