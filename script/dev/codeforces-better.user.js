@@ -5913,7 +5913,7 @@ async function initI18next() {
         lng: OJBetter.localization.scriptLang,
         ns: [
           "common",
-          "settings", 
+          "settings",
           "config",
           "dialog",
           "alert",
@@ -5922,7 +5922,7 @@ async function initI18next() {
           "codeEditor",
           "comments",
           "announce",
-          "logMessage", 
+          "logMessage",
         ], // 命名空间列表
         defaultNS: "settings",
         fallbackLng: ["zh", OJBetter.translation.targetLang],
@@ -7950,6 +7950,7 @@ async function initSettingsPanel() {
       "checked",
       GM_getValue("hoverTargetAreaDisplay") === true
     );
+    $("#showSameContestProblems").prop("checked", GM_getValue("showSameContestProblems") === true);
     $("#showClistRating_contest").prop(
       "checked",
       GM_getValue("showClistRating_contest") === true
@@ -8137,7 +8138,6 @@ async function initSettingsPanel() {
     settingMenu.on("click", ".btn-close", async () => {
       // 设置的数据
       const settings = {
-        showSameContestProblems: $("#showSameContestProblems").prop("checked"),
         darkMode: $("input[name='darkMode']:checked").val(),
         showLoading: $("#showLoading").prop("checked"),
         hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
@@ -8149,6 +8149,7 @@ async function initSettingsPanel() {
         hiddenProblemTag: $("#hiddenProblemTag").prop("checked"),
         showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
         showCF2vjudge: $("#showCF2vjudge").prop("checked"),
+        showSameContestProblems: $("#showSameContestProblems").prop("checked"),
         scriptL10nLanguage: $("#scriptL10nLanguage").val(),
         localizationLanguage: $("#localizationLanguage").val(),
         transTargetLang: $("#transTargetLang").val(),
