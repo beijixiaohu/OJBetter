@@ -7639,10 +7639,6 @@ async function initSettingsPanel() {
   const $settingBtns = $(".OJBetter_setting");
   $settingBtns.click(() => {
     $settingBtns.prop("disabled", true).addClass("open");
-    $("#showSameContestProblems").prop(
-      "checked",
-      GM_getValue("showSameContestProblems") === true
-    );
     // 设置面板div
     const settingMenu = OJB_safeCreateJQElement(OJBetterSettingMenu_HTML);
     $("body").append(settingMenu);
