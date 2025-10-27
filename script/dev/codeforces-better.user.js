@@ -1240,8 +1240,9 @@ async function ShowSameContestProblems() {
   const contestType = contestUrlMatch[2]; // 'contest' 或 'gym'
   const contestId = contestUrlMatch[3];   // 提取出 '2156'
 
-  // 构造比赛题目列表页的URL
-  const contestTasksUrl = `https://codeforces.com/${contestType}/${contestId}`;
+  // 构造比赛题目列表页的URL，使用当前页面的域名以保持一致性
+  const contestDomain = window.location.hostname;
+  const contestTasksUrl = `https://${contestDomain}/${contestType}/${contestId}`;
 
   // 获取当前题目内容的父容器 (或者你希望插入的任何元素)
   // 在Codeforces题目页，题目内容在 #pageContent 下，我们可以在 second-level-menu 之后插入
