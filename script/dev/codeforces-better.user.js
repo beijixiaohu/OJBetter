@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.80.0
+// @version      1.81.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -724,9 +724,9 @@ const OJB_removeHTMLTags = function (text) {
  * @param {string} text - 包含 &lt;、&gt; 的字符串
  * @returns {string} - 解码后的字符串
  */
-const OJB_unescapeHtml = (function() {
+const OJB_unescapeHtml = (function () {
   const textarea = document.createElement("textarea");
-  return function(text) {
+  return function (text) {
     textarea.innerHTML = text;
     return textarea.value;
   };
@@ -984,6 +984,7 @@ async function initVar() {
     "localizationLanguage",
     "zh"
   );
+
   OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
   OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
   OJBetter.basic.selectElementPerfOpt = OJB_getGMValue(
@@ -1214,12 +1215,152 @@ async function initVar() {
     "TranslateTextColor",
     ""
   );
+  OJBetter.preference.showSameContestProblems = OJB_getGMValue("showSameContestProblems", false);
   OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue(
     "isRuleMarkingEnabled",
     false
   );
   OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
   OJBetter.about.updateSource = OJB_getGMValue("updateSource", "aliyunoss");
+}
+
+
+async function ShowSameContestProblems() {
+  const url = window.location.href;
+
+  // 修正1：从单个题目页URL中提取 contestId
+  // 示例URL: https://codeforces.com/contest/2156/problem/A
+  const contestUrlMatch = url.match(/https:\/\/codeforces\.com\/(contest|gym)\/(\d+)\/problem\/([A-Za-z0-9]+)/);
+
+  if (!contestUrlMatch || contestUrlMatch.length < 3) {
+    console.error('URL不匹配，无法提取比赛ID。');
+    return;
+  }
+
+  const contestType = contestUrlMatch[1]; // 'contest' 或 'gym'
+  const contestId = contestUrlMatch[2];   // 提取出 '2156'
+
+  // 构造比赛题目列表页的URL
+  const contestTasksUrl = `https://codeforces.com/${contestType}/${contestId}`;
+
+  // 获取当前题目内容的父容器 (或者你希望插入的任何元素)
+  // 在Codeforces题目页，题目内容在 #pageContent 下，我们可以在 second-level-menu 之后插入
+  const insertTarget = $('#pageContent');
+  const insertAfterElement = $('.second-level-menu', insertTarget);
+
+  if (!insertTarget.length || !insertAfterElement.length) {
+    console.error('找不到目标元素或插入点，无法确定插入位置。');
+    return;
+  }
+
+  // 创建一个容器来放置题目列表，可以给它一些样式
+  const problemListContainer = OJB_safeCreateJQElement('<div>')
+    .attr('id', `ojb-same-contest-problems-${contestId}`)
+    .css({
+      'margin-top': '20px',
+      'border-top': '1px solid #eee',
+      'padding-top': '10px',
+      'background-color': '#fff', // Codeforces 默认白色背景
+      'border-radius': '6px',
+      'box-shadow': '0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24)'
+    });
+
+  // 添加一个标题
+  const containerTitle = OJB_safeCreateJQElement('<h3>')
+    .text(i18next.t('settings:preference.sameContestProblemsListTitle'))
+    .css({
+      'padding': '10px 15px',
+      'margin': '0',
+      'background-color': '#f8f8f8', // 标题背景色
+      'border-bottom': '1px solid #eee',
+      'border-radius': '6px 6px 0 0'
+    });
+  problemListContainer.append(containerTitle);
+
+  // 异步请求获取所有题目链接
+  fetch(contestTasksUrl)
+    .then(response => {
+      if (!response.ok) {
+        console.log(`获取比赛题目列表页面失败: ${response.status}`);
+        throw new Error(`Failed to fetch contest tasks: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      // 找到题目列表的表格，Codeforces的题目表格是 .datatable .problems
+      const table = $(doc).find('.datatable .problems');
+
+      if (!table.length) {
+        console.error('找不到任务表格在比赛题目列表页。');
+        const errorMessage = OJB_safeCreateJQElement('<p>')
+          .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: ${i18next.t('logMessage:cf.noProblemsTableFound')}`)
+          .css({ 'padding': '15px', 'color': 'red' });
+        problemListContainer.append(errorMessage);
+      } else {
+        // 修正2：调整表格样式以适应插入位置，并确保链接是完整的
+        table.find('a').each(function () {
+          const href = $(this).attr('href');
+          if (href && !href.startsWith('http')) {
+            $(this).attr('href', `https://codeforces.com${href}`);
+          }
+        });
+
+        // 移除原表格可能带有的筛选器
+        table.closest('.datatable').find('.filter, .closed, .opened, .rowCount').remove();
+
+        // 调整表格的父容器样式
+        table.closest('.datatable')
+          .css({
+            'background-color': 'transparent', // 移除外部 datatable 容器的背景色
+            'padding-bottom': '0',
+            'margin': '0'
+          })
+          .find('.lt, .rt, .lb, .rb, .ilt, .irt') // 移除边角装饰
+          .remove();
+
+        table.css({
+          'background-color': 'transparent', // 移除表格自身的背景色
+          'margin': '0',
+          'border': 'none'
+        });
+
+        // 移除所有 td 和 th 的 border-top 样式，由外部容器统一控制
+        table.find('td, th').css('border-top', 'none');
+
+        // 添加表格到容器，并更新样式
+        problemListContainer.append(table.closest('.datatable'));
+      }
+
+      // 插入到页面中
+      insertAfterElement.after(problemListContainer);
+
+      // 重新应用黑暗模式样式（如果适用）
+      if (OJBetter.common.realDarkMode === 'dark') {
+        problemListContainer.find('*').each(function () {
+          $(this).css({
+            'color': 'var(--ojb-color-text-primary)',
+            'background-color': 'var(--ojb-color-bg-primary)',
+            'border-color': 'var(--ojb-color-border-primary)'
+          });
+          if ($(this).is('a')) {
+            $(this).css('color', 'var(--ojb-color-text-link)');
+          }
+        });
+        // 特殊处理表格行背景色
+        problemListContainer.find('.problems tr:odd td').css('background-color', 'var(--ojb-color-bg-secondary)');
+        problemListContainer.find('th').css('background-color', 'var(--ojb-color-bg-secondary)');
+      }
+    })
+    .catch(error => {
+      console.error('获取或处理同场题目列表时发生错误:', error);
+      const errorMessage = OJB_safeCreateJQElement('<p>')
+        .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: ${error.message}`)
+        .css({ 'padding': '15px', 'color': 'red' });
+      problemListContainer.append(errorMessage);
+      insertAfterElement.after(problemListContainer); // 即使失败也插入错误信息
+    });
 }
 
 /**
@@ -2161,7 +2302,7 @@ async function beautifyPreBlocksWithMonaco() {
     // 创建一个用于 Monaco 编辑器的容器
     const container = $("<div></div>");
     const lineCount = code.split("\n").length; // 代码的行数
-    
+
     // 计算容器的高度
     const calculateContainerHeight = (lineCount) => {
       const lineHeight = 20; // 每行代码的高度
@@ -5772,7 +5913,7 @@ async function initI18next() {
         lng: OJBetter.localization.scriptLang,
         ns: [
           "common",
-          "settings",
+          "settings", 
           "config",
           "dialog",
           "alert",
@@ -5781,7 +5922,7 @@ async function initI18next() {
           "codeEditor",
           "comments",
           "announce",
-          "logMessage",
+          "logMessage", 
         ], // 命名空间列表
         defaultNS: "settings",
         fallbackLng: ["zh", OJBetter.translation.targetLang],
@@ -5812,6 +5953,24 @@ async function initI18next() {
         if (err) {
           reject(err);
         } else {
+          i18next.addResourceBundle('zh', 'settings', {
+            "preference": {
+              "showSameContestProblems": {
+                "label": "显示同比赛题目列表",
+                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+              },
+              "sameContestProblemsListTitle": "同比赛题目列表",
+              "sameContestProblemsListError": "无法加载同比赛题目列表"
+            }
+          }, true, true);
+          i18next.addResourceBundle('zh', 'logMessage', {
+            "cf": {
+              "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+          }, true, true);
+          // --- 结束内嵌的 i18n 资源 ---
+
+
           jqueryI18next.init(i18next, $, {
             useOptionsAttr: true,
           });
@@ -5821,6 +5980,23 @@ async function initI18next() {
     );
   });
 }
+//目前内嵌，托管json
+// {
+//   "preference": {
+//     // ... 现有设置
+//     "showSameContestProblems": {
+//       "label": "显示同比赛题目列表",
+//       "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+//     },
+//     "sameContestProblemsListTitle": "同比赛题目列表",
+//     "sameContestProblemsListError": "无法加载同比赛题目列表"
+//   },
+//   "logMessage": {
+//     "cf": {
+//       "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+//     }
+//   }
+// }
 
 /**
  * 抽象命令类
@@ -6964,6 +7140,14 @@ const preference_settings_HTML = `
         <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="showSameContestProblems" data-i18n="settings:preference.showSameContestProblems.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.showSameContestProblems.helpText"></div>
+        </div>
+        <input type="checkbox" id="showSameContestProblems" name="showSameContestProblems">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -7012,6 +7196,7 @@ const preference_settings_HTML = `
     </div>
 </div>
 `;
+
 
 const dev_settings_HTML = `
 <div id="dev-settings" class="settings-page">
@@ -7484,7 +7669,10 @@ async function initSettingsPanel() {
   const $settingBtns = $(".OJBetter_setting");
   $settingBtns.click(() => {
     $settingBtns.prop("disabled", true).addClass("open");
-
+    $("#showSameContestProblems").prop(
+      "checked",
+      GM_getValue("showSameContestProblems") === true
+    );
     // 设置面板div
     const settingMenu = OJB_safeCreateJQElement(OJBetterSettingMenu_HTML);
     $("body").append(settingMenu);
@@ -7503,6 +7691,7 @@ async function initSettingsPanel() {
         top: mouseY + "px",
         left: mouseX + "px",
       });
+
     });
 
     // 选项卡切换
@@ -7948,6 +8137,7 @@ async function initSettingsPanel() {
     settingMenu.on("click", ".btn-close", async () => {
       // 设置的数据
       const settings = {
+        showSameContestProblems: $("#showSameContestProblems").prop("checked"),
         darkMode: $("input[name='darkMode']:checked").val(),
         showLoading: $("#showLoading").prop("checked"),
         hoverTargetAreaDisplay: $("#hoverTargetAreaDisplay").prop("checked"),
@@ -8757,11 +8947,11 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       if (checkViewmd()) {
         setViewmd(false);
         target.last().next(".mdViewContent").remove();
-        if(!OJBetter.monaco.beautifyPreBlocks){
+        if (!OJBetter.monaco.beautifyPreBlocks) {
           target.show();
-        }else{
+        } else {
           // 不显示本来被隐藏的代码块
-          target.each(function() {
+          target.each(function () {
             if (!$(this).is("pre")) {
               $(this).show();
             }
@@ -9779,10 +9969,10 @@ class TranslateDiv {
     //         this.renderLaTeX(element);
     //     }
     // });
-    
+
     // 渲染翻译文本颜色
-    if(OJBetter.preference.TranslateTextColor){
-      this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
+    if (OJBetter.preference.TranslateTextColor) {
+      this.mainDiv.css("color", OJBetter.preference.TranslateTextColor);
     }
   }
 
@@ -11132,7 +11322,7 @@ async function CF2luogu(problemToolbar) {
           method: "GET",
           url,
         });
-        return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
+        return response.status < 300 && !response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
       },
       {
         maxRetries: 3,
@@ -12696,7 +12886,7 @@ async function createMonacoEditor(language, form, support) {
       },
     }
   );
-  
+
   // 在编辑器中添加快捷命令：Ctrl+Enter (或 macOS 下的 Cmd+Enter)
   OJBetter.monaco.editor.addCommand(
     monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
@@ -17134,6 +17324,10 @@ function initOnDOMReady() {
   ) {
     judgeStatusReplace(); // 评测结果替换
   }
+  if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem) {
+    ShowSameContestProblems();//显示同比赛题目列表
+  }
+
 }
 
 /**
