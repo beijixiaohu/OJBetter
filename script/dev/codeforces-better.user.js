@@ -1304,7 +1304,7 @@ async function ShowSameContestProblems() {
         table.find('a').each(function () {
           const href = $(this).attr('href');
           if (href && !href.startsWith('http')) {
-            $(this).attr('href', `https://codeforces.com${href}`);
+            $(this).attr('href', `${window.location.origin}${href}`);
           }
         });
 
