@@ -5953,21 +5953,6 @@ async function initI18next() {
         if (err) {
           reject(err);
         } else {
-          i18next.addResourceBundle('zh', 'settings', {
-            "preference": {
-              "showSameContestProblems": {
-                "label": "显示同比赛题目列表",
-                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
-              },
-              "sameContestProblemsListTitle": "同比赛题目列表",
-              "sameContestProblemsListError": "无法加载同比赛题目列表"
-            }
-          }, true, true);
-          i18next.addResourceBundle('zh', 'logMessage', {
-            "cf": {
-              "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
-            }
-          }, true, true);
           // --- 结束内嵌的 i18n 资源 ---
 
 
