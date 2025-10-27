@@ -1230,15 +1230,15 @@ async function ShowSameContestProblems() {
 
   // 修正1：从单个题目页URL中提取 contestId
   // 示例URL: https://codeforces.com/contest/2156/problem/A
-  const contestUrlMatch = url.match(/https:\/\/codeforces\.com\/(contest|gym)\/(\d+)\/problem\/([A-Za-z0-9]+)/);
+  const contestUrlMatch = url.match(/https:\/\/(codeforces\.com|codeforc\.es)\/(contest|gym)\/(\d+)\/problem\/([A-Za-z0-9]+)/);
 
-  if (!contestUrlMatch || contestUrlMatch.length < 3) {
+  if (!contestUrlMatch || contestUrlMatch.length < 4) {
     console.error('URL不匹配，无法提取比赛ID。');
     return;
   }
 
-  const contestType = contestUrlMatch[1]; // 'contest' 或 'gym'
-  const contestId = contestUrlMatch[2];   // 提取出 '2156'
+  const contestType = contestUrlMatch[2]; // 'contest' 或 'gym'
+  const contestId = contestUrlMatch[3];   // 提取出 '2156'
 
   // 构造比赛题目列表页的URL
   const contestTasksUrl = `https://codeforces.com/${contestType}/${contestId}`;
