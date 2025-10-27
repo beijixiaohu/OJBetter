@@ -5966,22 +5966,6 @@ async function initI18next() {
   });
 }
 //目前内嵌，托管json
-// {
-//   "preference": {
-//     // ... 现有设置
-//     "showSameContestProblems": {
-//       "label": "显示同比赛题目列表",
-//       "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
-//     },
-//     "sameContestProblemsListTitle": "同比赛题目列表",
-//     "sameContestProblemsListError": "无法加载同比赛题目列表"
-//   },
-//   "logMessage": {
-//     "cf": {
-//       "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
-//     }
-//   }
-// }
 
 /**
  * 抽象命令类
