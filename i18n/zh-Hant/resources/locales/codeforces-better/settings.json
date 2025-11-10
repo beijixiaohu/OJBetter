@@ -43,7 +43,7 @@
             "helpText": "評論區分頁顯示，每頁顯示指定數量的<strong>主樓</strong>。"
         },
         "luoguJump": {
-            "label": "顯示跳到洛谷",
+            "label": "顯示跳轉至洛谷",
             "helpText": "<p>洛谷OJ上收錄了Codeforces的部分題目，一些題目有翻譯和題解</p><p>開啟顯示後，會在題目頁的右上角顯示洛谷標誌，</p><p>點擊即可一鍵跳轉到該題洛谷的對應頁面。</strong></p>"
         },
         "vjudgeJump": {
