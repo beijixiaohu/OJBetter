@@ -269,11 +269,6 @@
                 "label": "Code de sauvegarde automatique",
                 "helpText": "Lorsque cette option est activée, lorsque vous tapez quelque chose dans l'éditeur monaco, ce texte est automatiquement sauvegardé localement et restauré lorsque vous actualisez ou ouvrez le sujet la prochaine fois."
             },
-            "showSameContestProblems": {
-                "label": "显示同比赛题目列表",
-                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
-            },
-            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "Emplacement du bouton de soumission",
                 "helpText": "Choisissez l'emplacement du test de code et des boutons de soumission",
@@ -396,6 +391,11 @@
             "label": "Afficher la portée de la zone cible",
             "helpText": "Lorsque cette option est activée, la portée de la zone cible s'affiche lorsque la souris passe sur le bouton MD View/Copy/Translate."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "Icône Taille du bouton",
             "helpText": "<p>Réglage de la taille du bouton de traduction</p>",
