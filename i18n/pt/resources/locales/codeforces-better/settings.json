@@ -269,6 +269,11 @@
                 "label": "Código de gravação automática",
                 "helpText": "Se estiver ativado, quando escrever algo no editor monaco, esse texto será automaticamente guardado localmente e restaurado quando atualizar ou abrir o tópico da próxima vez."
             },
+            "showSameContestProblems": {
+                "label": "显示同比赛题目列表",
+                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+            },
+            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "Localização do botão Enviar",
                 "helpText": "Escolha a localização dos botões de teste de código e de envio",
@@ -276,6 +281,11 @@
                     "bottom": "fundos",
                     "top": "parapeito"
                 }
+            }
+        },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
             }
         },
         "onlineCodeExecution": {
