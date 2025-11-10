@@ -269,6 +269,11 @@
                 "label": "코드 자동 저장",
                 "helpText": "이 기능을 켜면 모나코 편집기에서 무언가를 입력하면 자동으로 로컬에 저장되고 다음에 주제를 새로 고치거나 열 때 복원됩니다."
             },
+            "showSameContestProblems": {
+                "label": "显示同比赛题目列表",
+                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+            },
+            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "제출 버튼 위치",
                 "helpText": "코드 테스트 및 제출 버튼의 위치를 선택합니다.",
@@ -276,6 +281,11 @@
                     "bottom": "bottoms",
                     "top": "난간"
                 }
+            }
+        },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
             }
         },
         "onlineCodeExecution": {
