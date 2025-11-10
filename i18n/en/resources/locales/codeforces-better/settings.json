@@ -269,6 +269,11 @@
                 "label": "Auto-save code",
                 "helpText": "When turned on, when you type something in the monaco editor, it will be automatically saved locally and restored when you refresh or open the topic next time."
             },
+            "showSameContestProblems": {
+                "label": "显示同比赛题目列表",
+                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+            },
+            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "Submit Button Location",
                 "helpText": "Choose the location of the Code Test and Submit buttons",
@@ -276,6 +281,11 @@
                     "bottom": "Bottom",
                     "top": "Top Bar"
                 }
+            }
+        },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
             }
         },
         "onlineCodeExecution": {
