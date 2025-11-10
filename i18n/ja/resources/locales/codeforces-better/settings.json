@@ -269,6 +269,11 @@
                 "label": "自動保存コード",
                 "helpText": "オンにすると、モナコエディターで何かを入力すると、その内容が自動的にローカルに保存され、次にトピックを更新したり開いたりするときに復元されます。"
             },
+            "showSameContestProblems": {
+                "label": "显示同比赛题目列表",
+                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+            },
+            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "送信ボタンの位置",
                 "helpText": "コード・テストの場所と送信ボタンを選択する。",
@@ -276,6 +281,11 @@
                     "bottom": "ボトムス",
                     "top": "欄干"
                 }
+            }
+        },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
             }
         },
         "onlineCodeExecution": {
