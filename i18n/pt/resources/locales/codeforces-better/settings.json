@@ -269,11 +269,6 @@
                 "label": "Código de gravação automática",
                 "helpText": "Se estiver ativado, quando escrever algo no editor monaco, esse texto será automaticamente guardado localmente e restaurado quando atualizar ou abrir o tópico da próxima vez."
             },
-            "showSameContestProblems": {
-                "label": "显示同比赛题目列表",
-                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
-            },
-            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "Localização do botão Enviar",
                 "helpText": "Escolha a localização dos botões de teste de código e de envio",
@@ -396,6 +391,11 @@
             "label": "Visualize o alcance da área alvo",
             "helpText": "Quando ligado, o intervalo da sua área de destino é apresentado quando o rato passa sobre o botão Ver/Copiar/Transladar de MD."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "Ícone Tamanho do botão",
             "helpText": "<p>Definir o tamanho do botão de tradução</p>",
