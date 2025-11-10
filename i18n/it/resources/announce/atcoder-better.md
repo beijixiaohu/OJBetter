@@ -4,7 +4,7 @@
 - Aggiunta scorciatoia Ctrl+Invio per inviare il codice, grazie a **@wrk-123**.
 - Correggere le interruzioni di riga ` <br>` mancanti durante la conversione di MarkDown, grazie a **@wrk-123** per il contributo!
 - Correggere il problema dell'escape dei caratteri HTML durante la copia di MarkDown (ad esempio `&lt;` `&gt;`), grazie a **@wrk-123** per il contributo!
-- Correggere la conversione di MarkDown senza filtrare i tag \\\\\\\\\` <style>
+- Correggere la conversione di MarkDown senza filtrare i tag \\\\\\\\\\` <style>
 - Corretto il problema dell'errore di sintassi dei collegamenti Markdown causato dalla regola di sostituzione delle parentesi cinesi, grazie al contributo di **@wrk-123**.
 - Correzione della logica di valutazione del codice di stato HTTP di Yodo Translator, grazie al contributo di **@wrk-123**.
 - Correggere il problema di validazione del pannello CloudFlare, grazie a **@wrk-123** per il contributo!
@@ -71,7 +71,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2
