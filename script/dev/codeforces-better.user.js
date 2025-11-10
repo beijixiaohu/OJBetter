@@ -1228,24 +1228,24 @@ async function initVar() {
 async function ShowSameContestProblems() {
   const url = window.location.href;
 
-  // 修正1：从单个题目页URL中提取 contestId
+  // 从单个题目页URL中提取 contestId 和当前题目标识
   // 示例URL: https://codeforces.com/contest/2156/problem/A
   const contestUrlMatch = url.match(/https:\/\/(codeforces\.com|codeforc\.es)\/(contest|gym)\/(\d+)\/problem\/([A-Za-z0-9]+)/);
 
-  if (!contestUrlMatch || contestUrlMatch.length < 4) {
+  if (!contestUrlMatch || contestUrlMatch.length < 5) {
     console.error('URL不匹配，无法提取比赛ID。');
     return;
   }
 
   const contestType = contestUrlMatch[2]; // 'contest' 或 'gym'
   const contestId = contestUrlMatch[3];   // 提取出 '2156'
+  const currentProblemId = contestUrlMatch[4]; // 提取出当前题目标识，如 'A'
 
   // 构造比赛题目列表页的URL，使用当前页面的域名以保持一致性
   const contestDomain = window.location.hostname;
   const contestTasksUrl = `https://${contestDomain}/${contestType}/${contestId}`;
 
-  // 获取当前题目内容的父容器 (或者你希望插入的任何元素)
-  // 在Codeforces题目页，题目内容在 #pageContent 下，我们可以在 second-level-menu 之后插入
+  // 获取当前题目内容的父容器
   const insertTarget = $('#pageContent');
   const insertAfterElement = $('.second-level-menu', insertTarget);
 
@@ -1254,29 +1254,15 @@ async function ShowSameContestProblems() {
     return;
   }
 
-  // 创建一个容器来放置题目列表，可以给它一些样式
+  // 创建容器
   const problemListContainer = OJB_safeCreateJQElement('<div>')
     .attr('id', `ojb-same-contest-problems-${contestId}`)
-    .css({
-      'margin-top': '20px',
-      'border-top': '1px solid #eee',
-      'padding-top': '10px',
-      'background-color': '#fff', // Codeforces 默认白色背景
-      'border-radius': '6px',
-      'box-shadow': '0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24)'
-    });
+    .addClass('ojb-same-contest-problems-container');
 
-  // 添加一个标题
-  const containerTitle = OJB_safeCreateJQElement('<h3>')
-    .text(i18next.t('settings:preference.sameContestProblemsListTitle'))
-    .css({
-      'padding': '10px 15px',
-      'margin': '0',
-      'background-color': '#f8f8f8', // 标题背景色
-      'border-bottom': '1px solid #eee',
-      'border-radius': '6px 6px 0 0'
-    });
-  problemListContainer.append(containerTitle);
+  // 创建按钮容器
+  const buttonContainer = OJB_safeCreateJQElement('<div>')
+    .addClass('ojb-same-contest-problems-buttons');
+  problemListContainer.append(buttonContainer);
 
   // 异步请求获取所有题目链接
   fetch(contestTasksUrl)
@@ -1290,77 +1276,98 @@ async function ShowSameContestProblems() {
     .then(html => {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      // 找到题目列表的表格，Codeforces的题目表格是 .datatable .problems
+      // 找到题目列表的表格
       const table = $(doc).find('.datatable .problems');
 
       if (!table.length) {
         console.error('找不到任务表格在比赛题目列表页。');
         const errorMessage = OJB_safeCreateJQElement('<p>')
           .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: ${i18next.t('logMessage:cf.noProblemsTableFound')}`)
-          .css({ 'padding': '15px', 'color': 'red' });
+          .addClass('ojb-same-contest-problems-error');
         problemListContainer.append(errorMessage);
-      } else {
-        // 修正2：调整表格样式以适应插入位置，并确保链接是完整的
-        table.find('a').each(function () {
-          const href = $(this).attr('href');
-          if (href && !href.startsWith('http')) {
-            $(this).attr('href', `${window.location.origin}${href}`);
-          }
-        });
-
-        // 移除原表格可能带有的筛选器
-        table.closest('.datatable').find('.filter, .closed, .opened, .rowCount').remove();
-
-        // 调整表格的父容器样式
-        table.closest('.datatable')
-          .css({
-            'background-color': 'transparent', // 移除外部 datatable 容器的背景色
-            'padding-bottom': '0',
-            'margin': '0'
-          })
-          .find('.lt, .rt, .lb, .rb, .ilt, .irt') // 移除边角装饰
-          .remove();
-
-        table.css({
-          'background-color': 'transparent', // 移除表格自身的背景色
-          'margin': '0',
-          'border': 'none'
-        });
-
-        // 移除所有 td 和 th 的 border-top 样式，由外部容器统一控制
-        table.find('td, th').css('border-top', 'none');
-
-        // 添加表格到容器，并更新样式
-        problemListContainer.append(table.closest('.datatable'));
+        insertAfterElement.after(problemListContainer);
+        return;
       }
+
+      // 提取所有题目信息
+      const problems = [];
+      table.find('tbody tr').each(function () {
+        const $row = $(this);
+        // 跳过表头行
+        if ($row.find('th').length > 0) {
+          return;
+        }
+
+        // 提取题目标识（如 A, B, C）
+        const $idCell = $row.find('td.id');
+        const $idLink = $idCell.find('a');
+        if (!$idLink.length) return;
+
+        const problemId = $idLink.text().trim();
+        const problemHref = $idLink.attr('href');
+        if (!problemHref) return;
+
+        // 提取题目名称（第二列是名称）
+        const $nameCell = $row.find('td').eq(1);
+        const $nameLink = $nameCell.find('a');
+        let problemName = '';
+        if ($nameLink.length) {
+          // 获取链接文本，去除注释和空白
+          problemName = $nameLink.clone().children().remove().end().text().trim();
+          // 如果为空，尝试直接获取文本
+          if (!problemName) {
+            problemName = $nameLink.text().trim();
+          }
+        }
+
+        // 构建完整链接
+        const fullHref = problemHref.startsWith('http') 
+          ? problemHref 
+          : `${window.location.origin}${problemHref}`;
+
+        problems.push({
+          id: problemId,
+          name: problemName,
+          href: fullHref
+        });
+      });
+
+      if (problems.length === 0) {
+        console.error('未能提取到任何题目信息。');
+        const errorMessage = OJB_safeCreateJQElement('<p>')
+          .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: 未能提取到题目信息`)
+          .addClass('ojb-same-contest-problems-error');
+        problemListContainer.append(errorMessage);
+        insertAfterElement.after(problemListContainer);
+        return;
+      }
+
+      // 创建按钮
+      problems.forEach(problem => {
+        const isCurrent = problem.id === currentProblemId;
+        const button = OJB_safeCreateJQElement('<a>')
+          .attr('href', problem.href)
+          .addClass('ojb-same-contest-problems-button')
+          .text(problem.id)
+          .attr('title', problem.name || problem.id); // hover 显示全名
+
+        if (isCurrent) {
+          button.addClass('ojb-same-contest-problems-button-current');
+        }
+
+        buttonContainer.append(button);
+      });
 
       // 插入到页面中
       insertAfterElement.after(problemListContainer);
-
-      // 重新应用黑暗模式样式（如果适用）
-      if (OJBetter.common.realDarkMode === 'dark') {
-        problemListContainer.find('*').each(function () {
-          $(this).css({
-            'color': 'var(--ojb-color-text-primary)',
-            'background-color': 'var(--ojb-color-bg-primary)',
-            'border-color': 'var(--ojb-color-border-primary)'
-          });
-          if ($(this).is('a')) {
-            $(this).css('color', 'var(--ojb-color-text-link)');
-          }
-        });
-        // 特殊处理表格行背景色
-        problemListContainer.find('.problems tr:odd td').css('background-color', 'var(--ojb-color-bg-secondary)');
-        problemListContainer.find('th').css('background-color', 'var(--ojb-color-bg-secondary)');
-      }
     })
     .catch(error => {
       console.error('获取或处理同场题目列表时发生错误:', error);
       const errorMessage = OJB_safeCreateJQElement('<p>')
         .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: ${error.message}`)
-        .css({ 'padding': '15px', 'color': 'red' });
+        .addClass('ojb-same-contest-problems-error');
       problemListContainer.append(errorMessage);
-      insertAfterElement.after(problemListContainer); // 即使失败也插入错误信息
+      insertAfterElement.after(problemListContainer);
     });
 }
 
@@ -2584,6 +2591,126 @@ a.ojb_btn:link {
 }
 a.ojb_btn span {
     margin-left: 2px;
+}
+
+/* 同场比赛题目列表样式 */
+.ojb-same-contest-problems-container {
+    margin-top: 20px;
+    padding: 12px 0;
+}
+
+.ojb-same-contest-problems-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 4px;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.ojb-same-contest-problems-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.ojb-same-contest-problems-button:link {
+    color: #666;
+}
+
+.ojb-same-contest-problems-button:visited {
+    color: #666;
+}
+
+.ojb-same-contest-problems-button:hover {
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.ojb-same-contest-problems-button:hover:visited {
+    color: #333;
+}
+
+.ojb-same-contest-problems-button-current {
+    color: #333;
+    background-color: #f8f8f8;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.ojb-same-contest-problems-button-current:hover {
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+.ojb-same-contest-problems-error {
+    padding: 15px;
+    color: #f56c6c;
+    text-align: center;
+}
+
+/* 黑暗模式支持 */
+html[data-theme=dark] .ojb-same-contest-problems-container {
+    /* 容器在黑暗模式下不需要特殊样式 */
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-buttons {
+    background-color: var(--ojb-color-bg-primary);
+    border: var(--ojb-border-solid-primary);
+    box-shadow: var(--ojb-shadow-standard);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button {
+    color: var(--ojb-color-text-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:link {
+    color: var(--ojb-color-text-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:visited {
+    color: var(--ojb-color-text-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:hover {
+    color: var(--ojb-color-text-primary);
+    background-color: var(--ojb-color-bg-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:hover:visited {
+    color: var(--ojb-color-text-primary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button-current {
+    color: var(--ojb-color-text-primary);
+    background-color: var(--ojb-color-bg-secondary);
+    box-shadow: var(--ojb-shadow-standard);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button-current:hover {
+    color: var(--ojb-color-text-primary);
+    background-color: var(--ojb-color-bg-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-error {
+    color: #f56c6c;
 }
 /*按钮图标和popover*/
 .ojb_btn_popover {
