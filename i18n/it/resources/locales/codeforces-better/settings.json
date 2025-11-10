@@ -269,6 +269,11 @@
                 "label": "Codice di salvataggio automatico",
                 "helpText": "Se attivata, quando si digita qualcosa nell'editor di monaco, questa viene automaticamente salvata in locale e ripristinata quando si aggiorna o si apre l'argomento la volta successiva."
             },
+            "showSameContestProblems": {
+                "label": "显示同比赛题目列表",
+                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+            },
+            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "Posizione del pulsante Invia",
                 "helpText": "Scelga la posizione dei pulsanti di test del codice e di invio.",
@@ -276,6 +281,11 @@
                     "bottom": "fondi",
                     "top": "parapetto"
                 }
+            }
+        },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
             }
         },
         "onlineCodeExecution": {
