@@ -6,7 +6,7 @@
 - Correggere le interruzioni di riga ` <br>` mancanti durante la conversione di MarkDown, grazie a **@wrk-123** per il contributo!
 - Correggere il problema dell'escape dei caratteri HTML durante la copia di MarkDown (ad esempio `&lt;` `&gt;`), grazie a **@wrk-123** per il contributo!
 - Correggere la gestione delle interruzioni di riga per i blocchi di codice (` <pre>`) nelle conversioni MarkDown, grazie a **@wrk-123** per il contributo!
-- Correggere la conversione di MarkDown senza filtrare i tag \\\\\\\\\` <style>
+- Correggere la conversione di MarkDown senza filtrare i tag \\\\\\\\\\` <style>
 - Corretto il problema dell'errore di sintassi dei collegamenti Markdown causato dalla regola di sostituzione delle parentesi cinesi, grazie al contributo di **@wrk-123**.
 - Correggere il problema della corrispondenza dei casi in PP, grazie a **@awerty-noob** per il contributo!
 - Risolvere i problemi di cambio di livello ridondanti, grazie a **@wrk-123** per il contributo!

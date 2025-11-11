@@ -269,11 +269,6 @@
                 "label": "코드 자동 저장",
                 "helpText": "이 기능을 켜면 모나코 편집기에서 무언가를 입력하면 자동으로 로컬에 저장되고 다음에 주제를 새로 고치거나 열 때 복원됩니다."
             },
-            "showSameContestProblems": {
-                "label": "显示同比赛题目列表",
-                "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
-            },
-            "sameContestProblemsListError": "无法加载同比赛题目列表",
             "submitButtonPosition": {
                 "label": "제출 버튼 위치",
                 "helpText": "코드 테스트 및 제출 버튼의 위치를 선택합니다.",
@@ -396,6 +391,11 @@
             "label": "대상 영역의 범위 표시",
             "helpText": "켜져 있으면 MD 보기/복사/번역 버튼 위로 마우스를 가져가면 대상 영역의 범위가 표시됩니다."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "아이콘 버튼 크기",
             "helpText": "<p>번역 버튼 크기 설정하기</p>",
