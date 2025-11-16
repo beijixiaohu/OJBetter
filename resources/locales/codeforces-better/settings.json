@@ -265,7 +265,7 @@
                 "label": "鼠标滚动锁定",
                 "helpText": "开启后，当鼠标指针在 monaco 编辑器内部时，鼠标滚动将只会滚动编辑器内的内容"
             },
-            "autoMemoryCode":{
+            "autoMemoryCode": {
                 "label": "自动保存代码",
                 "helpText": "开启后，当你在 monaco 编辑器中输入内容时，会自动保存到本地，刷新或者下次打开该题目时会自动恢复"
             },
@@ -276,6 +276,11 @@
                     "bottom": "底部",
                     "top": "顶栏"
                 }
+            }
+        },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
             }
         },
         "onlineCodeExecution": {
@@ -386,6 +391,11 @@
             "label": "显示目标区域范围",
             "helpText": "开启后当鼠标悬浮在 MD视图/复制/翻译 按钮上时，会显示其目标区域的范围。"
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "图标按钮大小",
             "helpText": "<p>设置翻译按钮的大小</p>",

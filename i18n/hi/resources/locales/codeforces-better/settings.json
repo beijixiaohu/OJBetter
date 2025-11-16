@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "ऑनलाइन कोड निष्पादन",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "लक्ष्य क्षेत्र सीमा दिखाएँ",
             "helpText": "चालू करने के बाद, जब माउस एमडी व्यू/कॉपी/ट्रांसलेट बटन पर घूमेगा, तो उसके लक्ष्य क्षेत्र की सीमा प्रदर्शित होगी।"
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "चिह्न बटन का आकार",
             "helpText": "<p>अनुवाद बटन का आकार सेट करें</p>",

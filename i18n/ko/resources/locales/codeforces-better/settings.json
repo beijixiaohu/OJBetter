@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "온라인 코드 실행",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "대상 영역의 범위 표시",
             "helpText": "켜져 있으면 MD 보기/복사/번역 버튼 위로 마우스를 가져가면 대상 영역의 범위가 표시됩니다."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "아이콘 버튼 크기",
             "helpText": "<p>번역 버튼 크기 설정하기</p>",

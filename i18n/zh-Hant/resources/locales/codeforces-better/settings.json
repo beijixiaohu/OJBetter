@@ -43,7 +43,7 @@
             "helpText": "評論區分頁顯示，每頁顯示指定數量的<strong>主樓</strong>。"
         },
         "luoguJump": {
-            "label": "顯示跳到洛谷",
+            "label": "顯示跳轉至洛谷",
             "helpText": "<p>洛谷OJ上收錄了Codeforces的部分題目，一些題目有翻譯和題解</p><p>開啟顯示後，會在題目頁的右上角顯示洛谷標誌，</p><p>點擊即可一鍵跳轉到該題洛谷的對應頁面。</strong></p>"
         },
         "vjudgeJump": {
@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "線上程式碼運行",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "顯示目標區域範圍",
             "helpText": "開啟後當滑鼠懸浮在MD視圖/複製/翻譯按鈕上時，會顯示其目標區域的範圍。"
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "圖示按鈕大小",
             "helpText": "<p>設定翻譯按鈕的大小</p>",

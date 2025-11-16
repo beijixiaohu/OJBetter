@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "Code en ligne Run",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "Afficher la portée de la zone cible",
             "helpText": "Lorsque cette option est activée, la portée de la zone cible s'affiche lorsque la souris passe sur le bouton MD View/Copy/Translate."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "Icône Taille du bouton",
             "helpText": "<p>Réglage de la taille du bouton de traduction</p>",

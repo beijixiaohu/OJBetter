@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.80.0
+// @version      1.81.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -724,9 +724,9 @@ const OJB_removeHTMLTags = function (text) {
  * @param {string} text - 包含 &lt;、&gt; 的字符串
  * @returns {string} - 解码后的字符串
  */
-const OJB_unescapeHtml = (function() {
+const OJB_unescapeHtml = (function () {
   const textarea = document.createElement("textarea");
-  return function(text) {
+  return function (text) {
     textarea.innerHTML = text;
     return textarea.value;
   };
@@ -984,6 +984,7 @@ async function initVar() {
     "localizationLanguage",
     "zh"
   );
+
   OJBetter.localization.scriptLang = OJB_getGMValue("scriptL10nLanguage", "zh");
   OJBetter.basic.renderPerfOpt = OJB_getGMValue("renderPerfOpt", false);
   OJBetter.basic.selectElementPerfOpt = OJB_getGMValue(
@@ -1214,12 +1215,160 @@ async function initVar() {
     "TranslateTextColor",
     ""
   );
+  OJBetter.preference.showSameContestProblems = OJB_getGMValue("showSameContestProblems", false);
   OJBetter.dev.isRuleMarkingEnabled = OJB_getGMValue(
     "isRuleMarkingEnabled",
     false
   );
   OJBetter.about.updateChannel = OJB_getGMValue("updateChannel", "release");
   OJBetter.about.updateSource = OJB_getGMValue("updateSource", "aliyunoss");
+}
+
+
+async function ShowSameContestProblems() {
+  const url = window.location.href;
+
+  // 从单个题目页URL中提取 contestId 和当前题目标识
+  // 示例URL: https://codeforces.com/contest/2156/problem/A
+  const contestUrlMatch = url.match(/https:\/\/(codeforces\.com|codeforc\.es)\/(contest|gym)\/(\d+)\/problem\/([A-Za-z0-9]+)/);
+
+  if (!contestUrlMatch || contestUrlMatch.length < 5) {
+    console.error('URL不匹配，无法提取比赛ID。');
+    return;
+  }
+
+  const contestType = contestUrlMatch[2]; // 'contest' 或 'gym'
+  const contestId = contestUrlMatch[3];   // 提取出 '2156'
+  const currentProblemId = contestUrlMatch[4]; // 提取出当前题目标识，如 'A'
+
+  // 构造比赛题目列表页的URL，使用当前页面的域名以保持一致性
+  const contestDomain = window.location.hostname;
+  const contestTasksUrl = `https://${contestDomain}/${contestType}/${contestId}`;
+
+  // 获取当前题目内容的父容器
+  const insertTarget = $('#pageContent');
+  const insertAfterElement = $('.second-level-menu', insertTarget);
+
+  if (!insertTarget.length || !insertAfterElement.length) {
+    console.error('找不到目标元素或插入点，无法确定插入位置。');
+    return;
+  }
+
+  // 创建容器
+  const problemListContainer = OJB_safeCreateJQElement('<div>')
+    .attr('id', `ojb-same-contest-problems-${contestId}`)
+    .addClass('ojb-same-contest-problems-container');
+
+  // 创建按钮容器
+  const buttonContainer = OJB_safeCreateJQElement('<div>')
+    .addClass('ojb-same-contest-problems-buttons');
+  problemListContainer.append(buttonContainer);
+
+  // 异步请求获取所有题目链接
+  fetch(contestTasksUrl)
+    .then(response => {
+      if (!response.ok) {
+        console.log(`获取比赛题目列表页面失败: ${response.status}`);
+        throw new Error(`Failed to fetch contest tasks: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      // 找到题目列表的表格
+      const table = $(doc).find('.datatable .problems');
+
+      if (!table.length) {
+        console.error('找不到任务表格在比赛题目列表页。');
+        const errorMessage = OJB_safeCreateJQElement('<p>')
+          .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: ${i18next.t('logMessage:cf.noProblemsTableFound')}`)
+          .addClass('ojb-same-contest-problems-error');
+        problemListContainer.append(errorMessage);
+        insertAfterElement.after(problemListContainer);
+        return;
+      }
+
+      // 提取所有题目信息
+      const problems = [];
+      table.find('tbody tr').each(function () {
+        const $row = $(this);
+        // 跳过表头行
+        if ($row.find('th').length > 0) {
+          return;
+        }
+
+        // 提取题目标识（如 A, B, C）
+        const $idCell = $row.find('td.id');
+        const $idLink = $idCell.find('a');
+        if (!$idLink.length) return;
+
+        const problemId = $idLink.text().trim();
+        const problemHref = $idLink.attr('href');
+        if (!problemHref) return;
+
+        // 提取题目名称（第二列是名称）
+        const $nameCell = $row.find('td').eq(1);
+        const $nameLink = $nameCell.find('a');
+        let problemName = '';
+        if ($nameLink.length) {
+          // 获取链接文本，去除注释和空白
+          problemName = $nameLink.clone().children().remove().end().text().trim();
+          // 如果为空，尝试直接获取文本
+          if (!problemName) {
+            problemName = $nameLink.text().trim();
+          }
+        }
+
+        // 构建完整链接
+        const fullHref = problemHref.startsWith('http') 
+          ? problemHref 
+          : `${window.location.origin}${problemHref}`;
+
+        problems.push({
+          id: problemId,
+          name: problemName,
+          href: fullHref
+        });
+      });
+
+      if (problems.length === 0) {
+        console.error('未能提取到任何题目信息。');
+        const errorMessage = OJB_safeCreateJQElement('<p>')
+          .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: 未能提取到题目信息`)
+          .addClass('ojb-same-contest-problems-error');
+        problemListContainer.append(errorMessage);
+        insertAfterElement.after(problemListContainer);
+        return;
+      }
+
+      // 创建按钮
+      problems.forEach(problem => {
+        const isCurrent = problem.id === currentProblemId;
+        const button = OJB_safeCreateJQElement('<a>')
+          .attr('href', problem.href)
+          .addClass('ojb-same-contest-problems-button')
+          .text(problem.id)
+          .attr('title', problem.name || problem.id); // hover 显示全名
+
+        if (isCurrent) {
+          button.addClass('ojb-same-contest-problems-button-current');
+        }
+
+        buttonContainer.append(button);
+      });
+
+      // 插入到页面中
+      insertAfterElement.after(problemListContainer);
+    })
+    .catch(error => {
+      console.error('获取或处理同场题目列表时发生错误:', error);
+      const errorMessage = OJB_safeCreateJQElement('<p>')
+        .text(`${i18next.t('settings:preference.sameContestProblemsListError')}: ${error.message}`)
+        .addClass('ojb-same-contest-problems-error');
+      problemListContainer.append(errorMessage);
+      insertAfterElement.after(problemListContainer);
+    });
 }
 
 /**
@@ -2161,7 +2310,7 @@ async function beautifyPreBlocksWithMonaco() {
     // 创建一个用于 Monaco 编辑器的容器
     const container = $("<div></div>");
     const lineCount = code.split("\n").length; // 代码的行数
-    
+
     // 计算容器的高度
     const calculateContainerHeight = (lineCount) => {
       const lineHeight = 20; // 每行代码的高度
@@ -2442,6 +2591,126 @@ a.ojb_btn:link {
 }
 a.ojb_btn span {
     margin-left: 2px;
+}
+
+/* 同场比赛题目列表样式 */
+.ojb-same-contest-problems-container {
+    margin-top: 20px;
+    padding: 12px 0;
+}
+
+.ojb-same-contest-problems-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 4px;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.ojb-same-contest-problems-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.ojb-same-contest-problems-button:link {
+    color: #666;
+}
+
+.ojb-same-contest-problems-button:visited {
+    color: #666;
+}
+
+.ojb-same-contest-problems-button:hover {
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.ojb-same-contest-problems-button:hover:visited {
+    color: #333;
+}
+
+.ojb-same-contest-problems-button-current {
+    color: #333;
+    background-color: #f8f8f8;
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.ojb-same-contest-problems-button-current:hover {
+    color: #333;
+    background-color: #f0f0f0;
+}
+
+.ojb-same-contest-problems-error {
+    padding: 15px;
+    color: #f56c6c;
+    text-align: center;
+}
+
+/* 黑暗模式支持 */
+html[data-theme=dark] .ojb-same-contest-problems-container {
+    /* 容器在黑暗模式下不需要特殊样式 */
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-buttons {
+    background-color: var(--ojb-color-bg-primary);
+    border: var(--ojb-border-solid-primary);
+    box-shadow: var(--ojb-shadow-standard);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button {
+    color: var(--ojb-color-text-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:link {
+    color: var(--ojb-color-text-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:visited {
+    color: var(--ojb-color-text-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:hover {
+    color: var(--ojb-color-text-primary);
+    background-color: var(--ojb-color-bg-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button:hover:visited {
+    color: var(--ojb-color-text-primary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button-current {
+    color: var(--ojb-color-text-primary);
+    background-color: var(--ojb-color-bg-secondary);
+    box-shadow: var(--ojb-shadow-standard);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-button-current:hover {
+    color: var(--ojb-color-text-primary);
+    background-color: var(--ojb-color-bg-secondary);
+}
+
+html[data-theme=dark] .ojb-same-contest-problems-error {
+    color: #f56c6c;
 }
 /*按钮图标和popover*/
 .ojb_btn_popover {
@@ -5812,6 +6081,9 @@ async function initI18next() {
         if (err) {
           reject(err);
         } else {
+          // --- 结束内嵌的 i18n 资源 ---
+
+
           jqueryI18next.init(i18next, $, {
             useOptionsAttr: true,
           });
@@ -5821,6 +6093,7 @@ async function initI18next() {
     );
   });
 }
+//目前内嵌, 托管json
 
 /**
  * 抽象命令类
@@ -6964,6 +7237,14 @@ const preference_settings_HTML = `
         <input type="checkbox" id="hiddenProblemTag" name="hiddenProblemTag">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="showSameContestProblems" data-i18n="settings:preference.showSameContestProblems.label"></label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:preference.showSameContestProblems.helpText"></div>
+        </div>
+        <input type="checkbox" id="showSameContestProblems" name="showSameContestProblems">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="showLoading" data-i18n="settings:preference.loadingInfo.label"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -7012,6 +7293,7 @@ const preference_settings_HTML = `
     </div>
 </div>
 `;
+
 
 const dev_settings_HTML = `
 <div id="dev-settings" class="settings-page">
@@ -7484,7 +7766,6 @@ async function initSettingsPanel() {
   const $settingBtns = $(".OJBetter_setting");
   $settingBtns.click(() => {
     $settingBtns.prop("disabled", true).addClass("open");
-
     // 设置面板div
     const settingMenu = OJB_safeCreateJQElement(OJBetterSettingMenu_HTML);
     $("body").append(settingMenu);
@@ -7503,6 +7784,7 @@ async function initSettingsPanel() {
         top: mouseY + "px",
         left: mouseX + "px",
       });
+
     });
 
     // 选项卡切换
@@ -7761,6 +8043,7 @@ async function initSettingsPanel() {
       "checked",
       GM_getValue("hoverTargetAreaDisplay") === true
     );
+    $("#showSameContestProblems").prop("checked", GM_getValue("showSameContestProblems") === true);
     $("#showClistRating_contest").prop(
       "checked",
       GM_getValue("showClistRating_contest") === true
@@ -7959,6 +8242,7 @@ async function initSettingsPanel() {
         hiddenProblemTag: $("#hiddenProblemTag").prop("checked"),
         showJumpToLuogu: $("#showJumpToLuogu").prop("checked"),
         showCF2vjudge: $("#showCF2vjudge").prop("checked"),
+        showSameContestProblems: $("#showSameContestProblems").prop("checked"),
         scriptL10nLanguage: $("#scriptL10nLanguage").val(),
         localizationLanguage: $("#localizationLanguage").val(),
         transTargetLang: $("#transTargetLang").val(),
@@ -8757,11 +9041,11 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       if (checkViewmd()) {
         setViewmd(false);
         target.last().next(".mdViewContent").remove();
-        if(!OJBetter.monaco.beautifyPreBlocks){
+        if (!OJBetter.monaco.beautifyPreBlocks) {
           target.show();
-        }else{
+        } else {
           // 不显示本来被隐藏的代码块
-          target.each(function() {
+          target.each(function () {
             if (!$(this).is("pre")) {
               $(this).show();
             }
@@ -9779,10 +10063,10 @@ class TranslateDiv {
     //         this.renderLaTeX(element);
     //     }
     // });
-    
+
     // 渲染翻译文本颜色
-    if(OJBetter.preference.TranslateTextColor){
-      this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
+    if (OJBetter.preference.TranslateTextColor) {
+      this.mainDiv.css("color", OJBetter.preference.TranslateTextColor);
     }
   }
 
@@ -11132,7 +11416,7 @@ async function CF2luogu(problemToolbar) {
           method: "GET",
           url,
         });
-        return response.status<300&&!response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
+        return response.status < 300 && !response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
       },
       {
         maxRetries: 3,
@@ -12696,7 +12980,7 @@ async function createMonacoEditor(language, form, support) {
       },
     }
   );
-  
+
   // 在编辑器中添加快捷命令：Ctrl+Enter (或 macOS 下的 Cmd+Enter)
   OJBetter.monaco.editor.addCommand(
     monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
@@ -17134,6 +17418,10 @@ function initOnDOMReady() {
   ) {
     judgeStatusReplace(); // 评测结果替换
   }
+  if (OJBetter.preference.showSameContestProblems && OJBetter.typeOfPage.is_problem) {
+    ShowSameContestProblems();//显示同比赛题目列表
+  }
+
 }
 
 /**

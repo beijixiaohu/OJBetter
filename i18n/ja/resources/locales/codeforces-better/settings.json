@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "オンライン・コード・ラン",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "ターゲットエリアの範囲を表示",
             "helpText": "オンの場合、MD表示/コピー/変換ボタン上にマウスを置くと、そのターゲット領域の範囲が表示されます。"
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "アイコン ボタンのサイズ",
             "helpText": "<p>翻訳ボタンのサイズ設定</p>",

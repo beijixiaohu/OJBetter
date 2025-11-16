@@ -248,7 +248,8 @@
             "rules": {
                 "Submission": "#",
                 "Time": "सबमिशन का समय",
-                "Verdict": "判题状态"
+                "Verdict": "判题状态",
+                "提交时间 limit exceeded": "Time limit exceeded"
             }
         },
         ".reset-status-filter": {
@@ -1090,5 +1091,6 @@
         }
     }
 }
+
 
 

@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "Online Code Lauf",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "Anzeige der Reichweite des Zielgebiets",
             "helpText": "Wenn diese Funktion aktiviert ist, wird der Bereich des Zielbereichs angezeigt, wenn Sie den Mauszeiger über die Schaltfläche MD Ansicht/Kopieren/Translieren bewegen."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "Icon Schaltfläche Größe",
             "helpText": "<p>Einstellen der Größe der Übersetzungsschaltfläche</p>",

@@ -278,6 +278,11 @@
                 }
             }
         },
+        "logMessage": {
+            "cf": {
+                "noProblemsTableFound": "未找到题目表格，可能页面结构已更改或无题目信息。"
+            }
+        },
         "onlineCodeExecution": {
             "title": "Online Code Run",
             "compilerOptions": {
@@ -386,6 +391,11 @@
             "label": "Display target area range",
             "helpText": "When turned on, the range of its target area is displayed when the mouse is hovered over the MD View/Copy/Translate button."
         },
+        "showSameContestProblems": {
+            "label": "显示同比赛题目列表",
+            "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
+        },
+        "sameContestProblemsListError": "无法加载同比赛题目列表",
         "iconButtonSize": {
             "title": "Icon Button Size",
             "helpText": "<p>Setting the size of the translation button</p>",
