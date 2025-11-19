@@ -321,10 +321,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                " まで、問題の内容・感想・解法などをSNS上に投稿することは": " 之前，在SNS上发布题目的题面、思路或解法是违反",
+                "に違反する行為です。": "的行为。",
+                "どのような投稿がルールに違反するかはこちらの": "什么样的投稿违反规则请看这里的",
+                "もお読みください。": "。",
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
                 "AtCoder生成AI対策ルール - 20251003版": "AtCoder对于生成式AI的规定 - 20251003版本",
                 "2025/10/03 にルールの更新が行われましたのでご注意ください。": "注意此规则已于 2025 年 10 月 3 日更新。",
                 "詳しくは": "详情请见",
+                "こちらの記事": "這篇文章",
                 "をご覧ください。": "。",
                 "現在": "目前",
                 "で参加登録しています。詳細は": "已報名參加。詳情請閱讀",
@@ -333,17 +338,9 @@
                 "参加登録を取り消しました。": "已取消報名。",
                 "ログアウトしました。": "已登出登入。",
                 "ようこそ、": "歡迎，",
-                "さん": "先生/女士"
-            }
-        },
-        ".alert-link-jp": {
-            "class": [
-                ".alert-link"
-            ],
-            "description": "",
-            "isStrict": false,
-            "rules": {
-                "这里の記事": "這篇文章"
+                "さん": "先生/女士",
+                "記事": "报道",
+                "ルール": "規則"
             }
         },
         ".h2, h2": {
@@ -777,6 +774,8 @@
                 "participant. Please refer to": "參與者。請參考",
                 "this post": "這篇文章",
                 "for details.": "了解詳情。",
+                "Until ": "在 ",
+                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
                 "AtCoder Rules against Generative AI - Version 20251003": "AtCoder对于生成式AI的规定 - 20251003版本",
                 "Please note that the rules were updated on October 3\\, 2025.": "注意此规则已于 2025 年 10 月 3 日更新。",
@@ -785,7 +784,8 @@
                 "participant": "參與者",
                 "Registered": "已報名",
                 "Canceled registration": "已取消報名",
-                "Welcome, ": "歡迎，"
+                "Welcome, ": "歡迎，",
+                "the rules": "相关规则"
             }
         },
         ".lang-en": {
@@ -888,5 +888,6 @@
     },
     "dynamicReplacements": {}
 }
+
 
 

@@ -321,10 +321,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                " まで、問題の内容・感想・解法などをSNS上に投稿することは": " 之前，在SNS上发布题目的题面、思路或解法是违反",
+                "に違反する行為です。": "的行为。",
+                "どのような投稿がルールに違反するかはこちらの": "什么样的投稿违反规则请看这里的",
+                "もお読みください。": ".",
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "É proibida a utilização de IA generativa nos concursos AtCoder em curso. Para mais informações, consulte as regras abaixo.",
                 "AtCoder生成AI対策ルール - 20251003版": "Disposições do AtCoder para a IA generativa - Versão 20251003",
                 "2025/10/03 にルールの更新が行われましたのでご注意ください。": "Esta regra foi actualizada a partir de 3 de outubro de 2025",
                 "詳しくは": "Para mais informações, consultar",
+                "こちらの記事": "este artigo",
                 "をご覧ください。": ".",
                 "現在": "estar virado para (nós)",
                 "で参加登録しています。詳細は": "se inscreveram para participar. Para mais informações, consultar",
@@ -333,17 +338,9 @@
                 "参加登録を取り消しました。": "O registo foi cancelado.",
                 "ログアウトしました。": "Registado.",
                 "ようこそ、": "Bem-vindo.",
-                "さん": "Sr./Sra."
-            }
-        },
-        ".alert-link-jp": {
-            "class": [
-                ".ligação de alerta"
-            ],
-            "description": "",
-            "isStrict": false,
-            "rules": {
-                "这里の記事": "este artigo"
+                "さん": "Sr./Sra.",
+                "記事": "报道",
+                "ルール": "regras e regulamentos"
             }
         },
         ".h2, h2": {
@@ -777,6 +774,8 @@
                 "participant. Please refer to": "Participantes. Consultar",
                 "this post": "este artigo",
                 "for details.": "Para saber mais.",
+                "Until ": "在 ",
+                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "É proibida a utilização de IA generativa nos concursos AtCoder em curso. Para mais informações, consulte as regras abaixo.",
                 "AtCoder Rules against Generative AI - Version 20251003": "Disposições do AtCoder para a IA generativa - Versão 20251003",
                 "Please note that the rules were updated on October 3\\, 2025.": "Esta regra foi actualizada a partir de 3 de outubro de 2025",
@@ -785,7 +784,8 @@
                 "participant": "participantes",
                 "Registered": "Inscrito",
                 "Canceled registration": "Registo cancelado",
-                "Welcome, ": "Bem-vindo."
+                "Welcome, ": "Bem-vindo.",
+                "the rules": "相关规则"
             }
         },
         ".lang-en": {
@@ -888,5 +888,6 @@
     },
     "dynamicReplacements": {}
 }
+
 
 
