@@ -1008,7 +1008,7 @@
                 "Unrated allowed": "允许未评级报名"
             }
         },
-        ".terms": {
+        ".contestRegistration": {
             "class": [
                 ".contestRegistration"
             ],
