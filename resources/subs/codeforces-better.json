@@ -1007,6 +1007,25 @@
             "rules": {
                 "Unrated allowed": "允许未评级报名"
             }
+        },
+        ".contestRegistration": {
+            "class": [
+                ".contestRegistration"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "The registration confirms that you:": "报名即代表你：",
+                "have read the contest rules": "已经阅读过比赛规则",
+                "will not violate the rules": "不会违反比赛规则",
+                "will not communicate with other participants, use another person's code for solutions/generators, share ideas of solutions and hacks": "不会与其他参赛者交流、使用他人的代码（用于解题或生成器）、分享解题和 hack 思路",
+                "will not attempt to deliberately destabilize the testing process and try to hack the contest system in any form": "不会故意干扰评测过程，也不会以任何形式试图攻击比赛系统",
+                "will not use multiple accounts and will take part in the contest using your personal and the single account": "不会使用多个账号，仅使用你的个人且唯一账号参赛",
+                "have read the regulations on third-party code usage at the following link: https://codeforces.com/blog/entry/8790 and agree to comply with them": "已阅读以下链接中的第三方代码使用规定并同意遵守：https://codeforces.com/blog/entry/8790",
+                "have read the regulations on AI assistants at the following link: https://codeforces.com/blog/entry/133941 and agree to comply with them.": "已阅读以下链接中的 AI 使用规定并同意遵守：https://codeforces.com/blog/entry/133941",
+                
+                "I want to register unrated":"我想非评级报名"
+            }
         }
     },
     "InputValueReplacements": {
