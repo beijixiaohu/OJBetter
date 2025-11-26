@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.81.0
+// @version      1.82.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -11416,7 +11416,15 @@ async function CF2luogu(problemToolbar) {
           method: "GET",
           url,
         });
-        return response.status < 300 && !response.responseText.match(/出错了/g);//匹配 1xx 和 2xx
+        // 使用HTTP状态码判断页面是否存在，只接受2xx成功状态码
+        if (response.status >= 200 && response.status < 300) return true;
+        else if (response.status == 404) return false;
+        else
+          throw new OJB_GMError(
+            "network",
+            "An unknown network error occurred!",
+            response
+          );
       },
       {
         maxRetries: 3,
