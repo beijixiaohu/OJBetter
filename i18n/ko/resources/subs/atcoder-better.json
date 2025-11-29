@@ -321,10 +321,15 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                " まで、問題の内容・感想・解法などをSNS上に投稿することは": " 之前，在SNS上发布题目的题面、思路或解法是违反",
+                "に違反する行為です。": "的行为。",
+                "どのような投稿がルールに違反するかはこちらの": "什么样的投稿违反规则请看这里的",
+                "もお読みください。": ".",
                 "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "현재 진행 중인 AtCoder 대회에서 생성 AI를 사용하는 것은 금지됩니다. 자세한 내용은 아래 규정을 참조하세요.",
                 "AtCoder生成AI対策ルール - 20251003版": "AtCoder의 제너레이티브 AI 규정 - 버전 20251003",
                 "2025/10/03 にルールの更新が行われましたのでご注意ください。": "이 규칙은 2025년 10월 3일자로 업데이트되었습니다.",
                 "詳しくは": "자세한 내용은 다음을 참조하세요.",
+                "こちらの記事": "이 문서",
                 "をご覧ください。": ".",
                 "現在": "(우리를) 마주보고",
                 "で参加登録しています。詳細は": "에 참여하겠다고 등록했습니다. 자세한 내용은 다음을 참조하세요.",
@@ -333,17 +338,9 @@
                 "参加登録を取り消しました。": "등록이 취소되었습니다.",
                 "ログアウトしました。": "로그아웃했습니다.",
                 "ようこそ、": "환영합니다.",
-                "さん": "Mr/Ms"
-            }
-        },
-        ".alert-link-jp": {
-            "class": [
-                ".alert-link"
-            ],
-            "description": "",
-            "isStrict": false,
-            "rules": {
-                "这里の記事": "이 문서"
+                "さん": "Mr/Ms",
+                "記事": "报道",
+                "ルール": "규칙 및 규정"
             }
         },
         ".h2, h2": {
@@ -777,6 +774,8 @@
                 "participant. Please refer to": "참가자 다음을 참조하세요.",
                 "this post": "이 문서",
                 "for details.": "자세히 알아보세요.",
+                "Until ": "在 ",
+                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "현재 진행 중인 AtCoder 대회에서 생성 AI를 사용하는 것은 금지됩니다. 자세한 내용은 아래 규정을 참조하세요.",
                 "AtCoder Rules against Generative AI - Version 20251003": "AtCoder의 제너레이티브 AI 규정 - 버전 20251003",
                 "Please note that the rules were updated on October 3\\, 2025.": "이 규칙은 2025년 10월 3일자로 업데이트되었습니다.",
@@ -785,7 +784,8 @@
                 "participant": "참가자",
                 "Registered": "등록",
                 "Canceled registration": "등록 취소",
-                "Welcome, ": "환영합니다."
+                "Welcome, ": "환영합니다.",
+                "the rules": "相关规则"
             }
         },
         ".lang-en": {
@@ -888,5 +888,6 @@
     },
     "dynamicReplacements": {}
 }
+
 
 

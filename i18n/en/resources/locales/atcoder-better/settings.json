@@ -1,6 +1,6 @@
 {
   "sidebar": {
-    "basic": "General Settings",
+    "basic": "Basic",
     "localization": "localization",
     "translation": "Translation",
     "clist": "Clist",
@@ -201,7 +201,7 @@
   "clist": {
     "title": "Clist Settings",
     "basics": {
-      "name": "General Settings",
+      "name": "Basic",
       "notice": "<p>Note：Access to Clist data requires valid login credentials, you have two options：</p><p>Fill in<a href='https://clist.by/' target='_blank'> below clist.by </a>the official API key,</p><p>or keep the clist.by website in your browser logged in (i.e. cookie is valid)</p>",
       "key": {
         "title": "KEY.",
@@ -234,7 +234,7 @@
   },
   "codeEditor": {
     "title": "Monaco Editor Settings",
-    "basics": "General Settings",
+    "basics": "Basic",
     "problemPageCodeEditor": {
       "label": "Add editor to title page",
       "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"
