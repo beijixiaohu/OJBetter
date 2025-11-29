@@ -35,24 +35,24 @@
 
 ## 1.17.0
 
-- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
+- **更換公共庫 CDN 為[南科大鏡像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因見[issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
 
-- 修复 submissions 页面代码"展开/折叠"按钮无效的问题
+- 修復 submissions 頁面程式碼"展開 / 摺疊"按鈕無效的問題
 
-- 调整设置页面的布局结构
+- 調整設定頁面的佈局結構
 
 ## 1.16.1
 
-- 修复 网站本地化报错的问题
+- 修復 網站本地化報錯的問題
 
 ## 1.16.0
 
-- 添加 "ChatGPT 翻译提示词自定义" 和 "作为系统提示词"的选项 感谢 **@Dawn-Xu-helloworld** 的协作
-- 添加 代码提交确认弹窗显示题目名，
-- 添加 自动翻译 选项
-- 添加 样例通过自动提交 选项（默认关闭）
-- 更换 "有道翻译" 的接口
-- 修复 代码块美化中存在 `&nbsp;` 符号的问题
+- 添加"ChatGPT 翻譯提示詞自訂"與"做為系統提示詞"的選項，感謝 \*\* @Dawn-Xu-helloworld \*\*的協作
+- 添加 代碼提交確認彈窗顯示題目名
+- 添加 自動翻譯 選項
+- 添加· 範例通過自動提交 選項（默認關閉）
+- 更換 “有道翻譯” 的接口
+- 修復 代碼塊美化中存在 `&nbsp;` 符號的問題
 - 修复 主题设置为 follow 时 Monaco 编辑器未正确应用主题的问题 感谢 **@cscnk52** 的贡献
 - 修复 行间 LaTeX 未正确替换的问题，修复相关正则的性能问题
 - 修复 重新翻译时"收起旧的结果"报错的问题
