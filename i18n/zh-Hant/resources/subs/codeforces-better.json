@@ -1010,7 +1010,7 @@
         },
         ".contestRegistration": {
             "class": [
-                ".contestRegistration"
+                ""
             ],
             "description": "",
             "isStrict": false,
