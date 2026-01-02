@@ -395,7 +395,7 @@
             "label": "显示同比赛题目列表",
             "helpText": "在当前题目页面下方显示同比赛的所有题目列表，方便快速跳转。"
         },
-        "sameContestProblemsListError": "无法加载同比赛题目列表",
+        "sameContestProblemsListError": "Unable to load the list of all problems in the same contest",
         "iconButtonSize": {
             "title": "Icon Button Size",
             "helpText": "<p>Setting the size of the translation button</p>",
