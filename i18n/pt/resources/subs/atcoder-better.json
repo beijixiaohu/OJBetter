@@ -779,7 +779,7 @@
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "É proibida a utilização de IA generativa nos concursos AtCoder em curso. Para mais informações, consulte as regras abaixo.",
                 "AtCoder Rules against Generative AI - Version 20251003": "Disposições do AtCoder para a IA generativa - Versão 20251003",
                 "Please note that the rules were updated on October 3\\, 2025.": "Esta regra foi actualizada a partir de 3 de outubro de 2025",
-                " For details\\, please see ": "Para mais informações, consultar",
+                "For details\\, please see ": "Para mais informações, consultar",
                 "\\.": ".",
                 "participant": "participantes",
                 "Registered": "Inscrito",
@@ -888,6 +888,7 @@
     },
     "dynamicReplacements": {}
 }
+
 
 
 
