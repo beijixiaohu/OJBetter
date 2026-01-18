@@ -779,7 +779,7 @@
                 "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "禁止在正在进行的AtCoder比赛中使用生成式AI。请参考下面的规则了解详情。",
                 "AtCoder Rules against Generative AI - Version 20251003": "AtCoder对于生成式AI的规定 - 20251003版本",
                 "Please note that the rules were updated on October 3\\, 2025.": "注意此规则已于 2025 年 10 月 3 日更新。",
-                " For details\\, please see ": "详情请见",
+                "For details\\, please see ": "详情请见",
                 "\\.": "。",
                 "participant": "प्रतिभागियों",
                 "Registered": "दर्ज कराई",
@@ -888,6 +888,7 @@
     },
     "dynamicReplacements": {}
 }
+
 
 
 
