@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "Cacher les étiquettes de la question",
             "helpText": "<p>Cacher le libellé de la question dans la barre latérale de la page de titre et l'afficher lorsque la souris passe sur le libellé.</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
