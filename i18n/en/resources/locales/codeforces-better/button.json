@@ -48,5 +48,9 @@
         "404": "not found",
         "error": "Something went wrong",
         "netError": "Network Error"
+    },
+    "nav": {
+        "toProblemset": "To Problemset",
+        "toContest": "To Contest"
     }
 }
