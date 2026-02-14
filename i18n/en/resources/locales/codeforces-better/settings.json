@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "Hide question tags",
             "helpText": "<p>Hide the question label in the sidebar on the title page and show it when the mouse is hovering over the label</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
