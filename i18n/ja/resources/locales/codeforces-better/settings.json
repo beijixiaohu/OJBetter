@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "質問タグを隠す",
             "helpText": "<p>タイトルページのサイドバーの質問ラベルを非表示にし、ラベルの上にマウスを置いたときに表示する。</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
