@@ -48,5 +48,9 @@
         "404": "नहीं मिला",
         "error": "गलती",
         "netError": "नेटवर्क त्रुटि"
+    },
+    "nav": {
+        "toProblemset": "To Problemset",
+        "toContest": "To Contest"
     }
 }
