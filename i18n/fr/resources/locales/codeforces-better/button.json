@@ -48,5 +48,9 @@
         "404": "introuvable",
         "error": "Quelque chose n'a pas fonctionné.",
         "netError": "erreur de réseau"
+    },
+    "nav": {
+        "toProblemset": "To Problemset",
+        "toContest": "To Contest"
     }
 }
