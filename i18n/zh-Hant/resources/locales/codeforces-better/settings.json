@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "隐藏问题标签",
             "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
