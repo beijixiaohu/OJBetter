@@ -43,7 +43,7 @@ const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
 var enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
 var translation = getGMValue("translation", "deepl");
 //openai
-var openai_model, openai_key, openai_proxy, openai_header, openai_data;
+var openai_model, openai_think_level, openai_key, openai_proxy, openai_header, openai_data;
 var opneaiConfig = getGMValue("chatgpt-config", {
     "choice": -1,
     "configurations": []
@@ -57,8 +57,9 @@ if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
         GM_setValue('chatgpt-config', existingConfig);
         location.reload();
     }
-    
+
     openai_model = configAtIndex.model;
+    openai_think_level = configAtIndex.think_level;
     openai_key = configAtIndex.key;
     openai_proxy = configAtIndex.proxy;
     openai_header = configAtIndex._header ?
@@ -1353,14 +1354,29 @@ const chatgptConfigEditHTML = `
                 <div class="help_tip">
                     `+ helpCircleHTML + `
                     <div class="tip_text">
-                    <p>留空则默认为：gpt-3.5-turbo</p>
+                    <p>留空则默认为：gpt-5.4</p>
+                    <p>仅在使用支持 reasoning 的 /v1/responses 端点时，think_level 才会生效</p>
                     <p>模型列表请查阅<a target="_blank" href="https://platform.openai.com/docs/models">OpenAI官方文档</a></p>
                     <p><strong>此外，如果您使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
                     </div>
                 </div>
             </div>
         </label>
-        <input type='text' id='openai_model' placeholder='gpt-3.5-turbo' require = false>
+        <input type='text' id='openai_model' placeholder='gpt-5.4' require = false>
+        <label for='openai_think_level'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">think_level:</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
+                    <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
+                    <p>留空则跟随模型默认值</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <input type='text' id='openai_think_level' placeholder='none / minimal / low / medium / high / xhigh' require = false>
         <label for='openai_key'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label">KEY:</span>
@@ -1388,7 +1404,7 @@ const chatgptConfigEditHTML = `
                 </div>
             </div>
         </label>
-        <input type='text' id='openai_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
+        <input type='text' id='openai_proxy' placeholder='https://api.openai.com/v1/responses' require = false>
         <h5>高级</h5>
         <hr>
         <label for='_header'>
@@ -1437,6 +1453,7 @@ $(document).ready(function () {
         const chatgptStructure = {
             '#note': 'note',
             '#openai_model': 'model',
+            '#openai_think_level': 'think_level',
             '#openai_key': 'key',
             '#openai_proxy': 'proxy',
             '#_header': '_header',
@@ -1517,6 +1534,7 @@ $(document).ready(function () {
                         opneaiConfig = GM_getValue("chatgpt-config");
                         const configAtIndex = opneaiConfig.configurations[selectedIndex];
                         openai_model = configAtIndex.model;
+                        openai_think_level = configAtIndex.think_level;
                         openai_key = configAtIndex.key;
                         openai_proxy = configAtIndex.proxy;
                         openai_header = configAtIndex._header ?
@@ -2341,23 +2359,72 @@ async function translateProblemStatement(text, element_node, button) {
 }
 
 // ChatGPT
+function isOpenAIResponsesEndpoint(url) {
+    return /\/v1\/responses(?:$|[/?#])/.test(url);
+}
+
+function getOpenAIResponseText(response) {
+    if (!response) return "";
+    if (typeof response.output_text === 'string') return response.output_text;
+    if (response?.choices?.[0]?.message?.content) return response.choices[0].message.content;
+    if (!Array.isArray(response.output)) return "";
+
+    return response.output
+        .flatMap(item => Array.isArray(item?.content) ? item.content : [])
+        .filter(item => ['output_text', 'text'].includes(item?.type) && typeof item.text === 'string')
+        .map(item => item.text)
+        .join('');
+}
+
+function getOpenAITranslationRequest(raw) {
+    const modelDefault = 'gpt-5.4';
+    const proxyDefault = 'https://api.openai.com/v1/responses';
+    const prompt = "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw;
+    const url = (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : proxyDefault;
+    const extraData = Object.assign({}, ...openai_data);
+
+    if (isOpenAIResponsesEndpoint(url)) {
+        if (openai_think_level && extraData.reasoning === undefined) {
+            extraData.reasoning = { effort: openai_think_level };
+        }
+
+        return {
+            url: url,
+            data: {
+                model: (openai_model !== null && openai_model !== "") ? openai_model : modelDefault,
+                input: [{
+                    role: "user",
+                    content: prompt
+                }],
+                temperature: 0.7,
+                ...extraData
+            }
+        };
+    }
+
+    return {
+        url: url,
+        data: {
+            model: (openai_model !== null && openai_model !== "") ? openai_model : modelDefault,
+            messages: [{
+                role: "user",
+                content: prompt
+            }],
+            temperature: 0.7,
+            ...extraData
+        }
+    };
+}
+
 async function translate_openai(raw) {
     var openai_retext = "";
-    var data = {
-        model:  (openai_model !== null && openai_model !== "") ? openai_model : 'gpt-3.5-turbo',
-        messages: [{
-            role: "user",
-            content: "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw 
-        }],
-        temperature: 0.7,
-        ...Object.assign({}, ...openai_data)
-    };
+    const request = getOpenAITranslationRequest(raw);
     return new Promise(function (resolve, reject) {
         GM_xmlhttpRequest({
             method: 'POST',
-            url: (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : 'https://api.openai.com/v1/chat/completions',
+            url: request.url,
 
-            data: JSON.stringify(data),
+            data: JSON.stringify(request.data),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + openai_key,
@@ -2368,10 +2435,10 @@ async function translate_openai(raw) {
                 if (!response.response) {
                     reject("发生了未知的错误，如果你启用了代理API，请确认是否填写正确，并确保代理能够正常工作。\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈 请注意打码响应报文的敏感部分\n\n响应报文：" + JSON.stringify(response));
                 }
-                else if (!response.response.choices || response.response.choices.length < 1 || !response.response.choices[0].message) {
+                else if (!getOpenAIResponseText(response.response)) {
                     resolve("翻译出错，请重试\n\n如果无法解决，请前往 https://greasyfork.org/zh-CN/scripts/471106/feedback 反馈\n\n报错信息：" + JSON.stringify(response.response, null, ''));
                 } else {
-                    openai_retext = response.response.choices[0].message.content;
+                    openai_retext = getOpenAIResponseText(response.response);
                     resolve(openai_retext);
                 }
             },
@@ -2532,6 +2599,7 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
         let config1 = {
             "note": "我的配置1",
             "model": GM_getValue("openai_model"),
+            "think_level": GM_getValue("openai_think_level"),
             "key": GM_getValue("openai_key"),
             "proxy": GM_getValue("openai_proxy"),
             "_header": "",
@@ -2556,7 +2624,7 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
         newConfig.configurations.push(config2);
     }
     GM_setValue("chatgpt-config", newConfig);
-    const keysToDelete = ["openai_key", "openai_model", "openai_proxy", "api2d_key", "api2d_model", "api2d_request_entry", "x_api2d_no_cache", "showOpneAiAdvanced"];
+    const keysToDelete = ["openai_key", "openai_model", "openai_think_level", "openai_proxy", "api2d_key", "api2d_model", "api2d_request_entry", "x_api2d_no_cache", "showOpneAiAdvanced"];
     keysToDelete.forEach(key => {
         if (GM_getValue(key) != undefined) GM_deleteValue(key);
     });
