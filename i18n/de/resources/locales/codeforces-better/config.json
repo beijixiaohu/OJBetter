@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "Modelle.",
-                "tipText": "<p>Lassen Sie das Feld leer, um den Standardwert：gpt-5.4</p><p>zu verwenden. Eine Liste der Modelle finden Sie in der offiziellen OpenAI-Dokumentation<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\"></a></p><p><strong>Wenn Sie die vom Service Provider bereitgestellte Proxy-API verwenden, überprüfen Sie bitte, ob der Service Provider das entsprechende Modell unterstützt</strong></p>"
+                "tipText": "<p>Lassen Sie das Feld leer, um den Standardwert：gpt-3.5-turbo</p><p>zu verwenden. Eine Liste der Modelle finden Sie in der offiziellen OpenAI-Dokumentation<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\"></a></p><p><strong>Wenn Sie die vom Service Provider bereitgestellte Proxy-API verwenden, überprüfen Sie bitte, ob der Service Provider das entsprechende Modell unterstützt</strong></p>"
             },
             "key": {
                 "label": "SCHLÜSSEL.",

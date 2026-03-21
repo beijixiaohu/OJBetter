@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nowcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.12.0
+// @version      1.13.0
 // @description  牛客竞赛题目题解markdown一键复制
 // @author       北极小狐
 // @match        https://ac.nowcoder.com/*

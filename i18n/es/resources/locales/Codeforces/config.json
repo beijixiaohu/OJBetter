@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "Modelos.",
-                "tipText": "<p>Déjelo en blanco para que aparezca por defecto：gpt-5.4</p><p>Para obtener una lista de modelos, consulte<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentación oficial de OpenAI</a></p><p><strong>Además, si está utilizando la API proxy proporcionada por el proveedor de servicios, compruebe si el proveedor de servicios admite el modelo correspondiente</strong></p>"
+                "tipText": "<p>Déjelo en blanco para que aparezca por defecto：gpt-3.5-turbo</p><p>Para obtener una lista de modelos, consulte<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">Documentación oficial de OpenAI</a></p><p><strong>Además, si está utilizando la API proxy proporcionada por el proveedor de servicios, compruebe si el proveedor de servicios admite el modelo correspondiente</strong></p>"
             },
             "key": {
                 "label": "CLAVE.",
