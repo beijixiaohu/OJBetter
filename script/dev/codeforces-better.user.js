@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.83.0
+// @version      1.84.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -391,6 +391,8 @@ OJBetter.chatgpt = {
     name: undefined,
     /** @type {string?} 模型 */
     model: undefined,
+    /** @type {string?} 思考强度 */
+    think_level: undefined,
     /** @type {string?} API密钥 */
     key: undefined,
     /** @type {string?} 代理 */
@@ -1130,6 +1132,7 @@ async function initVar() {
     }
     OJBetter.chatgpt.config.name = configuration.name;
     OJBetter.chatgpt.config.model = configuration.model;
+    OJBetter.chatgpt.config.think_level = configuration.think_level;
     OJBetter.chatgpt.config.key = configuration.key;
     OJBetter.chatgpt.config.proxy = configuration.proxy;
     OJBetter.chatgpt.config.header = OJB_parseLinePairArray(
@@ -7652,7 +7655,23 @@ const chatgptConfigEditHTML = `
                     </div>
                 </div>
             </label>
-            <input type='text' id='chatgpt_model' placeholder='gpt-3.5-turbo' require = false>
+            <input type='text' id='chatgpt_model' placeholder='gpt-5.4' require = false>
+        </div>
+        <div class="OJBetter_setting_list">
+            <label for='chatgpt_think_level'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">think_level:</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text">
+                            <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
+                            <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
+                            <p>留空则跟随模型默认值</p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+            <input type='text' id='chatgpt_think_level' placeholder='none / minimal / low / medium / high / xhigh' require = false>
         </div>
         <div class="OJBetter_setting_list">
             <label for='chatgpt_key'>
@@ -7676,7 +7695,7 @@ const chatgptConfigEditHTML = `
                     </div>
                 </div>
             </label>
-            <input type='text' id='chatgpt_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
+            <input type='text' id='chatgpt_proxy' placeholder='https://api.openai.com/v1/responses' require = false>
         </div>
         <hr>
         <details>
@@ -7967,6 +7986,7 @@ async function initSettingsPanel() {
     const chatgptStructure = {
       "#name": createStructure("text", "name", true),
       "#chatgpt_model": createStructure("text", "model", false),
+      "#chatgpt_think_level": createStructure("text", "think_level", false),
       "#chatgpt_key": createStructure("text", "key", true),
       "#chatgpt_proxy": createStructure("text", "proxy", false),
       "#chatgpt_header": createStructure(
@@ -17062,8 +17082,31 @@ async function translate_caiyun(raw) {
  * @param {string} raw 原文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_openai(raw) {
-  const modelDefault = "gpt-3.5-turbo";
+function isOpenAIResponsesEndpoint(url) {
+  return /\/v1\/responses(?:$|[/?#])/.test(url);
+}
+
+function getOpenAIResponseText(response) {
+  if (!response) return "";
+  if (typeof response.output_text === "string") return response.output_text;
+  if (response?.choices?.[0]?.message?.content)
+    return response.choices[0].message.content;
+  if (!Array.isArray(response.output)) return "";
+
+  return response.output
+    .flatMap((item) => (Array.isArray(item?.content) ? item.content : []))
+    .filter(
+      (item) =>
+        ["output_text", "text"].includes(item?.type) &&
+        typeof item.text === "string"
+    )
+    .map((item) => item.text)
+    .join("");
+}
+
+function getOpenAITranslationRequest(raw, isStream = false) {
+  const modelDefault = "gpt-5.4";
+  const proxyDefault = "https://api.openai.com/v1/responses";
   const lang = getTargetLanguage("openai");
   let prompt = "";
   if (OJBetter.chatgpt.customPrompt) {
@@ -17072,7 +17115,7 @@ async function translate_openai(raw) {
       prompt += `\n${raw}`;
     }
   } else {
-    prompt = `You are a professional English translator specializing in algorithm programming competitions. 
+    prompt = `You are a professional English translator specializing in algorithm programming competitions.
 Translate the following text into ${lang} with precision, using appropriate technical terminology.
 
 Rules:
@@ -17087,34 +17130,77 @@ Text to translate:
 ${raw}
 "`;
   }
-  const data = {
-    model: OJBetter.chatgpt.config.model || modelDefault,
-    messages: OJBetter.chatgpt.asSystemPrompt
-      ? [
-        {
-          role: "system",
-          content: prompt,
-        },
-        {
-          role: "user",
-          content: raw,
-        },
-      ]
-      : [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    temperature: 0.7,
-    ...Object.assign({}, ...OJBetter.chatgpt.config.data),
+
+  const url = OJBetter.chatgpt.config.proxy || proxyDefault;
+  const extraData = Object.assign({}, ...OJBetter.chatgpt.config.data);
+
+  if (isOpenAIResponsesEndpoint(url)) {
+    if (OJBetter.chatgpt.config.think_level && extraData.reasoning === undefined) {
+      extraData.reasoning = { effort: OJBetter.chatgpt.config.think_level };
+    }
+
+    return {
+      url,
+      data: {
+        model: OJBetter.chatgpt.config.model || modelDefault,
+        input: OJBetter.chatgpt.asSystemPrompt
+          ? [
+            {
+              role: "developer",
+              content: prompt,
+            },
+            {
+              role: "user",
+              content: raw,
+            },
+          ]
+          : [
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        temperature: 0.7,
+        ...(isStream ? { stream: true } : {}),
+        ...extraData,
+      },
+    };
+  }
+
+  return {
+    url,
+    data: {
+      model: OJBetter.chatgpt.config.model || modelDefault,
+      messages: OJBetter.chatgpt.asSystemPrompt
+        ? [
+          {
+            role: "system",
+            content: prompt,
+          },
+          {
+            role: "user",
+            content: raw,
+          },
+        ]
+        : [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+      temperature: 0.7,
+      ...(isStream ? { stream: true } : {}),
+      ...extraData,
+    },
   };
+}
+
+async function translate_openai(raw) {
+  const request = getOpenAITranslationRequest(raw);
   const options = {
     method: "POST",
-    url:
-      OJBetter.chatgpt.config.proxy ||
-      "https://api.openai.com/v1/chat/completions",
-    data: JSON.stringify(data),
+    url: request.url,
+    data: JSON.stringify(request.data),
     responseType: "json",
     headers: {
       "Content-Type": "application/json",
@@ -17124,9 +17210,12 @@ ${raw}
   };
   return await BaseTranslate(
     options,
-    (res) => res,
+    (res) => {
+      if (!res) throw new Error("Translation failed or invalid response format.");
+      return res;
+    },
     undefined,
-    (response) => response.response.choices[0].message.content
+    (response) => getOpenAIResponseText(response.response)
   );
 }
 
@@ -17186,59 +17275,12 @@ async function translate_openai_stream(raw, translateDiv) {
  * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
  */
 async function* openai_stream(raw) {
-  const modelDefault = "gpt-3.5-turbo";
-  const lang = getTargetLanguage("openai");
-  let prompt = "";
-  if (OJBetter.chatgpt.customPrompt) {
-    prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-    if (!OJBetter.chatgpt.asSystemPrompt) {
-      prompt += `\n${raw}`;
-    }
-  } else {
-    prompt = `You are a professional English translator specializing in algorithm programming competitions. 
-Translate the following text into ${lang} with precision, using appropriate technical terminology.
-
-Rules:
-1. Output ONLY the translation, with no explanations, notes, or other text
-2. Maintain all original formatting
-3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
-4. Ensure the translation follows natural ${lang} expression patterns
-5. Use professional terminology common in programming competitions
-
-Text to translate:
-"
-${raw}
-"`;
-  }
-  const data = {
-    model: OJBetter.chatgpt.config.model || modelDefault,
-    messages: OJBetter.chatgpt.asSystemPrompt
-      ? [
-        {
-          role: "system",
-          content: prompt,
-        },
-        {
-          role: "user",
-          content: raw,
-        },
-      ]
-      : [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    temperature: 0.7,
-    stream: true,
-    ...Object.assign({}, ...OJBetter.chatgpt.config.data),
-  };
+  const request = getOpenAITranslationRequest(raw, true);
+  const isResponsesEndpoint = isOpenAIResponsesEndpoint(request.url);
   const options = {
     method: "POST",
-    url:
-      OJBetter.chatgpt.config.proxy ||
-      "https://api.openai.com/v1/chat/completions",
-    data: JSON.stringify(data),
+    url: request.url,
+    data: JSON.stringify(request.data),
     responseType: "stream",
     headers: {
       "Content-Type": "application/json",
@@ -17259,23 +17301,49 @@ ${raw}
 
     // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
     for (let i = 0; i < lines.length - 1; i++) {
-      let line = lines[i];
-      line = line.substring(5); // 移除 'data:' 前缀
+      const eventLines = lines[i].split("\n");
+      let eventType = "";
+      const dataLines = [];
+
+      for (const line of eventLines) {
+        if (line.startsWith("event:")) {
+          eventType = line.slice(6).trim();
+        } else if (line.startsWith("data:")) {
+          dataLines.push(line.slice(5).trimStart());
+        }
+      }
+
+      const line = dataLines.join("\n");
+      if (!line) continue;
       if (line.includes("[DONE]")) {
         return; // End
       }
       try {
         let data = JSON.parse(line);
-        let delta = data["choices"][0]["delta"];
-        let content = delta["content"] ? delta["content"] : "";
-        yield content; // 传递数据给调用者
+        if (isResponsesEndpoint) {
+          if (
+            eventType === "response.output_text.delta" &&
+            typeof data.delta === "string"
+          ) {
+            yield data.delta;
+          } else if (eventType === "error") {
+            throw new Error(data.message || line);
+          } else if (eventType === "response.completed") {
+            return;
+          }
+        } else {
+          let delta = data["choices"][0]["delta"];
+          let content = delta["content"] ? delta["content"] : "";
+          yield content; // 传递数据给调用者
+        }
       } catch (error) {
         console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
+        if (isResponsesEndpoint && eventType === "error") throw error;
       }
     }
 
     // 保留最后一行在缓冲区中
-    buffer = lines.slice(-1);
+    buffer = lines.slice(-1)[0];
   }
 
   return buffer;
