@@ -10659,8 +10659,8 @@ async function translateMain(
         regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
       text = textBlockReplacer.replace(text, regex);
 
-      // 替换行间代码块```
-      const regex2 = /```[\s\S]*?```/g;
+      // 替换行间代码块`
+      const regex2 = /`[\s\S]*?`/g;
       text = textBlockReplacer.replace(text, regex2);
     }
     return text;
