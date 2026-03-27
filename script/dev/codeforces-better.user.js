@@ -9539,8 +9539,8 @@ async function process(
     }
   }
 
-  // 是否跳过代码块
-  if ($(target).find("code").length > 0 || $(target).find(".monaco-editor").length > 0) {
+  // 是否跳过非行内代码块
+  if ($(target).find("code:not(.tt)").length > 0 || $(target).find(".monaco-editor").length > 0) {
     const shouldSkip = await OJB_createDialog(
       i18next.t("skipCodeBlock.title", { ns: "dialog" }),
       i18next.t("skipCodeBlock.content", { ns: "dialog" }),
@@ -9549,9 +9549,9 @@ async function process(
         i18next.t("skipCodeBlock.buttons.1", { ns: "dialog" }),
       ],
       true
-    ); // 跳过代码块确认
+    ); // 跳过非行内代码块确认
     if (shouldSkip) {
-      $(target).find("code").remove();
+      $(target).find("code:not(.tt)").remove();
       $(target).find(".monaco-editor").remove();
     }
   }
