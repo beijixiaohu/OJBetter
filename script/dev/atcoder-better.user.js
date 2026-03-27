@@ -1739,6 +1739,7 @@ async function initMonacoEditor() {
     if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         try {
             // 等待Monaco Editor加载器脚本加载完成
+            // 此处和 atcoder 自带的编辑器存在冲突，已知/submit界面的 Customize 功能无法使用
             await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
             // 配置Monaco Editor
             require.config({
