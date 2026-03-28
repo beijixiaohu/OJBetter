@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "Model:",
-                "tipText": "<p>Leave empty for：gpt-3.5-turbo</p><p>Model list check<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI Official Document</a></p><p><strong>Also, if you are using Proxy API, please confirm that the service provider supports Model</strong></p>"
+                "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
             },
             "key": {
                 "label": "KEY.",
