@@ -1739,8 +1739,8 @@ async function initMonacoEditor() {
     if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
         try {
             // 等待Monaco Editor加载器脚本加载完成
+            // 此处和 atcoder 自带的编辑器存在冲突，已知/submit界面的 Customize 功能无法使用
             await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
-
             // 配置Monaco Editor
             require.config({
                 paths: { vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs" },
@@ -8937,8 +8937,8 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
                 regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
             text = textBlockReplacer.replace(text, regex);
 
-            // 替换行间代码块```
-            const regex2 = /```[\s\S]*?```/g;
+            // 替换行间代码块`
+            const regex2 = /`[\s\S]*?`/g;
             text = textBlockReplacer.replace(text, regex2);
         }
         return text;
