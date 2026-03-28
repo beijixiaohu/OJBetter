@@ -33,8 +33,8 @@
         ]
     },
     "skipCodeBlock": {
-        "title": "Überspringt es Codeblöcke?",
-        "content": "Der zu übersetzende Bereich enthält Codeblöcke, die in der Regel nicht übersetzt werden müssen, und Sie müssen nun entscheiden, ob Sie diese überspringen möchten oder nicht：\n\nMöchten Sie die Codeblöcke überspringen?",
+        "title": "是否跳过非行内代码块？",
+        "content": "即将翻译的区域中包含非行内代码块，通常不需要翻译，现在你需要选择是否跳过这些代码块：\n\n要跳过非行内代码块吗？",
         "buttons": [
             "Verstopft",
             "Überspringen"
