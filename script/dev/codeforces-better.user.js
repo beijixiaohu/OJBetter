@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.85.0
+// @version      1.85.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -10568,9 +10568,11 @@ class ElementsTree {
    * @param {Boolean} isFold 是否折叠
    */
   reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
+    const translatedPayload =
+      translatedText && typeof translatedText === "object" ? translatedText : null;
     const translatedContent =
       OJB_stripReplaceOriginalMarkers(
-        translatedText && typeof translatedText === "object" ? translatedText.text : translatedText
+        translatedPayload ? translatedPayload.text : translatedText
       );
     const translateDiv = new TranslateDiv(id);
     pElement.after(translateDiv.getDiv());
@@ -10586,15 +10588,7 @@ class ElementsTree {
       const historyReplaceOriginalState = OJB_applyHistoryReplaceOriginal(
         translateDiv,
         pElement.get(0),
-        translatedContent,
-        !(
-          (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-          !OJBetter.translation.forceTurndownConversion
-        ),
-        !(
-          (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-          !OJBetter.translation.forceTurndownConversion
-        )
+        translatedPayload
       );
       if (historyReplaceOriginalState) {
         translateDiv.replaceOriginalState = historyReplaceOriginalState;
@@ -10768,6 +10762,7 @@ function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "") {
 
   return {
     records: records,
+    extraIgnoredSelector: extraIgnoredSelector,
     raw: records
       .map((record, index) => {
         const id = String(index).padStart(4, "0");
@@ -10876,48 +10871,33 @@ function OJB_stripReplaceOriginalMarkers(text) {
 function OJB_applyHistoryReplaceOriginal(
   translateDiv,
   targetElement,
-  translatedText,
-  is_escapeHTML = true,
-  is_renderLaTeX = true
+  translatedData
 ) {
-  const target = $(targetElement);
-  if (target.length === 0) return null;
-
-  let md = window.markdownit({
-    html: !is_escapeHTML,
-  });
-  if (!translatedText) translatedText = "";
-  let html = md.render(translatedText);
-
-  const tagName = target.prop("tagName");
-  let targetHTML = html;
-  if (["P", "LI"].includes(tagName)) {
-    const temp = $("<div>").html(html);
-    const child = temp.children().length === 1 ? temp.children().eq(0) : null;
-    if (child && child.prop("tagName") === "P") {
-      targetHTML = child.html();
-    } else if (tagName === "P") {
-      targetHTML = temp.text();
-    } else {
-      targetHTML = temp.html();
-    }
+  if (
+    !translatedData ||
+    typeof translatedData !== "object" ||
+    translatedData.replaceOriginal !== true ||
+    typeof translatedData.text !== "string"
+  ) {
+    return null;
   }
 
-  const originalHTML = target.html();
-  target.html(targetHTML);
+  const replaceOriginalState = OJB_prepareReplaceOriginalState(
+    targetElement,
+    translatedData.extraIgnoredSelector || ""
+  );
+  if (!replaceOriginalState) return null;
 
-  if (is_renderLaTeX) {
-    translateDiv.renderLaTeX(target.get(0));
+  translateDiv.setReplaceOriginalState(replaceOriginalState);
+  const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
+  if (applyResult.completed) {
+    return replaceOriginalState;
   }
 
-  return {
-    restore() {
-      const currentTarget = target.get(0);
-      if (currentTarget?.isConnected) {
-        target.html(originalHTML);
-      }
-    },
-  };
+  replaceOriginalState.restore();
+  translateDiv.replaceOriginalState = null;
+  translateDiv.getDiv().show();
+  return null;
 }
 
 /**
@@ -11341,10 +11321,14 @@ async function translateMain(
     OJBetter.translation.memory.enabled
   ) {
     OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
-    OJBetter.translation.memory.ttTree.addTransResultMap(
-      id,
-      OJB_stripReplaceOriginalMarkers(translatedText)
-    );
+    const transResultData = replaceOriginalState
+      ? {
+          text: translatedText,
+          replaceOriginal: true,
+          extraIgnoredSelector: replaceOriginalState.extraIgnoredSelector || "",
+        }
+      : OJB_stripReplaceOriginalMarkers(translatedText);
+    OJBetter.translation.memory.ttTree.addTransResultMap(id, transResultData);
     updateTransDBData(
       OJBetter.translation.memory.ttTree.getNodeData(),
       OJBetter.translation.memory.ttTree.getTransResultMap()
