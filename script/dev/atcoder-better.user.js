@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.22.0
+// @version      1.23.1
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -238,6 +238,8 @@ OJBetter.translation = {
         /** @type {Object?} 翻译记忆树 */
         ttTree: undefined
     },
+    /** @type {boolean?} 是否替换原文 */
+    replaceOriginal: undefined,
     /** @type {string?} 重翻译时的行为 */
     retransAction: undefined,
     /** @type {number?} 等待时间 */
@@ -897,6 +899,7 @@ async function initVar() {
     OJBetter.translation.comment.transMode = OJB_getGMValue("commentTranslationMode", "0");
     OJBetter.translation.comment.choice = OJB_getGMValue("commentTranslationChoice", "0");
     OJBetter.translation.memory.enabled = OJB_getGMValue("memoryTranslateHistory", true);
+    OJBetter.translation.replaceOriginal = OJB_getGMValue("replaceOriginal", false);
     OJBetter.translation.auto.enabled = OJB_getGMValue("autoTranslation", false);
     OJBetter.translation.auto.shortTextLength = OJB_getGMValue("shortTextLength", "2000");
     OJBetter.translation.retransAction = OJB_getGMValue("retransAction", "0");
@@ -6017,6 +6020,14 @@ const translation_settings_HTML = `
         <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="replaceOriginal" data-i18n="settings:translation.advanced.replaceOriginal.name">替换原文</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.replaceOriginal.helpText"><p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p></div>
+        </div>
+        <input type="checkbox" id="replaceOriginal" name="replaceOriginal">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="translation_retransAction" style="display: flex;" data-i18n="settings:translation.advanced.retrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -7066,6 +7077,7 @@ async function initSettingsPanel() {
         //
         $('#comment_translation_mode').val(GM_getValue("commentTranslationMode"));
         $("#memoryTranslateHistory").prop("checked", GM_getValue("memoryTranslateHistory") === true);
+        $("#replaceOriginal").prop("checked", GM_getValue("replaceOriginal") === true);
         $('#transWaitTime').val(GM_getValue("transWaitTime"));
         $('#translation_replaceSymbol').val(GM_getValue("replaceSymbol"));
         $("#filterTextWithoutEmphasis").prop("checked", GM_getValue("filterTextWithoutEmphasis") === true);
@@ -7148,6 +7160,7 @@ async function initSettingsPanel() {
                 })(),
                 commentTranslationMode: $('#comment_translation_mode').val(),
                 memoryTranslateHistory: $('#memoryTranslateHistory').prop("checked"),
+                replaceOriginal: $('#replaceOriginal').prop("checked"),
                 transWaitTime: $('#transWaitTime').val(),
                 replaceSymbol: $('#translation_replaceSymbol').val(),
                 filterTextWithoutEmphasis: $('#filterTextWithoutEmphasis').prop("checked"),
@@ -7293,6 +7306,7 @@ async function initSettingsPanel() {
                         // 更新配置信息
                         OJBetter.translation.choice = settings.translation;
                         OJBetter.translation.comment.choice = settings.commentTranslationChoice;
+                        OJBetter.translation.replaceOriginal = settings.replaceOriginal;
                     }
                 }
             }
@@ -8084,7 +8098,7 @@ async function executeTranslation(button, element, type, is_comment, overrideTra
  * @param {string} overrideTrans 覆盖全局翻译服务设定
  */
 async function process(button, target, element_node, type, is_comment, count, overrideTrans) {
-    if (type === "child_level") {
+    if (type === "child_level" && !OJBetter.translation.replaceOriginal) {
         let div = $("<div>");
         $(element_node).append(div);
         element_node = div.get(0);
@@ -8128,7 +8142,12 @@ async function process(button, target, element_node, type, is_comment, count, ov
  * @returns {TranslateResult} 翻译结果对象
  */
 async function blockProcessing(button, target, element_node, is_comment, overrideTrans) {
-    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+    const extraIgnoredSelector = $(target).find('.spoiler').length === 0 && $(element_node).find('.spoiler').length > 0 ? ', .spoiler' : '';
+    const replaceOriginalState = OJBetter.translation.replaceOriginal ? OJB_prepareReplaceOriginalState(element_node, extraIgnoredSelector) : null;
+
+    if (replaceOriginalState) {
+        target.markdown = replaceOriginalState.raw;
+    } else if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         target.markdown = $(target).html();
     } else if (!target.markdown) {
         target.markdown = OJBetter.common.turndownService.turndown($(target).html());
@@ -8141,7 +8160,8 @@ async function blockProcessing(button, target, element_node, is_comment, overrid
                 target.markdown,
                 element_node,
                 is_comment,
-                overrideTrans
+                overrideTrans,
+                replaceOriginalState
             ),
         OJBetter.translation.choice == "openai"
     );
@@ -8319,6 +8339,7 @@ class TranslateDiv {
      */
     constructor(id) {
         this.id = id;
+        this.replaceOriginalState = null;
         this.div = $('<div>').attr('id', id).addClass('translateDiv bounce-in');
         if (!OJBetter.typeOfPage.is_completeProblemset) {
             this.div.addClass('input-output-copier');
@@ -8402,6 +8423,17 @@ class TranslateDiv {
     }
 
     /**
+     * 设置原文替换目标
+     * @param {Object|null} replaceOriginalState 原文替换上下文
+     */
+    setReplaceOriginalState(replaceOriginalState) {
+        this.replaceOriginalState = replaceOriginalState || null;
+        if (this.replaceOriginalState) {
+            this.div.hide();
+        }
+    }
+
+    /**
      * 渲染一个元素内的LaTeX公式
      * @param {*} element
      */
@@ -8426,7 +8458,20 @@ class TranslateDiv {
      * @param {boolean} is_escapeHTML 是否转义HTML标签，为true则HTML标签将作为普通文本处理，默认为true
      * @param {boolean} is_renderLaTeX 是否渲染LaTeX，为true则会渲染LaTeX，默认为true
      */
-    updateTranslateDiv(text, is_escapeHTML = true, is_renderLaTeX = true,) {
+    updateTranslateDiv(text, is_escapeHTML = true, is_renderLaTeX = true, allowPartialReplace = false, forcePanel = false) {
+        if (this.replaceOriginalState && !forcePanel) {
+            const applyResult = OJB_applyReplaceOriginalText(this.replaceOriginalState, text, allowPartialReplace);
+            if (applyResult.applied) {
+                this.div.hide();
+            }
+            return applyResult;
+        }
+
+        if (this.replaceOriginalState && forcePanel) {
+            this.replaceOriginalState.restore();
+        }
+
+        this.div.show();
         // 渲染MarkDown
         let md = window.markdownit({
             html: !is_escapeHTML,
@@ -8452,6 +8497,11 @@ class TranslateDiv {
         if(OJBetter.preference.TranslateTextColor){
             this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
         }
+
+        return {
+            applied: false,
+            completed: true
+        };
     }
 
     /**
@@ -8495,6 +8545,9 @@ class TranslateDiv {
      */
     registerCloseButtonEvent() {
         this.closeButton.on("click", () => {
+            if (this.replaceOriginalState) {
+                this.replaceOriginalState.restore();
+            }
             $(this.div).remove();
             $(this.panelDiv).remove();
             if (OJBetter.typeOfPage.is_problem && OJBetter.translation.memory.enabled) {
@@ -8721,7 +8774,7 @@ class ElementsTree {
     getTranslateDivNum(ttTree) {
         var num = 0;
         for (var i in ttTree) {
-            if (ttTree[i].isTranslateDiv) {
+            if (ttTree[i].isTranslateDiv && this.transResultMap[ttTree[i].id] !== undefined) {
                 num++;
             }
         }
@@ -8776,8 +8829,10 @@ class ElementsTree {
                         var id = ne_node.id;
                         var topText = ne_node.topText;
                         var text = this.transResultMap[id];
-                        // create element after pElement
-                        this.reCreateTransDiv(pElement, id, text, topText, node.isTranslateDiv); // 如果前面一个也是翻译结果，则该结果折叠
+                        if (text !== undefined) {
+                            // create element after pElement
+                            this.reCreateTransDiv(pElement, id, text, topText, node.isTranslateDiv); // 如果前面一个也是翻译结果，则该结果折叠
+                        }
                     }
                     pElement = pElement.next(); // go to next element
                 }
@@ -8794,17 +8849,33 @@ class ElementsTree {
      * @param {Boolean} isFold 是否折叠
      */
     reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
+        const translatedPayload = translatedText && typeof translatedText === 'object' ? translatedText : null;
+        const translatedContent = OJB_stripReplaceOriginalMarkers(translatedPayload ? translatedPayload.text : translatedText);
         const translateDiv = new TranslateDiv(id);
         pElement.after(translateDiv.getDiv());
         translateDiv.setTopText(topText);
         translateDiv.registerUpButtonEvent();
         translateDiv.registerCloseButtonEvent();
         if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-            translateDiv.registerCopyButtonEvent(translatedText);
+            translateDiv.registerCopyButtonEvent(translatedContent);
         } else {
             translateDiv.disableCopyButton();
         }
-        translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+        if (OJBetter.translation.replaceOriginal === true) {
+            const historyReplaceOriginalState = OJB_applyHistoryReplaceOriginal(
+                translateDiv,
+                pElement.get(0),
+                translatedPayload
+            );
+            if (historyReplaceOriginalState) {
+                translateDiv.replaceOriginalState = historyReplaceOriginalState;
+                translateDiv.getDiv().hide();
+            } else {
+                translateDiv.updateTranslateDiv(translatedContent, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+            }
+        } else {
+            translateDiv.updateTranslateDiv(translatedContent, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+        }
         // 标记已翻译并添加到翻译按钮的结果栈中
         let transButton = pElement.prev('.html2md-panel').find('.translateButton');
         if (transButton.length == 0) {
@@ -8899,11 +8970,171 @@ async function initTransWhenViewable() {
 }
 
 /**
+ * 准备原文替换上下文
+ * @param {HTMLElement} element 目标元素
+ * @param {string} extraIgnoredSelector 额外忽略选择器
+ * @returns {Object|null} 原文替换上下文
+ */
+function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "") {
+    const records = [];
+    const ignoredSelector = `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel${extraIgnoredSelector}`;
+    const rootDocument = element?.ownerDocument || document;
+    const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
+    const walker = rootDocument.createTreeWalker(element, nodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+            if (!node || !node.parentElement) return nodeFilter.FILTER_REJECT;
+            if (node.parentElement.closest(ignoredSelector)) return nodeFilter.FILTER_REJECT;
+            if (!node.textContent || !node.textContent.trim()) return nodeFilter.FILTER_REJECT;
+            return nodeFilter.FILTER_ACCEPT;
+        }
+    });
+
+    let currentNode;
+    while ((currentNode = walker.nextNode())) {
+        const originalText = currentNode.textContent;
+        const prefix = originalText.match(/^\s*/)?.[0] || "";
+        const suffix = originalText.match(/\s*$/)?.[0] || "";
+        const text = originalText.slice(prefix.length, originalText.length - suffix.length);
+        if (!text.trim()) continue;
+        records.push({
+            node: currentNode,
+            originalText: originalText,
+            prefix: prefix,
+            suffix: suffix,
+            text: text
+        });
+    }
+
+    if (!records.length) return null;
+
+    return {
+            records: records,
+            extraIgnoredSelector: extraIgnoredSelector,
+            raw: records.map((record, index) => {
+            const id = String(index).padStart(4, '0');
+            return `[[OJBLOCK_${id}]]\n${record.text}\n[[/OJBLOCK_${id}]]`;
+        }).join('\n\n'),
+        restore() {
+            records.forEach(record => {
+                if (record.node.isConnected) {
+                    record.node.textContent = record.originalText;
+                }
+            });
+        }
+    };
+}
+
+/**
+ * 将译文写回原文节点
+ * @param {Object|null} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译后的文本
+ * @param {boolean} allowPartial 是否允许部分替换
+ * @returns {{applied: boolean, completed: boolean}} 替换结果
+ */
+function OJB_applyReplaceOriginalText(replaceOriginalState, translatedText, allowPartial = false) {
+    if (!replaceOriginalState || !Array.isArray(replaceOriginalState.records) || !replaceOriginalState.records.length) {
+        return {
+            applied: false,
+            completed: false
+        };
+    }
+
+    const translatedMap = new Map();
+    const regex = /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
+    let match;
+    while ((match = regex.exec(translatedText)) !== null) {
+        translatedMap.set(Number(match[1]), match[2]);
+    }
+
+    const targetRecords = replaceOriginalState.records;
+    const expectedCount = targetRecords.length;
+    let completed = translatedMap.size === expectedCount && targetRecords.length === expectedCount;
+    for (let index = 0; index < expectedCount; index++) {
+        const record = targetRecords[index];
+        if (!record?.node?.isConnected || !translatedMap.has(index)) {
+            completed = false;
+            if (!allowPartial) {
+                return {
+                    applied: false,
+                    completed: false
+                };
+            }
+        }
+    }
+
+    let applied = false;
+    translatedMap.forEach((text, index) => {
+        const record = targetRecords[index];
+        if (!record?.node?.isConnected) return;
+        record.node.textContent = `${record.prefix}${text.trim()}${record.suffix}`;
+        applied = true;
+    });
+
+    if (allowPartial) {
+        const partialRegex = /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)$/g;
+        let partialMatch = null;
+        while ((match = partialRegex.exec(translatedText)) !== null) {
+            partialMatch = match;
+        }
+
+        if (partialMatch) {
+            const partialIndex = Number(partialMatch[1]);
+            if (!translatedMap.has(partialIndex)) {
+                const record = targetRecords[partialIndex];
+                if (record?.node?.isConnected) {
+                    const partialText = partialMatch[2].replace(/\[\[\/?OJB[\s\S]*$/, '');
+                    record.node.textContent = `${record.prefix}${partialText}${record.suffix}`;
+                    applied = true;
+                }
+            }
+        }
+    }
+
+    return {
+        applied: applied,
+        completed: completed
+    };
+}
+
+function OJB_stripReplaceOriginalMarkers(text) {
+    if (typeof text !== "string") return text;
+    const regex = /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
+    const blocks = [];
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+        blocks.push(match[2]);
+    }
+    return blocks.length > 0 ? blocks.join("\n\n") : text;
+}
+
+function OJB_applyHistoryReplaceOriginal(translateDiv, targetElement, translatedData) {
+    if (!translatedData || typeof translatedData !== "object" || translatedData.replaceOriginal !== true || typeof translatedData.text !== "string") {
+        return null;
+    }
+
+    const replaceOriginalState = OJB_prepareReplaceOriginalState(targetElement, translatedData.extraIgnoredSelector || "");
+    if (!replaceOriginalState) return null;
+
+    translateDiv.setReplaceOriginalState(replaceOriginalState);
+    const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
+    if (applyResult.completed) {
+        return replaceOriginalState;
+    }
+
+    replaceOriginalState.restore();
+    translateDiv.replaceOriginalState = null;
+    translateDiv.getDiv().show();
+    return null;
+}
+
+/**
  * 翻译返回结果结构体
  * @typedef {Object} TranslateResult
  * @property {string} status 翻译状态
  * @property {TranslateDiv} translateDiv 翻译结果面板
  * @property {TransRawData} rawData 原始翻译数据
+ * @property {string} translatedText 翻译后的文本
+ * @property {Object|null} replaceOriginalState 原文替换上下文
  */
 
 /**
@@ -8914,7 +9145,7 @@ async function initTransWhenViewable() {
  * @param {string} overrideTrans 覆盖全局翻译服务设定
  * @returns {TranslateResult} 翻译结果对象
  */
-async function translateMain(text, element_node, is_comment, overrideTrans) {
+async function translateMain(text, element_node, is_comment, overrideTrans, replaceOriginalState = null) {
     /** @type {number} 翻译结果的ID*/
     const id = OJB_getRandomNumber(8);
     /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
@@ -8931,6 +9162,8 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
     /** @type {TranslateResult} 翻译结果对象 */
     const translateResult = {
         status: "ok",
+        translatedText: "",
+        replaceOriginalState: replaceOriginalState,
         rawData: {
             done: false
         }
@@ -9060,6 +9293,7 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
     // 创建翻译结果元素并放在element_node的后面
     translateResult.translateDiv = new TranslateDiv(id);
     $(element_node).after(translateResult.translateDiv.getDiv());
+    translateResult.translateDiv.setReplaceOriginalState(replaceOriginalState);
 
     const isColSm12 = $(element_node).prev().hasClass("col-sm-12");
     // 如果前一个元素的类名包含col-sm-12，则翻译面板也要加上col-sm-12
@@ -9196,7 +9430,7 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
     translateResult.rawData = await translate(realTransServer);
 
     if (translateResult.status == "error") {
-        translateResult.translateDiv.updateTranslateDiv(translateResult.rawData.message);
+        translateResult.translateDiv.updateTranslateDiv(translateResult.rawData.message, true, true, false, true);
         return translateResult;
     }
 
@@ -9217,12 +9451,23 @@ async function translateMain(text, element_node, is_comment, overrideTrans) {
     if ((OJBetter.typeOfPage.is_problem || OJBetter.typeOfPage.is_completeProblemset) && OJBetter.translation.memory.enabled) {
         // OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
         OJBetter.translation.memory.ttTree.refreshNode("#task-statement"); // 刷新当前页面.ttypography元素的结构树实例
-        OJBetter.translation.memory.ttTree.addTransResultMap(id, translatedText);
+        const transResultData = replaceOriginalState ? {
+            text: translatedText,
+            replaceOriginal: true,
+            extraIgnoredSelector: replaceOriginalState.extraIgnoredSelector || ""
+        } : OJB_stripReplaceOriginalMarkers(translatedText);
+        OJBetter.translation.memory.ttTree.addTransResultMap(id, transResultData);
         updateTransDBData(OJBetter.translation.memory.ttTree.getNodeData(), OJBetter.translation.memory.ttTree.getTransResultMap()); // 更新翻译结果到transDB
     }
 
+    translateResult.translatedText = translatedText;
+
     // 翻译结果面板更新
-    translateResult.translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+    const displayResult = translateResult.translateDiv.updateTranslateDiv(translatedText, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
+    if (replaceOriginalState && !displayResult.completed) {
+        translateResult.status = "error";
+        translateResult.translateDiv.updateTranslateDiv(i18next.t('error.unexpected', { ns: 'translator' }), true, true, false, true);
+    }
 
     return translateResult;
 }
@@ -13983,9 +14228,13 @@ function getOpenAITranslationRequest(raw, isStream = false) {
     const modelDefault = 'gpt-5.4';
     const proxyDefault = 'https://api.openai.com/v1/responses';
     const lang = getTargetLanguage('openai');
+    const hasReplaceOriginalMarker = /\[\[\/?OJBLOCK_\d{4}\]\]/.test(raw);
     let prompt = "";
     if (OJBetter.chatgpt.customPrompt) {
         prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+        if (hasReplaceOriginalMarker) {
+            prompt += `\nKeep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order.`;
+        }
         if (!OJBetter.chatgpt.asSystemPrompt) {
             prompt += `\n${raw}`;
         };
@@ -13999,6 +14248,7 @@ Rules:
 3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
 4. Ensure the translation follows natural ${lang} expression patterns
 5. Use professional terminology common in programming competitions
+${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
 
 Text to translate:
 "
@@ -14113,7 +14363,7 @@ async function translate_openai_stream(raw, translateDiv) {
         for await (const delta of openai_stream(raw)) {
             result.text += delta;
             // 翻译结果面板更新
-            translateDiv.updateTranslateDiv(result.text, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru), false);
+            translateDiv.updateTranslateDiv(result.text, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru), false, true);
         }
         return result;
     } catch (err) {
@@ -14581,5 +14831,3 @@ if (GM_getValue("openai_key") || GM_getValue("api2d_key")) {
       location.reload();
     }
 }
-
-
