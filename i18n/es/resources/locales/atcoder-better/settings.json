@@ -169,6 +169,10 @@
         "name": "Recuperación automática de traducciones históricas",
         "helpText": "<p>Guarda automáticamente la información de traducción de la página de título<strong></strong>en el indexDB local</p><p>Refresca / restaura automáticamente la información de traducción la próxima vez que se acceda a la página</p>"
       },
+      "replaceOriginal": {
+        "name": "替换原文",
+        "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
+      },
       "retrans": {
         "name": "Tras la retraducción",
         "helpText": "<p>Elija si desea \"cerrar los resultados antiguos\" o \"guardar los resultados antiguos\" en la retraducción</p>",
