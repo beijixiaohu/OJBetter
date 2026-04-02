@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "Frage-Tags ausblenden",
             "helpText": "<p>Die Fragebezeichnung in der Seitenleiste auf der Titelseite ausblenden und einblenden, wenn der Mauszeiger über der Bezeichnung schwebt</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
@@ -172,6 +176,10 @@
             "memory": {
                 "name": "Automatische Wiederherstellung von historischen Übersetzungen",
                 "helpText": "<p>Speichert die Übersetzungsinformationen auf der Titelseite<strong></strong>automatisch in der lokalen indexDB</p><p>Aktualisiert / stellt die Übersetzungsinformationen automatisch wieder her, wenn die Seite das nächste Mal aufgerufen wird</p>"
+            },
+            "replaceOriginal": {
+                "name": "替换原文",
+                "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
             },
             "retrans": {
                 "name": "Nach der Rückübersetzung",

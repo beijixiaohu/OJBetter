@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "질문 태그 숨기기",
             "helpText": "<p>제목 페이지의 사이드바에서 문제 레이블을 숨기고 마우스를 레이블 위에 가져가면 표시합니다.</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
@@ -172,6 +176,10 @@
             "memory": {
                 "name": "과거 번역 자동 복구",
                 "helpText": "<p><strong>제목 페이지의 번역 정보를</strong>로컬 인덱스DB에 자동 저장</p><p>다음 페이지에 액세스할 때 번역 정보를 새로 고침/자동 복원</p>"
+            },
+            "replaceOriginal": {
+                "name": "替换原文",
+                "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
             },
             "retrans": {
                 "name": "재번역 시",

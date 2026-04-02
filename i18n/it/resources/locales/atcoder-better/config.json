@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "Modelli.",
-                "tipText": "<p>Lasciare vuoto per impostare l'impostazione predefinita su：gpt-3.5-turbo</p><p>Per un elenco di modelli, consulti la documentazione ufficiale di OpenAI<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\"></a></p><p><strong>Inoltre, se sta utilizzando l'API proxy fornita dal fornitore di servizi, verifichi se il fornitore di servizi supporta il modello corrispondente</strong></p>"
+                "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
             },
             "key": {
                 "label": "CHIAVE.",

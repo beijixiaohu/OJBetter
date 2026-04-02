@@ -33,8 +33,8 @@
         ]
     },
     "skipCodeBlock": {
-        "title": "Does it skip code blocks?",
-        "content": "The area about to be translated contains code blocks, which usually don't need to be translated, and now you need to choose whether to skip them or not：\n\nWant to skip the code blocks?",
+        "title": "是否跳过非行内代码块？",
+        "content": "即将翻译的区域中包含非行内代码块，通常不需要翻译，现在你需要选择是否跳过这些代码块：\n\n要跳过非行内代码块吗？",
         "buttons": [
             "clogged",
             "Skip"

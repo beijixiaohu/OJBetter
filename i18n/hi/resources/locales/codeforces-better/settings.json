@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "隐藏问题标签",
             "helpText": "<p>隐藏题目页中侧边栏中的问题标签，鼠标悬浮在标签上时显示</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
@@ -172,6 +176,10 @@
             "memory": {
                 "name": "ऐतिहासिक अनुवादों को स्वचालित रूप से पुनर्स्थापित करें",
                 "helpText": "<p>将<strong>题目页面</strong>上的翻译信息自动保存到本地indexDB中</p><p>刷新 / 下一次进入页面 时自动恢复翻译信息</p>"
+            },
+            "replaceOriginal": {
+                "name": "替换原文",
+                "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
             },
             "retrans": {
                 "name": "पुन: अनुवाद करते समय",

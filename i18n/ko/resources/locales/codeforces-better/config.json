@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "모델.",
-                "tipText": "<p>비워두면 기본값은：gpt-3.5-turbo</p><p>모델 목록은<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI 공식 문서</a></p><p><strong>또한 서비스 제공업체에서 제공하는 프록시 API를 사용하는 경우 서비스 제공업체가 해당 모델을 지원하는지</strong></p>확인하시기 바랍니다."
+                "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
             },
             "key": {
                 "label": "KEY.",

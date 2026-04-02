@@ -1,6 +1,6 @@
 {
   "sidebar": {
-    "basic": "General Settings",
+    "basic": "Basic",
     "localization": "localization",
     "translation": "Translation",
     "clist": "Clist",
@@ -169,6 +169,10 @@
         "name": "Automatic recovery of historical translations",
         "helpText": "<p>Automatically saves the translation information on the<strong>title page</strong>to the local indexDB</p><p>Automatically restores the translation information when refreshing/next entering the page</p>"
       },
+      "replaceOriginal": {
+        "name": "替换原文",
+        "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
+      },
       "retrans": {
         "name": "When retranslating",
         "helpText": "<p>Choose whether to 'Close old results' or 'Collapse old results' when retranslating</p>",
@@ -201,7 +205,7 @@
   "clist": {
     "title": "Clist Settings",
     "basics": {
-      "name": "General Settings",
+      "name": "Basic",
       "notice": "<p>Note：Access to Clist data requires valid login credentials, you have two options：</p><p>Fill in<a href='https://clist.by/' target='_blank'> below clist.by </a>the official API key,</p><p>or keep the clist.by website in your browser logged in (i.e. cookie is valid)</p>",
       "key": {
         "title": "KEY.",
@@ -234,7 +238,7 @@
   },
   "codeEditor": {
     "title": "Monaco Editor Settings",
-    "basics": "General Settings",
+    "basics": "Basic",
     "problemPageCodeEditor": {
       "label": "Add editor to title page",
       "helpText": "Add Monaco editor below the title page and the code will be saved automatically, providing online code running"

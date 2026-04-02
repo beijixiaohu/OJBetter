@@ -22,7 +22,7 @@ Improve the website interface and user interaction by adding a number of useful 
 To install the script, you can get：
 
 - Dark Mode Support：Add dark mode to your website and brush up at night without hurting your eyes.
-- Website Localization：replaces the main text of the website with the language of your choice.
+- Website Localization: replaces the main text of the website with the language of your choice.
 - Title Translation：One-click translation of titles into the target language while ensuring that LaTeX formulas are not corrupted.
 - Clist Rating Score：displays the Clist Rating score data for the topic.
 - Quick Jump：One-click jump to the corresponding page for this question in Rock Valley, VJudge.
@@ -31,13 +31,13 @@ To install the script, you can get：
 
 > [!NOTE]
 >
-> Click the **`xxxBetter! Settings`** button in the **top-right corner of the webpage** to open the settings panel.
+> Click the **`xxxBetter! Settings`** button in the **top-right corner of the webpage** to open the settings panel,
 >
 > Help text is provided for most functions and can be viewed by hovering over the "? icon" to view it.
 
 ## Using Documents
 
-For more detailed information and usage guidelines, please visit the **[Wiki page](https://github.com/beijixiaohu/OJBetter/wiki)**.\*\*\*\*\*\*\*\*\*\*
+For more detailed information and usage guidelines, please visit the **[Wiki page](https://github.com/beijixiaohu/OJBetter/wiki)**.\*\*\*\*\*\*\*\*\*\*\*\*
 
 ## How to contribute
 
