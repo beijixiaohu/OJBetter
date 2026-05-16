@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "モデル:",
-                "tipText": "<p>デフォルトは空白のまま：gpt-3.5-turbo</p><p>モデル一覧は<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI公式ドキュメント</a></p><p><strong>なお、サービスプロバイダが提供するプロキシAPIを利用する場合は、サービスプロバイダが対応モデルをサポートしているかどうかをご確認ください</strong></p>"
+                "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
             },
             "key": {
                 "label": "キー",

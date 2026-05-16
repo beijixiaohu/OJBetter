@@ -41,23 +41,23 @@
 
 ## 1.76.0
 
-- **更换公共库 CDN 为[南科大镜像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因见 [issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
+- **更換公共庫 CDN 為[南科大鏡像](https://mirrors.sustech.edu.cn/help/cdnjs.html)，原因見[issue](https://github.com/beijixiaohu/OJBetter/issues/151)**
 
 - 新增「評測狀態文字替換」功能，感謝 **@wrk-123** 的協作
 
-- 调整设置页面的布局结构
+- 調整設定頁面的佈局結構
 
 ## 1.75.0
 
 - 完善部分網站在地化規則，感謝 **@qjwh** 的貢獻
-- 添加 "ChatGPT 翻译提示词自定义" 和 "作为系统提示词"的选项 感谢 **@Dawn-Xu-helloworld** 的协作
+- 添加"ChatGPT 翻譯提示詞自訂"與"做為系統提示詞"的選項，感謝 \*\* @Dawn-Xu-helloworld \*\*的協作
 - 新增「強制使用 Turndown 轉換」功能 感謝 **@wrk-123** 的貢獻
-- 添加 代码提交确认弹窗显示题目名，
-- 添加 样例通过自动提交 选项（默认关闭）
+- 添加 代碼提交確認彈窗顯示題目名
+- 添加· 範例通過自動提交 選項（默認關閉）
 - 新增「隱藏題目問題標籤」功能，默認關閉
-- 更换 "有道翻译" 的接口
+- 更換 “有道翻譯” 的接口
 - 修復 gym 題目無法跳轉至 vjudge 的問題
-- 修复 代码块美化中存在 `&nbsp;` 符号的问题
+- 修復 代碼塊美化中存在 `&nbsp;` 符號的問題
 - 修復 problemset 來源的題號的長度非 1 時無法正常提交的問題 感謝 **@WindJ0Y** 的貢獻
 - 修复 主题设置为 follow 时 Monaco 编辑器未正确应用主题的问题 感谢 **@cscnk52** 的贡献
 - 修復 題目集題目鏈接為小寫時程式碼編輯器未正確載入的問題

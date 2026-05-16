@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.83.0
+// @version      1.85.1
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -244,6 +244,8 @@ OJBetter.translation = {
     /** @type {Object?} 翻译记忆树 */
     ttTree: undefined,
   },
+  /** @type {boolean?} 是否替换原文 */
+  replaceOriginal: undefined,
   /** @type {string?} 重翻译时的行为 */
   retransAction: undefined,
   /** @type {number?} 等待时间 */
@@ -391,6 +393,8 @@ OJBetter.chatgpt = {
     name: undefined,
     /** @type {string?} 模型 */
     model: undefined,
+    /** @type {string?} 思考强度 */
+    think_level: undefined,
     /** @type {string?} API密钥 */
     key: undefined,
     /** @type {string?} 代理 */
@@ -1018,6 +1022,10 @@ async function initVar() {
     "memoryTranslateHistory",
     true
   );
+  OJBetter.translation.replaceOriginal = OJB_getGMValue(
+    "replaceOriginal",
+    false
+  );
   OJBetter.translation.auto.enabled = OJB_getGMValue("autoTranslation", false);
   OJBetter.translation.auto.shortTextLength = OJB_getGMValue(
     "shortTextLength",
@@ -1130,6 +1138,7 @@ async function initVar() {
     }
     OJBetter.chatgpt.config.name = configuration.name;
     OJBetter.chatgpt.config.model = configuration.model;
+    OJBetter.chatgpt.config.think_level = configuration.think_level;
     OJBetter.chatgpt.config.key = configuration.key;
     OJBetter.chatgpt.config.proxy = configuration.proxy;
     OJBetter.chatgpt.config.header = OJB_parseLinePairArray(
@@ -6929,6 +6938,14 @@ const translation_settings_HTML = `
         <input type="checkbox" id="memoryTranslateHistory" name="memoryTranslateHistory">
     </div>
     <div class='OJBetter_setting_list'>
+        <label for="replaceOriginal" data-i18n="settings:translation.advanced.replaceOriginal.name">替换原文</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text" data-i18n="[html]settings:translation.advanced.replaceOriginal.helpText"><p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p></div>
+        </div>
+        <input type="checkbox" id="replaceOriginal" name="replaceOriginal">
+    </div>
+    <div class='OJBetter_setting_list'>
         <label for="translation_retransAction" style="display: flex;" data-i18n="settings:translation.advanced.retrans.name"></label>
         <div class="help_tip">
             ${helpCircleHTML}
@@ -7652,7 +7669,23 @@ const chatgptConfigEditHTML = `
                     </div>
                 </div>
             </label>
-            <input type='text' id='chatgpt_model' placeholder='gpt-3.5-turbo' require = false>
+            <input type='text' id='chatgpt_model' placeholder='gpt-5.4' require = false>
+        </div>
+        <div class="OJBetter_setting_list">
+            <label for='chatgpt_think_level'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">think_level:</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text">
+                            <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
+                            <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
+                            <p>留空则跟随模型默认值</p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+            <input type='text' id='chatgpt_think_level' placeholder='none / minimal / low / medium / high / xhigh' require = false>
         </div>
         <div class="OJBetter_setting_list">
             <label for='chatgpt_key'>
@@ -7676,7 +7709,7 @@ const chatgptConfigEditHTML = `
                     </div>
                 </div>
             </label>
-            <input type='text' id='chatgpt_proxy' placeholder='https://api.openai.com/v1/chat/completions' require = false>
+            <input type='text' id='chatgpt_proxy' placeholder='https://api.openai.com/v1/responses' require = false>
         </div>
         <hr>
         <details>
@@ -7967,6 +8000,7 @@ async function initSettingsPanel() {
     const chatgptStructure = {
       "#name": createStructure("text", "name", true),
       "#chatgpt_model": createStructure("text", "model", false),
+      "#chatgpt_think_level": createStructure("text", "think_level", false),
       "#chatgpt_key": createStructure("text", "key", true),
       "#chatgpt_proxy": createStructure("text", "proxy", false),
       "#chatgpt_header": createStructure(
@@ -8149,6 +8183,10 @@ async function initSettingsPanel() {
       "checked",
       GM_getValue("memoryTranslateHistory") === true
     );
+    $("#replaceOriginal").prop(
+      "checked",
+      GM_getValue("replaceOriginal") === true
+    );
     $("#transWaitTime").val(GM_getValue("transWaitTime"));
     $("#translation_replaceSymbol").val(GM_getValue("replaceSymbol"));
     $("#filterTextWithoutEmphasis").prop(
@@ -8295,6 +8333,7 @@ async function initSettingsPanel() {
         })(),
         commentTranslationMode: $("#comment_translation_mode").val(),
         memoryTranslateHistory: $("#memoryTranslateHistory").prop("checked"),
+        replaceOriginal: $("#replaceOriginal").prop("checked"),
         transWaitTime: $("#transWaitTime").val(),
         replaceSymbol: $("#translation_replaceSymbol").val(),
         filterTextWithoutEmphasis: $("#filterTextWithoutEmphasis").prop(
@@ -8468,6 +8507,7 @@ async function initSettingsPanel() {
             OJBetter.translation.choice = settings.translation;
             OJBetter.translation.comment.choice =
               settings.commentTranslationChoice;
+            OJBetter.translation.replaceOriginal = settings.replaceOriginal;
           }
         }
       }
@@ -9515,7 +9555,7 @@ async function process(
   count,
   overrideTrans
 ) {
-  if (type === "child_level") {
+  if (type === "child_level" && !OJBetter.translation.replaceOriginal) {
     let div = $("<div>");
     $(element_node).append(div);
     element_node = div.get(0);
@@ -9539,8 +9579,8 @@ async function process(
     }
   }
 
-  // 是否跳过代码块
-  if ($(target).find("code").length > 0 || $(target).find(".monaco-editor").length > 0) {
+  // 是否跳过非行内代码块
+  if ($(target).find("code:not(.tt)").length > 0 || $(target).find(".monaco-editor").length > 0) {
     const shouldSkip = await OJB_createDialog(
       i18next.t("skipCodeBlock.title", { ns: "dialog" }),
       i18next.t("skipCodeBlock.content", { ns: "dialog" }),
@@ -9549,9 +9589,9 @@ async function process(
         i18next.t("skipCodeBlock.buttons.1", { ns: "dialog" }),
       ],
       true
-    ); // 跳过代码块确认
+    ); // 跳过非行内代码块确认
     if (shouldSkip) {
-      $(target).find("code").remove();
+      $(target).find("code:not(.tt)").remove();
       $(target).find(".monaco-editor").remove();
     }
   }
@@ -9588,7 +9628,18 @@ async function blockProcessing(
   is_comment,
   overrideTrans
 ) {
-  if (
+  const extraIgnoredSelector =
+    $(target).find(".spoiler").length === 0 &&
+    $(element_node).find(".spoiler").length > 0
+      ? ", .spoiler"
+      : "";
+  const replaceOriginalState = OJBetter.translation.replaceOriginal
+    ? OJB_prepareReplaceOriginalState(element_node, extraIgnoredSelector)
+    : null;
+
+  if (replaceOriginalState) {
+    target.markdown = replaceOriginalState.raw;
+  } else if (
     (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
     !OJBetter.translation.forceTurndownConversion
   ) {
@@ -9606,7 +9657,8 @@ async function blockProcessing(
         target.markdown,
         element_node,
         is_comment,
-        overrideTrans
+        overrideTrans,
+        replaceOriginalState
       ),
     OJBetter.translation.choice == "openai"
   );
@@ -9956,6 +10008,7 @@ class TranslateDiv {
    */
   constructor(id) {
     this.id = id;
+    this.replaceOriginalState = null;
     this.div = $("<div>").attr("id", id).addClass("translateDiv bounce-in");
     if (!OJBetter.typeOfPage.is_completeProblemset) {
       this.div.addClass("input-output-copier");
@@ -10049,6 +10102,17 @@ class TranslateDiv {
   }
 
   /**
+   * 设置原文替换目标
+   * @param {Object|null} replaceOriginalState 原文替换上下文
+   */
+  setReplaceOriginalState(replaceOriginalState) {
+    this.replaceOriginalState = replaceOriginalState || null;
+    if (this.replaceOriginalState) {
+      this.div.hide();
+    }
+  }
+
+  /**
    * 渲染一个元素内的LaTeX公式
    * @param {HTMLElement} element 元素
    */
@@ -10062,7 +10126,30 @@ class TranslateDiv {
    * @param {boolean} is_escapeHTML 是否转义HTML标签，为true则HTML标签将作为普通文本处理，默认为true
    * @param {boolean} is_renderLaTeX 是否渲染LaTeX，为true则会渲染LaTeX，默认为true
    */
-  updateTranslateDiv(text, is_escapeHTML = true, is_renderLaTeX = true) {
+  updateTranslateDiv(
+    text,
+    is_escapeHTML = true,
+    is_renderLaTeX = true,
+    allowPartialReplace = false,
+    forcePanel = false
+  ) {
+    if (this.replaceOriginalState && !forcePanel) {
+      const applyResult = OJB_applyReplaceOriginalText(
+        this.replaceOriginalState,
+        text,
+        allowPartialReplace
+      );
+      if (applyResult.applied) {
+        this.div.hide();
+      }
+      return applyResult;
+    }
+
+    if (this.replaceOriginalState && forcePanel) {
+      this.replaceOriginalState.restore();
+    }
+
+    this.div.show();
     // 渲染MarkDown
     let md = window.markdownit({
       html: !is_escapeHTML,
@@ -10088,6 +10175,11 @@ class TranslateDiv {
     if (OJBetter.preference.TranslateTextColor) {
       this.mainDiv.css("color", OJBetter.preference.TranslateTextColor);
     }
+
+    return {
+      applied: false,
+      completed: true,
+    };
   }
 
   /**
@@ -10137,6 +10229,9 @@ class TranslateDiv {
    */
   registerCloseButtonEvent() {
     this.closeButton.on("click", () => {
+      if (this.replaceOriginalState) {
+        this.replaceOriginalState.restore();
+      }
       $(this.div).remove();
       $(this.panelDiv).remove();
       if (
@@ -10389,7 +10484,7 @@ class ElementsTree {
   getTranslateDivNum(ttTree) {
     var num = 0;
     for (var i in ttTree) {
-      if (ttTree[i].isTranslateDiv) {
+      if (ttTree[i].isTranslateDiv && this.transResultMap[ttTree[i].id] !== undefined) {
         num++;
       }
     }
@@ -10447,14 +10542,16 @@ class ElementsTree {
             var id = ne_node.id;
             var topText = ne_node.topText;
             var text = this.transResultMap[id];
-            // create element after pElement
-            this.reCreateTransDiv(
-              pElement,
-              id,
-              text,
-              topText,
-              node.isTranslateDiv
-            ); // 如果前面一个也是翻译结果，则该结果折叠
+            if (text !== undefined) {
+              // create element after pElement
+              this.reCreateTransDiv(
+                pElement,
+                id,
+                text,
+                topText,
+                node.isTranslateDiv
+              ); // 如果前面一个也是翻译结果，则该结果折叠
+            }
           }
           pElement = pElement.next(); // go to next element
         }
@@ -10471,23 +10568,49 @@ class ElementsTree {
    * @param {Boolean} isFold 是否折叠
    */
   reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
+    const translatedPayload =
+      translatedText && typeof translatedText === "object" ? translatedText : null;
+    const translatedContent =
+      OJB_stripReplaceOriginalMarkers(
+        translatedPayload ? translatedPayload.text : translatedText
+      );
     const translateDiv = new TranslateDiv(id);
     pElement.after(translateDiv.getDiv());
     translateDiv.setTopText(topText);
     translateDiv.registerUpButtonEvent();
     translateDiv.registerCloseButtonEvent();
     if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-      translateDiv.registerCopyButtonEvent(translatedText);
+      translateDiv.registerCopyButtonEvent(translatedContent);
     } else {
       translateDiv.disableCopyButton();
     }
-    translateDiv.updateTranslateDiv(
-      translatedText,
-      !(
-        (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-        !OJBetter.translation.forceTurndownConversion
-      )
-    );
+    if (OJBetter.translation.replaceOriginal === true) {
+      const historyReplaceOriginalState = OJB_applyHistoryReplaceOriginal(
+        translateDiv,
+        pElement.get(0),
+        translatedPayload
+      );
+      if (historyReplaceOriginalState) {
+        translateDiv.replaceOriginalState = historyReplaceOriginalState;
+        translateDiv.getDiv().hide();
+      } else {
+        translateDiv.updateTranslateDiv(
+          translatedContent,
+          !(
+            (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
+            !OJBetter.translation.forceTurndownConversion
+          )
+        );
+      }
+    } else {
+      translateDiv.updateTranslateDiv(
+        translatedContent,
+        !(
+          (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
+          !OJBetter.translation.forceTurndownConversion
+        )
+      );
+    }
     // 标记已翻译并添加到翻译按钮的结果栈中
     let transButton = pElement.prev(".html2md-panel").find(".translateButton");
     if (transButton.length == 0) {
@@ -10594,11 +10717,197 @@ async function initTransWhenViewable() {
 }
 
 /**
+ * 准备原文替换上下文
+ * @param {HTMLElement} element 目标元素
+ * @param {string} extraIgnoredSelector 额外忽略选择器
+ * @returns {Object|null} 原文替换上下文
+ */
+function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "") {
+  const records = [];
+  const ignoredSelector =
+    `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel${extraIgnoredSelector}`;
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node || !node.parentElement) return NodeFilter.FILTER_REJECT;
+      if ($(node.parentElement).closest(ignoredSelector).length > 0) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      if (!node.textContent || !node.textContent.trim()) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+
+  let currentNode;
+  while ((currentNode = walker.nextNode())) {
+    const originalText = currentNode.textContent;
+    const prefix = originalText.match(/^\s*/)?.[0] || "";
+    const suffix = originalText.match(/\s*$/)?.[0] || "";
+    const text = originalText.slice(
+      prefix.length,
+      originalText.length - suffix.length
+    );
+    if (!text.trim()) continue;
+    records.push({
+      node: currentNode,
+      originalText: originalText,
+      prefix: prefix,
+      suffix: suffix,
+      text: text,
+    });
+  }
+
+  if (!records.length) return null;
+
+  return {
+    records: records,
+    extraIgnoredSelector: extraIgnoredSelector,
+    raw: records
+      .map((record, index) => {
+        const id = String(index).padStart(4, "0");
+        return `[[OJBLOCK_${id}]]\n${record.text}\n[[/OJBLOCK_${id}]]`;
+      })
+      .join("\n\n"),
+    restore() {
+      records.forEach((record) => {
+        if (record.node.isConnected) {
+          record.node.textContent = record.originalText;
+        }
+      });
+    },
+  };
+}
+
+/**
+ * 将译文写回原文节点
+ * @param {Object|null} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译后的文本
+ * @param {boolean} allowPartial 是否允许部分替换
+ * @returns {{applied: boolean, completed: boolean}} 替换结果
+ */
+function OJB_applyReplaceOriginalText(replaceOriginalState, translatedText, allowPartial = false) {
+  if (
+    !replaceOriginalState ||
+    !Array.isArray(replaceOriginalState.records) ||
+    !replaceOriginalState.records.length
+  ) {
+    return {
+      applied: false,
+      completed: false,
+    };
+  }
+
+  const translatedMap = new Map();
+  const regex =
+    /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
+  let match;
+  while ((match = regex.exec(translatedText)) !== null) {
+    translatedMap.set(Number(match[1]), match[2]);
+  }
+
+  const targetRecords = replaceOriginalState.records;
+  const expectedCount = targetRecords.length;
+  let completed = translatedMap.size === expectedCount && targetRecords.length === expectedCount;
+  for (let index = 0; index < expectedCount; index++) {
+    const record = targetRecords[index];
+    if (!record?.node?.isConnected || !translatedMap.has(index)) {
+      completed = false;
+      if (!allowPartial) {
+        return {
+          applied: false,
+          completed: false,
+        };
+      }
+    }
+  }
+
+  let applied = false;
+  translatedMap.forEach((text, index) => {
+    const record = targetRecords[index];
+    if (!record?.node?.isConnected) return;
+    record.node.textContent = `${record.prefix}${text.trim()}${record.suffix}`;
+    applied = true;
+  });
+
+  if (allowPartial) {
+    const partialRegex = /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)$/g;
+    let partialMatch = null;
+    while ((match = partialRegex.exec(translatedText)) !== null) {
+      partialMatch = match;
+    }
+
+    if (partialMatch) {
+      const partialIndex = Number(partialMatch[1]);
+      if (!translatedMap.has(partialIndex)) {
+        const record = targetRecords[partialIndex];
+        if (record?.node?.isConnected) {
+          const partialText = partialMatch[2].replace(/\[\[\/?OJB[\s\S]*$/, "");
+          record.node.textContent = `${record.prefix}${partialText}${record.suffix}`;
+          applied = true;
+        }
+      }
+    }
+  }
+
+  return {
+    applied: applied,
+    completed: completed,
+  };
+}
+
+function OJB_stripReplaceOriginalMarkers(text) {
+  if (typeof text !== "string") return text;
+  const regex =
+    /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
+  const blocks = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    blocks.push(match[2]);
+  }
+  return blocks.length > 0 ? blocks.join("\n\n") : text;
+}
+
+function OJB_applyHistoryReplaceOriginal(
+  translateDiv,
+  targetElement,
+  translatedData
+) {
+  if (
+    !translatedData ||
+    typeof translatedData !== "object" ||
+    translatedData.replaceOriginal !== true ||
+    typeof translatedData.text !== "string"
+  ) {
+    return null;
+  }
+
+  const replaceOriginalState = OJB_prepareReplaceOriginalState(
+    targetElement,
+    translatedData.extraIgnoredSelector || ""
+  );
+  if (!replaceOriginalState) return null;
+
+  translateDiv.setReplaceOriginalState(replaceOriginalState);
+  const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
+  if (applyResult.completed) {
+    return replaceOriginalState;
+  }
+
+  replaceOriginalState.restore();
+  translateDiv.replaceOriginalState = null;
+  translateDiv.getDiv().show();
+  return null;
+}
+
+/**
  * 翻译返回结果结构体
  * @typedef {Object} TranslateResult
  * @property {string} status 翻译状态
  * @property {TranslateDiv} translateDiv 翻译结果面板
  * @property {TransRawData} rawData 原始翻译数据
+ * @property {string} translatedText 翻译后的文本
+ * @property {Object|null} replaceOriginalState 原文替换上下文
  */
 
 /**
@@ -10613,7 +10922,8 @@ async function translateMain(
   text,
   element_node,
   is_comment,
-  overrideTrans
+  overrideTrans,
+  replaceOriginalState = null
 ) {
   /** @type {number} 翻译结果的ID*/
   const id = OJB_getRandomNumber(8);
@@ -10632,6 +10942,8 @@ async function translateMain(
   /** @type {TranslateResult} 翻译结果对象 */
   const translateResult = {
     status: "ok",
+    translatedText: "",
+    replaceOriginalState: replaceOriginalState,
     rawData: {
       done: false,
     },
@@ -10659,8 +10971,8 @@ async function translateMain(
         regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
       text = textBlockReplacer.replace(text, regex);
 
-      // 替换行间代码块```
-      const regex2 = /```[\s\S]*?```/g;
+      // 替换行间代码块`
+      const regex2 = /`[\s\S]*?`/g;
       text = textBlockReplacer.replace(text, regex2);
     }
     return text;
@@ -10773,6 +11085,7 @@ async function translateMain(
   // 创建翻译结果元素并放在element_node的后面
   translateResult.translateDiv = new TranslateDiv(id);
   $(element_node).after(translateResult.translateDiv.getDiv());
+  translateResult.translateDiv.setReplaceOriginalState(replaceOriginalState);
 
   // 顶栏左侧信息
   translateResult.translateDiv.setTopText(
@@ -10979,7 +11292,11 @@ async function translateMain(
 
   if (translateResult.status == "error") {
     translateResult.translateDiv.updateTranslateDiv(
-      translateResult.rawData.message
+      translateResult.rawData.message,
+      true,
+      true,
+      false,
+      true
     );
     return translateResult;
   }
@@ -11004,21 +11321,40 @@ async function translateMain(
     OJBetter.translation.memory.enabled
   ) {
     OJBetter.translation.memory.ttTree.refreshNode(".ttypography"); // 刷新当前页面.ttypography元素的结构树实例
-    OJBetter.translation.memory.ttTree.addTransResultMap(id, translatedText);
+    const transResultData = replaceOriginalState
+      ? {
+          text: translatedText,
+          replaceOriginal: true,
+          extraIgnoredSelector: replaceOriginalState.extraIgnoredSelector || "",
+        }
+      : OJB_stripReplaceOriginalMarkers(translatedText);
+    OJBetter.translation.memory.ttTree.addTransResultMap(id, transResultData);
     updateTransDBData(
       OJBetter.translation.memory.ttTree.getNodeData(),
       OJBetter.translation.memory.ttTree.getTransResultMap()
     ); // 更新翻译结果到transDB
   }
 
+  translateResult.translatedText = translatedText;
+
   // 翻译结果面板更新
-  translateResult.translateDiv.updateTranslateDiv(
+  const displayResult = translateResult.translateDiv.updateTranslateDiv(
     translatedText,
     !(
       (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
       !OJBetter.translation.forceTurndownConversion
     )
   );
+  if (replaceOriginalState && !displayResult.completed) {
+    translateResult.status = "error";
+    translateResult.translateDiv.updateTranslateDiv(
+      i18next.t("error.unexpected", { ns: "translator" }),
+      true,
+      true,
+      false,
+      true
+    );
+  }
 
   return translateResult;
 }
@@ -17062,17 +17398,44 @@ async function translate_caiyun(raw) {
  * @param {string} raw 原文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_openai(raw) {
-  const modelDefault = "gpt-3.5-turbo";
+function isOpenAIResponsesEndpoint(url) {
+  return /\/v1\/responses(?:$|[/?#])/.test(url);
+}
+
+function getOpenAIResponseText(response) {
+  if (!response) return "";
+  if (typeof response.output_text === "string") return response.output_text;
+  if (response?.choices?.[0]?.message?.content)
+    return response.choices[0].message.content;
+  if (!Array.isArray(response.output)) return "";
+
+  return response.output
+    .flatMap((item) => (Array.isArray(item?.content) ? item.content : []))
+    .filter(
+      (item) =>
+        ["output_text", "text"].includes(item?.type) &&
+        typeof item.text === "string"
+    )
+    .map((item) => item.text)
+    .join("");
+}
+
+function getOpenAITranslationRequest(raw, isStream = false) {
+  const modelDefault = "gpt-5.4";
+  const proxyDefault = "https://api.openai.com/v1/responses";
   const lang = getTargetLanguage("openai");
+  const hasReplaceOriginalMarker = /\[\[\/?OJBLOCK_\d{4}\]\]/.test(raw);
   let prompt = "";
   if (OJBetter.chatgpt.customPrompt) {
     prompt = `\n${OJBetter.chatgpt.customPrompt}`;
+    if (hasReplaceOriginalMarker) {
+      prompt += `\nKeep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order.`;
+    }
     if (!OJBetter.chatgpt.asSystemPrompt) {
       prompt += `\n${raw}`;
     }
   } else {
-    prompt = `You are a professional English translator specializing in algorithm programming competitions. 
+    prompt = `You are a professional English translator specializing in algorithm programming competitions.
 Translate the following text into ${lang} with precision, using appropriate technical terminology.
 
 Rules:
@@ -17081,40 +17444,84 @@ Rules:
 3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
 4. Ensure the translation follows natural ${lang} expression patterns
 5. Use professional terminology common in programming competitions
+${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
 
 Text to translate:
 "
 ${raw}
 "`;
   }
-  const data = {
-    model: OJBetter.chatgpt.config.model || modelDefault,
-    messages: OJBetter.chatgpt.asSystemPrompt
-      ? [
-        {
-          role: "system",
-          content: prompt,
-        },
-        {
-          role: "user",
-          content: raw,
-        },
-      ]
-      : [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    temperature: 0.7,
-    ...Object.assign({}, ...OJBetter.chatgpt.config.data),
+
+  const url = OJBetter.chatgpt.config.proxy || proxyDefault;
+  const extraData = Object.assign({}, ...OJBetter.chatgpt.config.data);
+
+  if (isOpenAIResponsesEndpoint(url)) {
+    if (OJBetter.chatgpt.config.think_level && extraData.reasoning === undefined) {
+      extraData.reasoning = { effort: OJBetter.chatgpt.config.think_level };
+    }
+
+    return {
+      url,
+      data: {
+        model: OJBetter.chatgpt.config.model || modelDefault,
+        input: OJBetter.chatgpt.asSystemPrompt
+          ? [
+            {
+              role: "developer",
+              content: prompt,
+            },
+            {
+              role: "user",
+              content: raw,
+            },
+          ]
+          : [
+            {
+              role: "user",
+              content: prompt,
+            },
+          ],
+        temperature: 0.7,
+        ...(isStream ? { stream: true } : {}),
+        ...extraData,
+      },
+    };
+  }
+
+  return {
+    url,
+    data: {
+      model: OJBetter.chatgpt.config.model || modelDefault,
+      messages: OJBetter.chatgpt.asSystemPrompt
+        ? [
+          {
+            role: "system",
+            content: prompt,
+          },
+          {
+            role: "user",
+            content: raw,
+          },
+        ]
+        : [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+      temperature: 0.7,
+      ...(isStream ? { stream: true } : {}),
+      ...extraData,
+    },
   };
+}
+
+async function translate_openai(raw) {
+  const request = getOpenAITranslationRequest(raw);
   const options = {
     method: "POST",
-    url:
-      OJBetter.chatgpt.config.proxy ||
-      "https://api.openai.com/v1/chat/completions",
-    data: JSON.stringify(data),
+    url: request.url,
+    data: JSON.stringify(request.data),
     responseType: "json",
     headers: {
       "Content-Type": "application/json",
@@ -17124,9 +17531,12 @@ ${raw}
   };
   return await BaseTranslate(
     options,
-    (res) => res,
+    (res) => {
+      if (!res) throw new Error("Translation failed or invalid response format.");
+      return res;
+    },
     undefined,
-    (response) => response.response.choices[0].message.content
+    (response) => getOpenAIResponseText(response.response)
   );
 }
 
@@ -17158,7 +17568,8 @@ async function translate_openai_stream(raw, translateDiv) {
             OJBetter.typeOfPage.is_acmsguru) &&
           !OJBetter.translation.forceTurndownConversion
         ),
-        false
+        false,
+        true
       );
     }
     return result;
@@ -17186,59 +17597,12 @@ async function translate_openai_stream(raw, translateDiv) {
  * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
  */
 async function* openai_stream(raw) {
-  const modelDefault = "gpt-3.5-turbo";
-  const lang = getTargetLanguage("openai");
-  let prompt = "";
-  if (OJBetter.chatgpt.customPrompt) {
-    prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-    if (!OJBetter.chatgpt.asSystemPrompt) {
-      prompt += `\n${raw}`;
-    }
-  } else {
-    prompt = `You are a professional English translator specializing in algorithm programming competitions. 
-Translate the following text into ${lang} with precision, using appropriate technical terminology.
-
-Rules:
-1. Output ONLY the translation, with no explanations, notes, or other text
-2. Maintain all original formatting
-3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
-4. Ensure the translation follows natural ${lang} expression patterns
-5. Use professional terminology common in programming competitions
-
-Text to translate:
-"
-${raw}
-"`;
-  }
-  const data = {
-    model: OJBetter.chatgpt.config.model || modelDefault,
-    messages: OJBetter.chatgpt.asSystemPrompt
-      ? [
-        {
-          role: "system",
-          content: prompt,
-        },
-        {
-          role: "user",
-          content: raw,
-        },
-      ]
-      : [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-    temperature: 0.7,
-    stream: true,
-    ...Object.assign({}, ...OJBetter.chatgpt.config.data),
-  };
+  const request = getOpenAITranslationRequest(raw, true);
+  const isResponsesEndpoint = isOpenAIResponsesEndpoint(request.url);
   const options = {
     method: "POST",
-    url:
-      OJBetter.chatgpt.config.proxy ||
-      "https://api.openai.com/v1/chat/completions",
-    data: JSON.stringify(data),
+    url: request.url,
+    data: JSON.stringify(request.data),
     responseType: "stream",
     headers: {
       "Content-Type": "application/json",
@@ -17259,23 +17623,49 @@ ${raw}
 
     // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
     for (let i = 0; i < lines.length - 1; i++) {
-      let line = lines[i];
-      line = line.substring(5); // 移除 'data:' 前缀
+      const eventLines = lines[i].split("\n");
+      let eventType = "";
+      const dataLines = [];
+
+      for (const line of eventLines) {
+        if (line.startsWith("event:")) {
+          eventType = line.slice(6).trim();
+        } else if (line.startsWith("data:")) {
+          dataLines.push(line.slice(5).trimStart());
+        }
+      }
+
+      const line = dataLines.join("\n");
+      if (!line) continue;
       if (line.includes("[DONE]")) {
         return; // End
       }
       try {
         let data = JSON.parse(line);
-        let delta = data["choices"][0]["delta"];
-        let content = delta["content"] ? delta["content"] : "";
-        yield content; // 传递数据给调用者
+        if (isResponsesEndpoint) {
+          if (
+            eventType === "response.output_text.delta" &&
+            typeof data.delta === "string"
+          ) {
+            yield data.delta;
+          } else if (eventType === "error") {
+            throw new Error(data.message || line);
+          } else if (eventType === "response.completed") {
+            return;
+          }
+        } else {
+          let delta = data["choices"][0]["delta"];
+          let content = delta["content"] ? delta["content"] : "";
+          yield content; // 传递数据给调用者
+        }
       } catch (error) {
         console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
+        if (isResponsesEndpoint && eventType === "error") throw error;
       }
     }
 
     // 保留最后一行在缓冲区中
-    buffer = lines.slice(-1);
+    buffer = lines.slice(-1)[0];
   }
 
   return buffer;
@@ -17667,7 +18057,5 @@ if (document.readyState === "loading") {
     location.reload();
   }
 }
-
-
 
 

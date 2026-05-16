@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "質問タグを隠す",
             "helpText": "<p>タイトルページのサイドバーの質問ラベルを非表示にし、ラベルの上にマウスを置いたときに表示する。</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
@@ -172,6 +176,10 @@
             "memory": {
                 "name": "過去の翻訳の自動復元",
                 "helpText": "<p><strong>タイトルページ</strong>の翻訳情報をローカルの indexDB に自動保存</p><p>次回アクセス時に翻訳情報をリフレッシュ／自動復元</p>"
+            },
+            "replaceOriginal": {
+                "name": "替换原文",
+                "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
             },
             "retrans": {
                 "name": "再翻訳にあたって",

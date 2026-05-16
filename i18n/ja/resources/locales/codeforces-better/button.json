@@ -48,5 +48,9 @@
         "404": "見つかりません",
         "error": "問題が発生しました",
         "netError": "ネットワークエラー"
+    },
+    "nav": {
+        "toProblemset": "To Problemset",
+        "toContest": "To Contest"
     }
 }

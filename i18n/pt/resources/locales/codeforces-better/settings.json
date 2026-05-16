@@ -57,6 +57,10 @@
         "hiddenProblemTag": {
             "label": "Ocultar etiquetas de perguntas",
             "helpText": "<p>Ocultar a etiqueta da pergunta na barra lateral da página de título e mostrá-la quando o rato estiver a pairar sobre a etiqueta</p>"
+        },
+        "contestProblemSwitch": {
+            "label": "题库/比赛题目互相跳转",
+            "helpText": "<p>当在Problemset或Contest页面题目时，显示互相跳转的按钮</p>"
         }
     },
     "localization": {
@@ -172,6 +176,10 @@
             "memory": {
                 "name": "Recuperação automática de traduções históricas",
                 "helpText": "<p>Salva automaticamente as informações de tradução na página de título<strong></strong>para o indexDB local</p><p>Refresca / restaura automaticamente as informações de tradução na próxima vez que a página for acedida</p>"
+            },
+            "replaceOriginal": {
+                "name": "替换原文",
+                "helpText": "<p>开启后，不再额外显示翻译框，而是直接将译文写回原页面中的文本节点。</p><p>脚本只会替换文本内容，尽量保留原有的图片、公式、链接和排版结构。</p><p>历史翻译恢复时也会继续直接替换原文。</p>"
             },
             "retrans": {
                 "name": "Após a retradução",

@@ -33,8 +33,8 @@
         ]
     },
     "skipCodeBlock": {
-        "title": "Salta blocos de código?",
-        "content": "A área que está prestes a ser traduzida contém blocos de código, que normalmente não precisam de ser traduzidos, e agora precisa de escolher se os quer saltar ou não：\n\nQuer saltar os blocos de código?",
+        "title": "是否跳过非行内代码块？",
+        "content": "即将翻译的区域中包含非行内代码块，通常不需要翻译，现在你需要选择是否跳过这些代码块：\n\n要跳过非行内代码块吗？",
         "buttons": [
             "entupido",
             "saltar"
