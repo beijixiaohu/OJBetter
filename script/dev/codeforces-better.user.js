@@ -5199,7 +5199,7 @@ const LANGUAGE_ALIASES = {
 const COMPETITIVE_LANGUAGES = new Set([
     'cpp','python','java','rust','csharp',
     'ruby','kotlin','haskell','go','javascript',
-    'typescript','swift','swift','d','php','julia'
+    'typescript','swift','d','php','julia'
 ]);
 
 /**
