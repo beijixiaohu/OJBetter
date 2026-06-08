@@ -5196,11 +5196,11 @@ const LANGUAGE_ALIASES = {
 
 // 白名单，只保留算法竞赛常用的语言，避免一些奇奇怪怪的匹配
 
-const COMPETITIVE_LANGUAGES = new Set([
+const COMPETITIVE_LANGUAGES = [
     'cpp','python','java','rust','csharp',
     'ruby','kotlin','haskell','go','javascript',
-    'typescript','swift','swift','d','php','julia'
-]);
+    'typescript','swift','d','php','julia'
+];
 
 /**
  * 尝试从 DOM 中获取代码语言
@@ -5256,18 +5256,8 @@ function normalizeLang(raw) {
  * @returns 可能的代码语言，准确度取决于 HLJS
  */
 function whitelistFallback(code) {
-    const result = hljs.highlightAuto(code);
-
-    // 按 relevance 降序，找第一个在白名单里的语言
-    const languages = result.language
-        ? [result.language, ...(result.secondBest ? [result.secondBest.language] : [])]
-        : [];
-
-    for (const lang of languages) {
-        if (COMPETITIVE_LANGUAGES.has(lang)) return lang;
-    }
-
-    return 'plaintext';
+    const result = hljs.highlightAuto(code,COMPETITIVE_LANGUAGES);
+    return result.language||'plaintext';
 }
 
 
