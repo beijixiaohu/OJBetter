@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.23.2
+// @version      1.23.3
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -7841,7 +7841,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
      * 存放目标元素的 JQueryObject
      */
     const target = (() => {
-        if (type = "child_level") {
+        if (type === "child_level") {
             return $(element).children(':not(.html2md-panel)');
         } else {
             return $(element);

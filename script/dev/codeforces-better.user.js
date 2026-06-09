@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.85.2
+// @version      1.85.3
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -9135,7 +9135,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
    * 存放目标元素的 JQueryObject
    */
   const target = (() => {
-    if ((type = "child_level")) {
+    if (type === "child_level") {
       return $(element).children(":not(.html2md-panel)");
     } else {
       return $(element);
