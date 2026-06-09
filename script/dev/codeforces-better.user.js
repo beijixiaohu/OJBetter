@@ -2321,7 +2321,7 @@ async function beautifyPreBlocksWithMonaco() {
     if (pre.hasClass("source-code-for-copy")) return; // 跳过复制块
     const code = OJB_getCodeFromPre(pre.get(0));
     if (!code) return;
-    const language = OJB_codeLangDetect(code,preElement);
+    const language = OJB_codeLangDetect(code, preElement);
 
     // 创建一个用于 Monaco 编辑器的容器
     const container = $("<div></div>");
@@ -5180,26 +5180,26 @@ function OJB_getCodeFromPre(element) {
 // 映射表，考虑一些作者会写出奇奇怪怪的语言名，先做一个映射；有些是平台自动生成的，有些单纯是防止作者写奇奇怪怪的名称
 
 const LANGUAGE_ALIASES = {
-    'py': 'python', 'python3': 'python', 'py3': 'python',
-    'c++': 'cpp', 'c_cpp': 'cpp', 'cc': 'cpp', 'cxx': 'cpp', 'cplusplus': 'cpp',
-    'js': 'javascript', 'node': 'javascript',
-    'cs': 'csharp', 'c#': 'csharp',
-    'golang': 'go',
-    'rs': 'rust', 
-    'rb': 'ruby', 
-    'kt': 'kotlin',
-    'hs': 'haskell',
-    'jl': 'julia',
-    'ts': 'typescript',
-    'md':'markdown'
+  "py": "python", "python3": "python", "py3": "python",
+  "c++": "cpp", "c_cpp": "cpp", "cc": "cpp", "cxx": "cpp", "cplusplus": "cpp",
+  "js": "javascript", "node": "javascript",
+  "cs": "csharp", "c#": "csharp",
+  "golang": "go",
+  "rs": "rust",
+  "rb": "ruby",
+  "kt": "kotlin",
+  "hs": "haskell",
+  "jl": "julia",
+  "ts": "typescript",
+  "md": "markdown",
 };
 
 // 白名单，只保留算法竞赛常用的语言，避免一些奇奇怪怪的匹配
 
 const COMPETITIVE_LANGUAGES = [
-    'cpp','python','java','rust','csharp',
-    'ruby','kotlin','haskell','go','javascript',
-    'typescript','swift','d','php','julia'
+  "cpp", "python", "java", "rust", "csharp",
+  "ruby", "kotlin", "haskell", "go", "javascript",
+  "typescript", "swift", "d", "php", "julia",
 ];
 
 /**
@@ -5208,35 +5208,26 @@ const COMPETITIVE_LANGUAGES = [
  * @returns {string|null} 从 DOM 中获取的语言
  */
 function detectLanguageFromDOM(element) {
-    if (!element) return null;
-    /*Atcoder 的逻辑，codeforces 不用管
-    // 1. data-ace-mode（AtCoder Submission）
-    // Atcoder submission 中 通过 <pre> 上的 data-ace-mode 来存语言类型
-    const ace = element.dataset?.aceMode;
-    if (ace) {
-        const result = normalizeLang(ace);
-        if (result) return result;
-    }
-    */
-    // 2. class 里的 language-xxx 或 lang-xxx
-    // 与 HighlightJS 保持一致或类似的做法，存在一个 lang(uage)- 表示语言
-    const cls = element.className || '';
-    const match = cls.match(/(?:^|\s)(?:lang(?:uage)?-)(\S+)/i);
-    if (match) {
-        const result = normalizeLang(match[1]);
-        if (result) return result;
-    }
-    
-    // 3. 从 <pre><code> 里获取的 language-xxx 或 lang-xxx
+  if (!element) return null;
 
-    const ccls = element.querySelector('code').className || '';
-    const cmatch = ccls.match(/(?:^|\s)(?:lang(?:uage)?-)(\S+)/i);
-    if (cmatch) {
-        const result = normalizeLang(cmatch[1]);
-        if (result) return result;
-    }
+  // 1. class 里的 language-xxx 或 lang-xxx
+  // 与 HighlightJS 保持一致或类似的做法，存在一个 lang(uage)- 表示语言
+  const cls = element.className || "";
+  const match = cls.match(/(?:^|\s)(?:lang(?:uage)?-)(\S+)/i);
+  if (match) {
+    const result = normalizeLang(match[1]);
+    if (result) return result;
+  }
 
-    return null;
+  // 2. 从 <pre><code> 里获取的 language-xxx 或 lang-xxx
+  const ccls = element.querySelector("code")?.className || "";
+  const cmatch = ccls.match(/(?:^|\s)(?:lang(?:uage)?-)(\S+)/i);
+  if (cmatch) {
+    const result = normalizeLang(cmatch[1]);
+    if (result) return result;
+  }
+
+  return null;
 }
 
 /**
@@ -5245,9 +5236,10 @@ function detectLanguageFromDOM(element) {
  * @returns 格式化后，Monaco Editor 认识的语言名
  */
 function normalizeLang(raw) {
-    const normalized = raw.trim().toLowerCase();
-    if(monaco.languages.getLanguages().map(l => l.id).includes(normalized)) return normalized;
-    return LANGUAGE_ALIASES[normalized] || null;
+  if (!raw) return null;
+  const normalized = raw.trim().toLowerCase();
+  if (monaco.languages.getLanguages().map((l) => l.id).includes(normalized)) return normalized;
+  return LANGUAGE_ALIASES[normalized] || null;
 }
 
 /**
@@ -5256,8 +5248,8 @@ function normalizeLang(raw) {
  * @returns 可能的代码语言，准确度取决于 HLJS
  */
 function whitelistFallback(code) {
-    const result = hljs.highlightAuto(code,COMPETITIVE_LANGUAGES);
-    return result.language||'plaintext';
+  const result = hljs.highlightAuto(code, COMPETITIVE_LANGUAGES);
+  return result.language || "plaintext";
 }
 
 
@@ -5268,12 +5260,12 @@ function whitelistFallback(code) {
  * @returns {string} 可能的语言
  */
 function OJB_codeLangDetect(code, element) {
-    // 第一层：DOM 优先
-    const fromDOM = detectLanguageFromDOM(element);
-    if (fromDOM) return fromDOM;
+  // 第一层：DOM 优先
+  const fromDOM = detectLanguageFromDOM(element);
+  if (fromDOM) return fromDOM;
 
-    // 第二层：白名单兜底
-    return  whitelistFallback(code);
+  // 第二层：白名单兜底
+  return whitelistFallback(code);
 }
 
 /**
