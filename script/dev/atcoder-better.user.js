@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.23.3
+// @version      1.23.4
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -7424,6 +7424,7 @@ async function initHTML2MarkDown() {
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('ojb-overlay') ||
                 node.classList.contains('monaco-editor') ||
+                node.classList.contains('text-hidden') ||
                 node.nodeName === 'SCRIPT' ||
                 node.nodeName === 'STYLE';
         },
