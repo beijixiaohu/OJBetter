@@ -7424,6 +7424,7 @@ async function initHTML2MarkDown() {
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('ojb-overlay') ||
                 node.classList.contains('monaco-editor') ||
+                node.classList.contains('text-hidden') ||
                 node.nodeName === 'SCRIPT' ||
                 node.nodeName === 'STYLE';
         },
