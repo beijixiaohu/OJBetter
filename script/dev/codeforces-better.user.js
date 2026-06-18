@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.85.3
+// @version      1.85.4
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -2273,6 +2273,26 @@ function darkModeStyleAdjustment() {
         .removeClass("darkhighlight");
     }
   );
+
+  // Logo 修复，感谢 @hejiehejiehejiehejie 提供的代码
+  if (!$("#cf-dark-logo-style").length) {
+    $("head").append(`
+      <style id="cf-dark-logo-style">
+        img[alt="Codeforces"],
+        img[src*="codeforces-sponsored-by-ton"] {
+          filter: invert(0.88) hue-rotate(180deg) brightness(1.2);
+          transition: filter 0.3s ease;
+        }
+        img[alt="Codeforces"]:hover,
+        img[src*="codeforces-sponsored-by-ton"]:hover {
+          filter: invert(1)
+                  hue-rotate(180deg)
+                  brightness(1.5)
+                  drop-shadow(0 0 8px rgba(255,255,255,0.2));
+        }
+      </style>
+    `);
+  }
 }
 
 /**
