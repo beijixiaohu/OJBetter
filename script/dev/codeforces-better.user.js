@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.85.4
+// @version      1.85.5
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -703,8 +703,26 @@ const OJB_parseObject = (val) => {
  * @returns {Object[]} - 解析结果
  * @throws {Error} - 如果解析失败，则抛出错误
  */
-const OJB_parseLinePairArray = (val) => {
+const OJB_parseLinePairArray = (val, parseJsonValue = false) => {
   if (typeof val !== "string" || val.trim() === "") return [];
+  const trimmedVal = val.trim();
+  if (parseJsonValue && /^[\[{]/.test(trimmedVal)) {
+    const parsed = OJB_parseObject(trimmedVal);
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === "object") return [parsed];
+    throw new Error("Invalid LinePairArray JSON: expected object or array");
+  }
+  const parseLinePairValue = (value) => {
+    const trimmedValue = value.trim();
+    if (parseJsonValue) {
+      try {
+        return JSON.parse(trimmedValue);
+      } catch {
+        return trimmedValue;
+      }
+    }
+    return trimmedValue;
+  };
   return val
     .split("\n")
     .filter((line) => line.trim() !== "")
@@ -713,7 +731,7 @@ const OJB_parseLinePairArray = (val) => {
       if (indexOfFirstColon === -1)
         throw new Error('Invalid LinePairArray format: ":" is missing');
       const key = line.substring(0, indexOfFirstColon).trim();
-      const value = line.substring(indexOfFirstColon + 1).trim();
+      const value = parseLinePairValue(line.substring(indexOfFirstColon + 1));
       return { [key]: value };
     });
 };
@@ -1092,14 +1110,18 @@ async function initVar() {
     OJBetter.deepl.config.header = OJB_parseLinePairArray(
       configuration._header
     );
-    OJBetter.deepl.config.data = OJB_parseLinePairArray(configuration._data);
+    OJBetter.deepl.config.data = OJB_parseLinePairArray(
+      configuration._data,
+      true
+    );
     OJBetter.deepl.config.quota.url = configuration.quota_url;
     OJBetter.deepl.config.quota.method = configuration.quota_method;
     OJBetter.deepl.config.quota.header = OJB_parseLinePairArray(
       configuration.quota_header
     );
     OJBetter.deepl.config.quota.data = OJB_parseLinePairArray(
-      configuration.quota_data
+      configuration.quota_data,
+      true
     );
     OJBetter.deepl.config.quota.surplus = configuration.quota_surplus;
   }
@@ -1144,14 +1166,18 @@ async function initVar() {
     OJBetter.chatgpt.config.header = OJB_parseLinePairArray(
       configuration._header
     );
-    OJBetter.chatgpt.config.data = OJB_parseLinePairArray(configuration._data);
+    OJBetter.chatgpt.config.data = OJB_parseLinePairArray(
+      configuration._data,
+      true
+    );
     OJBetter.chatgpt.config.quota.url = configuration.quota_url;
     OJBetter.chatgpt.config.quota.method = configuration.quota_method;
     OJBetter.chatgpt.config.quota.header = OJB_parseLinePairArray(
       configuration.quota_header
     );
     OJBetter.chatgpt.config.quota.data = OJB_parseLinePairArray(
-      configuration.quota_data
+      configuration.quota_data,
+      true
     );
     OJBetter.chatgpt.config.quota.surplus = configuration.quota_surplus;
   }
