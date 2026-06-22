@@ -17520,11 +17520,6 @@ async function translate_caiyun(raw) {
   );
 }
 
-/**
- * ChatGPT
- * @param {string} raw 原文
- * @returns {Promise<TransRawData>} 翻译结果对象
- */
 function isOpenAIResponsesEndpoint(url) {
   return /\/v1\/responses(?:$|[/?#])/.test(url);
 }
@@ -17643,6 +17638,11 @@ ${raw}
   };
 }
 
+/**
+ * ChatGPT
+ * @param {string} raw 原文
+ * @returns {Promise<TransRawData>} 翻译结果对象
+ */
 async function translate_openai(raw) {
   const request = getOpenAITranslationRequest(raw);
   const options = {
