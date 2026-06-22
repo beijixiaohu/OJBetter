@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.85.5
+// @version      1.85.6
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -6407,6 +6407,9 @@ class Validator {
         case "keyValuePairs":
           isValid = Validator.keyValuePairs(fieldValue);
           break;
+        case "keyValuePairsOrJson":
+          isValid = Validator.keyValuePairsOrJson(fieldValue);
+          break;
         case "dotSeparatedPath":
           isValid = Validator.validateDotSeparatedPath(fieldValue);
           break;
@@ -6457,6 +6460,23 @@ class Validator {
     // 允许值中包含空格和冒号
     const regex = /^[a-zA-Z0-9_-]+\s*:\s*.+$/;
     return keyValuePairs.every((pair) => regex.test(pair));
+  }
+
+  /**
+   * 键值对或顶级JSON对象校验
+   * @param {string} value
+   * @returns {boolean}
+   */
+  static keyValuePairsOrJson(value) {
+    if (typeof value !== "string" || value.trim() === "") return true;
+    const trimmed = value.trim();
+    if (/^[\[{]/.test(trimmed)) {
+      try { JSON.parse(trimmed); return true; }
+      catch { return false; }
+    }
+    const pairs = value.split("\n");
+    const regex = /^[a-zA-Z0-9_-]+\s*:\s*.+$/;
+    return pairs.every((pair) => regex.test(pair));
   }
 
   /**
@@ -8091,7 +8111,7 @@ async function initSettingsPanel() {
         false,
         "keyValuePairs"
       ),
-      "#deepl_data": createStructure("text", "_data", false, "keyValuePairs"),
+      "#deepl_data": createStructure("text", "_data", false, "keyValuePairsOrJson"),
       "#deepl_quota_url": createStructure("text", "quota_url", false),
       "#deepl_quota_method": createStructure("text", "quota_method", false),
       "#deepl_quota_header": createStructure(
@@ -8104,7 +8124,7 @@ async function initSettingsPanel() {
         "text",
         "quota_data",
         false,
-        "keyValuePairs"
+        "keyValuePairsOrJson"
       ),
       "#deepl_quota_surplus": createStructure(
         "text",
@@ -8136,7 +8156,7 @@ async function initSettingsPanel() {
         false,
         "keyValuePairs"
       ),
-      "#chatgpt_data": createStructure("text", "_data", false, "keyValuePairs"),
+      "#chatgpt_data": createStructure("text", "_data", false, "keyValuePairsOrJson"),
       "#chatgpt_quota_url": createStructure("text", "quota_url", false),
       "#chatgpt_quota_header": createStructure(
         "text",
@@ -8148,7 +8168,7 @@ async function initSettingsPanel() {
         "text",
         "quota_data",
         false,
-        "keyValuePairs"
+        "keyValuePairsOrJson"
       ),
       "#chatgpt_quota_surplus": createStructure(
         "text",
@@ -17520,11 +17540,6 @@ async function translate_caiyun(raw) {
   );
 }
 
-/**
- * ChatGPT
- * @param {string} raw 原文
- * @returns {Promise<TransRawData>} 翻译结果对象
- */
 function isOpenAIResponsesEndpoint(url) {
   return /\/v1\/responses(?:$|[/?#])/.test(url);
 }
@@ -17574,9 +17589,12 @@ Rules:
 ${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
 
 Text to translate:
-"
+"`;
+    if (!OJBetter.chatgpt.asSystemPrompt) {
+      prompt += `
 ${raw}
 "`;
+    }
   }
 
   const url = OJBetter.chatgpt.config.proxy || proxyDefault;
@@ -17643,6 +17661,11 @@ ${raw}
   };
 }
 
+/**
+ * ChatGPT
+ * @param {string} raw 原文
+ * @returns {Promise<TransRawData>} 翻译结果对象
+ */
 async function translate_openai(raw) {
   const request = getOpenAITranslationRequest(raw);
   const options = {
