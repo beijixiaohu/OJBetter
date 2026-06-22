@@ -14357,9 +14357,12 @@ Rules:
 ${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
 
 Text to translate:
-"
+"`;
+        if (!OJBetter.chatgpt.asSystemPrompt) {
+            prompt += `
 ${raw}
 "`;
+        }
     };
 
     const url = OJBetter.chatgpt.config.proxy || proxyDefault;
