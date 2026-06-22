@@ -5496,6 +5496,9 @@ class Validator {
                 case 'keyValuePairs':
                     isValid = Validator.keyValuePairs(fieldValue);
                     break;
+                case 'keyValuePairsOrJson':
+                    isValid = Validator.keyValuePairsOrJson(fieldValue);
+                    break;
                 case 'dotSeparatedPath':
                     isValid = Validator.validateDotSeparatedPath(fieldValue);
                     break;
@@ -5544,6 +5547,23 @@ class Validator {
         // 允许值中包含空格和冒号
         const regex = /^[a-zA-Z0-9_-]+\s*:\s*.+$/;
         return keyValuePairs.every(pair => regex.test(pair));
+    }
+
+    /**
+     * 键值对或顶级JSON对象校验
+     * @param {string} value
+     * @returns {boolean}
+     */
+    static keyValuePairsOrJson(value) {
+        if (typeof value !== "string" || value.trim() === "") return true;
+        const trimmed = value.trim();
+        if (/^[\[{]/.test(trimmed)) {
+            try { JSON.parse(trimmed); return true; }
+            catch { return false; }
+        }
+        const pairs = value.split('\n');
+        const regex = /^[a-zA-Z0-9_-]+\s*:\s*.+$/;
+        return pairs.every(pair => regex.test(pair));
     }
 
 
@@ -7095,11 +7115,11 @@ async function initSettingsPanel() {
             '#deepl_key': createStructure('text', 'key', false),
             '#deepl_proxy': createStructure('text', 'proxy', false),
             '#deepl_header': createStructure('text', '_header', false, 'keyValuePairs'),
-            '#deepl_data': createStructure('text', '_data', false, 'keyValuePairs'),
+            '#deepl_data': createStructure('text', '_data', false, 'keyValuePairsOrJson'),
             '#deepl_quota_url': createStructure('text', 'quota_url', false),
             '#deepl_quota_method': createStructure('text', 'quota_method', false),
             '#deepl_quota_header': createStructure('text', 'quota_header', false, 'keyValuePairs'),
-            '#deepl_quota_data': createStructure('text', 'quota_data', false, 'keyValuePairs'),
+            '#deepl_quota_data': createStructure('text', 'quota_data', false, 'keyValuePairsOrJson'),
             '#deepl_quota_surplus': createStructure('text', 'quota_surplus', false, 'dotSeparatedPath'),
         };
         let tempConfig_deepl = GM_getValue('deepl_config'); // 获取配置信息
@@ -7114,10 +7134,10 @@ async function initSettingsPanel() {
             '#chatgpt_key': createStructure('text', 'key', true),
             '#chatgpt_proxy': createStructure('text', 'proxy', false),
             '#chatgpt_header': createStructure('text', '_header', false, 'keyValuePairs'),
-            '#chatgpt_data': createStructure('text', '_data', false, 'keyValuePairs'),
+            '#chatgpt_data': createStructure('text', '_data', false, 'keyValuePairsOrJson'),
             '#chatgpt_quota_url': createStructure('text', 'quota_url', false),
             '#chatgpt_quota_header': createStructure('text', 'quota_header', false, 'keyValuePairs'),
-            '#chatgpt_quota_data': createStructure('text', 'quota_data', false, 'keyValuePairs'),
+            '#chatgpt_quota_data': createStructure('text', 'quota_data', false, 'keyValuePairsOrJson'),
             '#chatgpt_quota_surplus': createStructure('text', 'quota_surplus', false, 'dotSeparatedPath'),
             '#chatgpt_quota_method': createStructure('text', 'quota_method', false),
         };
