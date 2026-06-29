@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.23.7
+// @version      1.23.8
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -6969,10 +6969,6 @@ async function initSettingsPanel() {
      * @param {string} location 位置选择器
      * @param {string} method 插入方法
      */
-    function insertOJBetterSettingButton(location, method) {
-        $(location)[method](`<button class='ojb_btn OJBetter_setting'>
-        ${OJBetter.state.name} ${i18next.t('settings', { ns: 'common' })}</button>`);
-    }
     function insertOJBetterSettingButton(location, method) {
         // 将原本的 <button> 改为 Bootstrap 规范的 <li><a> 结构
         // 增加了一个齿轮图标，并用 span 包裹文字以便 CSS 控制
