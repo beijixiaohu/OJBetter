@@ -6973,6 +6973,18 @@ async function initSettingsPanel() {
         $(location)[method](`<button class='ojb_btn OJBetter_setting'>
         ${OJBetter.state.name} ${i18next.t('settings', { ns: 'common' })}</button>`);
     }
+    function insertOJBetterSettingButton(location, method) {
+        // 将原本的 <button> 改为 Bootstrap 规范的 <li><a> 结构
+        // 增加了一个齿轮图标，并用 span 包裹文字以便 CSS 控制
+        $(location)[method](`
+        <li>
+            <a href="javascript:void(0);" class="OJBetter_setting" style="cursor: pointer;">
+            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+            <span class="ojb-setting-text"> ${OJBetter.state.name} ${i18next.t("settings", { ns: "common" })}</span>
+            </a>
+        </li>
+        `);
+    }
 
     /**
      * ============================================
