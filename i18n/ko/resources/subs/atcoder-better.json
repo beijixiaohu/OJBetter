@@ -325,15 +325,15 @@
                 "に違反する行為です。": "的行为。",
                 "どのような投稿がルールに違反するかはこちらの": "什么样的投稿违反规则请看这里的",
                 "もお読みください。": ".",
-                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "현재 진행 중인 AtCoder 대회에서 생성 AI를 사용하는 것은 금지됩니다. 자세한 내용은 아래 규정을 참조하세요.",
                 "AtCoder生成AI対策ルール - 20251003版": "AtCoder의 제너레이티브 AI 규정 - 버전 20251003",
-                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "이 규칙은 2025년 10월 3일자로 업데이트되었습니다.",
+                "このコンテストでは、生成AIの使用を禁止しております。": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。",
                 "詳しくは": "자세한 내용은 다음을 참조하세요.",
                 "こちらの記事": "이 문서",
+                "Unrated参加の場合にもこのルールは適用されます。": "这条规则也适用于 Unrated 参与者。",
                 "をご覧ください。": ".",
-                "現在": "(우리를) 마주보고",
-                "で参加登録しています。詳細は": "에 참여하겠다고 등록했습니다. 자세한 내용은 다음을 참조하세요.",
-                "こちら": "다음은 다음과 같습니다.",
+                "現在": "您已经报名参加了这场比赛，作为一个 ",
+                "で参加登録しています。詳細は": " 参与者。详情请阅读 ",
+                "こちら": "이 문서",
                 "参加登録しました。": "등록됨.",
                 "参加登録を取り消しました。": "등록이 취소되었습니다.",
                 "ログアウトしました。": "로그아웃했습니다.",
@@ -769,17 +769,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Until ": "在 ",
+                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
                 "You have registered for this contest as an": "귀하는 이 레이스에",
                 "You have registered for this contest as a": "귀하는 이 레이스에",
                 "participant. Please refer to": "참가자 다음을 참조하세요.",
                 "this post": "이 문서",
                 "for details.": "자세히 알아보세요.",
-                "Until ": "在 ",
-                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
-                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "현재 진행 중인 AtCoder 대회에서 생성 AI를 사용하는 것은 금지됩니다. 자세한 내용은 아래 규정을 참조하세요.",
                 "AtCoder Rules against Generative AI - Version 20251003": "AtCoder의 제너레이티브 AI 규정 - 버전 20251003",
-                "Please note that the rules were updated on October 3\\, 2025.": "이 규칙은 2025년 10월 3일자로 업데이트되었습니다.",
-                "For details\\, please see ": "자세한 내용은 다음을 참조하세요.",
+                "It is prohibited to use generative AI in ongoing AtCoder contests.": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。",
+                " For details\\, please see ": "자세한 내용은 다음을 참조하세요.",
+                "This rule also applies for Unrated participants.": "这条规则也适用于 Unrated 参与者。",
                 "\\.": ".",
                 "participant": "참가자",
                 "Registered": "등록",
@@ -888,7 +888,3 @@
     },
     "dynamicReplacements": {}
 }
-
-
-
-
