@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.85.7
+// @version      1.85.8
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -13575,18 +13575,20 @@ async function createMonacoEditor(language, form, support) {
    */
   (OJBetter_monaco.addShortCuts = async () => {
     // 从配置信息更新字体大小
-    OJBetter.monaco.editor.updateOptions({
-      fontSize: parseInt(OJBetter.monaco.setting.fontsize),
-    });
+    OJBetter.monaco.editor.updateOptions({ fontSize: parseInt(OJBetter.monaco.setting.fontsize) });
 
-    // 更多设置按钮
+    // 给更多设置按钮增加一个唯一类名 "ojb_btn_settings"，用于防重检查
     let moreSetting = OJB_safeCreateJQElement(`
-        <div class="ojb_btn ojb_btn_popover top">
+        <div class="ojb_btn ojb_btn_popover ojb_btn_settings top">
             <i class="iconfont">&#xe643;</i>
-            <span class="popover_content">${i18next.t("moreSettings.title", {
-      ns: "codeEditor",
-    })}</span>
+            <span class="popover_content">${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</span>
         </div>`);
+        
+    //在追加按钮前先检查是否已存在，如果存在则直接退出函数，防止所有按钮重复生成
+    if (form.topRightDiv.find('.ojb_btn_settings').length > 0) {
+        console.log('[OJB-Debug] 检测到设置按钮已存在，跳过重复初始化。');
+        return;
+    }
     form.topRightDiv.append(moreSetting);
 
     // 设置弹窗页面
@@ -13597,13 +13599,16 @@ async function createMonacoEditor(language, form, support) {
                     <i class="iconfont">&#xe614;</i>
                 </button>
             </div>
-            <h2>${i18next.t("moreSettings.title", { ns: "codeEditor" })}</h2>
+            <h2>${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</h2>
             <div class='OJBetter_setting_list alert_tip'>
-                <p>${i18next.t("moreSettings.tip", { ns: "codeEditor" })}</p>
-            </div>    
+                <p>${i18next.t('moreSettings.tip', { ns: 'codeEditor' })}</p>
+            </div>
         </dialog>`);
     OJB_addDraggable(moreSettingPopover);
-    $("body").append(moreSettingPopover);
+    
+    //在向 body 追加新弹窗前，先移除可能残留的旧弹窗，防止 DOM 中出现重复的 ID
+    $('#moreSettingPopover').remove();
+    $('body').append(moreSettingPopover);
 
     // 设置弹窗的关闭按钮
     moreSettingPopover.find(".btn-close").on("click", function () {
@@ -13692,6 +13697,212 @@ async function createMonacoEditor(language, form, support) {
     )}</option>
                 </select>
             </div>`);
+    let langSettingHtml = `
+      <div class='OJBetter_setting_list' style='flex-direction: column; align-items: flex-start;'>
+          <label style='margin-bottom: 8px; font-weight: bold;'>
+              <span>${i18next.t('moreSettings.langSetup.title', { ns: 'codeEditor' })}</span>
+          </label>
+          
+          <!-- 已置顶语言列表 -->
+          <div id='pinnedLangList' style='width: 100%; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px;'></div>
+          
+          <!-- 搜索与添加区 -->
+          <div style='width: 100%; display: flex; gap: 5px; align-items: center; position: relative;'>
+              <input type="text" id="addPinnedSearch" list="ojb_lang_datalist" 
+                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor' })}" 
+                  style="flex: 1; max-width: calc(100% - 40px); box-sizing: border-box;" autocomplete="off">
+              <datalist id="ojb_lang_datalist"></datalist>
+              <button id='addPinnedBtn' class='ojb_btn' type='button' style='padding: 2px 8px; min-width: 30px;' 
+                  title="${i18next.t('moreSettings.langSetup.addBtnTitle', { ns: 'codeEditor' })}">
+                  <span style="font-weight:bold;">+</span>
+              </button>
+          </div>
+      </div>`;
+    let langSettingDiv = OJB_safeCreateJQElement(langSettingHtml);
+    moreSettingPopover.append(langSettingDiv);
+
+    const listContainer = langSettingDiv.find('#pinnedLangList');
+    const searchInput = langSettingDiv.find('#addPinnedSearch');
+    const dataList = langSettingDiv.find('#ojb_lang_datalist');
+    const addBtn = langSettingDiv.find('#addPinnedBtn');
+    let localOriginalOptions = []; 
+
+    /**
+     * 重新渲染设置面板中的已置顶语言列表和待选推荐 datalist
+     */
+    const renderLangSettingsUI = () => {
+        if (!localOriginalOptions || localOriginalOptions.length === 0) return;
+        let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
+        let defaultLang = String(OJB_getGMValue('defaultLanguage', ''));
+
+        listContainer.empty();
+        if (pinnedLangs.length === 0) {
+            listContainer.append(`<div style="color: gray; font-size: 12px; padding: 4px;">${i18next.t('moreSettings.langSetup.noPinned', { ns: 'codeEditor' })}</div>`);
+        } else {
+            pinnedLangs.forEach(val => {
+                const opt = localOriginalOptions.find(o => String(o.value) === String(val));
+                const text = opt ? opt.text : val;
+                const isDefault = (defaultLang === val) ? 'checked' : '';
+                
+                // 采用声明式构建，确保语言名称中的特殊符号（如 > 符号）不会破坏 DOM 结构
+                const itemNode = $('<div>').css({
+                    display: 'flex',
+                    'align-items': 'center',
+                    'justify-content': 'space-between',
+                    background: 'var(--bg-color-hover, rgba(128,128,128,0.1))',
+                    padding: '4px 8px',
+                    'border-radius': '4px'
+                });
+                
+                const label = $('<label>').css({
+                    display: 'flex',
+                    'align-items': 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                    margin: '0',
+                    flex: '1',
+                    overflow: 'hidden'
+                }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor' }));
+                
+                const radio = $('<input>', {
+                    type: 'radio',
+                    name: 'ojb_default_lang',
+                    class: 'set-default-radio',
+                    value: val
+                });
+                if (isDefault) radio.prop('checked', true);
+                
+                const span = $('<span>').css({
+                    'white-space': 'nowrap',
+                    overflow: 'hidden',
+                    'text-overflow': 'ellipsis',
+                    'font-size': '13px'
+                }).text(text).attr('title', text); // 纯文本安全赋值
+                
+                label.append(radio, span);
+                
+                const removeBtn = $('<i>', {
+                    class: 'iconfont remove-pinned-btn',
+                    'data-val': val,
+                    title: i18next.t('moreSettings.langSetup.removeTitle', { ns: 'codeEditor' })
+                }).css({
+                    cursor: 'pointer',
+                    color: '#ff4d4f',
+                    'font-size': '14px',
+                    'margin-left': '8px'
+                }).html('&#xe614;');
+                
+                itemNode.append(label, removeBtn);
+                listContainer.append(itemNode);
+            });
+        }
+
+        // 更新 datalist 中未被添加置顶的语言候选项
+        dataList.empty();
+        const unpinned = localOriginalOptions.filter(o => !pinnedLangs.includes(String(o.value)));
+        unpinned.forEach(opt => {
+            dataList.append(`<option value="${opt.text}"></option>`);
+        });
+        
+        searchInput.val('');
+    };
+
+    // 点击设置齿轮图标时的事件响应：提取当前页面可用的所有语言，准备初始化设置视图
+    moreSetting.on('click', () => {
+        let options = [];
+        const rawSelect = $('select[name="programTypeId"]').not('#OJBetter_SubmitForm select').first();
+        
+        if (rawSelect.length > 0 && rawSelect[0].options) {
+            const opts = rawSelect[0].options;
+            for (let i = 0; i < opts.length; i++) {
+                if (opts[i].value !== 'ojb_show_all') {
+                    options.push({
+                        value: String(opts[i].value),
+                        text: opts[i].text
+                    });
+                }
+            }
+        }
+
+        localOriginalOptions = options.length > 0 ? options : (window.OJB_originalOptions || []);
+        
+        if (localOriginalOptions.length > 0) {
+            renderLangSettingsUI();
+            searchInput.prop('disabled', false);
+            addBtn.prop('disabled', false);
+        } else {
+            listContainer.html(`<div style="color: gray;">${i18next.t('moreSettings.langSetup.noLangDetected', { ns: 'codeEditor' })}</div>`);
+            searchInput.prop('disabled', true);
+            addBtn.prop('disabled', true);
+        }
+    });
+
+    // 添加常用语言置顶按钮点击事件
+    addBtn.on('click', () => {
+        const rawSearchText = searchInput.val().trim();
+        if (!rawSearchText) return;
+        
+        const searchText = rawSearchText.toLowerCase();
+        let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
+        
+        // 模糊匹配搜索文本
+        const unpinnedOptions = localOriginalOptions.filter(o => !pinnedLangs.includes(String(o.value))); 
+        const matchedOption = unpinnedOptions.find(o => o.text.toLowerCase().includes(searchText));
+
+        if (!matchedOption) {
+          // Todo
+          alert(i18next.t('moreSettings.langSetup.noMatchAlert', { ns: 'codeEditor' }));
+          return;
+        }
+
+        const val = String(matchedOption.value);
+        
+        if (!pinnedLangs.includes(val)) {
+            pinnedLangs.push(val);
+            GM_setValue('pinnedLanguages', pinnedLangs);
+            // 如果是第一个添加的置顶语言，默认设为首选语言
+            if (pinnedLangs.length === 1) GM_setValue('defaultLanguage', val);
+            
+            renderLangSettingsUI();
+            
+            // 派发自定义原生事件，通知页面左侧主界面重绘
+            document.dispatchEvent(new CustomEvent('OJB_TriggerRebuild'));
+        }
+    });
+
+    // 支持输入框中回车直接提交添加
+    searchInput.on('keypress', function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            addBtn.click();
+        }
+    });
+
+    // 移除常用语言置顶项
+    listContainer.on('click', '.remove-pinned-btn', function() {
+        const val = String($(this).attr('data-val')); 
+        
+        let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
+        pinnedLangs = pinnedLangs.filter(v => String(v) !== val);
+        GM_setValue('pinnedLanguages', pinnedLangs);
+        
+        // 如果移除的正好是当前的默认语言，重置默认语言为剩余常用语言的第一个
+        if (String(OJB_getGMValue('defaultLanguage', '')) === val) {
+            GM_setValue('defaultLanguage', pinnedLangs.length > 0 ? pinnedLangs[0] : '');
+        }
+        renderLangSettingsUI();
+        
+        // 同步派发重绘事件更新主页面视图
+        document.dispatchEvent(new CustomEvent('OJB_TriggerRebuild'));
+    });
+
+    // 默认首选语言单选按钮状态变更监听
+    listContainer.on('change', '.set-default-radio', function() {
+        const val = String($(this).val());
+        GM_setValue('defaultLanguage', val);
+        // 触发关联选择器的变更，确保界面高亮立即调整
+        $('.ojb-language-select').val(val).trigger('change');
+    });
     // 选择默认检查器
     const defaultValidator = OJB_getGMValue(
       "judgeResultCheckMode",
@@ -16888,109 +17099,262 @@ async function runCode(event, runButton, sourceDiv) {
  * @returns
  */
 async function addProblemPageCodeEditor() {
-  if (typeof ace === "undefined") {
-    const loadingMessage = new LoadingMessage();
-    loadingMessage.updateStatus(
-      `${OJBetter.state.name} —— ${i18next.t("error.codeEditor.load", {
-        ns: "alert",
-      })}`,
-      "error"
-    );
-    return; // 因为Codeforces设定的是未登录时不能访问提交页，也不会加载ace库
-  }
-
-  // 获取提交页链接
-  const href = window.location.href;
-  let submitUrl;
-  if (/\/problemset\//.test(href)) {
-    // problemset
-    submitUrl = OJBetter.common.hostAddress + "/problemset/submit";
-  } else if (/\/gym\//.test(href)) {
-    // gym 题目
-    submitUrl =
-      OJBetter.common.hostAddress +
-      "/gym/" +
-      ((href) => {
-        const regex = /\/gym\/(?<num>[0-9a-zA-Z]*?)\/problem\//;
-        const match = href.match(regex);
-        return match && match.groups.num;
-      })(href) +
-      "/submit";
-  } else if (OJBetter.typeOfPage.is_acmsguru) {
-    // acmsguru 题目
-    submitUrl = href.replace(
-      /\/problemsets[A-Za-z0-9\/#]*/,
-      "/problemsets/acmsguru/submit"
-    );
-  } else {
-    submitUrl = href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit");
-  }
-
-  // 获取提交页HTML
-  let cloneHTML = await getSubmitHTML(submitUrl);
-
-  // 创建
-  let form = await createCodeEditorForm(submitUrl, cloneHTML);
-  let selectLang = form.selectLang;
-  let submitButton = form.submitButton;
-  let runButton = form.runButton;
-
-  // 初始化
-  CustomTestInit(); // 自定义测试数据面板
-  selectLang.val(OJBetter.monaco.compilerSelection);
-
-  // 设置语言选择change事件监听器
-  selectLang.on("change", () => {
-    changeMonacoLanguage(form); // 编辑器语言切换监听
-  });
-  changeMonacoLanguage(form);
-
-  // 样例测试
-  runButton
-    .on("click", (event) =>
-      runCode(event, runButton, form.sourceDiv, form.submitDiv)
-    )
-    .setHoverRedo();
-
-  // 提交
-  submitButton.on("click", async function (event) {
-    event.preventDefault();
-    if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
-      // 获取题目名
-      const questionTitle = (() => {
-        if (OJBetter.typeOfPage.is_acmsguru) {
-          return $("h4").eq(0).text();
-        } else {
-          return $(".header .title").eq(0).text();
-        }
-      })();
-      const submit = await OJB_createDialog(
-        i18next.t("submitCode.title", { ns: "dialog" }),
-        i18next.t("submitCode.content", {
-          ns: "dialog",
-          questionTitle: questionTitle,
-        }),
-        [
-          i18next.t("submitCode.buttons.0", { ns: "dialog" }),
-          i18next.t("submitCode.buttons.1", { ns: "dialog" }),
-        ],
-        true
-      ); //提交确认
-      if (submit) {
-        submitButton.after(
-          `<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`
+    // Codeforces 安全检查：未登录不加载编辑器
+    if (typeof ace === "undefined") {
+        const loadingMessage = new LoadingMessage();
+        loadingMessage.updateStatus(
+            `${OJBetter.state.name} —— ${i18next.t("error.codeEditor.load", {
+                ns: "alert",
+            })}`,
+            "error"
         );
-        $("#OJBetter_SubmitForm").submit();
-      } else {
-        submitButton.addClass("disabled");
-        setTimeout(function () {
-          submitButton.removeClass("disabled");
-        }, 300);
-      }
-    } else {
-      $("#OJBetter_SubmitForm").submit();
+        return; 
     }
-  });
+
+    // 获取提交页链接与计算绝对地址 (CF 专属)
+    const href = window.location.href;
+    let submitUrl;
+    if (/\/problemset\//.test(href)) {
+        submitUrl = OJBetter.common.hostAddress + "/problemset/submit";
+    } else if (/\/gym\//.test(href)) {
+        submitUrl = OJBetter.common.hostAddress + "/gym/" + ((href) => {
+            const regex = /\/gym\/(?<num>[0-9a-zA-Z]*?)\/problem\//;
+            const match = href.match(regex);
+            return match && match.groups.num;
+        })(href) + "/submit";
+    } else if (OJBetter.typeOfPage.is_acmsguru) {
+        submitUrl = href.replace(/\/problemsets[A-Za-z0-9\/#]*/, "/problemsets/acmsguru/submit");
+    } else {
+        submitUrl = href.replace(/\/problem[A-Za-z0-9\/#]*/, "/submit");
+    }
+
+    // 获取提交页原版 HTML，并创建定制表单 (CF 专属)
+    let cloneHTML = await getSubmitHTML(submitUrl);
+    let form = await createCodeEditorForm(submitUrl, cloneHTML);
+    let selectLang = form.selectLang;
+    let submitButton = form.submitButton;
+    let runButton = form.runButton;
+
+    // =========================================================
+    // 【功能模块】：语言快捷标签(Tabs) 与 隐藏式下拉框重构
+    // =========================================================
+
+    selectLang.addClass('ojb-language-select'); 
+    
+    // 提取原始选项
+    const originalOptions = [];
+    if (selectLang.length > 0 && selectLang[0].options) {
+        for (let i = 0; i < selectLang[0].options.length; i++) {
+            originalOptions.push({ 
+                value: String(selectLang[0].options[i].value),
+                text: selectLang[0].options[i].text 
+            });
+        }
+    }
+    
+    // 备份至全局窗口
+    window.OJB_originalOptions = originalOptions;
+    selectLang.css({ 'min-width': '300px', 'width': 'auto' });
+
+    // 在下拉框前面插入快捷按钮容器
+    const quickTabsContainer = OJB_safeCreateJQElement('<div id="ojb-quick-lang-tabs" style="display: flex; gap: 6px; flex-wrap: wrap; margin-right: 10px;"></div>');
+    selectLang.before(quickTabsContainer);
+    form.formDiv.find('.topLeftDiv').css({ 'display': 'flex', 'align-items': 'center', 'flex-wrap': 'wrap' });
+
+    let isShowAllLangs = false;
+
+    // 动态抓取原生下拉框的方法 (CF 字段为 programTypeId)
+    const getRawOptions = () => {
+        const rawSelect = $('select[name="programTypeId"]').not('#OJBetter_SubmitForm select').first();
+        const options = [];
+        if (rawSelect.length > 0 && rawSelect[0].options) {
+            const opts = rawSelect[0].options;
+            for (let i = 0; i < opts.length; i++) {
+                if (opts[i].value !== 'ojb_show_all') {
+                    options.push({
+                        value: String(opts[i].value),
+                        text: opts[i].text
+                    });
+                }
+            }
+        }
+        return options;
+    };
+
+    // 重构视图
+    const rebuildSelectLang = () => {
+        let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
+        let currentVal = selectLang.val();
+
+        console.log('[OJB-Debug] 触发重绘 rebuildSelectLang. 当前置顶语言:', pinnedLangs, '当前选择:', currentVal);
+
+        const currentOptions = getRawOptions();
+        if (currentOptions.length > 0) {
+            window.OJB_originalOptions = currentOptions;
+        }
+
+        const optionsToUse = currentOptions.length > 0 ? currentOptions : originalOptions;
+
+        if (optionsToUse.length > 0) {
+            selectLang.empty();
+            let pinnedHtml = '';
+            let unpinnedHtml = '';
+            
+            optionsToUse.forEach(opt => {
+                if (pinnedLangs.includes(opt.value)) {
+                    pinnedHtml += `<option value="${opt.value}">${opt.text}</option>`;
+                } else {
+                    unpinnedHtml += `<option value="${opt.value}">${opt.text}</option>`;
+                }
+            });
+
+            if (pinnedLangs.length > 0) {
+                if (isShowAllLangs) {
+                    selectLang.append(`<optgroup label="⭐ ${i18next.t('langSetup.pinned', { ns: 'codeEditor' })}">${pinnedHtml}</optgroup>`);
+                    selectLang.append(`<optgroup label="--- ${i18next.t('langSetup.others', { ns: 'codeEditor' })} ---">${unpinnedHtml}</optgroup>`);
+                } else {
+                    selectLang.append(pinnedHtml);
+                    selectLang.append(`<option value="ojb_show_all" style="color: gray; font-style: italic;">--- ${i18next.t('langSetup.showAll', { ns: 'codeEditor' })} ---</option>`);
+                }
+            } else {
+                selectLang.append(unpinnedHtml);
+            }
+
+            if (currentVal && currentVal !== 'ojb_show_all') {
+                selectLang.val(currentVal);
+            }
+
+            // 同步实际选中值，解决首个语言激活高亮的 Bug
+            let realVal = selectLang.val();
+            if (realVal !== currentVal) {
+                currentVal = realVal;
+                selectLang.trigger('change'); 
+            }
+
+            quickTabsContainer.empty();
+            pinnedLangs.forEach(val => {
+                const opt = optionsToUse.find(o => o.value === val);
+                if (opt) {
+                    const isActive = currentVal === val;
+                    let shortName = opt.text.split(' (')[0].split(' ')[0]; 
+                    if(opt.text.toLowerCase().includes('python')) shortName = 'Py';
+                    if(opt.text.toLowerCase().includes('c++')) shortName = 'C++';
+                    
+                    const btn = $('<button>', {
+                        type: 'button',
+                        class: `ojb-quick-tab ${isActive ? 'active' : ''}`,
+                        'data-val': val
+                    });
+                    
+                    btn.text(shortName); 
+                    btn.attr('title', opt.text); 
+                    
+                    btn.css({
+                        padding: '2px 8px',
+                        border: '1px solid var(--border-color, #ccc)',
+                        'border-radius': '4px',
+                        cursor: 'pointer',
+                        'font-size': '13px',
+                        'font-weight': 'bold',
+                        background: isActive ? 'var(--theme-color, #007bff)' : 'transparent',
+                        color: isActive ? '#fff' : 'inherit',
+                        transition: 'all 0.2s'
+                    });
+                    
+                    quickTabsContainer.append(btn);
+                }
+            });
+        }
+    };
+
+    // 快捷按钮点击
+    quickTabsContainer.on('click', '.ojb-quick-tab', function() {
+        const val = String($(this).attr('data-val'));
+        selectLang.val(val).trigger('change');
+    });
+
+    // 监听下拉框改变
+    selectLang.on('change', () => {
+        const currentVal = selectLang.val();
+        
+        if (currentVal === 'ojb_show_all') {
+            isShowAllLangs = true;
+            let prevActiveVal = quickTabsContainer.find('.ojb-quick-tab.active').attr('data-val');
+            let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
+            if (!prevActiveVal) prevActiveVal = pinnedLangs.length > 0 ? String(pinnedLangs[0]) : '';
+            
+            selectLang.val(String(prevActiveVal)); 
+            rebuildSelectLang();           
+            return; 
+        }
+
+        quickTabsContainer.find('.ojb-quick-tab').each(function() {
+            if (String($(this).attr('data-val')) === String(currentVal)) {
+                $(this).css({ 'background': 'var(--theme-color, #007bff)', 'color': '#fff' }).addClass('active');
+            } else {
+                $(this).css({ 'background': 'transparent', 'color': 'inherit' }).removeClass('active');
+            }
+        });
+        
+        changeMonacoLanguage(form); 
+    });
+
+    rebuildSelectLang();
+    
+    // 监听原生自定义重绘事件
+    document.addEventListener('OJB_TriggerRebuild', () => {
+        isShowAllLangs = false; 
+        rebuildSelectLang();
+    });
+
+    // 初始化测试数据面板
+    CustomTestInit();
+
+    // 恢复默认语言选择，如果没设置过则 fallback 至 CF 历史语言选择
+    let defaultLang = String(OJB_getGMValue('defaultLanguage', ''));
+    let initLang = (defaultLang && selectLang.find(`option[value="${defaultLang}"]`).length > 0) 
+        ? defaultLang 
+        : OJBetter.monaco.compilerSelection;
+    
+    selectLang.val(initLang).trigger('change');
+
+    // 样例测试 (CF 专属)
+    runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv)).setHoverRedo();
+    
+    // 提交 (CF 专属)
+    submitButton.on('click', async function (event) {
+        event.preventDefault();
+        if (OJBetter.monaco.setting.isCodeSubmitDoubleConfirm) {
+            // 获取题目名 (支持 ACM-SGURU)
+            const questionTitle = (() => {
+                if (OJBetter.typeOfPage.is_acmsguru) {
+                    return $("h4").eq(0).text();
+                } else {
+                    return $(".header .title").eq(0).text();
+                }
+            })();
+            const submit = await OJB_createDialog(
+                i18next.t('submitCode.title', { ns: 'dialog' }),
+                i18next.t('submitCode.content', { ns: 'dialog', questionTitle: questionTitle }),
+                [
+                    i18next.t('submitCode.buttons.0', { ns: 'dialog' }),
+                    i18next.t('submitCode.buttons.1', { ns: 'dialog' })
+                ],
+                true
+            );
+            if (submit) {
+                submitButton.after(`<img class="OJBetter_loding" src="//codeforces.org/s/84141/images/ajax-loading-24x24.gif">`);
+                $('#OJBetter_SubmitForm').submit();
+            } else {
+                submitButton.addClass('disabled');
+                setTimeout(function () {
+                    submitButton.removeClass('disabled');
+                }, 300);
+            }
+        } else {
+            $('#OJBetter_SubmitForm').submit();
+        }
+    });
 }
 
 /**
