@@ -13762,7 +13762,7 @@ async function createMonacoEditor(language, form, support) {
                     margin: '0',
                     flex: '1',
                     overflow: 'hidden'
-                }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor', defaultValue: '设为默认语言' }));
+                }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor', defaultValue: '设置为默认语言' }));
                 
                 const radio = $('<input>', {
                     type: 'radio',
@@ -13850,8 +13850,9 @@ async function createMonacoEditor(language, form, support) {
         const matchedOption = unpinnedOptions.find(o => o.text.toLowerCase().includes(searchText));
 
         if (!matchedOption) {
-            alert(i18next.t('moreSettings.langSetup.noMatchAlert', { ns: 'codeEditor', defaultValue: '未匹配到有效语言，请检查输入或从下拉提示中选择。' }));
-            return;
+          // Todo
+          alert(i18next.t('moreSettings.langSetup.noMatchAlert', { ns: 'codeEditor', defaultValue: '未找到匹配的编程语言' }));
+          return;
         }
 
         const val = String(matchedOption.value);
@@ -17214,7 +17215,7 @@ async function runCode(event, runButton, sourceDiv) {
                     selectLang.append(`<optgroup label="--- ${i18next.t('langSetup.others', { ns: 'codeEditor', defaultValue: '其他语言' })} ---">${unpinnedHtml}</optgroup>`);
                 } else {
                     selectLang.append(pinnedHtml);
-                    selectLang.append(`<option value="ojb_show_all" style="color: gray; font-style: italic;">--- ${i18next.t('langSetup.showAll', { ns: 'codeEditor', defaultValue: '点击显示其他语言...' })} ---</option>`);
+                    selectLang.append(`<option value="ojb_show_all" style="color: gray; font-style: italic;">--- ${i18next.t('langSetup.showAll', { ns: 'codeEditor', defaultValue: '显示全部' })} ---</option>`);
                 }
             } else {
                 selectLang.append(unpinnedHtml);
