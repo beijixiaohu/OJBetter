@@ -41,6 +41,11 @@
         "running": "测试中",
         "success": "全部通过"
     },
+    "langSetup": {
+        "pinned": "常用语言",
+        "others": "其他语言",
+        "showAll": "显示全部"
+    },
     "submitButton": "提交（Ctrl+Enter）",
     "moreSettings": {
         "title": "更多设置",
@@ -113,11 +118,7 @@
             "setDefaultTitle": "设置为默认语言",
             "removeTitle": "移除",
             "noLangDetected": "未检测到编程语言，请在下方搜索添加",
-            "noMatchAlert": "未找到匹配的编程语言",
-
-            "pinned": "常用语言",
-            "others": "其他语言",
-            "showAll": "显示全部"
+            "noMatchAlert": "未找到匹配的编程语言"
         }
     }
 }

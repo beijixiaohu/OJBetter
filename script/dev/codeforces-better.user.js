@@ -13700,7 +13700,7 @@ async function createMonacoEditor(language, form, support) {
     let langSettingHtml = `
       <div class='OJBetter_setting_list' style='flex-direction: column; align-items: flex-start;'>
           <label style='margin-bottom: 8px; font-weight: bold;'>
-              <span>${i18next.t('moreSettings.langSetup.title', { ns: 'codeEditor', defaultValue: '⭐ 常用语言与默认项' })}</span>
+              <span>${i18next.t('moreSettings.langSetup.title', { ns: 'codeEditor' })}</span>
           </label>
           
           <!-- 已置顶语言列表 -->
@@ -13709,11 +13709,11 @@ async function createMonacoEditor(language, form, support) {
           <!-- 搜索与添加区 -->
           <div style='width: 100%; display: flex; gap: 5px; align-items: center; position: relative;'>
               <input type="text" id="addPinnedSearch" list="ojb_lang_datalist" 
-                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor', defaultValue: '搜索并添加常用语言...' })}" 
+                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor' })}" 
                   style="flex: 1; max-width: calc(100% - 40px); box-sizing: border-box;" autocomplete="off">
               <datalist id="ojb_lang_datalist"></datalist>
               <button id='addPinnedBtn' class='ojb_btn' type='button' style='padding: 2px 8px; min-width: 30px;' 
-                  title="${i18next.t('moreSettings.langSetup.addBtnTitle', { ns: 'codeEditor', defaultValue: '添加' })}">
+                  title="${i18next.t('moreSettings.langSetup.addBtnTitle', { ns: 'codeEditor' })}">
                   <span style="font-weight:bold;">+</span>
               </button>
           </div>
@@ -13737,7 +13737,7 @@ async function createMonacoEditor(language, form, support) {
 
         listContainer.empty();
         if (pinnedLangs.length === 0) {
-            listContainer.append(`<div style="color: gray; font-size: 12px; padding: 4px;">${i18next.t('moreSettings.langSetup.noPinned', { ns: 'codeEditor', defaultValue: '暂无常用语言，请在下方搜索添加' })}</div>`);
+            listContainer.append(`<div style="color: gray; font-size: 12px; padding: 4px;">${i18next.t('moreSettings.langSetup.noPinned', { ns: 'codeEditor' })}</div>`);
         } else {
             pinnedLangs.forEach(val => {
                 const opt = localOriginalOptions.find(o => String(o.value) === String(val));
@@ -13762,7 +13762,7 @@ async function createMonacoEditor(language, form, support) {
                     margin: '0',
                     flex: '1',
                     overflow: 'hidden'
-                }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor', defaultValue: '设置为默认语言' }));
+                }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor' }));
                 
                 const radio = $('<input>', {
                     type: 'radio',
@@ -13784,7 +13784,7 @@ async function createMonacoEditor(language, form, support) {
                 const removeBtn = $('<i>', {
                     class: 'iconfont remove-pinned-btn',
                     'data-val': val,
-                    title: i18next.t('moreSettings.langSetup.removeTitle', { ns: 'codeEditor', defaultValue: '移除' })
+                    title: i18next.t('moreSettings.langSetup.removeTitle', { ns: 'codeEditor' })
                 }).css({
                     cursor: 'pointer',
                     color: '#ff4d4f',
@@ -13831,7 +13831,7 @@ async function createMonacoEditor(language, form, support) {
             searchInput.prop('disabled', false);
             addBtn.prop('disabled', false);
         } else {
-            listContainer.html(`<div style="color: gray;">${i18next.t('moreSettings.langSetup.noLangDetected', { ns: 'codeEditor', defaultValue: '未检测到语言选项，请确保你在题目提交页' })}</div>`);
+            listContainer.html(`<div style="color: gray;">${i18next.t('moreSettings.langSetup.noLangDetected', { ns: 'codeEditor' })}</div>`);
             searchInput.prop('disabled', true);
             addBtn.prop('disabled', true);
         }
@@ -13851,7 +13851,7 @@ async function createMonacoEditor(language, form, support) {
 
         if (!matchedOption) {
           // Todo
-          alert(i18next.t('moreSettings.langSetup.noMatchAlert', { ns: 'codeEditor', defaultValue: '未找到匹配的编程语言' }));
+          alert(i18next.t('moreSettings.langSetup.noMatchAlert', { ns: 'codeEditor' }));
           return;
         }
 
@@ -17210,11 +17210,11 @@ async function addProblemPageCodeEditor() {
 
             if (pinnedLangs.length > 0) {
                 if (isShowAllLangs) {
-                    selectLang.append(`<optgroup label="⭐ ${i18next.t('langSetup.pinned', { ns: 'codeEditor', defaultValue: '常用语言' })}">${pinnedHtml}</optgroup>`);
-                    selectLang.append(`<optgroup label="--- ${i18next.t('langSetup.others', { ns: 'codeEditor', defaultValue: '其他语言' })} ---">${unpinnedHtml}</optgroup>`);
+                    selectLang.append(`<optgroup label="⭐ ${i18next.t('langSetup.pinned', { ns: 'codeEditor' })}">${pinnedHtml}</optgroup>`);
+                    selectLang.append(`<optgroup label="--- ${i18next.t('langSetup.others', { ns: 'codeEditor' })} ---">${unpinnedHtml}</optgroup>`);
                 } else {
                     selectLang.append(pinnedHtml);
-                    selectLang.append(`<option value="ojb_show_all" style="color: gray; font-style: italic;">--- ${i18next.t('langSetup.showAll', { ns: 'codeEditor', defaultValue: '显示全部' })} ---</option>`);
+                    selectLang.append(`<option value="ojb_show_all" style="color: gray; font-style: italic;">--- ${i18next.t('langSetup.showAll', { ns: 'codeEditor' })} ---</option>`);
                 }
             } else {
                 selectLang.append(unpinnedHtml);
