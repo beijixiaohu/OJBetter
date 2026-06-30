@@ -17097,9 +17097,8 @@ async function runCode(event, runButton, sourceDiv) {
 /**
  * 添加题目页代码编辑器
  * @returns
- */async function addProblemPageCodeEditor() {
-    console.log('[OJB-Debug] === Codeforces 页面初始化开始 ===');
-    
+ */
+async function addProblemPageCodeEditor() {
     // Codeforces 安全检查：未登录不加载编辑器
     if (typeof ace === "undefined") {
         const loadingMessage = new LoadingMessage();
