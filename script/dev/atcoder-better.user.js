@@ -4747,7 +4747,7 @@ async function getLocalizeWebsiteJson(localizationLanguage) {
     let data = await OJBetter.common.database.localizeSubsData.get(localizationLanguage);
     let url = localizationLanguage === "zh" ?
         `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/${OJBetter.state.formatName}.json` :
-        `https://aowuucdn.oss-accelerate.aliyuncs.com/resources/subs/${OJBetter.state.formatName}.json`;
+        `https://aowuucdn.oss-accelerate.aliyuncs.com/i18n/${localizationLanguage}/resources/subs/${OJBetter.state.formatName}.json`;
     if (data) data = data.data;
     if (!data) {
         // 如果本地没有数据，从远端获取并保存
