@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.23.8
+// @version      1.23.9
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -1712,7 +1712,7 @@ const handleColorSchemeChange = (event) => {
             opacity: .75;
         }
         /* 反转 */
-        html[data-theme=dark] .ace_content, html[data-theme=dark] #header .header-logo img, html[data-theme=dark] pre code{
+        html[data-theme=dark] .ace_content, html[data-theme=dark] #header .header-logo img{
             filter: invert(1) hue-rotate(.5turn);
         }
         /* 区域遮罩 */
