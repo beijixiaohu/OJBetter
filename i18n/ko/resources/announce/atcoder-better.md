@@ -1,10 +1,38 @@
+## 1.24.0
+
+### What's Changed
+
+- 增加AtCoder新横幅的翻译 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/352
+- AtCoder规则更新 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/361
+- fix(Codeforces, AtCoder): 修复洛谷题目跳转功能误判问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/6b7ae1d
+- 规则文本本地化更新和修复代码块相关问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/377
+- feat(openai): 增加 Responses API 与 think_level 支持 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/378
+- feat(translation): 增加原文替换模式 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/379
+- 再再再修复对于生成式AI的规则的翻译+日文英文翻译同步 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/385
+- fix: 完善代码语言识别 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/391
+- fix: 修复 addButtonWithHTML2MD 类型判断问题 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/393
+- fix(AtCoder): 不再翻译类名包含 text-hidden 的元素 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/396
+- fix: 支持自定义请求 data 的 JSON 参数 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/f576c9c
+- fix: 关于ai翻译的一些修复 by @MoYuToGo in https://github.com/beijixiaohu/OJBetter/pull/398
+- fix(AtCoder): 修复分屏等窄屏下设置按钮挤压换行、遮挡二级导航的问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/399
+- fix: 实现 #397，添加默认语言选取功能 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/400
+- fix(AtCoder): 修复暗色模式下翻译后的代码块内部文字颜色异常的问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/401
+
+### New Contributors
+
+- @MoYeRanqianzhi made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/378
+- @MZMTab made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/391
+- @MoYuToGo made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/398
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/3d5aa4c...atcoder-better-v1.24.0
+
 ## 1.20.0
 
 - "번역 텍스트 색상" 사용자 지정 기능을 추가하여 설정에서 번역 결과의 텍스트 색상을 구성할 수 있게 되었습니다(**@wrk-123**의 기여 덕분에).
 - 코드 제출을 위한 Ctrl+Enter 단축키를 **@wrk-123** 덕분에 추가했습니다.
 - 마크다운 변환 중 ` <br>` 줄 바꿈 누락 수정, 기여해 주신 **@wrk-123**님께 감사드립니다!
 - 마크다운(예: `&lt;` `&gt;`) 복사 시 HTML 이스케이프 문자 문제 수정, 기여해주신 **@wrk-123**님께 감사드립니다!
-- \\\\\\\\\\\\` 태그를 필터링하지 않고 마크다운 전환 수정
+- \\\\\\\\\\\\\` 태그를 필터링하지 않고 마크다운 전환 수정
 - 중국어 대괄호 대체 규칙으로 인한 마크다운 링크 구문 오류 문제를 **@wrk-123**의 기여 덕분에 수정했습니다.
 - wrk-123\*\* 님의 기여 덕분에 요도 번역기의 HTTP 상태 코드 판단 로직이 수정되었습니다.
 - CloudFlare 패널 유효성 검사 문제 수정, 기여해주신 **@wrk-123**님께 감사드립니다!
@@ -71,7 +99,7 @@
 - 웹사이트 현지화 규칙 개선
 - 텍스트가 코드 스니펫인지 확인하는 방법 개선
 - '코드 블록 미화' 기능의 정의되지 않은 오류 수정.
-- OJB_observeElement()\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\` 메서드 보고 오류 수정
+- OJB_observeElement()\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\` 메서드 보고 오류 수정
 - 웹사이트 현지화 메서드 `strictTraverseTextNodes()`가 작동하지 않는 문제 수정
 
 ## 1.14.2
