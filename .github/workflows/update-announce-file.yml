@@ -24,6 +24,11 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
+          if git diff --quiet; then
+            git fetch origin main
+            git rebase origin/main
+            exit 0
+          fi
           git stash push -m "Temporarily stash changes for rebase"
           git fetch origin main
           git rebase origin/main
