@@ -1,0 +1,91 @@
+name: Sync Release Announcement
+
+on:
+  release:
+    types:
+      - published
+      - edited
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release tag to sync, for example codeforces-better-v1.86.0'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-release-announcement
+  cancel-in-progress: false
+
+jobs:
+  sync-release-announcement:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Sync release body to announcement
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ github.event.inputs.tag_name || github.event.release.tag_name }}
+        run: |
+          node .github/scripts/sync-release-announcement.js
+          python .github/scripts/update-announce.py
+          git add resources/announce/*.md resources/locales/*/announce.json
+
+      - name: Commit announcement changes
+        id: commit
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git stash push --include-untracked -m "Temporarily stash announcement updates"
+          git fetch origin main
+          git rebase origin/main
+          git stash pop
+          git add resources/announce/*.md resources/locales/*/announce.json
+          git commit -m "Update release announcement"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Install ossutil
+        if: steps.commit.outputs.changed == 'true'
+        run: |
+          wget http://gosspublic.alicdn.com/ossutil/1.7.0/ossutil64
+          chmod 755 ossutil64
+
+      - name: Config ossutil
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          OSS_ENDPOINT: 'oss-cn-beijing.aliyuncs.com'
+          OSS_ACCESS_KEY_ID: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          OSS_ACCESS_KEY_SECRET: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+        run: |
+          ./ossutil64 config -e $OSS_ENDPOINT -i $OSS_ACCESS_KEY_ID -k $OSS_ACCESS_KEY_SECRET
+
+      - name: Sync resources to OSS
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          OSS_BUCKET: 'aowuucdn'
+        run: |
+          ./ossutil64 sync -u -f ./resources/ oss://$OSS_BUCKET/resources/
