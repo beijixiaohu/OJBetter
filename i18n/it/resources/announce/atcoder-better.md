@@ -1,10 +1,38 @@
+## 1.24.0
+
+### What's Changed
+
+- 增加AtCoder新横幅的翻译 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/352
+- AtCoder规则更新 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/361
+- fix(Codeforces, AtCoder): 修复洛谷题目跳转功能误判问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/6b7ae1d
+- 规则文本本地化更新和修复代码块相关问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/377
+- feat(openai): 增加 Responses API 与 think_level 支持 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/378
+- feat(translation): 增加原文替换模式 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/379
+- 再再再修复对于生成式AI的规则的翻译+日文英文翻译同步 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/385
+- fix: 完善代码语言识别 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/391
+- fix: 修复 addButtonWithHTML2MD 类型判断问题 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/393
+- fix(AtCoder): 不再翻译类名包含 text-hidden 的元素 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/396
+- fix: 支持自定义请求 data 的 JSON 参数 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/f576c9c
+- fix: 关于ai翻译的一些修复 by @MoYuToGo in https://github.com/beijixiaohu/OJBetter/pull/398
+- fix(AtCoder): 修复分屏等窄屏下设置按钮挤压换行、遮挡二级导航的问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/399
+- fix: 实现 #397，添加默认语言选取功能 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/400
+- fix(AtCoder): 修复暗色模式下翻译后的代码块内部文字颜色异常的问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/401
+
+### New Contributors
+
+- @MoYeRanqianzhi made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/378
+- @MZMTab made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/391
+- @MoYuToGo made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/398
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/3d5aa4c...atcoder-better-v1.24.0
+
 ## 1.20.0
 
 - Aggiunta la funzione personalizzata "Colore del testo della traduzione", che consente di configurare il colore del testo del risultato della traduzione nelle impostazioni, grazie al contributo di **@wrk-123**.
 - Aggiunta scorciatoia Ctrl+Invio per inviare il codice, grazie a **@wrk-123**.
 - Correggere le interruzioni di riga ` <br>` mancanti durante la conversione di MarkDown, grazie a **@wrk-123** per il contributo!
 - Correggere il problema dell'escape dei caratteri HTML durante la copia di MarkDown (ad esempio `&lt;` `&gt;`), grazie a **@wrk-123** per il contributo!
-- Correggere la conversione di MarkDown senza filtrare i tag \\\\\\\\\\\\\` <style>
+- Correggere la conversione di MarkDown senza filtrare i tag \\\\\\\\\\\\\\` <style>
 - Corretto il problema dell'errore di sintassi dei collegamenti Markdown causato dalla regola di sostituzione delle parentesi cinesi, grazie al contributo di **@wrk-123**.
 - Correzione della logica di valutazione del codice di stato HTTP di Yodo Translator, grazie al contributo di **@wrk-123**.
 - Correggere il problema di validazione del pannello CloudFlare, grazie a **@wrk-123** per il contributo!
@@ -71,7 +99,7 @@
 - Migliorare le regole di localizzazione del sito web
 - Metodi migliorati per determinare se un testo è un frammento di codice
 - Correzione dell'errore non definito nella funzione "abbellisci blocco codice".
-- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
+- Correzione degli errori di segnalazione del metodo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\`OJB_observeElement()
 - Correzione del metodo di localizzazione del sito web `strictTraverseTextNodes()` che non funziona.
 
 ## 1.14.2

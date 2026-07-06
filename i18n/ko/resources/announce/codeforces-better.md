@@ -1,3 +1,31 @@
+## 1.86.0
+
+### What's Changed
+
+- fix(Codeforces): 完善网站本地化规则 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/340
+- feat(Codeforces): 添加显示Codeforces同比赛题目列表功能 by @Sam5440 in https://github.com/beijixiaohu/OJBetter/pull/346
+- feat(Codeforces): 添加有关参赛规则的本地化 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/354
+- fix(Codeforces, AtCoder): 修复洛谷题目跳转功能误判问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/6b7ae1d
+- feat(Codeforces): 添加Problemset和Contest题目互相跳转 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/367
+- fix: 规则文本本地化更新和修复代码块相关问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/377
+- feat(openai): 增加 Responses API 与 think_level 支持 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/378
+- feat(translation): 增加原文替换模式 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/379
+- fix: 完善代码语言识别 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/391
+- fix: 修复 addButtonWithHTML2MD 类型判断问题 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/393
+- fix(Codeforces): 修复黑暗模式 logo 问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/395
+- fix: 支持自定义请求 data 的 JSON 参数 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/f576c9c
+- fix: 关于ai翻译的一些修复 by @MoYuToGo in https://github.com/beijixiaohu/OJBetter/pull/398
+- fix: 实现 #397，添加默认语言选取功能 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/400
+
+### New Contributors
+
+- @Sam5440 made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/346
+- @MoYeRanqianzhi made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/378
+- @MZMTab made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/391
+- @MoYuToGo made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/398
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/3d5aa4c...codeforces-better-v1.86.0
+
 ## 1.80.0
 
 - "번역 텍스트 색상" 사용자 지정 기능을 추가하여 설정에서 번역 결과의 텍스트 색상을 구성할 수 있게 되었습니다(**@wrk-123**의 기여 덕분에).
@@ -6,7 +34,7 @@
 - 마크다운 변환 중 ` <br>` 줄 바꿈 누락 수정, 기여해 주신 **@wrk-123**님께 감사드립니다!
 - 마크다운(예: `&lt;` `&gt;`) 복사 시 HTML 이스케이프 문자 문제 수정, 기여해주신 **@wrk-123**님께 감사드립니다!
 - 마크다운 변환에서 코드 블록(` <pre>`)의 줄 바꿈 처리 수정, 기여해 주신 **@wrk-123**님께 감사드립니다!
-- \\\\\\\\\\\\` 태그를 필터링하지 않고 마크다운 전환 수정
+- \\\\\\\\\\\\\` 태그를 필터링하지 않고 마크다운 전환 수정
 - 중국어 대괄호 대체 규칙으로 인한 마크다운 링크 구문 오류 문제를 **@wrk-123**의 기여 덕분에 수정했습니다.
 - PP 케이스 매칭 문제 수정, 기여해주신 **@awerty-noob**님께 감사드립니다!
 - 중복 계층 변경 문제 수정, 기여해주신 **@wrk-123**님께 감사드립니다!
