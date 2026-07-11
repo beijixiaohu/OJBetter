@@ -2330,6 +2330,34 @@ header .enter-or-register-box, header .languages {
     color: #727378;
     cursor: not-allowed;
 }
+#navbar-collapse .OJBetter_setting {
+    cursor: pointer;
+}
+#navbar-collapse .OJBetter_setting.open {
+    color: #727378;
+    pointer-events: none;
+}
+#navbar-collapse.ojb-navbar-title-auto .contest-title {
+    display: block;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#navbar-collapse.ojb-navbar-title-constrained .contest-title {
+    display: block;
+    width: var(--ojb-contest-title-width);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#navbar-collapse .ojb-navbar-setting-item.is-hidden,
+#navbar-collapse .ojb-navbar-setting-fallback {
+    display: none;
+}
+#navbar-collapse .ojb-navbar-setting-fallback.is-visible {
+    display: block;
+}
 
 /*设置面板*/
 .OJBetter_setting_menu {
@@ -6970,16 +6998,118 @@ async function initSettingsPanel() {
      * @param {string} method 插入方法
      */
     function insertOJBetterSettingButton(location, method) {
-        // 将原本的 <button> 改为 Bootstrap 规范的 <li><a> 结构
-        // 增加了一个齿轮图标，并用 span 包裹文字以便 CSS 控制
-        $(location)[method](`
-        <li>
-            <a href="javascript:void(0);" class="OJBetter_setting" style="cursor: pointer;">
-            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-            <span class="ojb-setting-text"> ${OJBetter.state.name} ${i18next.t("settings", { ns: "common" })}</span>
-            </a>
-        </li>
-        `);
+        const $location = $(location);
+        if ($location.length === 0) return;
+
+        const settingLabel = `${OJBetter.state.name} ${i18next.t("settings", { ns: "common" })}`;
+        let $settingEntry;
+
+        // AtCoder 的 Bootstrap 导航需要使用合法的 <li><a> 结构。
+        if ($location.closest("#navbar-collapse").length > 0) {
+            const createSettingLink = () => $("<a>", {
+                href: "#",
+                class: "OJBetter_setting",
+                title: settingLabel,
+                "aria-label": settingLabel,
+            }).append(
+                $("<span>", { class: "glyphicon glyphicon-cog", "aria-hidden": "true" }),
+                $("<span>", { class: "ojb-setting-text", text: ` ${settingLabel}` }),
+            );
+            $settingEntry = $("<li>", { class: "ojb-navbar-setting-item" }).append(createSettingLink());
+
+            // 极窄桌面布局下若压缩比赛标题仍放不下，则在账户下拉菜单中保留可访问的设置入口。
+            const $accountDropdownMenu = $location.children(".dropdown-menu").first();
+            if ($accountDropdownMenu.length > 0) {
+                const $fallbackEntry = $("<li>", { class: "ojb-navbar-setting-fallback" }).append(createSettingLink());
+                const $logoutDivider = $accountDropdownMenu.children(".divider").last();
+                if ($logoutDivider.length > 0) $fallbackEntry.insertBefore($logoutDivider);
+                else $accountDropdownMenu.append($fallbackEntry);
+            }
+        } else {
+            // 非 Bootstrap 导航（例如旧版日语页头）继续使用普通按钮，避免孤立的 <li> 出现列表圆点。
+            $settingEntry = $("<button>", {
+                type: "button",
+                class: "ojb_btn OJBetter_setting",
+                text: settingLabel,
+            });
+        }
+
+        $location[method]($settingEntry);
+    }
+
+    /**
+     * 当桌面导航的实际内容宽度不足时，优先释放比赛标题的预留宽度，保留完整的设置入口。
+     */
+    function initNavbarSettingResponsiveLayout() {
+        const settingItem = document.querySelector("#navbar-collapse > .navbar-right > .ojb-navbar-setting-item");
+        if (!settingItem) return;
+
+        const navbarCollapse = settingItem.closest("#navbar-collapse");
+        const rightNavbar = settingItem.parentElement;
+        const leftNavbar = Array.from(navbarCollapse.children).find((element) =>
+            element.classList.contains("navbar-nav") && !element.classList.contains("navbar-right")
+        );
+        const navbarToggle = navbarCollapse.parentElement.querySelector(".navbar-toggle");
+        const contestTitle = leftNavbar?.querySelector(".contest-title");
+        const fallbackItem = rightNavbar.querySelector(".ojb-navbar-setting-fallback");
+        if (!leftNavbar || !rightNavbar) return;
+
+        let updateFrameId = null;
+        const isRightNavbarWrapped = () => {
+            const leftRect = leftNavbar.getBoundingClientRect();
+            const rightRect = rightNavbar.getBoundingClientRect();
+            return rightRect.top > leftRect.top + 1 || rightRect.left < leftRect.right;
+        };
+        const resetContestTitleLayout = () => {
+            navbarCollapse.classList.remove("ojb-navbar-title-auto", "ojb-navbar-title-constrained");
+            navbarCollapse.style.removeProperty("--ojb-contest-title-width");
+        };
+        const fitContestTitleToAvailableSpace = () => {
+            if (!contestTitle) return false;
+
+            navbarCollapse.classList.add("ojb-navbar-title-auto");
+            if (!isRightNavbarWrapped()) return true;
+
+            navbarCollapse.classList.remove("ojb-navbar-title-auto");
+            const titleRect = contestTitle.getBoundingClientRect();
+            const rightRect = rightNavbar.getBoundingClientRect();
+            const availableTitleWidth = Math.floor(rightRect.left - titleRect.left - 1);
+            if (availableTitleWidth <= 0) return false;
+
+            navbarCollapse.style.setProperty("--ojb-contest-title-width", `${availableTitleWidth}px`);
+            navbarCollapse.classList.add("ojb-navbar-title-constrained");
+            return !isRightNavbarWrapped();
+        };
+        const updateLayout = () => {
+            updateFrameId = null;
+            settingItem.classList.remove("is-hidden");
+            fallbackItem?.classList.remove("is-visible");
+            resetContestTitleLayout();
+
+            const isCollapsedNavbar = navbarToggle && getComputedStyle(navbarToggle).display !== "none";
+            if (isCollapsedNavbar || getComputedStyle(navbarCollapse).display === "none") return;
+
+            if (!isRightNavbarWrapped()) return;
+            if (fitContestTitleToAvailableSpace() || !fallbackItem) return;
+
+            settingItem.classList.add("is-hidden");
+            fallbackItem.classList.add("is-visible");
+            resetContestTitleLayout();
+            if (isRightNavbarWrapped()) fitContestTitleToAvailableSpace();
+        };
+        const scheduleLayoutUpdate = () => {
+            if (updateFrameId !== null) cancelAnimationFrame(updateFrameId);
+            updateFrameId = requestAnimationFrame(updateLayout);
+        };
+
+        scheduleLayoutUpdate();
+        window.addEventListener("resize", scheduleLayoutUpdate, { passive: true });
+        new MutationObserver(scheduleLayoutUpdate).observe(navbarCollapse, {
+            childList: true,
+            characterData: true,
+            subtree: true,
+        });
+        if (document.fonts?.ready) document.fonts.ready.then(scheduleLayoutUpdate);
     }
 
     /**
@@ -6996,9 +7126,13 @@ async function initSettingsPanel() {
      * ============================================
      */
 
+    initNavbarSettingResponsiveLayout();
+
     const $settingBtns = $(".OJBetter_setting");
-    $settingBtns.click(() => {
-        $settingBtns.prop("disabled", true).addClass("open");
+    $settingBtns.on("click", function (event) {
+        event.preventDefault();
+        if ($(this).hasClass("open")) return;
+        $settingBtns.prop("disabled", true).attr("aria-disabled", "true").addClass("open");
 
         // 设置面板div
         const settingMenu = OJB_safeCreateJQElement(OJBetterSettingMenu_HTML);
@@ -7006,6 +7140,10 @@ async function initSettingsPanel() {
 
         elementLocalize(settingMenu); // 加载i18n
         OJB_showModal(settingMenu);
+        settingMenu.one("close", () => {
+            settingMenu.remove();
+            $settingBtns.prop("disabled", false).removeAttr("aria-disabled").removeClass("open");
+        });
         OJB_addDraggable($('#OJBetter_setting_menu')); // 窗口支持拖拽
 
         // help帮助悬浮窗位置更新
@@ -7449,7 +7587,6 @@ async function initSettingsPanel() {
                 }
             }
             OJB_closeAndRemoveModal(settingMenu);
-            $settingBtns.prop("disabled", false).removeClass("open");
         });
     });
 };
