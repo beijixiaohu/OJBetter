@@ -8760,15 +8760,16 @@ class TranslateDiv {
         if (is_renderLaTeX) {
             // MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
             this.renderLaTeX(this.mainDiv.get(0));
+
+            // 渲染代码块中的公式 (AtCoder)
+            this.mainDiv.find('pre code').each((index, element) => {
+                const codeText = $(element).text();
+                const latexPattern = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/;
+                if (latexPattern.test(codeText)) {
+                    this.renderLaTeX(element);
+                }
+            });
         }
-        // 渲染代码块中的公式 (AtCoder)
-        this.mainDiv.find('pre code').each((index, element) => {
-            const codeText = $(element).text();
-            const latexPattern = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/;
-            if (latexPattern.test(codeText)) {
-                this.renderLaTeX(element);
-            }
-        });
         // 渲染翻译文本颜色
         if(OJBetter.preference.TranslateTextColor){
             this.mainDiv.css("color",OJBetter.preference.TranslateTextColor);
@@ -9467,7 +9468,7 @@ async function translateMain(text, element_node, is_comment, overrideTrans, repl
             text = textBlockReplacer.replace(text, regex);
 
             // 替换行间代码块`
-            const regex2 = /`[\s\S]*?`/g;
+            const regex2 = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
             text = textBlockReplacer.replace(text, regex2);
         }
         return text;

@@ -11119,7 +11119,7 @@ async function translateMain(
       text = textBlockReplacer.replace(text, regex);
 
       // 替换行间代码块`
-      const regex2 = /`[\s\S]*?`/g;
+      const regex2 = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
       text = textBlockReplacer.replace(text, regex2);
     }
     return text;
