@@ -4508,6 +4508,54 @@ function addI18nStyles() {
 }
 
 // ------------------------------
+// 翻译占位符格式化
+// ------------------------------
+
+/**
+ * 翻译占位符样式：`1` 为 `【】`，`2` 为 `{}`，`3` 为 `[]`。
+ * @typedef {"1" | "2" | "3"} OJBPlaceholderTokenStyle
+ */
+
+/**
+ * 占位符样式与左右边界的映射。无效或缺失的设置值统一回退到样式 `2`（`{}`）。
+ * @type {Readonly<Record<OJBPlaceholderTokenStyle, Readonly<[string, string]>>>}
+ */
+const OJB_PLACEHOLDER_TOKEN_PAIRS = Object.freeze({
+  "1": Object.freeze(["【", "】"]),
+  "2": Object.freeze(["{", "}"]),
+  "3": Object.freeze(["[", "]"]),
+});
+
+/**
+ * 归一化占位符样式设置。
+ * @param {unknown} style 待归一化的设置值
+ * @returns {OJBPlaceholderTokenStyle} 有效样式；非法值回退为 `2`
+ */
+function OJB_normalizePlaceholderTokenStyle(style) {
+  const normalized = String(style ?? "2");
+  return Object.prototype.hasOwnProperty.call(
+    OJB_PLACEHOLDER_TOKEN_PAIRS,
+    normalized
+  )
+    ? normalized
+    : "2";
+}
+
+/**
+ * 按指定样式格式化完整占位符。该函数只负责编码，不校验 ID，也不参与恢复策略。
+ * @param {string | number} id 占位符 ID
+ * @param {unknown} [style="2"] 占位符样式
+ * @returns {string} 格式化后的完整占位符
+ */
+function OJB_formatPlaceholderToken(id, style = "2") {
+  const [opening, closing] =
+    OJB_PLACEHOLDER_TOKEN_PAIRS[
+      OJB_normalizePlaceholderTokenStyle(style)
+    ];
+  return `${opening}${id}${closing}`;
+}
+
+// ------------------------------
 // 一些工具类
 // ------------------------------
 
@@ -4535,8 +4583,10 @@ class TextBlockReplacer {
     this.replacements = new Map();
     /** @type {Map<string, string>} 暂时未找到的待还原项 */
     this.tempReplacements = new Map();
-    /** @type {string} 替换符号 */
-    this.replaceSymbol = OJBetter.translation.replaceSymbol;
+    /** @type {OJBPlaceholderTokenStyle} 替换符号 */
+    this.replaceSymbol = OJB_normalizePlaceholderTokenStyle(
+      OJBetter.translation.replaceSymbol
+    );
   }
 
   /**
@@ -4559,21 +4609,7 @@ class TextBlockReplacer {
       for (let i = 0; i < this.matches.length; i++) {
         const match = this.matches[i];
         const id = OJB_getRandomNumber(8);
-        let replacement = "";
-        switch (this.replaceSymbol) {
-          case "1":
-            replacement = `【${id}】`;
-            break;
-          case "2":
-            replacement = `{${id}}`;
-            break;
-          case "3":
-            replacement = `[${id}]`;
-            break;
-          default:
-            replacement = `【${id}】`;
-            break;
-        }
+        const replacement = OJB_formatPlaceholderToken(id, this.replaceSymbol);
         text = text.replace(match, replacement);
         if (isOrdinal(match) && OJBetter.translation.targetLang === "zh")
           this.replacements.set(id, ordinalTranslation(match));
@@ -10718,9 +10754,12 @@ class ElementsTree {
     const translatedPayload =
       translatedText && typeof translatedText === "object" ? translatedText : null;
     const translatedContent =
-      OJB_stripReplaceOriginalMarkers(
-        translatedPayload ? translatedPayload.text : translatedText
-      );
+      translatedPayload?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION &&
+      typeof translatedPayload.displayText === "string"
+      ? translatedPayload.displayText
+      : translatedPayload && typeof translatedPayload.text === "string"
+      ? translatedPayload.text
+      : translatedText;
     const translateDiv = new TranslateDiv(id);
     pElement.after(translateDiv.getDiv());
     translateDiv.setTopText(topText);
@@ -10776,9 +10815,18 @@ class ElementsTree {
   }
 }
 
-// 更新TransDB中的翻译数据
+// ------------------------------
+// 翻译历史缓存
+// ------------------------------
+
+/**
+ * 保存当前 URL 的翻译历史。
+ * @param {Object[]} nodeDate 页面元素关系树
+ * @param {Record<string, any>} transResultMap 翻译结果映射
+ * @returns {Promise<string>} 保存成功提示
+ */
 async function updateTransDBData(nodeDate, transResultMap) {
-  var url = window.location.href.replace(/#/, "");
+  const url = window.location.href.replace(/#/, "");
   try {
     await OJBetter.common.database.translateData.put({
       url,
@@ -10791,9 +10839,12 @@ async function updateTransDBData(nodeDate, transResultMap) {
   }
 }
 
-// 获取TransDB中保存的翻译数据
+/**
+ * 获取当前 URL 保存的翻译历史。
+ * @returns {Promise<Object | undefined>} IndexedDB 中的历史记录
+ */
 async function getTransDBData() {
-  var url = window.location.href.replace(/#/, "");
+  const url = window.location.href.replace(/#/, "");
   try {
     const result = await OJBetter.common.database.translateData.get(url);
     return result;
@@ -10803,12 +10854,12 @@ async function getTransDBData() {
 }
 
 /**
- * 翻译结果恢复功能初始化
- * @returns
+ * 初始化翻译历史恢复。
+ * @returns {Promise<void>}
  */
 async function initTransResultsRecover() {
   OJBetter.translation.memory.ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
-  let result = await getTransDBData();
+  const result = await getTransDBData();
   if (!result) return;
   OJBetter.translation.memory.ttTree.setNodeData(result.nodeDate);
   OJBetter.translation.memory.ttTree.setTransResultMap(result.transResultMap);
@@ -10863,189 +10914,701 @@ async function initTransWhenViewable() {
   observers.push(observer);
 }
 
+// ------------------------------
+// 原文替换协议
+// ------------------------------
+
 /**
- * 准备原文替换上下文
- * @param {HTMLElement} element 目标元素
- * @param {string} extraIgnoredSelector 额外忽略选择器
- * @returns {Object|null} 原文替换上下文
+ * 当前 replaceOriginal 协议使用“段首 marker + 块内可移动 slot + 末尾 terminal marker”描述页面结构。
+ * 解析时要求每个 ID 恰好出现一次、段首 marker 保序且独占一行、slot 只能位于所属记录中；
+ * 完成校验并构建全部待写回内容后才开始提交；提交异常时尝试恢复原 DOM。
  */
-function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "") {
-  const records = [];
-  const ignoredSelector =
-    `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel${extraIgnoredSelector}`;
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      if (!node || !node.parentElement) return NodeFilter.FILTER_REJECT;
-      if ($(node.parentElement).closest(ignoredSelector).length > 0) {
-        return NodeFilter.FILTER_REJECT;
-      }
-      if (!node.textContent || !node.textContent.trim()) {
-        return NodeFilter.FILTER_REJECT;
-      }
-      return NodeFilter.FILTER_ACCEPT;
-    },
-  });
 
-  let currentNode;
-  while ((currentNode = walker.nextNode())) {
-    const originalText = currentNode.textContent;
-    const prefix = originalText.match(/^\s*/)?.[0] || "";
-    const suffix = originalText.match(/\s*$/)?.[0] || "";
-    const text = originalText.slice(
-      prefix.length,
-      originalText.length - suffix.length
-    );
-    if (!text.trim()) continue;
-    records.push({
-      node: currentNode,
-      originalText: originalText,
-      prefix: prefix,
-      suffix: suffix,
-      text: text,
-    });
-  }
+/**
+ * 原文替换协议中的不可拆分 DOM slot。
+ * @typedef {Object} OJBReplaceOriginalSlot
+ * @property {string} [id] 分配给 slot 的 8 位 ID
+ * @property {Node} node 主节点
+ * @property {Node[]} nodes 需要绑定移动的全部节点
+ * @property {string} kind slot 类型
+ * @property {string} tagName 用于 Schema 对齐的节点签名
+ */
 
-  if (!records.length) return null;
+/**
+ * 持久化到翻译历史中的结构 Schema。
+ * @typedef {Object} OJBReplaceOriginalSchema
+ * @property {string} fingerprint 页面结构指纹
+ * @property {OJBPlaceholderTokenStyle} tokenStyle Token 样式
+ * @property {string} terminalId 末尾完整性标记 ID
+ * @property {Object[]} records 记录路径、marker 与 slot 结构
+ */
 
-  return {
-    records: records,
-    extraIgnoredSelector: extraIgnoredSelector,
-    raw: records
-      .map((record, index) => {
-        const id = String(index).padStart(4, "0");
-        return `[[OJBLOCK_${id}]]\n${record.text}\n[[/OJBLOCK_${id}]]`;
-      })
-      .join("\n\n"),
-    restore() {
-      records.forEach((record) => {
-        if (record.node.isConnected) {
-          record.node.textContent = record.originalText;
-        }
-      });
-    },
-  };
+/**
+ * 当前原文替换协议的运行时上下文。
+ * @typedef {Object} OJBReplaceOriginalState
+ * @property {number} version 协议版本
+ * @property {Object[]} records DOM 记录
+ * @property {string} [terminalId] 末尾完整性标记 ID
+ * @property {OJBPlaceholderTokenStyle} [tokenStyle] 本次任务快照的 Token 样式
+ * @property {OJBReplaceOriginalSchema} [schema] 历史结构 Schema
+ * @property {string} [raw] 发送给翻译服务的协议文本
+ * @property {string} [extraIgnoredSelector] 额外忽略选择器
+ * @property {boolean} [applied] 是否已经写回原页面
+ * @property {() => void} restore 恢复原 DOM 的方法
+ */
+
+/**
+ * 原文替换写回结果。
+ * @typedef {Object} OJBReplaceOriginalApplyResult
+ * @property {boolean} applied 是否已写入原页面
+ * @property {boolean} completed 是否已完整处理译文
+ * @property {boolean} [pending] 是否仍在等待完整的流式结果
+ */
+
+// ------------------------------
+// 协议常量与 Token
+// ------------------------------
+
+/** @type {number} 当前原文替换协议版本：8 位单点 Token 与完整校验/回滚写回。 */
+const OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION = 2;
+
+/** @type {string} 可作为完整语义记录进行建模的块级元素。 */
+const OJB_REPLACE_ORIGINAL_COMPOSITE_SELECTOR = 'p, li, h1, h2, h3, h4, h5, h6, dt, dd, th, td, caption, figcaption, summary, legend';
+
+/** @type {string} 在语义记录中作为不可拆分 slot 保留和移动的直接子元素。 */
+const OJB_REPLACE_ORIGINAL_ATOMIC_SELECTOR = 'var, code, pre, kbd, samp, img, picture, svg, br, wbr, sub, sup, .MathJax_Preview, .MathJax, .MathJax_Display, .katex, .tex-span, input, button, select';
+
+/**
+ * 创建完整的 replaceOriginal Token 匹配器。每次返回新的全局正则，避免 `lastIndex` 在调用间泄漏。
+ * 匹配三种完整边界，并容忍边界与 8 位 ID 之间出现空白。
+ * @returns {RegExp} 带有 `g` 标志的 Token 正则
+ */
+function OJB_getReplaceOriginalTokenRegex() {
+    return /(?:【\s*(\d{8})\s*】|\[\s*(\d{8})\s*\]|\{\s*(\d{8})\s*\})/g;
 }
 
 /**
- * 将译文写回原文节点
- * @param {Object|null} replaceOriginalState 原文替换上下文
- * @param {string} translatedText 翻译后的文本
- * @param {boolean} allowPartial 是否允许部分替换
- * @returns {{applied: boolean, completed: boolean}} 替换结果
+ * 从 `OJB_getReplaceOriginalTokenRegex` 的匹配结果中提取统一 ID。
+ * @param {RegExpExecArray | null} match Token 正则匹配结果
+ * @returns {string} 8 位 Token ID；无匹配时返回空字符串
+ */
+function OJB_getReplaceOriginalTokenId(match) {
+    return match?.[1] || match?.[2] || match?.[3] || "";
+}
+
+/**
+ * 使用原文替换任务的样式格式化 Token。构建 state 时应显式传入已快照的样式。
+ * @param {string | number} id Token ID
+ * @param {unknown} [style=OJBetter.translation.replaceSymbol] 本次任务的占位符样式
+ * @returns {string} 格式化后的完整 Token
+ */
+function OJB_formatReplaceOriginalToken(id, style = OJBetter.translation.replaceSymbol) {
+    return OJB_formatPlaceholderToken(id, style);
+}
+
+// ------------------------------
+// DOM 建模与历史 Schema
+// ------------------------------
+
+/**
+ * 计算非加密指纹，用于判断历史 Schema 对应的 DOM 结构是否仍然一致。
+ * @param {string} value 待计算的规范化结构文本
+ * @returns {string} 8 位十六进制 FNV-1a 指纹
+ */
+function OJB_hashReplaceOriginalFingerprint(value) {
+    let hash = 2166136261;
+    for (let index = 0; index < value.length; index++) {
+        hash ^= value.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+/**
+ * 计算节点相对根节点的 `childNodes` 索引路径。
+ * @param {Node} root 根节点
+ * @param {Node} node 目标节点
+ * @returns {string} 点分索引路径，或 `root`、`detached`
+ */
+function OJB_getReplaceOriginalNodePath(root, node) {
+    if (root === node) return "root";
+    const path = [];
+    let current = node;
+    while (current && current !== root) {
+        const parent = current.parentNode;
+        if (!parent) return "detached";
+        path.unshift(Array.prototype.indexOf.call(parent.childNodes, current));
+        current = parent;
+    }
+    return current === root ? path.join('.') : "outside";
+}
+
+/**
+ * 生成用于 Schema 对齐的节点类型签名，并区分常见公式渲染节点。
+ * @param {Node} node DOM 节点
+ * @returns {string} 节点类型签名
+ */
+function OJB_getReplaceOriginalNodeSignature(node) {
+    if (node?.nodeType !== 1) return `#${node?.nodeType || 0}`;
+    const tagName = node.tagName.toLowerCase();
+    if (node.matches('.MathJax_Preview')) return `${tagName}.MathJax_Preview`;
+    if (node.matches('.MathJax_Display')) return `${tagName}.MathJax_Display`;
+    if (node.matches('.MathJax')) return `${tagName}.MathJax`;
+    if (node.matches('.katex')) return `${tagName}.katex`;
+    if (node.matches('.tex-span')) return `${tagName}.tex-span`;
+    if (tagName === 'script' && /^math\/tex/.test(node.getAttribute('type') || "")) return 'script[math/tex]';
+    return tagName;
+}
+
+/**
+ * 创建不可拆分 DOM slot 的描述对象。MathJax 的预览、渲染结果和源码可组成同一个 slot。
+ * @param {Node | Node[]} nodeOrNodes 单个节点或需要绑定移动的一组节点
+ * @returns {OJBReplaceOriginalSlot} slot 描述对象
+ */
+function OJB_getReplaceOriginalSlotDescriptor(nodeOrNodes) {
+    const nodes = Array.isArray(nodeOrNodes) ? nodeOrNodes : [nodeOrNodes];
+    const node = nodes[0];
+    return {
+        node: node,
+        nodes: nodes,
+        kind: nodes.length > 1 ? "group" : node.nodeType === 1 ? "element" : node.nodeType === 8 ? "comment" : "node",
+        tagName: nodes.map(OJB_getReplaceOriginalNodeSignature).join('+')
+    };
+}
+
+/**
+ * 将语义块的直接子节点拆分为可翻译文本和不可拆分 slot。
+ * @param {Node[]} originalChildren 语义块的原始直接子节点
+ * @returns {Array<{kind: string, node?: Node, slot?: Object}>} 按原顺序排列的文本与 slot
+ */
+function OJB_createReplaceOriginalCompositeParts(originalChildren) {
+    const parts = [];
+    const isMathJaxPreview = node => node?.nodeType === 1 && node.matches('.MathJax_Preview');
+    const isMathJaxRendered = node => node?.nodeType === 1 && node.matches('.MathJax, .MathJax_Display');
+    const isMathJaxSource = node => node?.nodeType === 1 && node.tagName.toLowerCase() === 'script' && /^math\/tex/.test(node.getAttribute('type') || "");
+
+    for (let index = 0; index < originalChildren.length; index++) {
+        const node = originalChildren[index];
+        if (node.nodeType === 3) {
+            parts.push({ kind: "text", node: node });
+            continue;
+        }
+
+        const groupedNodes = [node];
+        if (isMathJaxPreview(node)) {
+            if (isMathJaxRendered(originalChildren[index + 1])) groupedNodes.push(originalChildren[++index]);
+            if (isMathJaxSource(originalChildren[index + 1])) groupedNodes.push(originalChildren[++index]);
+        } else if (isMathJaxRendered(node) && isMathJaxSource(originalChildren[index + 1])) {
+            groupedNodes.push(originalChildren[++index]);
+        }
+        parts.push({ kind: "slot", slot: OJB_getReplaceOriginalSlotDescriptor(groupedNodes) });
+    }
+    return parts;
+}
+
+/**
+ * 生成 slot 的语义签名，仅用于指纹和历史 Schema 对齐，不用于展示。
+ * @param {OJBReplaceOriginalSlot} slot DOM slot 描述对象
+ * @returns {string} slot 语义签名
+ */
+function OJB_getReplaceOriginalSlotSemanticSignature(slot) {
+    const nodes = slot?.nodes || (slot?.node ? [slot.node] : []);
+    const mathSource = nodes.find(node => node?.nodeType === 1 && node.tagName.toLowerCase() === 'script' && /^math\/tex/.test(node.getAttribute('type') || ""));
+    if (mathSource) return `tex:${mathSource.getAttribute('type') || ""}:${mathSource.textContent || ""}`;
+    const node = nodes[0];
+    if (!node || node.nodeType !== 1) return "";
+    const tagName = node.tagName.toLowerCase();
+    const annotation = node.querySelector?.('annotation[encoding="application/x-tex"]');
+    if (annotation) return `tex:${annotation.textContent || ""}`;
+    if (tagName === 'img') return `img:${node.getAttribute('alt') || ""}:${node.getAttribute('src') || ""}`;
+    if (tagName === 'input' || tagName === 'button' || tagName === 'select') {
+        return `control:${node.getAttribute('type') || ""}:${node.value || node.textContent || ""}`;
+    }
+    return `${tagName}:${node.textContent || ""}`;
+}
+
+/**
+ * 创建本次协议内唯一、且数字串未出现在原文中的 8 位 ID。
+ * @param {Set<string>} usedIds 本次协议已占用的 ID
+ * @param {string} sourceText 原页面文本
+ * @returns {string} 新生成的 8 位 ID
+ */
+function OJB_createReplaceOriginalId(usedIds, sourceText) {
+    let id;
+    do {
+        id = String(OJB_getRandomNumber(8));
+    } while (usedIds.has(id) || sourceText.includes(id));
+    usedIds.add(id);
+    return id;
+}
+
+/**
+ * 校验历史 Schema 是否仍匹配当前 DOM 的指纹、记录路径、节点类型和 slot 形状。
+ * @param {Object[]} records 当前 DOM 建模记录
+ * @param {string} fingerprint 当前 DOM 指纹
+ * @param {OJBReplaceOriginalSchema | null} schema 历史记录中的 Schema
+ * @returns {boolean} Schema 基础结构与 ID 格式是否匹配；ID 唯一性会在复用阶段继续校验
+ */
+function OJB_isValidReplaceOriginalSchema(records, fingerprint, schema) {
+    if (!schema || schema.fingerprint !== fingerprint ||
+        OJB_normalizePlaceholderTokenStyle(schema.tokenStyle) !== schema.tokenStyle ||
+        !/^\d{8}$/.test(schema.terminalId || "")) return false;
+    if (!Array.isArray(schema.records) || schema.records.length !== records.length) return false;
+
+    for (let index = 0; index < records.length; index++) {
+        const current = records[index];
+        const saved = schema.records[index];
+        if (!saved || saved.kind !== current.kind || saved.path !== current.path || saved.tagName !== current.tagName) return false;
+        if (!/^\d{8}$/.test(saved.markerId || "")) return false;
+        if (!Array.isArray(saved.slots) || saved.slots.length !== current.slots.length) return false;
+        for (let slotIndex = 0; slotIndex < current.slots.length; slotIndex++) {
+            const currentSlot = current.slots[slotIndex];
+            const savedSlot = saved.slots[slotIndex];
+            if (!savedSlot || !/^\d{8}$/.test(savedSlot.id || "") || savedSlot.kind !== currentSlot.kind || savedSlot.tagName !== currentSlot.tagName) return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * 准备原文替换上下文。每个逻辑块只使用一个段首 marker，块内 DOM 节点使用可重排的单点 slot。
+ * 创建新任务时快照当前 tokenStyle；恢复历史时优先复用 savedSchema 中的样式和 ID。
+ * @param {HTMLElement} element 目标元素
+ * @param {string} [extraIgnoredSelector=""] 额外忽略选择器
+ * @param {OJBReplaceOriginalSchema | null} [savedSchema=null] 历史记录保存的协议结构
+ * @returns {OJBReplaceOriginalState | null} 原文替换上下文；无可翻译记录或 Schema 不匹配时返回 null
+ */
+function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "", savedSchema = null) {
+    if (!element) return null;
+    const tokenStyle = OJB_normalizePlaceholderTokenStyle(
+        savedSchema ? savedSchema.tokenStyle : OJBetter.translation.replaceSymbol
+    );
+    const ignoredSelector = `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel${extraIgnoredSelector}`;
+    const rootDocument = element.ownerDocument || document;
+    const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
+    const compositeElements = new Set();
+    const compositeCandidates = [];
+
+    if (element.matches?.(OJB_REPLACE_ORIGINAL_COMPOSITE_SELECTOR)) compositeCandidates.push(element);
+    element.querySelectorAll?.(OJB_REPLACE_ORIGINAL_COMPOSITE_SELECTOR).forEach(candidate => compositeCandidates.push(candidate));
+    compositeCandidates.forEach(candidate => {
+        if (candidate.closest(ignoredSelector)) return;
+        const children = Array.from(candidate.childNodes);
+        const hasDirectText = children.some(node => node.nodeType === 3 && node.textContent.trim());
+        const isSafe = children.every(node => {
+            if (node.nodeType === 3 || node.nodeType === 8) return true;
+            if (node.nodeType !== 1) return false;
+            return node.matches(OJB_REPLACE_ORIGINAL_ATOMIC_SELECTOR) || node.matches(ignoredSelector);
+        });
+        if (hasDirectText && isSafe) compositeElements.add(candidate);
+    });
+
+    const walker = rootDocument.createTreeWalker(element, nodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+            if (!node || !node.parentElement) return nodeFilter.FILTER_REJECT;
+            if (node.parentElement.closest(ignoredSelector)) return nodeFilter.FILTER_REJECT;
+            if (!node.textContent || !node.textContent.trim()) return nodeFilter.FILTER_REJECT;
+            return nodeFilter.FILTER_ACCEPT;
+        }
+    });
+
+    const records = [];
+    const addedCompositeElements = new Set();
+    let currentNode;
+    while ((currentNode = walker.nextNode())) {
+        let compositeElement = null;
+        let currentElement = currentNode.parentElement;
+        while (currentElement) {
+            if (compositeElements.has(currentElement)) {
+                compositeElement = currentElement;
+                break;
+            }
+            if (currentElement === element) break;
+            currentElement = currentElement.parentElement;
+        }
+
+        if (compositeElement) {
+            if (addedCompositeElements.has(compositeElement)) continue;
+            addedCompositeElements.add(compositeElement);
+            const originalChildren = Array.from(compositeElement.childNodes);
+            const parts = OJB_createReplaceOriginalCompositeParts(originalChildren);
+            const slots = parts.filter(part => part.kind === "slot").map(part => part.slot);
+            records.push({
+                kind: "composite",
+                element: compositeElement,
+                node: compositeElement,
+                path: OJB_getReplaceOriginalNodePath(element, compositeElement),
+                tagName: compositeElement.tagName.toLowerCase(),
+                originalChildren: originalChildren,
+                parts: parts,
+                slots: slots
+            });
+            continue;
+        }
+
+        const originalText = currentNode.textContent;
+        const prefix = originalText.match(/^\s*/)?.[0] || "";
+        const suffix = originalText.match(/\s*$/)?.[0] || "";
+        const text = originalText.slice(prefix.length, originalText.length - suffix.length);
+        if (!text.trim()) continue;
+        records.push({
+            kind: "scalar",
+            node: currentNode,
+            path: OJB_getReplaceOriginalNodePath(element, currentNode),
+            tagName: currentNode.parentElement?.tagName?.toLowerCase() || "#text",
+            originalText: originalText,
+            prefix: prefix,
+            suffix: suffix,
+            text: text,
+            slots: []
+        });
+    }
+
+    if (!records.length) return null;
+
+    const canonical = records.map(record => {
+        if (record.kind === "scalar") return `scalar|${record.path}|${record.tagName}|${record.originalText}`;
+        const children = record.parts.map(part => part.kind === "text"
+            ? `text:${part.node.textContent.length}:${part.node.textContent}`
+            : `slot:${part.slot.kind}:${part.slot.tagName}:${OJB_getReplaceOriginalSlotSemanticSignature(part.slot)}`
+        ).join('|');
+        return `composite|${record.path}|${record.tagName}|${children}`;
+    }).join('\n');
+    const fingerprint = OJB_hashReplaceOriginalFingerprint(canonical);
+    if (savedSchema && !OJB_isValidReplaceOriginalSchema(records, fingerprint, savedSchema)) return null;
+
+    const sourceText = element.textContent || "";
+    const usedIds = new Set();
+    const takeSavedId = id => {
+        if (!/^\d{8}$/.test(id || "") || usedIds.has(id)) return null;
+        usedIds.add(id);
+        return id;
+    };
+
+    for (let recordIndex = 0; recordIndex < records.length; recordIndex++) {
+        const record = records[recordIndex];
+        record.markerId = savedSchema
+            ? takeSavedId(savedSchema.records[recordIndex].markerId)
+            : OJB_createReplaceOriginalId(usedIds, sourceText);
+        if (!record.markerId) return null;
+        for (let slotIndex = 0; slotIndex < record.slots.length; slotIndex++) {
+            const slot = record.slots[slotIndex];
+            slot.id = savedSchema
+                ? takeSavedId(savedSchema.records[recordIndex].slots[slotIndex].id)
+                : OJB_createReplaceOriginalId(usedIds, sourceText);
+            if (!slot.id) return null;
+        }
+
+        if (record.kind === "composite") {
+            const source = record.parts.map(part => part.kind === "text"
+                ? part.node.textContent
+                : OJB_formatReplaceOriginalToken(part.slot.id, tokenStyle)
+            ).join('');
+            record.prefix = source.match(/^\s*/)?.[0] || "";
+            record.suffix = source.match(/\s*$/)?.[0] || "";
+            record.text = source.slice(record.prefix.length, source.length - record.suffix.length);
+        }
+    }
+
+    const terminalId = savedSchema
+        ? takeSavedId(savedSchema.terminalId)
+        : OJB_createReplaceOriginalId(usedIds, sourceText);
+    if (!terminalId) return null;
+
+    const schema = {
+        fingerprint: fingerprint,
+        tokenStyle: tokenStyle,
+        terminalId: terminalId,
+        records: records.map(record => ({
+            kind: record.kind,
+            path: record.path,
+            tagName: record.tagName,
+            markerId: record.markerId,
+            slots: record.slots.map(slot => ({ id: slot.id, kind: slot.kind, tagName: slot.tagName }))
+        }))
+    };
+    const raw = records
+        .map(record => `${OJB_formatReplaceOriginalToken(record.markerId, tokenStyle)}\n${record.text}`)
+        .join('\n\n') + `\n\n${OJB_formatReplaceOriginalToken(terminalId, tokenStyle)}`;
+
+    return {
+        version: OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION,
+        records: records,
+        terminalId: terminalId,
+        tokenStyle: tokenStyle,
+        schema: schema,
+        raw: raw,
+        extraIgnoredSelector: extraIgnoredSelector,
+        applied: false,
+        restore() {
+            if (!this.applied) return;
+            records.forEach(record => {
+                if (record.kind === "composite") {
+                    if (record.element?.isConnected) record.element.replaceChildren(...record.originalChildren);
+                } else if (record.node?.isConnected) {
+                    record.node.textContent = record.originalText;
+                }
+            });
+            this.applied = false;
+        }
+    };
+}
+
+// ------------------------------
+// 响应校验与回滚写回
+// ------------------------------
+
+/**
+ * 纯解析并严格校验 replaceOriginal 译文，不修改 DOM。
+ * 要求所有预期 ID 恰好出现一次、记录 marker 保序且独占行、slot 位于所属记录中，并且没有首尾残留文本。
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的完整文本
+ * @returns {Array<{record: Object, body: string}> | null} 校验后的记录正文；协议损坏时返回 null
+ */
+function OJB_parseReplaceOriginalResponse(replaceOriginalState, translatedText) {
+    if (typeof translatedText !== "string") return null;
+    const expectedIds = new Set([replaceOriginalState.terminalId]);
+    replaceOriginalState.records.forEach(record => {
+        expectedIds.add(record.markerId);
+        record.slots.forEach(slot => expectedIds.add(slot.id));
+    });
+
+    const occurrences = new Map(Array.from(expectedIds, id => [id, []]));
+    const regex = OJB_getReplaceOriginalTokenRegex();
+    let match;
+    while ((match = regex.exec(translatedText)) !== null) {
+        const id = OJB_getReplaceOriginalTokenId(match);
+        if (occurrences.has(id)) occurrences.get(id).push({ start: match.index, end: regex.lastIndex });
+    }
+    if (Array.from(occurrences.values()).some(items => items.length !== 1)) return null;
+
+    const markerOccurrences = replaceOriginalState.records
+        .map(record => occurrences.get(record.markerId)[0]);
+    const terminalOccurrence = occurrences.get(replaceOriginalState.terminalId)[0];
+    const orderedMarkers = markerOccurrences.concat(terminalOccurrence);
+    for (let index = 1; index < orderedMarkers.length; index++) {
+        if (orderedMarkers[index - 1].start >= orderedMarkers[index].start) return null;
+    }
+    const isLineLeading = occurrence => {
+        const lineStart = translatedText.lastIndexOf('\n', occurrence.start - 1) + 1;
+        return !translatedText.slice(lineStart, occurrence.start).trim();
+    };
+    const isLineTrailing = occurrence => {
+        const nextLineBreak = translatedText.indexOf('\n', occurrence.end);
+        const lineEnd = nextLineBreak === -1 ? translatedText.length : nextLineBreak;
+        return !translatedText.slice(occurrence.end, lineEnd).trim();
+    };
+    if (orderedMarkers.some(occurrence => !isLineLeading(occurrence) || !isLineTrailing(occurrence))) return null;
+    if (translatedText.slice(0, markerOccurrences[0].start).trim()) return null;
+    if (translatedText.slice(terminalOccurrence.end).trim()) return null;
+
+    const parsedRecords = [];
+    for (let index = 0; index < replaceOriginalState.records.length; index++) {
+        const record = replaceOriginalState.records[index];
+        const start = markerOccurrences[index].end;
+        const end = orderedMarkers[index + 1].start;
+        const body = translatedText.slice(start, end).trim();
+        if (!body) return null;
+        for (const slot of record.slots) {
+            const occurrence = occurrences.get(slot.id)[0];
+            if (occurrence.start < start || occurrence.end > end) return null;
+        }
+        parsedRecords.push({ record, body });
+    }
+    return parsedRecords;
+}
+
+/**
+ * 校验实时 DOM 并先构建全部待写回内容，再顺序提交；提交异常时尝试恢复原始 DOM。
+ * 流式 partial 结果不会写入 DOM。
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的文本
+ * @param {boolean} allowPartial 是否为尚未结束的流式结果
+ * @returns {OJBReplaceOriginalApplyResult} 写回状态
+ */
+function OJB_applyReplaceOriginalResponse(replaceOriginalState, translatedText, allowPartial) {
+    if (allowPartial) return { applied: false, completed: false, pending: true };
+    const parsedRecords = OJB_parseReplaceOriginalResponse(replaceOriginalState, translatedText);
+    if (!parsedRecords) return { applied: false, completed: false };
+
+    // 第一阶段：确认页面 DOM 自建模后没有被其他脚本或用户操作改变。
+    for (const { record } of parsedRecords) {
+        if (record.kind === "composite") {
+            const currentChildren = Array.from(record.element?.childNodes || []);
+            if (!record.element?.isConnected || currentChildren.length !== record.originalChildren.length ||
+                currentChildren.some((node, index) => node !== record.originalChildren[index])) {
+                return { applied: false, completed: false };
+            }
+        } else if (!record.node?.isConnected || record.node.textContent !== record.originalText) {
+            return { applied: false, completed: false };
+        }
+    }
+
+    try {
+        // 第二阶段：仅在内存中构建全部待写回内容，完成后再开始顺序提交。
+        const staged = parsedRecords.map(({ record, body }) => {
+            if (record.kind === "scalar") {
+                return { record, text: `${record.prefix}${body}${record.suffix}` };
+            }
+            const rootDocument = record.element.ownerDocument || document;
+            const childNodes = [];
+            if (record.prefix) childNodes.push(rootDocument.createTextNode(record.prefix));
+            const slotsById = new Map(record.slots.map(slot => [slot.id, slot]));
+            const regex = OJB_getReplaceOriginalTokenRegex();
+            let cursor = 0;
+            let match;
+            while ((match = regex.exec(body)) !== null) {
+                const id = OJB_getReplaceOriginalTokenId(match);
+                const slot = slotsById.get(id);
+                if (!slot) continue;
+                if (match.index > cursor) childNodes.push(rootDocument.createTextNode(body.slice(cursor, match.index)));
+                const slotNodes = slot.nodes || [slot.node];
+                childNodes.push(...slotNodes);
+                cursor = regex.lastIndex;
+            }
+            if (cursor < body.length) childNodes.push(rootDocument.createTextNode(body.slice(cursor)));
+            if (record.suffix) childNodes.push(rootDocument.createTextNode(record.suffix));
+            return { record, childNodes };
+        });
+        staged.forEach(item => {
+            if (item.record.kind === "composite") item.record.element.replaceChildren(...item.childNodes);
+            else item.record.node.textContent = item.text;
+        });
+        replaceOriginalState.applied = true;
+        return { applied: true, completed: true };
+    } catch (error) {
+        console.warn("Failed to apply replaceOriginal; rolling back:", error);
+        try {
+            replaceOriginalState.applied = true;
+            replaceOriginalState.restore();
+        } catch (rollbackError) {
+            console.warn("Failed to roll back replaceOriginal:", rollbackError);
+        }
+        return { applied: false, completed: false };
+    }
+}
+
+/**
+ * 将当前协议译文写回原文节点。
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的文本
+ * @param {boolean} [allowPartial=false] 是否为尚未结束的流式结果
+ * @returns {OJBReplaceOriginalApplyResult} 写回状态
  */
 function OJB_applyReplaceOriginalText(replaceOriginalState, translatedText, allowPartial = false) {
-  if (
-    !replaceOriginalState ||
-    !Array.isArray(replaceOriginalState.records) ||
-    !replaceOriginalState.records.length
-  ) {
-    return {
-      applied: false,
-      completed: false,
-    };
-  }
-
-  const translatedMap = new Map();
-  const regex =
-    /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
-  let match;
-  while ((match = regex.exec(translatedText)) !== null) {
-    translatedMap.set(Number(match[1]), match[2]);
-  }
-
-  const targetRecords = replaceOriginalState.records;
-  const expectedCount = targetRecords.length;
-  let completed = translatedMap.size === expectedCount && targetRecords.length === expectedCount;
-  for (let index = 0; index < expectedCount; index++) {
-    const record = targetRecords[index];
-    if (!record?.node?.isConnected || !translatedMap.has(index)) {
-      completed = false;
-      if (!allowPartial) {
-        return {
-          applied: false,
-          completed: false,
-        };
-      }
+    if (!replaceOriginalState || replaceOriginalState.version !== OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION ||
+        !Array.isArray(replaceOriginalState.records) || !replaceOriginalState.records.length) {
+        return { applied: false, completed: false };
     }
-  }
-
-  let applied = false;
-  translatedMap.forEach((text, index) => {
-    const record = targetRecords[index];
-    if (!record?.node?.isConnected) return;
-    record.node.textContent = `${record.prefix}${text.trim()}${record.suffix}`;
-    applied = true;
-  });
-
-  if (allowPartial) {
-    const partialRegex = /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)$/g;
-    let partialMatch = null;
-    while ((match = partialRegex.exec(translatedText)) !== null) {
-      partialMatch = match;
-    }
-
-    if (partialMatch) {
-      const partialIndex = Number(partialMatch[1]);
-      if (!translatedMap.has(partialIndex)) {
-        const record = targetRecords[partialIndex];
-        if (record?.node?.isConnected) {
-          const partialText = partialMatch[2].replace(/\[\[\/?OJB[\s\S]*$/, "");
-          record.node.textContent = `${record.prefix}${partialText}${record.suffix}`;
-          applied = true;
-        }
-      }
-    }
-  }
-
-  return {
-    applied: applied,
-    completed: completed,
-  };
+    return OJB_applyReplaceOriginalResponse(replaceOriginalState, translatedText, allowPartial);
 }
 
-function OJB_stripReplaceOriginalMarkers(text) {
-  if (typeof text !== "string") return text;
-  const regex =
-    /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
-  const blocks = [];
-  let match;
-  while ((match = regex.exec(text)) !== null) {
-    blocks.push(match[2]);
-  }
-  return blocks.length > 0 ? blocks.join("\n\n") : text;
+// ------------------------------
+// 显示文本与历史恢复
+// ------------------------------
+
+/**
+ * 将 DOM slot 转换为展示面板与复制操作可读的 Markdown/纯文本表示。
+ * @param {OJBReplaceOriginalSlot} slot DOM slot 描述对象
+ * @returns {string} slot 的可读文本
+ */
+function OJB_getReplaceOriginalSlotDisplayText(slot) {
+    const nodes = slot?.nodes || (slot?.node ? [slot.node] : []);
+    const mathSource = nodes.find(node => node?.nodeType === 1 && node.tagName.toLowerCase() === 'script' && /^math\/tex/.test(node.getAttribute('type') || ""));
+    if (mathSource) {
+        const source = (mathSource.textContent || "").trim();
+        return /mode=display/.test(mathSource.getAttribute('type') || "") ? `$$${source}$$` : `$${source}$`;
+    }
+    const node = nodes[0];
+    if (!node || node.nodeType !== 1) return "";
+    const tagName = node.tagName.toLowerCase();
+    if (tagName === 'br' || tagName === 'wbr') return "\n";
+    if (tagName === 'img') return node.getAttribute('alt') || "";
+    const annotation = node.querySelector?.('annotation[encoding="application/x-tex"]');
+    const nodeText = (annotation?.textContent || node.textContent || "").trim();
+    if (tagName === 'var' || node.matches('.katex, .MathJax, .MathJax_Display, .tex-span')) return nodeText ? `$${nodeText}$` : "";
+    if (tagName === 'pre') return `\n\`\`\`\n${nodeText}\n\`\`\`\n`;
+    if (tagName === 'code' || tagName === 'kbd' || tagName === 'samp') return `\`${nodeText}\``;
+    if (tagName === 'a') {
+        const href = node.getAttribute('href');
+        return href ? `[${nodeText}](${href})` : nodeText;
+    }
+    return nodeText;
 }
 
-function OJB_applyHistoryReplaceOriginal(
-  translateDiv,
-  targetElement,
-  translatedData
-) {
-  if (
-    !translatedData ||
-    typeof translatedData !== "object" ||
-    translatedData.replaceOriginal !== true ||
-    typeof translatedData.text !== "string"
-  ) {
+/**
+ * 将已知 replaceOriginal Token 替换为可读文本：slot 转为内容，记录 marker 转为分段；未知 Token 保持原样。
+ * @param {string} text 包含 replaceOriginal Token 的文本
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {boolean} [includeRecordBreaks=true] 是否将记录 marker 转为段落分隔
+ * @returns {string} 移除协议 Token 后的展示文本
+ */
+function OJB_replaceReplaceOriginalTokens(text, replaceOriginalState, includeRecordBreaks = true) {
+    const recordIds = new Set(replaceOriginalState.records.map(record => record.markerId));
+    recordIds.add(replaceOriginalState.terminalId);
+    const slotsById = new Map();
+    replaceOriginalState.records.forEach(record => record.slots.forEach(slot => slotsById.set(slot.id, slot)));
+    return String(text || "").replace(OJB_getReplaceOriginalTokenRegex(), (token, first, second, third) => {
+        const id = first || second || third;
+        if (slotsById.has(id)) return OJB_getReplaceOriginalSlotDisplayText(slotsById.get(id));
+        if (recordIds.has(id)) return includeRecordBreaks ? "\n\n" : "";
+        return token;
+    }).replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/**
+ * 生成翻译面板与复制操作使用的展示文本。优先使用严格解析结果，协议损坏时仅降级清理已知 Token。
+ * @param {OJBReplaceOriginalState | null} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的文本
+ * @returns {string} 面向用户的展示文本
+ */
+function OJB_getReplaceOriginalDisplayText(replaceOriginalState, translatedText) {
+    if (!replaceOriginalState || replaceOriginalState.version !== OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION) {
+        return String(translatedText || "");
+    }
+    const parsedRecords = OJB_parseReplaceOriginalResponse(replaceOriginalState, translatedText);
+    if (!parsedRecords) return OJB_replaceReplaceOriginalTokens(translatedText, replaceOriginalState);
+    return parsedRecords.map(({ record, body }) => {
+        const temporaryState = { records: [record], terminalId: "" };
+        return OJB_replaceReplaceOriginalTokens(body, temporaryState, false);
+    }).join("\n\n");
+}
+
+/**
+ * 根据历史 Schema 重建上下文并恢复“替换原文”结果。
+ * 只有完整写回成功时返回 state；失败时恢复原文并回退到普通翻译面板。
+ * @param {TranslateDiv} translateDiv 翻译结果面板
+ * @param {HTMLElement} targetElement 需要恢复的原页面元素
+ * @param {Object} translatedData 历史翻译数据
+ * @returns {OJBReplaceOriginalState | null} 已成功应用的原文替换上下文
+ */
+function OJB_applyHistoryReplaceOriginal(translateDiv, targetElement, translatedData) {
+    if (!translatedData || typeof translatedData !== "object" || translatedData.replaceOriginal !== true ||
+        translatedData.version !== OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION || typeof translatedData.text !== "string" ||
+        !translatedData.schema || typeof translatedData.schema !== "object") {
+        return null;
+    }
+
+    const replaceOriginalState = OJB_prepareReplaceOriginalState(
+        targetElement,
+        translatedData.extraIgnoredSelector || "",
+        translatedData.schema
+    );
+    if (!replaceOriginalState) return null;
+
+    translateDiv.setReplaceOriginalState(replaceOriginalState);
+    const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
+    if (applyResult.completed) return replaceOriginalState;
+
+    replaceOriginalState.restore();
+    translateDiv.replaceOriginalState = null;
+    translateDiv.getDiv().show();
     return null;
-  }
-
-  const replaceOriginalState = OJB_prepareReplaceOriginalState(
-    targetElement,
-    translatedData.extraIgnoredSelector || ""
-  );
-  if (!replaceOriginalState) return null;
-
-  translateDiv.setReplaceOriginalState(replaceOriginalState);
-  const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
-  if (applyResult.completed) {
-    return replaceOriginalState;
-  }
-
-  replaceOriginalState.restore();
-  translateDiv.replaceOriginalState = null;
-  translateDiv.getDiv().show();
-  return null;
 }
+
+// ------------------------------
+// 翻译主流程
+// ------------------------------
 
 /**
  * 翻译返回结果结构体
@@ -11129,8 +11692,11 @@ async function translateMain(
    * LaTeX恢复
    * @param {string} text 已翻译的文本
    * @returns {string} 恢复后的文本
-   */
+  */
   const recoverLatex = function (text) {
+    if (replaceOriginalState?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION) {
+      return realTransServer !== "openai" ? textBlockReplacer.recover(text) : text;
+    }
     // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
     let resultText = text
       .replace(/】【/g, "】 【")
@@ -11451,15 +12017,46 @@ async function translateMain(
   // 还原latex公式
   translatedText = recoverLatex(translatedText);
 
-  // 注册结果复制按钮
+  // 翻译结果格式化
+  if (!replaceOriginalState) translatedText = formatText(translatedText);
+
+  const displayText = replaceOriginalState
+    ? OJB_getReplaceOriginalDisplayText(replaceOriginalState, translatedText)
+    : translatedText;
+  translateResult.translatedText = displayText;
+
+  // 先完整校验并写回；失败结果不能进入翻译记忆。
+  const displayResult = translateResult.translateDiv.updateTranslateDiv(
+    translatedText,
+    !(
+      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
+      !OJBetter.translation.forceTurndownConversion
+    )
+  );
+  if (replaceOriginalState && !displayResult.completed) {
+    translateResult.status = "error";
+    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+      translateResult.translateDiv.registerCopyButtonEvent(displayText);
+    } else {
+      translateResult.translateDiv.disableCopyButton();
+    }
+    // 保留可读译文作为安全回退，同时由上层显示原始响应调试入口。
+    translateResult.translateDiv.updateTranslateDiv(
+      displayText || translatedText,
+      true,
+      true,
+      false,
+      true
+    );
+    return translateResult;
+  }
+
+  // 注册结果复制按钮（原文替换模式下复制去除协议 token 后的可读文本）。
   if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-    translateResult.translateDiv.registerCopyButtonEvent(translatedText);
+    translateResult.translateDiv.registerCopyButtonEvent(displayText);
   } else {
     translateResult.translateDiv.disableCopyButton();
   }
-
-  // 翻译结果格式化
-  translatedText = formatText(translatedText);
 
   // 保存翻译结果
   if (
@@ -11472,35 +12069,17 @@ async function translateMain(
       ? {
           text: translatedText,
           replaceOriginal: true,
+          version: replaceOriginalState.version,
+          displayText: displayText,
+          schema: replaceOriginalState.schema,
           extraIgnoredSelector: replaceOriginalState.extraIgnoredSelector || "",
         }
-      : OJB_stripReplaceOriginalMarkers(translatedText);
+      : displayText;
     OJBetter.translation.memory.ttTree.addTransResultMap(id, transResultData);
     updateTransDBData(
       OJBetter.translation.memory.ttTree.getNodeData(),
       OJBetter.translation.memory.ttTree.getTransResultMap()
     ); // 更新翻译结果到transDB
-  }
-
-  translateResult.translatedText = translatedText;
-
-  // 翻译结果面板更新
-  const displayResult = translateResult.translateDiv.updateTranslateDiv(
-    translatedText,
-    !(
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    )
-  );
-  if (replaceOriginalState && !displayResult.completed) {
-    translateResult.status = "error";
-    translateResult.translateDiv.updateTranslateDiv(
-      i18next.t("error.unexpected", { ns: "translator" }),
-      true,
-      true,
-      false,
-      true
-    );
   }
 
   return translateResult;
@@ -17930,13 +18509,19 @@ function getOpenAITranslationRequest(raw, isStream = false) {
   const modelDefault = "gpt-5.4";
   const proxyDefault = "https://api.openai.com/v1/responses";
   const lang = getTargetLanguage("openai");
-  const hasReplaceOriginalMarker = /\[\[\/?OJBLOCK_\d{4}\]\]/.test(raw);
+  const hasReplaceOriginalMarker =
+    /^\s*(?:【\s*\d{8}\s*】|\[\s*\d{8}\s*\]|\{\s*\d{8}\s*\})\s*\n/.test(raw);
+  const replaceOriginalPlaceholderExample = hasReplaceOriginalMarker
+    ? raw.match(OJB_getReplaceOriginalTokenRegex())?.[0] ||
+      OJB_formatPlaceholderToken("12345678")
+    : "";
+  const replaceOriginalPrompt = hasReplaceOriginalMarker
+    ? `Keep every 8-digit numeric placeholder (for example ${replaceOriginalPlaceholderExample}) unchanged and exactly once. Sentence-internal placeholders may move to follow the target-language word order. Keep paragraph-leading placeholders in their original paragraph order.`
+    : "";
   let prompt = "";
   if (OJBetter.chatgpt.customPrompt) {
     prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-    if (hasReplaceOriginalMarker) {
-      prompt += `\nKeep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order.`;
-    }
+    if (replaceOriginalPrompt) prompt += `\n${replaceOriginalPrompt}`;
     if (!OJBetter.chatgpt.asSystemPrompt) {
       prompt += `\n${raw}`;
     }
@@ -17950,7 +18535,7 @@ Rules:
 3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
 4. Ensure the translation follows natural ${lang} expression patterns
 5. Use professional terminology common in programming competitions
-${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
+${replaceOriginalPrompt ? `6. ${replaceOriginalPrompt}` : ""}
 
 Text to translate:
 "`;
@@ -18374,7 +18959,7 @@ async function ensureJQueryIsLoaded(retryDelay = 50) {
 async function loadRequiredFunctions() {
   await initVar(); // 初始化全局变量
   return Promise.allSettled([
-    initDB(), // 连接数据库
+    initDB().then(() => OJB_migrateOjbBlockTranslationCache()), // 连接数据库并执行一次性缓存迁移
     initI18next(), // i18next初始化
     initButtonFunc(), // 加载按钮相关函数
     initHTML2MarkDown(), // 初始化html2markdown转换器
@@ -18572,4 +19157,101 @@ if (document.readyState === "loading") {
   }
 }
 
+// ------------------------------
+// OJBLOCK 翻译缓存一次性迁移
+// ------------------------------
 
+/**
+ * 从带 OJBLOCK 行标记的缓存文本中提取可读译文。
+ * @param {string} text 已发布的 OJBLOCK 缓存文本
+ * @returns {string} 移除行标记后的普通译文
+ */
+function OJB_extractOjbBlockTranslationText(text) {
+  /** 匹配被翻译服务改写过括号、大小写、空格或行末标点的 OJBLOCK 独占行。 */
+  const markerLinePattern = /^[\t ]*(?:[\[【［{][\t ]*)*\/?[\t ]*OJBLOCK_\d{4}[\t ]*(?:[\]】］}][\t ]*)*[。．.!！?？:：;；,，、]?[\t ]*(?:\r?\n|$)/gim;
+  return String(text || "")
+    .replace(markerLinePattern, "")
+    .trim();
+}
+
+/**
+ * 将一条 OJBLOCK replaceOriginal 缓存转换为普通译文；其他缓存值原样返回。
+ * 已发布的数据可能省略 `version`，也可能保存数值 `1`；即使行标记被翻译服务删除，仍按该固定对象形态识别。
+ * @param {any} value 翻译缓存值
+ * @returns {any} 转换后的普通字符串，或未变化的原值
+ */
+function OJB_convertOjbBlockCacheEntryToText(value) {
+  const isOjbBlockCacheEntry =
+    value &&
+    typeof value === "object" &&
+    value.replaceOriginal === true &&
+    typeof value.text === "string" &&
+    (value.version == null || value.version === 1);
+  return isOjbBlockCacheEntry
+    ? OJB_extractOjbBlockTranslationText(value.text)
+    : value;
+}
+
+/**
+ * 转换单条数据库记录中的 OJBLOCK 缓存。未匹配的条目保持原值和对象引用，原 map 不会被修改。
+ * @param {Record<string, any>} transResultMap 翻译结果映射
+ * @returns {{transResultMap: Record<string, any>, migratedCount: number}} 转换后的映射和条目数量
+ */
+function OJB_migrateOjbBlockTranslationResults(transResultMap) {
+  const sourceMap =
+    transResultMap && typeof transResultMap === "object" ? transResultMap : {};
+  let migratedMap = sourceMap;
+  let migratedCount = 0;
+
+  Object.entries(sourceMap).forEach(([id, value]) => {
+    const convertedValue = OJB_convertOjbBlockCacheEntryToText(value);
+    if (convertedValue === value) return;
+    if (migratedCount === 0) migratedMap = { ...sourceMap };
+    migratedMap[id] = convertedValue;
+    migratedCount++;
+  });
+
+  return { transResultMap: migratedMap, migratedCount };
+}
+
+/**
+ * 在数据库打开后迁移当前站点的全部 OJBLOCK 翻译缓存。
+ * 完成标记与缓存保存在同一张表中，因此清空或导入数据库后会自然重新判断；事务失败时下次加载会重试。
+ * @returns {Promise<number>} 转换的缓存条目数量
+ */
+async function OJB_migrateOjbBlockTranslationCache() {
+  const migrationMarkerUrl = "__ojbetter_migration__:ojblock_translation_cache";
+  const database = OJBetter.common.database;
+  const table = database?.translateData;
+  if (!database || !table)
+    throw new Error("Translation cache database is not available.");
+
+  let migratedCount = 0;
+  try {
+    if (await table.get(migrationMarkerUrl)) return 0;
+    await database.transaction("rw", table, async () => {
+      if (await table.get(migrationMarkerUrl)) return;
+      const storedRecords = await table.toArray();
+      const migratedRecords = [];
+
+      storedRecords.forEach((record) => {
+        const migration = OJB_migrateOjbBlockTranslationResults(
+          record.transResultMap
+        );
+        if (migration.migratedCount === 0) return;
+        migratedCount += migration.migratedCount;
+        migratedRecords.push({
+          ...record,
+          transResultMap: migration.transResultMap,
+        });
+      });
+
+      await table.bulkPut([...migratedRecords, { url: migrationMarkerUrl }]);
+    });
+  } catch (error) {
+    console.warn("Failed to migrate OJBLOCK translation cache:", error);
+    throw error;
+  }
+
+  return migratedCount;
+}

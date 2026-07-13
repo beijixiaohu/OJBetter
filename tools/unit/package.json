@@ -1,6 +1,7 @@
 {
     "scripts": {
-        "test": "jest"
+        "test": "jest",
+        "test:replace-original": "node --test test/replaceOriginal/index.node.js"
     },
     "devDependencies": {
         "jest": "^29.7.0"
