@@ -8150,6 +8150,134 @@ async function addButtonWithCopy(button, element, suffix, type) {
 }
 
 /**
+ * 添加题目全文MD视图按钮
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {JQuery<HTMLElement>} element 目标元素
+ */
+async function addButtonWithTaskStatementHTML2MD(button, element) {
+    const changeButtonState = (state) => {
+        if (state == "loading") {
+            button.setButtonLoading();
+            button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
+        } else if (state == "loaded" || state == "normal") {
+            button.removeClass("enabled");
+            button.setButtonLoaded();
+            button.setButtonPopover(i18next.t('md.normal', { ns: 'button' }));
+        } else if (state == "mdView") {
+            button.addClass("enabled");
+            button.setButtonPopover(i18next.t('md.reduction', { ns: 'button' }));
+        } else if (state == "disabled") {
+            button.prop("disabled", true);
+            button.setButtonPopover(i18next.t('md.disabled', { ns: 'button' }));
+        }
+    }
+
+    const getSectionButtons = () => $(element).find('section').map((i, section) => {
+        return $(section).prev('.html2md-panel').find('[id^="html2md-view"]').get(0);
+    }).get();
+
+    const syncButtonState = () => {
+        const sections = $(element).find('section');
+        const isAllMarkdown = sections.length > 0 && sections.filter((i, section) => $(section).attr("viewmd") !== "true").length === 0;
+        changeButtonState(isAllMarkdown ? "mdView" : "normal");
+    };
+
+    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+        changeButtonState("disabled");
+        return;
+    } else {
+        changeButtonState("loading");
+        await waitForMathJaxIdle();
+        changeButtonState("loaded");
+    }
+
+    button.click(OJB_debounce(function () {
+        const sections = $(element).find('section');
+        const shouldShowMarkdown = sections.filter((i, section) => $(section).attr("viewmd") !== "true").length > 0;
+        getSectionButtons().forEach(sectionButton => {
+            const section = $(sectionButton).parent().next('section');
+            const isMarkdown = section.attr("viewmd") === "true";
+            if (isMarkdown !== shouldShowMarkdown) {
+                $(sectionButton).trigger('click');
+            }
+        });
+        setTimeout(syncButtonState, 0);
+    }));
+
+    if (OJBetter.preference.hoverTargetAreaDisplay) {
+        button.addHoverOverlay($(element));
+    }
+}
+
+/**
+ * 获取题目页标题的Markdown
+ * @param {JQuery<HTMLElement>} element 题面元素
+ * @returns {string} Markdown标题
+ */
+function getTaskStatementTitleMarkdown(element) {
+    const title = $(element)
+        .closest('.col-sm-12')
+        .children('.h2, h2')
+        .first()
+        .clone();
+    title.find('a, button, .html2md-panel').remove();
+    const titleText = title.text().replace(/\s+/g, ' ').trim();
+    return titleText ? `## ${titleText}\n\n` : '';
+}
+
+/**
+ * 添加题目全文复制按钮
+ * @param {JQuery<HTMLElement>} button 按钮
+ * @param {JQuery<HTMLElement>} element 目标元素
+ */
+async function addButtonWithTaskStatementCopy(button, element) {
+    function changeButtonState(state) {
+        if (state == "loading") {
+            button.setButtonLoading();
+            button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
+        } else if (state == "loaded") {
+            button.setButtonLoaded();
+            button.setButtonPopover(i18next.t('copy.normal', { ns: 'button' }));
+        } else if (state == "normal") {
+            button.setButtonPopover(i18next.t('copy.normal', { ns: 'button' }));
+        } else if (state == "copied") {
+            button.setButtonPopover(i18next.t('copy.copied', { ns: 'button' }));
+        } else if (state == "disabled") {
+            button.prop("disabled", true);
+            button.setButtonPopover(i18next.t('copy.disabled', { ns: 'button' }));
+        }
+    }
+
+    if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+        changeButtonState("disabled");
+        return;
+    } else {
+        changeButtonState("loading");
+        await waitForMathJaxIdle();
+        changeButtonState("loaded");
+    }
+
+    button.click(OJB_debounce(function () {
+        const target = $(element).clone();
+        target.find('.mdViewContent').remove();
+        const markdown = getTaskStatementTitleMarkdown(element) + OJBetter.common.turndownService.turndown(target.html());
+        GM_setClipboard(OJB_unescapeHtml(markdown));
+
+        $(this).addClass("success");
+        changeButtonState("copied");
+
+        setTimeout(() => {
+            $(this).removeClass("success");
+            changeButtonState("normal")
+        }, 2000);
+    }));
+
+    if (OJBetter.preference.hoverTargetAreaDisplay) {
+        button.addHoverOverlay($(element));
+    }
+}
+
+/**
  * 添加翻译按钮
  * @param {JQuery<HTMLElement>} button 按钮
  * @param {JQuery<HTMLElement>} element 目标元素
@@ -8522,6 +8650,45 @@ async function addConversionButton() {
             promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
             promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
         });
+    }
+
+    // 添加按钮到题目全文部分
+    if (OJBetter.typeOfPage.is_problem && !OJBetter.typeOfPage.isEditorial) {
+        const taskStatement = $('#task-statement');
+        if (taskStatement.length > 0) {
+            const languageBlocks = taskStatement.children('span.lang').children('span[class^="lang-"], span[class*=" lang-"]');
+            const targets = languageBlocks.length > 0 ? languageBlocks : taskStatement;
+            const taskContainer = taskStatement.closest('.col-sm-12');
+            const insertAnchor = taskContainer.find('#task-lang-btn').first().length > 0
+                ? taskContainer.find('#task-lang-btn').first()
+                : taskContainer.find('.h2, h2').first();
+            let lastPanel = insertAnchor.length > 0 ? insertAnchor : taskStatement;
+
+            targets.each((i, e) => {
+                const langClass = [...e.classList].find(className => className.startsWith('lang-')) || `task-statement-${i}`;
+                let id = "_task-statement_" + langClass.replace(/[^a-zA-Z0-9_-]/g, '_') + "_" + OJB_getRandomNumber(8);
+                let panel = addButtonPanel(e, id, "this_level");
+                panel.panel.addClass(`OJBetter_taskStatementPanel ${langClass}`);
+                panel.panel.detach().insertAfter(lastPanel);
+                lastPanel = panel.panel;
+                promises.push(addButtonWithTaskStatementHTML2MD(panel.viewButton, e));
+                promises.push(addButtonWithTaskStatementCopy(panel.copyButton, e));
+                promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
+            });
+
+            const syncTaskStatementPanelVisibility = () => {
+                const visibleLanguageBlock = languageBlocks.filter(':visible').first();
+                $('.OJBetter_taskStatementPanel').hide();
+                if (visibleLanguageBlock.length > 0) {
+                    const visibleLangClass = [...visibleLanguageBlock.get(0).classList].find(className => className.startsWith('lang-'));
+                    $(`.OJBetter_taskStatementPanel.${visibleLangClass}`).show();
+                } else {
+                    $('.OJBetter_taskStatementPanel').first().show();
+                }
+            };
+            syncTaskStatementPanelVisibility();
+            $('#task-lang-btn span[data-lang]').on('click', () => setTimeout(syncTaskStatementPanelVisibility, 0));
+        }
     }
 
     // 添加按钮到题解部分
