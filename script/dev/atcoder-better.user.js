@@ -1987,6 +1987,21 @@ dialog::backdrop {
     right: 2%;
 }
 
+/* 题目标题操作组：保持题解按钮与全文操作按钮底部对齐 */
+.OJBetter_taskStatementActions {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 8px;
+    vertical-align: middle;
+}
+
+.html2md-panel.OJBetter_taskStatementPanel {
+    display: inline-flex;
+    padding: 0 !important;
+    font-size: 14px;
+    line-height: 1.42857143;
+}
+
 /*通用按钮*/
 .ojb_btn {
     display: flex;
@@ -7629,6 +7644,10 @@ async function initHTML2MarkDown() {
     OJBetter.common.turndownService.addRule('removeByClass', {
         filter: function (node) {
             return node.classList.contains('html2md-panel') ||
+                node.classList.contains('mdViewContent') ||
+                node.classList.contains('translateDiv') ||
+                node.classList.contains('OJBetter_MiniTranslateButton') ||
+                node.classList.contains('OJBetter_taskStatementTranslationAnchor') ||
                 node.classList.contains('div-btn-copy') ||
                 node.classList.contains('btn-copy') ||
                 node.classList.contains('ojb-overlay') ||
@@ -7673,11 +7692,18 @@ async function initHTML2MarkDown() {
             return node.tagName.toLowerCase() == "pre";
         },
         replacement: function (content, node) {
-            if (!node.classList.contains('source-code-for-copy') && !node.classList.contains('prettyprint')) {
-                return "```\n" + content + "```\n";
-            } else {
-                return "";
+            const toFencedCode = code => "```\n" + String(code).replace(/\n?$/, "\n") + "```\n";
+            // AtCoder 会同时保留高亮代码块和隐藏的原始复制块，只转换后者以避免重复且保留换行。
+            if (node.classList.contains('prettyprint')) {
+                const sourceCode = $(node).nextAll('pre').first().filter('.source-code-for-copy');
+                if (sourceCode.length > 0) return "";
+                const code = OJB_getCodeFromPre(node) || node.textContent;
+                return toFencedCode(code);
             }
+            if (node.classList.contains('source-code-for-copy')) {
+                return toFencedCode(node.textContent);
+            }
+            return toFencedCode(content);
         }
     });
 
@@ -7791,25 +7817,34 @@ const isEmptyText = text => text.trim() === '';
  * 加载按钮相关函数
  */
 async function initButtonFunc() {
-    // 鼠标悬浮时为目标元素区域添加一个覆盖层
+    /**
+     * 鼠标悬浮时为目标元素区域添加一个覆盖层。
+     * @param {JQuery<HTMLElement>|HTMLElement|(() => JQuery<HTMLElement>|HTMLElement)} target 目标或动态目标获取方法
+     * @returns {void}
+     */
     $.fn.addHoverOverlay = function (target) {
-        let position = $(target).css('position');
-        let display = $(target).css('display');
+        let currentTarget = $();
+        let position;
+        let display;
 
         this.hover(() => {
-            $(target)
+            currentTarget = typeof target === 'function' ? $(target()) : $(target);
+            position = currentTarget.css('position');
+            display = currentTarget.css('display');
+            currentTarget
                 .addClass('ojb-overlay')
                 .css('position', 'relative');
             if (display == "inline" || display == "contents") {
-                $(target).css('display', 'block');
+                currentTarget.css('display', 'block');
             }
         }, () => {
-            $(target)
+            currentTarget
                 .removeClass('ojb-overlay')
                 .css('position', position);
             if (display == "inline" || display == "contents") {
-                $(target).css('display', display);
+                currentTarget.css('display', display);
             }
+            currentTarget = $();
         })
     }
 
@@ -7879,7 +7914,13 @@ async function initButtonFunc() {
         return markdown;
     }
 
-    // 设置按钮状态
+    /**
+     * 设置按钮状态。
+     * @param {string} state 状态名称
+     * @param {string|null} popoverText 提示文本
+     * @param {boolean} disabled 是否禁用按钮
+     * @returns {JQuery<HTMLElement>} 按钮
+     */
     $.fn.setButtonState = function (state, popoverText = null, disabled = false) {
         this.data('buttonState', state)
             .prop('disabled', disabled)
@@ -7969,20 +8010,37 @@ async function initButtonFunc() {
 }
 
 /**
+ * 获取当前翻译模式对应的按钮提示文本。
+ * @returns {string} 翻译按钮提示文本
+ */
+function getTranslationButtonDefaultText() {
+    if (OJBetter.translation.comment.transMode == "1") return i18next.t('trans.segment', { ns: 'button' });
+    if (OJBetter.translation.comment.transMode == "2") return i18next.t('trans.select', { ns: 'button' });
+    return i18next.t('trans.normal', { ns: 'button' });
+}
+
+/**
+ * 转换按钮面板。
+ * @typedef {Object} ConversionButtonPanel
+ * @property {JQuery<HTMLElement>} panel 面板容器
+ * @property {JQuery<HTMLElement>} viewButton Markdown 视图按钮
+ * @property {JQuery<HTMLElement>} copyButton 复制按钮
+ * @property {JQuery<HTMLElement>} translateButton 翻译按钮
+ */
+
+/**
  * 添加题目markdown转换/复制/翻译按钮面板
  * @param {HTMLElement} element 需要添加按钮面板的元素
  * @param {string} suffix 按钮面板id后缀
- * @param {string} type 按钮面板添加位置
- * @param {boolean} is_simple 是否是简单模式
- * @returns {object} 返回按钮面板元素
+ * @param {"this_level"|"child_level"|"detached"} type 按钮面板添加位置
+ * @param {boolean} [is_simple=false] 是否是简单模式
+ * @param {"div"|"span"} [panelTag="div"] 面板容器标签
+ * @returns {ConversionButtonPanel} 返回按钮面板元素
  */
-function addButtonPanel(element, suffix, type, is_simple = false) {
-    let text;
-    if (OJBetter.translation.comment.transMode == "1") text = i18next.t('trans.segment', { ns: 'button' });
-    else if (OJBetter.translation.comment.transMode == "2") text = i18next.t('trans.select', { ns: 'button' });
-    else text = i18next.t('trans.normal', { ns: 'button' });
+function addButtonPanel(element, suffix, type, is_simple = false, panelTag = "div") {
+    const text = getTranslationButtonDefaultText();
 
-    let panel = OJB_safeCreateJQElement(`<div class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></div>`);
+    let panel = OJB_safeCreateJQElement(`<${panelTag} class='html2md-panel input-output-copier ${is_simple ? 'is_simple' : ''}'></${panelTag}>`);
     let viewButton = OJB_safeCreateJQElement(`
         <button class='ojb_btn ojb_btn_popover top' id='html2md-view${suffix}' type='button'>
             <i class="iconfont">&#xe7e5;</i>
@@ -8016,12 +8074,21 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
 }
 
 /**
+ * 获取题面分区前的转换按钮面板。
+ * @param {JQuery<HTMLElement>|HTMLElement} section 题面分区
+ * @returns {JQuery<HTMLElement>} 转换按钮面板
+ */
+function getSectionConversionPanel(section) {
+    return $(section).prev('.html2md-panel');
+}
+
+/**
  * 添加MD视图按钮
  * @param {JQuery<HTMLElement>} button 按钮
  * @param {JQuery<HTMLElement>} element 目标元素
  * @param {string} suffix id后缀
  * @param {string} type 类型
- * @returns {void}
+ * @returns {Promise<void>}
  */
 async function addButtonWithHTML2MD(button, element, suffix, type) {
     /**
@@ -8039,6 +8106,7 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
             button.removeClass("enabled");
             button.setButtonPopover(i18next.t('md.normal', { ns: 'button' }));
         } else if (state == "mdView") {
+            button.setButtonLoaded();
             button.addClass("enabled");
             button.setButtonPopover(i18next.t('md.reduction', { ns: 'button' }));
         } else if (state == "disabled") {
@@ -8057,6 +8125,37 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
             return $(element);
         }
     })();
+    let mdViewContent = null;
+
+    /**
+     * 检查目标是否处于 Markdown 视图。
+     * @returns {boolean} 是否处于 Markdown 视图
+     */
+    const isMarkdownView = () => $(element).attr("viewmd") === "true";
+
+    /**
+     * 设置目标的 Markdown 视图并同步关联按钮。
+     * @param {boolean} value 是否显示 Markdown 视图
+     * @returns {void}
+     */
+    const setMarkdownView = (value) => {
+        if (isMarkdownView() === value) return;
+
+        $(element).attr("viewmd", value);
+        if (value) {
+            const markdown = $(element).getMarkdown();
+            mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
+            target.last().after(mdViewContent);
+            target.hide();
+            changeButtonState("mdView");
+        } else {
+            mdViewContent?.remove();
+            mdViewContent = null;
+            target.show();
+            changeButtonState("normal");
+        }
+        $(element).trigger("ojbetter:markdown-view-change", [value]);
+    };
 
     if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
         changeButtonState("disabled");
@@ -8067,49 +8166,74 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
         changeButtonState("loaded");
     }
 
-    button.click(OJB_debounce(function () {
-        /**
-         * 检查是否是MarkDown视图
-         * @returns {boolean} 是否是MarkDown视图
-         */
-        function checkViewmd() {
-            if ($(element).attr("viewmd") === "true") {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         * 设置是否是MarkDown视图
-         * @param {boolean} value 是否是MarkDown视图
-         * @returns {void}
-         */
-        function setViewmd(value) {
-            $(element).attr("viewmd", value);
-            if (value) {
-                changeButtonState("mdView");
-            } else {
-                changeButtonState("normal");
-            }
-        }
-
-        if (checkViewmd()) {
-            setViewmd(false);
-            target.last().next(".mdViewContent").remove();
-            target.show();
-        } else {
-            setViewmd(true);
-            const markdown = $(element).getMarkdown();
-            const mdViewContent = OJB_safeCreateJQElement(`<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`);
-            target.last().after(mdViewContent);
-            target.hide();
-        }
-    }));
+    $(element).data("setMarkdownView", setMarkdownView);
+    button.click(OJB_debounce(() => setMarkdownView(!isMarkdownView())));
 
     if (OJBetter.preference.hoverTargetAreaDisplay && !OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
         button.addHoverOverlay($(element));
     }
+}
+
+/**
+ * 还原目标及其子元素中的 Markdown 视图。
+ * 原文替换模式需要操作真实题面节点，不能让旧的 Markdown 预览遮住写回结果。
+ * @param {HTMLElement} element 目标元素
+ * @returns {void}
+ */
+function restoreMarkdownViews(element) {
+    $(element)
+        .find('[viewmd="true"]')
+        .addBack('[viewmd="true"]')
+        .each((i, markdownElement) => {
+            const setMarkdownView = $(markdownElement).data("setMarkdownView");
+            if (typeof setMarkdownView === "function") setMarkdownView(false);
+        });
+}
+
+/**
+ * 逆序关闭按钮已有的翻译结果，并同步清理结果栈。
+ * 原文替换结果可能形成恢复链，必须按创建顺序的反方向还原。
+ * @param {JQuery<HTMLElement>} button 翻译按钮
+ * @param {JQuery<HTMLElement>|HTMLElement[]|null} [sourceElements=null] 仅关闭与这些原页面目标重叠的结果
+ * @returns {void}
+ */
+function clearTranslationButtonResults(button, sourceElements = null) {
+    if (!button || button.length === 0) return;
+    const resultStack = button.getResultFromTransButton();
+    if (!Array.isArray(resultStack)) return;
+
+    const sources = sourceElements === null ? null : $(sourceElements).get();
+    const retainedResults = [];
+    for (let index = resultStack.length - 1; index >= 0; index--) {
+        const result = resultStack[index];
+        const resultSource = result?.sourceElement;
+        const overlapsTarget = sources === null || (resultSource && sources.some(source =>
+            source === resultSource || source.contains(resultSource) || resultSource.contains(source)
+        ));
+        if (overlapsTarget) {
+            result?.translateDiv?.close();
+        } else {
+            retainedResults.unshift(result);
+        }
+    }
+
+    if (retainedResults.length > 0) {
+        button.data("resultStack", retainedResults);
+    } else {
+        button.removeData("resultStack");
+        button.setButtonState("normal", getTranslationButtonDefaultText());
+    }
+}
+
+/**
+ * 检查结果栈中是否存在实际写回过原文的翻译结果。
+ * @param {TranslateResult[]|undefined} resultStack 翻译结果栈
+ * @returns {boolean} 是否必须先恢复原文
+ */
+function hasReplaceOriginalTranslationResult(resultStack) {
+    return Array.isArray(resultStack) && resultStack.some(result =>
+        Boolean(result?.translateDiv?.replaceOriginalState)
+    );
 }
 
 /**
@@ -8152,8 +8276,6 @@ async function addButtonWithCopy(button, element, suffix, type) {
     }
 
     button.click(OJB_debounce(function () {
-        var target = $(element).get(0);
-
         var markdown = $(element).getMarkdown();
 
         // 得到的应当是原字符串，getMarkdown得到的字符被转义
@@ -8175,12 +8297,111 @@ async function addButtonWithCopy(button, element, suffix, type) {
     }
 }
 
+// ------------------------------
+// 题目全文操作
+// ------------------------------
+
+/**
+ * 题面全文翻译运行时控制器。
+ * @typedef {Object} TaskStatementTranslationController
+ * @property {HTMLElement} target 所属题面语言块
+ * @property {HTMLElement} button 全文翻译按钮
+ * @property {HTMLElement} anchor 全文译文插入锚点
+ * @property {boolean} wholeRunning 是否正在执行全文翻译
+ * @property {number} blockRunning 正在执行的局部翻译数量
+ */
+
+/** AtCoder 双语题面内容块选择器。 */
+const OJB_TASK_STATEMENT_LANGUAGE_BLOCK_SELECTOR = 'span.lang > span[class^="lang-"], span.lang > span[class*=" lang-"]';
+
+/** 题面全文译文在语言块内使用的稳定插入锚点类名。 */
+const OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS = "OJBetter_taskStatementTranslationAnchor";
+
+/**
+ * 获取当前可见的题面语言块；无可见块时回退到第一个目标。
+ * @param {JQuery<HTMLElement>} targets 全部题面语言块
+ * @returns {JQuery<HTMLElement>} 当前题面语言块
+ */
+function getCurrentTaskStatementTarget(targets) {
+    const visibleTarget = $(targets).filter(':visible');
+    return visibleTarget.length > 0 ? visibleTarget.eq(0) : $(targets).eq(0);
+}
+
+/**
+ * 获取当前题面语言块中的全部内容分区。
+ * @param {JQuery<HTMLElement>} targets 全部题面语言块
+ * @returns {JQuery<HTMLElement>} 当前语言的题面分区
+ */
+function getCurrentTaskStatementSections(targets) {
+    return getCurrentTaskStatementTarget(targets).find('section');
+}
+
+/**
+ * 获取包含指定题面节点的全文翻译控制器。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 题面节点
+ * @returns {TaskStatementTranslationController|null} 全文翻译控制器
+ */
+function getTaskStatementTranslationController(element) {
+    let current = $(element).first();
+    while (current.length > 0) {
+        const controller = current.data("taskStatementTranslationController");
+        if (controller) return controller;
+        current = current.parent();
+    }
+    return null;
+}
+
+/**
+ * 清理与指定题面节点重叠的全文翻译结果。
+ * 全文翻译仍在运行时拒绝启动局部翻译，避免两套写回流程并发修改题面。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 题面节点
+ * @returns {boolean} 是否可以继续局部翻译
+ */
+function clearTaskStatementTranslationResults(element) {
+    const controller = getTaskStatementTranslationController(element);
+    if (!controller) return true;
+    if (controller.wholeRunning) return false;
+
+    const button = $(controller.button);
+    clearTranslationButtonResults(button, element);
+    button.trigger("ojbetter:task-statement-translation-change");
+    return true;
+}
+
+/**
+ * 在全文译文关闭后清理标题按钮结果栈并同步当前语言状态。
+ * @param {TranslateDiv} translateDiv 全文翻译结果
+ * @param {TaskStatementTranslationController|null} controller 全文翻译控制器
+ * @returns {void}
+ */
+function registerTaskStatementTranslationCloseSync(translateDiv, controller) {
+    if (!controller) return;
+
+    translateDiv.closeButton.one("click", () => {
+        const button = $(controller.button);
+        const resultStack = button.getResultFromTransButton();
+        const retainedResults = Array.isArray(resultStack)
+            ? resultStack.filter(result => result?.translateDiv !== translateDiv)
+            : [];
+
+        if (retainedResults.length > 0) button.data("resultStack", retainedResults);
+        else button.removeData("resultStack");
+        button.trigger("ojbetter:task-statement-translation-change");
+    });
+}
+
 /**
  * 添加题目全文MD视图按钮
  * @param {JQuery<HTMLElement>} button 按钮
- * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {JQuery<HTMLElement>} targets 全部题面语言块
+ * @returns {Promise<void>}
  */
-async function addButtonWithTaskStatementHTML2MD(button, element) {
+async function addButtonWithTaskStatementHTML2MD(button, targets) {
+    /**
+     * 改变全文 Markdown 按钮状态。
+     * @param {string} state 状态
+     * @returns {void}
+     */
     const changeButtonState = (state) => {
         if (state == "loading") {
             button.setButtonLoading();
@@ -8190,20 +8411,38 @@ async function addButtonWithTaskStatementHTML2MD(button, element) {
             button.setButtonLoaded();
             button.setButtonPopover(i18next.t('md.normal', { ns: 'button' }));
         } else if (state == "mdView") {
+            button.setButtonLoaded();
             button.addClass("enabled");
             button.setButtonPopover(i18next.t('md.reduction', { ns: 'button' }));
         } else if (state == "disabled") {
             button.prop("disabled", true);
             button.setButtonPopover(i18next.t('md.disabled', { ns: 'button' }));
         }
-    }
+    };
 
-    const getSectionButtons = () => $(element).find('section').map((i, section) => {
-        return $(section).prev('.html2md-panel').find('[id^="html2md-view"]').get(0);
-    }).get();
+    /**
+     * 设置单个题面分区的 Markdown 视图。
+     * @param {HTMLElement} section 题面分区
+     * @param {boolean} value 是否显示 Markdown
+     * @returns {void}
+     */
+    const setSectionMarkdownView = (section, value) => {
+        const setMarkdownView = $(section).data("setMarkdownView");
+        if (typeof setMarkdownView === "function") {
+            setMarkdownView(value);
+            return;
+        }
 
+        const sectionButton = getSectionConversionPanel(section).find('[id^="html2md-view"]');
+        if (sectionButton.length > 0) sectionButton.trigger('click');
+    };
+
+    /**
+     * 根据所有题面分区的实际状态同步全文按钮。
+     * @returns {void}
+     */
     const syncButtonState = () => {
-        const sections = $(element).find('section');
+        const sections = getCurrentTaskStatementSections(targets);
         const isAllMarkdown = sections.length > 0 && sections.filter((i, section) => $(section).attr("viewmd") !== "true").length === 0;
         changeButtonState(isAllMarkdown ? "mdView" : "normal");
     };
@@ -8214,30 +8453,32 @@ async function addButtonWithTaskStatementHTML2MD(button, element) {
     } else {
         changeButtonState("loading");
         await waitForMathJaxIdle();
-        changeButtonState("loaded");
     }
 
+    $(targets).find('section').on("ojbetter:markdown-view-change", syncButtonState);
+    $('#task-lang-btn span[data-lang]').on('click', () => setTimeout(syncButtonState, 0));
+    syncButtonState();
+
     button.click(OJB_debounce(function () {
-        const sections = $(element).find('section');
+        const sections = getCurrentTaskStatementSections(targets);
         const shouldShowMarkdown = sections.filter((i, section) => $(section).attr("viewmd") !== "true").length > 0;
-        getSectionButtons().forEach(sectionButton => {
-            const section = $(sectionButton).parent().next('section');
-            const isMarkdown = section.attr("viewmd") === "true";
+        sections.each((i, section) => {
+            const isMarkdown = $(section).attr("viewmd") === "true";
             if (isMarkdown !== shouldShowMarkdown) {
-                $(sectionButton).trigger('click');
+                setSectionMarkdownView(section, shouldShowMarkdown);
             }
         });
-        setTimeout(syncButtonState, 0);
+        syncButtonState();
     }));
 
     if (OJBetter.preference.hoverTargetAreaDisplay) {
-        button.addHoverOverlay($(element));
+        button.addHoverOverlay(() => getCurrentTaskStatementTarget(targets));
     }
 }
 
 /**
  * 获取题目页标题的Markdown
- * @param {JQuery<HTMLElement>} element 题面元素
+ * @param {HTMLElement} element 题面语言块
  * @returns {string} Markdown标题
  */
 function getTaskStatementTitleMarkdown(element) {
@@ -8254,9 +8495,15 @@ function getTaskStatementTitleMarkdown(element) {
 /**
  * 添加题目全文复制按钮
  * @param {JQuery<HTMLElement>} button 按钮
- * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {JQuery<HTMLElement>} targets 全部题面语言块
+ * @returns {Promise<void>}
  */
-async function addButtonWithTaskStatementCopy(button, element) {
+async function addButtonWithTaskStatementCopy(button, targets) {
+    /**
+     * 改变全文复制按钮状态。
+     * @param {string} state 状态
+     * @returns {void}
+     */
     function changeButtonState(state) {
         if (state == "loading") {
             button.setButtonLoading();
@@ -8280,13 +8527,18 @@ async function addButtonWithTaskStatementCopy(button, element) {
     } else {
         changeButtonState("loading");
         await waitForMathJaxIdle();
-        changeButtonState("loaded");
     }
 
+    // 必须在翻译历史恢复和用户交互前生成，后续操作只读取对应语言的干净缓存。
+    const markdownByTarget = new Map();
+    $(targets).each((i, target) => {
+        markdownByTarget.set(target, getTaskStatementTitleMarkdown(target) + $(target).getMarkdown());
+    });
+    changeButtonState("loaded");
+
     button.click(OJB_debounce(function () {
-        const target = $(element).clone();
-        target.find('.mdViewContent').remove();
-        const markdown = getTaskStatementTitleMarkdown(element) + OJBetter.common.turndownService.turndown(target.html());
+        const target = getCurrentTaskStatementTarget(targets).get(0);
+        const markdown = markdownByTarget.get(target) || '';
         GM_setClipboard(OJB_unescapeHtml(markdown));
 
         $(this).addClass("success");
@@ -8294,12 +8546,251 @@ async function addButtonWithTaskStatementCopy(button, element) {
 
         setTimeout(() => {
             $(this).removeClass("success");
-            changeButtonState("normal")
+            changeButtonState("normal");
         }, 2000);
     }));
 
     if (OJBetter.preference.hoverTargetAreaDisplay) {
-        button.addHoverOverlay($(element));
+        button.addHoverOverlay(() => getCurrentTaskStatementTarget(targets));
+    }
+}
+
+// ------------------------------
+// 翻译源缓存与临时 UI
+// ------------------------------
+
+/** 初始化阶段缓存翻译内容节点时使用的 jQuery 数据键。 */
+const OJB_TRANSLATION_BLOCK_CACHE_KEY = "translationBlockElements";
+
+/** 不应进入 Markdown 或翻译历史结构树的临时选段按钮。 */
+const OJB_MINI_TRANSLATION_BUTTON_SELECTOR = ".OJBetter_MiniTranslateButton";
+
+/**
+ * 判断历史关系树节点是否为不应持久化的临时选段按钮。
+ * @param {Object|null|undefined} node 历史关系树节点
+ * @returns {boolean} 是否为临时节点
+ */
+function isTransientTranslationHistoryNode(node) {
+    return typeof node?.id === 'string' && node.id.startsWith("translateButton_selected_");
+}
+
+/**
+ * 从干净页面结构中查找可能被分段或选段翻译的内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 翻译内容节点
+ */
+function findTranslationBlockElements(element) {
+    return $(element)
+        .find("p:not(:scope > li p), li, .OJBetter_acmsguru")
+        .filter((i, block) => $(block).closest('.translateDiv, .mdViewContent').length === 0);
+}
+
+/**
+ * 获取初始化阶段固定下来的翻译内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 翻译内容节点
+ */
+function getTranslationBlockElements(element) {
+    const cachedBlocks = $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY);
+    return Array.isArray(cachedBlocks) ? $(cachedBlocks) : findTranslationBlockElements(element);
+}
+
+/**
+ * 获取当前选中的翻译内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 已选中的内容节点
+ */
+function getSelectedTranslationBlockElements(element) {
+    return getTranslationBlockElements(element).filter('.block_selected');
+}
+
+/**
+ * 移除内容节点对应的临时选段按钮，避免其进入 Markdown 或翻译历史结构树。
+ * @param {JQuery<HTMLElement>|HTMLElement[]} elements 内容节点
+ * @returns {void}
+ */
+function removeMiniTranslationButtons(elements) {
+    $(elements).each((i, element) => {
+        const id = $(element).attr('OJBetter_p_id');
+        if (id) $(`#translateButton_selected_${id}`).remove();
+    });
+}
+
+/**
+ * 关闭迷你选段按钮直接创建的翻译结果。
+ * @param {JQuery<HTMLElement>|HTMLElement[]} elements 内容节点
+ * @returns {void}
+ */
+function clearInlineTranslationResults(elements) {
+    $(elements).each((i, element) => {
+        const resultStack = $(element).data('inlineTranslationResultStack');
+        if (!Array.isArray(resultStack)) return;
+
+        for (let index = resultStack.length - 1; index >= 0; index--) {
+            resultStack[index]?.translateDiv?.close();
+        }
+        $(element).removeData('inlineTranslationResultStack').removeAttr('translated');
+    });
+}
+
+/**
+ * 在历史恢复和用户交互前缓存翻译可能读取的 Markdown。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {string} 目标整体的 Markdown
+ */
+function cacheTranslationMarkdown(element) {
+    const markdown = $(element).getMarkdown();
+    const blocks = findTranslationBlockElements(element);
+    blocks.each((i, block) => $(block).getMarkdown());
+    $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
+    return markdown;
+}
+
+/**
+ * 为翻译按钮添加悬浮时的“重新翻译”提示。
+ * @param {JQuery<HTMLElement>} button 翻译按钮
+ * @returns {void}
+ */
+function registerTranslationRedoHover(button) {
+    let previousState;
+    button.hover(() => {
+        previousState = button.getButtonState();
+        if (previousState !== "normal" && previousState !== "running") {
+            button.setTransButtonState('redo');
+        }
+    }, () => {
+        const currentState = button.getButtonState();
+        if (previousState !== "normal" && ["normal", "redo"].includes(currentState)) {
+            button.setTransButtonState(previousState);
+            previousState = null;
+        }
+    });
+}
+
+/**
+ * 添加题目全文翻译按钮。
+ * 每次将当前语言的完整题面作为一个请求发送，以保留跨分区上下文。
+ * @param {JQuery<HTMLElement>} button 全文翻译按钮
+ * @param {JQuery<HTMLElement>} targets 全部题面语言块
+ * @returns {Promise<void>}
+ */
+async function addButtonWithTaskStatementTranslation(button, targets) {
+    const defaultText = i18next.t('trans.normal', { ns: 'button' });
+    const markdownByTarget = new Map();
+
+    /**
+     * 根据当前语言已有的全文结果同步按钮状态。
+     * @returns {void}
+     */
+    const syncButtonState = () => {
+        if (button.getButtonState() === "running") return;
+
+        const target = getCurrentTaskStatementTarget(targets).get(0);
+        const resultStack = button.getResultFromTransButton();
+        const currentResults = Array.isArray(resultStack)
+            ? resultStack.filter(result => result?.sourceElement === target && result.translateDiv?.getDiv().parent().length > 0)
+            : [];
+        const latestResult = currentResults.find(result =>
+            result.translateDiv?.upButton && !result.translateDiv.upButton.hasClass("reverse")
+        ) || currentResults[currentResults.length - 1];
+
+        if (!latestResult) button.setButtonState('normal', defaultText);
+        else if (latestResult.status === "error") button.setTransButtonState('error', i18next.t('trans.error', { ns: 'button' }));
+        else if (latestResult.status === "skip") button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
+        else button.setTransButtonState('success');
+    };
+
+    /**
+     * 翻译当前语言的完整题面。
+     * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+     * @returns {Promise<void>}
+     */
+    const runTranslation = async (overrideTrans) => {
+        const target = getCurrentTaskStatementTarget(targets);
+        const targetElement = target.get(0);
+        const controller = target.data("taskStatementTranslationController");
+        if (!targetElement || !controller || controller.wholeRunning || controller.blockRunning > 0) return;
+
+        controller.wholeRunning = true;
+        try {
+            const resultStack = button.getResultFromTransButton();
+            if (Array.isArray(resultStack)) {
+                const currentResults = resultStack.filter(result => result?.sourceElement === targetElement);
+                if (OJBetter.translation.replaceOriginal ||
+                    OJBetter.translation.retransAction == "0" ||
+                    hasReplaceOriginalTranslationResult(currentResults)) {
+                    clearTranslationButtonResults(button, target);
+                } else {
+                    currentResults.forEach(result => result?.translateDiv?.fold());
+                }
+            }
+
+            // 全文结果和局部结果采用互斥展示，避免替换原文状态发生重叠。
+            target.find('section').each((i, section) => {
+                clearTranslationButtonResults(getSectionConversionPanel(section).find('.translateButton'));
+            });
+            const translationBlocks = getTranslationBlockElements(targetElement);
+            target.find(OJB_MINI_TRANSLATION_BUTTON_SELECTOR).remove();
+            translationBlocks.removeClass('block_selected');
+            clearInlineTranslationResults(translationBlocks);
+
+            button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
+            try {
+                await executeTranslation(
+                    button,
+                    targetElement,
+                    "this_level",
+                    false,
+                    overrideTrans,
+                    markdownByTarget.get(targetElement)
+                );
+            } catch (error) {
+                button.setTransButtonState('error', i18next.t('trans.error', { ns: 'button' }));
+                console.warn("Failed to translate the complete task statement:", error);
+            }
+        } finally {
+            controller.wholeRunning = false;
+        }
+
+        if (getCurrentTaskStatementTarget(targets).get(0) !== target.get(0)) {
+            syncButtonState();
+        }
+    };
+
+    button.setButtonLoading();
+    button.setButtonPopover(i18next.t('state.waitMathJax', { ns: 'button' }));
+    await waitForMathJaxIdle();
+    $(targets).each((i, target) => {
+        const targetElement = $(target);
+        markdownByTarget.set(target, targetElement.getMarkdown());
+
+        let anchor = targetElement.children(`.${OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS}`).first();
+        if (anchor.length === 0) {
+            anchor = OJB_safeCreateJQElement(`<div class="${OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS}" hidden></div>`);
+            targetElement.append(anchor);
+        }
+        /** @type {TaskStatementTranslationController} */
+        const controller = {
+            target: target,
+            button: button.get(0),
+            anchor: anchor.get(0),
+            wholeRunning: false,
+            blockRunning: 0
+        };
+        targetElement.data("taskStatementTranslationController", controller);
+    });
+
+    button.setButtonLoaded();
+    button.setButtonState('normal', defaultText);
+    button.on("ojbetter:task-statement-translation-change", syncButtonState);
+    $('#task-lang-btn span[data-lang]').on('click', () => setTimeout(syncButtonState, 0));
+    button.click(OJB_debounce(() => runTranslation()));
+    registerTranslationRedoHover(button);
+    registerTranslationContextMenu(button);
+    syncButtonState();
+
+    if (OJBetter.preference.hoverTargetAreaDisplay) {
+        button.addHoverOverlay(() => getCurrentTaskStatementTarget(targets));
     }
 }
 
@@ -8307,24 +8798,14 @@ async function addButtonWithTaskStatementCopy(button, element) {
  * 添加翻译按钮
  * @param {JQuery<HTMLElement>} button 按钮
  * @param {JQuery<HTMLElement>} element 目标元素
- * @param {string} suffix 后缀
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
+ * @returns {Promise<void>}
  */
-async function addButtonWithTranslation(button, element, suffix, type, is_comment = false) {
-    /**
-     * 添加可指定翻译服务的方法调用
-     * @param {string} translation 翻译服务
-     */
-    button.data("translatedItBy", function (translation) {
-        button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        executeTranslation(button, element, type, is_comment, translation);
-    });
-
+async function addButtonWithTranslation(button, element, type, is_comment = false) {
     // 等待MathJax队列完成
     button.setButtonLoading();
     await waitForMathJaxIdle();
-    button.setButtonLoaded();
 
     // 标记目标文本区域不自动翻译
     {
@@ -8332,7 +8813,7 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
             text = $(element).html();
         } else {
-            text = $(element).getMarkdown();
+            text = cacheTranslationMarkdown(element);
         }
         let length = text.length;
         if (length > OJBetter.translation.auto.shortTextLength || isEmptyText(text) || $(element).find('.spoiler').length > 0) {
@@ -8340,57 +8821,76 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
         }
         // button.after(`<span>${length}</span>`); // 显示字符数
     }
+    button.setButtonLoaded();
 
-    button.click(OJB_debounce(async function () {
-        // 重新翻译
-        let resultStack = $(this).getResultFromTransButton();
-        if (resultStack) {
-            let pElements = $(element).find("p.block_selected:not(li p), li.block_selected");
-            for (let item of resultStack) {
-                if (OJBetter.translation.retransAction == "0") {
-                    // 选段翻译不直接移除旧结果
-                    if (OJBetter.translation.comment.transMode == "2") {
-                        // 只移除即将要翻译的段的结果
-                        if (pElements.is(item.translateDiv.getDiv().prev())) {
-                            item.translateDiv.close();
-                        }
-                    } else {
-                        item.translateDiv.close();
-                        $($(element)).find(".translate-problem-statement, .translate-problem-statement-panel").remove();
-                    }
+    /**
+     * 执行一次与按钮点击完全相同的翻译流程。
+     * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+     * @returns {Promise<void>}
+     */
+    const runTranslation = async (overrideTrans) => {
+        const controller = getTaskStatementTranslationController(element);
+        if (controller) controller.blockRunning += 1;
+
+        try {
+            if (!clearTaskStatementTranslationResults(element)) return;
+
+            const isSelectionMode = OJBetter.translation.comment.transMode == "2";
+            const selectedElements = isSelectionMode ? getSelectedTranslationBlockElements(element) : $();
+            const affectedElements = isSelectionMode ? selectedElements : getTranslationBlockElements(element);
+
+            // 临时按钮必须先移除；关闭旧结果会立即刷新翻译历史结构树。
+            if (isSelectionMode) removeMiniTranslationButtons(selectedElements);
+            else $(element).find(OJB_MINI_TRANSLATION_BUTTON_SELECTOR).remove();
+
+            const resultStack = button.getResultFromTransButton();
+            if (Array.isArray(resultStack)) {
+                if (OJBetter.translation.replaceOriginal ||
+                    OJBetter.translation.retransAction == "0" ||
+                    hasReplaceOriginalTranslationResult(resultStack)) {
+                    clearTranslationButtonResults(button, isSelectionMode ? selectedElements : null);
                 } else {
-                    item.translateDiv.fold();
+                    resultStack.forEach(result => result?.translateDiv?.fold());
                 }
             }
-        }
+            const hasInlineReplaceOriginalResult = affectedElements.toArray().some(affectedElement =>
+                hasReplaceOriginalTranslationResult($(affectedElement).data("inlineTranslationResultStack"))
+            );
+            if (OJBetter.translation.replaceOriginal || hasInlineReplaceOriginalResult) {
+                clearInlineTranslationResults(affectedElements);
+            }
 
-        // 翻译
-        button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
-        executeTranslation(button, element, type, is_comment);
-    }));
+            button.setTransButtonState('running', i18next.t('trans.wait', { ns: 'button' }));
+            try {
+                await executeTranslation(button, element, type, is_comment, overrideTrans);
+            } catch (error) {
+                button.setTransButtonState('error', i18next.t('trans.error', { ns: 'button' }));
+                console.warn("Failed to execute translation:", error);
+            }
+        } finally {
+            if (controller) controller.blockRunning -= 1;
+        }
+    };
 
-    // 重新翻译提示
-    let prevState;
-    button.hover(() => {
-        prevState = button.getButtonState();
-        if (prevState !== "normal" && prevState !== "running") {
-            button.setTransButtonState('redo');
-        }
-    }, () => {
-        const currentState = button.getButtonState();
-        if (prevState !== "normal" && ["normal", "redo"].includes(currentState)) {
-            button.setTransButtonState(prevState);
-            prevState = null;
-        }
-    });
+    button.data('translatedItBy', runTranslation);
+    button.click(OJB_debounce(() => runTranslation()));
+    registerTranslationRedoHover(button);
 
     // 目标区域指示
     if (OJBetter.preference.hoverTargetAreaDisplay) {
         button.addHoverOverlay($(element));
     }
 
-    // 翻译右键切换菜单
-    $(document).on('contextmenu', '#translateButton' + suffix, function (e) {
+    registerTranslationContextMenu(button);
+}
+
+/**
+ * 为翻译按钮注册右键服务切换菜单。
+ * @param {JQuery<HTMLElement>} button 翻译按钮
+ * @returns {void}
+ */
+function registerTranslationContextMenu(button) {
+    button.on('contextmenu', function (e) {
         e.preventDefault();
 
         // 是否为评论的翻译
@@ -8467,54 +8967,83 @@ async function addButtonWithTranslation(button, element, suffix, type, is_commen
 }
 
 /**
+ * 单次按钮翻译的结果计数。
+ * @typedef {Object} TranslationCount
+ * @property {number} errorNum 错误数量
+ * @property {number} skipNum 跳过数量
+ */
+
+/**
  * 处理按钮的翻译事件
  * @param {JQuery<HTMLElement>} button 按钮
  * @param {HTMLElement} element 目标元素
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @param {string} [wholeMarkdown] 指定后忽略分段/选段模式，并将该完整 Markdown 作为单次翻译输入
+ * @returns {Promise<void>}
  */
-async function executeTranslation(button, element, type, is_comment, overrideTrans) {
+async function executeTranslation(button, element, type, is_comment, overrideTrans, wholeMarkdown) {
     /** @type {HTMLElement} 目标元素 */
     let target;
-    /**
-     * 错误计数数据结构
-     * @typedef {Object} count
-     * @property {number} errerNum 错误数量
-     * @property {number} skipNum 跳过数量
-     */
+    /** @type {HTMLElement} 原页面中的翻译目标 */
+    let element_node;
+    /** @type {TranslationCount} */
     const count = {
-        errerNum: 0,
+        errorNum: 0,
         skipNum: 0
     };
-    if (OJBetter.translation.comment.transMode == "1") {
+
+    restoreMarkdownViews(element);
+
+    if (wholeMarkdown !== undefined) {
+        // 全文翻译始终只创建一个任务，保留跨分区上下文。
+        target = $(element).eq(0).clone();
+        element_node = $(element).get(0);
+        target.markdown = wholeMarkdown;
+        target.preserveSourceMarkdown = true;
+        await process(button, target, element_node, type, is_comment, count, overrideTrans);
+    } else if (OJBetter.translation.comment.transMode == "1") {
         // 分段翻译
-        let pElements = $(element).find("p:not(:scope > li p), li, .OJBetter_acmsguru");
+        let pElements = getTranslationBlockElements(element);
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
+            if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+                target.markdown = $(element_node).getMarkdown();
+            }
             await process(button, target, element_node, type, is_comment, count, overrideTrans);
         }
     } else if (OJBetter.translation.comment.transMode == "2") {
         // 选段翻译
-        let pElements = $(element).find("p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru");
+        let pElements = getSelectedTranslationBlockElements(element);
         for (let i = 0; i < pElements.length; i++) {
             target = $(pElements[i]).eq(0).clone();
             element_node = pElements[i];
+            if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+                target.markdown = $(element_node).getMarkdown();
+            }
             await process(button, target, element_node, type, is_comment, count, overrideTrans);
         }
-        $(element).find("p.block_selected:not(li p), li.block_selected").removeClass('block_selected');
+        pElements.removeClass('block_selected');
     } else {
         // 普通翻译
         target = $(element).eq(0).clone();
         if (type === "child_level") $(target).children(':first').remove();
         element_node = $($(element)).get(0);
+        if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+            target.markdown = $(element).getMarkdown();
+        }
         await process(button, target, element_node, type, is_comment, count, overrideTrans);
     }
 
     // 翻译完成
-    if (!count.errerNum && !count.skipNum) {
+    if (!count.errorNum && !count.skipNum) {
         button.setTransButtonState('success');
+    } else if (count.errorNum) {
+        button.setTransButtonState('error', i18next.t('trans.error', { ns: 'button' }));
+    } else {
+        button.setTransButtonState('error', i18next.t('trans.tooLong', { ns: 'button' }));
     }
 }
 
@@ -8525,7 +9054,9 @@ async function executeTranslation(button, element, type, is_comment, overrideTra
  * @param {HTMLElement} element_node 目标节点
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
+ * @param {TranslationCount} count 翻译结果计数
  * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @returns {Promise<void>}
  */
 async function process(button, target, element_node, type, is_comment, count, overrideTrans) {
     if (type === "child_level" && !OJBetter.translation.replaceOriginal) {
@@ -8535,7 +9066,7 @@ async function process(button, target, element_node, type, is_comment, count, ov
     }
 
     //是否跳过折叠块
-    if ($(target).find('.spoiler').length > 0) {
+    if (!target.preserveSourceMarkdown && $(target).find('.spoiler').length > 0) {
         const shouldSkip = await OJB_createDialog(
             i18next.t('skipFold.title', { ns: 'dialog' }),
             i18next.t('skipFold.content', { ns: 'dialog' }),
@@ -8547,6 +9078,7 @@ async function process(button, target, element_node, type, is_comment, count, ov
         ); //跳过折叠块确认
         if (shouldSkip) {
             $(target).find('.spoiler').remove();
+            target.markdown = undefined;
         } else {
             $(target).find('.html2md-panel').remove();
         }
@@ -8556,8 +9088,12 @@ async function process(button, target, element_node, type, is_comment, count, ov
     button.setTransButtonState('running');
     const result = await blockProcessing(button, target, element_node, is_comment, overrideTrans);
     button.pushResultToTransButton(result);
+    registerTaskStatementTranslationCloseSync(
+        result.translateDiv,
+        $(element_node).data("taskStatementTranslationController") || null
+    );
 
-    if (result.status == "error") count.errerNum += 1;
+    if (result.status == "error") count.errorNum += 1;
     else if (result.status == "skip") count.skipNum += 1;
     $(target).remove();
 }
@@ -8569,7 +9105,7 @@ async function process(button, target, element_node, type, is_comment, count, ov
  * @param {HTMLElement} element_node 目标节点
  * @param {boolean} is_comment 是否是评论
  * @param {string} overrideTrans 覆盖全局翻译服务设定
- * @returns {TranslateResult} 翻译结果对象
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function blockProcessing(button, target, element_node, is_comment, overrideTrans) {
     const extraIgnoredSelector = $(target).find('.spoiler').length === 0 && $(element_node).find('.spoiler').length > 0 ? ', .spoiler' : '';
@@ -8621,6 +9157,7 @@ async function multiChoiceTranslation() {
 
     $(document).on('click', 'p, li:not(:has(.comment)), .OJBetter_acmsguru', function (e) {
         let $this = $(this);
+        if ($this.closest('.translateDiv, .mdViewContent, .html2md-panel').length > 0) return;
         e.stopPropagation();
         if ($this.hasClass('block_selected')) {
             $this.removeClass('block_selected');
@@ -8637,24 +9174,55 @@ async function multiChoiceTranslation() {
                 });
             $this.before(menu);
 
-            $("#translateButton_selected_" + id).click(async function () {
-                // 处理旧的结果
-                if ($this.attr('translated')) {
-                    let result = $this.data("resultData");
-                    if (OJBetter.translation.retransAction == "0") {
-                        result.translateDiv.close();
-                    } else {
-                        result.translateDiv.fold();
+            const miniButton = $("#translateButton_selected_" + id);
+            miniButton.click(async function () {
+                const controller = getTaskStatementTranslationController($this);
+                if (controller) controller.blockRunning += 1;
+
+                try {
+                    if (!clearTaskStatementTranslationResults($this)) return;
+
+                    // 历史树会在关闭旧结果和保存新结果时刷新，因此先移除临时按钮。
+                    miniButton.remove();
+
+                    // 处理旧的结果
+                    let resultStack = $this.data("inlineTranslationResultStack");
+                    if (!Array.isArray(resultStack)) resultStack = [];
+                    if ($this.attr('translated')) {
+                        if (OJBetter.translation.replaceOriginal ||
+                            OJBetter.translation.retransAction == "0" ||
+                            hasReplaceOriginalTranslationResult(resultStack)) {
+                            for (let index = resultStack.length - 1; index >= 0; index--) {
+                                resultStack[index]?.translateDiv?.close();
+                            }
+                            resultStack = [];
+                            $this.removeData('inlineTranslationResultStack').removeAttr('translated');
+                        } else {
+                            resultStack.forEach(result => result?.translateDiv?.fold());
+                        }
                     }
+
+                    const section = $this.closest('section');
+                    const sectionButton = getSectionConversionPanel(section).find('.translateButton');
+                    const sectionResultStack = sectionButton.getResultFromTransButton();
+                    if (OJBetter.translation.replaceOriginal ||
+                        hasReplaceOriginalTranslationResult(sectionResultStack)) {
+                        clearTranslationButtonResults(sectionButton, $this);
+                    }
+
+                    // 翻译
+                    let target = $this.eq(0).clone();
+                    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+                        target.markdown = $this.getMarkdown();
+                    }
+                    let result = await blockProcessing(miniButton, target, $this.get(0), false);
+                    resultStack.push(result);
+                    $this.data("inlineTranslationResultStack", resultStack);
+                    $this.removeClass('block_selected');
+                    $this.attr('translated', '1'); // 标记已翻译
+                } finally {
+                    if (controller) controller.blockRunning -= 1;
                 }
-                // 翻译
-                let target = $this.eq(0).clone();
-                let result = await blockProcessing(OJBetter.translation.choice, target, $this.eq(0), $("#translateButton_selected_" + id), false);
-                $this.data("resultData", result);
-                $this.removeClass('block_selected');
-                // 移除对应的按钮
-                $('.OJBetter_MiniTranslateButton').remove("#translateButton_selected_" + id);
-                $this.attr('translated', '1'); // 标记已翻译
             });
         }
     });
@@ -8674,7 +9242,7 @@ async function addConversionButton() {
             let panel = addButtonPanel(e, id, "this_level");
             promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
             promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
-            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
+            promises.push(addButtonWithTranslation(panel.translateButton, e, "this_level"));
         });
     }
 
@@ -8682,38 +9250,30 @@ async function addConversionButton() {
     if (OJBetter.typeOfPage.is_problem && !OJBetter.typeOfPage.isEditorial) {
         const taskStatement = $('#task-statement');
         if (taskStatement.length > 0) {
-            const languageBlocks = taskStatement.children('span.lang').children('span[class^="lang-"], span[class*=" lang-"]');
+            const languageBlocks = taskStatement.find(OJB_TASK_STATEMENT_LANGUAGE_BLOCK_SELECTOR);
             const targets = languageBlocks.length > 0 ? languageBlocks : taskStatement;
             const taskContainer = taskStatement.closest('.col-sm-12');
-            const insertAnchor = taskContainer.find('#task-lang-btn').first().length > 0
-                ? taskContainer.find('#task-lang-btn').first()
-                : taskContainer.find('.h2, h2').first();
-            let lastPanel = insertAnchor.length > 0 ? insertAnchor : taskStatement;
+            const title = taskContainer.children('.h2, h2').first();
+            const id = "_task-statement_" + OJB_getRandomNumber(8);
+            const panel = addButtonPanel(taskStatement.get(0), id, "detached", false, "span");
+            panel.panel.addClass('OJBetter_taskStatementPanel');
 
-            targets.each((i, e) => {
-                const langClass = [...e.classList].find(className => className.startsWith('lang-')) || `task-statement-${i}`;
-                let id = "_task-statement_" + langClass.replace(/[^a-zA-Z0-9_-]/g, '_') + "_" + OJB_getRandomNumber(8);
-                let panel = addButtonPanel(e, id, "this_level");
-                panel.panel.addClass(`OJBetter_taskStatementPanel ${langClass}`);
-                panel.panel.detach().insertAfter(lastPanel);
-                lastPanel = panel.panel;
-                promises.push(addButtonWithTaskStatementHTML2MD(panel.viewButton, e));
-                promises.push(addButtonWithTaskStatementCopy(panel.copyButton, e));
-                promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
-            });
+            // 将题解和全文操作放入同一容器，使两组按钮底部对齐。
+            const editorialButton = title.children('a.btn').last();
+            if (editorialButton.length > 0) {
+                const actions = OJB_safeCreateJQElement('<span class="OJBetter_taskStatementActions"></span>');
+                editorialButton.before(actions);
+                actions.append(editorialButton, panel.panel);
+            } else if (title.length > 0) {
+                title.after(panel.panel);
+            } else {
+                const insertAnchor = taskContainer.children('#task-lang-btn').first();
+                (insertAnchor.length > 0 ? insertAnchor : taskStatement).before(panel.panel);
+            }
 
-            const syncTaskStatementPanelVisibility = () => {
-                const visibleLanguageBlock = languageBlocks.filter(':visible').first();
-                $('.OJBetter_taskStatementPanel').hide();
-                if (visibleLanguageBlock.length > 0) {
-                    const visibleLangClass = [...visibleLanguageBlock.get(0).classList].find(className => className.startsWith('lang-'));
-                    $(`.OJBetter_taskStatementPanel.${visibleLangClass}`).show();
-                } else {
-                    $('.OJBetter_taskStatementPanel').first().show();
-                }
-            };
-            syncTaskStatementPanelVisibility();
-            $('#task-lang-btn span[data-lang]').on('click', () => setTimeout(syncTaskStatementPanelVisibility, 0));
+            promises.push(addButtonWithTaskStatementHTML2MD(panel.viewButton, targets));
+            promises.push(addButtonWithTaskStatementCopy(panel.copyButton, targets));
+            promises.push(addButtonWithTaskStatementTranslation(panel.translateButton, targets));
         }
     }
 
@@ -8726,7 +9286,7 @@ async function addConversionButton() {
         panel.panel.addClass('col-sm-12');
         promises.push(addButtonWithHTML2MD(panel.viewButton, nextElement, id, "this_level"));
         promises.push(addButtonWithCopy(panel.copyButton, nextElement, id, "this_level"));
-        promises.push(addButtonWithTranslation(panel.translateButton, nextElement, id, "this_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, nextElement, "this_level"));
     }
 
     // 添加按钮到折叠块部分
@@ -8737,7 +9297,7 @@ async function addConversionButton() {
             let panel = addButtonPanel(e, id, "child_level");
             promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "child_level"));
             promises.push(addButtonWithCopy(panel.copyButton, e, id, "child_level"));
-            promises.push(addButtonWithTranslation(panel.translateButton, e, id, "child_level"));
+            promises.push(addButtonWithTranslation(panel.translateButton, e, "child_level"));
         }
     });
 
@@ -8747,7 +9307,7 @@ async function addConversionButton() {
         let panel = addButtonPanel(e, id, "this_level");
         promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
         promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
-        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, e, "this_level"));
     });
 
     // 添加到blog-post部分
@@ -8756,7 +9316,7 @@ async function addConversionButton() {
         let panel = addButtonPanel(e, id, "this_level");
         promises.push(addButtonWithHTML2MD(panel.viewButton, e, id, "this_level"));
         promises.push(addButtonWithCopy(panel.copyButton, e, id, "this_level"));
-        promises.push(addButtonWithTranslation(panel.translateButton, e, id, "this_level"));
+        promises.push(addButtonWithTranslation(panel.translateButton, e, "this_level"));
     });
 
     return Promise.all(promises).catch(error => {
@@ -9182,6 +9742,7 @@ class ElementsTree {
         var prev = null;
         var node = this.node[i_];
         element.children().each((i, e) => {
+            if ($(e).is(OJB_MINI_TRANSLATION_BUTTON_SELECTOR)) return;
             // only add element with tagNames
             if (this.tagNames.includes($(e).prop("tagName"))) {
                 prev = this.addNode(i_, prev, e);
@@ -9269,6 +9830,15 @@ class ElementsTree {
     // 恢复一个分支
     recoverOneFork(pElement, ttTreeNode, index) {
         do {
+            while (pElement.is(OJB_MINI_TRANSLATION_BUTTON_SELECTOR)) {
+                if (pElement.next().length === 0) return;
+                pElement = pElement.next();
+            }
+            while (isTransientTranslationHistoryNode(ttTreeNode[index])) {
+                index = ttTreeNode[index].next;
+                if (index === null) return;
+            }
+
             // only recover element with tagNames
             if (!this.tagNames.includes(pElement.prop("tagName"))) {
                 if (pElement.next().length > 0) {
@@ -9323,6 +9893,13 @@ class ElementsTree {
         const translatedContent = translatedPayload?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION && typeof translatedPayload.displayText === 'string'
             ? translatedPayload.displayText
             : translatedPayload && typeof translatedPayload.text === 'string' ? translatedPayload.text : translatedText;
+        let sourceElement = pElement.hasClass("translateDiv")
+            ? pElement.prevAll(':not(.translateDiv)').first()
+            : pElement;
+        if (sourceElement.hasClass(OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS)) {
+            sourceElement = sourceElement.parent();
+        }
+        const taskStatementController = sourceElement.data("taskStatementTranslationController");
         const translateDiv = new TranslateDiv(id);
         pElement.after(translateDiv.getDiv());
         translateDiv.setTopText(topText);
@@ -9336,7 +9913,7 @@ class ElementsTree {
         if (OJBetter.translation.replaceOriginal === true) {
             const historyReplaceOriginalState = OJB_applyHistoryReplaceOriginal(
                 translateDiv,
-                pElement.get(0),
+                sourceElement.get(0),
                 translatedPayload
             );
             if (historyReplaceOriginalState) {
@@ -9349,17 +9926,29 @@ class ElementsTree {
             translateDiv.updateTranslateDiv(translatedContent, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru));
         }
         // 标记已翻译并添加到翻译按钮的结果栈中
-        let transButton = pElement.prev('.html2md-panel').find('.translateButton');
+        let transButton = taskStatementController ? $(taskStatementController.button) : $();
         if (transButton.length == 0) {
-            // 如果没有找到，则应该是得在父元素中找到
-            transButton = pElement.parent().prev('.html2md-panel').find('.translateButton');
+            const section = sourceElement.closest('section');
+            transButton = getSectionConversionPanel(section).find('.translateButton');
+            if (transButton.length == 0) {
+                transButton = sourceElement.prev('.html2md-panel').find('.translateButton');
+            }
+            if (transButton.length == 0) {
+                // 如果没有找到，则应该是得在父元素中找到
+                transButton = sourceElement.parent().prev('.html2md-panel').find('.translateButton');
+            }
         }
         if (isFold) translateDiv.fold(); // 是否折叠该翻译
+        registerTaskStatementTranslationCloseSync(translateDiv, taskStatementController || null);
         transButton.pushResultToTransButton({
             translateDiv: translateDiv,
+            sourceElement: sourceElement.get(0),
             status: 0
         });
         transButton.setTransButtonState('success');
+        if (taskStatementController) {
+            transButton.trigger("ojbetter:task-statement-translation-change");
+        }
     }
 }
 
@@ -9431,8 +10020,15 @@ async function initTransWhenViewable() {
                 const button = $(entry.target);
                 const state = button.getButtonState();
                 const notAutoTranslate = button.getNotAutoTranslate();
+                const taskStatementController = getTaskStatementTranslationController(button);
+                const wholeResultStack = taskStatementController
+                    ? $(taskStatementController.button).getResultFromTransButton()
+                    : null;
+                const hasWholeResult = Array.isArray(wholeResultStack) && wholeResultStack.some(result =>
+                    result?.sourceElement === taskStatementController.target && result.translateDiv?.getDiv().parent().length > 0
+                );
                 // Check if the button meets the criteria
-                if (state === 'normal' && !notAutoTranslate) {
+                if (state === 'normal' && !notAutoTranslate && !hasWholeResult) {
                     let trans = OJBetter.translation.choice;
 
                     if (OJBetter.translation.auto.mixTrans.enabled && button.IsCommentButton() && OJBetter.translation.auto.mixTrans.servers.length > 0) {
@@ -9726,7 +10322,7 @@ function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "", sav
     const tokenStyle = OJB_normalizePlaceholderTokenStyle(
         savedSchema ? savedSchema.tokenStyle : OJBetter.translation.replaceSymbol
     );
-    const ignoredSelector = `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel${extraIgnoredSelector}`;
+    const ignoredSelector = `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel, .mdViewContent, .OJBetter_MiniTranslateButton, .OJBetter_taskStatementTranslationAnchor${extraIgnoredSelector}`;
     const rootDocument = element.ownerDocument || document;
     const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
     const compositeElements = new Set();
@@ -10161,6 +10757,7 @@ function OJB_applyHistoryReplaceOriginal(translateDiv, targetElement, translated
  * @property {TransRawData} rawData 原始翻译数据
  * @property {string} translatedText 翻译后的文本
  * @property {Object|null} replaceOriginalState 原文替换上下文
+ * @property {HTMLElement} sourceElement 原页面中的翻译目标
  */
 
 /**
@@ -10169,7 +10766,8 @@ function OJB_applyHistoryReplaceOriginal(translateDiv, targetElement, translated
  * @param {HTMLElement} element_node 元素节点
  * @param {Boolean} is_comment 是否为评论区文本
  * @param {string} overrideTrans 覆盖全局翻译服务设定
- * @returns {TranslateResult} 翻译结果对象
+ * @param {OJBReplaceOriginalState | null} replaceOriginalState 原文替换上下文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translateMain(text, element_node, is_comment, overrideTrans, replaceOriginalState = null) {
     /** @type {number} 翻译结果的ID*/
@@ -10190,6 +10788,7 @@ async function translateMain(text, element_node, is_comment, overrideTrans, repl
         status: "ok",
         translatedText: "",
         replaceOriginalState: replaceOriginalState,
+        sourceElement: element_node,
         rawData: {
             done: false
         }
@@ -10319,9 +10918,10 @@ async function translateMain(text, element_node, is_comment, overrideTrans, repl
         return text;
     }
 
-    // 创建翻译结果元素并放在element_node的后面
+    // 全文译文放在当前语言块内的稳定锚点后，其余译文仍紧跟原目标。
     translateResult.translateDiv = new TranslateDiv(id);
-    $(element_node).after(translateResult.translateDiv.getDiv());
+    const taskStatementController = $(element_node).data("taskStatementTranslationController");
+    $(taskStatementController?.anchor || element_node).after(translateResult.translateDiv.getDiv());
     translateResult.translateDiv.setReplaceOriginalState(replaceOriginalState);
 
     const isColSm12 = $(element_node).prev().hasClass("col-sm-12");
