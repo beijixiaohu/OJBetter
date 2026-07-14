@@ -6,3 +6,12 @@ OJBetter_Bridge/python_workspace/*.py
 OJBetter_Bridge/pylsp_jsonrpc
 OJBetter_Bridge/server_gui.exe
 tools
+!tools/
+tools/*
+!tools/unit/
+tools/unit/*
+!tools/unit/test/
+tools/unit/test/*
+!tools/unit/test/replaceOriginal/
+tools/unit/test/replaceOriginal/*
+!tools/unit/test/replaceOriginal/index.node.js
