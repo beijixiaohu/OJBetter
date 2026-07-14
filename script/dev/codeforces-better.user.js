@@ -172,8 +172,6 @@ OJBetter.typeOfPage = {
   is_gym: undefined,
   /** @type {boolean?} 是否是acmsguru页面 */
   is_acmsguru: undefined,
-  /** @type {boolean?} 是否是旧版LaTeX页面 */
-  is_oldLatex: undefined,
   /** @type {boolean?} 是否是题目集/比赛的外部页面 */
   is_contest: undefined,
   /** @type {boolean?} 是否是题目集/比赛里面的题目页面 */
@@ -980,7 +978,6 @@ async function initVar() {
     "0"
   );
   OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
-  OJBetter.typeOfPage.is_oldLatex = $(".tex-span").length;
   OJBetter.typeOfPage.is_gym =
     href.includes("gym") && href.includes("/problem/");
   OJBetter.typeOfPage.is_acmsguru =
@@ -1417,15 +1414,6 @@ async function ShowSameContestProblems() {
  * 显示警告消息
  */
 function showWarnMessage() {
-  if (OJBetter.typeOfPage.is_oldLatex) {
-    const loadingMessage = new LoadingMessage();
-    loadingMessage.updateStatus(
-      `${OJBetter.state.name} —— ${i18next.t("warning.is_oldLatex", {
-        ns: "alert",
-      })}`,
-      "warning"
-    );
-  }
   if (OJBetter.typeOfPage.is_acmsguru) {
     const loadingMessage = new LoadingMessage();
     loadingMessage.updateStatus(
@@ -1465,7 +1453,10 @@ function showWarnMessage() {
       "warning"
     );
   }
-  if (OJBetter.translation.forceTurndownConversion) {
+  if (
+    OJBetter.typeOfPage.is_acmsguru &&
+    OJBetter.translation.forceTurndownConversion
+  ) {
     const loadingMessage = new LoadingMessage();
     loadingMessage.updateStatus(
       `${OJBetter.state.name} —— ${i18next.t(
@@ -4555,6 +4546,14 @@ function OJB_formatPlaceholderToken(id, style = "2") {
   return `${opening}${id}${closing}`;
 }
 
+/**
+ * 创建兼容所有占位符样式及 Markdown 方括号转义的 8 位 ID 匹配器。
+ * @returns {RegExp} 每次调用均返回新的全局正则，避免 lastIndex 泄漏
+ */
+function OJB_getPlaceholderTokenRegex() {
+  return /(?:【\s*(\d{8})\s*】|\\?\[\s*(\d{8})\s*\\?\]|\{\s*(\d{8})\s*\})/g;
+}
+
 // ------------------------------
 // 一些工具类
 // ------------------------------
@@ -4608,8 +4607,12 @@ class TextBlockReplacer {
     try {
       for (let i = 0; i < this.matches.length; i++) {
         const match = this.matches[i];
-        const id = OJB_getRandomNumber(8);
-        const replacement = OJB_formatPlaceholderToken(id, this.replaceSymbol);
+        let id;
+        let replacement;
+        do {
+          id = String(OJB_getRandomNumber(8));
+          replacement = OJB_formatPlaceholderToken(id, this.replaceSymbol);
+        } while (text.includes(id) || this.replacements.has(id));
         text = text.replace(match, replacement);
         if (isOrdinal(match) && OJBetter.translation.targetLang === "zh")
           this.replacements.set(id, ordinalTranslation(match));
@@ -8734,7 +8737,8 @@ async function initHTML2MarkDown() {
       return "";
     },
   });
-  OJBetter.common.turndownService.addRule("remove-script", {
+  // MathJax 未完成渲染时直接使用源码；已有渲染节点时由对应规则处理。
+  OJBetter.common.turndownService.addRule("math-source", {
     filter: function (node, options) {
       return (
         node.tagName.toLowerCase() == "script" &&
@@ -8742,7 +8746,15 @@ async function initHTML2MarkDown() {
       );
     },
     replacement: function (content, node) {
-      return "";
+      const previousElement = node.previousElementSibling;
+      if (previousElement?.matches(".MathJax, .MathJax_Display")) return "";
+
+      const latex = String(node.textContent || "")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return /mode=display/.test(node.type)
+        ? `\n$$\n${latex}\n$$\n`
+        : `$${latex}$`;
     },
   });
 
@@ -9342,6 +9354,10 @@ async function addButtonWithHTML2MD(
    * @returns {void}
    */
   const setMarkdownView = (value) => {
+    if (value && containsLegacyLatex(element)) {
+      changeButtonState("disabled");
+      return;
+    }
     if (isMarkdownView() === value) return;
 
     $(element).attr("viewmd", value);
@@ -9363,25 +9379,33 @@ async function addButtonWithHTML2MD(
     $(element).trigger("ojbetter:markdown-view-change", [value]);
   };
 
-  if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(element)
+  ) {
     changeButtonState("disabled");
     return;
   } else {
     changeButtonState("loading");
-    await waitForMathJaxIdle();
+    await waitForMathJaxIdle(element);
     changeButtonState("loaded");
   }
 
   $(element).data("setMarkdownView", setMarkdownView);
   if (!bindButtonEvents) return;
 
-  button.click(OJB_debounce(() => setMarkdownView(!isMarkdownView())));
+  button.click(
+    OJB_debounce(() => {
+      const shouldShowMarkdown = !isMarkdownView();
+      if (shouldShowMarkdown && containsLegacyLatex(element)) {
+        changeButtonState("disabled");
+        return;
+      }
+      setMarkdownView(shouldShowMarkdown);
+    })
+  );
 
-  if (
-    OJBetter.preference.hoverTargetAreaDisplay &&
-    !OJBetter.typeOfPage.is_oldLatex &&
-    !OJBetter.typeOfPage.is_acmsguru
-  ) {
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
     button.addHoverOverlay($(element));
   }
 }
@@ -9488,18 +9512,24 @@ async function addButtonWithCopy(button, element, suffix, type) {
   }
 
   // 等待MathJax队列完成
-  if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(element)
+  ) {
     changeButtonState("disabled");
     return;
   } else {
     changeButtonState("loading");
-    await waitForMathJaxIdle();
+    await waitForMathJaxIdle(element);
     changeButtonState("loaded");
   }
 
   button.click(
     OJB_debounce(function () {
-      var target = $(element).get(0);
+      if (containsLegacyLatex(element)) {
+        changeButtonState("disabled");
+        return;
+      }
 
       var markdown = $(element).getMarkdown();
 
@@ -9517,11 +9547,7 @@ async function addButtonWithCopy(button, element, suffix, type) {
     })
   );
 
-  if (
-    OJBetter.preference.hoverTargetAreaDisplay &&
-    !OJBetter.typeOfPage.is_oldLatex &&
-    !OJBetter.typeOfPage.is_acmsguru
-  ) {
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
     button.addHoverOverlay($(element));
   }
 }
@@ -9603,11 +9629,358 @@ function registerTaskStatementTranslationCloseSync(translateDiv, controller) {
 // 翻译源缓存与临时 UI
 // ------------------------------
 
+/**
+ * 旧版公式占位上下文。
+ * @typedef {Object} LegacyLatexSlotContext
+ * @property {OJBPlaceholderTokenStyle} tokenStyle 本次任务使用的占位符样式
+ * @property {Map<string, string>} slots 占位符 ID 与旧公式 HTML 的映射
+ * @property {string} [reservedText] 生成 ID 时需要避开的完整原文
+ */
+
+/**
+ * 单次翻译使用的完整输入上下文。
+ * @typedef {Object} TranslationSource
+ * @property {string} text 发送给翻译服务的文本
+ * @property {"markdown" | "html" | "replace-original"} format 输入格式
+ * @property {LegacyLatexSlotContext|null} legacyLatex 旧版公式占位上下文
+ */
+
+/** 翻译结果和 Markdown 预览等运行时界面。 */
+const OJB_TRANSLATION_GENERATED_UI_SELECTOR =
+  ".translateDiv, .mdViewContent, .html2md-panel";
+
 /** 初始化阶段缓存翻译内容节点时使用的 jQuery 数据键。 */
 const OJB_TRANSLATION_BLOCK_CACHE_KEY = "translationBlockElements";
 
 /** 不应进入 Markdown 或翻译历史结构树的临时选段按钮。 */
 const OJB_MINI_TRANSLATION_BUTTON_SELECTOR = ".OJBetter_MiniTranslateButton";
+
+/**
+ * 获取目标中属于原内容的旧版公式节点。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {JQuery<HTMLElement>} 顶层 `.tex-span` 节点
+ */
+function getLegacyLatexNodes(element) {
+  return $(element)
+    .find(".tex-span")
+    .addBack(".tex-span")
+    .filter((i, node) => {
+      const target = $(node);
+      return (
+        target.parents(".tex-span").length === 0 &&
+        target.closest(OJB_TRANSLATION_GENERATED_UI_SELECTOR).length === 0
+      );
+    });
+}
+
+/**
+ * 判断指定内容目标是否含有无法还原源码的旧版公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含旧版公式
+ */
+function containsLegacyLatex(element) {
+  return getLegacyLatexNodes(element).length > 0;
+}
+
+/**
+ * 判断目标中是否存在需要等待渲染的新版 MathJax 公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含新版 MathJax 节点或源码
+ */
+function containsModernMathJax(element) {
+  const selector =
+    '.MathJax_Preview, .MathJax, .MathJax_Display, script[type^="math/tex"]';
+  return $(element).find(selector).addBack(selector).length > 0;
+}
+
+/**
+ * 创建旧版公式占位上下文。
+ * @param {string} [reservedText=""] 生成 ID 时需要避开的完整原文
+ * @returns {LegacyLatexSlotContext} 新的占位上下文
+ */
+function createLegacyLatexSlotContext(reservedText = "") {
+  return {
+    tokenStyle: OJB_normalizePlaceholderTokenStyle(
+      OJBetter.translation.replaceSymbol
+    ),
+    slots: new Map(),
+    reservedText: String(reservedText || ""),
+  };
+}
+
+/**
+ * 将目标转换为 Markdown，并把旧版公式替换为本次任务专属的不可翻译占位符。
+ * 新版 MathJax 仍由 Turndown 规则读取相邻 source script 中的 LaTeX。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 内容目标
+ * @param {LegacyLatexSlotContext} [legacyLatex=createLegacyLatexSlotContext()] 可复用的占位上下文
+ * @returns {TranslationSource} Markdown 翻译源
+ */
+function createMarkdownTranslationSource(
+  element,
+  legacyLatex = createLegacyLatexSlotContext()
+) {
+  const sourceRoot = $("<div>").append(
+    $(element).first().contents().clone()
+  );
+  const sourceHTML = sourceRoot.html() || "";
+  const reservedText = legacyLatex.reservedText || sourceHTML;
+
+  getLegacyLatexNodes(sourceRoot).each((i, node) => {
+    let id;
+    do {
+      id = String(OJB_getRandomNumber(8));
+    } while (reservedText.includes(id) || legacyLatex.slots.has(id));
+
+    legacyLatex.slots.set(id, node.outerHTML);
+    node.replaceWith(
+      node.ownerDocument.createTextNode(
+        OJB_formatPlaceholderToken(id, legacyLatex.tokenStyle)
+      )
+    );
+  });
+
+  return {
+    text: OJBetter.common.turndownService.turndown(sourceRoot.html() || ""),
+    format: "markdown",
+    legacyLatex: legacyLatex.slots.size > 0 ? legacyLatex : null,
+  };
+}
+
+/**
+ * 将翻译结果中的旧版公式占位符恢复为原始 HTML，并检查每个 slot 是否恰好保留一次。
+ * @param {string} text 翻译结果
+ * @param {LegacyLatexSlotContext|null} legacyLatex 旧版公式占位上下文
+ * @returns {{text: string, tokenText: string, completed: boolean}} 恢复结果与完整性状态
+ */
+function restoreLegacyLatexSlots(text, legacyLatex) {
+  if (!legacyLatex || legacyLatex.slots.size === 0) {
+    return {
+      text: String(text || ""),
+      tokenText: String(text || ""),
+      completed: true,
+    };
+  }
+
+  const occurrences = new Map(
+    Array.from(legacyLatex.slots.keys(), (id) => [id, 0])
+  );
+  const restoredText = String(text || "").replace(
+    OJB_getPlaceholderTokenRegex(),
+    (token, first, second, third) => {
+      const id = first || second || third;
+      if (!legacyLatex.slots.has(id)) return token;
+      occurrences.set(id, occurrences.get(id) + 1);
+      return legacyLatex.slots.get(id);
+    }
+  );
+
+  return {
+    text: restoredText,
+    tokenText: String(text || ""),
+    completed: Array.from(occurrences.values()).every((count) => count === 1),
+  };
+}
+
+/**
+ * 将旧版公式 slot 转为可持久化的普通对象。
+ * @param {LegacyLatexSlotContext|null} legacyLatex 旧版公式上下文
+ * @returns {{tokenStyle: OJBPlaceholderTokenStyle, slots: Array<{id: string, html: string}>}|null} 可持久化数据
+ */
+function serializeLegacyLatexSlots(legacyLatex) {
+  if (!legacyLatex || legacyLatex.slots.size === 0) return null;
+  return {
+    tokenStyle: legacyLatex.tokenStyle,
+    slots: Array.from(legacyLatex.slots, ([id, html]) => ({ id, html })),
+  };
+}
+
+/**
+ * 从翻译历史恢复旧版公式 slot 上下文。
+ * @param {Object|null|undefined} serialized 历史中的 slot 数据
+ * @returns {LegacyLatexSlotContext|null} 运行时上下文
+ */
+function deserializeLegacyLatexSlots(serialized) {
+  if (!serialized || !Array.isArray(serialized.slots)) return null;
+  const slots = new Map(
+    serialized.slots
+      .filter(
+        (slot) =>
+          /^\d{8}$/.test(String(slot?.id || "")) &&
+          typeof slot?.html === "string"
+      )
+      .map((slot) => [String(slot.id), slot.html])
+  );
+  return slots.size > 0
+    ? {
+        tokenStyle: OJB_normalizePlaceholderTokenStyle(serialized.tokenStyle),
+        slots,
+      }
+    : null;
+}
+
+/**
+ * 在 Markdown 渲染完成后，仅插回由页面原始 DOM 提供的旧版公式片段。
+ * 翻译服务返回的其他 HTML 仍按 Markdown 的默认转义规则处理。
+ * @param {HTMLElement} root 已渲染的结果根节点
+ * @param {LegacyLatexSlotContext|null} legacyLatex 旧版公式上下文
+ * @returns {{completed: boolean}} 插回完整性状态
+ */
+function restoreLegacyLatexSlotsInRenderedDom(root, legacyLatex) {
+  if (!root || !legacyLatex || legacyLatex.slots.size === 0) {
+    return { completed: true };
+  }
+
+  const walker = document.createTreeWalker(root, 4);
+  const textNodes = [];
+  let currentNode;
+  while ((currentNode = walker.nextNode())) textNodes.push(currentNode);
+
+  const occurrences = new Map(
+    Array.from(legacyLatex.slots.keys(), (id) => [id, 0])
+  );
+  textNodes.forEach((textNode) => {
+    const text = textNode.nodeValue || "";
+    const matches = Array.from(text.matchAll(OJB_getPlaceholderTokenRegex()));
+    if (matches.length === 0) return;
+
+    const fragment = document.createDocumentFragment();
+    let cursor = 0;
+    let replaced = false;
+    matches.forEach((match) => {
+      const id = match[1] || match[2] || match[3];
+      if (!legacyLatex.slots.has(id)) return;
+      if (match.index > cursor) {
+        fragment.appendChild(
+          document.createTextNode(text.slice(cursor, match.index))
+        );
+      }
+      const holder = document.createElement("span");
+      holder.innerHTML = legacyLatex.slots.get(id);
+      while (holder.firstChild) fragment.appendChild(holder.firstChild);
+      cursor = match.index + match[0].length;
+      occurrences.set(id, occurrences.get(id) + 1);
+      replaced = true;
+    });
+    if (!replaced) return;
+    if (cursor < text.length) {
+      fragment.appendChild(document.createTextNode(text.slice(cursor)));
+    }
+    textNode.parentNode.replaceChild(fragment, textNode);
+  });
+
+  // Markdown 可能把占位符吞进链接地址、HTML 属性等非文本位置；这些情况不能安全恢复。
+  const hasRemainingToken = Array.from(
+    root.innerHTML.matchAll(OJB_getPlaceholderTokenRegex())
+  ).some((match) =>
+    legacyLatex.slots.has(match[1] || match[2] || match[3])
+  );
+
+  return {
+    completed:
+      !hasRemainingToken &&
+      Array.from(occurrences.values()).every((count) => count === 1),
+  };
+}
+
+/**
+ * 获取翻译源对应的展示方式。
+ * @param {TranslationSource} source 翻译源
+ * @returns {{escapeHTML: boolean, renderLatex: boolean}} 展示选项
+ */
+function getTranslationSourceDisplayOptions(source) {
+  return {
+    escapeHTML: source?.format !== "html",
+    renderLatex: source?.format === "markdown",
+  };
+}
+
+/**
+ * 判断 ACMSGURU 是否继续使用其专用 HTML 翻译输入。
+ * 强制 Turndown 设置仅在此处影响翻译源选择。
+ * @returns {boolean} 是否使用 ACMSGURU HTML 输入
+ */
+function usesAcmsguruHtmlTranslation() {
+  return (
+    OJBetter.typeOfPage.is_acmsguru &&
+    !OJBetter.translation.forceTurndownConversion
+  );
+}
+
+/**
+ * 为单个目标构建翻译源。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 内容目标
+ * @param {string} [cachedMarkdown] 初始化阶段缓存的干净 Markdown
+ * @returns {TranslationSource} 本次任务的翻译源
+ */
+function buildTranslationSource(element, cachedMarkdown) {
+  if (usesAcmsguruHtmlTranslation()) {
+    return {
+      text: $(element).html() || "",
+      format: "html",
+      legacyLatex: null,
+    };
+  }
+  if (cachedMarkdown !== undefined && !containsLegacyLatex(element)) {
+    return {
+      text: cachedMarkdown,
+      format: "markdown",
+      legacyLatex: null,
+    };
+  }
+  return createMarkdownTranslationSource(element);
+}
+
+// ------------------------------
+// 翻译历史兼容
+// ------------------------------
+
+/**
+ * 推断旧翻译历史使用的展示模式。新记录会直接保存 sourceMode，此函数仅处理兼容回退。
+ * @param {unknown} storedMode 历史中保存的模式
+ * @param {JQuery<HTMLElement>|HTMLElement} sourceElement 原内容节点
+ * @param {string} translatedContent 已保存的译文
+ * @returns {"markdown" | "mixed-markdown" | "html" | "replace-original"} 展示模式
+ */
+function getHistoryTranslationSourceMode(
+  storedMode,
+  sourceElement,
+  translatedContent
+) {
+  const supportedModes = new Set([
+    "markdown",
+    "mixed-markdown",
+    "html",
+    "replace-original",
+  ]);
+  if (supportedModes.has(storedMode)) return storedMode;
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(sourceElement) ||
+    /<(?:span|div)\b[^>]*class=["'][^"']*\b(?:tex-span|MathJax(?:[_-][\w-]*)?|katex(?:[_-][\w-]*)?)\b/i.test(
+      String(translatedContent || "")
+    ) ||
+    /<script\b[^>]*type=["']math\/tex/i.test(String(translatedContent || ""))
+  ) {
+    return "html";
+  }
+  return "markdown";
+}
+
+/**
+ * 获取翻译历史模式对应的展示方式。
+ * @param {"markdown" | "mixed-markdown" | "html" | "replace-original"} sourceMode 历史模式
+ * @returns {{escapeHTML: boolean, renderLatex: boolean}} 展示选项
+ */
+function getHistoryTranslationDisplayOptions(sourceMode) {
+  return {
+    escapeHTML: sourceMode !== "html",
+    renderLatex: sourceMode !== "html",
+  };
+}
+
+// ------------------------------
+// 临时界面与缓存
+// ------------------------------
 
 /**
  * 判断历史关系树节点是否为不应持久化的临时选段按钮。
@@ -9729,26 +10102,43 @@ function clearInlineTranslationResults(elements) {
  * @returns {string} 目标整体的 Markdown
  */
 function cacheTranslationMarkdown(element) {
-  const markdown = $(element).getMarkdown();
+  const markdown = containsLegacyLatex(element)
+    ? createMarkdownTranslationSource(element).text
+    : $(element).getMarkdown();
   const blocks = findTranslationBlockElements(element);
-  blocks.each((i, block) => $(block).getMarkdown());
+  blocks.each((i, block) => {
+    if (!containsLegacyLatex(block)) $(block).getMarkdown();
+  });
   $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
   return markdown;
 }
 
 /**
- * 缓存 Codeforces 题面各内容块，并拼接成全文操作使用的 Markdown。
+ * 缓存 Codeforces 题面各内容块，并拼接成全文翻译使用的统一输入。
  * 按块转换可避免根节点上的 `.header`、`.sample-tests` 过滤规则误删题名和样例。
  * @param {JQuery<HTMLElement>} blocks 题面的原始顶层内容块
- * @returns {Promise<string>} 初始化阶段生成的干净全文 Markdown
+ * @returns {Promise<TranslationSource>} 初始化阶段生成的干净全文翻译源
  */
-async function cacheTaskStatementMarkdown(blocks) {
-  await waitForMathJaxIdle();
-  return $(blocks)
-    .map((i, block) => $(block).getMarkdown())
+async function cacheTaskStatementTranslationSource(blocks) {
+  await waitForMathJaxIdle(blocks);
+  const reservedText = $(blocks)
+    .map((i, block) => block.outerHTML || "")
+    .get()
+    .join("");
+  const legacyLatex = createLegacyLatexSlotContext(reservedText);
+  const text = $(blocks)
+    .map(
+      (i, block) =>
+        createMarkdownTranslationSource(block, legacyLatex).text
+    )
     .get()
     .filter((markdown) => !isEmptyText(markdown))
     .join("\n\n");
+  return {
+    text: text,
+    format: "markdown",
+    legacyLatex: legacyLatex.slots.size > 0 ? legacyLatex : null,
+  };
 }
 
 /**
@@ -9833,16 +10223,23 @@ async function addButtonWithTaskStatementHTML2MD(button, statement, blocks) {
       blocks.length > 0 &&
       blocks.filter((i, block) => $(block).attr("viewmd") !== "true").length ===
         0;
+    if (containsLegacyLatex(statement) && !isAllMarkdown) {
+      changeButtonState("disabled");
+      return;
+    }
     changeButtonState(isAllMarkdown ? "mdView" : "normal");
   };
 
-  if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(statement)
+  ) {
     changeButtonState("disabled");
     return;
   }
 
   changeButtonState("loading");
-  await waitForMathJaxIdle();
+  await waitForMathJaxIdle(statement);
   blocks.on("ojbetter:markdown-view-change", syncButtonState);
   syncButtonState();
 
@@ -9851,6 +10248,10 @@ async function addButtonWithTaskStatementHTML2MD(button, statement, blocks) {
       const shouldShowMarkdown =
         blocks.filter((i, block) => $(block).attr("viewmd") !== "true").length >
         0;
+      if (shouldShowMarkdown && containsLegacyLatex(statement)) {
+        changeButtonState("disabled");
+        return;
+      }
       blocks.each((i, block) => {
         if (($(block).attr("viewmd") === "true") !== shouldShowMarkdown) {
           setBlockMarkdownView(block, shouldShowMarkdown);
@@ -9879,11 +10280,24 @@ async function addButtonWithTaskStatementCopy(
 ) {
   button.setButtonLoading();
   button.setButtonPopover(i18next.t("state.waitMathJax", { ns: "button" }));
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(statement)
+  ) {
+    button.setButtonLoaded().prop("disabled", true);
+    button.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
+    return;
+  }
   button.setButtonLoaded();
   button.setButtonPopover(i18next.t("copy.normal", { ns: "button" }));
 
   button.click(
     OJB_debounce(function () {
+      if (containsLegacyLatex(statement)) {
+        button.prop("disabled", true);
+        button.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
+        return;
+      }
       GM_setClipboard(OJB_unescapeHtml(markdown));
       $(this).addClass("success");
       button.setButtonPopover(i18next.t("copy.copied", { ns: "button" }));
@@ -9905,13 +10319,13 @@ async function addButtonWithTaskStatementCopy(
  * 每次将完整题面作为一个请求发送，以保留跨内容块上下文。
  * @param {JQuery<HTMLElement>} button 全文翻译按钮
  * @param {JQuery<HTMLElement>} statement 题面根节点
- * @param {string} markdown 初始化阶段生成的全文 Markdown
+ * @param {TranslationSource} translationSource 初始化阶段生成的全文翻译源
  * @returns {Promise<void>}
  */
 async function addButtonWithTaskStatementTranslation(
   button,
   statement,
-  markdown
+  translationSource
 ) {
   const defaultText = i18next.t("trans.normal", { ns: "button" });
   const statementElement = statement.get(0);
@@ -10025,7 +10439,7 @@ async function addButtonWithTaskStatementTranslation(
           "this_level",
           false,
           overrideTrans,
-          markdown
+          translationSource
         );
       } catch (error) {
         button.setTransButtonState(
@@ -10041,9 +10455,13 @@ async function addButtonWithTaskStatementTranslation(
 
   button.setButtonLoading();
   button.setButtonPopover(i18next.t("state.waitMathJax", { ns: "button" }));
-  statement.data("markdown", markdown);
+  if (!translationSource.legacyLatex) {
+    statement.data("markdown", translationSource.text);
+  }
   const translationBlocks = findTranslationBlockElements(statementElement);
-  translationBlocks.each((i, block) => $(block).getMarkdown());
+  translationBlocks.each((i, block) => {
+    if (!containsLegacyLatex(block)) $(block).getMarkdown();
+  });
   statement.data(OJB_TRANSLATION_BLOCK_CACHE_KEY, translationBlocks.get());
   button.setButtonLoaded();
   button.setButtonState("normal", defaultText);
@@ -10078,20 +10496,14 @@ async function addButtonWithTranslation(
 ) {
   // 等待MathJax队列完成
   button.setButtonLoading();
-  await waitForMathJaxIdle();
+  await waitForMathJaxIdle(element);
   button.setButtonLoaded();
 
   // 标记目标文本区域不自动翻译
   {
-    let text;
-    if (
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    ) {
-      text = $(element).html();
-    } else {
-      text = cacheTranslationMarkdown(element);
-    }
+    const text = usesAcmsguruHtmlTranslation()
+      ? $(element).html()
+      : cacheTranslationMarkdown(element);
     let length = text.length;
     if (
       length > OJBetter.translation.auto.shortTextLength ||
@@ -10347,7 +10759,7 @@ function registerTranslationContextMenu(button) {
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
  * @param {string} [overrideTrans] 覆盖全局翻译服务设定
- * @param {string} [wholeMarkdown] 指定后忽略分段/选段模式，并将完整题面作为单次翻译输入
+ * @param {TranslationSource} [wholeSource] 指定后忽略分段/选段模式，并将完整题面作为单次翻译输入
  * @returns {Promise<void>}
  */
 async function executeTranslation(
@@ -10356,7 +10768,7 @@ async function executeTranslation(
   type,
   is_comment,
   overrideTrans,
-  wholeMarkdown
+  wholeSource
 ) {
   /** @type {JQuery<HTMLElement>} 目标元素 */
   let target;
@@ -10368,17 +10780,13 @@ async function executeTranslation(
     skipNum: 0,
   };
 
-  const shouldUseMarkdown = !(
-    (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-    !OJBetter.translation.forceTurndownConversion
-  );
   restoreMarkdownViews(element);
 
-  if (wholeMarkdown !== undefined) {
+  if (wholeSource !== undefined) {
     // 全文翻译始终只创建一个任务，保留跨内容块上下文。
     target = $(element).eq(0).clone();
     element_node = $(element).get(0);
-    target.markdown = wholeMarkdown;
+    target.translationSource = wholeSource;
     target.preserveSourceMarkdown = true;
     await process(
       button,
@@ -10395,7 +10803,12 @@ async function executeTranslation(
     for (let i = 0; i < pElements.length; i++) {
       target = $(pElements[i]).eq(0).clone();
       element_node = pElements[i];
-      if (shouldUseMarkdown) target.markdown = $(element_node).getMarkdown();
+      if (
+        !usesAcmsguruHtmlTranslation() &&
+        !containsLegacyLatex(element_node)
+      ) {
+        target.markdown = $(element_node).getMarkdown();
+      }
       await process(
         button,
         target,
@@ -10412,7 +10825,12 @@ async function executeTranslation(
     for (let i = 0; i < pElements.length; i++) {
       target = $(pElements[i]).eq(0).clone();
       element_node = pElements[i];
-      if (shouldUseMarkdown) target.markdown = $(element_node).getMarkdown();
+      if (
+        !usesAcmsguruHtmlTranslation() &&
+        !containsLegacyLatex(element_node)
+      ) {
+        target.markdown = $(element_node).getMarkdown();
+      }
       await process(
         button,
         target,
@@ -10429,7 +10847,12 @@ async function executeTranslation(
     target = $(element).eq(0).clone();
     if (type === "child_level") $(target).children(":first").remove();
     element_node = $($(element)).get(0);
-    if (shouldUseMarkdown) target.markdown = $(element).getMarkdown();
+    if (
+      !usesAcmsguruHtmlTranslation() &&
+      !containsLegacyLatex(element)
+    ) {
+      target.markdown = $(element).getMarkdown();
+    }
     await process(
       button,
       target,
@@ -10568,29 +10991,26 @@ async function blockProcessing(
   const replaceOriginalState = OJBetter.translation.replaceOriginal
     ? OJB_prepareReplaceOriginalState(element_node, extraIgnoredSelector)
     : null;
-
-  if (replaceOriginalState) {
-    target.markdown = replaceOriginalState.raw;
-  } else if (
-    (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-    !OJBetter.translation.forceTurndownConversion
-  ) {
-    target.markdown = $(target).html();
-  } else if (!target.markdown) {
-    target.markdown = OJBetter.common.turndownService.turndown(
-      $(target).html()
-    );
-  }
+  /** @type {TranslationSource} */
+  const translationSource = replaceOriginalState
+    ? {
+        text: replaceOriginalState.raw,
+        format: "replace-original",
+        legacyLatex: null,
+      }
+    : target.translationSource ||
+      buildTranslationSource(target, target.markdown);
 
   const result = await OJBetter.common.taskQueue.addTask(
     OJBetter.translation.choice,
     () =>
       translateMain(
-        target.markdown,
+        translationSource.text,
         element_node,
         is_comment,
         overrideTrans,
-        replaceOriginalState
+        replaceOriginalState,
+        translationSource
       ),
     OJBetter.translation.choice == "openai"
   );
@@ -10700,11 +11120,8 @@ async function multiChoiceTranslation() {
             // 翻译
             const target = $this.eq(0).clone();
             if (
-              !(
-                (OJBetter.typeOfPage.is_oldLatex ||
-                  OJBetter.typeOfPage.is_acmsguru) &&
-                !OJBetter.translation.forceTurndownConversion
-              )
+              !usesAcmsguruHtmlTranslation() &&
+              !containsLegacyLatex($this)
             ) {
               target.markdown = $this.getMarkdown();
             }
@@ -10774,8 +11191,7 @@ async function addConversionButton() {
   if (
     OJBetter.typeOfPage.is_problem &&
     !OJBetter.typeOfPage.is_mSite &&
-    !OJBetter.typeOfPage.is_acmsguru &&
-    !OJBetter.typeOfPage.is_oldLatex
+    !OJBetter.typeOfPage.is_acmsguru
   ) {
     const statement = $(".problem-statement").first();
     const blocks = statement
@@ -10789,7 +11205,8 @@ async function addConversionButton() {
 
     if (blocks.length > 0) {
       // 在插入操作面板前固定原始内容块，三个全文操作共享同一份 Markdown 缓存。
-      const markdown = await cacheTaskStatementMarkdown(blocks);
+      const translationSource =
+        await cacheTaskStatementTranslationSource(blocks);
       const wholePanelId = "_task-statement_" + OJB_getRandomNumber(8);
       const wholePanel = addButtonPanel(
         statement.get(0),
@@ -10851,19 +11268,19 @@ async function addConversionButton() {
         addButtonWithTaskStatementCopy(
           wholePanel.copyButton,
           statement,
-          markdown
+          translationSource.text
         )
       );
       promises.push(
         addButtonWithTaskStatementTranslation(
           wholePanel.translateButton,
           statement,
-          markdown
+          translationSource
         )
       );
     }
   } else if (OJBetter.typeOfPage.is_problem) {
-    // m1/m2 轻量站、旧 LaTeX 和 acmsguru 页面暂不启用全文面板，保留原有局部按钮。
+    // m1/m2 轻量站和 acmsguru 页面暂不启用全文面板，保留原有局部按钮。
     $(".problem-statement")
       .children("div")
       .each((i, block) => {
@@ -11040,36 +11457,38 @@ async function addConversionButton() {
   });
 }
 
+/** MathJax 初始化异常时的最长等待时间。 */
+const OJB_MATHJAX_WAIT_TIMEOUT_MS = 10000;
+
 /**
  * 等待LaTeX渲染队列全部完成
- * @returns {Promise} 完成渲染
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} [element=document] 内容目标
+ * @returns {Promise<void>} 完成渲染或等待超时
  */
-function waitForMathJaxIdle() {
-  return new Promise((resolve, reject) => {
-    // 检查MathJax对象是否存在
-    const checkMathJaxExists = () => {
-      if (typeof MathJax === "undefined") {
-        // 如果MathJax不存在，稍后再次检查
-        OJB_delay(100).then(checkMathJaxExists);
-      } else {
-        // MathJax存在，开始监视渲染队列
-        startMonitoringQueue();
-      }
+function waitForMathJaxIdle(element = document) {
+  if (!containsModernMathJax(element)) return Promise.resolve();
+
+  return new Promise((resolve) => {
+    let completed = false;
+    let intervalId;
+
+    const finish = () => {
+      if (completed) return;
+      completed = true;
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+      resolve();
     };
 
-    // 开始监视MathJax渲染队列
-    const startMonitoringQueue = () => {
-      const intervalId = setInterval(() => {
-        const queue = MathJax.Hub.queue;
-        if (queue.pending === 0 && queue.running === 0) {
-          clearInterval(intervalId);
-          resolve();
-        }
-      }, 100);
+    const timeoutId = setTimeout(finish, OJB_MATHJAX_WAIT_TIMEOUT_MS);
+    const checkQueue = () => {
+      if (typeof MathJax === "undefined") return;
+      const queue = MathJax.Hub?.queue;
+      if (!queue || (queue.pending === 0 && queue.running === 0)) finish();
     };
 
-    // 开始检查MathJax对象
-    checkMathJaxExists();
+    intervalId = setInterval(checkQueue, 100);
+    checkQueue();
   });
 }
 
@@ -11192,21 +11611,27 @@ class TranslateDiv {
    * @param {HTMLElement} element 元素
    */
   renderLaTeX(element) {
+    if (typeof MathJax === "undefined" || !MathJax.Hub?.Queue) return;
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
   }
 
   /**
    * 更新翻译框内容
    * @param {string} text 文本内容
-   * @param {boolean} is_escapeHTML 是否转义HTML标签，为true则HTML标签将作为普通文本处理，默认为true
-   * @param {boolean} is_renderLaTeX 是否渲染LaTeX，为true则会渲染LaTeX，默认为true
+   * @param {boolean} [is_escapeHTML=true] 是否转义HTML标签，为true则HTML标签将作为普通文本处理
+   * @param {boolean} [is_renderLaTeX=true] 是否渲染LaTeX
+   * @param {boolean} [allowPartialReplace=false] 是否允许原文替换的流式不完整结果
+   * @param {boolean} [forcePanel=false] 是否强制显示翻译面板而不写回原文
+   * @param {LegacyLatexSlotContext|null} [legacyLatex=null] 需要在渲染后插回的旧版公式 slot
+   * @returns {{applied: boolean, completed: boolean, pending?: boolean}} 更新结果
    */
   updateTranslateDiv(
     text,
     is_escapeHTML = true,
     is_renderLaTeX = true,
     allowPartialReplace = false,
-    forcePanel = false
+    forcePanel = false,
+    legacyLatex = null
   ) {
     if (this.replaceOriginalState && !forcePanel) {
       const applyResult = OJB_applyReplaceOriginalText(
@@ -11232,6 +11657,10 @@ class TranslateDiv {
     if (!text) text = "";
     let html = md.render(text);
     this.mainDiv.html(html);
+    const legacyLatexResult = restoreLegacyLatexSlotsInRenderedDom(
+      this.mainDiv.get(0),
+      legacyLatex
+    );
     // 渲染Latex
     if (is_renderLaTeX) {
       // MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
@@ -11253,7 +11682,7 @@ class TranslateDiv {
 
     return {
       applied: false,
-      completed: true,
+      completed: legacyLatexResult.completed,
     };
   }
 
@@ -11671,6 +12100,39 @@ class ElementsTree {
     if (sourceElement.hasClass(OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS)) {
       sourceElement = sourceElement.parent();
     }
+    const storedSourceMode =
+      translatedPayload?.replaceOriginal === true &&
+      !translatedPayload?.sourceMode
+        ? "replace-original"
+        : translatedPayload?.sourceMode;
+    let sourceMode = getHistoryTranslationSourceMode(
+      storedSourceMode,
+      sourceElement,
+      translatedContent
+    );
+    const historyLegacyLatex = deserializeLegacyLatexSlots(
+      translatedPayload?.legacyLatex
+    );
+    if (historyLegacyLatex && sourceMode === "markdown") {
+      sourceMode = "mixed-markdown";
+    }
+    if (
+      sourceMode === "mixed-markdown" &&
+      !historyLegacyLatex &&
+      /<[^>]+class=["'][^"']*\btex-span\b/i.test(
+        String(translatedContent || "")
+      )
+    ) {
+      sourceMode = "html";
+    }
+    // 旧全页模式可能把不含公式的普通目标也保存为 raw HTML；先转回 Markdown 再安全渲染。
+    const historyDisplayContent =
+      !translatedPayload &&
+      sourceMode === "markdown" &&
+      /^\s*<(?:p|div|pre|table)\b/i.test(String(translatedContent || ""))
+        ? OJBetter.common.turndownService.turndown(translatedContent)
+        : translatedContent;
+    const displayOptions = getHistoryTranslationDisplayOptions(sourceMode);
     const taskStatementController = sourceElement.data(
       "taskStatementTranslationController"
     );
@@ -11679,12 +12141,18 @@ class ElementsTree {
     translateDiv.setTopText(topText);
     translateDiv.registerUpButtonEvent();
     translateDiv.registerCloseButtonEvent();
-    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-      translateDiv.registerCopyButtonEvent(translatedContent);
+    if (
+      translatedPayload?.replaceOriginal === true ||
+      sourceMode === "markdown"
+    ) {
+      translateDiv.registerCopyButtonEvent(historyDisplayContent);
     } else {
       translateDiv.disableCopyButton();
     }
-    if (OJBetter.translation.replaceOriginal === true) {
+    if (
+      OJBetter.translation.replaceOriginal === true &&
+      translatedPayload?.replaceOriginal === true
+    ) {
       const historyReplaceOriginalState = OJB_applyHistoryReplaceOriginal(
         translateDiv,
         sourceElement.get(0),
@@ -11694,22 +12162,30 @@ class ElementsTree {
         translateDiv.replaceOriginalState = historyReplaceOriginalState;
         translateDiv.getDiv().hide();
       } else {
-        translateDiv.updateTranslateDiv(
-          translatedContent,
-          !(
-            (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-            !OJBetter.translation.forceTurndownConversion
-          )
+        const fallbackResult = translateDiv.updateTranslateDiv(
+          historyDisplayContent,
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex,
+          false,
+          false,
+          historyLegacyLatex
         );
+        if (!fallbackResult.completed && historyLegacyLatex) {
+          translateDiv.setError();
+        }
       }
     } else {
-      translateDiv.updateTranslateDiv(
-        translatedContent,
-        !(
-          (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-          !OJBetter.translation.forceTurndownConversion
-        )
+      const displayResult = translateDiv.updateTranslateDiv(
+        historyDisplayContent,
+        displayOptions.escapeHTML,
+        displayOptions.renderLatex,
+        false,
+        false,
+        historyLegacyLatex
       );
+      if (!displayResult.completed && historyLegacyLatex) {
+        translateDiv.setError();
+      }
     }
     // 标记已翻译并添加到翻译按钮的结果栈中
     let transButton = taskStatementController
@@ -11822,7 +12298,7 @@ async function initTransResultsRecover() {
  * 自动翻译
  */
 async function initTransWhenViewable() {
-  await waitForMathJaxIdle();
+  await waitForMathJaxIdle(document);
 
   const elements = $(".ttypography, .comments").find(".translateButton");
   const observers = [];
@@ -11967,7 +12443,7 @@ const OJB_REPLACE_ORIGINAL_ATOMIC_SELECTOR = 'var, code, pre, kbd, samp, img, pi
  * @returns {RegExp} 带有 `g` 标志的 Token 正则
  */
 function OJB_getReplaceOriginalTokenRegex() {
-    return /(?:【\s*(\d{8})\s*】|\[\s*(\d{8})\s*\]|\{\s*(\d{8})\s*\})/g;
+    return OJB_getPlaceholderTokenRegex();
 }
 
 /**
@@ -12611,6 +13087,7 @@ function OJB_applyHistoryReplaceOriginal(translateDiv, targetElement, translated
  * @param {Boolean} is_comment 是否为评论区文本
  * @param {string} [overrideTrans] 覆盖全局翻译服务设定
  * @param {OJBReplaceOriginalState|null} [replaceOriginalState=null] 原文替换上下文
+ * @param {TranslationSource} [translationSource] 本次任务的翻译源上下文
  * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translateMain(
@@ -12618,7 +13095,12 @@ async function translateMain(
   element_node,
   is_comment,
   overrideTrans,
-  replaceOriginalState = null
+  replaceOriginalState = null,
+  translationSource = {
+    text: text,
+    format: "markdown",
+    legacyLatex: null,
+  }
 ) {
   /** @type {number} 翻译结果的ID*/
   const id = OJB_getRandomNumber(8);
@@ -12633,6 +13115,14 @@ async function translateMain(
     (is_comment && OJBetter.translation.comment.choice != "0"
       ? OJBetter.translation.comment.choice
       : OJBetter.translation.choice);
+  const displayOptions = getTranslationSourceDisplayOptions(translationSource);
+  const sourceMode = replaceOriginalState
+    ? "replace-original"
+    : translationSource.format === "html"
+    ? "html"
+    : translationSource.legacyLatex
+    ? "mixed-markdown"
+    : "markdown";
 
   /** @type {TranslateResult} 翻译结果对象 */
   const translateResult = {
@@ -12651,11 +13141,7 @@ async function translateMain(
    * @returns {string} 处理后的文本
    */
   const replaceLatex = function (text) {
-    if (OJBetter.typeOfPage.is_oldLatex) {
-      const regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-      text = textBlockReplacer.replace(text, regex);
-      text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
-    } else if (OJBetter.typeOfPage.is_acmsguru) {
+    if (translationSource.format === "html") {
       const regex =
         /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
       text = textBlockReplacer.replace(text, regex);
@@ -12689,10 +13175,7 @@ async function translateMain(
       .replace(/\]\[/g, "] [")
       .replace(/\}\{/g, "} {");
 
-    if (OJBetter.typeOfPage.is_oldLatex) {
-      resultText = resultText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
-      resultText = textBlockReplacer.recover(resultText);
-    } else if (OJBetter.typeOfPage.is_acmsguru) {
+    if (translationSource.format === "html") {
       resultText = textBlockReplacer.recover(resultText);
     } else if (realTransServer != "openai") {
       resultText = textBlockReplacer.recover(resultText);
@@ -12706,8 +13189,22 @@ async function translateMain(
    * @returns {string} 处理后的翻译结果
    */
   const formatText = function (text) {
+    const legacyLatexTokenMarkers = new Map();
+    if (translationSource.legacyLatex) {
+      text = text.replace(
+        OJB_getPlaceholderTokenRegex(),
+        (token, first, second, third) => {
+          const id = first || second || third;
+          if (!translationSource.legacyLatex.slots.has(id)) return token;
+          const marker = `OJBetterLegacyLatexSlot${id}`;
+          legacyLatexTokenMarkers.set(marker, token);
+          return marker;
+        }
+      );
+    }
+
     // 转义LaTex中的特殊符号
-    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+    if (translationSource.format !== "html") {
       // 先替换掉行间代码块
       const replacer = new TextBlockReplacer();
       text = replacer.replace(text, /```[\s\S]*?```/g);
@@ -12776,6 +13273,10 @@ async function translateMain(
     // 替换markdown语法
     mdRuleMap.forEach(({ pattern, replacement }) => {
       text = text.replace(pattern, replacement);
+    });
+
+    legacyLatexTokenMarkers.forEach((token, marker) => {
+      text = text.replaceAll(marker, token);
     });
 
     return text;
@@ -12877,10 +13378,6 @@ async function translateMain(
    * @returns {TransRawData} 原始翻译数据
    */
   async function translate(transServer) {
-    const is_renderLaTeX = !(
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    );
     const servername = i18next.t("servers." + realTransServer, {
       ns: "translator",
     });
@@ -12894,7 +13391,8 @@ async function translateMain(
               ns: "translator",
               server: servername,
             })}`,
-            is_renderLaTeX
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
           );
           rawData = await translate_deepl(text);
         } else if (OJBetter.deepl.config.type == "api") {
@@ -12903,7 +13401,8 @@ async function translateMain(
               ns: "translator",
               deepl_configName: OJBetter.deepl.config.name,
             })}`,
-            is_renderLaTeX
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
           );
           if (OJBetter.deepl.config.apiGenre == "deeplx") {
             rawData = await translate_deeplx(text);
@@ -12929,7 +13428,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_iflyrec(text);
       } else if (transServer == "youdao") {
@@ -12938,7 +13438,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_youdao_web(text);
       } else if (transServer == "google") {
@@ -12947,7 +13448,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_gg(text);
       } else if (transServer == "caiyun") {
@@ -12956,7 +13458,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_caiyun(text);
       } else if (transServer == "openai") {
@@ -12968,17 +13471,19 @@ async function translateMain(
             ? i18next.t("transingTip.openai_isStream", { ns: "translator" })
             : ""
           }`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         if (OJBetter.chatgpt.isStream) {
           // 流式传输
           rawData = await translate_openai_stream(
             text,
-            translateResult.translateDiv
+            translateResult.translateDiv,
+            translationSource
           );
         } else {
           // 普通模式
-          rawData = await translate_openai(text);
+          rawData = await translate_openai(text, translationSource);
         }
       }
       translatedText = rawData.text;
@@ -13011,6 +13516,31 @@ async function translateMain(
   // 翻译结果格式化
   if (!replaceOriginalState) translatedText = formatText(translatedText);
 
+  // 旧版公式在 Markdown 格式化完成后恢复，避免其 HTML 被公式转义规则破坏。
+  const legacyLatexResult = restoreLegacyLatexSlots(
+    translatedText,
+    translationSource.legacyLatex
+  );
+  translatedText = legacyLatexResult.text;
+  const renderedTranslatedText = legacyLatexResult.tokenText;
+  if (!legacyLatexResult.completed) {
+    translateResult.status = "error";
+    translateResult.rawData.message = i18next.t("error.unexpected", {
+      ns: "translator",
+    });
+    translateResult.translateDiv.updateTranslateDiv(
+      renderedTranslatedText,
+      displayOptions.escapeHTML,
+      displayOptions.renderLatex,
+      false,
+      true,
+      translationSource.legacyLatex
+    );
+    translateResult.translateDiv.disableCopyButton();
+    console.warn("Legacy LaTeX placeholders were not preserved exactly once.");
+    return translateResult;
+  }
+
   const displayText = replaceOriginalState
     ? OJB_getReplaceOriginalDisplayText(replaceOriginalState, translatedText)
     : translatedText;
@@ -13018,15 +13548,19 @@ async function translateMain(
 
   // 先完整校验并写回；失败结果不能进入翻译记忆。
   const displayResult = translateResult.translateDiv.updateTranslateDiv(
-    translatedText,
-    !(
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    )
+    renderedTranslatedText,
+    displayOptions.escapeHTML,
+    displayOptions.renderLatex,
+    false,
+    false,
+    translationSource.legacyLatex
   );
-  if (replaceOriginalState && !displayResult.completed) {
+  if (!displayResult.completed) {
     translateResult.status = "error";
-    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+    translateResult.rawData.message = i18next.t("error.unexpected", {
+      ns: "translator",
+    });
+    if (replaceOriginalState) {
       translateResult.translateDiv.registerCopyButtonEvent(displayText);
     } else {
       translateResult.translateDiv.disableCopyButton();
@@ -13043,7 +13577,11 @@ async function translateMain(
   }
 
   // 注册结果复制按钮（原文替换模式下复制去除协议 token 后的可读文本）。
-  if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
+  if (
+    replaceOriginalState ||
+    (translationSource.format === "markdown" &&
+      !translationSource.legacyLatex)
+  ) {
     translateResult.translateDiv.registerCopyButtonEvent(displayText);
   } else {
     translateResult.translateDiv.disableCopyButton();
@@ -13060,12 +13598,21 @@ async function translateMain(
       ? {
           text: translatedText,
           replaceOriginal: true,
+          sourceMode: sourceMode,
           version: replaceOriginalState.version,
           displayText: displayText,
           schema: replaceOriginalState.schema,
           extraIgnoredSelector: replaceOriginalState.extraIgnoredSelector || "",
         }
-      : displayText;
+      : {
+          text: translationSource.legacyLatex
+            ? renderedTranslatedText
+            : displayText,
+          sourceMode: sourceMode,
+          legacyLatex: serializeLegacyLatexSlots(
+            translationSource.legacyLatex
+          ),
+        };
     OJBetter.translation.memory.ttTree.addTransResultMap(id, transResultData);
     updateTransDBData(
       OJBetter.translation.memory.ttTree.getNodeData(),
@@ -19496,23 +20043,39 @@ function getOpenAIResponseText(response) {
     .join("");
 }
 
-function getOpenAITranslationRequest(raw, isStream = false) {
+function getOpenAITranslationRequest(
+  raw,
+  isStream = false,
+  translationSource = {
+    text: raw,
+    format: "markdown",
+    legacyLatex: null,
+  }
+) {
   const modelDefault = "gpt-5.4";
   const proxyDefault = "https://api.openai.com/v1/responses";
   const lang = getTargetLanguage("openai");
   const hasReplaceOriginalMarker =
     /^\s*(?:【\s*\d{8}\s*】|\[\s*\d{8}\s*\]|\{\s*\d{8}\s*\})\s*\n/.test(raw);
-  const replaceOriginalPlaceholderExample = hasReplaceOriginalMarker
-    ? raw.match(OJB_getReplaceOriginalTokenRegex())?.[0] ||
-      OJB_formatPlaceholderToken("12345678")
+  const hasLegacyLatexSlots = Boolean(
+    translationSource.legacyLatex?.slots?.size
+  );
+  const placeholderExample =
+    raw.match(OJB_getPlaceholderTokenRegex())?.[0] ||
+    OJB_formatPlaceholderToken("12345678");
+  const placeholderPrompt = hasReplaceOriginalMarker
+    ? `Keep every 8-digit numeric placeholder (for example ${placeholderExample}) unchanged and exactly once. Sentence-internal placeholders may move to follow the target-language word order. Keep paragraph-leading placeholders in their original paragraph order.`
+    : hasLegacyLatexSlots
+    ? `Keep every 8-digit numeric placeholder (for example ${placeholderExample}) unchanged and exactly once. Placeholders may move only as required by the target-language word order.`
     : "";
-  const replaceOriginalPrompt = hasReplaceOriginalMarker
-    ? `Keep every 8-digit numeric placeholder (for example ${replaceOriginalPlaceholderExample}) unchanged and exactly once. Sentence-internal placeholders may move to follow the target-language word order. Keep paragraph-leading placeholders in their original paragraph order.`
-    : "";
+  const formatPrompt =
+    translationSource.format === "html"
+      ? "Keep HTML tags and protected formula/code fragments unchanged; translate all human-readable text, including text nodes inside HTML elements"
+      : "Keep all Markdown formatting and LaTeX equations unchanged";
   let prompt = "";
   if (OJBetter.chatgpt.customPrompt) {
     prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-    if (replaceOriginalPrompt) prompt += `\n${replaceOriginalPrompt}`;
+    if (placeholderPrompt) prompt += `\n${placeholderPrompt}`;
     if (!OJBetter.chatgpt.asSystemPrompt) {
       prompt += `\n${raw}`;
     }
@@ -19523,10 +20086,10 @@ Translate the following text into ${lang} with precision, using appropriate tech
 Rules:
 1. Output ONLY the translation, with no explanations, notes, or other text
 2. Maintain all original formatting
-3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+3. ${formatPrompt}
 4. Ensure the translation follows natural ${lang} expression patterns
 5. Use professional terminology common in programming competitions
-${replaceOriginalPrompt ? `6. ${replaceOriginalPrompt}` : ""}
+${placeholderPrompt ? `6. ${placeholderPrompt}` : ""}
 
 Text to translate:
 "`;
@@ -19604,10 +20167,11 @@ ${raw}
 /**
  * ChatGPT
  * @param {string} raw 原文
+ * @param {TranslationSource} translationSource 本次任务的翻译源上下文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_openai(raw) {
-  const request = getOpenAITranslationRequest(raw);
+async function translate_openai(raw, translationSource) {
+  const request = getOpenAITranslationRequest(raw, false, translationSource);
   const options = {
     method: "POST",
     url: request.url,
@@ -19634,9 +20198,10 @@ async function translate_openai(raw) {
  * ChatGPT 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
+ * @param {TranslationSource} translationSource 本次任务的翻译源上下文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_openai_stream(raw, translateDiv) {
+async function translate_openai_stream(raw, translateDiv, translationSource) {
   const result = {
     done: true,
     checkPassed: null,
@@ -19648,23 +20213,29 @@ async function translate_openai_stream(raw, translateDiv) {
   };
   const helpText = i18next.t("error.basic", { ns: "translator" }); // 基本帮助提示信息
   try {
-    for await (const delta of openai_stream(raw)) {
+    for await (const delta of openai_stream(raw, translationSource)) {
       result.text += delta;
+      const partialText = restoreLegacyLatexSlots(
+        result.text,
+        translationSource.legacyLatex
+      ).tokenText;
+      const displayOptions = getTranslationSourceDisplayOptions(
+        translationSource
+      );
       // 翻译结果面板更新
       translateDiv.updateTranslateDiv(
-        result.text,
-        !(
-          (OJBetter.typeOfPage.is_oldLatex ||
-            OJBetter.typeOfPage.is_acmsguru) &&
-          !OJBetter.translation.forceTurndownConversion
-        ),
+        partialText,
+        displayOptions.escapeHTML,
         false,
-        true
+        true,
+        false,
+        translationSource.legacyLatex
       );
     }
     return result;
   } catch (err) {
     console.warn(err);
+    result.done = false;
     result.error = {
       message: err.message || null,
       stack: err.stack
@@ -19684,10 +20255,11 @@ async function translate_openai_stream(raw, translateDiv) {
 /**
  * 流式传输
  * @param {string} raw 原文
+ * @param {TranslationSource} translationSource 本次任务的翻译源上下文
  * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
  */
-async function* openai_stream(raw) {
-  const request = getOpenAITranslationRequest(raw, true);
+async function* openai_stream(raw, translationSource) {
+  const request = getOpenAITranslationRequest(raw, true, translationSource);
   const isResponsesEndpoint = isOpenAIResponsesEndpoint(request.url);
   const options = {
     method: "POST",
