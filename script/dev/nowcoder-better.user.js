@@ -1356,7 +1356,6 @@ const chatgptConfigEditHTML = `
                     `+ helpCircleHTML + `
                     <div class="tip_text">
                     <p>留空则默认为：gpt-5.4</p>
-                    <p>仅在使用支持 reasoning 的 /v1/responses 端点时，think_level 才会生效</p>
                     <p>模型列表请查阅<a target="_blank" href="https://platform.openai.com/docs/models">OpenAI官方文档</a></p>
                     <p><strong>此外，如果您使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>
                     </div>
