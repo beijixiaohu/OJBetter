@@ -3096,7 +3096,7 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
 /* 修改菜单 */
 #config_bar_menu {
     z-index: 400;
-    position: fixed;
+    position: absolute;
     width: 60px;
     background: #ffffff;
     box-shadow: 1px 1px 4px 0px #0000004d;
@@ -5690,6 +5690,67 @@ class Validator {
 }
 
 /**
+ * 将右键事件的视口坐标转换为宿主元素内的菜单坐标，并保持菜单位于视口内。
+ * @param {MouseEvent|JQuery.ContextMenuEvent} event 右键事件
+ * @param {HTMLElement} host 菜单的定位宿主
+ * @param {{width: number, height: number}} menuSize 菜单尺寸
+ * @param {{left: number, top: number, width: number, height: number}} viewport 视口范围
+ * @param {number} margin 菜单与视口边缘的最小间距
+ * @returns {{left: number, top: number}}
+ */
+function OJB_calculateContextMenuPosition(
+    event,
+    host,
+    menuSize,
+    viewport,
+    margin = 4
+) {
+    const hostRect = host.getBoundingClientRect();
+    const targetRect = event.currentTarget?.getBoundingClientRect?.();
+    const eventX = Number(event.clientX);
+    const eventY = Number(event.clientY);
+    const useTargetPosition =
+        targetRect &&
+        (!Number.isFinite(eventX) ||
+            !Number.isFinite(eventY) ||
+            (eventX === 0 && eventY === 0));
+    const pointerX = useTargetPosition ? targetRect.left : eventX;
+    const pointerY = useTargetPosition ? targetRect.bottom : eventY;
+    const viewportLeft = Number(viewport?.left) || 0;
+    const viewportTop = Number(viewport?.top) || 0;
+    const viewportWidth = Math.max(0, Number(viewport?.width) || 0);
+    const viewportHeight = Math.max(0, Number(viewport?.height) || 0);
+    const menuWidth = Math.max(0, Number(menuSize?.width) || 0);
+    const menuHeight = Math.max(0, Number(menuSize?.height) || 0);
+    const safeMargin = Math.max(0, Number(margin) || 0);
+    const minX = viewportLeft + safeMargin;
+    const minY = viewportTop + safeMargin;
+    const maxX = Math.max(
+        minX,
+        viewportLeft + viewportWidth - menuWidth - safeMargin
+    );
+    const maxY = Math.max(
+        minY,
+        viewportTop + viewportHeight - menuHeight - safeMargin
+    );
+    const viewportX = Math.min(Math.max(pointerX, minX), maxX);
+    const viewportY = Math.min(Math.max(pointerY, minY), maxY);
+
+    return {
+        left:
+            viewportX -
+            hostRect.left -
+            (host.clientLeft || 0) +
+            (host.scrollLeft || 0),
+        top:
+            viewportY -
+            hostRect.top -
+            (host.clientTop || 0) +
+            (host.scrollTop || 0),
+    };
+}
+
+/**
  * 配置管理
  */
 class ConfigManager {
@@ -5799,9 +5860,26 @@ class ConfigManager {
         // 添加右键菜单
         li.on("contextmenu", (event) => {
             event.preventDefault();
+            this.menu.css({ display: "block", visibility: "hidden" });
+            const visualViewport = window.visualViewport;
+            const menuPosition = OJB_calculateContextMenuPosition(
+                event,
+                this.settingMenuDiv.get(0),
+                {
+                    width: this.menu.outerWidth(),
+                    height: this.menu.outerHeight(),
+                },
+                {
+                    left: visualViewport?.offsetLeft ?? 0,
+                    top: visualViewport?.offsetTop ?? 0,
+                    width: visualViewport?.width ?? window.innerWidth,
+                    height: visualViewport?.height ?? window.innerHeight,
+                }
+            );
             this.menu.css({
-                display: "block",
-                left: event.pageX, top: event.pageY
+                left: menuPosition.left,
+                top: menuPosition.top,
+                visibility: "visible"
             });
 
             const deleteItem = this.deleteItem;
