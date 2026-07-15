@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.86.4
+// @version      1.87.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -395,6 +395,8 @@ OJBetter.chatgpt = {
     model: undefined,
     /** @type {string?} 思考强度 */
     think_level: undefined,
+    /** @type {""|"enabled"|"disabled"?} 思考模式 */
+    thinking_mode: undefined,
     /** @type {string?} API密钥 */
     key: undefined,
     /** @type {string?} 代理 */
@@ -1171,6 +1173,7 @@ async function initVar() {
     }
     OJBetter.chatgpt.config.name = configuration.name;
     OJBetter.chatgpt.config.model = configuration.model;
+    OJBetter.chatgpt.config.thinking_mode = configuration.thinking_mode;
     OJBetter.chatgpt.config.think_level = configuration.think_level;
     OJBetter.chatgpt.config.key = configuration.key;
     OJBetter.chatgpt.config.proxy = configuration.proxy;
@@ -4816,19 +4819,36 @@ async function OJB_promiseRetryWrapper(
  * @param {Boolean} isStream 是否为流式请求
  * @returns {Promise<OJB_GMError>} 返回 Promise
  */
-function OJB_GMRequest(options, isStream = false) {
+function OJB_GMRequest(options, isStream = false, streamStartTimeoutMs = 120000) {
   return new Promise((resolve, reject) => {
-    GM_xmlhttpRequest({
+    let settled = false;
+    let request = null;
+    let startTimer = null;
+    const settle = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      if (startTimer !== null) clearTimeout(startTimer);
+      callback(value);
+    };
+    const resolveStreamStart = (response) => {
+      if (typeof response?.response?.getReader === "function") {
+        settle(resolve, response);
+      }
+    };
+    const requestOptions = {
       ...options,
       ...(isStream
         ? {
-          onloadstart: resolve,
+          onloadstart: resolveStreamStart,
+          onload: (response) => settle(resolve, response),
+          onloadend: (response) => settle(resolve, response),
         }
         : {
-          onload: resolve,
+          onload: (response) => settle(resolve, response),
         }),
       onerror: (error) =>
-        reject(
+        settle(
+          reject,
           new OJB_GMError(
             "error",
             "An error occurred during the request.",
@@ -4836,10 +4856,43 @@ function OJB_GMRequest(options, isStream = false) {
           )
         ),
       ontimeout: (error) =>
-        reject(new OJB_GMError("timeout", "The request timed out.", error)),
+        settle(
+          reject,
+          new OJB_GMError("timeout", "The request timed out.", error)
+        ),
       onabort: (error) =>
-        reject(new OJB_GMError("abort", "The request was aborted.", error)),
-    });
+        settle(
+          reject,
+          new OJB_GMError("abort", "The request was aborted.", error)
+        ),
+    };
+
+    if (
+      isStream &&
+      Number.isFinite(streamStartTimeoutMs) &&
+      streamStartTimeoutMs > 0
+    ) {
+      startTimer = setTimeout(() => {
+        const error = new Error(
+          `The stream did not start within ${streamStartTimeoutMs}ms.`
+        );
+        settle(
+          reject,
+          new OJB_GMError("timeout", error.message, error)
+        );
+        try {
+          request?.abort?.();
+        } catch (abortError) {
+          console.warn(abortError);
+        }
+      }, streamStartTimeoutMs);
+    }
+
+    try {
+      request = GM_xmlhttpRequest(requestOptions);
+    } catch (error) {
+      settle(reject, error);
+    }
   });
 }
 
@@ -7880,20 +7933,32 @@ const chatgptConfigEditHTML = `
             <input type='text' id='chatgpt_model' placeholder='gpt-5.4' require = false>
         </div>
         <div class="OJBetter_setting_list">
-            <label for='chatgpt_think_level'>
+            <label for='chatgpt_thinking_mode'>
                 <div style="display: flex;align-items: center;">
-                    <span class="input_label">think_level:</span>
+                    <span class="input_label" data-i18n="config:chatgpt.basic.thinkingMode.label"></span>
                     <div class="help_tip">
                         ${helpCircleHTML}
-                        <div class="tip_text">
-                            <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
-                            <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
-                            <p>留空则跟随模型默认值</p>
-                        </div>
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.thinkingMode.tipText"></div>
                     </div>
                 </div>
             </label>
-            <input type='text' id='chatgpt_think_level' placeholder='none / minimal / low / medium / high / xhigh' require = false>
+            <select id='chatgpt_thinking_mode'>
+                <option value='' data-i18n="config:chatgpt.basic.thinkingMode.options.default"></option>
+                <option value='enabled' data-i18n="config:chatgpt.basic.thinkingMode.options.enabled"></option>
+                <option value='disabled' data-i18n="config:chatgpt.basic.thinkingMode.options.disabled"></option>
+            </select>
+        </div>
+        <div class="OJBetter_setting_list">
+            <label for='chatgpt_think_level'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="config:chatgpt.basic.thinkLevel.label"></span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.thinkLevel.tipText"></div>
+                    </div>
+                </div>
+            </label>
+            <input type='text' id='chatgpt_think_level' placeholder='' require = false data-i18n="[placeholder]config:chatgpt.basic.thinkLevel.placeholder">
         </div>
         <div class="OJBetter_setting_list">
             <label for='chatgpt_key'>
@@ -8208,6 +8273,7 @@ async function initSettingsPanel() {
     const chatgptStructure = {
       "#name": createStructure("text", "name", true),
       "#chatgpt_model": createStructure("text", "model", false),
+      "#chatgpt_thinking_mode": createStructure("text", "thinking_mode", false),
       "#chatgpt_think_level": createStructure("text", "think_level", false),
       "#chatgpt_key": createStructure("text", "key", true),
       "#chatgpt_proxy": createStructure("text", "proxy", false),
@@ -20187,6 +20253,228 @@ function getOpenAIResponseText(response) {
     .join("");
 }
 
+const OPENAI_STREAM_IDLE_TIMEOUT_MS = 120000;
+
+function getOpenAIResponseErrorMessage(response) {
+  const responseBody = response?.response;
+  if (
+    responseBody &&
+    typeof responseBody === "object" &&
+    typeof responseBody.getReader !== "function"
+  ) {
+    return responseBody.error?.message || responseBody.message || "";
+  }
+
+  const responseText =
+    response?.responseText ||
+    (typeof responseBody === "string" ? responseBody : "");
+  if (!responseText) return "";
+  try {
+    const data = JSON.parse(responseText);
+    return data?.error?.message || data?.message || "";
+  } catch (_error) {
+    return "";
+  }
+}
+
+function assertOpenAIResponseOK(response) {
+  const status = Number(response?.status || 0);
+  if (status === 0 || (status >= 200 && status < 300)) return;
+
+  const statusText = String(response?.statusText || "").trim();
+  const detail = getOpenAIResponseErrorMessage(response);
+  throw new Error(
+    `OpenAI API request failed with HTTP ${status}${
+      statusText ? ` ${statusText}` : ""
+    }${detail ? `: ${detail}` : ""}`
+  );
+}
+
+function getOpenAIStreamReader(response) {
+  const reader =
+    typeof response?.response?.getReader === "function"
+      ? response.response.getReader()
+      : null;
+
+  try {
+    assertOpenAIResponseOK(response);
+
+    const contentTypeMatch = String(response?.responseHeaders || "").match(
+      /(?:^|\r?\n)\s*content-type\s*:\s*([^\r\n]*)/i
+    );
+    const contentType = contentTypeMatch?.[1]?.trim() || "";
+    if (
+      /^(?:application\/(?:json|problem\+json)|text\/(?:json|html))(?:\s*;|$)/i.test(
+        contentType
+      )
+    ) {
+      const detail = getOpenAIResponseErrorMessage(response);
+      throw new Error(
+        detail ||
+        `OpenAI streaming expected text/event-stream but received ${contentType}.`
+      );
+    }
+
+    if (!reader) {
+      const detail = getOpenAIResponseErrorMessage(response);
+      throw new Error(
+        detail ||
+        "The userscript manager did not provide a readable streaming response. Disable streaming or update the userscript manager."
+      );
+    }
+    return reader;
+  } catch (error) {
+    const detail = getOpenAIResponseErrorMessage(response);
+    try {
+      const cancelResult = reader?.cancel?.(error);
+      cancelResult?.catch?.(() => {});
+    } catch (_cancelError) {
+      // Ignore cancellation errors and preserve the response error.
+    }
+    if (detail && !error.message.includes(detail)) {
+      error.message = `${error.message}: ${detail}`;
+    }
+    throw error;
+  }
+}
+
+async function readOpenAIStreamChunk(
+  reader,
+  idleTimeoutMs = OPENAI_STREAM_IDLE_TIMEOUT_MS
+) {
+  if (!Number.isFinite(idleTimeoutMs) || idleTimeoutMs <= 0) {
+    return reader.read();
+  }
+
+  let timeoutId = null;
+  try {
+    return await Promise.race([
+      reader.read(),
+      new Promise((_, reject) => {
+        timeoutId = setTimeout(() => {
+          const error = new Error(
+            `OpenAI stream received no data for ${idleTimeoutMs}ms.`
+          );
+          try {
+            const cancelResult = reader.cancel?.(error);
+            cancelResult?.catch?.(() => {});
+          } catch (_cancelError) {
+            // Ignore cancellation errors and surface the timeout itself.
+          }
+          reject(error);
+        }, idleTimeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timeoutId !== null) clearTimeout(timeoutId);
+  }
+}
+
+function applyOpenAIReasoningConfig(
+  extraData,
+  isResponsesEndpoint,
+  thinkingMode,
+  thinkLevel
+) {
+  const data = extraData || {};
+  if (isResponsesEndpoint) {
+    if (thinkLevel && data.reasoning === undefined) {
+      data.reasoning = { effort: thinkLevel };
+    }
+    return data;
+  }
+
+  if (
+    (thinkingMode === "enabled" || thinkingMode === "disabled") &&
+    data.thinking === undefined
+  ) {
+    data.thinking = { type: thinkingMode };
+  }
+
+  const effectiveThinkingMode = data.thinking?.type || thinkingMode;
+  if (
+    thinkLevel &&
+    effectiveThinkingMode !== "disabled" &&
+    data.reasoning_effort === undefined
+  ) {
+    data.reasoning_effort = thinkLevel;
+  }
+  return data;
+}
+
+function getOpenAIChatCompletionDefaults(extraData) {
+  const thinkingType = extraData?.thinking?.type;
+  if (thinkingType === "enabled" || extraData?.reasoning_effort !== undefined) {
+    return {};
+  }
+  return { temperature: 0.7 };
+}
+
+function splitOpenAISSEBuffer(buffer) {
+  const records = String(buffer || "").split(/\r?\n\r?\n/);
+  return {
+    records: records.slice(0, -1),
+    remainder: records[records.length - 1] || "",
+  };
+}
+
+function parseOpenAISSEEvent(record) {
+  let eventType = "";
+  const dataLines = [];
+  for (const line of String(record || "").split(/\r?\n/)) {
+    if (line.startsWith("event:")) eventType = line.slice(6).trim();
+    else if (line.startsWith("data:")) dataLines.push(line.slice(5).trimStart());
+  }
+  const line = dataLines.join("\n");
+  if (!line) return null;
+  if (line.trim() === "[DONE]") return { done: true, eventType, raw: line };
+  return { done: false, eventType, data: JSON.parse(line), raw: line };
+}
+
+function isOpenAISSEMetadataRecord(record) {
+  return String(record || "")
+    .split(/\r?\n/)
+    .every((line) => {
+      const trimmed = line.trim();
+      return (
+        !trimmed ||
+        trimmed.startsWith(":") ||
+        /^(?:event|id|retry|data):/.test(trimmed)
+      );
+    });
+}
+
+function getOpenAIStreamDeltas(data, isResponsesEndpoint, eventType = "") {
+  if (isResponsesEndpoint) {
+    if (
+      eventType === "response.output_text.delta" &&
+      typeof data?.delta === "string"
+    ) {
+      return [{ type: "content", text: data.delta }];
+    }
+    if (
+      eventType.toLowerCase().includes("reasoning") &&
+      eventType.endsWith(".delta") &&
+      typeof data?.delta === "string" &&
+      data.delta
+    ) {
+      return [{ type: "reasoning", text: data.delta }];
+    }
+    return [];
+  }
+
+  const delta = data?.choices?.[0]?.delta;
+  if (!delta) return [];
+  const result = [];
+  if (typeof delta.reasoning_content === "string" && delta.reasoning_content) {
+    result.push({ type: "reasoning", text: delta.reasoning_content });
+  }
+  if (typeof delta.content === "string" && delta.content) {
+    result.push({ type: "content", text: delta.content });
+  }
+  return result;
+}
+
 function getOpenAITranslationRequest(
   raw,
   isStream = false,
@@ -20248,9 +20536,12 @@ ${raw}
   const extraData = Object.assign({}, ...OJBetter.chatgpt.config.data);
 
   if (isOpenAIResponsesEndpoint(url)) {
-    if (OJBetter.chatgpt.config.think_level && extraData.reasoning === undefined) {
-      extraData.reasoning = { effort: OJBetter.chatgpt.config.think_level };
-    }
+    applyOpenAIReasoningConfig(
+      extraData,
+      true,
+      OJBetter.chatgpt.config.thinking_mode,
+      OJBetter.chatgpt.config.think_level
+    );
 
     return {
       url,
@@ -20280,6 +20571,13 @@ ${raw}
     };
   }
 
+  applyOpenAIReasoningConfig(
+    extraData,
+    false,
+    OJBetter.chatgpt.config.thinking_mode,
+    OJBetter.chatgpt.config.think_level
+  );
+
   return {
     url,
     data: {
@@ -20301,7 +20599,7 @@ ${raw}
             content: prompt,
           },
         ],
-      temperature: 0.7,
+      ...getOpenAIChatCompletionDefaults(extraData),
       ...(isStream ? { stream: true } : {}),
       ...extraData,
     },
@@ -20334,7 +20632,10 @@ async function translate_openai(raw, translationSource) {
       return res;
     },
     undefined,
-    (response) => getOpenAIResponseText(response.response)
+    (response) => {
+      assertOpenAIResponseOK(response);
+      return getOpenAIResponseText(response.response);
+    }
   );
 }
 
@@ -20347,7 +20648,7 @@ async function translate_openai(raw, translationSource) {
  */
 async function translate_openai_stream(raw, translateDiv, translationSource) {
   const result = {
-    done: true,
+    done: false,
     checkPassed: null,
     response: null,
     responseText: null,
@@ -20356,16 +20657,27 @@ async function translate_openai_stream(raw, translateDiv, translationSource) {
     message: null,
   };
   const helpText = i18next.t("error.basic", { ns: "translator" }); // 基本帮助提示信息
+  let thinkingShown = false;
+  const displayOptions = getTranslationSourceDisplayOptions(translationSource);
+  const showThinking = () => {
+    if (thinkingShown || result.text || translateDiv.replaceOriginalState) return;
+    thinkingShown = true;
+    translateDiv.updateTranslateDiv(
+      i18next.t("transingTip.thinking", { ns: "translator" }),
+      displayOptions.escapeHTML,
+      false,
+      false,
+      true,
+      translationSource.legacyLatex
+    );
+  };
   try {
-    for await (const delta of openai_stream(raw, translationSource)) {
+    for await (const delta of openai_stream(raw, translationSource, showThinking)) {
       result.text += delta;
       const partialText = restoreLegacyLatexSlots(
         result.text,
         translationSource.legacyLatex
       ).tokenText;
-      const displayOptions = getTranslationSourceDisplayOptions(
-        translationSource
-      );
       // 翻译结果面板更新
       translateDiv.updateTranslateDiv(
         partialText,
@@ -20376,6 +20688,10 @@ async function translate_openai_stream(raw, translateDiv, translationSource) {
         translationSource.legacyLatex
       );
     }
+    if (!result.text.trim()) {
+      throw new Error("The stream ended without translated content.");
+    }
+    result.done = true;
     return result;
   } catch (err) {
     console.warn(err);
@@ -20388,9 +20704,10 @@ async function translate_openai_stream(raw, translateDiv, translationSource) {
       enumerable: err,
       source: "openai_stream",
     };
+    const errorDetail = String(err?.message || "").slice(0, 500);
     result.message = `${i18next.t("error.GMRequest", {
       ns: "translator",
-    })}${helpText}`;
+    })}${helpText}${errorDetail ? `\n\n${errorDetail}` : ""}`;
   }
 
   return result;
@@ -20400,9 +20717,21 @@ async function translate_openai_stream(raw, translateDiv, translationSource) {
  * 流式传输
  * @param {string} raw 原文
  * @param {TranslationSource} translationSource 本次任务的翻译源上下文
- * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
+ * @param {Function} [onReasoning] 思考阶段开始时的回调
+ * @param {Object} [streamOptions] 流式读取选项
+ * @param {number} [streamOptions.startTimeoutMs] 等待流开始的超时时间
+ * @param {number} [streamOptions.idleTimeoutMs] 两个数据块之间的超时时间
+ * @returns {AsyncGenerator<string>} 返回最终文本片段
  */
-async function* openai_stream(raw, translationSource) {
+async function* openai_stream(
+  raw,
+  translationSource,
+  onReasoning,
+  {
+    startTimeoutMs = OPENAI_STREAM_IDLE_TIMEOUT_MS,
+    idleTimeoutMs = OPENAI_STREAM_IDLE_TIMEOUT_MS,
+  } = {}
+) {
   const request = getOpenAITranslationRequest(raw, true, translationSource);
   const isResponsesEndpoint = isOpenAIResponsesEndpoint(request.url);
   const options = {
@@ -20416,65 +20745,126 @@ async function* openai_stream(raw, translationSource) {
       ...Object.assign({}, ...OJBetter.chatgpt.config.header),
     },
   };
-  const response = await OJB_GMRequest(options, true);
-  const reader = response.response.getReader();
+  const response = await OJB_GMRequest(options, true, startTimeoutMs);
+  const reader = getOpenAIStreamReader(response);
   const decoder = new TextDecoder();
   let buffer = ""; // 用于累积数据片段的缓冲区
+  let reasoningNotified = false;
+  let hasContent = false;
+  let terminalSeen = false;
+  let readerClosed = false;
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true }); // 将新的数据片段追加到缓冲区
-    let lines = buffer.split("\n\n"); // 处理累积的数据
+  try {
+    streamLoop: while (true) {
+      const { done, value } = await readOpenAIStreamChunk(
+        reader,
+        idleTimeoutMs
+      );
+      if (value) buffer += decoder.decode(value, { stream: !done });
+      else if (done) buffer += decoder.decode();
+      if (done) {
+        readerClosed = true;
+        if (buffer.trim()) buffer += "\n\n";
+      }
 
-    // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
-    for (let i = 0; i < lines.length - 1; i++) {
-      const eventLines = lines[i].split("\n");
-      let eventType = "";
-      const dataLines = [];
-
-      for (const line of eventLines) {
-        if (line.startsWith("event:")) {
-          eventType = line.slice(6).trim();
-        } else if (line.startsWith("data:")) {
-          dataLines.push(line.slice(5).trimStart());
+      const split = splitOpenAISSEBuffer(buffer);
+      buffer = split.remainder;
+      for (const record of split.records) {
+        let event;
+        try {
+          event = parseOpenAISSEEvent(record);
+        } catch (error) {
+          console.warn(`Error parsing JSON: ${error}\n\nError data: ${record}`);
+          throw error;
         }
-      }
 
-      const line = dataLines.join("\n");
-      if (!line) continue;
-      if (line.includes("[DONE]")) {
-        return; // End
-      }
-      try {
-        let data = JSON.parse(line);
-        if (isResponsesEndpoint) {
-          if (
-            eventType === "response.output_text.delta" &&
-            typeof data.delta === "string"
-          ) {
-            yield data.delta;
-          } else if (eventType === "error") {
-            throw new Error(data.message || line);
-          } else if (eventType === "response.completed") {
-            return;
+        if (!event) {
+          if (!isOpenAISSEMetadataRecord(record)) {
+            throw new Error("OpenAI stream returned an invalid SSE record.");
           }
-        } else {
-          let delta = data["choices"][0]["delta"];
-          let content = delta["content"] ? delta["content"] : "";
-          yield content; // 传递数据给调用者
+          continue;
         }
-      } catch (error) {
-        console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
-        if (isResponsesEndpoint && eventType === "error") throw error;
+        if (event.done) {
+          terminalSeen = true;
+          break streamLoop;
+        }
+        if (
+          isResponsesEndpoint &&
+          ["response.failed", "response.incomplete"].includes(event.eventType)
+        ) {
+          const failureDetail =
+            event.data?.response?.error?.message ||
+            event.data?.response?.incomplete_details?.reason ||
+            event.data?.error?.message ||
+            event.data?.message ||
+            event.raw;
+          throw new Error(
+            `OpenAI stream ended with ${event.eventType}: ${failureDetail}`
+          );
+        }
+        if (event.data?.error) {
+          throw new Error(event.data.error.message || event.raw);
+        }
+        if (isResponsesEndpoint && event.eventType === "error") {
+          throw new Error(event.data?.message || event.raw);
+        }
+
+        for (const delta of getOpenAIStreamDeltas(
+          event.data,
+          isResponsesEndpoint,
+          event.eventType
+        )) {
+          if (delta.type === "reasoning") {
+            if (!reasoningNotified) {
+              reasoningNotified = true;
+              onReasoning?.();
+            }
+          } else {
+            hasContent = true;
+            yield delta.text;
+          }
+        }
+
+        if (isResponsesEndpoint && event.eventType === "response.completed") {
+          terminalSeen = true;
+          break streamLoop;
+        }
+        if (!isResponsesEndpoint) {
+          const finishReason = event.data?.choices?.[0]?.finish_reason;
+          if (finishReason) {
+            if (finishReason !== "stop") {
+              throw new Error(
+                `OpenAI stream ended with finish_reason: ${finishReason}.`
+              );
+            }
+            terminalSeen = true;
+            break streamLoop;
+          }
+        }
       }
+      if (done) break;
     }
 
-    // 保留最后一行在缓冲区中
-    buffer = lines.slice(-1)[0];
+    if (!terminalSeen) {
+      throw new Error("OpenAI stream ended without a completion signal.");
+    }
+    if (!hasContent) {
+      throw new Error("The stream ended without translated content.");
+    }
+  } finally {
+    if (!readerClosed) {
+      try {
+        await reader.cancel?.();
+      } catch (_error) {
+        // The stream may already be closed by the provider.
+      }
+    }
+    try {
+      reader.releaseLock?.();
+    } catch (_error) {
+      // The reader may already have released its lock.
+    }
   }
-
-  return buffer;
 }
 
 /**
