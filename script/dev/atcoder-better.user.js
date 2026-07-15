@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.24.4
+// @version      1.25.0
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -387,6 +387,8 @@ OJBetter.chatgpt = {
         model: undefined,
         /** @type {string?} 思考强度 */
         think_level: undefined,
+        /** @type {""|"enabled"|"disabled"?} 思考模式 */
+        thinking_mode: undefined,
         /** @type {string?} API密钥 */
         key: undefined,
         /** @type {string?} 代理 */
@@ -980,6 +982,7 @@ async function initVar() {
         }
         OJBetter.chatgpt.config.name = configuration.name;
         OJBetter.chatgpt.config.model = configuration.model;
+        OJBetter.chatgpt.config.thinking_mode = configuration.thinking_mode;
         OJBetter.chatgpt.config.think_level = configuration.think_level;
         OJBetter.chatgpt.config.key = configuration.key;
         OJBetter.chatgpt.config.proxy = configuration.proxy;
@@ -6918,14 +6921,33 @@ const chatgptConfigEditHTML = `
             <input type='text' id='chatgpt_model' placeholder='gpt-5.4' require = false>
         </div>
         <div class="OJBetter_setting_list">
+            <label for='chatgpt_thinking_mode'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">thinking_mode:</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text">
+                            <p>仅对兼容的 Chat Completions 服务商生效，例如 DeepSeek</p>
+                            <p>跟随模型默认值时不会自动添加 thinking 参数</p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+            <select id='chatgpt_thinking_mode'>
+                <option value=''>跟随模型默认值</option>
+                <option value='enabled'>开启</option>
+                <option value='disabled'>关闭</option>
+            </select>
+        </div>
+        <div class="OJBetter_setting_list">
             <label for='chatgpt_think_level'>
                 <div style="display: flex;align-items: center;">
                     <span class="input_label">think_level:</span>
                     <div class="help_tip">
                         ${helpCircleHTML}
                         <div class="tip_text">
-                            <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
-                            <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
+                            <p>/v1/responses 使用 reasoning.effort；Chat Completions 使用 reasoning_effort</p>
+                            <p>常见取值包括 none、minimal、low、medium、high、xhigh；DeepSeek 通常使用 high 或 max</p>
                             <p>留空则跟随模型默认值</p>
                         </div>
                     </div>
@@ -7317,6 +7339,7 @@ async function initSettingsPanel() {
         const chatgptStructure = {
             '#name': createStructure('text', 'name', true),
             '#chatgpt_model': createStructure('text', 'model', false),
+            '#chatgpt_thinking_mode': createStructure('text', 'thinking_mode', false),
             '#chatgpt_think_level': createStructure('text', 'think_level', false),
             '#chatgpt_key': createStructure('text', 'key', true),
             '#chatgpt_proxy': createStructure('text', 'proxy', false),
@@ -16225,6 +16248,98 @@ function getOpenAIResponseText(response) {
         .join('');
 }
 
+function applyOpenAIReasoningConfig(
+    extraData,
+    isResponsesEndpoint,
+    thinkingMode,
+    thinkLevel
+) {
+    const data = extraData || {};
+    if (isResponsesEndpoint) {
+        if (thinkLevel && data.reasoning === undefined) {
+            data.reasoning = { effort: thinkLevel };
+        }
+        return data;
+    }
+
+    if (
+        (thinkingMode === 'enabled' || thinkingMode === 'disabled') &&
+        data.thinking === undefined
+    ) {
+        data.thinking = { type: thinkingMode };
+    }
+
+    const effectiveThinkingMode = data.thinking?.type || thinkingMode;
+    if (
+        thinkLevel &&
+        effectiveThinkingMode !== 'disabled' &&
+        data.reasoning_effort === undefined
+    ) {
+        data.reasoning_effort = thinkLevel;
+    }
+    return data;
+}
+
+function getOpenAIChatCompletionDefaults(extraData) {
+    const thinkingType = extraData?.thinking?.type;
+    if (thinkingType === 'enabled' || extraData?.reasoning_effort !== undefined) {
+        return {};
+    }
+    return { temperature: 0.7 };
+}
+
+function splitOpenAISSEBuffer(buffer) {
+    const records = String(buffer || '').split(/\r?\n\r?\n/);
+    return {
+        records: records.slice(0, -1),
+        remainder: records[records.length - 1] || '',
+    };
+}
+
+function parseOpenAISSEEvent(record) {
+    let eventType = '';
+    const dataLines = [];
+    for (const line of String(record || '').split(/\r?\n/)) {
+        if (line.startsWith('event:')) eventType = line.slice(6).trim();
+        else if (line.startsWith('data:')) dataLines.push(line.slice(5).trimStart());
+    }
+    const line = dataLines.join('\n');
+    if (!line) return null;
+    if (line.trim() === '[DONE]') return { done: true, eventType, raw: line };
+    return { done: false, eventType, data: JSON.parse(line), raw: line };
+}
+
+function getOpenAIStreamDeltas(data, isResponsesEndpoint, eventType = '') {
+    if (isResponsesEndpoint) {
+        if (
+            eventType === 'response.output_text.delta' &&
+            typeof data?.delta === 'string'
+        ) {
+            return [{ type: 'content', text: data.delta }];
+        }
+        if (
+            eventType.toLowerCase().includes('reasoning') &&
+            eventType.endsWith('.delta') &&
+            typeof data?.delta === 'string' &&
+            data.delta
+        ) {
+            return [{ type: 'reasoning', text: data.delta }];
+        }
+        return [];
+    }
+
+    const delta = data?.choices?.[0]?.delta;
+    if (!delta) return [];
+    const result = [];
+    if (typeof delta.reasoning_content === 'string' && delta.reasoning_content) {
+        result.push({ type: 'reasoning', text: delta.reasoning_content });
+    }
+    if (typeof delta.content === 'string' && delta.content) {
+        result.push({ type: 'content', text: delta.content });
+    }
+    return result;
+}
+
 function getOpenAITranslationRequest(raw, isStream = false) {
     const modelDefault = 'gpt-5.4';
     const proxyDefault = 'https://api.openai.com/v1/responses';
@@ -16268,9 +16383,12 @@ ${raw}
     const extraData = Object.assign({}, ...OJBetter.chatgpt.config.data);
 
     if (isOpenAIResponsesEndpoint(url)) {
-        if (OJBetter.chatgpt.config.think_level && extraData.reasoning === undefined) {
-            extraData.reasoning = { effort: OJBetter.chatgpt.config.think_level };
-        }
+        applyOpenAIReasoningConfig(
+            extraData,
+            true,
+            OJBetter.chatgpt.config.thinking_mode,
+            OJBetter.chatgpt.config.think_level
+        );
 
         return {
             url,
@@ -16300,6 +16418,13 @@ ${raw}
         };
     }
 
+    applyOpenAIReasoningConfig(
+        extraData,
+        false,
+        OJBetter.chatgpt.config.thinking_mode,
+        OJBetter.chatgpt.config.think_level
+    );
+
     return {
         url,
         data: {
@@ -16321,7 +16446,7 @@ ${raw}
                         content: prompt
                     }
                 ],
-            temperature: 0.7,
+            ...getOpenAIChatCompletionDefaults(extraData),
             ...(isStream ? { stream: true } : {}),
             ...extraData
         }
@@ -16372,15 +16497,29 @@ async function translate_openai_stream(raw, translateDiv) {
         message: null
     };
     const helpText = i18next.t('error.basic', { ns: 'translator' }); // 基本帮助提示信息
+    let thinkingShown = false;
+    const isEscapeHTML = !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru);
+    const showThinking = () => {
+        if (thinkingShown || result.text || translateDiv.replaceOriginalState) return;
+        thinkingShown = true;
+        translateDiv.updateTranslateDiv(
+            i18next.t('transingTip.thinking', { ns: 'translator' }),
+            isEscapeHTML,
+            false,
+            false,
+            true
+        );
+    };
     try {
-        for await (const delta of openai_stream(raw)) {
+        for await (const delta of openai_stream(raw, showThinking)) {
             result.text += delta;
             // 翻译结果面板更新
-            translateDiv.updateTranslateDiv(result.text, !(OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru), false, true);
+            translateDiv.updateTranslateDiv(result.text, isEscapeHTML, false, true);
         }
         return result;
     } catch (err) {
         console.warn(err);
+        result.done = false;
         result.error = {
             message: err.message || null,
             stack: err.stack ? err.stack.replace(/\n/g, '<br>').replace(/\s/g, '&nbsp;') : null,
@@ -16396,9 +16535,10 @@ async function translate_openai_stream(raw, translateDiv) {
 /**
  * 流式传输
  * @param {string} raw 原文
- * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
+ * @param {Function} [onReasoning] 思考阶段开始时的回调
+ * @returns {AsyncGenerator<string>} 返回最终文本片段
  */
-async function* openai_stream(raw) {
+async function* openai_stream(raw, onReasoning) {
     const request = getOpenAITranslationRequest(raw, true);
     const isResponsesEndpoint = isOpenAIResponsesEndpoint(request.url);
     const options = {
@@ -16416,55 +16556,57 @@ async function* openai_stream(raw) {
     const reader = response.response.getReader();
     const decoder = new TextDecoder();
     let buffer = ''; // 用于累积数据片段的缓冲区
+    let reasoningNotified = false;
 
     while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true }); // 将新的数据片段追加到缓冲区
-        let lines = buffer.split("\n\n"); // 处理累积的数据
+        if (value) buffer += decoder.decode(value, { stream: !done });
+        else if (done) buffer += decoder.decode();
+        if (done && buffer.trim()) buffer += '\n\n';
 
-        // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
-        for (let i = 0; i < lines.length - 1; i++) {
-            const eventLines = lines[i].split("\n");
-            let eventType = "";
-            const dataLines = [];
-
-            for (const line of eventLines) {
-                if (line.startsWith('event:')) {
-                    eventType = line.slice(6).trim();
-                } else if (line.startsWith('data:')) {
-                    dataLines.push(line.slice(5).trimStart());
-                }
-            }
-
-            const line = dataLines.join("\n");
-            if (!line) continue;
-            if (line.includes('[DONE]')) {
-                return; // End
-            }
+        const split = splitOpenAISSEBuffer(buffer);
+        buffer = split.remainder;
+        for (const record of split.records) {
+            let eventType = '';
+            let shouldThrow = false;
             try {
-                let data = JSON.parse(line);
-                if (isResponsesEndpoint) {
-                    if (eventType === 'response.output_text.delta' && typeof data.delta === 'string') {
-                        yield data.delta;
-                    } else if (eventType === 'error') {
-                        throw new Error(data.message || line);
-                    } else if (eventType === 'response.completed') {
-                        return;
+                const event = parseOpenAISSEEvent(record);
+                if (!event) continue;
+                if (event.done) return;
+                eventType = event.eventType;
+                if (event.data?.error) {
+                    shouldThrow = true;
+                    throw new Error(event.data.error.message || event.raw);
+                }
+                if (isResponsesEndpoint && event.eventType === 'error') {
+                    shouldThrow = true;
+                    throw new Error(event.data?.message || event.raw);
+                }
+                if (isResponsesEndpoint && event.eventType === 'response.completed') {
+                    return;
+                }
+                for (const delta of getOpenAIStreamDeltas(
+                    event.data,
+                    isResponsesEndpoint,
+                    event.eventType
+                )) {
+                    if (delta.type === 'reasoning') {
+                        if (!reasoningNotified) {
+                            reasoningNotified = true;
+                            onReasoning?.();
+                        }
+                    } else {
+                        yield delta.text;
                     }
-                } else {
-                    let delta = data['choices'][0]['delta'];
-                    let content = delta['content'] ? delta['content'] : "";
-                    yield content; // 传递数据给调用者
                 }
             } catch (error) {
-                console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
-                if (isResponsesEndpoint && eventType === 'error') throw error;
+                console.warn(`Error parsing JSON: ${error}\n\nError data: ${record}`);
+                if (shouldThrow || (isResponsesEndpoint && eventType === 'error')) {
+                    throw error;
+                }
             }
         }
-
-        // 保留最后一行在缓冲区中
-        buffer = lines.slice(-1)[0];
+        if (done) break;
     }
 
     return buffer;

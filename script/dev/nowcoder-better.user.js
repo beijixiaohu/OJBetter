@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nowcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.13.0
+// @version      1.14.0
 // @description  牛客竞赛题目题解markdown一键复制
 // @author       北极小狐
 // @match        https://ac.nowcoder.com/*
@@ -43,7 +43,7 @@ const hoverTargetAreaDisplay = getGMValue("hoverTargetAreaDisplay", false);
 var enableSegmentedTranslation = getGMValue("enableSegmentedTranslation", false);
 var translation = getGMValue("translation", "deepl");
 //openai
-var openai_model, openai_think_level, openai_key, openai_proxy, openai_header, openai_data;
+var openai_model, openai_thinking_mode, openai_think_level, openai_key, openai_proxy, openai_header, openai_data;
 var opneaiConfig = getGMValue("chatgpt-config", {
     "choice": -1,
     "configurations": []
@@ -59,6 +59,7 @@ if (opneaiConfig.choice !== -1 && opneaiConfig.configurations.length !== 0) {
     }
 
     openai_model = configAtIndex.model;
+    openai_thinking_mode = configAtIndex.thinking_mode;
     openai_think_level = configAtIndex.think_level;
     openai_key = configAtIndex.key;
     openai_proxy = configAtIndex.proxy;
@@ -1363,14 +1364,31 @@ const chatgptConfigEditHTML = `
             </div>
         </label>
         <input type='text' id='openai_model' placeholder='gpt-5.4' require = false>
+        <label for='openai_thinking_mode'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">thinking_mode:</span>
+                <div class="help_tip">
+                    `+ helpCircleHTML + `
+                    <div class="tip_text">
+                    <p>仅对兼容的 Chat Completions 服务商生效，例如 DeepSeek</p>
+                    <p>跟随模型默认值时不会自动添加 thinking 参数</p>
+                    </div>
+                </div>
+            </div>
+        </label>
+        <select id='openai_thinking_mode'>
+            <option value=''>跟随模型默认值</option>
+            <option value='enabled'>开启</option>
+            <option value='disabled'>关闭</option>
+        </select>
         <label for='openai_think_level'>
             <div style="display: flex;align-items: center;">
                 <span class="input_label">think_level:</span>
                 <div class="help_tip">
                     `+ helpCircleHTML + `
                     <div class="tip_text">
-                    <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
-                    <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
+                    <p>/v1/responses 使用 reasoning.effort；Chat Completions 使用 reasoning_effort</p>
+                    <p>常见取值包括 none、minimal、low、medium、high、xhigh；DeepSeek 通常使用 high 或 max</p>
                     <p>留空则跟随模型默认值</p>
                     </div>
                 </div>
@@ -1453,6 +1471,7 @@ $(document).ready(function () {
         const chatgptStructure = {
             '#note': 'note',
             '#openai_model': 'model',
+            '#openai_thinking_mode': 'thinking_mode',
             '#openai_think_level': 'think_level',
             '#openai_key': 'key',
             '#openai_proxy': 'proxy',
@@ -1534,6 +1553,7 @@ $(document).ready(function () {
                         opneaiConfig = GM_getValue("chatgpt-config");
                         const configAtIndex = opneaiConfig.configurations[selectedIndex];
                         openai_model = configAtIndex.model;
+                        openai_thinking_mode = configAtIndex.thinking_mode;
                         openai_think_level = configAtIndex.think_level;
                         openai_key = configAtIndex.key;
                         openai_proxy = configAtIndex.proxy;
@@ -2252,8 +2272,15 @@ async function translateProblemStatement(text, element_node, button) {
         translatedText = await translate_gg(text);
     } else if (translation == "openai") {
         try {
+            const thinkingHint =
+                openai_thinking_mode !== "disabled" &&
+                (openai_thinking_mode === "enabled" ||
+                    (openai_think_level && openai_think_level !== "none"))
+                    ? "<br><br>模型思考中……"
+                    : "";
             translateDiv.innerHTML = "正在使用 ChatGPT 翻译中……" +
                 "<br><br>应用的配置：" + opneaiConfig.configurations[opneaiConfig.choice].note +
+                thinkingHint +
                 "<br><br>使用 ChatGPT 翻译需要很长的时间，请耐心等待";
             translatedText = await translate_openai(text);
         } catch (error) {
@@ -2376,17 +2403,55 @@ function getOpenAIResponseText(response) {
         .join('');
 }
 
+function applyOpenAIReasoningConfig(extraData, isResponsesEndpoint, thinkingMode, thinkLevel) {
+    const data = extraData || {};
+    if (isResponsesEndpoint) {
+        if (thinkLevel && data.reasoning === undefined) {
+            data.reasoning = { effort: thinkLevel };
+        }
+        return data;
+    }
+
+    if (
+        (thinkingMode === 'enabled' || thinkingMode === 'disabled') &&
+        data.thinking === undefined
+    ) {
+        data.thinking = { type: thinkingMode };
+    }
+
+    const effectiveThinkingMode = data.thinking?.type || thinkingMode;
+    if (
+        thinkLevel &&
+        effectiveThinkingMode !== 'disabled' &&
+        data.reasoning_effort === undefined
+    ) {
+        data.reasoning_effort = thinkLevel;
+    }
+    return data;
+}
+
+function getOpenAIChatCompletionDefaults(extraData) {
+    const thinkingType = extraData?.thinking?.type;
+    if (thinkingType === 'enabled' || extraData?.reasoning_effort !== undefined) {
+        return {};
+    }
+    return { temperature: 0.7 };
+}
+
 function getOpenAITranslationRequest(raw) {
     const modelDefault = 'gpt-5.4';
     const proxyDefault = 'https://api.openai.com/v1/responses';
     const prompt = "请将下面的文本翻译为中文，这是一道编程竞赛题描述的一部分，注意术语的翻译，注意保持其中的latex公式不翻译，你只需要回复翻译后的内容即可，不要回复任何其他内容：\n\n" + raw;
     const url = (openai_proxy !== null && openai_proxy !== "") ? openai_proxy : proxyDefault;
-    const extraData = Object.assign({}, ...openai_data);
+    const extraData = Object.assign({}, ...(openai_data || []));
 
     if (isOpenAIResponsesEndpoint(url)) {
-        if (openai_think_level && extraData.reasoning === undefined) {
-            extraData.reasoning = { effort: openai_think_level };
-        }
+        applyOpenAIReasoningConfig(
+            extraData,
+            true,
+            openai_thinking_mode,
+            openai_think_level
+        );
 
         return {
             url: url,
@@ -2402,6 +2467,13 @@ function getOpenAITranslationRequest(raw) {
         };
     }
 
+    applyOpenAIReasoningConfig(
+        extraData,
+        false,
+        openai_thinking_mode,
+        openai_think_level
+    );
+
     return {
         url: url,
         data: {
@@ -2410,7 +2482,7 @@ function getOpenAITranslationRequest(raw) {
                 role: "user",
                 content: prompt
             }],
-            temperature: 0.7,
+            ...getOpenAIChatCompletionDefaults(extraData),
             ...extraData
         }
     };
