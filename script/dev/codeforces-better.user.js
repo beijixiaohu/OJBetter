@@ -25,6 +25,8 @@
 // @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
+// @connect      edge.microsoft.com
+// @connect      api-edge.cognitive.microsofttranslator.com
 // @connect      127.0.0.1
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -511,6 +513,18 @@ OJBetter.supportList = {
       ko: "auto2ko",
       es: "auto2es",
       fr: "auto2fr",
+    },
+    edge: {
+      zh: "zh-Hans",
+      "zh-Hant": "zh-Hant",
+      de: "de",
+      fr: "fr",
+      ko: "ko",
+      pt: "pt",
+      ja: "ja",
+      es: "es",
+      it: "it",
+      hi: "hi",
     },
     openai: {
       zh: "Chinese",
@@ -1054,7 +1068,7 @@ async function initVar() {
   );
   OJBetter.translation.auto.mixTrans.servers = OJB_getGMValue(
     "mixedTranslation",
-    ["deepl", "iflyrec", "youdao", "caiyun"]
+    ["deepl", "iflyrec", "youdao", "caiyun", "edge"]
   );
   OJBetter.common.taskQueue = new TaskQueue();
   OJBetter.translation.replaceSymbol = OJB_getGMValue("replaceSymbol", "2");
@@ -6967,6 +6981,11 @@ const translation_settings_HTML = `
                 data-i18n="settings:translation.options.services.caiyun"></span>
         </label>
         <label>
+            <input type='radio' name='translation' value='edge'>
+            <span class='OJBetter_setting_menu_label_text'
+                data-i18n="settings:translation.options.services.edge"></span>
+        </label>
+        <label>
             <input type='radio' name='translation' value='openai'>
             <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.openai.name">
@@ -7054,6 +7073,7 @@ const translation_settings_HTML = `
             <option value="youdao" data-i18n="settings:translation.preference.comment_translation_choice.services.youdao"></option>
             <option value="google" data-i18n="settings:translation.preference.comment_translation_choice.services.google"></option>
             <option value="caiyun" data-i18n="settings:translation.preference.comment_translation_choice.services.caiyun"></option>
+            <option value="edge" data-i18n="settings:translation.preference.comment_translation_choice.services.edge"></option>
             <option value="openai" data-i18n="settings:translation.preference.comment_translation_choice.services.openai"></option>
         </select>
     </div>
@@ -7099,6 +7119,8 @@ const translation_settings_HTML = `
             <label for="google" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <input type="checkbox" id="edge" name="mixedTranslation" value="edge">
+            <label for="edge" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.edge"></label>
         </div>
     </div>
     <hr>
@@ -10659,6 +10681,12 @@ function registerTranslationContextMenu(button) {
         }),
       },
       {
+        value: "edge",
+        name: i18next.t("translation.options.services.edge", {
+          ns: "settings",
+        }),
+      },
+      {
         value: "openai",
         name: i18next.t("translation.options.services.openai.name", {
           ns: "settings",
@@ -13346,6 +13374,7 @@ async function translateMain(
     youdao: 5000,
     google: 5000,
     caiyun: 5000,
+    edge: 5000,
   };
   if (
     translationLimits.hasOwnProperty(realTransServer) &&
@@ -13462,6 +13491,8 @@ async function translateMain(
           displayOptions.renderLatex
         );
         rawData = await translate_caiyun(text);
+      } else if (transServer == "edge") {
+        rawData = await edgeTranslator.run(text, translateResult, displayOptions, servername);
       } else if (transServer == "openai") {
         translateResult.translateDiv.updateTranslateDiv(
           `${i18next.t("transingTip.openai", {
@@ -20020,6 +20051,119 @@ async function translate_caiyun(raw) {
     JSON.parse(res).target.map(decoder).join("\n")
   );
 }
+
+/**
+ * 微软 Edge 翻译器类 (简化版)
+ */
+class EdgeTranslator {
+    constructor() {
+        this.name = 'Microsoft Edge';
+        this.cachedToken = null;
+        this.tokenExpireTime = 0;
+    }
+    /**
+     * 获取或返回缓存的 Token
+     */
+    async getToken() {
+        if (this.cachedToken && Date.now() < this.tokenExpireTime) {
+            return this.cachedToken;
+        }
+        return new Promise((resolve, reject) => {
+            GM_xmlhttpRequest({
+                method: "GET",
+                url: "https://edge.microsoft.com/translate/auth",
+                onload: (res) => {
+                    if (res.status === 200 && res.responseText) {
+                        this.cachedToken = res.responseText;
+                        this.tokenExpireTime = Date.now() + 540000; // 缓存 9 分钟
+                        resolve(this.cachedToken);
+                    } else {
+                        reject("获取 Edge Token 失败: " + res.status);
+                    }
+                },
+                onerror: (err) => reject(err)
+            });
+        });
+    }
+
+    /**
+     * 底层翻译请求
+     */
+    async _doTranslate(raw, targetLang) {
+        try {
+            const token = await this.getToken();
+            const options = {
+                method: 'POST',
+                url: `https://api-edge.cognitive.microsofttranslator.com/translate?from=&to=${targetLang}&api-version=3.0&textType=html`,
+                data: JSON.stringify([{ "Text": raw }]),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+                },
+                anonymous: true,
+                nocache: true,
+            };
+
+            return await BaseTranslate(
+                options,
+                res => {
+                    try {
+                        const jsonObj = JSON.parse(res);
+                        return jsonObj[0]?.translations[0]?.text || res;
+                    } catch (e) {
+                        return res;
+                    }
+                },
+                res => {
+                    const resObj = { status: true, message: 'ok', done: true };
+                    if (res.includes('"error"')) {
+                        resObj.status = false;
+                        try {
+                            const errObj = JSON.parse(res);
+                            resObj.message = errObj.error?.message || 'Edge 翻译报错';
+                            if (errObj.error?.code === 401000 || res.includes("401")) {
+                                this.cachedToken = null; // Token 失效，清空缓存
+                            }
+                        } catch (e) {
+                            resObj.message = 'Edge API 未知错误';
+                        }
+                    }
+                    return resObj;
+                }
+            );
+        } catch (error) {
+            return {
+                text: raw,
+                status: false,
+                message: error.message || error || "Edge Network Error",
+                done: false
+            };
+        }
+    }
+
+    /**
+     * 暴露给主控路由的执行入口
+     */
+    async run(text, translateResult, displayOptions, servername) {
+        // 1. 更新 UI 提示 (适配你当前脚本版本的参数：escapeHTML 和 renderLatex)
+        translateResult.translateDiv.updateTranslateDiv(
+            `${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`,
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
+        );
+
+        // 2. 获取目标语言
+        let targetLang = 'zh-Hans';
+        try { targetLang = getTargetLanguage('edge') || 'zh-Hans'; } catch (e) {}
+
+        // 3. 执行翻译并直接返回结果
+        return await this._doTranslate(text, targetLang);
+    }
+}
+
+// 实例化全局的 Edge 翻译器
+const edgeTranslator = new EdgeTranslator();
 
 function isOpenAIResponsesEndpoint(url) {
   return /\/v1\/responses(?:$|[/?#])/.test(url);
