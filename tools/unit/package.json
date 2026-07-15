@@ -1,7 +1,8 @@
 {
     "scripts": {
         "test": "jest",
-        "test:replace-original": "node --test test/replaceOriginal/index.node.js"
+        "test:replace-original": "node --test test/replaceOriginal/index.node.js",
+        "test:openai": "node --test test/openai/index.node.js"
     },
     "devDependencies": {
         "jest": "^29.7.0"
