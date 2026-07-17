@@ -4571,6 +4571,167 @@ function OJB_getPlaceholderTokenRegex() {
   return /(?:【\s*(\d{8})\s*】|\\?\[\s*(\d{8})\s*\\?\]|\{\s*(\d{8})\s*\})/g;
 }
 
+/**
+ * 将 Codeforces 渲染前的三美元/六美元公式规范为标准 Markdown 公式。
+ * 反引号代码段保持原样，避免改写代码中的字面量美元符号。
+ * @param {string} markdown 待处理的 Markdown
+ * @returns {string} 规范化后的 Markdown
+ */
+function OJB_normalizeCodeforcesLatexDelimiters(markdown) {
+  const text = String(markdown ?? "");
+  const codeforcesDelimiters = [
+    ["$$$$$$", "$$"],
+    ["$$$", "$"],
+  ];
+
+  const isEscaped = (value, position) => {
+    let backslashCount = 0;
+    for (
+      let cursor = position - 1;
+      cursor >= 0 && value[cursor] === "\\";
+      cursor--
+    ) {
+      backslashCount++;
+    }
+    return backslashCount % 2 === 1;
+  };
+
+  const getRunLength = (value, position, character) => {
+    let length = 0;
+    while (value[position + length] === character) length++;
+    return length;
+  };
+
+  const findExactClosingRun = (
+    value,
+    delimiter,
+    fromIndex,
+    character
+  ) => {
+    let candidate = value.indexOf(delimiter, fromIndex);
+    while (candidate !== -1) {
+      if (
+        value[candidate - 1] !== character &&
+        value[candidate + delimiter.length] !== character &&
+        !isEscaped(value, candidate)
+      ) {
+        return candidate;
+      }
+      candidate = value.indexOf(delimiter, candidate + 1);
+    }
+    return -1;
+  };
+
+  const normalizePlainText = (value) => {
+    let result = "";
+    let copyFrom = 0;
+    let index = 0;
+    while (index < value.length) {
+      let normalized = false;
+      for (const [delimiter, replacement] of codeforcesDelimiters) {
+        if (
+          value.startsWith(delimiter, index) &&
+          value[index - 1] !== "$" &&
+          value[index + delimiter.length] !== "$" &&
+          !isEscaped(value, index)
+        ) {
+          const closing = findExactClosingRun(
+            value,
+            delimiter,
+            index + delimiter.length,
+            "$"
+          );
+          if (closing !== -1) {
+            result +=
+              value.slice(copyFrom, index) +
+              replacement +
+              value.slice(index + delimiter.length, closing) +
+              replacement;
+            index = closing + delimiter.length;
+            copyFrom = index;
+            normalized = true;
+            break;
+          }
+        }
+      }
+      if (normalized) continue;
+      index++;
+    }
+    return result + value.slice(copyFrom);
+  };
+
+  let result = "";
+  let plainTextStart = 0;
+  let index = 0;
+  while (index < text.length) {
+    if (text[index] === "`" && !isEscaped(text, index)) {
+      const runLength = getRunLength(text, index, "`");
+      const delimiter = "`".repeat(runLength);
+      const closing = findExactClosingRun(
+        text,
+        delimiter,
+        index + runLength,
+        "`"
+      );
+      result += normalizePlainText(text.slice(plainTextStart, index));
+      if (closing === -1) return result + text.slice(index);
+      const codeEnd = closing + runLength;
+      result += text.slice(index, codeEnd);
+      index = codeEnd;
+      plainTextStart = index;
+      continue;
+    }
+    index++;
+  }
+  return result + normalizePlainText(text.slice(plainTextStart));
+}
+
+/**
+ * 创建机器翻译前用于保护 LaTeX 公式的匹配器。
+ * @param {boolean} [includeOrdinalSuffix=false] 是否同时保护英文序数词后缀
+ * @returns {RegExp} LaTeX 公式匹配器
+ */
+function OJB_getTranslationLatexRegex(includeOrdinalSuffix = false) {
+  return includeOrdinalSuffix
+    ? /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g
+    : /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+}
+
+/**
+ * 在本地 Markdown 格式化期间临时保护代码段。标记不会发送给翻译服务，
+ * 因此可在格式化完成后进行严格、无公式边界判断的恢复。
+ * @param {string} markdown 待保护的 Markdown
+ * @returns {{text: string, recover: (value: string) => string}} 保护结果与恢复函数
+ */
+function OJB_protectMarkdownCodeForFormatting(markdown) {
+  const source = String(markdown ?? "");
+  let markerPrefix;
+  do {
+    markerPrefix = `OJBetterMarkdownCode${OJB_getRandomNumber(8)}Slot`;
+  } while (source.includes(markerPrefix));
+
+  const replacements = [];
+  const text = source.replace(
+    /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g,
+    (code) => {
+      const marker = `${markerPrefix}${replacements.length}End`;
+      replacements.push([marker, code]);
+      return marker;
+    }
+  );
+
+  return {
+    text,
+    recover(value) {
+      let result = String(value ?? "");
+      replacements.forEach(([marker, code]) => {
+        result = result.replaceAll(marker, () => code);
+      });
+      return result;
+    },
+  };
+}
+
 // ------------------------------
 // 一些工具类
 // ------------------------------
@@ -9220,7 +9381,9 @@ async function initButtonFunc() {
     const markdown = this.data("markdown");
     if (markdown === undefined) {
       const htmlContent = this.html();
-      const newMarkdown = OJBetter.common.turndownService.turndown(htmlContent);
+      const newMarkdown = OJB_normalizeCodeforcesLatexDelimiters(
+        OJBetter.common.turndownService.turndown(htmlContent)
+      );
       this.data("markdown", newMarkdown);
       return newMarkdown;
     }
@@ -9847,6 +10010,47 @@ function containsLegacyLatex(element) {
   return getLegacyLatexNodes(element).length > 0;
 }
 
+/** 不参与 Codeforces 原始公式标记检测的内容。 */
+const OJB_UNRENDERED_LATEX_IGNORED_SELECTOR =
+  "code, pre, kbd, samp, script, style, textarea, noscript, .MathJax, .MathJax_Display, .katex, .monaco-editor, .translateDiv, .html2md-panel, .mdViewContent";
+
+/**
+ * 判断目标中是否仍有 MathJax 尚未处理的 Codeforces 三/六美元公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含未渲染公式
+ */
+function containsUnrenderedCodeforcesLatex(element) {
+  const roots = $(element).get();
+  for (const root of roots) {
+    if (!root) continue;
+    const rootDocument =
+      root.nodeType === 9 ? root : root.ownerDocument || document;
+    const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
+    const walker = rootDocument.createTreeWalker(
+      root,
+      nodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const text = node.nodeValue || "";
+          if (
+            !text.includes("$$$") ||
+            node.parentElement?.closest(
+              OJB_UNRENDERED_LATEX_IGNORED_SELECTOR
+            )
+          ) {
+            return nodeFilter.FILTER_REJECT;
+          }
+          return OJB_normalizeCodeforcesLatexDelimiters(text) === text
+            ? nodeFilter.FILTER_REJECT
+            : nodeFilter.FILTER_ACCEPT;
+        },
+      }
+    );
+    if (walker.nextNode()) return true;
+  }
+  return false;
+}
+
 /**
  * 判断目标中是否存在需要等待渲染的新版 MathJax 公式。
  * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
@@ -9855,7 +10059,10 @@ function containsLegacyLatex(element) {
 function containsModernMathJax(element) {
   const selector =
     '.MathJax_Preview, .MathJax, .MathJax_Display, script[type^="math/tex"]';
-  return $(element).find(selector).addBack(selector).length > 0;
+  return (
+    $(element).find(selector).addBack(selector).length > 0 ||
+    containsUnrenderedCodeforcesLatex(element)
+  );
 }
 
 /**
@@ -9905,7 +10112,9 @@ function createMarkdownTranslationSource(
   });
 
   return {
-    text: OJBetter.common.turndownService.turndown(sourceRoot.html() || ""),
+    text: OJB_normalizeCodeforcesLatexDelimiters(
+      OJBetter.common.turndownService.turndown(sourceRoot.html() || "")
+    ),
     format: "markdown",
     legacyLatex: legacyLatex.slots.size > 0 ? legacyLatex : null,
   };
@@ -11653,6 +11862,7 @@ function waitForMathJaxIdle(element = document) {
 
     const timeoutId = setTimeout(finish, OJB_MATHJAX_WAIT_TIMEOUT_MS);
     const checkQueue = () => {
+      if (containsUnrenderedCodeforcesLatex(element)) return;
       if (typeof MathJax === "undefined") return;
       const queue = MathJax.Hub?.queue;
       if (!queue || (queue.pending === 0 && queue.running === 0)) finish();
@@ -13277,6 +13487,8 @@ async function translateMain(
   const id = OJB_getRandomNumber(8);
   /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
   const textBlockReplacer = new TextBlockReplacer();
+  /** @type {TextBlockReplacer} Markdown 代码替换/恢复实例*/
+  const markdownCodeReplacer = new TextBlockReplacer();
   /** @type {string} 翻译结果文本*/
   let translatedText = "";
 
@@ -13318,15 +13530,13 @@ async function translateMain(
       text = textBlockReplacer.replace(text, regex);
     } else if (realTransServer != "openai") {
       // 使用GPT翻译时不必替换latex公式
-      let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
-      // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
-      if (OJBetter.translation.targetLang === "zh")
-        regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
-      text = textBlockReplacer.replace(text, regex);
+      const codeRegex = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
+      text = markdownCodeReplacer.replace(text, codeRegex);
 
-      // 替换行间代码块`
-      const regex2 = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
-      text = textBlockReplacer.replace(text, regex2);
+      const regex = OJB_getTranslationLatexRegex(
+        OJBetter.translation.targetLang === "zh"
+      );
+      text = textBlockReplacer.replace(text, regex);
     }
     return text;
   };
@@ -13338,7 +13548,9 @@ async function translateMain(
   */
   const recoverLatex = function (text) {
     if (replaceOriginalState?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION) {
-      return realTransServer !== "openai" ? textBlockReplacer.recover(text) : text;
+      return realTransServer !== "openai"
+        ? markdownCodeReplacer.recover(textBlockReplacer.recover(text))
+        : text;
     }
     // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
     let resultText = text
@@ -13349,7 +13561,9 @@ async function translateMain(
     if (translationSource.format === "html") {
       resultText = textBlockReplacer.recover(resultText);
     } else if (realTransServer != "openai") {
-      resultText = textBlockReplacer.recover(resultText);
+      resultText = markdownCodeReplacer.recover(
+        textBlockReplacer.recover(resultText)
+      );
     }
     return resultText;
   };
@@ -13361,6 +13575,7 @@ async function translateMain(
    */
   const formatText = function (text) {
     const legacyLatexTokenMarkers = new Map();
+    let protectedMarkdownCode = null;
     if (translationSource.legacyLatex) {
       text = text.replace(
         OJB_getPlaceholderTokenRegex(),
@@ -13376,9 +13591,9 @@ async function translateMain(
 
     // 转义LaTex中的特殊符号
     if (translationSource.format !== "html") {
-      // 先替换掉行间代码块
-      const replacer = new TextBlockReplacer();
-      text = replacer.replace(text, /```[\s\S]*?```/g);
+      // 所有 Markdown 代码段保持原样，直到公式及 Markdown 格式化完成。
+      protectedMarkdownCode = OJB_protectMarkdownCodeForFormatting(text);
+      text = protectedMarkdownCode.text;
 
       // 处理LaTeX公式
       const escapeRules = [
@@ -13403,9 +13618,6 @@ async function translateMain(
         escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$"); // $$符号（因为后面需要作为replacement，双倍消耗）
         text = text.replace(matchedText, escapedText);
       }
-
-      // 恢复行间代码块
-      text = replacer.recover(text);
     }
 
     // 使符合mathjx的转换语法
@@ -13445,6 +13657,8 @@ async function translateMain(
     mdRuleMap.forEach(({ pattern, replacement }) => {
       text = text.replace(pattern, replacement);
     });
+
+    if (protectedMarkdownCode) text = protectedMarkdownCode.recover(text);
 
     legacyLatexTokenMarkers.forEach((token, marker) => {
       text = text.replaceAll(marker, token);
@@ -13496,6 +13710,11 @@ async function translateMain(
       translateResult.status = "skip";
       return translateResult;
     }
+  }
+
+  // MathJax 等待超时或异常时，原始 Codeforces 三/六美元公式仍需安全降级。
+  if (translationSource.format === "markdown") {
+    text = OJB_normalizeCodeforcesLatexDelimiters(text);
   }
 
   // 替换latex公式

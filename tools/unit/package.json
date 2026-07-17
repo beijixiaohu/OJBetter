@@ -3,7 +3,8 @@
         "test": "jest",
         "test:replace-original": "node --test test/replaceOriginal/index.node.js",
         "test:openai": "node --test test/openai/index.node.js",
-        "test:edge": "node --test test/edge/index.node.js"
+        "test:edge": "node --test test/edge/index.node.js",
+        "test:codeforces-mathjax": "node --test test/codeforcesMathJax/index.node.js"
     },
     "devDependencies": {
         "jest": "^29.7.0"
