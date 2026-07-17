@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Atcoder Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.25.1
+// @version      1.25.3
 // @description  一个适用于 AtCoder 的 Tampermonkey 脚本，增强功能与界面。
 // @author       北极小狐
 // @match        *://atcoder.jp/*
@@ -23,6 +23,8 @@
 // @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
+// @connect      edge.microsoft.com
+// @connect      api-edge.cognitive.microsofttranslator.com
 // @connect      127.0.0.1
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -471,6 +473,7 @@ OJBetter.supportList = {
         'youdao': { 'zh': 'zh-CHS', 'zh-Hant': 'zh-CHT', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'google': { 'zh': 'zh-CN', 'zh-Hant': 'zh-TW', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'caiyun': { 'zh': 'auto2zh', 'ja': 'auto2ja', 'ko': 'auto2ko', 'es': 'auto2es', 'fr': 'auto2fr' },
+        'edge': { 'zh': 'zh-Hans', 'zh-Hant': 'zh-Hant', 'de': 'de', 'fr': 'fr', 'ko': 'ko', 'pt': 'pt', 'ja': 'ja', 'es': 'es', 'it': 'it', 'hi': 'hi' },
         'openai': { 'zh': 'Chinese', 'zh-Hant': 'Traditional Chinese', 'de': 'German', 'fr': 'French', 'ko': 'Korean', 'pt': 'Portuguese', 'ja': 'Japanese', 'es': 'Spanish', 'it': 'Italian', 'hi': 'Hindi' }
     },
     /** @type {object} 更新源支持列表*/
@@ -925,7 +928,7 @@ async function initVar() {
     OJBetter.translation.retransAction = OJB_getGMValue("retransAction", "0");
     OJBetter.translation.waitTime = OJB_getGMValue("transWaitTime", "200");
     OJBetter.translation.auto.mixTrans.enabled = OJB_getGMValue("allowMixTrans", true);
-    OJBetter.translation.auto.mixTrans.servers = OJB_getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun']);
+    OJBetter.translation.auto.mixTrans.servers = OJB_getGMValue("mixedTranslation", ['deepl', 'iflyrec', 'youdao', 'caiyun', 'edge']);
     OJBetter.common.taskQueue = new TaskQueue();
     OJBetter.translation.replaceSymbol = OJB_getGMValue("replaceSymbol", "2");
     OJBetter.translation.filterTextWithoutEmphasis = OJB_getGMValue("filterTextWithoutEmphasis", false);
@@ -6177,6 +6180,11 @@ const translation_settings_HTML = `
                 data-i18n="settings:translation.options.services.caiyun"></span>
         </label>
         <label>
+            <input type='radio' name='translation' value='edge'>
+            <span class='OJBetter_setting_menu_label_text'
+                data-i18n="settings:translation.options.services.edge"></span>
+        </label>
+        <label>
             <input type='radio' name='translation' value='openai'>
             <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.openai.name">
@@ -6264,6 +6272,7 @@ const translation_settings_HTML = `
             <option value="youdao" data-i18n="settings:translation.preference.comment_translation_choice.services.youdao"></option>
             <option value="google" data-i18n="settings:translation.preference.comment_translation_choice.services.google"></option>
             <option value="caiyun" data-i18n="settings:translation.preference.comment_translation_choice.services.caiyun"></option>
+            <option value="edge" data-i18n="settings:translation.preference.comment_translation_choice.services.edge"></option>
             <option value="openai" data-i18n="settings:translation.preference.comment_translation_choice.services.openai"></option>
         </select>
     </div>
@@ -6311,6 +6320,8 @@ const translation_settings_HTML = `
             <label for="google" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <input type="checkbox" id="edge" name="mixedTranslation" value="edge">
+            <label for="edge" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.edge"></label>
         </div>
     </div>
     </div>
@@ -9040,6 +9051,7 @@ function registerTranslationContextMenu(button) {
             { value: 'youdao', name: i18next.t('translation.options.services.youdao', { ns: 'settings' }) },
             { value: 'google', name: i18next.t('translation.options.services.google', { ns: 'settings' }) },
             { value: 'caiyun', name: i18next.t('translation.options.services.caiyun', { ns: 'settings' }) },
+            { value: "edge", name: i18next.t("translation.options.services.edge", { ns: "settings" }) },
             { value: 'openai', name: i18next.t('translation.options.services.openai.name', { ns: 'settings' }) }
         ];
 
@@ -11102,7 +11114,8 @@ async function translateMain(text, element_node, is_comment, overrideTrans, repl
         iflyrec: 2000,
         youdao: 5000,
         google: 5000,
-        caiyun: 5000
+        caiyun: 5000,
+        edge: 5000
     };
     if (translationLimits.hasOwnProperty(realTransServer) && text.length > translationLimits[realTransServer]) {
         let textLength = translationLimits[realTransServer];
@@ -11165,6 +11178,8 @@ async function translateMain(text, element_node, is_comment, overrideTrans, repl
             } else if (transServer == "caiyun") {
                 translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`, is_renderLaTeX);
                 rawData = await translate_caiyun(text);
+            } else if (transServer == "edge") {
+                rawData = await edgeTranslator.run(text, translateResult, is_renderLaTeX, servername);
             } else if (transServer == "openai") {
                 translateResult.translateDiv.updateTranslateDiv(`${i18next.t('transingTip.openai', { ns: 'translator', openai_name: OJBetter.chatgpt.config.name })}${!OJBetter.chatgpt.isStream
                     ? i18next.t('transingTip.openai_isStream', { ns: 'translator' }) : ""}`,
@@ -16339,6 +16354,162 @@ async function translate_caiyun(raw) {
     }
     return await BaseTranslate(options, res => JSON.parse(res).target.map(decoder).join('\n'))
 }
+
+/**
+ * 微软 Edge 翻译器类 (AtCoder Better 专属版)
+ */
+class EdgeTranslator {
+    constructor() {
+        this.name = 'Microsoft Edge';
+        this.cachedToken = null;
+        this.tokenExpireTime = 0;
+    }
+
+    /**
+     * 获取或返回缓存的 Token
+     */
+    async getToken() {
+        if (this.cachedToken && Date.now() < this.tokenExpireTime) {
+            return this.cachedToken;
+        }
+        const response = await OJB_GMRequest({
+            method: "GET",
+            url: "https://edge.microsoft.com/translate/auth",
+            timeout: 30000,
+        });
+        const status = Number(response?.status || 0);
+        const token = typeof response?.responseText === "string"
+            ? response.responseText.trim()
+            : "";
+        if (status !== 200 || !token) {
+            throw new Error(`获取 Edge Token 失败: HTTP ${status || "unknown"}`);
+        }
+        this.cachedToken = token;
+        this.tokenExpireTime = Date.now() + 540000; // 缓存 9 分钟
+        return this.cachedToken;
+    }
+
+    /**
+     * 校验 Edge API 的 HTTP 响应并返回原始响应文本
+     */
+    _getResponseText(response) {
+        const status = Number(response?.status || 0);
+        const responseText = typeof response?.responseText === "string"
+            ? response.responseText
+            : "";
+
+        if (status === 401) {
+            this.cachedToken = null;
+            this.tokenExpireTime = 0;
+        }
+        if (status < 200 || status >= 300) {
+            let detail = "";
+            try {
+                const errorData = JSON.parse(responseText);
+                detail = errorData?.error?.message || errorData?.message || "";
+                if (Number(errorData?.error?.code) === 401000) {
+                    this.cachedToken = null;
+                    this.tokenExpireTime = 0;
+                }
+            } catch (_error) {}
+            throw new Error(
+                `Edge API 请求失败: HTTP ${status || "unknown"}${detail ? `: ${detail}` : ""}`
+            );
+        }
+
+        return responseText;
+    }
+
+    /**
+     * 解析并校验 Edge API 的翻译结果
+     */
+    _parseTranslationResponse(responseText) {
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (_error) {
+            throw new Error("Edge API 返回了无效的 JSON 响应");
+        }
+
+        if (data?.error) {
+            if (Number(data.error.code) === 401000) {
+                this.cachedToken = null;
+                this.tokenExpireTime = 0;
+            }
+            throw new Error(data.error.message || "Edge 翻译报错");
+        }
+
+        const translatedText = data?.[0]?.translations?.[0]?.text;
+        if (typeof translatedText !== "string") {
+            throw new Error("Edge API 返回了无效的翻译结果");
+        }
+        return translatedText;
+    }
+
+    /**
+     * 底层翻译请求
+     */
+    async _doTranslate(raw, targetLang) {
+        try {
+            const token = await this.getToken();
+            const options = {
+                method: 'POST',
+                url: `https://api-edge.cognitive.microsofttranslator.com/translate?from=&to=${targetLang}&api-version=3.0&textType=html`,
+                data: JSON.stringify([{ "Text": raw }]),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+                },
+                anonymous: true,
+                nocache: true,
+                timeout: 30000,
+            };
+
+            return await BaseTranslate(
+                options,
+                responseText => this._parseTranslationResponse(responseText),
+                undefined,
+                response => this._getResponseText(response)
+            );
+        } catch (error) {
+            const message = typeof error?.message === "string" && error.message
+                ? error.message
+                : typeof error === "string" && error
+                    ? error
+                    : typeof error?.error === "string" && error.error
+                        ? error.error
+                        : "Edge Network Error";
+            return {
+                text: raw,
+                status: false,
+                message,
+                done: false
+            };
+        }
+    }
+
+    /**
+     * 运行入口 (使用 AtCoder 版本的 is_renderLaTeX)
+     */
+    async run(text, translateResult, is_renderLaTeX, servername) {
+        // 1. 更新 UI 提示
+        translateResult.translateDiv.updateTranslateDiv(
+            `${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`,
+            is_renderLaTeX
+        );
+
+        // 2. 获取目标语言
+        let targetLang = 'zh-Hans';
+        try { targetLang = getTargetLanguage('edge') || 'zh-Hans'; } catch (e) {}
+
+        // 3. 执行翻译并直接返回结果
+        return await this._doTranslate(text, targetLang);
+    }
+}
+
+// 实例化全局的 Edge 翻译器
+const edgeTranslator = new EdgeTranslator();
 
 function isOpenAIResponsesEndpoint(url) {
     return /\/v1\/responses(?:$|[/?#])/.test(url);

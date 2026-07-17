@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.87.1
+// @version      1.87.2
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -25,6 +25,8 @@
 // @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
+// @connect      edge.microsoft.com
+// @connect      api-edge.cognitive.microsofttranslator.com
 // @connect      127.0.0.1
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -513,6 +515,18 @@ OJBetter.supportList = {
       ko: "auto2ko",
       es: "auto2es",
       fr: "auto2fr",
+    },
+    edge: {
+      zh: "zh-Hans",
+      "zh-Hant": "zh-Hant",
+      de: "de",
+      fr: "fr",
+      ko: "ko",
+      pt: "pt",
+      ja: "ja",
+      es: "es",
+      it: "it",
+      hi: "hi",
     },
     openai: {
       zh: "Chinese",
@@ -1056,7 +1070,7 @@ async function initVar() {
   );
   OJBetter.translation.auto.mixTrans.servers = OJB_getGMValue(
     "mixedTranslation",
-    ["deepl", "iflyrec", "youdao", "caiyun"]
+    ["deepl", "iflyrec", "youdao", "caiyun", "edge"]
   );
   OJBetter.common.taskQueue = new TaskQueue();
   OJBetter.translation.replaceSymbol = OJB_getGMValue("replaceSymbol", "2");
@@ -4557,6 +4571,167 @@ function OJB_getPlaceholderTokenRegex() {
   return /(?:【\s*(\d{8})\s*】|\\?\[\s*(\d{8})\s*\\?\]|\{\s*(\d{8})\s*\})/g;
 }
 
+/**
+ * 将 Codeforces 渲染前的三美元/六美元公式规范为标准 Markdown 公式。
+ * 反引号代码段保持原样，避免改写代码中的字面量美元符号。
+ * @param {string} markdown 待处理的 Markdown
+ * @returns {string} 规范化后的 Markdown
+ */
+function OJB_normalizeCodeforcesLatexDelimiters(markdown) {
+  const text = String(markdown ?? "");
+  const codeforcesDelimiters = [
+    ["$$$$$$", "$$"],
+    ["$$$", "$"],
+  ];
+
+  const isEscaped = (value, position) => {
+    let backslashCount = 0;
+    for (
+      let cursor = position - 1;
+      cursor >= 0 && value[cursor] === "\\";
+      cursor--
+    ) {
+      backslashCount++;
+    }
+    return backslashCount % 2 === 1;
+  };
+
+  const getRunLength = (value, position, character) => {
+    let length = 0;
+    while (value[position + length] === character) length++;
+    return length;
+  };
+
+  const findExactClosingRun = (
+    value,
+    delimiter,
+    fromIndex,
+    character
+  ) => {
+    let candidate = value.indexOf(delimiter, fromIndex);
+    while (candidate !== -1) {
+      if (
+        value[candidate - 1] !== character &&
+        value[candidate + delimiter.length] !== character &&
+        !isEscaped(value, candidate)
+      ) {
+        return candidate;
+      }
+      candidate = value.indexOf(delimiter, candidate + 1);
+    }
+    return -1;
+  };
+
+  const normalizePlainText = (value) => {
+    let result = "";
+    let copyFrom = 0;
+    let index = 0;
+    while (index < value.length) {
+      let normalized = false;
+      for (const [delimiter, replacement] of codeforcesDelimiters) {
+        if (
+          value.startsWith(delimiter, index) &&
+          value[index - 1] !== "$" &&
+          value[index + delimiter.length] !== "$" &&
+          !isEscaped(value, index)
+        ) {
+          const closing = findExactClosingRun(
+            value,
+            delimiter,
+            index + delimiter.length,
+            "$"
+          );
+          if (closing !== -1) {
+            result +=
+              value.slice(copyFrom, index) +
+              replacement +
+              value.slice(index + delimiter.length, closing) +
+              replacement;
+            index = closing + delimiter.length;
+            copyFrom = index;
+            normalized = true;
+            break;
+          }
+        }
+      }
+      if (normalized) continue;
+      index++;
+    }
+    return result + value.slice(copyFrom);
+  };
+
+  let result = "";
+  let plainTextStart = 0;
+  let index = 0;
+  while (index < text.length) {
+    if (text[index] === "`" && !isEscaped(text, index)) {
+      const runLength = getRunLength(text, index, "`");
+      const delimiter = "`".repeat(runLength);
+      const closing = findExactClosingRun(
+        text,
+        delimiter,
+        index + runLength,
+        "`"
+      );
+      result += normalizePlainText(text.slice(plainTextStart, index));
+      if (closing === -1) return result + text.slice(index);
+      const codeEnd = closing + runLength;
+      result += text.slice(index, codeEnd);
+      index = codeEnd;
+      plainTextStart = index;
+      continue;
+    }
+    index++;
+  }
+  return result + normalizePlainText(text.slice(plainTextStart));
+}
+
+/**
+ * 创建机器翻译前用于保护 LaTeX 公式的匹配器。
+ * @param {boolean} [includeOrdinalSuffix=false] 是否同时保护英文序数词后缀
+ * @returns {RegExp} LaTeX 公式匹配器
+ */
+function OJB_getTranslationLatexRegex(includeOrdinalSuffix = false) {
+  return includeOrdinalSuffix
+    ? /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g
+    : /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+}
+
+/**
+ * 在本地 Markdown 格式化期间临时保护代码段。标记不会发送给翻译服务，
+ * 因此可在格式化完成后进行严格、无公式边界判断的恢复。
+ * @param {string} markdown 待保护的 Markdown
+ * @returns {{text: string, recover: (value: string) => string}} 保护结果与恢复函数
+ */
+function OJB_protectMarkdownCodeForFormatting(markdown) {
+  const source = String(markdown ?? "");
+  let markerPrefix;
+  do {
+    markerPrefix = `OJBetterMarkdownCode${OJB_getRandomNumber(8)}Slot`;
+  } while (source.includes(markerPrefix));
+
+  const replacements = [];
+  const text = source.replace(
+    /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g,
+    (code) => {
+      const marker = `${markerPrefix}${replacements.length}End`;
+      replacements.push([marker, code]);
+      return marker;
+    }
+  );
+
+  return {
+    text,
+    recover(value) {
+      let result = String(value ?? "");
+      replacements.forEach(([marker, code]) => {
+        result = result.replaceAll(marker, () => code);
+      });
+      return result;
+    },
+  };
+}
+
 // ------------------------------
 // 一些工具类
 // ------------------------------
@@ -7097,6 +7272,11 @@ const translation_settings_HTML = `
                 data-i18n="settings:translation.options.services.caiyun"></span>
         </label>
         <label>
+            <input type='radio' name='translation' value='edge'>
+            <span class='OJBetter_setting_menu_label_text'
+                data-i18n="settings:translation.options.services.edge"></span>
+        </label>
+        <label>
             <input type='radio' name='translation' value='openai'>
             <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.openai.name">
@@ -7184,6 +7364,7 @@ const translation_settings_HTML = `
             <option value="youdao" data-i18n="settings:translation.preference.comment_translation_choice.services.youdao"></option>
             <option value="google" data-i18n="settings:translation.preference.comment_translation_choice.services.google"></option>
             <option value="caiyun" data-i18n="settings:translation.preference.comment_translation_choice.services.caiyun"></option>
+            <option value="edge" data-i18n="settings:translation.preference.comment_translation_choice.services.edge"></option>
             <option value="openai" data-i18n="settings:translation.preference.comment_translation_choice.services.openai"></option>
         </select>
     </div>
@@ -7229,6 +7410,8 @@ const translation_settings_HTML = `
             <label for="google" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <input type="checkbox" id="edge" name="mixedTranslation" value="edge">
+            <label for="edge" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.edge"></label>
         </div>
     </div>
     <hr>
@@ -9198,7 +9381,9 @@ async function initButtonFunc() {
     const markdown = this.data("markdown");
     if (markdown === undefined) {
       const htmlContent = this.html();
-      const newMarkdown = OJBetter.common.turndownService.turndown(htmlContent);
+      const newMarkdown = OJB_normalizeCodeforcesLatexDelimiters(
+        OJBetter.common.turndownService.turndown(htmlContent)
+      );
       this.data("markdown", newMarkdown);
       return newMarkdown;
     }
@@ -9825,6 +10010,47 @@ function containsLegacyLatex(element) {
   return getLegacyLatexNodes(element).length > 0;
 }
 
+/** 不参与 Codeforces 原始公式标记检测的内容。 */
+const OJB_UNRENDERED_LATEX_IGNORED_SELECTOR =
+  "code, pre, kbd, samp, script, style, textarea, noscript, .MathJax, .MathJax_Display, .katex, .monaco-editor, .translateDiv, .html2md-panel, .mdViewContent";
+
+/**
+ * 判断目标中是否仍有 MathJax 尚未处理的 Codeforces 三/六美元公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含未渲染公式
+ */
+function containsUnrenderedCodeforcesLatex(element) {
+  const roots = $(element).get();
+  for (const root of roots) {
+    if (!root) continue;
+    const rootDocument =
+      root.nodeType === 9 ? root : root.ownerDocument || document;
+    const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
+    const walker = rootDocument.createTreeWalker(
+      root,
+      nodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const text = node.nodeValue || "";
+          if (
+            !text.includes("$$$") ||
+            node.parentElement?.closest(
+              OJB_UNRENDERED_LATEX_IGNORED_SELECTOR
+            )
+          ) {
+            return nodeFilter.FILTER_REJECT;
+          }
+          return OJB_normalizeCodeforcesLatexDelimiters(text) === text
+            ? nodeFilter.FILTER_REJECT
+            : nodeFilter.FILTER_ACCEPT;
+        },
+      }
+    );
+    if (walker.nextNode()) return true;
+  }
+  return false;
+}
+
 /**
  * 判断目标中是否存在需要等待渲染的新版 MathJax 公式。
  * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
@@ -9833,7 +10059,10 @@ function containsLegacyLatex(element) {
 function containsModernMathJax(element) {
   const selector =
     '.MathJax_Preview, .MathJax, .MathJax_Display, script[type^="math/tex"]';
-  return $(element).find(selector).addBack(selector).length > 0;
+  return (
+    $(element).find(selector).addBack(selector).length > 0 ||
+    containsUnrenderedCodeforcesLatex(element)
+  );
 }
 
 /**
@@ -9883,7 +10112,9 @@ function createMarkdownTranslationSource(
   });
 
   return {
-    text: OJBetter.common.turndownService.turndown(sourceRoot.html() || ""),
+    text: OJB_normalizeCodeforcesLatexDelimiters(
+      OJBetter.common.turndownService.turndown(sourceRoot.html() || "")
+    ),
     format: "markdown",
     legacyLatex: legacyLatex.slots.size > 0 ? legacyLatex : null,
   };
@@ -10802,6 +11033,12 @@ function registerTranslationContextMenu(button) {
         }),
       },
       {
+        value: "edge",
+        name: i18next.t("translation.options.services.edge", {
+          ns: "settings",
+        }),
+      },
+      {
         value: "openai",
         name: i18next.t("translation.options.services.openai.name", {
           ns: "settings",
@@ -11625,6 +11862,7 @@ function waitForMathJaxIdle(element = document) {
 
     const timeoutId = setTimeout(finish, OJB_MATHJAX_WAIT_TIMEOUT_MS);
     const checkQueue = () => {
+      if (containsUnrenderedCodeforcesLatex(element)) return;
       if (typeof MathJax === "undefined") return;
       const queue = MathJax.Hub?.queue;
       if (!queue || (queue.pending === 0 && queue.running === 0)) finish();
@@ -13249,6 +13487,8 @@ async function translateMain(
   const id = OJB_getRandomNumber(8);
   /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
   const textBlockReplacer = new TextBlockReplacer();
+  /** @type {TextBlockReplacer} Markdown 代码替换/恢复实例*/
+  const markdownCodeReplacer = new TextBlockReplacer();
   /** @type {string} 翻译结果文本*/
   let translatedText = "";
 
@@ -13290,15 +13530,13 @@ async function translateMain(
       text = textBlockReplacer.replace(text, regex);
     } else if (realTransServer != "openai") {
       // 使用GPT翻译时不必替换latex公式
-      let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
-      // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
-      if (OJBetter.translation.targetLang === "zh")
-        regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
-      text = textBlockReplacer.replace(text, regex);
+      const codeRegex = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
+      text = markdownCodeReplacer.replace(text, codeRegex);
 
-      // 替换行间代码块`
-      const regex2 = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
-      text = textBlockReplacer.replace(text, regex2);
+      const regex = OJB_getTranslationLatexRegex(
+        OJBetter.translation.targetLang === "zh"
+      );
+      text = textBlockReplacer.replace(text, regex);
     }
     return text;
   };
@@ -13310,7 +13548,9 @@ async function translateMain(
   */
   const recoverLatex = function (text) {
     if (replaceOriginalState?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION) {
-      return realTransServer !== "openai" ? textBlockReplacer.recover(text) : text;
+      return realTransServer !== "openai"
+        ? markdownCodeReplacer.recover(textBlockReplacer.recover(text))
+        : text;
     }
     // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
     let resultText = text
@@ -13321,7 +13561,9 @@ async function translateMain(
     if (translationSource.format === "html") {
       resultText = textBlockReplacer.recover(resultText);
     } else if (realTransServer != "openai") {
-      resultText = textBlockReplacer.recover(resultText);
+      resultText = markdownCodeReplacer.recover(
+        textBlockReplacer.recover(resultText)
+      );
     }
     return resultText;
   };
@@ -13333,6 +13575,7 @@ async function translateMain(
    */
   const formatText = function (text) {
     const legacyLatexTokenMarkers = new Map();
+    let protectedMarkdownCode = null;
     if (translationSource.legacyLatex) {
       text = text.replace(
         OJB_getPlaceholderTokenRegex(),
@@ -13348,9 +13591,9 @@ async function translateMain(
 
     // 转义LaTex中的特殊符号
     if (translationSource.format !== "html") {
-      // 先替换掉行间代码块
-      const replacer = new TextBlockReplacer();
-      text = replacer.replace(text, /```[\s\S]*?```/g);
+      // 所有 Markdown 代码段保持原样，直到公式及 Markdown 格式化完成。
+      protectedMarkdownCode = OJB_protectMarkdownCodeForFormatting(text);
+      text = protectedMarkdownCode.text;
 
       // 处理LaTeX公式
       const escapeRules = [
@@ -13375,9 +13618,6 @@ async function translateMain(
         escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$"); // $$符号（因为后面需要作为replacement，双倍消耗）
         text = text.replace(matchedText, escapedText);
       }
-
-      // 恢复行间代码块
-      text = replacer.recover(text);
     }
 
     // 使符合mathjx的转换语法
@@ -13417,6 +13657,8 @@ async function translateMain(
     mdRuleMap.forEach(({ pattern, replacement }) => {
       text = text.replace(pattern, replacement);
     });
+
+    if (protectedMarkdownCode) text = protectedMarkdownCode.recover(text);
 
     legacyLatexTokenMarkers.forEach((token, marker) => {
       text = text.replaceAll(marker, token);
@@ -13470,6 +13712,11 @@ async function translateMain(
     }
   }
 
+  // MathJax 等待超时或异常时，原始 Codeforces 三/六美元公式仍需安全降级。
+  if (translationSource.format === "markdown") {
+    text = OJB_normalizeCodeforcesLatexDelimiters(text);
+  }
+
   // 替换latex公式
   text = replaceLatex(text);
 
@@ -13489,6 +13736,7 @@ async function translateMain(
     youdao: 5000,
     google: 5000,
     caiyun: 5000,
+    edge: 5000,
   };
   if (
     translationLimits.hasOwnProperty(realTransServer) &&
@@ -13605,6 +13853,8 @@ async function translateMain(
           displayOptions.renderLatex
         );
         rawData = await translate_caiyun(text);
+      } else if (transServer == "edge") {
+        rawData = await edgeTranslator.run(text, translateResult, displayOptions, servername);
       } else if (transServer == "openai") {
         translateResult.translateDiv.updateTranslateDiv(
           `${i18next.t("transingTip.openai", {
@@ -20163,6 +20413,162 @@ async function translate_caiyun(raw) {
     JSON.parse(res).target.map(decoder).join("\n")
   );
 }
+
+/**
+ * 微软 Edge 翻译器类 (简化版)
+ */
+class EdgeTranslator {
+    constructor() {
+        this.name = 'Microsoft Edge';
+        this.cachedToken = null;
+        this.tokenExpireTime = 0;
+    }
+    /**
+     * 获取或返回缓存的 Token
+     */
+    async getToken() {
+        if (this.cachedToken && Date.now() < this.tokenExpireTime) {
+            return this.cachedToken;
+        }
+        const response = await OJB_GMRequest({
+            method: "GET",
+            url: "https://edge.microsoft.com/translate/auth",
+            timeout: 30000,
+        });
+        const status = Number(response?.status || 0);
+        const token = typeof response?.responseText === "string"
+            ? response.responseText.trim()
+            : "";
+        if (status !== 200 || !token) {
+            throw new Error(`获取 Edge Token 失败: HTTP ${status || "unknown"}`);
+        }
+        this.cachedToken = token;
+        this.tokenExpireTime = Date.now() + 540000; // 缓存 9 分钟
+        return this.cachedToken;
+    }
+
+    /**
+     * 校验 Edge API 的 HTTP 响应并返回原始响应文本
+     */
+    _getResponseText(response) {
+        const status = Number(response?.status || 0);
+        const responseText = typeof response?.responseText === "string"
+            ? response.responseText
+            : "";
+
+        if (status === 401) {
+            this.cachedToken = null;
+            this.tokenExpireTime = 0;
+        }
+        if (status < 200 || status >= 300) {
+            let detail = "";
+            try {
+                const errorData = JSON.parse(responseText);
+                detail = errorData?.error?.message || errorData?.message || "";
+                if (Number(errorData?.error?.code) === 401000) {
+                    this.cachedToken = null;
+                    this.tokenExpireTime = 0;
+                }
+            } catch (_error) {}
+            throw new Error(
+                `Edge API 请求失败: HTTP ${status || "unknown"}${detail ? `: ${detail}` : ""}`
+            );
+        }
+
+        return responseText;
+    }
+
+    /**
+     * 解析并校验 Edge API 的翻译结果
+     */
+    _parseTranslationResponse(responseText) {
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (_error) {
+            throw new Error("Edge API 返回了无效的 JSON 响应");
+        }
+
+        if (data?.error) {
+            if (Number(data.error.code) === 401000) {
+                this.cachedToken = null;
+                this.tokenExpireTime = 0;
+            }
+            throw new Error(data.error.message || "Edge 翻译报错");
+        }
+
+        const translatedText = data?.[0]?.translations?.[0]?.text;
+        if (typeof translatedText !== "string") {
+            throw new Error("Edge API 返回了无效的翻译结果");
+        }
+        return translatedText;
+    }
+
+    /**
+     * 底层翻译请求
+     */
+    async _doTranslate(raw, targetLang) {
+        try {
+            const token = await this.getToken();
+            const options = {
+                method: 'POST',
+                url: `https://api-edge.cognitive.microsofttranslator.com/translate?from=&to=${targetLang}&api-version=3.0&textType=html`,
+                data: JSON.stringify([{ "Text": raw }]),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+                },
+                anonymous: true,
+                nocache: true,
+                timeout: 30000,
+            };
+
+            return await BaseTranslate(
+                options,
+                responseText => this._parseTranslationResponse(responseText),
+                undefined,
+                response => this._getResponseText(response)
+            );
+        } catch (error) {
+            const message = typeof error?.message === "string" && error.message
+                ? error.message
+                : typeof error === "string" && error
+                    ? error
+                    : typeof error?.error === "string" && error.error
+                        ? error.error
+                        : "Edge Network Error";
+            return {
+                text: raw,
+                status: false,
+                message,
+                done: false
+            };
+        }
+    }
+
+    /**
+     * 暴露给主控路由的执行入口
+     */
+    async run(text, translateResult, displayOptions, servername) {
+        // 1. 更新 UI 提示 (适配你当前脚本版本的参数：escapeHTML 和 renderLatex)
+        translateResult.translateDiv.updateTranslateDiv(
+            `${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`,
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
+        );
+
+        // 2. 获取目标语言
+        let targetLang = 'zh-Hans';
+        try { targetLang = getTargetLanguage('edge') || 'zh-Hans'; } catch (e) {}
+
+        // 3. 执行翻译并直接返回结果
+        return await this._doTranslate(text, targetLang);
+    }
+}
+
+// 实例化全局的 Edge 翻译器
+const edgeTranslator = new EdgeTranslator();
 
 function isOpenAIResponsesEndpoint(url) {
   return /\/v1\/responses(?:$|[/?#])/.test(url);
