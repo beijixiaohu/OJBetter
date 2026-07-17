@@ -16372,22 +16372,78 @@ class EdgeTranslator {
         if (this.cachedToken && Date.now() < this.tokenExpireTime) {
             return this.cachedToken;
         }
-        return new Promise((resolve, reject) => {
-            GM_xmlhttpRequest({
-                method: "GET",
-                url: "https://edge.microsoft.com/translate/auth",
-                onload: (res) => {
-                    if (res.status === 200 && res.responseText) {
-                        this.cachedToken = res.responseText;
-                        this.tokenExpireTime = Date.now() + 540000; // 缓存 9 分钟
-                        resolve(this.cachedToken);
-                    } else {
-                        reject("获取 Edge Token 失败: " + res.status);
-                    }
-                },
-                onerror: (err) => reject(err)
-            });
+        const response = await OJB_GMRequest({
+            method: "GET",
+            url: "https://edge.microsoft.com/translate/auth",
+            timeout: 30000,
         });
+        const status = Number(response?.status || 0);
+        const token = typeof response?.responseText === "string"
+            ? response.responseText.trim()
+            : "";
+        if (status !== 200 || !token) {
+            throw new Error(`获取 Edge Token 失败: HTTP ${status || "unknown"}`);
+        }
+        this.cachedToken = token;
+        this.tokenExpireTime = Date.now() + 540000; // 缓存 9 分钟
+        return this.cachedToken;
+    }
+
+    /**
+     * 校验 Edge API 的 HTTP 响应并返回原始响应文本
+     */
+    _getResponseText(response) {
+        const status = Number(response?.status || 0);
+        const responseText = typeof response?.responseText === "string"
+            ? response.responseText
+            : "";
+
+        if (status === 401) {
+            this.cachedToken = null;
+            this.tokenExpireTime = 0;
+        }
+        if (status < 200 || status >= 300) {
+            let detail = "";
+            try {
+                const errorData = JSON.parse(responseText);
+                detail = errorData?.error?.message || errorData?.message || "";
+                if (Number(errorData?.error?.code) === 401000) {
+                    this.cachedToken = null;
+                    this.tokenExpireTime = 0;
+                }
+            } catch (_error) {}
+            throw new Error(
+                `Edge API 请求失败: HTTP ${status || "unknown"}${detail ? `: ${detail}` : ""}`
+            );
+        }
+
+        return responseText;
+    }
+
+    /**
+     * 解析并校验 Edge API 的翻译结果
+     */
+    _parseTranslationResponse(responseText) {
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (_error) {
+            throw new Error("Edge API 返回了无效的 JSON 响应");
+        }
+
+        if (data?.error) {
+            if (Number(data.error.code) === 401000) {
+                this.cachedToken = null;
+                this.tokenExpireTime = 0;
+            }
+            throw new Error(data.error.message || "Edge 翻译报错");
+        }
+
+        const translatedText = data?.[0]?.translations?.[0]?.text;
+        if (typeof translatedText !== "string") {
+            throw new Error("Edge API 返回了无效的翻译结果");
+        }
+        return translatedText;
     }
 
     /**
@@ -16407,40 +16463,27 @@ class EdgeTranslator {
                 },
                 anonymous: true,
                 nocache: true,
+                timeout: 30000,
             };
 
             return await BaseTranslate(
                 options,
-                res => {
-                    try {
-                        const jsonObj = JSON.parse(res);
-                        return jsonObj[0]?.translations[0]?.text || res;
-                    } catch (e) {
-                        return res;
-                    }
-                },
-                res => {
-                    const resObj = { status: true, message: 'ok', done: true };
-                    if (res.includes('"error"')) {
-                        resObj.status = false;
-                        try {
-                            const errObj = JSON.parse(res);
-                            resObj.message = errObj.error?.message || 'Edge 翻译报错';
-                            if (errObj.error?.code === 401000 || res.includes("401")) {
-                                this.cachedToken = null; // Token 失效，清空缓存
-                            }
-                        } catch (e) {
-                            resObj.message = 'Edge API 未知错误';
-                        }
-                    }
-                    return resObj;
-                }
+                responseText => this._parseTranslationResponse(responseText),
+                undefined,
+                response => this._getResponseText(response)
             );
         } catch (error) {
+            const message = typeof error?.message === "string" && error.message
+                ? error.message
+                : typeof error === "string" && error
+                    ? error
+                    : typeof error?.error === "string" && error.error
+                        ? error.error
+                        : "Edge Network Error";
             return {
                 text: raw,
                 status: false,
-                message: error.message || error || "Edge Network Error",
+                message,
                 done: false
             };
         }

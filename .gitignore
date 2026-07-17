@@ -17,5 +17,7 @@ tools/unit/test/replaceOriginal/*
 !tools/unit/test/replaceOriginal/index.node.js
 !tools/unit/test/openai/
 !tools/unit/test/openai/index.node.js
+!tools/unit/test/edge/
+!tools/unit/test/edge/index.node.js
 !tools/unit/test/contextMenu/
 !tools/unit/test/contextMenu/index.test.js
