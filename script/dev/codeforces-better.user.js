@@ -15588,6 +15588,7 @@ const value_monacoLanguageMap = {
   83: "kotlin",
   87: "java",
   89: "cpp",
+  91: "cpp",
 };
 
 /**
