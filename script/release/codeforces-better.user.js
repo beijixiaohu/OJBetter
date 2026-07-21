@@ -16,6 +16,7 @@
 // @connect      translate.google.com
 // @connect      openai.api2d.net
 // @connect      api.openai.com
+// @connect      api.deepseek.com
 // @connect      www.luogu.com.cn
 // @connect      vjudge.net
 // @connect      clist.by
@@ -425,6 +426,46 @@ OJBetter.chatgpt = {
 };
 
 /**
+ * @namespace deepseek
+ * @desc DeepSeek翻译服务配置。
+ * @memberof OJBetter
+ */
+OJBetter.deepseek = {
+  /** @type {Object?} DeepSeek配置对象 */
+  configs: undefined,
+  config: {
+    /** @type {string?} 名称 */
+    name: undefined,
+    /** @type {string?} API密钥 */
+    key: undefined,
+    /** @type {string?} 代理地址 */
+    proxy: undefined,
+    /** @type {Object?} 额外请求头 */
+    header: undefined,
+    /** @type {Object?} 额外请求数据 */
+    data: undefined,
+    quota: {
+      /** @type {string?} 余额URL */
+      url: undefined,
+      /** @type {string?} 余额请求方法 */
+      method: undefined,
+      /** @type {Object?} 余额请求头 */
+      header: undefined,
+      /** @type {Object?} 余额请求数据 */
+      data: undefined,
+      /** @type {number?} 剩余配额 */
+      surplus: undefined,
+    },
+  },
+  /** @type {boolean?} 是否为流式传输 */
+  isStream: undefined,
+  /** @type {string?} 是否使用自定义Prompt */
+  customPrompt: undefined,
+  /** @type {boolean?} 是否作为系统Prompt */
+  asSystemPrompt: undefined,
+};
+
+/**
  * @namespace preference
  * @desc 偏好设置
  * @memberof OJBetter
@@ -515,6 +556,18 @@ OJBetter.supportList = {
       fr: "auto2fr",
     },
     openai: {
+      zh: "Chinese",
+      "zh-Hant": "Traditional Chinese",
+      de: "German",
+      fr: "French",
+      ko: "Korean",
+      pt: "Portuguese",
+      ja: "Japanese",
+      es: "Spanish",
+      it: "Italian",
+      hi: "Hindi",
+    },
+    deepseek: {
       zh: "Chinese",
       "zh-Hant": "Traditional Chinese",
       de: "German",
@@ -1180,6 +1233,52 @@ async function initVar() {
       true
     );
     OJBetter.chatgpt.config.quota.surplus = configuration.quota_surplus;
+  }
+  //deepseek
+  OJBetter.deepseek.isStream = OJB_getGMValue("deepseek_isStream", true);
+  OJBetter.deepseek.customPrompt = OJB_getGMValue("deepseek_customPrompt", "");
+  OJBetter.deepseek.asSystemPrompt = OJB_getGMValue(
+    "deepseek_asSystemPrompt",
+    false
+  );
+  OJBetter.deepseek.configs = OJB_getGMValue("deepseek_config", {
+    choice: "",
+    configurations: [],
+  });
+  if (
+    OJBetter.deepseek.configs.choice !== "" &&
+    OJBetter.deepseek.configs.configurations.length !== 0
+  ) {
+    const choice = OJBetter.deepseek.configs.choice;
+    const configuration = OJBetter.deepseek.configs.configurations.find(
+      (obj) => obj.name === choice
+    );
+    if (configuration == undefined) {
+      let existingConfig = GM_getValue("deepseek_config");
+      existingConfig.choice = "";
+      GM_setValue("deepseek_config", existingConfig);
+      location.reload();
+    }
+    OJBetter.deepseek.config.name = configuration.name;
+    OJBetter.deepseek.config.key = configuration.key;
+    OJBetter.deepseek.config.proxy = configuration.proxy;
+    OJBetter.deepseek.config.header = OJB_parseLinePairArray(
+      configuration._header
+    );
+    OJBetter.deepseek.config.data = OJB_parseLinePairArray(
+      configuration._data,
+      true
+    );
+    OJBetter.deepseek.config.quota.url = configuration.quota_url;
+    OJBetter.deepseek.config.quota.method = configuration.quota_method;
+    OJBetter.deepseek.config.quota.header = OJB_parseLinePairArray(
+      configuration.quota_header
+    );
+    OJBetter.deepseek.config.quota.data = OJB_parseLinePairArray(
+      configuration.quota_data,
+      true
+    );
+    OJBetter.deepseek.config.quota.surplus = configuration.quota_surplus;
   }
   // 编辑器
   if (!OJBetter.typeOfPage.is_mSite)
@@ -6681,14 +6780,20 @@ class ConfigManager {
     configMenu.on("click", "#tempConfig_save", () => {
       // 检查必填字段
       const { valid, config } = Validator.required(structure);
-      if (!valid) return;
+      if (!valid) {
+        OJB_createDialog("提示", "请填写所有必填字段（名称等），红色边框标记了必填项。", ["确定"], false);
+        return;
+      }
 
       // 检查键值对
       const { valid: checkOk, errorKey } = Validator.checkKeyValuePairs(
         structure,
         config
       );
-      if (!checkOk) return;
+      if (!checkOk) {
+        OJB_createDialog("提示", "请检查字段格式是否正确。", ["确定"], false);
+        return;
+      }
 
       this.tempConfig.configurations.push(config);
 
@@ -6730,14 +6835,20 @@ class ConfigManager {
     configMenu.on("click", "#tempConfig_save", () => {
       // 检查必填字段
       const { valid, config } = Validator.required(structure);
-      if (!valid) return;
+      if (!valid) {
+        OJB_createDialog("提示", "请填写所有必填字段（名称等），红色边框标记了必填项。", ["确定"], false);
+        return;
+      }
 
       // 检查键值对
       const { valid: checkOk, errorKey } = Validator.checkKeyValuePairs(
         structure,
         config
       );
-      if (!checkOk) return;
+      if (!checkOk) {
+        OJB_createDialog("提示", "请检查字段格式是否正确。", ["确定"], false);
+        return;
+      }
 
       // 更新配置
       this.tempConfig.configurations[index] = config;
@@ -6938,6 +7049,16 @@ const translation_settings_HTML = `
                 </div>
             </span>
         </label>
+        <label>
+            <input type='radio' name='translation' value='deepseek'>
+            <span class='OJBetter_setting_menu_label_text'>
+                DeepSeek
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text">使用 DeepSeek V4 Flash 模型进行翻译</div>
+                </div>
+            </span>
+        </label>
     </div>
     <hr>
     <h4>DeepL</h4>
@@ -7003,6 +7124,37 @@ const translation_settings_HTML = `
         <textarea id="openai_customPrompt" placeholder='' require = false data-i18n="[placeholder]settings:translation.chatgpt.customPrompt.placeholder"></textarea>
     </div>
     <hr>
+    <h4>DeepSeek（强制使用 V4 Flash）</h4>
+    <div id="deepseek_config" class="config"></div>
+    <div class='OJBetter_setting_list'>
+        <label for="deepseek_isStream" style="display: flex;">流式传输</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">启用流式传输可实时显示翻译结果</div>
+        </div>
+        <input type="checkbox" id="deepseek_isStream" name="deepseek_isStream">
+    </div>
+    <div class='OJBetter_setting_list'>
+        <label for="deepseek_asSystemPrompt" style="display: flex;">作为 System Prompt</label>
+        <div class="help_tip">
+            ${helpCircleHTML}
+            <div class="tip_text">启用后将自定义 Prompt 作为 system msg 而非 user msg 发送</div>
+        </div>
+        <input type="checkbox" id="deepseek_asSystemPrompt" name="deepseek_asSystemPrompt">
+    </div>
+    <div class="OJBetter_setting_list">
+        <label for='deepseek_customPrompt'>
+            <div style="display: flex;align-items: center;">
+                <span class="input_label">自定义翻译 Prompt</span>
+                <div class="help_tip">
+                    ${helpCircleHTML}
+                    <div class="tip_text">留空则使用默认 Prompt。如果填写，将替代默认 Prompt，请务必保持严谨的翻译规则</div>
+                </div>
+            </div>
+        </label>
+        <textarea id="deepseek_customPrompt" placeholder='' require = false></textarea>
+    </div>
+    <hr>
     <h4 data-i18n="settings:translation.preference.title"></h4>
     <div class='OJBetter_setting_list'>
         <label for="comment_translation_choice" style="display: flex;"
@@ -7016,6 +7168,7 @@ const translation_settings_HTML = `
             <option value="google" data-i18n="settings:translation.preference.comment_translation_choice.services.google"></option>
             <option value="caiyun" data-i18n="settings:translation.preference.comment_translation_choice.services.caiyun"></option>
             <option value="openai" data-i18n="settings:translation.preference.comment_translation_choice.services.openai"></option>
+            <option value="deepseek">DeepSeek</option>
         </select>
     </div>
     <hr>
@@ -7060,6 +7213,8 @@ const translation_settings_HTML = `
             <label for="google" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <input type="checkbox" id="deepseek" name="mixedTranslation" value="deepseek">
+            <label for="deepseek">DeepSeek</label>
         </div>
     </div>
     <hr>
@@ -7872,6 +8027,61 @@ const chatgptConfigEditHTML = `
     </dialog>
 `;
 
+const deepseekConfigEditHTML = `
+    <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
+    <div class='OJBetter_setting_content'>
+        <div class="tool-box">
+            <button class='ojb_btn ojb_btn_popover top btn-close' type="button">
+                <i class="iconfont">&#xe614;</i>
+            </button>
+        </div>
+        <h4>DeepSeek 配置</h4>
+        <h5>基础设置</h5>
+        <hr>
+        <div class="OJBetter_setting_list">
+            <label for='name'>
+                <span class="input_label">配置名称</span>
+            </label>
+            <input type='text' id='name' class='no_default' placeholder='配置名称（必填）' require = true>
+        </div>
+        <div class="OJBetter_setting_list">
+            <label for='deepseek_key'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">API Key</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text">从 platform.deepseek.com 获取 API Key</div>
+                    </div>
+                </div>
+            </label>
+            <input type='text' id='deepseek_key' placeholder='sk-' require = true>
+        </div>
+        <div class="OJBetter_setting_list">
+            <label for='deepseek_proxy'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label">API 地址（可选）</span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text">默认使用 https://api.deepseek.com/v1/chat/completions，如需代理可填写自定义地址</div>
+                    </div>
+                </div>
+            </label>
+            <input type='text' id='deepseek_proxy' placeholder='https://api.deepseek.com/v1/chat/completions' require = false>
+        </div>
+        <hr>
+        <details>
+            <summary>高级设置</summary>
+            ${apiCustomConfigHTML("deepseek")}
+        </details>
+        <details>
+            <summary>配额查询</summary>
+            ${apiQuotaConfigHTML("deepseek")}
+        </details>
+        <button id='tempConfig_save' data-i18n="common:save"></button>
+    </div>
+    </dialog>
+`;
+
 const CompletConfigEditHTML = `
     <dialog class='OJBetter_setting_menu' id='config_edit_menu'>
     <div class='OJBetter_setting_content'>
@@ -8188,6 +8398,49 @@ async function initSettingsPanel() {
     );
     configManager_chatgpt.registerChoiceChange();
 
+    // deepseek配置
+    const deepseekStructure = {
+      "#name": createStructure("text", "name", true),
+      "#deepseek_key": createStructure("text", "key", true),
+      "#deepseek_proxy": createStructure("text", "proxy", false),
+      "#deepseek_header": createStructure(
+        "text",
+        "_header",
+        false,
+        "keyValuePairs"
+      ),
+      "#deepseek_data": createStructure("text", "_data", false, "keyValuePairsOrJson"),
+      "#deepseek_quota_url": createStructure("text", "quota_url", false),
+      "#deepseek_quota_header": createStructure(
+        "text",
+        "quota_header",
+        false,
+        "keyValuePairs"
+      ),
+      "#deepseek_quota_data": createStructure(
+        "text",
+        "quota_data",
+        false,
+        "keyValuePairsOrJson"
+      ),
+      "#deepseek_quota_surplus": createStructure(
+        "text",
+        "quota_surplus",
+        false,
+        "dotSeparatedPath"
+      ),
+      "#deepseek_quota_method": createStructure("text", "quota_method", false),
+    };
+    let tempConfig_deepseek = GM_getValue("deepseek_config"); // 获取配置信息
+    const configManager_deepseek = new ConfigManager(
+      "#deepseek_config",
+      "deepseek_config_",
+      tempConfig_deepseek,
+      deepseekStructure,
+      deepseekConfigEditHTML
+    );
+    configManager_deepseek.registerChoiceChange();
+
     // Complet配置
     const CompletStructure = {
       "#name": createStructure("text", "name", true),
@@ -8291,6 +8544,23 @@ async function initSettingsPanel() {
       GM_getValue("openai_asSystemPrompt") === true
     );
     $("#openai_customPrompt").val(GM_getValue("openai_customPrompt"));
+    // deepseek
+    if (GM_getValue("deepseek_config")) {
+      let tempConfig_deepseek = GM_getValue("deepseek_config");
+      $(
+        `input[name='deepseek_config_config_item'][value='${tempConfig_deepseek.choice}']`
+      )
+      .prop("checked", true);
+    }
+    $("#deepseek_isStream").prop(
+      "checked",
+      GM_getValue("deepseek_isStream") !== false
+    );
+    $("#deepseek_asSystemPrompt").prop(
+      "checked",
+      GM_getValue("deepseek_asSystemPrompt") === true
+    );
+    $("#deepseek_customPrompt").val(GM_getValue("deepseek_customPrompt"));
     $("#comment_translation_choice").val(
       GM_getValue("commentTranslationChoice")
     );
@@ -8460,6 +8730,9 @@ async function initSettingsPanel() {
         openai_isStream: $("#openai_isStream").prop("checked"),
         openai_asSystemPrompt: $("#openai_asSystemPrompt").prop("checked"),
         openai_customPrompt: $("#openai_customPrompt").val(),
+        deepseek_isStream: $("#deepseek_isStream").prop("checked"),
+        deepseek_asSystemPrompt: $("#deepseek_asSystemPrompt").prop("checked"),
+        deepseek_customPrompt: $("#deepseek_customPrompt").val(),
         commentTranslationChoice: $("#comment_translation_choice").val(),
         iconButtonSize: $("#iconButtonSize").val(),
         judgeStatusReplaceText: $("#judgeStatusReplaceText").val(),
@@ -8519,6 +8792,7 @@ async function initSettingsPanel() {
       const tempConfigs = {
         deepl_config: configManager_deepl.getTempConfig(),
         chatgpt_config: configManager_chatgpt.getTempConfig(),
+        deepseek_config: configManager_deepseek.getTempConfig(),
         Complet_config: configManager_complet.getTempConfig(),
       };
 
@@ -8574,6 +8848,21 @@ async function initSettingsPanel() {
               return;
             } else {
               $("#chatgpt_config").removeClass("missing");
+            }
+          }
+          if (settings.translation === "deepseek") {
+            let selectedIndex =
+              $('input[name="deepseek_config_config_item"]:checked').length > 0;
+            if (!selectedIndex) {
+              $(".deepseek_config a").removeClass("active");
+              $(".settings-page").removeClass("active");
+              $("#sidebar-translation-settings").addClass("active");
+              $("#translation-settings").addClass("active");
+
+              $("#deepseek_config").addClass("missing");
+              return;
+            } else {
+              $("#deepseek_config").removeClass("missing");
             }
           }
           {
@@ -8859,7 +9148,7 @@ class TaskQueue {
   }
 
   getDelay(type) {
-    return type === "openai" ? 0 : OJBetter.translation.waitTime;
+    return type === "openai" || type === "deepseek" ? 0 : OJBetter.translation.waitTime;
   }
 
   /**
@@ -9514,6 +9803,10 @@ async function addButtonWithTranslation(
           ns: "settings",
         }),
       },
+      {
+        value: "deepseek",
+        name: "DeepSeek",
+      },
     ];
 
     // Function to check if the service supports the target language
@@ -9807,7 +10100,8 @@ async function blockProcessing(
         overrideTrans,
         replaceOriginalState
       ),
-    OJBetter.translation.choice == "openai"
+    OJBetter.translation.choice == "openai" ||
+    OJBetter.translation.choice == "deepseek"
   );
   if (result.status == "skip") {
     button.setTransButtonState(
@@ -10534,6 +10828,14 @@ class TranslateDiv {
           return queryServerBalance(OJBetter.chatgpt.config.quota);
         });
       }
+    } else if (server == "deepseek") {
+      const quotaConfig = OJBetter.deepseek.config.quota;
+      if (quotaConfig.url && quotaConfig.surplus && quotaConfig.header) {
+        this.queryBalanceButton.show();
+        this.registerQueryBalanceButtonEvent(() => {
+          return queryServerBalance(OJBetter.deepseek.config.quota);
+        });
+      }
     }
   }
 }
@@ -11110,8 +11412,8 @@ async function translateMain(
       const regex =
         /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
       text = textBlockReplacer.replace(text, regex);
-    } else if (realTransServer != "openai") {
-      // 使用GPT翻译时不必替换latex公式
+    } else if (realTransServer != "openai" && realTransServer != "deepseek") {
+      // 使用 AI 翻译时不必替换 latex 公式
       let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
       // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
       if (OJBetter.translation.targetLang === "zh")
@@ -11142,7 +11444,7 @@ async function translateMain(
       resultText = textBlockReplacer.recover(resultText);
     } else if (OJBetter.typeOfPage.is_acmsguru) {
       resultText = textBlockReplacer.recover(resultText);
-    } else if (realTransServer != "openai") {
+    } else if (realTransServer != "openai" && realTransServer != "deepseek") {
       resultText = textBlockReplacer.recover(resultText);
     }
     return resultText;
@@ -11245,6 +11547,7 @@ async function translateMain(
   translateResult.translateDiv.registerCloseButtonEvent();
   if (
     OJBetter.translation.choice == "openai" ||
+    OJBetter.translation.choice == "deepseek" ||
     OJBetter.translation.choice == "deepl"
   ) {
     translateResult.translateDiv.showQueryBalanceButton(
@@ -11275,7 +11578,8 @@ async function translateMain(
   // 过滤**号
   if (
     OJBetter.translation.filterTextWithoutEmphasis &&
-    GM_getValue("translation") !== "openai"
+    GM_getValue("translation") !== "openai" &&
+    GM_getValue("translation") !== "deepseek"
   ) {
     // TODO
     text = text.replace(/\*\*/g, "");
@@ -11422,6 +11726,24 @@ async function translateMain(
         } else {
           // 普通模式
           rawData = await translate_openai(text);
+        }
+      } else if (transServer == "deepseek") {
+        translateResult.translateDiv.updateTranslateDiv(
+          `DeepSeek [${OJBetter.deepseek.config.name || "deepseek-chat"}] 翻译中...${!OJBetter.deepseek.isStream
+            ? "（非流式模式）"
+            : ""
+          }`,
+          is_renderLaTeX
+        );
+        if (OJBetter.deepseek.isStream) {
+          // 流式传输
+          rawData = await translate_deepseek_stream(
+            text,
+            translateResult.translateDiv
+          );
+        } else {
+          // 普通模式
+          rawData = await translate_deepseek(text);
         }
       }
       translatedText = rawData.text;
@@ -18183,6 +18505,198 @@ async function* openai_stream(raw) {
   }
 
   return buffer;
+}
+
+// ==================== DeepSeek 翻译函数（强制 V4 Flash）====================
+
+/**
+ * 构造 DeepSeek 翻译请求（强制使用 deepseek-chat / V4 Flash）
+ * @param {string} raw 原文
+ * @param {boolean} [isStream=false] 是否流式
+ * @returns {{url: string, data: Object}}
+ */
+function getDeepSeekTranslationRequest(raw, isStream = false) {
+  const modelDefault = "deepseek-chat";
+  const proxyDefault = "https://api.deepseek.com/v1/chat/completions";
+  const lang = getTargetLanguage("deepseek");
+  const hasReplaceOriginalMarker = /\[\[\/?OJBLOCK_\d{4}\]\]/.test(raw);
+  let prompt = "";
+  if (OJBetter.deepseek.customPrompt) {
+    prompt = `\n${OJBetter.deepseek.customPrompt}`;
+    if (hasReplaceOriginalMarker) {
+      prompt += `\nKeep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order.`;
+    }
+    if (!OJBetter.deepseek.asSystemPrompt) {
+      prompt += `\n${raw}`;
+    }
+  } else {
+    prompt = `You are a professional translator specializing in algorithm programming competitions.
+Translate the following text into ${lang} with precision, using appropriate technical terminology.
+
+Rules:
+1. Output ONLY the translation, with no explanations, notes, or other text
+2. Maintain all original formatting
+3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+4. Ensure the translation follows natural ${lang} expression patterns
+5. Use professional terminology common in programming competitions
+${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
+
+Text to translate:
+"`;
+    if (!OJBetter.deepseek.asSystemPrompt) {
+      prompt += `
+${raw}
+"`;
+    }
+  }
+
+  const url = OJBetter.deepseek.config.proxy || proxyDefault;
+  const extraData = Object.assign({}, ...OJBetter.deepseek.config.data);
+
+  return {
+    url,
+    data: {
+      model: modelDefault,
+      messages: OJBetter.deepseek.asSystemPrompt
+        ? [
+            { role: "system", content: prompt },
+            { role: "user", content: raw },
+          ]
+        : [{ role: "user", content: prompt }],
+      temperature: 0.7,
+      ...(isStream ? { stream: true } : {}),
+      ...extraData,
+    },
+  };
+}
+
+/**
+ * DeepSeek 非流式翻译
+ * @param {string} raw 原文
+ * @returns {Promise<TransRawData>} 翻译结果对象
+ */
+async function translate_deepseek(raw) {
+  const request = getDeepSeekTranslationRequest(raw);
+  const options = {
+    method: "POST",
+    url: request.url,
+    data: JSON.stringify(request.data),
+    responseType: "json",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + OJBetter.deepseek.config.key,
+      ...Object.assign({}, ...OJBetter.deepseek.config.header),
+    },
+  };
+  return await BaseTranslate(
+    options,
+    (res) => {
+      if (!res) throw new Error("Translation failed or invalid response format.");
+      return res;
+    },
+    undefined,
+    (response) => getOpenAIResponseText(response.response)
+  );
+}
+
+/**
+ * DeepSeek 流式翻译
+ * @param {string} raw 原文
+ * @param {TranslateDiv} translateDiv 翻译结果面板
+ * @returns {Promise<TransRawData>} 翻译结果对象
+ */
+async function translate_deepseek_stream(raw, translateDiv) {
+  const result = {
+    done: true,
+    checkPassed: null,
+    response: null,
+    responseText: null,
+    text: "",
+    error: null,
+    message: null,
+  };
+  const helpText = i18next.t("error.basic", { ns: "translator" });
+  try {
+    for await (const delta of deepseek_stream(raw)) {
+      result.text += delta;
+      translateDiv.updateTranslateDiv(
+        result.text,
+        !(
+          (OJBetter.typeOfPage.is_oldLatex ||
+            OJBetter.typeOfPage.is_acmsguru) &&
+          !OJBetter.translation.forceTurndownConversion
+        ),
+        false,
+        true
+      );
+    }
+    return result;
+  } catch (err) {
+    console.warn(err);
+    result.error = {
+      message: err.message || null,
+      stack: err.stack
+        ? err.stack.replace(/\n/g, "<br>").replace(/\s/g, "&nbsp;")
+        : null,
+      enumerable: err,
+      source: "deepseek_stream",
+    };
+    result.message = `${i18next.t("error.GMRequest", {
+      ns: "translator",
+    })}${helpText}`;
+  }
+  return result;
+}
+
+/**
+ * DeepSeek 流式传输生成器（标准 /v1/chat/completions SSE）
+ * @param {string} raw 原文
+ * @returns {AsyncGenerator<string>}
+ */
+async function* deepseek_stream(raw) {
+  const request = getDeepSeekTranslationRequest(raw, true);
+  const options = {
+    method: "POST",
+    url: request.url,
+    data: JSON.stringify(request.data),
+    responseType: "stream",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + OJBetter.deepseek.config.key,
+      ...Object.assign({}, ...OJBetter.deepseek.config.header),
+    },
+  };
+  const response = await OJB_GMRequest(options, true);
+  const reader = response.response.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let lines = buffer.split("\n\n");
+
+    for (let i = 0; i < lines.length - 1; i++) {
+      const dataLines = [];
+      for (const line of lines[i].split("\n")) {
+        if (line.startsWith("data:")) {
+          dataLines.push(line.slice(5).trimStart());
+        }
+      }
+      const line = dataLines.join("\n");
+      if (!line) continue;
+      if (line.includes("[DONE]")) return;
+      try {
+        const data = JSON.parse(line);
+        const delta = data?.choices?.[0]?.delta;
+        if (delta?.content) yield delta.content;
+      } catch (error) {
+        console.warn(`DeepSeek JSON parse error: ${error}\n${line}`);
+      }
+    }
+    buffer = lines.slice(-1)[0];
+  }
 }
 
 /**
