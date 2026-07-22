@@ -1,3 +1,22 @@
+## 1.87.0
+
+### What's Changed
+- Propose a contest/problems 添加本地化 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/408
+- fix(Codeforces & AtCoder): 修复代码块中的公式无法正确显示的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/9c99188
+- fix(Codeforces & AtCoder): 修复“替换原文”模式下机器翻译的兼容性问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/d57a8c1
+- feat(Codeforces): 新增题目页面全文操作按钮 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/ff7d0a3
+- fix(Codeforces): 修复新旧公式混合页面的翻译 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/0a82e35
+- feat: 支持 DeepSeek Chat Completions 思考模式 (#412) by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/417
+- fix: 修复配置右键菜单滚动后偏移 (#418) by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/418
+- feat: 添加微软edge翻译 (#419) by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/419
+- fix(Codeforces): 支持 G++23 Monaco 语法高亮 by @AceYKN in https://github.com/beijixiaohu/OJBetter/pull/421
+- fix(Codeforces): 修复暗色模式下图片公式显示 by @AceYKN in https://github.com/beijixiaohu/OJBetter/pull/423
+
+### New Contributors
+- @AceYKN made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/421
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/codeforces-better-v1.86.0...codeforces-better-v1.87.0
+
 ## 1.86.0
 
 ### What's Changed
