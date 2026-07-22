@@ -2194,6 +2194,11 @@ const handleColorSchemeChange = (event) => {
         html[data-theme=dark] img, html[data-theme=dark] #facebox .popup a{
             opacity: .75;
         }
+        /* 图片公式反色 */
+        html[data-theme=dark] img.tex-formula {
+            opacity: 1;
+            filter: invert(1);
+        }
         /* 反转 */
         html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link,
         html[data-theme=dark] #program-source-text, html[data-theme=dark] .spoiler-content pre,
