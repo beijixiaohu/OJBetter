@@ -1,3 +1,19 @@
+## 1.25.0
+
+### What's Changed
+- 修复特定窄屏宽度下导航区域挤压换行的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/dd6bdcd
+- 修复代码块中的公式无法正确显示的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/9c99188
+- 修复“替换原文”模式与机器翻译的兼容性问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/d57a8c1
+- 新增题目页面全文操作按钮 by @Fux-i in https://github.com/beijixiaohu/OJBetter/pull/414
+- 支持 DeepSeek Chat Completions 思考模式 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/417
+- 修复配置右键菜单滚动后偏移的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/418
+- 新增 Microsoft Edge 翻译支持 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/419
+
+### New Contributors
+- @Fux-i made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/414
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/atcoder-better-v1.24.0...atcoder-better-v1.25.0
+
 ## 1.24.0
 
 ### What's Changed
