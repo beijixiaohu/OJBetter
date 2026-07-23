@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.86.0
+// @version      1.87.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -25,6 +25,8 @@
 // @connect      sustech.edu.cn
 // @connect      aowuucdn.oss-cn-beijing.aliyuncs.com
 // @connect      aowuucdn.oss-accelerate.aliyuncs.com
+// @connect      edge.microsoft.com
+// @connect      api-edge.cognitive.microsofttranslator.com
 // @connect      127.0.0.1
 // @connect      *
 // @grant        GM_xmlhttpRequest
@@ -172,8 +174,6 @@ OJBetter.typeOfPage = {
   is_gym: undefined,
   /** @type {boolean?} 是否是acmsguru页面 */
   is_acmsguru: undefined,
-  /** @type {boolean?} 是否是旧版LaTeX页面 */
-  is_oldLatex: undefined,
   /** @type {boolean?} 是否是题目集/比赛的外部页面 */
   is_contest: undefined,
   /** @type {boolean?} 是否是题目集/比赛里面的题目页面 */
@@ -395,6 +395,8 @@ OJBetter.chatgpt = {
     model: undefined,
     /** @type {string?} 思考强度 */
     think_level: undefined,
+    /** @type {""|"enabled"|"disabled"?} 思考模式 */
+    thinking_mode: undefined,
     /** @type {string?} API密钥 */
     key: undefined,
     /** @type {string?} 代理 */
@@ -513,6 +515,18 @@ OJBetter.supportList = {
       ko: "auto2ko",
       es: "auto2es",
       fr: "auto2fr",
+    },
+    edge: {
+      zh: "zh-Hans",
+      "zh-Hant": "zh-Hant",
+      de: "de",
+      fr: "fr",
+      ko: "ko",
+      pt: "pt",
+      ja: "ja",
+      es: "es",
+      it: "it",
+      hi: "hi",
     },
     openai: {
       zh: "Chinese",
@@ -980,7 +994,6 @@ async function initVar() {
     "0"
   );
   OJBetter.typeOfPage.is_mSite = /^m[0-9]/.test(hostname);
-  OJBetter.typeOfPage.is_oldLatex = $(".tex-span").length;
   OJBetter.typeOfPage.is_gym =
     href.includes("gym") && href.includes("/problem/");
   OJBetter.typeOfPage.is_acmsguru =
@@ -1057,7 +1070,7 @@ async function initVar() {
   );
   OJBetter.translation.auto.mixTrans.servers = OJB_getGMValue(
     "mixedTranslation",
-    ["deepl", "iflyrec", "youdao", "caiyun"]
+    ["deepl", "iflyrec", "youdao", "caiyun", "edge"]
   );
   OJBetter.common.taskQueue = new TaskQueue();
   OJBetter.translation.replaceSymbol = OJB_getGMValue("replaceSymbol", "2");
@@ -1160,6 +1173,7 @@ async function initVar() {
     }
     OJBetter.chatgpt.config.name = configuration.name;
     OJBetter.chatgpt.config.model = configuration.model;
+    OJBetter.chatgpt.config.thinking_mode = configuration.thinking_mode;
     OJBetter.chatgpt.config.think_level = configuration.think_level;
     OJBetter.chatgpt.config.key = configuration.key;
     OJBetter.chatgpt.config.proxy = configuration.proxy;
@@ -1417,15 +1431,6 @@ async function ShowSameContestProblems() {
  * 显示警告消息
  */
 function showWarnMessage() {
-  if (OJBetter.typeOfPage.is_oldLatex) {
-    const loadingMessage = new LoadingMessage();
-    loadingMessage.updateStatus(
-      `${OJBetter.state.name} —— ${i18next.t("warning.is_oldLatex", {
-        ns: "alert",
-      })}`,
-      "warning"
-    );
-  }
   if (OJBetter.typeOfPage.is_acmsguru) {
     const loadingMessage = new LoadingMessage();
     loadingMessage.updateStatus(
@@ -1465,7 +1470,10 @@ function showWarnMessage() {
       "warning"
     );
   }
-  if (OJBetter.translation.forceTurndownConversion) {
+  if (
+    OJBetter.typeOfPage.is_acmsguru &&
+    OJBetter.translation.forceTurndownConversion
+  ) {
     const loadingMessage = new LoadingMessage();
     loadingMessage.updateStatus(
       `${OJBetter.state.name} —— ${i18next.t(
@@ -2185,6 +2193,11 @@ const handleColorSchemeChange = (event) => {
         /* 图片-亮度 */
         html[data-theme=dark] img, html[data-theme=dark] #facebox .popup a{
             opacity: .75;
+        }
+        /* 图片公式反色 */
+        html[data-theme=dark] img.tex-formula {
+            opacity: 1;
+            filter: invert(1);
         }
         /* 反转 */
         html[data-theme=dark] .SumoSelect>.CaptionCont>label>i, html[data-theme=dark] .delete-resource-link,
@@ -3769,7 +3782,7 @@ input[type="radio"]:checked + .config_bar_ul_li_text {
 /* 修改菜单 */
 #config_bar_menu {
     z-index: 400;
-    position: fixed;
+    position: absolute;
     width: 60px;
     background: #ffffff;
     box-shadow: 1px 1px 4px 0px #0000004d;
@@ -4508,6 +4521,223 @@ function addI18nStyles() {
 }
 
 // ------------------------------
+// 翻译占位符格式化
+// ------------------------------
+
+/**
+ * 翻译占位符样式：`1` 为 `【】`，`2` 为 `{}`，`3` 为 `[]`。
+ * @typedef {"1" | "2" | "3"} OJBPlaceholderTokenStyle
+ */
+
+/**
+ * 占位符样式与左右边界的映射。无效或缺失的设置值统一回退到样式 `2`（`{}`）。
+ * @type {Readonly<Record<OJBPlaceholderTokenStyle, Readonly<[string, string]>>>}
+ */
+const OJB_PLACEHOLDER_TOKEN_PAIRS = Object.freeze({
+  "1": Object.freeze(["【", "】"]),
+  "2": Object.freeze(["{", "}"]),
+  "3": Object.freeze(["[", "]"]),
+});
+
+/**
+ * 归一化占位符样式设置。
+ * @param {unknown} style 待归一化的设置值
+ * @returns {OJBPlaceholderTokenStyle} 有效样式；非法值回退为 `2`
+ */
+function OJB_normalizePlaceholderTokenStyle(style) {
+  const normalized = String(style ?? "2");
+  return Object.prototype.hasOwnProperty.call(
+    OJB_PLACEHOLDER_TOKEN_PAIRS,
+    normalized
+  )
+    ? normalized
+    : "2";
+}
+
+/**
+ * 按指定样式格式化完整占位符。该函数只负责编码，不校验 ID，也不参与恢复策略。
+ * @param {string | number} id 占位符 ID
+ * @param {unknown} [style="2"] 占位符样式
+ * @returns {string} 格式化后的完整占位符
+ */
+function OJB_formatPlaceholderToken(id, style = "2") {
+  const [opening, closing] =
+    OJB_PLACEHOLDER_TOKEN_PAIRS[
+      OJB_normalizePlaceholderTokenStyle(style)
+    ];
+  return `${opening}${id}${closing}`;
+}
+
+/**
+ * 创建兼容所有占位符样式及 Markdown 方括号转义的 8 位 ID 匹配器。
+ * @returns {RegExp} 每次调用均返回新的全局正则，避免 lastIndex 泄漏
+ */
+function OJB_getPlaceholderTokenRegex() {
+  return /(?:【\s*(\d{8})\s*】|\\?\[\s*(\d{8})\s*\\?\]|\{\s*(\d{8})\s*\})/g;
+}
+
+/**
+ * 将 Codeforces 渲染前的三美元/六美元公式规范为标准 Markdown 公式。
+ * 反引号代码段保持原样，避免改写代码中的字面量美元符号。
+ * @param {string} markdown 待处理的 Markdown
+ * @returns {string} 规范化后的 Markdown
+ */
+function OJB_normalizeCodeforcesLatexDelimiters(markdown) {
+  const text = String(markdown ?? "");
+  const codeforcesDelimiters = [
+    ["$$$$$$", "$$"],
+    ["$$$", "$"],
+  ];
+
+  const isEscaped = (value, position) => {
+    let backslashCount = 0;
+    for (
+      let cursor = position - 1;
+      cursor >= 0 && value[cursor] === "\\";
+      cursor--
+    ) {
+      backslashCount++;
+    }
+    return backslashCount % 2 === 1;
+  };
+
+  const getRunLength = (value, position, character) => {
+    let length = 0;
+    while (value[position + length] === character) length++;
+    return length;
+  };
+
+  const findExactClosingRun = (
+    value,
+    delimiter,
+    fromIndex,
+    character
+  ) => {
+    let candidate = value.indexOf(delimiter, fromIndex);
+    while (candidate !== -1) {
+      if (
+        value[candidate - 1] !== character &&
+        value[candidate + delimiter.length] !== character &&
+        !isEscaped(value, candidate)
+      ) {
+        return candidate;
+      }
+      candidate = value.indexOf(delimiter, candidate + 1);
+    }
+    return -1;
+  };
+
+  const normalizePlainText = (value) => {
+    let result = "";
+    let copyFrom = 0;
+    let index = 0;
+    while (index < value.length) {
+      let normalized = false;
+      for (const [delimiter, replacement] of codeforcesDelimiters) {
+        if (
+          value.startsWith(delimiter, index) &&
+          value[index - 1] !== "$" &&
+          value[index + delimiter.length] !== "$" &&
+          !isEscaped(value, index)
+        ) {
+          const closing = findExactClosingRun(
+            value,
+            delimiter,
+            index + delimiter.length,
+            "$"
+          );
+          if (closing !== -1) {
+            result +=
+              value.slice(copyFrom, index) +
+              replacement +
+              value.slice(index + delimiter.length, closing) +
+              replacement;
+            index = closing + delimiter.length;
+            copyFrom = index;
+            normalized = true;
+            break;
+          }
+        }
+      }
+      if (normalized) continue;
+      index++;
+    }
+    return result + value.slice(copyFrom);
+  };
+
+  let result = "";
+  let plainTextStart = 0;
+  let index = 0;
+  while (index < text.length) {
+    if (text[index] === "`" && !isEscaped(text, index)) {
+      const runLength = getRunLength(text, index, "`");
+      const delimiter = "`".repeat(runLength);
+      const closing = findExactClosingRun(
+        text,
+        delimiter,
+        index + runLength,
+        "`"
+      );
+      result += normalizePlainText(text.slice(plainTextStart, index));
+      if (closing === -1) return result + text.slice(index);
+      const codeEnd = closing + runLength;
+      result += text.slice(index, codeEnd);
+      index = codeEnd;
+      plainTextStart = index;
+      continue;
+    }
+    index++;
+  }
+  return result + normalizePlainText(text.slice(plainTextStart));
+}
+
+/**
+ * 创建机器翻译前用于保护 LaTeX 公式的匹配器。
+ * @param {boolean} [includeOrdinalSuffix=false] 是否同时保护英文序数词后缀
+ * @returns {RegExp} LaTeX 公式匹配器
+ */
+function OJB_getTranslationLatexRegex(includeOrdinalSuffix = false) {
+  return includeOrdinalSuffix
+    ? /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g
+    : /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
+}
+
+/**
+ * 在本地 Markdown 格式化期间临时保护代码段。标记不会发送给翻译服务，
+ * 因此可在格式化完成后进行严格、无公式边界判断的恢复。
+ * @param {string} markdown 待保护的 Markdown
+ * @returns {{text: string, recover: (value: string) => string}} 保护结果与恢复函数
+ */
+function OJB_protectMarkdownCodeForFormatting(markdown) {
+  const source = String(markdown ?? "");
+  let markerPrefix;
+  do {
+    markerPrefix = `OJBetterMarkdownCode${OJB_getRandomNumber(8)}Slot`;
+  } while (source.includes(markerPrefix));
+
+  const replacements = [];
+  const text = source.replace(
+    /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g,
+    (code) => {
+      const marker = `${markerPrefix}${replacements.length}End`;
+      replacements.push([marker, code]);
+      return marker;
+    }
+  );
+
+  return {
+    text,
+    recover(value) {
+      let result = String(value ?? "");
+      replacements.forEach(([marker, code]) => {
+        result = result.replaceAll(marker, () => code);
+      });
+      return result;
+    },
+  };
+}
+
+// ------------------------------
 // 一些工具类
 // ------------------------------
 
@@ -4535,8 +4765,10 @@ class TextBlockReplacer {
     this.replacements = new Map();
     /** @type {Map<string, string>} 暂时未找到的待还原项 */
     this.tempReplacements = new Map();
-    /** @type {string} 替换符号 */
-    this.replaceSymbol = OJBetter.translation.replaceSymbol;
+    /** @type {OJBPlaceholderTokenStyle} 替换符号 */
+    this.replaceSymbol = OJB_normalizePlaceholderTokenStyle(
+      OJBetter.translation.replaceSymbol
+    );
   }
 
   /**
@@ -4558,22 +4790,12 @@ class TextBlockReplacer {
     try {
       for (let i = 0; i < this.matches.length; i++) {
         const match = this.matches[i];
-        const id = OJB_getRandomNumber(8);
-        let replacement = "";
-        switch (this.replaceSymbol) {
-          case "1":
-            replacement = `【${id}】`;
-            break;
-          case "2":
-            replacement = `{${id}}`;
-            break;
-          case "3":
-            replacement = `[${id}]`;
-            break;
-          default:
-            replacement = `【${id}】`;
-            break;
-        }
+        let id;
+        let replacement;
+        do {
+          id = String(OJB_getRandomNumber(8));
+          replacement = OJB_formatPlaceholderToken(id, this.replaceSymbol);
+        } while (text.includes(id) || this.replacements.has(id));
         text = text.replace(match, replacement);
         if (isOrdinal(match) && OJBetter.translation.targetLang === "zh")
           this.replacements.set(id, ordinalTranslation(match));
@@ -4763,19 +4985,36 @@ async function OJB_promiseRetryWrapper(
  * @param {Boolean} isStream 是否为流式请求
  * @returns {Promise<OJB_GMError>} 返回 Promise
  */
-function OJB_GMRequest(options, isStream = false) {
+function OJB_GMRequest(options, isStream = false, streamStartTimeoutMs = 120000) {
   return new Promise((resolve, reject) => {
-    GM_xmlhttpRequest({
+    let settled = false;
+    let request = null;
+    let startTimer = null;
+    const settle = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      if (startTimer !== null) clearTimeout(startTimer);
+      callback(value);
+    };
+    const resolveStreamStart = (response) => {
+      if (typeof response?.response?.getReader === "function") {
+        settle(resolve, response);
+      }
+    };
+    const requestOptions = {
       ...options,
       ...(isStream
         ? {
-          onloadstart: resolve,
+          onloadstart: resolveStreamStart,
+          onload: (response) => settle(resolve, response),
+          onloadend: (response) => settle(resolve, response),
         }
         : {
-          onload: resolve,
+          onload: (response) => settle(resolve, response),
         }),
       onerror: (error) =>
-        reject(
+        settle(
+          reject,
           new OJB_GMError(
             "error",
             "An error occurred during the request.",
@@ -4783,10 +5022,43 @@ function OJB_GMRequest(options, isStream = false) {
           )
         ),
       ontimeout: (error) =>
-        reject(new OJB_GMError("timeout", "The request timed out.", error)),
+        settle(
+          reject,
+          new OJB_GMError("timeout", "The request timed out.", error)
+        ),
       onabort: (error) =>
-        reject(new OJB_GMError("abort", "The request was aborted.", error)),
-    });
+        settle(
+          reject,
+          new OJB_GMError("abort", "The request was aborted.", error)
+        ),
+    };
+
+    if (
+      isStream &&
+      Number.isFinite(streamStartTimeoutMs) &&
+      streamStartTimeoutMs > 0
+    ) {
+      startTimer = setTimeout(() => {
+        const error = new Error(
+          `The stream did not start within ${streamStartTimeoutMs}ms.`
+        );
+        settle(
+          reject,
+          new OJB_GMError("timeout", error.message, error)
+        );
+        try {
+          request?.abort?.();
+        } catch (abortError) {
+          console.warn(abortError);
+        }
+      }, streamStartTimeoutMs);
+    }
+
+    try {
+      request = GM_xmlhttpRequest(requestOptions);
+    } catch (error) {
+      settle(reject, error);
+    }
   });
 }
 
@@ -6493,6 +6765,67 @@ class Validator {
 }
 
 /**
+ * 将右键事件的视口坐标转换为宿主元素内的菜单坐标，并保持菜单位于视口内。
+ * @param {MouseEvent|JQuery.ContextMenuEvent} event 右键事件
+ * @param {HTMLElement} host 菜单的定位宿主
+ * @param {{width: number, height: number}} menuSize 菜单尺寸
+ * @param {{left: number, top: number, width: number, height: number}} viewport 视口范围
+ * @param {number} margin 菜单与视口边缘的最小间距
+ * @returns {{left: number, top: number}}
+ */
+function OJB_calculateContextMenuPosition(
+  event,
+  host,
+  menuSize,
+  viewport,
+  margin = 4
+) {
+  const hostRect = host.getBoundingClientRect();
+  const targetRect = event.currentTarget?.getBoundingClientRect?.();
+  const eventX = Number(event.clientX);
+  const eventY = Number(event.clientY);
+  const useTargetPosition =
+    targetRect &&
+    (!Number.isFinite(eventX) ||
+      !Number.isFinite(eventY) ||
+      (eventX === 0 && eventY === 0));
+  const pointerX = useTargetPosition ? targetRect.left : eventX;
+  const pointerY = useTargetPosition ? targetRect.bottom : eventY;
+  const viewportLeft = Number(viewport?.left) || 0;
+  const viewportTop = Number(viewport?.top) || 0;
+  const viewportWidth = Math.max(0, Number(viewport?.width) || 0);
+  const viewportHeight = Math.max(0, Number(viewport?.height) || 0);
+  const menuWidth = Math.max(0, Number(menuSize?.width) || 0);
+  const menuHeight = Math.max(0, Number(menuSize?.height) || 0);
+  const safeMargin = Math.max(0, Number(margin) || 0);
+  const minX = viewportLeft + safeMargin;
+  const minY = viewportTop + safeMargin;
+  const maxX = Math.max(
+    minX,
+    viewportLeft + viewportWidth - menuWidth - safeMargin
+  );
+  const maxY = Math.max(
+    minY,
+    viewportTop + viewportHeight - menuHeight - safeMargin
+  );
+  const viewportX = Math.min(Math.max(pointerX, minX), maxX);
+  const viewportY = Math.min(Math.max(pointerY, minY), maxY);
+
+  return {
+    left:
+      viewportX -
+      hostRect.left -
+      (host.clientLeft || 0) +
+      (host.scrollLeft || 0),
+    top:
+      viewportY -
+      hostRect.top -
+      (host.clientTop || 0) +
+      (host.scrollTop || 0),
+  };
+}
+
+/**
  * 配置管理
  */
 class ConfigManager {
@@ -6620,10 +6953,26 @@ class ConfigManager {
     // 添加右键菜单
     li.on("contextmenu", (event) => {
       event.preventDefault();
+      this.menu.css({ display: "block", visibility: "hidden" });
+      const visualViewport = window.visualViewport;
+      const menuPosition = OJB_calculateContextMenuPosition(
+        event,
+        this.settingMenuDiv.get(0),
+        {
+          width: this.menu.outerWidth(),
+          height: this.menu.outerHeight(),
+        },
+        {
+          left: visualViewport?.offsetLeft ?? 0,
+          top: visualViewport?.offsetTop ?? 0,
+          width: visualViewport?.width ?? window.innerWidth,
+          height: visualViewport?.height ?? window.innerHeight,
+        }
+      );
       this.menu.css({
-        display: "block",
-        left: event.pageX,
-        top: event.pageY,
+        left: menuPosition.left,
+        top: menuPosition.top,
+        visibility: "visible",
       });
 
       const deleteItem = this.deleteItem;
@@ -6928,6 +7277,11 @@ const translation_settings_HTML = `
                 data-i18n="settings:translation.options.services.caiyun"></span>
         </label>
         <label>
+            <input type='radio' name='translation' value='edge'>
+            <span class='OJBetter_setting_menu_label_text'
+                data-i18n="settings:translation.options.services.edge"></span>
+        </label>
+        <label>
             <input type='radio' name='translation' value='openai'>
             <span class='OJBetter_setting_menu_label_text'
                 data-i18n="settings:translation.options.services.openai.name">
@@ -7015,6 +7369,7 @@ const translation_settings_HTML = `
             <option value="youdao" data-i18n="settings:translation.preference.comment_translation_choice.services.youdao"></option>
             <option value="google" data-i18n="settings:translation.preference.comment_translation_choice.services.google"></option>
             <option value="caiyun" data-i18n="settings:translation.preference.comment_translation_choice.services.caiyun"></option>
+            <option value="edge" data-i18n="settings:translation.preference.comment_translation_choice.services.edge"></option>
             <option value="openai" data-i18n="settings:translation.preference.comment_translation_choice.services.openai"></option>
         </select>
     </div>
@@ -7060,6 +7415,8 @@ const translation_settings_HTML = `
             <label for="google" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.google">Google</label>
             <input type="checkbox" id="caiyun" name="mixedTranslation" value="caiyun">
             <label for="caiyun" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.caiyun"></label>
+            <input type="checkbox" id="edge" name="mixedTranslation" value="edge">
+            <label for="edge" data-i18n="settings:translation.autoTranslation.allowMixTrans.checkboxs.edge"></label>
         </div>
     </div>
     <hr>
@@ -7819,20 +8176,32 @@ const chatgptConfigEditHTML = `
             <input type='text' id='chatgpt_model' placeholder='gpt-5.4' require = false>
         </div>
         <div class="OJBetter_setting_list">
-            <label for='chatgpt_think_level'>
+            <label for='chatgpt_thinking_mode'>
                 <div style="display: flex;align-items: center;">
-                    <span class="input_label">think_level:</span>
+                    <span class="input_label" data-i18n="config:chatgpt.basic.thinkingMode.label"></span>
                     <div class="help_tip">
                         ${helpCircleHTML}
-                        <div class="tip_text">
-                            <p>仅在使用支持 reasoning 的 /v1/responses 端点时生效</p>
-                            <p>支持的取值通常包括 none、minimal、low、medium、high、xhigh</p>
-                            <p>留空则跟随模型默认值</p>
-                        </div>
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.thinkingMode.tipText"></div>
                     </div>
                 </div>
             </label>
-            <input type='text' id='chatgpt_think_level' placeholder='none / minimal / low / medium / high / xhigh' require = false>
+            <select id='chatgpt_thinking_mode'>
+                <option value='' data-i18n="config:chatgpt.basic.thinkingMode.options.default"></option>
+                <option value='enabled' data-i18n="config:chatgpt.basic.thinkingMode.options.enabled"></option>
+                <option value='disabled' data-i18n="config:chatgpt.basic.thinkingMode.options.disabled"></option>
+            </select>
+        </div>
+        <div class="OJBetter_setting_list">
+            <label for='chatgpt_think_level'>
+                <div style="display: flex;align-items: center;">
+                    <span class="input_label" data-i18n="config:chatgpt.basic.thinkLevel.label"></span>
+                    <div class="help_tip">
+                        ${helpCircleHTML}
+                        <div class="tip_text" data-i18n="[html]config:chatgpt.basic.thinkLevel.tipText"></div>
+                    </div>
+                </div>
+            </label>
+            <input type='text' id='chatgpt_think_level' placeholder='' require = false data-i18n="[placeholder]config:chatgpt.basic.thinkLevel.placeholder">
         </div>
         <div class="OJBetter_setting_list">
             <label for='chatgpt_key'>
@@ -8147,6 +8516,7 @@ async function initSettingsPanel() {
     const chatgptStructure = {
       "#name": createStructure("text", "name", true),
       "#chatgpt_model": createStructure("text", "model", false),
+      "#chatgpt_thinking_mode": createStructure("text", "thinking_mode", false),
       "#chatgpt_think_level": createStructure("text", "think_level", false),
       "#chatgpt_key": createStructure("text", "key", true),
       "#chatgpt_proxy": createStructure("text", "proxy", false),
@@ -8682,7 +9052,12 @@ async function initHTML2MarkDown() {
         node.classList.contains("sample-tests") ||
         node.classList.contains("header") ||
         node.classList.contains("ojb-overlay") ||
+        node.classList.contains("input-output-copier") ||
         node.classList.contains("html2md-panel") ||
+        node.classList.contains("mdViewContent") ||
+        node.classList.contains("translateDiv") ||
+        node.classList.contains("OJBetter_MiniTranslateButton") ||
+        node.classList.contains("OJBetter_taskStatementTranslationAnchor") ||
         node.classList.contains("likeForm") ||
         node.classList.contains("monaco-editor") ||
         node.nodeName === "SCRIPT" ||
@@ -8693,7 +9068,8 @@ async function initHTML2MarkDown() {
       return "";
     },
   });
-  OJBetter.common.turndownService.addRule("remove-script", {
+  // MathJax 未完成渲染时直接使用源码；已有渲染节点时由对应规则处理。
+  OJBetter.common.turndownService.addRule("math-source", {
     filter: function (node, options) {
       return (
         node.tagName.toLowerCase() == "script" &&
@@ -8701,7 +9077,15 @@ async function initHTML2MarkDown() {
       );
     },
     replacement: function (content, node) {
-      return "";
+      const previousElement = node.previousElementSibling;
+      if (previousElement?.matches(".MathJax, .MathJax_Display")) return "";
+
+      const latex = String(node.textContent || "")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return /mode=display/.test(node.type)
+        ? `\n$$\n${latex}\n$$\n`
+        : `$${latex}$`;
     },
   });
 
@@ -8778,6 +9162,7 @@ async function initHTML2MarkDown() {
     },
     replacement: function (content, node) {
       const code = node.querySelector("code.prettyprint");
+      let text = content;
       if (code) {
         // 克隆一份 DOM，避免破坏原结构
         const clone = code.cloneNode(true);
@@ -8788,11 +9173,9 @@ async function initHTML2MarkDown() {
         });
 
         // 最终拿纯文本
-        const text = clone.textContent;
-        return "```\n" + text + "```\n";
-      } else {
-        return "```\n" + content + "```\n";
+        text = clone.textContent;
       }
+      return "```\n" + String(text).replace(/\n?$/, "\n") + "```\n";
     },
   });
 
@@ -9003,7 +9386,9 @@ async function initButtonFunc() {
     const markdown = this.data("markdown");
     if (markdown === undefined) {
       const htmlContent = this.html();
-      const newMarkdown = OJBetter.common.turndownService.turndown(htmlContent);
+      const newMarkdown = OJB_normalizeCodeforcesLatexDelimiters(
+        OJBetter.common.turndownService.turndown(htmlContent)
+      );
       this.data("markdown", newMarkdown);
       return newMarkdown;
     }
@@ -9110,20 +9495,36 @@ async function initButtonFunc() {
 }
 
 /**
+ * 获取当前翻译模式对应的按钮提示文本。
+ * @returns {string} 翻译按钮提示文本
+ */
+function getTranslationButtonDefaultText() {
+  if (OJBetter.translation.comment.transMode == "1")
+    return i18next.t("trans.segment", { ns: "button" });
+  if (OJBetter.translation.comment.transMode == "2")
+    return i18next.t("trans.select", { ns: "button" });
+  return i18next.t("trans.normal", { ns: "button" });
+}
+
+/**
+ * 转换按钮面板。
+ * @typedef {Object} ConversionButtonPanel
+ * @property {JQuery<HTMLElement>} panel 面板容器
+ * @property {JQuery<HTMLElement>} viewButton Markdown 视图按钮
+ * @property {JQuery<HTMLElement>} copyButton 复制按钮
+ * @property {JQuery<HTMLElement>} translateButton 翻译按钮
+ */
+
+/**
  * 添加题目markdown转换/复制/翻译按钮面板
  * @param {HTMLElement} element 需要添加按钮面板的元素
  * @param {string} suffix 按钮面板id后缀
  * @param {string} type 按钮面板添加位置
- * @param {boolean} is_simple 是否是简单模式
- * @returns {object} 返回按钮面板元素
+ * @param {boolean} [is_simple=false] 是否是简单模式
+ * @returns {ConversionButtonPanel} 返回按钮面板元素
  */
 function addButtonPanel(element, suffix, type, is_simple = false) {
-  let text;
-  if (OJBetter.translation.comment.transMode == "1")
-    text = i18next.t("trans.segment", { ns: "button" });
-  else if (OJBetter.translation.comment.transMode == "2")
-    text = i18next.t("trans.select", { ns: "button" });
-  else text = i18next.t("trans.normal", { ns: "button" });
+  const text = getTranslationButtonDefaultText();
 
   let panel = OJB_safeCreateJQElement(
     `<div class='html2md-panel input-output-copier ${is_simple ? "is_simple" : ""
@@ -9156,6 +9557,7 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
   } else if (type === "child_level") {
     $(element).prepend(panel);
   }
+  panel.data("conversionTarget", $(element).get(0));
 
   return {
     panel: panel,
@@ -9166,14 +9568,60 @@ function addButtonPanel(element, suffix, type, is_simple = false) {
 }
 
 /**
+ * 获取与 Codeforces 题面内容节点关联的最近转换按钮面板。
+ * @param {JQuery<HTMLElement>|HTMLElement} block 题面内容节点
+ * @returns {JQuery<HTMLElement>} 转换按钮面板
+ */
+function getTaskStatementConversionPanel(block) {
+  const target = $(block).first();
+  if (target.length === 0) return $();
+
+  const previousPanel = target.prev(".html2md-panel");
+  if (previousPanel.data("conversionTarget") === target.get(0)) {
+    return previousPanel;
+  }
+
+  const childPanel = target.children(".html2md-panel").first();
+  if (childPanel.data("conversionTarget") === target.get(0)) {
+    return childPanel;
+  }
+
+  let ancestor = target.parent();
+  while (
+    ancestor.length > 0 &&
+    !ancestor.hasClass("problem-statement")
+  ) {
+    const ancestorPreviousPanel = ancestor.prev(".html2md-panel");
+    if (
+      ancestorPreviousPanel.data("conversionTarget") === ancestor.get(0)
+    ) {
+      return ancestorPreviousPanel;
+    }
+    const ancestorPanel = ancestor.children(".html2md-panel").first();
+    if (ancestorPanel.data("conversionTarget") === ancestor.get(0)) {
+      return ancestorPanel;
+    }
+    ancestor = ancestor.parent();
+  }
+  return $();
+}
+
+/**
  * 添加MD视图按钮
  * @param {JQuery<HTMLElement>} button 按钮
- * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {JQuery<HTMLElement>|HTMLElement} element 目标元素
  * @param {string} suffix id后缀
  * @param {string} type 类型
- * @returns {void}
+ * @param {boolean} [bindButtonEvents=true] 是否绑定当前按钮的点击和悬浮事件
+ * @returns {Promise<void>}
  */
-async function addButtonWithHTML2MD(button, element, suffix, type) {
+async function addButtonWithHTML2MD(
+  button,
+  element,
+  suffix,
+  type,
+  bindButtonEvents = true
+) {
   /**
    * 改变按钮状态
    * @param {string} state 状态
@@ -9187,8 +9635,10 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       button.setButtonPopover(i18next.t("md.normal", { ns: "button" }));
     } else if (state == "normal") {
       button.removeClass("enabled");
+      button.setButtonLoaded();
       button.setButtonPopover(i18next.t("md.normal", { ns: "button" }));
     } else if (state == "mdView") {
+      button.setButtonLoaded();
       button.addClass("enabled");
       button.setButtonPopover(i18next.t("md.reduction", { ns: "button" }));
     } else if (state == "disabled") {
@@ -9207,84 +9657,170 @@ async function addButtonWithHTML2MD(button, element, suffix, type) {
       return $(element);
     }
   })();
+  let mdViewContent = null;
 
-  if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+  /**
+   * 检查目标是否处于 Markdown 视图。
+   * @returns {boolean} 是否处于 Markdown 视图
+   */
+  const isMarkdownView = () => $(element).attr("viewmd") === "true";
+
+  /**
+   * 还原被 Markdown 视图隐藏的目标节点。
+   * @returns {void}
+   */
+  const showTarget = () => {
+    if (!OJBetter.monaco.beautifyPreBlocks) {
+      target.show();
+      return;
+    }
+
+    // Monaco 启用后原始 pre 本就隐藏，关闭 Markdown 视图时不能重新显示它。
+    target.each(function () {
+      if (!$(this).is("pre")) $(this).show();
+    });
+  };
+
+  /**
+   * 设置目标的 Markdown 视图并同步关联按钮。
+   * @param {boolean} value 是否显示 Markdown 视图
+   * @returns {void}
+   */
+  const setMarkdownView = (value) => {
+    if (value && containsLegacyLatex(element)) {
+      changeButtonState("disabled");
+      return;
+    }
+    if (isMarkdownView() === value) return;
+
+    $(element).attr("viewmd", value);
+    if (value) {
+      const markdown = $(element).getMarkdown();
+      mdViewContent = OJB_safeCreateJQElement(
+        `<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`
+      );
+      target.last().after(mdViewContent);
+      target.hide();
+      changeButtonState("mdView");
+    } else {
+      mdViewContent?.remove();
+      target.last().next(".mdViewContent").remove();
+      mdViewContent = null;
+      showTarget();
+      changeButtonState("normal");
+    }
+    $(element).trigger("ojbetter:markdown-view-change", [value]);
+  };
+
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(element)
+  ) {
     changeButtonState("disabled");
     return;
   } else {
     changeButtonState("loading");
-    await waitForMathJaxIdle();
+    await waitForMathJaxIdle(element);
     changeButtonState("loaded");
   }
 
+  $(element).data("setMarkdownView", setMarkdownView);
+  if (!bindButtonEvents) return;
+
   button.click(
-    OJB_debounce(function () {
-      /**
-       * 检查是否是MarkDown视图
-       * @returns {boolean} 是否是MarkDown视图
-       */
-      function checkViewmd() {
-        if ($(element).attr("viewmd") === "true") {
-          return true;
-        } else {
-          return false;
-        }
+    OJB_debounce(() => {
+      const shouldShowMarkdown = !isMarkdownView();
+      if (shouldShowMarkdown && containsLegacyLatex(element)) {
+        changeButtonState("disabled");
+        return;
       }
-
-      /**
-       * 设置是否是MarkDown视图
-       * @param {boolean} value 是否是MarkDown视图
-       * @returns {void}
-       */
-      function setViewmd(value) {
-        $(element).attr("viewmd", value);
-        if (value) {
-          changeButtonState("mdView");
-        } else {
-          changeButtonState("normal");
-        }
-      }
-
-      if (checkViewmd()) {
-        setViewmd(false);
-        target.last().next(".mdViewContent").remove();
-        if (!OJBetter.monaco.beautifyPreBlocks) {
-          target.show();
-        } else {
-          // 不显示本来被隐藏的代码块
-          target.each(function () {
-            if (!$(this).is("pre")) {
-              $(this).show();
-            }
-          });
-        }
-      } else {
-        setViewmd(true);
-        const markdown = $(element).getMarkdown();
-        const mdViewContent = OJB_safeCreateJQElement(
-          `<span class="mdViewContent" style="width:auto; height:auto;">${markdown}</span>`
-        );
-        target.last().after(mdViewContent);
-        target.hide();
-      }
+      setMarkdownView(shouldShowMarkdown);
     })
   );
 
-  if (
-    OJBetter.preference.hoverTargetAreaDisplay &&
-    !OJBetter.typeOfPage.is_oldLatex &&
-    !OJBetter.typeOfPage.is_acmsguru
-  ) {
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
     button.addHoverOverlay($(element));
   }
 }
 
 /**
+ * 还原目标及其子元素中的 Markdown 视图。
+ * 原文替换模式需要操作真实题面节点，不能让旧的 Markdown 预览遮住写回结果。
+ * @param {HTMLElement} element 目标元素
+ * @returns {void}
+ */
+function restoreMarkdownViews(element) {
+  $(element)
+    .find('[viewmd="true"]')
+    .addBack('[viewmd="true"]')
+    .each((i, markdownElement) => {
+      const setMarkdownView = $(markdownElement).data("setMarkdownView");
+      if (typeof setMarkdownView === "function") setMarkdownView(false);
+    });
+}
+
+/**
+ * 逆序关闭按钮已有的翻译结果，并同步清理结果栈。
+ * 原文替换结果可能形成恢复链，必须按创建顺序的反方向还原。
+ * @param {JQuery<HTMLElement>} button 翻译按钮
+ * @param {JQuery<HTMLElement>|HTMLElement|HTMLElement[]|null} [sourceElements=null] 仅关闭与这些原页面目标重叠的结果
+ * @returns {void}
+ */
+function clearTranslationButtonResults(button, sourceElements = null) {
+  if (!button || button.length === 0) return;
+  const resultStack = button.getResultFromTransButton();
+  if (!Array.isArray(resultStack)) return;
+
+  const sources = sourceElements === null ? null : $(sourceElements).get();
+  const retainedResults = [];
+  for (let index = resultStack.length - 1; index >= 0; index--) {
+    const result = resultStack[index];
+    const resultSource = result?.sourceElement;
+    const overlapsTarget =
+      sources === null ||
+      (resultSource &&
+        sources.some(
+          (source) =>
+            source === resultSource ||
+            source.contains(resultSource) ||
+            resultSource.contains(source)
+        ));
+    if (overlapsTarget) {
+      result?.translateDiv?.close();
+    } else {
+      retainedResults.unshift(result);
+    }
+  }
+
+  if (retainedResults.length > 0) {
+    button.data("resultStack", retainedResults);
+  } else {
+    button.removeData("resultStack");
+    button.setButtonState("normal", getTranslationButtonDefaultText());
+  }
+}
+
+/**
+ * 检查结果栈中是否存在实际写回过原文的翻译结果。
+ * @param {TranslateResult[]|undefined} resultStack 翻译结果栈
+ * @returns {boolean} 是否必须先恢复原文
+ */
+function hasReplaceOriginalTranslationResult(resultStack) {
+  return (
+    Array.isArray(resultStack) &&
+    resultStack.some((result) =>
+      Boolean(result?.translateDiv?.replaceOriginalState)
+    )
+  );
+}
+
+/**
  * 添加复制按钮
  * @param {JQuery<HTMLElement>} button 按钮
- * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {JQuery<HTMLElement>|HTMLElement} element 目标元素
  * @param {string} suffix 后缀
  * @param {string} type 类型
+ * @returns {Promise<void>}
  */
 async function addButtonWithCopy(button, element, suffix, type) {
   /**
@@ -9309,18 +9845,24 @@ async function addButtonWithCopy(button, element, suffix, type) {
   }
 
   // 等待MathJax队列完成
-  if (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) {
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(element)
+  ) {
     changeButtonState("disabled");
     return;
   } else {
     changeButtonState("loading");
-    await waitForMathJaxIdle();
+    await waitForMathJaxIdle(element);
     changeButtonState("loaded");
   }
 
   button.click(
     OJB_debounce(function () {
-      var target = $(element).get(0);
+      if (containsLegacyLatex(element)) {
+        changeButtonState("disabled");
+        return;
+      }
 
       var markdown = $(element).getMarkdown();
 
@@ -9338,22 +9880,991 @@ async function addButtonWithCopy(button, element, suffix, type) {
     })
   );
 
-  if (
-    OJBetter.preference.hoverTargetAreaDisplay &&
-    !OJBetter.typeOfPage.is_oldLatex &&
-    !OJBetter.typeOfPage.is_acmsguru
-  ) {
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
     button.addHoverOverlay($(element));
+  }
+}
+
+// ------------------------------
+// Codeforces 题面全文操作
+// ------------------------------
+
+/**
+ * 题面全文翻译运行时控制器。
+ * @typedef {Object} TaskStatementTranslationController
+ * @property {HTMLElement} target 所属题面根节点
+ * @property {HTMLElement} button 全文翻译按钮
+ * @property {HTMLElement} anchor 全文译文插入锚点
+ * @property {boolean} wholeRunning 是否正在执行全文翻译
+ * @property {number} blockRunning 正在执行的局部翻译数量
+ * @property {boolean} recovering 是否正在恢复翻译历史
+ */
+
+/** 题面全文译文使用的稳定插入锚点类名。 */
+const OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS =
+  "OJBetter_taskStatementTranslationAnchor";
+
+/**
+ * 获取包含指定题面节点的全文翻译控制器。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 题面节点
+ * @returns {TaskStatementTranslationController|null} 全文翻译控制器
+ */
+function getTaskStatementTranslationController(element) {
+  let current = $(element).first();
+  while (current.length > 0) {
+    const controller = current.data("taskStatementTranslationController");
+    if (controller) return controller;
+    current = current.parent();
+  }
+  return null;
+}
+
+/**
+ * 清理与指定题面节点重叠的全文翻译结果。
+ * 全文翻译仍在运行时拒绝启动局部翻译，避免两套写回流程并发修改题面。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 题面节点
+ * @returns {boolean} 是否可以继续局部翻译
+ */
+function clearTaskStatementTranslationResults(element) {
+  const controller = getTaskStatementTranslationController(element);
+  if (!controller) return true;
+  if (controller.wholeRunning || controller.recovering) return false;
+
+  const button = $(controller.button);
+  clearTranslationButtonResults(button, element);
+  button.trigger("ojbetter:task-statement-translation-change");
+  return true;
+}
+
+/**
+ * 在全文译文关闭后清理全文按钮结果栈并同步按钮状态。
+ * @param {TranslateDiv} translateDiv 全文翻译结果
+ * @param {TaskStatementTranslationController|null} controller 全文翻译控制器
+ * @returns {void}
+ */
+function registerTaskStatementTranslationCloseSync(translateDiv, controller) {
+  if (!controller) return;
+
+  translateDiv.closeButton.one("click", () => {
+    const button = $(controller.button);
+    const resultStack = button.getResultFromTransButton();
+    const retainedResults = Array.isArray(resultStack)
+      ? resultStack.filter((result) => result?.translateDiv !== translateDiv)
+      : [];
+
+    if (retainedResults.length > 0) button.data("resultStack", retainedResults);
+    else button.removeData("resultStack");
+    button.trigger("ojbetter:task-statement-translation-change");
+  });
+}
+
+// ------------------------------
+// 翻译源缓存与临时 UI
+// ------------------------------
+
+/**
+ * 旧版公式占位上下文。
+ * @typedef {Object} LegacyLatexSlotContext
+ * @property {OJBPlaceholderTokenStyle} tokenStyle 本次任务使用的占位符样式
+ * @property {Map<string, string>} slots 占位符 ID 与旧公式 HTML 的映射
+ * @property {string} [reservedText] 生成 ID 时需要避开的完整原文
+ */
+
+/**
+ * 单次翻译使用的完整输入上下文。
+ * @typedef {Object} TranslationSource
+ * @property {string} text 发送给翻译服务的文本
+ * @property {"markdown" | "html" | "replace-original"} format 输入格式
+ * @property {LegacyLatexSlotContext|null} legacyLatex 旧版公式占位上下文
+ */
+
+/** 翻译结果和 Markdown 预览等运行时界面。 */
+const OJB_TRANSLATION_GENERATED_UI_SELECTOR =
+  ".translateDiv, .mdViewContent, .html2md-panel";
+
+/** 初始化阶段缓存翻译内容节点时使用的 jQuery 数据键。 */
+const OJB_TRANSLATION_BLOCK_CACHE_KEY = "translationBlockElements";
+
+/** 不应进入 Markdown 或翻译历史结构树的临时选段按钮。 */
+const OJB_MINI_TRANSLATION_BUTTON_SELECTOR = ".OJBetter_MiniTranslateButton";
+
+/**
+ * 获取目标中属于原内容的旧版公式节点。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {JQuery<HTMLElement>} 顶层 `.tex-span` 节点
+ */
+function getLegacyLatexNodes(element) {
+  return $(element)
+    .find(".tex-span")
+    .addBack(".tex-span")
+    .filter((i, node) => {
+      const target = $(node);
+      return (
+        target.parents(".tex-span").length === 0 &&
+        target.closest(OJB_TRANSLATION_GENERATED_UI_SELECTOR).length === 0
+      );
+    });
+}
+
+/**
+ * 判断指定内容目标是否含有无法还原源码的旧版公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含旧版公式
+ */
+function containsLegacyLatex(element) {
+  return getLegacyLatexNodes(element).length > 0;
+}
+
+/** 不参与 Codeforces 原始公式标记检测的内容。 */
+const OJB_UNRENDERED_LATEX_IGNORED_SELECTOR =
+  "code, pre, kbd, samp, script, style, textarea, noscript, .MathJax, .MathJax_Display, .katex, .monaco-editor, .translateDiv, .html2md-panel, .mdViewContent";
+
+/**
+ * 判断目标中是否仍有 MathJax 尚未处理的 Codeforces 三/六美元公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含未渲染公式
+ */
+function containsUnrenderedCodeforcesLatex(element) {
+  const roots = $(element).get();
+  for (const root of roots) {
+    if (!root) continue;
+    const rootDocument =
+      root.nodeType === 9 ? root : root.ownerDocument || document;
+    const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
+    const walker = rootDocument.createTreeWalker(
+      root,
+      nodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const text = node.nodeValue || "";
+          if (
+            !text.includes("$$$") ||
+            node.parentElement?.closest(
+              OJB_UNRENDERED_LATEX_IGNORED_SELECTOR
+            )
+          ) {
+            return nodeFilter.FILTER_REJECT;
+          }
+          return OJB_normalizeCodeforcesLatexDelimiters(text) === text
+            ? nodeFilter.FILTER_REJECT
+            : nodeFilter.FILTER_ACCEPT;
+        },
+      }
+    );
+    if (walker.nextNode()) return true;
+  }
+  return false;
+}
+
+/**
+ * 判断目标中是否存在需要等待渲染的新版 MathJax 公式。
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} element 内容目标
+ * @returns {boolean} 是否含新版 MathJax 节点或源码
+ */
+function containsModernMathJax(element) {
+  const selector =
+    '.MathJax_Preview, .MathJax, .MathJax_Display, script[type^="math/tex"]';
+  return (
+    $(element).find(selector).addBack(selector).length > 0 ||
+    containsUnrenderedCodeforcesLatex(element)
+  );
+}
+
+/**
+ * 创建旧版公式占位上下文。
+ * @param {string} [reservedText=""] 生成 ID 时需要避开的完整原文
+ * @returns {LegacyLatexSlotContext} 新的占位上下文
+ */
+function createLegacyLatexSlotContext(reservedText = "") {
+  return {
+    tokenStyle: OJB_normalizePlaceholderTokenStyle(
+      OJBetter.translation.replaceSymbol
+    ),
+    slots: new Map(),
+    reservedText: String(reservedText || ""),
+  };
+}
+
+/**
+ * 将目标转换为 Markdown，并把旧版公式替换为本次任务专属的不可翻译占位符。
+ * 新版 MathJax 仍由 Turndown 规则读取相邻 source script 中的 LaTeX。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 内容目标
+ * @param {LegacyLatexSlotContext} [legacyLatex=createLegacyLatexSlotContext()] 可复用的占位上下文
+ * @returns {TranslationSource} Markdown 翻译源
+ */
+function createMarkdownTranslationSource(
+  element,
+  legacyLatex = createLegacyLatexSlotContext()
+) {
+  const sourceRoot = $("<div>").append(
+    $(element).first().contents().clone()
+  );
+  const sourceHTML = sourceRoot.html() || "";
+  const reservedText = legacyLatex.reservedText || sourceHTML;
+
+  getLegacyLatexNodes(sourceRoot).each((i, node) => {
+    let id;
+    do {
+      id = String(OJB_getRandomNumber(8));
+    } while (reservedText.includes(id) || legacyLatex.slots.has(id));
+
+    legacyLatex.slots.set(id, node.outerHTML);
+    node.replaceWith(
+      node.ownerDocument.createTextNode(
+        OJB_formatPlaceholderToken(id, legacyLatex.tokenStyle)
+      )
+    );
+  });
+
+  return {
+    text: OJB_normalizeCodeforcesLatexDelimiters(
+      OJBetter.common.turndownService.turndown(sourceRoot.html() || "")
+    ),
+    format: "markdown",
+    legacyLatex: legacyLatex.slots.size > 0 ? legacyLatex : null,
+  };
+}
+
+/**
+ * 将翻译结果中的旧版公式占位符恢复为原始 HTML，并检查每个 slot 是否恰好保留一次。
+ * @param {string} text 翻译结果
+ * @param {LegacyLatexSlotContext|null} legacyLatex 旧版公式占位上下文
+ * @returns {{text: string, tokenText: string, completed: boolean}} 恢复结果与完整性状态
+ */
+function restoreLegacyLatexSlots(text, legacyLatex) {
+  if (!legacyLatex || legacyLatex.slots.size === 0) {
+    return {
+      text: String(text || ""),
+      tokenText: String(text || ""),
+      completed: true,
+    };
+  }
+
+  const occurrences = new Map(
+    Array.from(legacyLatex.slots.keys(), (id) => [id, 0])
+  );
+  const restoredText = String(text || "").replace(
+    OJB_getPlaceholderTokenRegex(),
+    (token, first, second, third) => {
+      const id = first || second || third;
+      if (!legacyLatex.slots.has(id)) return token;
+      occurrences.set(id, occurrences.get(id) + 1);
+      return legacyLatex.slots.get(id);
+    }
+  );
+
+  return {
+    text: restoredText,
+    tokenText: String(text || ""),
+    completed: Array.from(occurrences.values()).every((count) => count === 1),
+  };
+}
+
+/**
+ * 将旧版公式 slot 转为可持久化的普通对象。
+ * @param {LegacyLatexSlotContext|null} legacyLatex 旧版公式上下文
+ * @returns {{tokenStyle: OJBPlaceholderTokenStyle, slots: Array<{id: string, html: string}>}|null} 可持久化数据
+ */
+function serializeLegacyLatexSlots(legacyLatex) {
+  if (!legacyLatex || legacyLatex.slots.size === 0) return null;
+  return {
+    tokenStyle: legacyLatex.tokenStyle,
+    slots: Array.from(legacyLatex.slots, ([id, html]) => ({ id, html })),
+  };
+}
+
+/**
+ * 从翻译历史恢复旧版公式 slot 上下文。
+ * @param {Object|null|undefined} serialized 历史中的 slot 数据
+ * @returns {LegacyLatexSlotContext|null} 运行时上下文
+ */
+function deserializeLegacyLatexSlots(serialized) {
+  if (!serialized || !Array.isArray(serialized.slots)) return null;
+  const slots = new Map(
+    serialized.slots
+      .filter(
+        (slot) =>
+          /^\d{8}$/.test(String(slot?.id || "")) &&
+          typeof slot?.html === "string"
+      )
+      .map((slot) => [String(slot.id), slot.html])
+  );
+  return slots.size > 0
+    ? {
+        tokenStyle: OJB_normalizePlaceholderTokenStyle(serialized.tokenStyle),
+        slots,
+      }
+    : null;
+}
+
+/**
+ * 在 Markdown 渲染完成后，仅插回由页面原始 DOM 提供的旧版公式片段。
+ * 翻译服务返回的其他 HTML 仍按 Markdown 的默认转义规则处理。
+ * @param {HTMLElement} root 已渲染的结果根节点
+ * @param {LegacyLatexSlotContext|null} legacyLatex 旧版公式上下文
+ * @returns {{completed: boolean}} 插回完整性状态
+ */
+function restoreLegacyLatexSlotsInRenderedDom(root, legacyLatex) {
+  if (!root || !legacyLatex || legacyLatex.slots.size === 0) {
+    return { completed: true };
+  }
+
+  const walker = document.createTreeWalker(root, 4);
+  const textNodes = [];
+  let currentNode;
+  while ((currentNode = walker.nextNode())) textNodes.push(currentNode);
+
+  const occurrences = new Map(
+    Array.from(legacyLatex.slots.keys(), (id) => [id, 0])
+  );
+  textNodes.forEach((textNode) => {
+    const text = textNode.nodeValue || "";
+    const matches = Array.from(text.matchAll(OJB_getPlaceholderTokenRegex()));
+    if (matches.length === 0) return;
+
+    const fragment = document.createDocumentFragment();
+    let cursor = 0;
+    let replaced = false;
+    matches.forEach((match) => {
+      const id = match[1] || match[2] || match[3];
+      if (!legacyLatex.slots.has(id)) return;
+      if (match.index > cursor) {
+        fragment.appendChild(
+          document.createTextNode(text.slice(cursor, match.index))
+        );
+      }
+      const holder = document.createElement("span");
+      holder.innerHTML = legacyLatex.slots.get(id);
+      while (holder.firstChild) fragment.appendChild(holder.firstChild);
+      cursor = match.index + match[0].length;
+      occurrences.set(id, occurrences.get(id) + 1);
+      replaced = true;
+    });
+    if (!replaced) return;
+    if (cursor < text.length) {
+      fragment.appendChild(document.createTextNode(text.slice(cursor)));
+    }
+    textNode.parentNode.replaceChild(fragment, textNode);
+  });
+
+  // Markdown 可能把占位符吞进链接地址、HTML 属性等非文本位置；这些情况不能安全恢复。
+  const hasRemainingToken = Array.from(
+    root.innerHTML.matchAll(OJB_getPlaceholderTokenRegex())
+  ).some((match) =>
+    legacyLatex.slots.has(match[1] || match[2] || match[3])
+  );
+
+  return {
+    completed:
+      !hasRemainingToken &&
+      Array.from(occurrences.values()).every((count) => count === 1),
+  };
+}
+
+/**
+ * 获取翻译源对应的展示方式。
+ * @param {TranslationSource} source 翻译源
+ * @returns {{escapeHTML: boolean, renderLatex: boolean}} 展示选项
+ */
+function getTranslationSourceDisplayOptions(source) {
+  return {
+    escapeHTML: source?.format !== "html",
+    renderLatex: source?.format === "markdown",
+  };
+}
+
+/**
+ * 判断 ACMSGURU 是否继续使用其专用 HTML 翻译输入。
+ * 强制 Turndown 设置仅在此处影响翻译源选择。
+ * @returns {boolean} 是否使用 ACMSGURU HTML 输入
+ */
+function usesAcmsguruHtmlTranslation() {
+  return (
+    OJBetter.typeOfPage.is_acmsguru &&
+    !OJBetter.translation.forceTurndownConversion
+  );
+}
+
+/**
+ * 为单个目标构建翻译源。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 内容目标
+ * @param {string} [cachedMarkdown] 初始化阶段缓存的干净 Markdown
+ * @returns {TranslationSource} 本次任务的翻译源
+ */
+function buildTranslationSource(element, cachedMarkdown) {
+  if (usesAcmsguruHtmlTranslation()) {
+    return {
+      text: $(element).html() || "",
+      format: "html",
+      legacyLatex: null,
+    };
+  }
+  if (cachedMarkdown !== undefined && !containsLegacyLatex(element)) {
+    return {
+      text: cachedMarkdown,
+      format: "markdown",
+      legacyLatex: null,
+    };
+  }
+  return createMarkdownTranslationSource(element);
+}
+
+// ------------------------------
+// 翻译历史兼容
+// ------------------------------
+
+/**
+ * 推断旧翻译历史使用的展示模式。新记录会直接保存 sourceMode，此函数仅处理兼容回退。
+ * @param {unknown} storedMode 历史中保存的模式
+ * @param {JQuery<HTMLElement>|HTMLElement} sourceElement 原内容节点
+ * @param {string} translatedContent 已保存的译文
+ * @returns {"markdown" | "mixed-markdown" | "html" | "replace-original"} 展示模式
+ */
+function getHistoryTranslationSourceMode(
+  storedMode,
+  sourceElement,
+  translatedContent
+) {
+  const supportedModes = new Set([
+    "markdown",
+    "mixed-markdown",
+    "html",
+    "replace-original",
+  ]);
+  if (supportedModes.has(storedMode)) return storedMode;
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(sourceElement) ||
+    /<(?:span|div)\b[^>]*class=["'][^"']*\b(?:tex-span|MathJax(?:[_-][\w-]*)?|katex(?:[_-][\w-]*)?)\b/i.test(
+      String(translatedContent || "")
+    ) ||
+    /<script\b[^>]*type=["']math\/tex/i.test(String(translatedContent || ""))
+  ) {
+    return "html";
+  }
+  return "markdown";
+}
+
+/**
+ * 获取翻译历史模式对应的展示方式。
+ * @param {"markdown" | "mixed-markdown" | "html" | "replace-original"} sourceMode 历史模式
+ * @returns {{escapeHTML: boolean, renderLatex: boolean}} 展示选项
+ */
+function getHistoryTranslationDisplayOptions(sourceMode) {
+  return {
+    escapeHTML: sourceMode !== "html",
+    renderLatex: sourceMode !== "html",
+  };
+}
+
+// ------------------------------
+// 临时界面与缓存
+// ------------------------------
+
+/**
+ * 判断历史关系树节点是否为不应持久化的临时选段按钮。
+ * @param {Object|null|undefined} node 历史关系树节点
+ * @returns {boolean} 是否为临时节点
+ */
+function isTransientTranslationHistoryNode(node) {
+  return (
+    typeof node?.id === "string" &&
+    node.id.startsWith("translateButton_selected_")
+  );
+}
+
+/**
+ * 判断页面节点是否为不应进入翻译历史树的临时界面。
+ * @param {JQuery<HTMLElement>|HTMLElement} element 页面节点
+ * @returns {boolean} 是否为临时界面节点
+ */
+function isTransientTranslationUiElement(element) {
+  return $(element).is(
+    `${OJB_MINI_TRANSLATION_BUTTON_SELECTOR}, .mdViewContent, .OJBetter_taskStatementPanel`
+  );
+}
+
+/**
+ * 从干净页面结构中查找可能被分段或选段翻译的内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 翻译内容节点
+ */
+function findTranslationBlockElements(element) {
+  return $(element)
+    .find("p, li, .OJBetter_acmsguru")
+    .filter((i, block) => {
+      const candidate = $(block);
+      const isParagraphInsideListItem =
+        candidate.is("p") && candidate.parents("li").length > 0;
+      return (
+        !isParagraphInsideListItem &&
+        candidate.closest(".translateDiv, .mdViewContent").length === 0
+      );
+    });
+}
+
+/**
+ * 获取初始化阶段固定下来的翻译内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 翻译内容节点
+ */
+function getTranslationBlockElements(element) {
+  const cachedBlocks = $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY);
+  return Array.isArray(cachedBlocks)
+    ? $(cachedBlocks)
+    : findTranslationBlockElements(element);
+}
+
+/**
+ * 获取当前选中的翻译内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 已选中的内容节点
+ */
+function getSelectedTranslationBlockElements(element) {
+  return getTranslationBlockElements(element).filter(".block_selected");
+}
+
+/**
+ * 移除内容节点对应的临时选段按钮，避免其进入 Markdown 或翻译历史结构树。
+ * @param {JQuery<HTMLElement>|HTMLElement[]} elements 内容节点
+ * @returns {void}
+ */
+function removeMiniTranslationButtons(elements) {
+  $(elements).each((i, element) => {
+    const id = $(element).attr("OJBetter_p_id");
+    if (id) $(`#translateButton_selected_${id}`).remove();
+  });
+}
+
+/**
+ * 获取可能保存划词翻译结果的内容节点，包括列表项中的段落。
+ * 分段翻译为避免重复会排除 li 内的 p，但划词按钮仍可能直接挂在这些 p 上。
+ * @param {JQuery<HTMLElement>|HTMLElement|HTMLElement[]} elements 内容根节点或节点集合
+ * @returns {JQuery<HTMLElement>} 可清理划词结果的节点
+ */
+function getInlineTranslationResultElements(elements) {
+  const roots = $(elements);
+  return roots.add(roots.find("p, li, .OJBetter_acmsguru"));
+}
+
+/**
+ * 获取当前选中的划词翻译内容节点。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {JQuery<HTMLElement>} 已选中的内容节点
+ */
+function getSelectedInlineTranslationElements(element) {
+  return getInlineTranslationResultElements(element).filter(".block_selected");
+}
+
+/**
+ * 关闭迷你选段按钮直接创建的翻译结果。
+ * @param {JQuery<HTMLElement>|HTMLElement[]} elements 内容节点
+ * @returns {void}
+ */
+function clearInlineTranslationResults(elements) {
+  getInlineTranslationResultElements(elements).each((i, element) => {
+    const resultStack = $(element).data("inlineTranslationResultStack");
+    if (!Array.isArray(resultStack)) return;
+
+    for (let index = resultStack.length - 1; index >= 0; index--) {
+      resultStack[index]?.translateDiv?.close();
+    }
+    $(element)
+      .removeData("inlineTranslationResultStack")
+      .removeAttr("translated");
+  });
+}
+
+/**
+ * 在历史恢复和用户交互前缓存翻译可能读取的 Markdown。
+ * @param {HTMLElement} element 翻译目标
+ * @returns {string} 目标整体的 Markdown
+ */
+function cacheTranslationMarkdown(element) {
+  const markdown = containsLegacyLatex(element)
+    ? createMarkdownTranslationSource(element).text
+    : $(element).getMarkdown();
+  const blocks = findTranslationBlockElements(element);
+  blocks.each((i, block) => {
+    if (!containsLegacyLatex(block)) $(block).getMarkdown();
+  });
+  $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
+  return markdown;
+}
+
+/**
+ * 缓存 Codeforces 题面各内容块，并拼接成全文翻译使用的统一输入。
+ * 按块转换可避免根节点上的 `.header`、`.sample-tests` 过滤规则误删题名和样例。
+ * @param {JQuery<HTMLElement>} blocks 题面的原始顶层内容块
+ * @returns {Promise<TranslationSource>} 初始化阶段生成的干净全文翻译源
+ */
+async function cacheTaskStatementTranslationSource(blocks) {
+  await waitForMathJaxIdle(blocks);
+  const reservedText = $(blocks)
+    .map((i, block) => block.outerHTML || "")
+    .get()
+    .join("");
+  const legacyLatex = createLegacyLatexSlotContext(reservedText);
+  const text = $(blocks)
+    .map(
+      (i, block) =>
+        createMarkdownTranslationSource(block, legacyLatex).text
+    )
+    .get()
+    .filter((markdown) => !isEmptyText(markdown))
+    .join("\n\n");
+  return {
+    text: text,
+    format: "markdown",
+    legacyLatex: legacyLatex.slots.size > 0 ? legacyLatex : null,
+  };
+}
+
+/**
+ * 为翻译按钮添加悬浮时的“重新翻译”提示。
+ * @param {JQuery<HTMLElement>} button 翻译按钮
+ * @returns {void}
+ */
+function registerTranslationRedoHover(button) {
+  let previousState;
+  button.hover(
+    () => {
+      previousState = button.getButtonState();
+      if (previousState !== "normal" && previousState !== "running") {
+        button.setTransButtonState("redo");
+      }
+    },
+    () => {
+      const currentState = button.getButtonState();
+      if (
+        previousState !== "normal" &&
+        ["normal", "redo"].includes(currentState)
+      ) {
+        button.setTransButtonState(previousState);
+        previousState = null;
+      }
+    }
+  );
+}
+
+// ------------------------------
+// 题面全文按钮
+// ------------------------------
+
+/**
+ * 添加 Codeforces 题面全文 Markdown 视图按钮。
+ * @param {JQuery<HTMLElement>} button 全文 Markdown 按钮
+ * @param {JQuery<HTMLElement>} statement 题面根节点
+ * @param {JQuery<HTMLElement>} blocks 题面中可操作的原始顶层内容块
+ * @returns {Promise<void>}
+ */
+async function addButtonWithTaskStatementHTML2MD(button, statement, blocks) {
+  /**
+   * 改变全文 Markdown 按钮状态。
+   * @param {string} state 状态
+   * @returns {void}
+   */
+  const changeButtonState = (state) => {
+    if (state == "loading") {
+      button.setButtonLoading();
+      button.setButtonPopover(i18next.t("state.waitMathJax", { ns: "button" }));
+    } else if (state == "loaded" || state == "normal") {
+      button.removeClass("enabled");
+      button.setButtonLoaded();
+      button.setButtonPopover(i18next.t("md.normal", { ns: "button" }));
+    } else if (state == "mdView") {
+      button.setButtonLoaded();
+      button.addClass("enabled");
+      button.setButtonPopover(i18next.t("md.reduction", { ns: "button" }));
+    } else if (state == "disabled") {
+      button.prop("disabled", true);
+      button.setButtonPopover(i18next.t("md.disabled", { ns: "button" }));
+    }
+  };
+
+  /**
+   * 设置单个题面内容块的 Markdown 视图。
+   * @param {HTMLElement} block 题面内容块
+   * @param {boolean} value 是否显示 Markdown
+   * @returns {void}
+   */
+  const setBlockMarkdownView = (block, value) => {
+    const setMarkdownView = $(block).data("setMarkdownView");
+    if (typeof setMarkdownView === "function") setMarkdownView(value);
+  };
+
+  /**
+   * 根据全部题面内容块的实际状态同步全文按钮。
+   * @returns {void}
+   */
+  const syncButtonState = () => {
+    const isAllMarkdown =
+      blocks.length > 0 &&
+      blocks.filter((i, block) => $(block).attr("viewmd") !== "true").length ===
+        0;
+    if (containsLegacyLatex(statement) && !isAllMarkdown) {
+      changeButtonState("disabled");
+      return;
+    }
+    changeButtonState(isAllMarkdown ? "mdView" : "normal");
+  };
+
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(statement)
+  ) {
+    changeButtonState("disabled");
+    return;
+  }
+
+  changeButtonState("loading");
+  await waitForMathJaxIdle(statement);
+  blocks.on("ojbetter:markdown-view-change", syncButtonState);
+  syncButtonState();
+
+  button.click(
+    OJB_debounce(() => {
+      const shouldShowMarkdown =
+        blocks.filter((i, block) => $(block).attr("viewmd") !== "true").length >
+        0;
+      if (shouldShowMarkdown && containsLegacyLatex(statement)) {
+        changeButtonState("disabled");
+        return;
+      }
+      blocks.each((i, block) => {
+        if (($(block).attr("viewmd") === "true") !== shouldShowMarkdown) {
+          setBlockMarkdownView(block, shouldShowMarkdown);
+        }
+      });
+      syncButtonState();
+    })
+  );
+
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
+    button.addHoverOverlay(statement);
+  }
+}
+
+/**
+ * 添加 Codeforces 题面全文复制按钮。
+ * @param {JQuery<HTMLElement>} button 全文复制按钮
+ * @param {JQuery<HTMLElement>} statement 题面根节点
+ * @param {string} markdown 初始化阶段生成的全文 Markdown
+ * @returns {Promise<void>}
+ */
+async function addButtonWithTaskStatementCopy(
+  button,
+  statement,
+  markdown
+) {
+  button.setButtonLoading();
+  button.setButtonPopover(i18next.t("state.waitMathJax", { ns: "button" }));
+  if (
+    OJBetter.typeOfPage.is_acmsguru ||
+    containsLegacyLatex(statement)
+  ) {
+    button.setButtonLoaded().prop("disabled", true);
+    button.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
+    return;
+  }
+  button.setButtonLoaded();
+  button.setButtonPopover(i18next.t("copy.normal", { ns: "button" }));
+
+  button.click(
+    OJB_debounce(function () {
+      if (containsLegacyLatex(statement)) {
+        button.prop("disabled", true);
+        button.setButtonPopover(i18next.t("copy.disabled", { ns: "button" }));
+        return;
+      }
+      GM_setClipboard(OJB_unescapeHtml(markdown));
+      $(this).addClass("success");
+      button.setButtonPopover(i18next.t("copy.copied", { ns: "button" }));
+
+      setTimeout(() => {
+        $(this).removeClass("success");
+        button.setButtonPopover(i18next.t("copy.normal", { ns: "button" }));
+      }, 2000);
+    })
+  );
+
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
+    button.addHoverOverlay(statement);
+  }
+}
+
+/**
+ * 添加 Codeforces 题面全文翻译按钮。
+ * 每次将完整题面作为一个请求发送，以保留跨内容块上下文。
+ * @param {JQuery<HTMLElement>} button 全文翻译按钮
+ * @param {JQuery<HTMLElement>} statement 题面根节点
+ * @param {TranslationSource} translationSource 初始化阶段生成的全文翻译源
+ * @returns {Promise<void>}
+ */
+async function addButtonWithTaskStatementTranslation(
+  button,
+  statement,
+  translationSource
+) {
+  const defaultText = i18next.t("trans.normal", { ns: "button" });
+  const statementElement = statement.get(0);
+  let anchor = statement
+    .children(`.${OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS}`)
+    .first();
+  if (anchor.length === 0) {
+    anchor = OJB_safeCreateJQElement(
+      `<div class="${OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS}" hidden></div>`
+    );
+    statement.append(anchor);
+  }
+
+  /** @type {TaskStatementTranslationController} */
+  const controller = {
+    target: statementElement,
+    button: button.get(0),
+    anchor: anchor.get(0),
+    wholeRunning: false,
+    blockRunning: 0,
+    recovering: false,
+  };
+  statement.data("taskStatementTranslationController", controller);
+
+  /**
+   * 根据现有全文结果同步按钮状态。
+   * @returns {void}
+   */
+  const syncButtonState = () => {
+    if (button.getButtonState() === "running") return;
+
+    const resultStack = button.getResultFromTransButton();
+    const currentResults = Array.isArray(resultStack)
+      ? resultStack.filter(
+          (result) =>
+            result?.sourceElement === statementElement &&
+            result.translateDiv?.getDiv().parent().length > 0
+        )
+      : [];
+    const latestResult =
+      currentResults.find(
+        (result) =>
+          result.translateDiv?.upButton &&
+          !result.translateDiv.upButton.hasClass("reverse")
+      ) || currentResults[currentResults.length - 1];
+
+    if (!latestResult) button.setButtonState("normal", defaultText);
+    else if (latestResult.status === "error")
+      button.setTransButtonState(
+        "error",
+        i18next.t("trans.error", { ns: "button" })
+      );
+    else if (latestResult.status === "skip")
+      button.setTransButtonState(
+        "error",
+        i18next.t("trans.tooLong", { ns: "button" })
+      );
+    else button.setTransButtonState("success");
+  };
+
+  /**
+   * 翻译完整题面。
+   * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+   * @returns {Promise<void>}
+   */
+  const runTranslation = async (overrideTrans) => {
+    if (
+      controller.wholeRunning ||
+      controller.blockRunning > 0 ||
+      controller.recovering
+    )
+      return;
+
+    controller.wholeRunning = true;
+    try {
+      const resultStack = button.getResultFromTransButton();
+      if (Array.isArray(resultStack)) {
+        const currentResults = resultStack.filter(
+          (result) => result?.sourceElement === statementElement
+        );
+        if (
+          OJBetter.translation.replaceOriginal ||
+          OJBetter.translation.retransAction == "0" ||
+          hasReplaceOriginalTranslationResult(currentResults)
+        ) {
+          clearTranslationButtonResults(button, statement);
+        } else {
+          currentResults.forEach((result) => result?.translateDiv?.fold());
+        }
+      }
+
+      // 全文结果和所有局部结果采用互斥展示，包含 spoiler-content 等嵌套面板。
+      statement.find(".translateButton").each((i, localButtonElement) => {
+        if (localButtonElement !== button.get(0)) {
+          clearTranslationButtonResults($(localButtonElement));
+        }
+      });
+      statement.find(OJB_MINI_TRANSLATION_BUTTON_SELECTOR).remove();
+      const inlineElements = getInlineTranslationResultElements(statement);
+      inlineElements.removeClass("block_selected");
+      clearInlineTranslationResults(inlineElements);
+
+      button.setTransButtonState(
+        "running",
+        i18next.t("trans.wait", { ns: "button" })
+      );
+      try {
+        await executeTranslation(
+          button,
+          statementElement,
+          "this_level",
+          false,
+          overrideTrans,
+          translationSource
+        );
+      } catch (error) {
+        button.setTransButtonState(
+          "error",
+          i18next.t("trans.error", { ns: "button" })
+        );
+        console.warn("Failed to translate the complete task statement:", error);
+      }
+    } finally {
+      controller.wholeRunning = false;
+    }
+  };
+
+  button.setButtonLoading();
+  button.setButtonPopover(i18next.t("state.waitMathJax", { ns: "button" }));
+  if (!translationSource.legacyLatex) {
+    statement.data("markdown", translationSource.text);
+  }
+  const translationBlocks = findTranslationBlockElements(statementElement);
+  translationBlocks.each((i, block) => {
+    if (!containsLegacyLatex(block)) $(block).getMarkdown();
+  });
+  statement.data(OJB_TRANSLATION_BLOCK_CACHE_KEY, translationBlocks.get());
+  button.setButtonLoaded();
+  button.setButtonState("normal", defaultText);
+  button.setNotAutoTranslate();
+  button.on("ojbetter:task-statement-translation-change", syncButtonState);
+  button.data("translatedItBy", runTranslation);
+  button.click(OJB_debounce(() => runTranslation()));
+  registerTranslationRedoHover(button);
+  registerTranslationContextMenu(button);
+  syncButtonState();
+
+  if (OJBetter.preference.hoverTargetAreaDisplay) {
+    button.addHoverOverlay(statement);
   }
 }
 
 /**
  * 添加翻译按钮
  * @param {JQuery<HTMLElement>} button 按钮
- * @param {JQuery<HTMLElement>} element 目标元素
+ * @param {JQuery<HTMLElement>|HTMLElement} element 目标元素
  * @param {string} suffix 后缀
  * @param {string} type 类型
- * @param {boolean} is_comment 是否是评论
+ * @param {boolean} [is_comment=false] 是否是评论
+ * @returns {Promise<void>}
  */
 async function addButtonWithTranslation(
   button,
@@ -9362,34 +10873,16 @@ async function addButtonWithTranslation(
   type,
   is_comment = false
 ) {
-  /**
-   * 添加可指定翻译服务的方法调用
-   * @param {string} translation 翻译服务
-   */
-  button.data("translatedItBy", function (translation) {
-    button.setTransButtonState(
-      "running",
-      i18next.t("trans.wait", { ns: "button" })
-    );
-    executeTranslation(button, element, type, is_comment, translation);
-  });
-
   // 等待MathJax队列完成
   button.setButtonLoading();
-  await waitForMathJaxIdle();
+  await waitForMathJaxIdle(element);
   button.setButtonLoaded();
 
   // 标记目标文本区域不自动翻译
   {
-    let text;
-    if (
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    ) {
-      text = $(element).html();
-    } else {
-      text = $(element).getMarkdown();
-    }
+    const text = usesAcmsguruHtmlTranslation()
+      ? $(element).html()
+      : cacheTranslationMarkdown(element);
     let length = text.length;
     if (
       length > OJBetter.translation.auto.shortTextLength ||
@@ -9401,71 +10894,107 @@ async function addButtonWithTranslation(
     // button.after(`<span>${length}</span>`); // 显示字符数
   }
 
-  button.click(
-    OJB_debounce(async function () {
-      // 重新翻译
-      let resultStack = $(this).getResultFromTransButton();
-      if (resultStack) {
-        let pElements = $(element).find(
-          "p.block_selected:not(li p), li.block_selected"
-        );
-        for (let item of resultStack) {
-          if (OJBetter.translation.retransAction == "0") {
-            // 选段翻译不直接移除旧结果
-            if (OJBetter.translation.comment.transMode == "2") {
-              // 只移除即将要翻译的段的结果
-              if (pElements.is(item.translateDiv.getDiv().prev())) {
-                item.translateDiv.close();
-              }
-            } else {
-              item.translateDiv.close();
-              $($(element))
-                .find(
-                  ".translate-problem-statement, .translate-problem-statement-panel"
-                )
-                .remove();
-            }
-          } else {
-            item.translateDiv.fold();
-          }
+  /**
+   * 执行一次与按钮点击完全相同的翻译流程。
+   * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+   * @returns {Promise<void>}
+   */
+  const runTranslation = async (overrideTrans) => {
+    const controller = getTaskStatementTranslationController(element);
+    if (controller?.recovering) return;
+    if (controller) controller.blockRunning += 1;
+
+    try {
+      if (!clearTaskStatementTranslationResults(element)) return;
+
+      const isSelectionMode = OJBetter.translation.comment.transMode == "2";
+      const selectedElements = isSelectionMode
+        ? getSelectedTranslationBlockElements(element)
+        : $();
+      const affectedElements = isSelectionMode
+        ? selectedElements
+        : getTranslationBlockElements(element);
+      const inlineAffectedElements = isSelectionMode
+        ? getSelectedInlineTranslationElements(element)
+        : affectedElements;
+
+      // 临时按钮必须先移除；关闭旧结果会立即刷新翻译历史结构树。
+      if (isSelectionMode) removeMiniTranslationButtons(inlineAffectedElements);
+      else $(element).find(OJB_MINI_TRANSLATION_BUTTON_SELECTOR).remove();
+
+      const resultStack = button.getResultFromTransButton();
+      if (Array.isArray(resultStack)) {
+        if (
+          OJBetter.translation.replaceOriginal ||
+          OJBetter.translation.retransAction == "0" ||
+          hasReplaceOriginalTranslationResult(resultStack)
+        ) {
+          clearTranslationButtonResults(
+            button,
+            isSelectionMode ? selectedElements : null
+          );
+        } else {
+          resultStack.forEach((result) => result?.translateDiv?.fold());
         }
       }
 
-      // 翻译
+      const hasInlineReplaceOriginalResult = inlineAffectedElements
+        .toArray()
+        .some((affectedElement) =>
+          hasReplaceOriginalTranslationResult(
+            $(affectedElement).data("inlineTranslationResultStack")
+          )
+        );
+      if (
+        OJBetter.translation.replaceOriginal ||
+        hasInlineReplaceOriginalResult
+      ) {
+        clearInlineTranslationResults(inlineAffectedElements);
+      }
+
       button.setTransButtonState(
         "running",
         i18next.t("trans.wait", { ns: "button" })
       );
-
-      executeTranslation(button, element, type, is_comment);
-    })
-  );
-
-  // 重新翻译提示
-  let prevState;
-  button.hover(
-    () => {
-      prevState = button.getButtonState();
-      if (prevState !== "normal" && prevState !== "running") {
-        button.setTransButtonState("redo");
+      try {
+        await executeTranslation(
+          button,
+          element,
+          type,
+          is_comment,
+          overrideTrans
+        );
+      } catch (error) {
+        button.setTransButtonState(
+          "error",
+          i18next.t("trans.error", { ns: "button" })
+        );
+        console.warn("Failed to execute translation:", error);
       }
-    },
-    () => {
-      const currentState = button.getButtonState();
-      if (prevState !== "normal" && ["normal", "redo"].includes(currentState)) {
-        button.setTransButtonState(prevState);
-        prevState = null;
-      }
+    } finally {
+      if (controller) controller.blockRunning -= 1;
     }
-  );
+  };
+
+  button.data("translatedItBy", runTranslation);
+  button.click(OJB_debounce(() => runTranslation()));
+  registerTranslationRedoHover(button);
 
   // 目标区域指示
   if (OJBetter.preference.hoverTargetAreaDisplay) {
     button.addHoverOverlay($(element));
   }
 
-  // 翻译右键切换菜单
-  $(document).on("contextmenu", "#translateButton" + suffix, function (e) {
+  registerTranslationContextMenu(button);
+}
+
+/**
+ * 为翻译按钮注册右键服务切换菜单。
+ * @param {JQuery<HTMLElement>} button 翻译按钮
+ * @returns {void}
+ */
+function registerTranslationContextMenu(button) {
+  button.on("contextmenu", function (e) {
     e.preventDefault();
 
     // 是否为评论的翻译
@@ -9505,6 +11034,12 @@ async function addButtonWithTranslation(
       {
         value: "caiyun",
         name: i18next.t("translation.options.services.caiyun", {
+          ns: "settings",
+        }),
+      },
+      {
+        value: "edge",
+        name: i18next.t("translation.options.services.edge", {
           ns: "settings",
         }),
       },
@@ -9608,29 +11143,57 @@ async function addButtonWithTranslation(
  * @param {HTMLElement} element 目标元素
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
- * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+ * @param {TranslationSource} [wholeSource] 指定后忽略分段/选段模式，并将完整题面作为单次翻译输入
+ * @returns {Promise<void>}
  */
-async function executeTranslation(button, element, type, is_comment, overrideTrans) {
-  /** @type {HTMLElement} 目标元素 */
+async function executeTranslation(
+  button,
+  element,
+  type,
+  is_comment,
+  overrideTrans,
+  wholeSource
+) {
+  /** @type {JQuery<HTMLElement>} 目标元素 */
   let target;
-  /**
-   * 错误计数数据结构
-   * @typedef {Object} count
-   * @property {number} errerNum 错误数量
-   * @property {number} skipNum 跳过数量
-   */
+  /** @type {HTMLElement} 原页面中的翻译目标 */
+  let element_node;
+  /** @type {{errorNum: number, skipNum: number}} */
   const count = {
-    errerNum: 0,
+    errorNum: 0,
     skipNum: 0,
   };
-  if (OJBetter.translation.comment.transMode == "1") {
-    // 分段翻译
-    let pElements = $(element).find(
-      "p:not(:scope > li p), li, .OJBetter_acmsguru"
+
+  restoreMarkdownViews(element);
+
+  if (wholeSource !== undefined) {
+    // 全文翻译始终只创建一个任务，保留跨内容块上下文。
+    target = $(element).eq(0).clone();
+    element_node = $(element).get(0);
+    target.translationSource = wholeSource;
+    target.preserveSourceMarkdown = true;
+    await process(
+      button,
+      target,
+      element_node,
+      type,
+      is_comment,
+      count,
+      overrideTrans
     );
+  } else if (OJBetter.translation.comment.transMode == "1") {
+    // 分段翻译
+    let pElements = getTranslationBlockElements(element);
     for (let i = 0; i < pElements.length; i++) {
       target = $(pElements[i]).eq(0).clone();
       element_node = pElements[i];
+      if (
+        !usesAcmsguruHtmlTranslation() &&
+        !containsLegacyLatex(element_node)
+      ) {
+        target.markdown = $(element_node).getMarkdown();
+      }
       await process(
         button,
         target,
@@ -9643,12 +11206,16 @@ async function executeTranslation(button, element, type, is_comment, overrideTra
     }
   } else if (OJBetter.translation.comment.transMode == "2") {
     // 选段翻译
-    let pElements = $(element).find(
-      "p.block_selected:not(li p), li.block_selected, .OJBetter_acmsguru"
-    );
+    let pElements = getSelectedTranslationBlockElements(element);
     for (let i = 0; i < pElements.length; i++) {
       target = $(pElements[i]).eq(0).clone();
       element_node = pElements[i];
+      if (
+        !usesAcmsguruHtmlTranslation() &&
+        !containsLegacyLatex(element_node)
+      ) {
+        target.markdown = $(element_node).getMarkdown();
+      }
       await process(
         button,
         target,
@@ -9659,14 +11226,18 @@ async function executeTranslation(button, element, type, is_comment, overrideTra
         overrideTrans
       );
     }
-    $(element)
-      .find("p.block_selected:not(li p), li.block_selected")
-      .removeClass("block_selected");
+    pElements.removeClass("block_selected");
   } else {
     // 普通翻译
     target = $(element).eq(0).clone();
     if (type === "child_level") $(target).children(":first").remove();
     element_node = $($(element)).get(0);
+    if (
+      !usesAcmsguruHtmlTranslation() &&
+      !containsLegacyLatex(element)
+    ) {
+      target.markdown = $(element).getMarkdown();
+    }
     await process(
       button,
       target,
@@ -9679,19 +11250,31 @@ async function executeTranslation(button, element, type, is_comment, overrideTra
   }
 
   // 翻译完成
-  if (!count.errerNum && !count.skipNum) {
+  if (!count.errorNum && !count.skipNum) {
     button.setTransButtonState("success");
+  } else if (count.errorNum) {
+    button.setTransButtonState(
+      "error",
+      i18next.t("trans.error", { ns: "button" })
+    );
+  } else {
+    button.setTransButtonState(
+      "error",
+      i18next.t("trans.tooLong", { ns: "button" })
+    );
   }
 }
 
 /**
  * 翻译处理
  * @param {JQuery<HTMLElement>} button 按钮
- * @param {HTMLElement} target 目标元素
+ * @param {JQuery<HTMLElement>} target 目标元素
  * @param {HTMLElement} element_node 目标节点
  * @param {string} type 类型
  * @param {boolean} is_comment 是否是评论
- * @param {string} overrideTrans 覆盖全局翻译服务设定
+ * @param {{errorNum: number, skipNum: number}} count 翻译结果计数
+ * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+ * @returns {Promise<void>}
  */
 async function process(
   button,
@@ -9709,7 +11292,7 @@ async function process(
   }
 
   // 是否跳过折叠块
-  if ($(target).find(".spoiler").length > 0) {
+  if (!target.preserveSourceMarkdown && $(target).find(".spoiler").length > 0) {
     const shouldSkip = await OJB_createDialog(
       i18next.t("skipFold.title", { ns: "dialog" }),
       i18next.t("skipFold.content", { ns: "dialog" }),
@@ -9721,13 +11304,18 @@ async function process(
     ); // 跳过折叠块确认
     if (shouldSkip) {
       $(target).find(".spoiler").remove();
+      target.markdown = undefined;
     } else {
       $(target).find(".html2md-panel").remove();
     }
   }
 
   // 是否跳过非行内代码块
-  if ($(target).find("code:not(.tt)").length > 0 || $(target).find(".monaco-editor").length > 0) {
+  if (
+    !target.preserveSourceMarkdown &&
+    ($(target).find("code:not(.tt)").length > 0 ||
+      $(target).find(".monaco-editor").length > 0)
+  ) {
     const shouldSkip = await OJB_createDialog(
       i18next.t("skipCodeBlock.title", { ns: "dialog" }),
       i18next.t("skipCodeBlock.content", { ns: "dialog" }),
@@ -9740,6 +11328,7 @@ async function process(
     if (shouldSkip) {
       $(target).find("code:not(.tt)").remove();
       $(target).find(".monaco-editor").remove();
+      target.markdown = undefined;
     }
   }
 
@@ -9753,8 +11342,12 @@ async function process(
     overrideTrans
   );
   button.pushResultToTransButton(result);
+  registerTaskStatementTranslationCloseSync(
+    result.translateDiv,
+    $(element_node).data("taskStatementTranslationController") || null
+  );
 
-  if (result.status == "error") count.errerNum += 1;
+  if (result.status == "error") count.errorNum += 1;
   else if (result.status == "skip") count.skipNum += 1;
   $(target).remove();
 }
@@ -9762,11 +11355,11 @@ async function process(
 /**
  * 块处理
  * @param {JQuery<HTMLElement>} button
- * @param {HTMLElement} target 目标元素
+ * @param {JQuery<HTMLElement>} target 目标元素
  * @param {HTMLElement} element_node 目标节点
  * @param {boolean} is_comment 是否是评论
- * @param {string} overrideTrans 覆盖全局翻译服务设定
- * @returns {TranslateResult} 翻译结果对象
+ * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function blockProcessing(
   button,
@@ -9783,29 +11376,26 @@ async function blockProcessing(
   const replaceOriginalState = OJBetter.translation.replaceOriginal
     ? OJB_prepareReplaceOriginalState(element_node, extraIgnoredSelector)
     : null;
-
-  if (replaceOriginalState) {
-    target.markdown = replaceOriginalState.raw;
-  } else if (
-    (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-    !OJBetter.translation.forceTurndownConversion
-  ) {
-    target.markdown = $(target).html();
-  } else if (!target.markdown) {
-    target.markdown = OJBetter.common.turndownService.turndown(
-      $(target).html()
-    );
-  }
+  /** @type {TranslationSource} */
+  const translationSource = replaceOriginalState
+    ? {
+        text: replaceOriginalState.raw,
+        format: "replace-original",
+        legacyLatex: null,
+      }
+    : target.translationSource ||
+      buildTranslationSource(target, target.markdown);
 
   const result = await OJBetter.common.taskQueue.addTask(
     OJBetter.translation.choice,
     () =>
       translateMain(
-        target.markdown,
+        translationSource.text,
         element_node,
         is_comment,
         overrideTrans,
-        replaceOriginalState
+        replaceOriginalState,
+        translationSource
       ),
     OJBetter.translation.choice == "openai"
   );
@@ -9830,6 +11420,7 @@ async function blockProcessing(
 
 /**
  * 选段翻译支持
+ * @returns {Promise<void>}
  */
 async function multiChoiceTranslation() {
   GM_addStyle(`
@@ -9843,6 +11434,11 @@ async function multiChoiceTranslation() {
     "p, li:not(:has(.comment)), .OJBetter_acmsguru",
     function (e) {
       let $this = $(this);
+      if (
+        $this.closest(".translateDiv, .mdViewContent, .html2md-panel").length >
+        0
+      )
+        return;
       e.stopPropagation();
       if ($this.hasClass("block_selected")) {
         $this.removeClass("block_selected");
@@ -9863,32 +11459,70 @@ async function multiChoiceTranslation() {
         });
         $this.before(menu);
 
-        $("#translateButton_selected_" + id).click(async function () {
-          // 处理旧的结果
-          if ($this.attr("translated")) {
-            let result = $this.data("resultData");
-            if (OJBetter.translation.retransAction == "0") {
-              result.translateDiv.close();
-            } else {
-              result.translateDiv.fold();
+        const miniButton = $("#translateButton_selected_" + id);
+        miniButton.click(async function () {
+          const controller = getTaskStatementTranslationController($this);
+          if (controller?.recovering) return;
+          if (controller) controller.blockRunning += 1;
+
+          try {
+            if (!clearTaskStatementTranslationResults($this)) return;
+
+            // 关闭旧结果会立即刷新翻译历史树，因此先移除临时按钮。
+            miniButton.remove();
+
+            let resultStack = $this.data("inlineTranslationResultStack");
+            if (!Array.isArray(resultStack)) resultStack = [];
+            if ($this.attr("translated")) {
+              if (
+                OJBetter.translation.replaceOriginal ||
+                OJBetter.translation.retransAction == "0" ||
+                hasReplaceOriginalTranslationResult(resultStack)
+              ) {
+                for (let index = resultStack.length - 1; index >= 0; index--) {
+                  resultStack[index]?.translateDiv?.close();
+                }
+                resultStack = [];
+                $this
+                  .removeData("inlineTranslationResultStack")
+                  .removeAttr("translated");
+              } else {
+                resultStack.forEach((result) => result?.translateDiv?.fold());
+              }
             }
+
+            const blockButton = getTaskStatementConversionPanel($this).find(
+              ".translateButton"
+            );
+            const blockResultStack = blockButton.getResultFromTransButton();
+            if (
+              OJBetter.translation.replaceOriginal ||
+              hasReplaceOriginalTranslationResult(blockResultStack)
+            ) {
+              clearTranslationButtonResults(blockButton, $this);
+            }
+
+            // 翻译
+            const target = $this.eq(0).clone();
+            if (
+              !usesAcmsguruHtmlTranslation() &&
+              !containsLegacyLatex($this)
+            ) {
+              target.markdown = $this.getMarkdown();
+            }
+            const result = await blockProcessing(
+              miniButton,
+              target,
+              $this.get(0),
+              false
+            );
+            resultStack.push(result);
+            $this.data("inlineTranslationResultStack", resultStack);
+            $this.removeClass("block_selected");
+            $this.attr("translated", "1"); // 标记已翻译
+          } finally {
+            if (controller) controller.blockRunning -= 1;
           }
-          // 翻译
-          let target = $this.eq(0).clone();
-          let result = await blockProcessing(
-            OJBetter.translation.choice,
-            target,
-            $this.eq(0),
-            $("#translateButton_selected_" + id),
-            false
-          );
-          $this.data("resultData", result);
-          $this.removeClass("block_selected");
-          // 移除对应的按钮
-          $(".OJBetter_MiniTranslateButton").remove(
-            "#translateButton_selected_" + id
-          );
-          $this.attr("translated", "1"); // 标记已翻译
         });
       }
     }
@@ -9933,31 +11567,127 @@ async function acmsguruReblock() {
 
 /**
  * 添加MD/复制/翻译按钮
+ * @returns {Promise<void>}
  */
 async function addConversionButton() {
   let promises = []; // 用于收集所有的 Promise
 
-  // 题目页添加按钮
-  if (OJBetter.typeOfPage.is_problem) {
-    let exContentsPageClasses = ["sample-tests"];
+  // Codeforces 单题页：题面全文与各内容块分别使用独立的操作面板。
+  if (
+    OJBetter.typeOfPage.is_problem &&
+    !OJBetter.typeOfPage.is_mSite &&
+    !OJBetter.typeOfPage.is_acmsguru
+  ) {
+    const statement = $(".problem-statement").first();
+    const blocks = statement
+      .children("div")
+      .filter(
+        (i, block) =>
+          !$(block).is(
+            `.html2md-panel, .translateDiv, .${OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS}`
+          )
+    );
+
+    if (blocks.length > 0) {
+      // 在插入操作面板前固定原始内容块，三个全文操作共享同一份 Markdown 缓存。
+      const translationSource =
+        await cacheTaskStatementTranslationSource(blocks);
+      const wholePanelId = "_task-statement_" + OJB_getRandomNumber(8);
+      const wholePanel = addButtonPanel(
+        statement.get(0),
+        wholePanelId,
+        "this_level"
+      );
+      wholePanel.panel.addClass("OJBetter_taskStatementPanel");
+
+      blocks.each((i, block) => {
+        const id = "_problem_" + OJB_getRandomNumber(8);
+        const isSampleTests = $(block).hasClass("sample-tests");
+
+        if (isSampleTests) {
+          // 样例沿用旧版的不显示局部面板，只为全文 Markdown 视图注册控制器。
+          const detachedButton = OJB_safeCreateJQElement(
+            '<button type="button"></button>'
+          );
+          promises.push(
+            addButtonWithHTML2MD(
+              detachedButton,
+              block,
+              id,
+              "this_level",
+              false
+            )
+          );
+          return;
+        }
+
+        const panel = addButtonPanel(block, id, "this_level");
+        promises.push(
+          addButtonWithHTML2MD(panel.viewButton, block, id, "this_level")
+        );
+        promises.push(
+          addButtonWithCopy(panel.copyButton, block, id, "this_level")
+        );
+        promises.push(
+          addButtonWithTranslation(
+            panel.translateButton,
+            block,
+            id,
+            "this_level"
+          )
+        );
+        if ($(block).hasClass("header")) {
+          panel.translateButton.setNotAutoTranslate();
+        }
+      });
+
+      wholePanel.translateButton.setNotAutoTranslate();
+      promises.push(
+        addButtonWithTaskStatementHTML2MD(
+          wholePanel.viewButton,
+          statement,
+          blocks
+        )
+      );
+      promises.push(
+        addButtonWithTaskStatementCopy(
+          wholePanel.copyButton,
+          statement,
+          translationSource.text
+        )
+      );
+      promises.push(
+        addButtonWithTaskStatementTranslation(
+          wholePanel.translateButton,
+          statement,
+          translationSource
+        )
+      );
+    }
+  } else if (OJBetter.typeOfPage.is_problem) {
+    // m1/m2 轻量站和 acmsguru 页面暂不启用全文面板，保留原有局部按钮。
     $(".problem-statement")
       .children("div")
-      .each((i, e) => {
-        var className = $(e).attr("class");
-        if (!exContentsPageClasses.includes(className)) {
-          var id = "_problem_" + OJB_getRandomNumber(8);
-          let panel = addButtonPanel(e, id, "this_level");
-          promises.push(
-            addButtonWithHTML2MD(panel.viewButton, e, id, "this_level")
-          );
-          promises.push(
-            addButtonWithCopy(panel.copyButton, e, id, "this_level")
-          );
-          promises.push(
-            addButtonWithTranslation(panel.translateButton, e, id, "this_level")
-          );
-          if (i == 0) panel.translateButton.setNotAutoTranslate(); // 题目标题块跳过，不自动翻译
-        }
+      .each((i, block) => {
+        if ($(block).hasClass("sample-tests")) return;
+
+        const id = "_problem_" + OJB_getRandomNumber(8);
+        const panel = addButtonPanel(block, id, "this_level");
+        promises.push(
+          addButtonWithHTML2MD(panel.viewButton, block, id, "this_level")
+        );
+        promises.push(
+          addButtonWithCopy(panel.copyButton, block, id, "this_level")
+        );
+        promises.push(
+          addButtonWithTranslation(
+            panel.translateButton,
+            block,
+            id,
+            "this_level"
+          )
+        );
+        if (i === 0) panel.translateButton.setNotAutoTranslate();
       });
   }
   // 添加按钮到ttypography部分
@@ -10112,36 +11842,39 @@ async function addConversionButton() {
   });
 }
 
+/** MathJax 初始化异常时的最长等待时间。 */
+const OJB_MATHJAX_WAIT_TIMEOUT_MS = 10000;
+
 /**
  * 等待LaTeX渲染队列全部完成
- * @returns {Promise} 完成渲染
+ * @param {JQuery<HTMLElement>|HTMLElement|Document} [element=document] 内容目标
+ * @returns {Promise<void>} 完成渲染或等待超时
  */
-function waitForMathJaxIdle() {
-  return new Promise((resolve, reject) => {
-    // 检查MathJax对象是否存在
-    const checkMathJaxExists = () => {
-      if (typeof MathJax === "undefined") {
-        // 如果MathJax不存在，稍后再次检查
-        OJB_delay(100).then(checkMathJaxExists);
-      } else {
-        // MathJax存在，开始监视渲染队列
-        startMonitoringQueue();
-      }
+function waitForMathJaxIdle(element = document) {
+  if (!containsModernMathJax(element)) return Promise.resolve();
+
+  return new Promise((resolve) => {
+    let completed = false;
+    let intervalId;
+
+    const finish = () => {
+      if (completed) return;
+      completed = true;
+      clearInterval(intervalId);
+      clearTimeout(timeoutId);
+      resolve();
     };
 
-    // 开始监视MathJax渲染队列
-    const startMonitoringQueue = () => {
-      const intervalId = setInterval(() => {
-        const queue = MathJax.Hub.queue;
-        if (queue.pending === 0 && queue.running === 0) {
-          clearInterval(intervalId);
-          resolve();
-        }
-      }, 100);
+    const timeoutId = setTimeout(finish, OJB_MATHJAX_WAIT_TIMEOUT_MS);
+    const checkQueue = () => {
+      if (containsUnrenderedCodeforcesLatex(element)) return;
+      if (typeof MathJax === "undefined") return;
+      const queue = MathJax.Hub?.queue;
+      if (!queue || (queue.pending === 0 && queue.running === 0)) finish();
     };
 
-    // 开始检查MathJax对象
-    checkMathJaxExists();
+    intervalId = setInterval(checkQueue, 100);
+    checkQueue();
   });
 }
 
@@ -10264,21 +11997,27 @@ class TranslateDiv {
    * @param {HTMLElement} element 元素
    */
   renderLaTeX(element) {
+    if (typeof MathJax === "undefined" || !MathJax.Hub?.Queue) return;
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
   }
 
   /**
    * 更新翻译框内容
    * @param {string} text 文本内容
-   * @param {boolean} is_escapeHTML 是否转义HTML标签，为true则HTML标签将作为普通文本处理，默认为true
-   * @param {boolean} is_renderLaTeX 是否渲染LaTeX，为true则会渲染LaTeX，默认为true
+   * @param {boolean} [is_escapeHTML=true] 是否转义HTML标签，为true则HTML标签将作为普通文本处理
+   * @param {boolean} [is_renderLaTeX=true] 是否渲染LaTeX
+   * @param {boolean} [allowPartialReplace=false] 是否允许原文替换的流式不完整结果
+   * @param {boolean} [forcePanel=false] 是否强制显示翻译面板而不写回原文
+   * @param {LegacyLatexSlotContext|null} [legacyLatex=null] 需要在渲染后插回的旧版公式 slot
+   * @returns {{applied: boolean, completed: boolean, pending?: boolean}} 更新结果
    */
   updateTranslateDiv(
     text,
     is_escapeHTML = true,
     is_renderLaTeX = true,
     allowPartialReplace = false,
-    forcePanel = false
+    forcePanel = false,
+    legacyLatex = null
   ) {
     if (this.replaceOriginalState && !forcePanel) {
       const applyResult = OJB_applyReplaceOriginalText(
@@ -10304,6 +12043,10 @@ class TranslateDiv {
     if (!text) text = "";
     let html = md.render(text);
     this.mainDiv.html(html);
+    const legacyLatexResult = restoreLegacyLatexSlotsInRenderedDom(
+      this.mainDiv.get(0),
+      legacyLatex
+    );
     // 渲染Latex
     if (is_renderLaTeX) {
       // MathJax.Hub.Queue(["Typeset", MathJax.Hub, this.mainDiv.get(0)]);
@@ -10325,7 +12068,7 @@ class TranslateDiv {
 
     return {
       applied: false,
-      completed: true,
+      completed: legacyLatexResult.completed,
     };
   }
 
@@ -10569,6 +12312,7 @@ class ElementsTree {
     var prev = null;
     var node = this.node[i_];
     element.children().each((i, e) => {
+      if (isTransientTranslationUiElement(e)) return;
       // only add element with tagNames
       if (this.tagNames.includes($(e).prop("tagName"))) {
         prev = this.addNode(i_, prev, e);
@@ -10656,6 +12400,15 @@ class ElementsTree {
   // 恢复一个分支
   recoverOneFork(pElement, ttTreeNode, index) {
     do {
+      while (isTransientTranslationUiElement(pElement)) {
+        if (pElement.next().length === 0) return;
+        pElement = pElement.next();
+      }
+      while (isTransientTranslationHistoryNode(ttTreeNode[index])) {
+        index = ttTreeNode[index].next;
+        if (index === null) return;
+      }
+
       // only recover element with tagNames
       if (!this.tagNames.includes(pElement.prop("tagName"))) {
         if (pElement.next().length > 0) {
@@ -10708,77 +12461,168 @@ class ElementsTree {
 
   /**
    * 重新创建translateDiv
-   * @param {*} pElement
-   * @param {*} id
-   * @param {*} translatedText
-   * @param {*} topText
-   * @param {Boolean} isFold 是否折叠
+   * @param {JQuery<HTMLElement>} pElement 译文在历史结构中的前置节点
+   * @param {string} id 翻译结果 ID
+   * @param {string|Object} translatedText 历史翻译内容
+   * @param {string|undefined} topText 翻译结果顶部文本
+   * @param {boolean} isFold 是否折叠
+   * @returns {void}
    */
   reCreateTransDiv(pElement, id, translatedText, topText, isFold) {
     const translatedPayload =
-      translatedText && typeof translatedText === "object" ? translatedText : null;
+      translatedText && typeof translatedText === "object"
+        ? translatedText
+        : null;
     const translatedContent =
-      OJB_stripReplaceOriginalMarkers(
-        translatedPayload ? translatedPayload.text : translatedText
-      );
+      translatedPayload?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION &&
+      typeof translatedPayload.displayText === "string"
+      ? translatedPayload.displayText
+      : translatedPayload && typeof translatedPayload.text === "string"
+      ? translatedPayload.text
+      : translatedText;
+    let sourceElement = pElement.hasClass("translateDiv")
+      ? pElement.prevAll(":not(.translateDiv)").first()
+      : pElement;
+    if (sourceElement.hasClass(OJB_TASK_STATEMENT_TRANSLATION_ANCHOR_CLASS)) {
+      sourceElement = sourceElement.parent();
+    }
+    const storedSourceMode =
+      translatedPayload?.replaceOriginal === true &&
+      !translatedPayload?.sourceMode
+        ? "replace-original"
+        : translatedPayload?.sourceMode;
+    let sourceMode = getHistoryTranslationSourceMode(
+      storedSourceMode,
+      sourceElement,
+      translatedContent
+    );
+    const historyLegacyLatex = deserializeLegacyLatexSlots(
+      translatedPayload?.legacyLatex
+    );
+    if (historyLegacyLatex && sourceMode === "markdown") {
+      sourceMode = "mixed-markdown";
+    }
+    if (
+      sourceMode === "mixed-markdown" &&
+      !historyLegacyLatex &&
+      /<[^>]+class=["'][^"']*\btex-span\b/i.test(
+        String(translatedContent || "")
+      )
+    ) {
+      sourceMode = "html";
+    }
+    // 旧全页模式可能把不含公式的普通目标也保存为 raw HTML；先转回 Markdown 再安全渲染。
+    const historyDisplayContent =
+      !translatedPayload &&
+      sourceMode === "markdown" &&
+      /^\s*<(?:p|div|pre|table)\b/i.test(String(translatedContent || ""))
+        ? OJBetter.common.turndownService.turndown(translatedContent)
+        : translatedContent;
+    const displayOptions = getHistoryTranslationDisplayOptions(sourceMode);
+    const taskStatementController = sourceElement.data(
+      "taskStatementTranslationController"
+    );
     const translateDiv = new TranslateDiv(id);
     pElement.after(translateDiv.getDiv());
     translateDiv.setTopText(topText);
     translateDiv.registerUpButtonEvent();
     translateDiv.registerCloseButtonEvent();
-    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-      translateDiv.registerCopyButtonEvent(translatedContent);
+    if (
+      translatedPayload?.replaceOriginal === true ||
+      sourceMode === "markdown"
+    ) {
+      translateDiv.registerCopyButtonEvent(historyDisplayContent);
     } else {
       translateDiv.disableCopyButton();
     }
-    if (OJBetter.translation.replaceOriginal === true) {
+    if (
+      OJBetter.translation.replaceOriginal === true &&
+      translatedPayload?.replaceOriginal === true
+    ) {
       const historyReplaceOriginalState = OJB_applyHistoryReplaceOriginal(
         translateDiv,
-        pElement.get(0),
+        sourceElement.get(0),
         translatedPayload
       );
       if (historyReplaceOriginalState) {
         translateDiv.replaceOriginalState = historyReplaceOriginalState;
         translateDiv.getDiv().hide();
       } else {
-        translateDiv.updateTranslateDiv(
-          translatedContent,
-          !(
-            (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-            !OJBetter.translation.forceTurndownConversion
-          )
+        const fallbackResult = translateDiv.updateTranslateDiv(
+          historyDisplayContent,
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex,
+          false,
+          false,
+          historyLegacyLatex
         );
+        if (!fallbackResult.completed && historyLegacyLatex) {
+          translateDiv.setError();
+        }
       }
     } else {
-      translateDiv.updateTranslateDiv(
-        translatedContent,
-        !(
-          (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-          !OJBetter.translation.forceTurndownConversion
-        )
+      const displayResult = translateDiv.updateTranslateDiv(
+        historyDisplayContent,
+        displayOptions.escapeHTML,
+        displayOptions.renderLatex,
+        false,
+        false,
+        historyLegacyLatex
       );
+      if (!displayResult.completed && historyLegacyLatex) {
+        translateDiv.setError();
+      }
     }
     // 标记已翻译并添加到翻译按钮的结果栈中
-    let transButton = pElement.prev(".html2md-panel").find(".translateButton");
+    let transButton = taskStatementController
+      ? $(taskStatementController.button)
+      : $();
+    if (transButton.length == 0) {
+      transButton = getTaskStatementConversionPanel(sourceElement).find(
+        ".translateButton"
+      );
+    }
+    if (transButton.length == 0) {
+      transButton = sourceElement
+        .prev(".html2md-panel")
+        .find(".translateButton");
+    }
     if (transButton.length == 0) {
       // 如果没有找到，则应该是得在父元素中找到
-      transButton = pElement
+      transButton = sourceElement
         .parent()
         .prev(".html2md-panel")
         .find(".translateButton");
     }
     if (isFold) translateDiv.fold(); // 是否折叠该翻译
+    registerTaskStatementTranslationCloseSync(
+      translateDiv,
+      taskStatementController || null
+    );
     transButton.pushResultToTransButton({
       translateDiv: translateDiv,
+      sourceElement: sourceElement.get(0),
       status: 0,
     });
     transButton.setTransButtonState("success");
+    if (taskStatementController) {
+      transButton.trigger("ojbetter:task-statement-translation-change");
+    }
   }
 }
 
-// 更新TransDB中的翻译数据
+// ------------------------------
+// 翻译历史缓存
+// ------------------------------
+
+/**
+ * 保存当前 URL 的翻译历史。
+ * @param {Object[]} nodeDate 页面元素关系树
+ * @param {Record<string, any>} transResultMap 翻译结果映射
+ * @returns {Promise<string>} 保存成功提示
+ */
 async function updateTransDBData(nodeDate, transResultMap) {
-  var url = window.location.href.replace(/#/, "");
+  const url = window.location.href.replace(/#/, "");
   try {
     await OJBetter.common.database.translateData.put({
       url,
@@ -10791,9 +12635,12 @@ async function updateTransDBData(nodeDate, transResultMap) {
   }
 }
 
-// 获取TransDB中保存的翻译数据
+/**
+ * 获取当前 URL 保存的翻译历史。
+ * @returns {Promise<Object | undefined>} IndexedDB 中的历史记录
+ */
 async function getTransDBData() {
-  var url = window.location.href.replace(/#/, "");
+  const url = window.location.href.replace(/#/, "");
   try {
     const result = await OJBetter.common.database.translateData.get(url);
     return result;
@@ -10803,50 +12650,99 @@ async function getTransDBData() {
 }
 
 /**
- * 翻译结果恢复功能初始化
- * @returns
+ * 初始化翻译历史恢复。
+ * @returns {Promise<void>}
  */
 async function initTransResultsRecover() {
-  OJBetter.translation.memory.ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
-  let result = await getTransDBData();
-  if (!result) return;
-  OJBetter.translation.memory.ttTree.setNodeData(result.nodeDate);
-  OJBetter.translation.memory.ttTree.setTransResultMap(result.transResultMap);
-  OJBetter.translation.memory.ttTree.recover($(".ttypography"));
+  const controllers = $(".problem-statement")
+    .map((i, statement) =>
+      $(statement).data("taskStatementTranslationController")
+    )
+    .get()
+    .filter(Boolean);
+  controllers.forEach((controller) => {
+    controller.recovering = true;
+  });
+
+  try {
+    OJBetter.translation.memory.ttTree = new ElementsTree(".ttypography"); // 初始化当前页面.ttypography元素的结构树
+    const result = await getTransDBData();
+    if (!result) return;
+    OJBetter.translation.memory.ttTree.setNodeData(result.nodeDate);
+    OJBetter.translation.memory.ttTree.setTransResultMap(result.transResultMap);
+    OJBetter.translation.memory.ttTree.recover($(".ttypography"));
+  } finally {
+    // 历史恢复完成后再开放按钮，并以当前全文结果同步按钮状态。
+    controllers.forEach((controller) => {
+      controller.recovering = false;
+      $(controller.button).trigger("ojbetter:task-statement-translation-change");
+    });
+  }
 }
 
 /**
  * 自动翻译
  */
 async function initTransWhenViewable() {
-  await waitForMathJaxIdle();
+  await waitForMathJaxIdle(document);
 
   const elements = $(".ttypography, .comments").find(".translateButton");
   const observers = [];
+  const retryDelayMs = 250;
 
   // Use a single Intersection Observer for all elements
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        const button = $(entry.target);
-        const state = button.getButtonState();
-        const notAutoTranslate = button.getNotAutoTranslate();
-        // Check if the button meets the criteria
-        if (state === "normal" && !notAutoTranslate) {
-          let trans = OJBetter.translation.choice;
+        /**
+         * 尝试执行一次自动翻译；全文或历史恢复占用题面时稍后重试。
+         * @returns {void}
+         */
+        const tryAutoTranslate = () => {
+          if (!document.documentElement.contains(entry.target)) return;
 
+          const button = $(entry.target);
+          if (button.getNotAutoTranslate()) return;
+
+          const taskStatementController =
+            getTaskStatementTranslationController(button);
           if (
-            OJBetter.translation.auto.mixTrans.enabled &&
-            button.IsCommentButton() &&
-            OJBetter.translation.auto.mixTrans.servers.length > 0
+            taskStatementController?.wholeRunning ||
+            taskStatementController?.recovering
           ) {
-            const randomIndex = Math.floor(
-              Math.random() * OJBetter.translation.auto.mixTrans.servers.length
-            );
-            trans = OJBetter.translation.auto.mixTrans.servers[randomIndex];
+            setTimeout(tryAutoTranslate, retryDelayMs);
+            return;
           }
-          button.data("translatedItBy")(trans);
-        }
+
+          const wholeResultStack = taskStatementController
+            ? $(taskStatementController.button).getResultFromTransButton()
+            : null;
+          const hasWholeResult =
+            Array.isArray(wholeResultStack) &&
+            wholeResultStack.some(
+              (result) =>
+                result?.sourceElement === taskStatementController.target &&
+                result.translateDiv?.getDiv().parent().length > 0
+            );
+
+          if (button.getButtonState() === "normal" && !hasWholeResult) {
+            let trans = OJBetter.translation.choice;
+            if (
+              OJBetter.translation.auto.mixTrans.enabled &&
+              button.IsCommentButton() &&
+              OJBetter.translation.auto.mixTrans.servers.length > 0
+            ) {
+              const randomIndex = Math.floor(
+                Math.random() * OJBetter.translation.auto.mixTrans.servers.length
+              );
+              trans = OJBetter.translation.auto.mixTrans.servers[randomIndex];
+            }
+            const translate = button.data("translatedItBy");
+            if (typeof translate === "function") translate(trans);
+          }
+        };
+
+        tryAutoTranslate();
 
         // Stop observing the element
         obs.unobserve(entry.target);
@@ -10863,189 +12759,701 @@ async function initTransWhenViewable() {
   observers.push(observer);
 }
 
+// ------------------------------
+// 原文替换协议
+// ------------------------------
+
 /**
- * 准备原文替换上下文
- * @param {HTMLElement} element 目标元素
- * @param {string} extraIgnoredSelector 额外忽略选择器
- * @returns {Object|null} 原文替换上下文
+ * 当前 replaceOriginal 协议使用“段首 marker + 块内可移动 slot + 末尾 terminal marker”描述页面结构。
+ * 解析时要求每个 ID 恰好出现一次、段首 marker 保序且独占一行、slot 只能位于所属记录中；
+ * 完成校验并构建全部待写回内容后才开始提交；提交异常时尝试恢复原 DOM。
  */
-function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "") {
-  const records = [];
-  const ignoredSelector =
-    `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel${extraIgnoredSelector}`;
-  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      if (!node || !node.parentElement) return NodeFilter.FILTER_REJECT;
-      if ($(node.parentElement).closest(ignoredSelector).length > 0) {
-        return NodeFilter.FILTER_REJECT;
-      }
-      if (!node.textContent || !node.textContent.trim()) {
-        return NodeFilter.FILTER_REJECT;
-      }
-      return NodeFilter.FILTER_ACCEPT;
-    },
-  });
 
-  let currentNode;
-  while ((currentNode = walker.nextNode())) {
-    const originalText = currentNode.textContent;
-    const prefix = originalText.match(/^\s*/)?.[0] || "";
-    const suffix = originalText.match(/\s*$/)?.[0] || "";
-    const text = originalText.slice(
-      prefix.length,
-      originalText.length - suffix.length
-    );
-    if (!text.trim()) continue;
-    records.push({
-      node: currentNode,
-      originalText: originalText,
-      prefix: prefix,
-      suffix: suffix,
-      text: text,
-    });
-  }
+/**
+ * 原文替换协议中的不可拆分 DOM slot。
+ * @typedef {Object} OJBReplaceOriginalSlot
+ * @property {string} [id] 分配给 slot 的 8 位 ID
+ * @property {Node} node 主节点
+ * @property {Node[]} nodes 需要绑定移动的全部节点
+ * @property {string} kind slot 类型
+ * @property {string} tagName 用于 Schema 对齐的节点签名
+ */
 
-  if (!records.length) return null;
+/**
+ * 持久化到翻译历史中的结构 Schema。
+ * @typedef {Object} OJBReplaceOriginalSchema
+ * @property {string} fingerprint 页面结构指纹
+ * @property {OJBPlaceholderTokenStyle} tokenStyle Token 样式
+ * @property {string} terminalId 末尾完整性标记 ID
+ * @property {Object[]} records 记录路径、marker 与 slot 结构
+ */
 
-  return {
-    records: records,
-    extraIgnoredSelector: extraIgnoredSelector,
-    raw: records
-      .map((record, index) => {
-        const id = String(index).padStart(4, "0");
-        return `[[OJBLOCK_${id}]]\n${record.text}\n[[/OJBLOCK_${id}]]`;
-      })
-      .join("\n\n"),
-    restore() {
-      records.forEach((record) => {
-        if (record.node.isConnected) {
-          record.node.textContent = record.originalText;
-        }
-      });
-    },
-  };
+/**
+ * 当前原文替换协议的运行时上下文。
+ * @typedef {Object} OJBReplaceOriginalState
+ * @property {number} version 协议版本
+ * @property {Object[]} records DOM 记录
+ * @property {string} [terminalId] 末尾完整性标记 ID
+ * @property {OJBPlaceholderTokenStyle} [tokenStyle] 本次任务快照的 Token 样式
+ * @property {OJBReplaceOriginalSchema} [schema] 历史结构 Schema
+ * @property {string} [raw] 发送给翻译服务的协议文本
+ * @property {string} [extraIgnoredSelector] 额外忽略选择器
+ * @property {boolean} [applied] 是否已经写回原页面
+ * @property {() => void} restore 恢复原 DOM 的方法
+ */
+
+/**
+ * 原文替换写回结果。
+ * @typedef {Object} OJBReplaceOriginalApplyResult
+ * @property {boolean} applied 是否已写入原页面
+ * @property {boolean} completed 是否已完整处理译文
+ * @property {boolean} [pending] 是否仍在等待完整的流式结果
+ */
+
+// ------------------------------
+// 协议常量与 Token
+// ------------------------------
+
+/** @type {number} 当前原文替换协议版本：8 位单点 Token 与完整校验/回滚写回。 */
+const OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION = 2;
+
+/** @type {string} 可作为完整语义记录进行建模的块级元素。 */
+const OJB_REPLACE_ORIGINAL_COMPOSITE_SELECTOR = 'p, li, h1, h2, h3, h4, h5, h6, dt, dd, th, td, caption, figcaption, summary, legend';
+
+/** @type {string} 在语义记录中作为不可拆分 slot 保留和移动的直接子元素。 */
+const OJB_REPLACE_ORIGINAL_ATOMIC_SELECTOR = 'var, code, pre, kbd, samp, img, picture, svg, br, wbr, sub, sup, .MathJax_Preview, .MathJax, .MathJax_Display, .katex, .tex-span, input, button, select';
+
+/**
+ * 创建完整的 replaceOriginal Token 匹配器。每次返回新的全局正则，避免 `lastIndex` 在调用间泄漏。
+ * 匹配三种完整边界，并容忍边界与 8 位 ID 之间出现空白。
+ * @returns {RegExp} 带有 `g` 标志的 Token 正则
+ */
+function OJB_getReplaceOriginalTokenRegex() {
+    return OJB_getPlaceholderTokenRegex();
 }
 
 /**
- * 将译文写回原文节点
- * @param {Object|null} replaceOriginalState 原文替换上下文
- * @param {string} translatedText 翻译后的文本
- * @param {boolean} allowPartial 是否允许部分替换
- * @returns {{applied: boolean, completed: boolean}} 替换结果
+ * 从 `OJB_getReplaceOriginalTokenRegex` 的匹配结果中提取统一 ID。
+ * @param {RegExpExecArray | null} match Token 正则匹配结果
+ * @returns {string} 8 位 Token ID；无匹配时返回空字符串
+ */
+function OJB_getReplaceOriginalTokenId(match) {
+    return match?.[1] || match?.[2] || match?.[3] || "";
+}
+
+/**
+ * 使用原文替换任务的样式格式化 Token。构建 state 时应显式传入已快照的样式。
+ * @param {string | number} id Token ID
+ * @param {unknown} [style=OJBetter.translation.replaceSymbol] 本次任务的占位符样式
+ * @returns {string} 格式化后的完整 Token
+ */
+function OJB_formatReplaceOriginalToken(id, style = OJBetter.translation.replaceSymbol) {
+    return OJB_formatPlaceholderToken(id, style);
+}
+
+// ------------------------------
+// DOM 建模与历史 Schema
+// ------------------------------
+
+/**
+ * 计算非加密指纹，用于判断历史 Schema 对应的 DOM 结构是否仍然一致。
+ * @param {string} value 待计算的规范化结构文本
+ * @returns {string} 8 位十六进制 FNV-1a 指纹
+ */
+function OJB_hashReplaceOriginalFingerprint(value) {
+    let hash = 2166136261;
+    for (let index = 0; index < value.length; index++) {
+        hash ^= value.charCodeAt(index);
+        hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+/**
+ * 计算节点相对根节点的 `childNodes` 索引路径。
+ * @param {Node} root 根节点
+ * @param {Node} node 目标节点
+ * @returns {string} 点分索引路径，或 `root`、`detached`
+ */
+function OJB_getReplaceOriginalNodePath(root, node) {
+    if (root === node) return "root";
+    const path = [];
+    let current = node;
+    while (current && current !== root) {
+        const parent = current.parentNode;
+        if (!parent) return "detached";
+        path.unshift(Array.prototype.indexOf.call(parent.childNodes, current));
+        current = parent;
+    }
+    return current === root ? path.join('.') : "outside";
+}
+
+/**
+ * 生成用于 Schema 对齐的节点类型签名，并区分常见公式渲染节点。
+ * @param {Node} node DOM 节点
+ * @returns {string} 节点类型签名
+ */
+function OJB_getReplaceOriginalNodeSignature(node) {
+    if (node?.nodeType !== 1) return `#${node?.nodeType || 0}`;
+    const tagName = node.tagName.toLowerCase();
+    if (node.matches('.MathJax_Preview')) return `${tagName}.MathJax_Preview`;
+    if (node.matches('.MathJax_Display')) return `${tagName}.MathJax_Display`;
+    if (node.matches('.MathJax')) return `${tagName}.MathJax`;
+    if (node.matches('.katex')) return `${tagName}.katex`;
+    if (node.matches('.tex-span')) return `${tagName}.tex-span`;
+    if (tagName === 'script' && /^math\/tex/.test(node.getAttribute('type') || "")) return 'script[math/tex]';
+    return tagName;
+}
+
+/**
+ * 创建不可拆分 DOM slot 的描述对象。MathJax 的预览、渲染结果和源码可组成同一个 slot。
+ * @param {Node | Node[]} nodeOrNodes 单个节点或需要绑定移动的一组节点
+ * @returns {OJBReplaceOriginalSlot} slot 描述对象
+ */
+function OJB_getReplaceOriginalSlotDescriptor(nodeOrNodes) {
+    const nodes = Array.isArray(nodeOrNodes) ? nodeOrNodes : [nodeOrNodes];
+    const node = nodes[0];
+    return {
+        node: node,
+        nodes: nodes,
+        kind: nodes.length > 1 ? "group" : node.nodeType === 1 ? "element" : node.nodeType === 8 ? "comment" : "node",
+        tagName: nodes.map(OJB_getReplaceOriginalNodeSignature).join('+')
+    };
+}
+
+/**
+ * 将语义块的直接子节点拆分为可翻译文本和不可拆分 slot。
+ * @param {Node[]} originalChildren 语义块的原始直接子节点
+ * @returns {Array<{kind: string, node?: Node, slot?: Object}>} 按原顺序排列的文本与 slot
+ */
+function OJB_createReplaceOriginalCompositeParts(originalChildren) {
+    const parts = [];
+    const isMathJaxPreview = node => node?.nodeType === 1 && node.matches('.MathJax_Preview');
+    const isMathJaxRendered = node => node?.nodeType === 1 && node.matches('.MathJax, .MathJax_Display');
+    const isMathJaxSource = node => node?.nodeType === 1 && node.tagName.toLowerCase() === 'script' && /^math\/tex/.test(node.getAttribute('type') || "");
+
+    for (let index = 0; index < originalChildren.length; index++) {
+        const node = originalChildren[index];
+        if (node.nodeType === 3) {
+            parts.push({ kind: "text", node: node });
+            continue;
+        }
+
+        const groupedNodes = [node];
+        if (isMathJaxPreview(node)) {
+            if (isMathJaxRendered(originalChildren[index + 1])) groupedNodes.push(originalChildren[++index]);
+            if (isMathJaxSource(originalChildren[index + 1])) groupedNodes.push(originalChildren[++index]);
+        } else if (isMathJaxRendered(node) && isMathJaxSource(originalChildren[index + 1])) {
+            groupedNodes.push(originalChildren[++index]);
+        }
+        parts.push({ kind: "slot", slot: OJB_getReplaceOriginalSlotDescriptor(groupedNodes) });
+    }
+    return parts;
+}
+
+/**
+ * 生成 slot 的语义签名，仅用于指纹和历史 Schema 对齐，不用于展示。
+ * @param {OJBReplaceOriginalSlot} slot DOM slot 描述对象
+ * @returns {string} slot 语义签名
+ */
+function OJB_getReplaceOriginalSlotSemanticSignature(slot) {
+    const nodes = slot?.nodes || (slot?.node ? [slot.node] : []);
+    const mathSource = nodes.find(node => node?.nodeType === 1 && node.tagName.toLowerCase() === 'script' && /^math\/tex/.test(node.getAttribute('type') || ""));
+    if (mathSource) return `tex:${mathSource.getAttribute('type') || ""}:${mathSource.textContent || ""}`;
+    const node = nodes[0];
+    if (!node || node.nodeType !== 1) return "";
+    const tagName = node.tagName.toLowerCase();
+    const annotation = node.querySelector?.('annotation[encoding="application/x-tex"]');
+    if (annotation) return `tex:${annotation.textContent || ""}`;
+    if (tagName === 'img') return `img:${node.getAttribute('alt') || ""}:${node.getAttribute('src') || ""}`;
+    if (tagName === 'input' || tagName === 'button' || tagName === 'select') {
+        return `control:${node.getAttribute('type') || ""}:${node.value || node.textContent || ""}`;
+    }
+    return `${tagName}:${node.textContent || ""}`;
+}
+
+/**
+ * 创建本次协议内唯一、且数字串未出现在原文中的 8 位 ID。
+ * @param {Set<string>} usedIds 本次协议已占用的 ID
+ * @param {string} sourceText 原页面文本
+ * @returns {string} 新生成的 8 位 ID
+ */
+function OJB_createReplaceOriginalId(usedIds, sourceText) {
+    let id;
+    do {
+        id = String(OJB_getRandomNumber(8));
+    } while (usedIds.has(id) || sourceText.includes(id));
+    usedIds.add(id);
+    return id;
+}
+
+/**
+ * 校验历史 Schema 是否仍匹配当前 DOM 的指纹、记录路径、节点类型和 slot 形状。
+ * @param {Object[]} records 当前 DOM 建模记录
+ * @param {string} fingerprint 当前 DOM 指纹
+ * @param {OJBReplaceOriginalSchema | null} schema 历史记录中的 Schema
+ * @returns {boolean} Schema 基础结构与 ID 格式是否匹配；ID 唯一性会在复用阶段继续校验
+ */
+function OJB_isValidReplaceOriginalSchema(records, fingerprint, schema) {
+    if (!schema || schema.fingerprint !== fingerprint ||
+        OJB_normalizePlaceholderTokenStyle(schema.tokenStyle) !== schema.tokenStyle ||
+        !/^\d{8}$/.test(schema.terminalId || "")) return false;
+    if (!Array.isArray(schema.records) || schema.records.length !== records.length) return false;
+
+    for (let index = 0; index < records.length; index++) {
+        const current = records[index];
+        const saved = schema.records[index];
+        if (!saved || saved.kind !== current.kind || saved.path !== current.path || saved.tagName !== current.tagName) return false;
+        if (!/^\d{8}$/.test(saved.markerId || "")) return false;
+        if (!Array.isArray(saved.slots) || saved.slots.length !== current.slots.length) return false;
+        for (let slotIndex = 0; slotIndex < current.slots.length; slotIndex++) {
+            const currentSlot = current.slots[slotIndex];
+            const savedSlot = saved.slots[slotIndex];
+            if (!savedSlot || !/^\d{8}$/.test(savedSlot.id || "") || savedSlot.kind !== currentSlot.kind || savedSlot.tagName !== currentSlot.tagName) return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * 准备原文替换上下文。每个逻辑块只使用一个段首 marker，块内 DOM 节点使用可重排的单点 slot。
+ * 创建新任务时快照当前 tokenStyle；恢复历史时优先复用 savedSchema 中的样式和 ID。
+ * @param {HTMLElement} element 目标元素
+ * @param {string} [extraIgnoredSelector=""] 额外忽略选择器
+ * @param {OJBReplaceOriginalSchema | null} [savedSchema=null] 历史记录保存的协议结构
+ * @returns {OJBReplaceOriginalState | null} 原文替换上下文；无可翻译记录或 Schema 不匹配时返回 null
+ */
+function OJB_prepareReplaceOriginalState(element, extraIgnoredSelector = "", savedSchema = null) {
+    if (!element) return null;
+    const tokenStyle = OJB_normalizePlaceholderTokenStyle(
+        savedSchema ? savedSchema.tokenStyle : OJBetter.translation.replaceSymbol
+    );
+    const ignoredSelector = `code, pre, script, style, textarea, noscript, svg, .monaco-editor, .MathJax, .MathJax_Display, .katex, .tex-span, .translateDiv, .html2md-panel, .input-output-copier, .mdViewContent, .OJBetter_MiniTranslateButton, .OJBetter_taskStatementTranslationAnchor${extraIgnoredSelector}`;
+    const rootDocument = element.ownerDocument || document;
+    const nodeFilter = rootDocument.defaultView?.NodeFilter || NodeFilter;
+    const compositeElements = new Set();
+    const compositeCandidates = [];
+
+    if (element.matches?.(OJB_REPLACE_ORIGINAL_COMPOSITE_SELECTOR)) compositeCandidates.push(element);
+    element.querySelectorAll?.(OJB_REPLACE_ORIGINAL_COMPOSITE_SELECTOR).forEach(candidate => compositeCandidates.push(candidate));
+    compositeCandidates.forEach(candidate => {
+        if (candidate.closest(ignoredSelector)) return;
+        const children = Array.from(candidate.childNodes);
+        const hasDirectText = children.some(node => node.nodeType === 3 && node.textContent.trim());
+        const isSafe = children.every(node => {
+            if (node.nodeType === 3 || node.nodeType === 8) return true;
+            if (node.nodeType !== 1) return false;
+            return node.matches(OJB_REPLACE_ORIGINAL_ATOMIC_SELECTOR) || node.matches(ignoredSelector);
+        });
+        if (hasDirectText && isSafe) compositeElements.add(candidate);
+    });
+
+    const walker = rootDocument.createTreeWalker(element, nodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+            if (!node || !node.parentElement) return nodeFilter.FILTER_REJECT;
+            if (node.parentElement.closest(ignoredSelector)) return nodeFilter.FILTER_REJECT;
+            if (!node.textContent || !node.textContent.trim()) return nodeFilter.FILTER_REJECT;
+            return nodeFilter.FILTER_ACCEPT;
+        }
+    });
+
+    const records = [];
+    const addedCompositeElements = new Set();
+    let currentNode;
+    while ((currentNode = walker.nextNode())) {
+        let compositeElement = null;
+        let currentElement = currentNode.parentElement;
+        while (currentElement) {
+            if (compositeElements.has(currentElement)) {
+                compositeElement = currentElement;
+                break;
+            }
+            if (currentElement === element) break;
+            currentElement = currentElement.parentElement;
+        }
+
+        if (compositeElement) {
+            if (addedCompositeElements.has(compositeElement)) continue;
+            addedCompositeElements.add(compositeElement);
+            const originalChildren = Array.from(compositeElement.childNodes);
+            const parts = OJB_createReplaceOriginalCompositeParts(originalChildren);
+            const slots = parts.filter(part => part.kind === "slot").map(part => part.slot);
+            records.push({
+                kind: "composite",
+                element: compositeElement,
+                node: compositeElement,
+                path: OJB_getReplaceOriginalNodePath(element, compositeElement),
+                tagName: compositeElement.tagName.toLowerCase(),
+                originalChildren: originalChildren,
+                parts: parts,
+                slots: slots
+            });
+            continue;
+        }
+
+        const originalText = currentNode.textContent;
+        const prefix = originalText.match(/^\s*/)?.[0] || "";
+        const suffix = originalText.match(/\s*$/)?.[0] || "";
+        const text = originalText.slice(prefix.length, originalText.length - suffix.length);
+        if (!text.trim()) continue;
+        records.push({
+            kind: "scalar",
+            node: currentNode,
+            path: OJB_getReplaceOriginalNodePath(element, currentNode),
+            tagName: currentNode.parentElement?.tagName?.toLowerCase() || "#text",
+            originalText: originalText,
+            prefix: prefix,
+            suffix: suffix,
+            text: text,
+            slots: []
+        });
+    }
+
+    if (!records.length) return null;
+
+    const canonical = records.map(record => {
+        if (record.kind === "scalar") return `scalar|${record.path}|${record.tagName}|${record.originalText}`;
+        const children = record.parts.map(part => part.kind === "text"
+            ? `text:${part.node.textContent.length}:${part.node.textContent}`
+            : `slot:${part.slot.kind}:${part.slot.tagName}:${OJB_getReplaceOriginalSlotSemanticSignature(part.slot)}`
+        ).join('|');
+        return `composite|${record.path}|${record.tagName}|${children}`;
+    }).join('\n');
+    const fingerprint = OJB_hashReplaceOriginalFingerprint(canonical);
+    if (savedSchema && !OJB_isValidReplaceOriginalSchema(records, fingerprint, savedSchema)) return null;
+
+    const sourceText = element.textContent || "";
+    const usedIds = new Set();
+    const takeSavedId = id => {
+        if (!/^\d{8}$/.test(id || "") || usedIds.has(id)) return null;
+        usedIds.add(id);
+        return id;
+    };
+
+    for (let recordIndex = 0; recordIndex < records.length; recordIndex++) {
+        const record = records[recordIndex];
+        record.markerId = savedSchema
+            ? takeSavedId(savedSchema.records[recordIndex].markerId)
+            : OJB_createReplaceOriginalId(usedIds, sourceText);
+        if (!record.markerId) return null;
+        for (let slotIndex = 0; slotIndex < record.slots.length; slotIndex++) {
+            const slot = record.slots[slotIndex];
+            slot.id = savedSchema
+                ? takeSavedId(savedSchema.records[recordIndex].slots[slotIndex].id)
+                : OJB_createReplaceOriginalId(usedIds, sourceText);
+            if (!slot.id) return null;
+        }
+
+        if (record.kind === "composite") {
+            const source = record.parts.map(part => part.kind === "text"
+                ? part.node.textContent
+                : OJB_formatReplaceOriginalToken(part.slot.id, tokenStyle)
+            ).join('');
+            record.prefix = source.match(/^\s*/)?.[0] || "";
+            record.suffix = source.match(/\s*$/)?.[0] || "";
+            record.text = source.slice(record.prefix.length, source.length - record.suffix.length);
+        }
+    }
+
+    const terminalId = savedSchema
+        ? takeSavedId(savedSchema.terminalId)
+        : OJB_createReplaceOriginalId(usedIds, sourceText);
+    if (!terminalId) return null;
+
+    const schema = {
+        fingerprint: fingerprint,
+        tokenStyle: tokenStyle,
+        terminalId: terminalId,
+        records: records.map(record => ({
+            kind: record.kind,
+            path: record.path,
+            tagName: record.tagName,
+            markerId: record.markerId,
+            slots: record.slots.map(slot => ({ id: slot.id, kind: slot.kind, tagName: slot.tagName }))
+        }))
+    };
+    const raw = records
+        .map(record => `${OJB_formatReplaceOriginalToken(record.markerId, tokenStyle)}\n${record.text}`)
+        .join('\n\n') + `\n\n${OJB_formatReplaceOriginalToken(terminalId, tokenStyle)}`;
+
+    return {
+        version: OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION,
+        records: records,
+        terminalId: terminalId,
+        tokenStyle: tokenStyle,
+        schema: schema,
+        raw: raw,
+        extraIgnoredSelector: extraIgnoredSelector,
+        applied: false,
+        restore() {
+            if (!this.applied) return;
+            records.forEach(record => {
+                if (record.kind === "composite") {
+                    if (record.element?.isConnected) record.element.replaceChildren(...record.originalChildren);
+                } else if (record.node?.isConnected) {
+                    record.node.textContent = record.originalText;
+                }
+            });
+            this.applied = false;
+        }
+    };
+}
+
+// ------------------------------
+// 响应校验与回滚写回
+// ------------------------------
+
+/**
+ * 纯解析并严格校验 replaceOriginal 译文，不修改 DOM。
+ * 要求所有预期 ID 恰好出现一次、记录 marker 保序且独占行、slot 位于所属记录中，并且没有首尾残留文本。
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的完整文本
+ * @returns {Array<{record: Object, body: string}> | null} 校验后的记录正文；协议损坏时返回 null
+ */
+function OJB_parseReplaceOriginalResponse(replaceOriginalState, translatedText) {
+    if (typeof translatedText !== "string") return null;
+    const expectedIds = new Set([replaceOriginalState.terminalId]);
+    replaceOriginalState.records.forEach(record => {
+        expectedIds.add(record.markerId);
+        record.slots.forEach(slot => expectedIds.add(slot.id));
+    });
+
+    const occurrences = new Map(Array.from(expectedIds, id => [id, []]));
+    const regex = OJB_getReplaceOriginalTokenRegex();
+    let match;
+    while ((match = regex.exec(translatedText)) !== null) {
+        const id = OJB_getReplaceOriginalTokenId(match);
+        if (occurrences.has(id)) occurrences.get(id).push({ start: match.index, end: regex.lastIndex });
+    }
+    if (Array.from(occurrences.values()).some(items => items.length !== 1)) return null;
+
+    const markerOccurrences = replaceOriginalState.records
+        .map(record => occurrences.get(record.markerId)[0]);
+    const terminalOccurrence = occurrences.get(replaceOriginalState.terminalId)[0];
+    const orderedMarkers = markerOccurrences.concat(terminalOccurrence);
+    for (let index = 1; index < orderedMarkers.length; index++) {
+        if (orderedMarkers[index - 1].start >= orderedMarkers[index].start) return null;
+    }
+    const isLineLeading = occurrence => {
+        const lineStart = translatedText.lastIndexOf('\n', occurrence.start - 1) + 1;
+        return !translatedText.slice(lineStart, occurrence.start).trim();
+    };
+    const isLineTrailing = occurrence => {
+        const nextLineBreak = translatedText.indexOf('\n', occurrence.end);
+        const lineEnd = nextLineBreak === -1 ? translatedText.length : nextLineBreak;
+        return !translatedText.slice(occurrence.end, lineEnd).trim();
+    };
+    if (orderedMarkers.some(occurrence => !isLineLeading(occurrence) || !isLineTrailing(occurrence))) return null;
+    if (translatedText.slice(0, markerOccurrences[0].start).trim()) return null;
+    if (translatedText.slice(terminalOccurrence.end).trim()) return null;
+
+    const parsedRecords = [];
+    for (let index = 0; index < replaceOriginalState.records.length; index++) {
+        const record = replaceOriginalState.records[index];
+        const start = markerOccurrences[index].end;
+        const end = orderedMarkers[index + 1].start;
+        const body = translatedText.slice(start, end).trim();
+        if (!body) return null;
+        for (const slot of record.slots) {
+            const occurrence = occurrences.get(slot.id)[0];
+            if (occurrence.start < start || occurrence.end > end) return null;
+        }
+        parsedRecords.push({ record, body });
+    }
+    return parsedRecords;
+}
+
+/**
+ * 校验实时 DOM 并先构建全部待写回内容，再顺序提交；提交异常时尝试恢复原始 DOM。
+ * 流式 partial 结果不会写入 DOM。
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的文本
+ * @param {boolean} allowPartial 是否为尚未结束的流式结果
+ * @returns {OJBReplaceOriginalApplyResult} 写回状态
+ */
+function OJB_applyReplaceOriginalResponse(replaceOriginalState, translatedText, allowPartial) {
+    if (allowPartial) return { applied: false, completed: false, pending: true };
+    const parsedRecords = OJB_parseReplaceOriginalResponse(replaceOriginalState, translatedText);
+    if (!parsedRecords) return { applied: false, completed: false };
+
+    // 第一阶段：确认页面 DOM 自建模后没有被其他脚本或用户操作改变。
+    for (const { record } of parsedRecords) {
+        if (record.kind === "composite") {
+            const currentChildren = Array.from(record.element?.childNodes || []);
+            if (!record.element?.isConnected || currentChildren.length !== record.originalChildren.length ||
+                currentChildren.some((node, index) => node !== record.originalChildren[index])) {
+                return { applied: false, completed: false };
+            }
+        } else if (!record.node?.isConnected || record.node.textContent !== record.originalText) {
+            return { applied: false, completed: false };
+        }
+    }
+
+    try {
+        // 第二阶段：仅在内存中构建全部待写回内容，完成后再开始顺序提交。
+        const staged = parsedRecords.map(({ record, body }) => {
+            if (record.kind === "scalar") {
+                return { record, text: `${record.prefix}${body}${record.suffix}` };
+            }
+            const rootDocument = record.element.ownerDocument || document;
+            const childNodes = [];
+            if (record.prefix) childNodes.push(rootDocument.createTextNode(record.prefix));
+            const slotsById = new Map(record.slots.map(slot => [slot.id, slot]));
+            const regex = OJB_getReplaceOriginalTokenRegex();
+            let cursor = 0;
+            let match;
+            while ((match = regex.exec(body)) !== null) {
+                const id = OJB_getReplaceOriginalTokenId(match);
+                const slot = slotsById.get(id);
+                if (!slot) continue;
+                if (match.index > cursor) childNodes.push(rootDocument.createTextNode(body.slice(cursor, match.index)));
+                const slotNodes = slot.nodes || [slot.node];
+                childNodes.push(...slotNodes);
+                cursor = regex.lastIndex;
+            }
+            if (cursor < body.length) childNodes.push(rootDocument.createTextNode(body.slice(cursor)));
+            if (record.suffix) childNodes.push(rootDocument.createTextNode(record.suffix));
+            return { record, childNodes };
+        });
+        staged.forEach(item => {
+            if (item.record.kind === "composite") item.record.element.replaceChildren(...item.childNodes);
+            else item.record.node.textContent = item.text;
+        });
+        replaceOriginalState.applied = true;
+        return { applied: true, completed: true };
+    } catch (error) {
+        console.warn("Failed to apply replaceOriginal; rolling back:", error);
+        try {
+            replaceOriginalState.applied = true;
+            replaceOriginalState.restore();
+        } catch (rollbackError) {
+            console.warn("Failed to roll back replaceOriginal:", rollbackError);
+        }
+        return { applied: false, completed: false };
+    }
+}
+
+/**
+ * 将当前协议译文写回原文节点。
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的文本
+ * @param {boolean} [allowPartial=false] 是否为尚未结束的流式结果
+ * @returns {OJBReplaceOriginalApplyResult} 写回状态
  */
 function OJB_applyReplaceOriginalText(replaceOriginalState, translatedText, allowPartial = false) {
-  if (
-    !replaceOriginalState ||
-    !Array.isArray(replaceOriginalState.records) ||
-    !replaceOriginalState.records.length
-  ) {
-    return {
-      applied: false,
-      completed: false,
-    };
-  }
-
-  const translatedMap = new Map();
-  const regex =
-    /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
-  let match;
-  while ((match = regex.exec(translatedText)) !== null) {
-    translatedMap.set(Number(match[1]), match[2]);
-  }
-
-  const targetRecords = replaceOriginalState.records;
-  const expectedCount = targetRecords.length;
-  let completed = translatedMap.size === expectedCount && targetRecords.length === expectedCount;
-  for (let index = 0; index < expectedCount; index++) {
-    const record = targetRecords[index];
-    if (!record?.node?.isConnected || !translatedMap.has(index)) {
-      completed = false;
-      if (!allowPartial) {
-        return {
-          applied: false,
-          completed: false,
-        };
-      }
+    if (!replaceOriginalState || replaceOriginalState.version !== OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION ||
+        !Array.isArray(replaceOriginalState.records) || !replaceOriginalState.records.length) {
+        return { applied: false, completed: false };
     }
-  }
-
-  let applied = false;
-  translatedMap.forEach((text, index) => {
-    const record = targetRecords[index];
-    if (!record?.node?.isConnected) return;
-    record.node.textContent = `${record.prefix}${text.trim()}${record.suffix}`;
-    applied = true;
-  });
-
-  if (allowPartial) {
-    const partialRegex = /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)$/g;
-    let partialMatch = null;
-    while ((match = partialRegex.exec(translatedText)) !== null) {
-      partialMatch = match;
-    }
-
-    if (partialMatch) {
-      const partialIndex = Number(partialMatch[1]);
-      if (!translatedMap.has(partialIndex)) {
-        const record = targetRecords[partialIndex];
-        if (record?.node?.isConnected) {
-          const partialText = partialMatch[2].replace(/\[\[\/?OJB[\s\S]*$/, "");
-          record.node.textContent = `${record.prefix}${partialText}${record.suffix}`;
-          applied = true;
-        }
-      }
-    }
-  }
-
-  return {
-    applied: applied,
-    completed: completed,
-  };
+    return OJB_applyReplaceOriginalResponse(replaceOriginalState, translatedText, allowPartial);
 }
 
-function OJB_stripReplaceOriginalMarkers(text) {
-  if (typeof text !== "string") return text;
-  const regex =
-    /\[\[OJBLOCK_(\d{4})\]\]\s*([\s\S]*?)\s*\[\[\/OJBLOCK_\1\]\]/g;
-  const blocks = [];
-  let match;
-  while ((match = regex.exec(text)) !== null) {
-    blocks.push(match[2]);
-  }
-  return blocks.length > 0 ? blocks.join("\n\n") : text;
+// ------------------------------
+// 显示文本与历史恢复
+// ------------------------------
+
+/**
+ * 将 DOM slot 转换为展示面板与复制操作可读的 Markdown/纯文本表示。
+ * @param {OJBReplaceOriginalSlot} slot DOM slot 描述对象
+ * @returns {string} slot 的可读文本
+ */
+function OJB_getReplaceOriginalSlotDisplayText(slot) {
+    const nodes = slot?.nodes || (slot?.node ? [slot.node] : []);
+    const mathSource = nodes.find(node => node?.nodeType === 1 && node.tagName.toLowerCase() === 'script' && /^math\/tex/.test(node.getAttribute('type') || ""));
+    if (mathSource) {
+        const source = (mathSource.textContent || "").trim();
+        return /mode=display/.test(mathSource.getAttribute('type') || "") ? `$$${source}$$` : `$${source}$`;
+    }
+    const node = nodes[0];
+    if (!node || node.nodeType !== 1) return "";
+    const tagName = node.tagName.toLowerCase();
+    if (tagName === 'br' || tagName === 'wbr') return "\n";
+    if (tagName === 'img') return node.getAttribute('alt') || "";
+    const annotation = node.querySelector?.('annotation[encoding="application/x-tex"]');
+    const nodeText = (annotation?.textContent || node.textContent || "").trim();
+    if (tagName === 'var' || node.matches('.katex, .MathJax, .MathJax_Display, .tex-span')) return nodeText ? `$${nodeText}$` : "";
+    if (tagName === 'pre') return `\n\`\`\`\n${nodeText}\n\`\`\`\n`;
+    if (tagName === 'code' || tagName === 'kbd' || tagName === 'samp') return `\`${nodeText}\``;
+    if (tagName === 'a') {
+        const href = node.getAttribute('href');
+        return href ? `[${nodeText}](${href})` : nodeText;
+    }
+    return nodeText;
 }
 
-function OJB_applyHistoryReplaceOriginal(
-  translateDiv,
-  targetElement,
-  translatedData
-) {
-  if (
-    !translatedData ||
-    typeof translatedData !== "object" ||
-    translatedData.replaceOriginal !== true ||
-    typeof translatedData.text !== "string"
-  ) {
+/**
+ * 将已知 replaceOriginal Token 替换为可读文本：slot 转为内容，记录 marker 转为分段；未知 Token 保持原样。
+ * @param {string} text 包含 replaceOriginal Token 的文本
+ * @param {OJBReplaceOriginalState} replaceOriginalState 原文替换上下文
+ * @param {boolean} [includeRecordBreaks=true] 是否将记录 marker 转为段落分隔
+ * @returns {string} 移除协议 Token 后的展示文本
+ */
+function OJB_replaceReplaceOriginalTokens(text, replaceOriginalState, includeRecordBreaks = true) {
+    const recordIds = new Set(replaceOriginalState.records.map(record => record.markerId));
+    recordIds.add(replaceOriginalState.terminalId);
+    const slotsById = new Map();
+    replaceOriginalState.records.forEach(record => record.slots.forEach(slot => slotsById.set(slot.id, slot)));
+    return String(text || "").replace(OJB_getReplaceOriginalTokenRegex(), (token, first, second, third) => {
+        const id = first || second || third;
+        if (slotsById.has(id)) return OJB_getReplaceOriginalSlotDisplayText(slotsById.get(id));
+        if (recordIds.has(id)) return includeRecordBreaks ? "\n\n" : "";
+        return token;
+    }).replace(/\n{3,}/g, "\n\n").trim();
+}
+
+/**
+ * 生成翻译面板与复制操作使用的展示文本。优先使用严格解析结果，协议损坏时仅降级清理已知 Token。
+ * @param {OJBReplaceOriginalState | null} replaceOriginalState 原文替换上下文
+ * @param {string} translatedText 翻译服务返回的文本
+ * @returns {string} 面向用户的展示文本
+ */
+function OJB_getReplaceOriginalDisplayText(replaceOriginalState, translatedText) {
+    if (!replaceOriginalState || replaceOriginalState.version !== OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION) {
+        return String(translatedText || "");
+    }
+    const parsedRecords = OJB_parseReplaceOriginalResponse(replaceOriginalState, translatedText);
+    if (!parsedRecords) return OJB_replaceReplaceOriginalTokens(translatedText, replaceOriginalState);
+    return parsedRecords.map(({ record, body }) => {
+        const temporaryState = { records: [record], terminalId: "" };
+        return OJB_replaceReplaceOriginalTokens(body, temporaryState, false);
+    }).join("\n\n");
+}
+
+/**
+ * 根据历史 Schema 重建上下文并恢复“替换原文”结果。
+ * 只有完整写回成功时返回 state；失败时恢复原文并回退到普通翻译面板。
+ * @param {TranslateDiv} translateDiv 翻译结果面板
+ * @param {HTMLElement} targetElement 需要恢复的原页面元素
+ * @param {Object} translatedData 历史翻译数据
+ * @returns {OJBReplaceOriginalState | null} 已成功应用的原文替换上下文
+ */
+function OJB_applyHistoryReplaceOriginal(translateDiv, targetElement, translatedData) {
+    if (!translatedData || typeof translatedData !== "object" || translatedData.replaceOriginal !== true ||
+        translatedData.version !== OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION || typeof translatedData.text !== "string" ||
+        !translatedData.schema || typeof translatedData.schema !== "object") {
+        return null;
+    }
+
+    const replaceOriginalState = OJB_prepareReplaceOriginalState(
+        targetElement,
+        translatedData.extraIgnoredSelector || "",
+        translatedData.schema
+    );
+    if (!replaceOriginalState) return null;
+
+    translateDiv.setReplaceOriginalState(replaceOriginalState);
+    const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
+    if (applyResult.completed) return replaceOriginalState;
+
+    replaceOriginalState.restore();
+    translateDiv.replaceOriginalState = null;
+    translateDiv.getDiv().show();
     return null;
-  }
-
-  const replaceOriginalState = OJB_prepareReplaceOriginalState(
-    targetElement,
-    translatedData.extraIgnoredSelector || ""
-  );
-  if (!replaceOriginalState) return null;
-
-  translateDiv.setReplaceOriginalState(replaceOriginalState);
-  const applyResult = translateDiv.updateTranslateDiv(translatedData.text);
-  if (applyResult.completed) {
-    return replaceOriginalState;
-  }
-
-  replaceOriginalState.restore();
-  translateDiv.replaceOriginalState = null;
-  translateDiv.getDiv().show();
-  return null;
 }
+
+// ------------------------------
+// 翻译主流程
+// ------------------------------
 
 /**
  * 翻译返回结果结构体
@@ -11054,7 +13462,8 @@ function OJB_applyHistoryReplaceOriginal(
  * @property {TranslateDiv} translateDiv 翻译结果面板
  * @property {TransRawData} rawData 原始翻译数据
  * @property {string} translatedText 翻译后的文本
- * @property {Object|null} replaceOriginalState 原文替换上下文
+ * @property {OJBReplaceOriginalState|null} replaceOriginalState 原文替换上下文
+ * @property {HTMLElement} sourceElement 原页面中的翻译目标
  */
 
 /**
@@ -11062,20 +13471,29 @@ function OJB_applyHistoryReplaceOriginal(
  * @param {string} text 待翻译文本
  * @param {HTMLElement} element_node 元素节点
  * @param {Boolean} is_comment 是否为评论区文本
- * @param {string} overrideTrans 覆盖全局翻译服务设定
- * @returns {TranslateResult} 翻译结果对象
+ * @param {string} [overrideTrans] 覆盖全局翻译服务设定
+ * @param {OJBReplaceOriginalState|null} [replaceOriginalState=null] 原文替换上下文
+ * @param {TranslationSource} [translationSource] 本次任务的翻译源上下文
+ * @returns {Promise<TranslateResult>} 翻译结果对象
  */
 async function translateMain(
   text,
   element_node,
   is_comment,
   overrideTrans,
-  replaceOriginalState = null
+  replaceOriginalState = null,
+  translationSource = {
+    text: text,
+    format: "markdown",
+    legacyLatex: null,
+  }
 ) {
   /** @type {number} 翻译结果的ID*/
   const id = OJB_getRandomNumber(8);
   /** @type {TextBlockReplacer} 文本块替换/恢复实例*/
   const textBlockReplacer = new TextBlockReplacer();
+  /** @type {TextBlockReplacer} Markdown 代码替换/恢复实例*/
+  const markdownCodeReplacer = new TextBlockReplacer();
   /** @type {string} 翻译结果文本*/
   let translatedText = "";
 
@@ -11085,12 +13503,21 @@ async function translateMain(
     (is_comment && OJBetter.translation.comment.choice != "0"
       ? OJBetter.translation.comment.choice
       : OJBetter.translation.choice);
+  const displayOptions = getTranslationSourceDisplayOptions(translationSource);
+  const sourceMode = replaceOriginalState
+    ? "replace-original"
+    : translationSource.format === "html"
+    ? "html"
+    : translationSource.legacyLatex
+    ? "mixed-markdown"
+    : "markdown";
 
   /** @type {TranslateResult} 翻译结果对象 */
   const translateResult = {
     status: "ok",
     translatedText: "",
     replaceOriginalState: replaceOriginalState,
+    sourceElement: element_node,
     rawData: {
       done: false,
     },
@@ -11102,25 +13529,19 @@ async function translateMain(
    * @returns {string} 处理后的文本
    */
   const replaceLatex = function (text) {
-    if (OJBetter.typeOfPage.is_oldLatex) {
-      const regex = /<span\s+class="tex-span">.*?<\/span>/gi;
-      text = textBlockReplacer.replace(text, regex);
-      text = text.replace(/<p>(.*?)<\/p>/g, "$1\n\n"); // <p/>标签换为换行
-    } else if (OJBetter.typeOfPage.is_acmsguru) {
+    if (translationSource.format === "html") {
       const regex =
         /<i>.*?<\/i>|<sub>.*?<\/sub>|<sup>.*?<\/sup>|<pre>.*?<\/pre>/gi;
       text = textBlockReplacer.replace(text, regex);
     } else if (realTransServer != "openai") {
       // 使用GPT翻译时不必替换latex公式
-      let regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$/g;
-      // 目标语言是中文时，匹配行内公式时对序数词特殊判断以优化翻译
-      if (OJBetter.translation.targetLang === "zh")
-        regex = /\$\$([^]*?)\$\$|\$(\\\$|[^\$])*?\$(st|nd|rd|th)?/g;
-      text = textBlockReplacer.replace(text, regex);
+      const codeRegex = /(?<!`)(`+)(?!`)([\s\S]*?)(?<!`)\1(?!`)/g;
+      text = markdownCodeReplacer.replace(text, codeRegex);
 
-      // 替换行间代码块`
-      const regex2 = /`[\s\S]*?`/g;
-      text = textBlockReplacer.replace(text, regex2);
+      const regex = OJB_getTranslationLatexRegex(
+        OJBetter.translation.targetLang === "zh"
+      );
+      text = textBlockReplacer.replace(text, regex);
     }
     return text;
   };
@@ -11129,21 +13550,25 @@ async function translateMain(
    * LaTeX恢复
    * @param {string} text 已翻译的文本
    * @returns {string} 恢复后的文本
-   */
+  */
   const recoverLatex = function (text) {
+    if (replaceOriginalState?.version === OJB_REPLACE_ORIGINAL_PROTOCOL_VERSION) {
+      return realTransServer !== "openai"
+        ? markdownCodeReplacer.recover(textBlockReplacer.recover(text))
+        : text;
+    }
     // 两个公式之间加个空格，防止有些LaTeX解析器解析错误
     let resultText = text
       .replace(/】【/g, "】 【")
       .replace(/\]\[/g, "] [")
       .replace(/\}\{/g, "} {");
 
-    if (OJBetter.typeOfPage.is_oldLatex) {
-      resultText = resultText.replace(/(.+?)(\n\n|$)/g, "<p>$1</p>"); // 换行符还原为<p/>标签
-      resultText = textBlockReplacer.recover(resultText);
-    } else if (OJBetter.typeOfPage.is_acmsguru) {
+    if (translationSource.format === "html") {
       resultText = textBlockReplacer.recover(resultText);
     } else if (realTransServer != "openai") {
-      resultText = textBlockReplacer.recover(resultText);
+      resultText = markdownCodeReplacer.recover(
+        textBlockReplacer.recover(resultText)
+      );
     }
     return resultText;
   };
@@ -11154,11 +13579,26 @@ async function translateMain(
    * @returns {string} 处理后的翻译结果
    */
   const formatText = function (text) {
+    const legacyLatexTokenMarkers = new Map();
+    let protectedMarkdownCode = null;
+    if (translationSource.legacyLatex) {
+      text = text.replace(
+        OJB_getPlaceholderTokenRegex(),
+        (token, first, second, third) => {
+          const id = first || second || third;
+          if (!translationSource.legacyLatex.slots.has(id)) return token;
+          const marker = `OJBetterLegacyLatexSlot${id}`;
+          legacyLatexTokenMarkers.set(marker, token);
+          return marker;
+        }
+      );
+    }
+
     // 转义LaTex中的特殊符号
-    if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-      // 先替换掉行间代码块
-      const replacer = new TextBlockReplacer();
-      text = replacer.replace(text, /```[\s\S]*?```/g);
+    if (translationSource.format !== "html") {
+      // 所有 Markdown 代码段保持原样，直到公式及 Markdown 格式化完成。
+      protectedMarkdownCode = OJB_protectMarkdownCodeForFormatting(text);
+      text = protectedMarkdownCode.text;
 
       // 处理LaTeX公式
       const escapeRules = [
@@ -11183,9 +13623,6 @@ async function translateMain(
         escapedText = escapedText.replace(/\$\$/g, "$$$$$$$$"); // $$符号（因为后面需要作为replacement，双倍消耗）
         text = text.replace(matchedText, escapedText);
       }
-
-      // 恢复行间代码块
-      text = replacer.recover(text);
     }
 
     // 使符合mathjx的转换语法
@@ -11226,12 +13663,23 @@ async function translateMain(
       text = text.replace(pattern, replacement);
     });
 
+    if (protectedMarkdownCode) text = protectedMarkdownCode.recover(text);
+
+    legacyLatexTokenMarkers.forEach((token, marker) => {
+      text = text.replaceAll(marker, token);
+    });
+
     return text;
   };
 
-  // 创建翻译结果元素并放在element_node的后面
+  // 全文译文放在题面根节点内的稳定锚点后，其余译文仍紧跟原目标。
   translateResult.translateDiv = new TranslateDiv(id);
-  $(element_node).after(translateResult.translateDiv.getDiv());
+  const taskStatementController = $(element_node).data(
+    "taskStatementTranslationController"
+  );
+  $(taskStatementController?.anchor || element_node).after(
+    translateResult.translateDiv.getDiv()
+  );
   translateResult.translateDiv.setReplaceOriginalState(replaceOriginalState);
 
   // 顶栏左侧信息
@@ -11269,6 +13717,11 @@ async function translateMain(
     }
   }
 
+  // MathJax 等待超时或异常时，原始 Codeforces 三/六美元公式仍需安全降级。
+  if (translationSource.format === "markdown") {
+    text = OJB_normalizeCodeforcesLatexDelimiters(text);
+  }
+
   // 替换latex公式
   text = replaceLatex(text);
 
@@ -11288,6 +13741,7 @@ async function translateMain(
     youdao: 5000,
     google: 5000,
     caiyun: 5000,
+    edge: 5000,
   };
   if (
     translationLimits.hasOwnProperty(realTransServer) &&
@@ -11320,10 +13774,6 @@ async function translateMain(
    * @returns {TransRawData} 原始翻译数据
    */
   async function translate(transServer) {
-    const is_renderLaTeX = !(
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    );
     const servername = i18next.t("servers." + realTransServer, {
       ns: "translator",
     });
@@ -11337,7 +13787,8 @@ async function translateMain(
               ns: "translator",
               server: servername,
             })}`,
-            is_renderLaTeX
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
           );
           rawData = await translate_deepl(text);
         } else if (OJBetter.deepl.config.type == "api") {
@@ -11346,7 +13797,8 @@ async function translateMain(
               ns: "translator",
               deepl_configName: OJBetter.deepl.config.name,
             })}`,
-            is_renderLaTeX
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
           );
           if (OJBetter.deepl.config.apiGenre == "deeplx") {
             rawData = await translate_deeplx(text);
@@ -11372,7 +13824,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_iflyrec(text);
       } else if (transServer == "youdao") {
@@ -11381,7 +13834,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_youdao_web(text);
       } else if (transServer == "google") {
@@ -11390,7 +13844,8 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_gg(text);
       } else if (transServer == "caiyun") {
@@ -11399,9 +13854,12 @@ async function translateMain(
             ns: "translator",
             server: servername,
           })}`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         rawData = await translate_caiyun(text);
+      } else if (transServer == "edge") {
+        rawData = await edgeTranslator.run(text, translateResult, displayOptions, servername);
       } else if (transServer == "openai") {
         translateResult.translateDiv.updateTranslateDiv(
           `${i18next.t("transingTip.openai", {
@@ -11411,17 +13869,19 @@ async function translateMain(
             ? i18next.t("transingTip.openai_isStream", { ns: "translator" })
             : ""
           }`,
-          is_renderLaTeX
+          displayOptions.escapeHTML,
+          displayOptions.renderLatex
         );
         if (OJBetter.chatgpt.isStream) {
           // 流式传输
           rawData = await translate_openai_stream(
             text,
-            translateResult.translateDiv
+            translateResult.translateDiv,
+            translationSource
           );
         } else {
           // 普通模式
-          rawData = await translate_openai(text);
+          rawData = await translate_openai(text, translationSource);
         }
       }
       translatedText = rawData.text;
@@ -11451,15 +13911,79 @@ async function translateMain(
   // 还原latex公式
   translatedText = recoverLatex(translatedText);
 
-  // 注册结果复制按钮
-  if (!OJBetter.typeOfPage.is_oldLatex && !OJBetter.typeOfPage.is_acmsguru) {
-    translateResult.translateDiv.registerCopyButtonEvent(translatedText);
+  // 翻译结果格式化
+  if (!replaceOriginalState) translatedText = formatText(translatedText);
+
+  // 旧版公式在 Markdown 格式化完成后恢复，避免其 HTML 被公式转义规则破坏。
+  const legacyLatexResult = restoreLegacyLatexSlots(
+    translatedText,
+    translationSource.legacyLatex
+  );
+  translatedText = legacyLatexResult.text;
+  const renderedTranslatedText = legacyLatexResult.tokenText;
+  if (!legacyLatexResult.completed) {
+    translateResult.status = "error";
+    translateResult.rawData.message = i18next.t("error.unexpected", {
+      ns: "translator",
+    });
+    translateResult.translateDiv.updateTranslateDiv(
+      renderedTranslatedText,
+      displayOptions.escapeHTML,
+      displayOptions.renderLatex,
+      false,
+      true,
+      translationSource.legacyLatex
+    );
+    translateResult.translateDiv.disableCopyButton();
+    console.warn("Legacy LaTeX placeholders were not preserved exactly once.");
+    return translateResult;
+  }
+
+  const displayText = replaceOriginalState
+    ? OJB_getReplaceOriginalDisplayText(replaceOriginalState, translatedText)
+    : translatedText;
+  translateResult.translatedText = displayText;
+
+  // 先完整校验并写回；失败结果不能进入翻译记忆。
+  const displayResult = translateResult.translateDiv.updateTranslateDiv(
+    renderedTranslatedText,
+    displayOptions.escapeHTML,
+    displayOptions.renderLatex,
+    false,
+    false,
+    translationSource.legacyLatex
+  );
+  if (!displayResult.completed) {
+    translateResult.status = "error";
+    translateResult.rawData.message = i18next.t("error.unexpected", {
+      ns: "translator",
+    });
+    if (replaceOriginalState) {
+      translateResult.translateDiv.registerCopyButtonEvent(displayText);
+    } else {
+      translateResult.translateDiv.disableCopyButton();
+    }
+    // 保留可读译文作为安全回退，同时由上层显示原始响应调试入口。
+    translateResult.translateDiv.updateTranslateDiv(
+      displayText || translatedText,
+      true,
+      true,
+      false,
+      true
+    );
+    return translateResult;
+  }
+
+  // 注册结果复制按钮（原文替换模式下复制去除协议 token 后的可读文本）。
+  if (
+    replaceOriginalState ||
+    (translationSource.format === "markdown" &&
+      !translationSource.legacyLatex)
+  ) {
+    translateResult.translateDiv.registerCopyButtonEvent(displayText);
   } else {
     translateResult.translateDiv.disableCopyButton();
   }
-
-  // 翻译结果格式化
-  translatedText = formatText(translatedText);
 
   // 保存翻译结果
   if (
@@ -11472,35 +13996,26 @@ async function translateMain(
       ? {
           text: translatedText,
           replaceOriginal: true,
+          sourceMode: sourceMode,
+          version: replaceOriginalState.version,
+          displayText: displayText,
+          schema: replaceOriginalState.schema,
           extraIgnoredSelector: replaceOriginalState.extraIgnoredSelector || "",
         }
-      : OJB_stripReplaceOriginalMarkers(translatedText);
+      : {
+          text: translationSource.legacyLatex
+            ? renderedTranslatedText
+            : displayText,
+          sourceMode: sourceMode,
+          legacyLatex: serializeLegacyLatexSlots(
+            translationSource.legacyLatex
+          ),
+        };
     OJBetter.translation.memory.ttTree.addTransResultMap(id, transResultData);
     updateTransDBData(
       OJBetter.translation.memory.ttTree.getNodeData(),
       OJBetter.translation.memory.ttTree.getTransResultMap()
     ); // 更新翻译结果到transDB
-  }
-
-  translateResult.translatedText = translatedText;
-
-  // 翻译结果面板更新
-  const displayResult = translateResult.translateDiv.updateTranslateDiv(
-    translatedText,
-    !(
-      (OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru) &&
-      !OJBetter.translation.forceTurndownConversion
-    )
-  );
-  if (replaceOriginalState && !displayResult.completed) {
-    translateResult.status = "error";
-    translateResult.translateDiv.updateTranslateDiv(
-      i18next.t("error.unexpected", { ns: "translator" }),
-      true,
-      true,
-      false,
-      true
-    );
   }
 
   return translateResult;
@@ -13078,6 +15593,7 @@ const value_monacoLanguageMap = {
   83: "kotlin",
   87: "java",
   89: "cpp",
+  91: "cpp",
 };
 
 /**
@@ -17904,6 +20420,162 @@ async function translate_caiyun(raw) {
   );
 }
 
+/**
+ * 微软 Edge 翻译器类 (简化版)
+ */
+class EdgeTranslator {
+    constructor() {
+        this.name = 'Microsoft Edge';
+        this.cachedToken = null;
+        this.tokenExpireTime = 0;
+    }
+    /**
+     * 获取或返回缓存的 Token
+     */
+    async getToken() {
+        if (this.cachedToken && Date.now() < this.tokenExpireTime) {
+            return this.cachedToken;
+        }
+        const response = await OJB_GMRequest({
+            method: "GET",
+            url: "https://edge.microsoft.com/translate/auth",
+            timeout: 30000,
+        });
+        const status = Number(response?.status || 0);
+        const token = typeof response?.responseText === "string"
+            ? response.responseText.trim()
+            : "";
+        if (status !== 200 || !token) {
+            throw new Error(`获取 Edge Token 失败: HTTP ${status || "unknown"}`);
+        }
+        this.cachedToken = token;
+        this.tokenExpireTime = Date.now() + 540000; // 缓存 9 分钟
+        return this.cachedToken;
+    }
+
+    /**
+     * 校验 Edge API 的 HTTP 响应并返回原始响应文本
+     */
+    _getResponseText(response) {
+        const status = Number(response?.status || 0);
+        const responseText = typeof response?.responseText === "string"
+            ? response.responseText
+            : "";
+
+        if (status === 401) {
+            this.cachedToken = null;
+            this.tokenExpireTime = 0;
+        }
+        if (status < 200 || status >= 300) {
+            let detail = "";
+            try {
+                const errorData = JSON.parse(responseText);
+                detail = errorData?.error?.message || errorData?.message || "";
+                if (Number(errorData?.error?.code) === 401000) {
+                    this.cachedToken = null;
+                    this.tokenExpireTime = 0;
+                }
+            } catch (_error) {}
+            throw new Error(
+                `Edge API 请求失败: HTTP ${status || "unknown"}${detail ? `: ${detail}` : ""}`
+            );
+        }
+
+        return responseText;
+    }
+
+    /**
+     * 解析并校验 Edge API 的翻译结果
+     */
+    _parseTranslationResponse(responseText) {
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (_error) {
+            throw new Error("Edge API 返回了无效的 JSON 响应");
+        }
+
+        if (data?.error) {
+            if (Number(data.error.code) === 401000) {
+                this.cachedToken = null;
+                this.tokenExpireTime = 0;
+            }
+            throw new Error(data.error.message || "Edge 翻译报错");
+        }
+
+        const translatedText = data?.[0]?.translations?.[0]?.text;
+        if (typeof translatedText !== "string") {
+            throw new Error("Edge API 返回了无效的翻译结果");
+        }
+        return translatedText;
+    }
+
+    /**
+     * 底层翻译请求
+     */
+    async _doTranslate(raw, targetLang) {
+        try {
+            const token = await this.getToken();
+            const options = {
+                method: 'POST',
+                url: `https://api-edge.cognitive.microsofttranslator.com/translate?from=&to=${targetLang}&api-version=3.0&textType=html`,
+                data: JSON.stringify([{ "Text": raw }]),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+                },
+                anonymous: true,
+                nocache: true,
+                timeout: 30000,
+            };
+
+            return await BaseTranslate(
+                options,
+                responseText => this._parseTranslationResponse(responseText),
+                undefined,
+                response => this._getResponseText(response)
+            );
+        } catch (error) {
+            const message = typeof error?.message === "string" && error.message
+                ? error.message
+                : typeof error === "string" && error
+                    ? error
+                    : typeof error?.error === "string" && error.error
+                        ? error.error
+                        : "Edge Network Error";
+            return {
+                text: raw,
+                status: false,
+                message,
+                done: false
+            };
+        }
+    }
+
+    /**
+     * 暴露给主控路由的执行入口
+     */
+    async run(text, translateResult, displayOptions, servername) {
+        // 1. 更新 UI 提示 (适配你当前脚本版本的参数：escapeHTML 和 renderLatex)
+        translateResult.translateDiv.updateTranslateDiv(
+            `${i18next.t('transingTip.basic', { ns: 'translator', server: servername })}`,
+            displayOptions.escapeHTML,
+            displayOptions.renderLatex
+        );
+
+        // 2. 获取目标语言
+        let targetLang = 'zh-Hans';
+        try { targetLang = getTargetLanguage('edge') || 'zh-Hans'; } catch (e) {}
+
+        // 3. 执行翻译并直接返回结果
+        return await this._doTranslate(text, targetLang);
+    }
+}
+
+// 实例化全局的 Edge 翻译器
+const edgeTranslator = new EdgeTranslator();
+
 function isOpenAIResponsesEndpoint(url) {
   return /\/v1\/responses(?:$|[/?#])/.test(url);
 }
@@ -17926,17 +20598,261 @@ function getOpenAIResponseText(response) {
     .join("");
 }
 
-function getOpenAITranslationRequest(raw, isStream = false) {
+const OPENAI_STREAM_IDLE_TIMEOUT_MS = 120000;
+
+function getOpenAIResponseErrorMessage(response) {
+  const responseBody = response?.response;
+  if (
+    responseBody &&
+    typeof responseBody === "object" &&
+    typeof responseBody.getReader !== "function"
+  ) {
+    return responseBody.error?.message || responseBody.message || "";
+  }
+
+  const responseText =
+    response?.responseText ||
+    (typeof responseBody === "string" ? responseBody : "");
+  if (!responseText) return "";
+  try {
+    const data = JSON.parse(responseText);
+    return data?.error?.message || data?.message || "";
+  } catch (_error) {
+    return "";
+  }
+}
+
+function assertOpenAIResponseOK(response) {
+  const status = Number(response?.status || 0);
+  if (status === 0 || (status >= 200 && status < 300)) return;
+
+  const statusText = String(response?.statusText || "").trim();
+  const detail = getOpenAIResponseErrorMessage(response);
+  throw new Error(
+    `OpenAI API request failed with HTTP ${status}${
+      statusText ? ` ${statusText}` : ""
+    }${detail ? `: ${detail}` : ""}`
+  );
+}
+
+function getOpenAIStreamReader(response) {
+  const reader =
+    typeof response?.response?.getReader === "function"
+      ? response.response.getReader()
+      : null;
+
+  try {
+    assertOpenAIResponseOK(response);
+
+    const contentTypeMatch = String(response?.responseHeaders || "").match(
+      /(?:^|\r?\n)\s*content-type\s*:\s*([^\r\n]*)/i
+    );
+    const contentType = contentTypeMatch?.[1]?.trim() || "";
+    if (
+      /^(?:application\/(?:json|problem\+json)|text\/(?:json|html))(?:\s*;|$)/i.test(
+        contentType
+      )
+    ) {
+      const detail = getOpenAIResponseErrorMessage(response);
+      throw new Error(
+        detail ||
+        `OpenAI streaming expected text/event-stream but received ${contentType}.`
+      );
+    }
+
+    if (!reader) {
+      const detail = getOpenAIResponseErrorMessage(response);
+      throw new Error(
+        detail ||
+        "The userscript manager did not provide a readable streaming response. Disable streaming or update the userscript manager."
+      );
+    }
+    return reader;
+  } catch (error) {
+    const detail = getOpenAIResponseErrorMessage(response);
+    try {
+      const cancelResult = reader?.cancel?.(error);
+      cancelResult?.catch?.(() => {});
+    } catch (_cancelError) {
+      // Ignore cancellation errors and preserve the response error.
+    }
+    if (detail && !error.message.includes(detail)) {
+      error.message = `${error.message}: ${detail}`;
+    }
+    throw error;
+  }
+}
+
+async function readOpenAIStreamChunk(
+  reader,
+  idleTimeoutMs = OPENAI_STREAM_IDLE_TIMEOUT_MS
+) {
+  if (!Number.isFinite(idleTimeoutMs) || idleTimeoutMs <= 0) {
+    return reader.read();
+  }
+
+  let timeoutId = null;
+  try {
+    return await Promise.race([
+      reader.read(),
+      new Promise((_, reject) => {
+        timeoutId = setTimeout(() => {
+          const error = new Error(
+            `OpenAI stream received no data for ${idleTimeoutMs}ms.`
+          );
+          try {
+            const cancelResult = reader.cancel?.(error);
+            cancelResult?.catch?.(() => {});
+          } catch (_cancelError) {
+            // Ignore cancellation errors and surface the timeout itself.
+          }
+          reject(error);
+        }, idleTimeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timeoutId !== null) clearTimeout(timeoutId);
+  }
+}
+
+function applyOpenAIReasoningConfig(
+  extraData,
+  isResponsesEndpoint,
+  thinkingMode,
+  thinkLevel
+) {
+  const data = extraData || {};
+  if (isResponsesEndpoint) {
+    if (thinkLevel && data.reasoning === undefined) {
+      data.reasoning = { effort: thinkLevel };
+    }
+    return data;
+  }
+
+  if (
+    (thinkingMode === "enabled" || thinkingMode === "disabled") &&
+    data.thinking === undefined
+  ) {
+    data.thinking = { type: thinkingMode };
+  }
+
+  const effectiveThinkingMode = data.thinking?.type || thinkingMode;
+  if (
+    thinkLevel &&
+    effectiveThinkingMode !== "disabled" &&
+    data.reasoning_effort === undefined
+  ) {
+    data.reasoning_effort = thinkLevel;
+  }
+  return data;
+}
+
+function getOpenAIChatCompletionDefaults(extraData) {
+  const thinkingType = extraData?.thinking?.type;
+  if (thinkingType === "enabled" || extraData?.reasoning_effort !== undefined) {
+    return {};
+  }
+  return { temperature: 0.7 };
+}
+
+function splitOpenAISSEBuffer(buffer) {
+  const records = String(buffer || "").split(/\r?\n\r?\n/);
+  return {
+    records: records.slice(0, -1),
+    remainder: records[records.length - 1] || "",
+  };
+}
+
+function parseOpenAISSEEvent(record) {
+  let eventType = "";
+  const dataLines = [];
+  for (const line of String(record || "").split(/\r?\n/)) {
+    if (line.startsWith("event:")) eventType = line.slice(6).trim();
+    else if (line.startsWith("data:")) dataLines.push(line.slice(5).trimStart());
+  }
+  const line = dataLines.join("\n");
+  if (!line) return null;
+  if (line.trim() === "[DONE]") return { done: true, eventType, raw: line };
+  return { done: false, eventType, data: JSON.parse(line), raw: line };
+}
+
+function isOpenAISSEMetadataRecord(record) {
+  return String(record || "")
+    .split(/\r?\n/)
+    .every((line) => {
+      const trimmed = line.trim();
+      return (
+        !trimmed ||
+        trimmed.startsWith(":") ||
+        /^(?:event|id|retry|data):/.test(trimmed)
+      );
+    });
+}
+
+function getOpenAIStreamDeltas(data, isResponsesEndpoint, eventType = "") {
+  if (isResponsesEndpoint) {
+    if (
+      eventType === "response.output_text.delta" &&
+      typeof data?.delta === "string"
+    ) {
+      return [{ type: "content", text: data.delta }];
+    }
+    if (
+      eventType.toLowerCase().includes("reasoning") &&
+      eventType.endsWith(".delta") &&
+      typeof data?.delta === "string" &&
+      data.delta
+    ) {
+      return [{ type: "reasoning", text: data.delta }];
+    }
+    return [];
+  }
+
+  const delta = data?.choices?.[0]?.delta;
+  if (!delta) return [];
+  const result = [];
+  if (typeof delta.reasoning_content === "string" && delta.reasoning_content) {
+    result.push({ type: "reasoning", text: delta.reasoning_content });
+  }
+  if (typeof delta.content === "string" && delta.content) {
+    result.push({ type: "content", text: delta.content });
+  }
+  return result;
+}
+
+function getOpenAITranslationRequest(
+  raw,
+  isStream = false,
+  translationSource = {
+    text: raw,
+    format: "markdown",
+    legacyLatex: null,
+  }
+) {
   const modelDefault = "gpt-5.4";
   const proxyDefault = "https://api.openai.com/v1/responses";
   const lang = getTargetLanguage("openai");
-  const hasReplaceOriginalMarker = /\[\[\/?OJBLOCK_\d{4}\]\]/.test(raw);
+  const hasReplaceOriginalMarker =
+    /^\s*(?:【\s*\d{8}\s*】|\[\s*\d{8}\s*\]|\{\s*\d{8}\s*\})\s*\n/.test(raw);
+  const hasLegacyLatexSlots = Boolean(
+    translationSource.legacyLatex?.slots?.size
+  );
+  const placeholderExample =
+    raw.match(OJB_getPlaceholderTokenRegex())?.[0] ||
+    OJB_formatPlaceholderToken("12345678");
+  const placeholderPrompt = hasReplaceOriginalMarker
+    ? `Keep every 8-digit numeric placeholder (for example ${placeholderExample}) unchanged and exactly once. Sentence-internal placeholders may move to follow the target-language word order. Keep paragraph-leading placeholders in their original paragraph order.`
+    : hasLegacyLatexSlots
+    ? `Keep every 8-digit numeric placeholder (for example ${placeholderExample}) unchanged and exactly once. Placeholders may move only as required by the target-language word order.`
+    : "";
+  const formatPrompt =
+    translationSource.format === "html"
+      ? "Keep HTML tags and protected formula/code fragments unchanged; translate all human-readable text, including text nodes inside HTML elements"
+      : "Keep all Markdown formatting and LaTeX equations unchanged";
   let prompt = "";
   if (OJBetter.chatgpt.customPrompt) {
     prompt = `\n${OJBetter.chatgpt.customPrompt}`;
-    if (hasReplaceOriginalMarker) {
-      prompt += `\nKeep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order.`;
-    }
+    if (placeholderPrompt) prompt += `\n${placeholderPrompt}`;
     if (!OJBetter.chatgpt.asSystemPrompt) {
       prompt += `\n${raw}`;
     }
@@ -17947,10 +20863,10 @@ Translate the following text into ${lang} with precision, using appropriate tech
 Rules:
 1. Output ONLY the translation, with no explanations, notes, or other text
 2. Maintain all original formatting
-3. ${OJBetter.typeOfPage.is_oldLatex || OJBetter.typeOfPage.is_acmsguru ? "Keep all LaTeX equations unchanged" : "Keep all brackets [], HTML tags, and their content unchanged"}
+3. ${formatPrompt}
 4. Ensure the translation follows natural ${lang} expression patterns
 5. Use professional terminology common in programming competitions
-${hasReplaceOriginalMarker ? "6. Keep all [[OJBLOCK_xxxx]] and [[/OJBLOCK_xxxx]] markers unchanged and in the same order" : ""}
+${placeholderPrompt ? `6. ${placeholderPrompt}` : ""}
 
 Text to translate:
 "`;
@@ -17965,9 +20881,12 @@ ${raw}
   const extraData = Object.assign({}, ...OJBetter.chatgpt.config.data);
 
   if (isOpenAIResponsesEndpoint(url)) {
-    if (OJBetter.chatgpt.config.think_level && extraData.reasoning === undefined) {
-      extraData.reasoning = { effort: OJBetter.chatgpt.config.think_level };
-    }
+    applyOpenAIReasoningConfig(
+      extraData,
+      true,
+      OJBetter.chatgpt.config.thinking_mode,
+      OJBetter.chatgpt.config.think_level
+    );
 
     return {
       url,
@@ -17997,6 +20916,13 @@ ${raw}
     };
   }
 
+  applyOpenAIReasoningConfig(
+    extraData,
+    false,
+    OJBetter.chatgpt.config.thinking_mode,
+    OJBetter.chatgpt.config.think_level
+  );
+
   return {
     url,
     data: {
@@ -18018,7 +20944,7 @@ ${raw}
             content: prompt,
           },
         ],
-      temperature: 0.7,
+      ...getOpenAIChatCompletionDefaults(extraData),
       ...(isStream ? { stream: true } : {}),
       ...extraData,
     },
@@ -18028,10 +20954,11 @@ ${raw}
 /**
  * ChatGPT
  * @param {string} raw 原文
+ * @param {TranslationSource} translationSource 本次任务的翻译源上下文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_openai(raw) {
-  const request = getOpenAITranslationRequest(raw);
+async function translate_openai(raw, translationSource) {
+  const request = getOpenAITranslationRequest(raw, false, translationSource);
   const options = {
     method: "POST",
     url: request.url,
@@ -18050,7 +20977,10 @@ async function translate_openai(raw) {
       return res;
     },
     undefined,
-    (response) => getOpenAIResponseText(response.response)
+    (response) => {
+      assertOpenAIResponseOK(response);
+      return getOpenAIResponseText(response.response);
+    }
   );
 }
 
@@ -18058,11 +20988,12 @@ async function translate_openai(raw) {
  * ChatGPT 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
+ * @param {TranslationSource} translationSource 本次任务的翻译源上下文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
-async function translate_openai_stream(raw, translateDiv) {
+async function translate_openai_stream(raw, translateDiv, translationSource) {
   const result = {
-    done: true,
+    done: false,
     checkPassed: null,
     response: null,
     responseText: null,
@@ -18071,24 +21002,45 @@ async function translate_openai_stream(raw, translateDiv) {
     message: null,
   };
   const helpText = i18next.t("error.basic", { ns: "translator" }); // 基本帮助提示信息
+  let thinkingShown = false;
+  const displayOptions = getTranslationSourceDisplayOptions(translationSource);
+  const showThinking = () => {
+    if (thinkingShown || result.text || translateDiv.replaceOriginalState) return;
+    thinkingShown = true;
+    translateDiv.updateTranslateDiv(
+      i18next.t("transingTip.thinking", { ns: "translator" }),
+      displayOptions.escapeHTML,
+      false,
+      false,
+      true,
+      translationSource.legacyLatex
+    );
+  };
   try {
-    for await (const delta of openai_stream(raw)) {
+    for await (const delta of openai_stream(raw, translationSource, showThinking)) {
       result.text += delta;
+      const partialText = restoreLegacyLatexSlots(
+        result.text,
+        translationSource.legacyLatex
+      ).tokenText;
       // 翻译结果面板更新
       translateDiv.updateTranslateDiv(
-        result.text,
-        !(
-          (OJBetter.typeOfPage.is_oldLatex ||
-            OJBetter.typeOfPage.is_acmsguru) &&
-          !OJBetter.translation.forceTurndownConversion
-        ),
+        partialText,
+        displayOptions.escapeHTML,
         false,
-        true
+        true,
+        false,
+        translationSource.legacyLatex
       );
     }
+    if (!result.text.trim()) {
+      throw new Error("The stream ended without translated content.");
+    }
+    result.done = true;
     return result;
   } catch (err) {
     console.warn(err);
+    result.done = false;
     result.error = {
       message: err.message || null,
       stack: err.stack
@@ -18097,9 +21049,10 @@ async function translate_openai_stream(raw, translateDiv) {
       enumerable: err,
       source: "openai_stream",
     };
+    const errorDetail = String(err?.message || "").slice(0, 500);
     result.message = `${i18next.t("error.GMRequest", {
       ns: "translator",
-    })}${helpText}`;
+    })}${helpText}${errorDetail ? `\n\n${errorDetail}` : ""}`;
   }
 
   return result;
@@ -18108,10 +21061,23 @@ async function translate_openai_stream(raw, translateDiv) {
 /**
  * 流式传输
  * @param {string} raw 原文
- * @returns {AsyncGenerator<string>} 返回 AsyncGenerator
+ * @param {TranslationSource} translationSource 本次任务的翻译源上下文
+ * @param {Function} [onReasoning] 思考阶段开始时的回调
+ * @param {Object} [streamOptions] 流式读取选项
+ * @param {number} [streamOptions.startTimeoutMs] 等待流开始的超时时间
+ * @param {number} [streamOptions.idleTimeoutMs] 两个数据块之间的超时时间
+ * @returns {AsyncGenerator<string>} 返回最终文本片段
  */
-async function* openai_stream(raw) {
-  const request = getOpenAITranslationRequest(raw, true);
+async function* openai_stream(
+  raw,
+  translationSource,
+  onReasoning,
+  {
+    startTimeoutMs = OPENAI_STREAM_IDLE_TIMEOUT_MS,
+    idleTimeoutMs = OPENAI_STREAM_IDLE_TIMEOUT_MS,
+  } = {}
+) {
+  const request = getOpenAITranslationRequest(raw, true, translationSource);
   const isResponsesEndpoint = isOpenAIResponsesEndpoint(request.url);
   const options = {
     method: "POST",
@@ -18124,65 +21090,126 @@ async function* openai_stream(raw) {
       ...Object.assign({}, ...OJBetter.chatgpt.config.header),
     },
   };
-  const response = await OJB_GMRequest(options, true);
-  const reader = response.response.getReader();
+  const response = await OJB_GMRequest(options, true, startTimeoutMs);
+  const reader = getOpenAIStreamReader(response);
   const decoder = new TextDecoder();
   let buffer = ""; // 用于累积数据片段的缓冲区
+  let reasoningNotified = false;
+  let hasContent = false;
+  let terminalSeen = false;
+  let readerClosed = false;
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true }); // 将新的数据片段追加到缓冲区
-    let lines = buffer.split("\n\n"); // 处理累积的数据
+  try {
+    streamLoop: while (true) {
+      const { done, value } = await readOpenAIStreamChunk(
+        reader,
+        idleTimeoutMs
+      );
+      if (value) buffer += decoder.decode(value, { stream: !done });
+      else if (done) buffer += decoder.decode();
+      if (done) {
+        readerClosed = true;
+        if (buffer.trim()) buffer += "\n\n";
+      }
 
-    // 缓冲区的最后一行可能还未完整接收，保留在缓冲区中，-1
-    for (let i = 0; i < lines.length - 1; i++) {
-      const eventLines = lines[i].split("\n");
-      let eventType = "";
-      const dataLines = [];
-
-      for (const line of eventLines) {
-        if (line.startsWith("event:")) {
-          eventType = line.slice(6).trim();
-        } else if (line.startsWith("data:")) {
-          dataLines.push(line.slice(5).trimStart());
+      const split = splitOpenAISSEBuffer(buffer);
+      buffer = split.remainder;
+      for (const record of split.records) {
+        let event;
+        try {
+          event = parseOpenAISSEEvent(record);
+        } catch (error) {
+          console.warn(`Error parsing JSON: ${error}\n\nError data: ${record}`);
+          throw error;
         }
-      }
 
-      const line = dataLines.join("\n");
-      if (!line) continue;
-      if (line.includes("[DONE]")) {
-        return; // End
-      }
-      try {
-        let data = JSON.parse(line);
-        if (isResponsesEndpoint) {
-          if (
-            eventType === "response.output_text.delta" &&
-            typeof data.delta === "string"
-          ) {
-            yield data.delta;
-          } else if (eventType === "error") {
-            throw new Error(data.message || line);
-          } else if (eventType === "response.completed") {
-            return;
+        if (!event) {
+          if (!isOpenAISSEMetadataRecord(record)) {
+            throw new Error("OpenAI stream returned an invalid SSE record.");
           }
-        } else {
-          let delta = data["choices"][0]["delta"];
-          let content = delta["content"] ? delta["content"] : "";
-          yield content; // 传递数据给调用者
+          continue;
         }
-      } catch (error) {
-        console.warn(`Error parsing JSON: ${error}\n\nError data: ${line}`);
-        if (isResponsesEndpoint && eventType === "error") throw error;
+        if (event.done) {
+          terminalSeen = true;
+          break streamLoop;
+        }
+        if (
+          isResponsesEndpoint &&
+          ["response.failed", "response.incomplete"].includes(event.eventType)
+        ) {
+          const failureDetail =
+            event.data?.response?.error?.message ||
+            event.data?.response?.incomplete_details?.reason ||
+            event.data?.error?.message ||
+            event.data?.message ||
+            event.raw;
+          throw new Error(
+            `OpenAI stream ended with ${event.eventType}: ${failureDetail}`
+          );
+        }
+        if (event.data?.error) {
+          throw new Error(event.data.error.message || event.raw);
+        }
+        if (isResponsesEndpoint && event.eventType === "error") {
+          throw new Error(event.data?.message || event.raw);
+        }
+
+        for (const delta of getOpenAIStreamDeltas(
+          event.data,
+          isResponsesEndpoint,
+          event.eventType
+        )) {
+          if (delta.type === "reasoning") {
+            if (!reasoningNotified) {
+              reasoningNotified = true;
+              onReasoning?.();
+            }
+          } else {
+            hasContent = true;
+            yield delta.text;
+          }
+        }
+
+        if (isResponsesEndpoint && event.eventType === "response.completed") {
+          terminalSeen = true;
+          break streamLoop;
+        }
+        if (!isResponsesEndpoint) {
+          const finishReason = event.data?.choices?.[0]?.finish_reason;
+          if (finishReason) {
+            if (finishReason !== "stop") {
+              throw new Error(
+                `OpenAI stream ended with finish_reason: ${finishReason}.`
+              );
+            }
+            terminalSeen = true;
+            break streamLoop;
+          }
+        }
       }
+      if (done) break;
     }
 
-    // 保留最后一行在缓冲区中
-    buffer = lines.slice(-1)[0];
+    if (!terminalSeen) {
+      throw new Error("OpenAI stream ended without a completion signal.");
+    }
+    if (!hasContent) {
+      throw new Error("The stream ended without translated content.");
+    }
+  } finally {
+    if (!readerClosed) {
+      try {
+        await reader.cancel?.();
+      } catch (_error) {
+        // The stream may already be closed by the provider.
+      }
+    }
+    try {
+      reader.releaseLock?.();
+    } catch (_error) {
+      // The reader may already have released its lock.
+    }
   }
-
-  return buffer;
 }
 
 /**
@@ -18374,7 +21401,7 @@ async function ensureJQueryIsLoaded(retryDelay = 50) {
 async function loadRequiredFunctions() {
   await initVar(); // 初始化全局变量
   return Promise.allSettled([
-    initDB(), // 连接数据库
+    initDB().then(() => OJB_migrateOjbBlockTranslationCache()), // 连接数据库并执行一次性缓存迁移
     initI18next(), // i18next初始化
     initButtonFunc(), // 加载按钮相关函数
     initHTML2MarkDown(), // 初始化html2markdown转换器
@@ -18572,4 +21599,101 @@ if (document.readyState === "loading") {
   }
 }
 
+// ------------------------------
+// OJBLOCK 翻译缓存一次性迁移
+// ------------------------------
 
+/**
+ * 从带 OJBLOCK 行标记的缓存文本中提取可读译文。
+ * @param {string} text 已发布的 OJBLOCK 缓存文本
+ * @returns {string} 移除行标记后的普通译文
+ */
+function OJB_extractOjbBlockTranslationText(text) {
+  /** 匹配被翻译服务改写过括号、大小写、空格或行末标点的 OJBLOCK 独占行。 */
+  const markerLinePattern = /^[\t ]*(?:[\[【［{][\t ]*)*\/?[\t ]*OJBLOCK_\d{4}[\t ]*(?:[\]】］}][\t ]*)*[。．.!！?？:：;；,，、]?[\t ]*(?:\r?\n|$)/gim;
+  return String(text || "")
+    .replace(markerLinePattern, "")
+    .trim();
+}
+
+/**
+ * 将一条 OJBLOCK replaceOriginal 缓存转换为普通译文；其他缓存值原样返回。
+ * 已发布的数据可能省略 `version`，也可能保存数值 `1`；即使行标记被翻译服务删除，仍按该固定对象形态识别。
+ * @param {any} value 翻译缓存值
+ * @returns {any} 转换后的普通字符串，或未变化的原值
+ */
+function OJB_convertOjbBlockCacheEntryToText(value) {
+  const isOjbBlockCacheEntry =
+    value &&
+    typeof value === "object" &&
+    value.replaceOriginal === true &&
+    typeof value.text === "string" &&
+    (value.version == null || value.version === 1);
+  return isOjbBlockCacheEntry
+    ? OJB_extractOjbBlockTranslationText(value.text)
+    : value;
+}
+
+/**
+ * 转换单条数据库记录中的 OJBLOCK 缓存。未匹配的条目保持原值和对象引用，原 map 不会被修改。
+ * @param {Record<string, any>} transResultMap 翻译结果映射
+ * @returns {{transResultMap: Record<string, any>, migratedCount: number}} 转换后的映射和条目数量
+ */
+function OJB_migrateOjbBlockTranslationResults(transResultMap) {
+  const sourceMap =
+    transResultMap && typeof transResultMap === "object" ? transResultMap : {};
+  let migratedMap = sourceMap;
+  let migratedCount = 0;
+
+  Object.entries(sourceMap).forEach(([id, value]) => {
+    const convertedValue = OJB_convertOjbBlockCacheEntryToText(value);
+    if (convertedValue === value) return;
+    if (migratedCount === 0) migratedMap = { ...sourceMap };
+    migratedMap[id] = convertedValue;
+    migratedCount++;
+  });
+
+  return { transResultMap: migratedMap, migratedCount };
+}
+
+/**
+ * 在数据库打开后迁移当前站点的全部 OJBLOCK 翻译缓存。
+ * 完成标记与缓存保存在同一张表中，因此清空或导入数据库后会自然重新判断；事务失败时下次加载会重试。
+ * @returns {Promise<number>} 转换的缓存条目数量
+ */
+async function OJB_migrateOjbBlockTranslationCache() {
+  const migrationMarkerUrl = "__ojbetter_migration__:ojblock_translation_cache";
+  const database = OJBetter.common.database;
+  const table = database?.translateData;
+  if (!database || !table)
+    throw new Error("Translation cache database is not available.");
+
+  let migratedCount = 0;
+  try {
+    if (await table.get(migrationMarkerUrl)) return 0;
+    await database.transaction("rw", table, async () => {
+      if (await table.get(migrationMarkerUrl)) return;
+      const storedRecords = await table.toArray();
+      const migratedRecords = [];
+
+      storedRecords.forEach((record) => {
+        const migration = OJB_migrateOjbBlockTranslationResults(
+          record.transResultMap
+        );
+        if (migration.migratedCount === 0) return;
+        migratedCount += migration.migratedCount;
+        migratedRecords.push({
+          ...record,
+          transResultMap: migration.transResultMap,
+        });
+      });
+
+      await table.bulkPut([...migratedRecords, { url: migrationMarkerUrl }]);
+    });
+  } catch (error) {
+    console.warn("Failed to migrate OJBLOCK translation cache:", error);
+    throw error;
+  }
+
+  return migratedCount;
+}
