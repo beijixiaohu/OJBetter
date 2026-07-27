@@ -328,6 +328,8 @@
                 "AtCoder生成AI対策ルール - 20251003版": "AtCoder 对于生成式 AI 的规定 - 20251003 版本",
                 "このコンテストでは、生成AIの使用を禁止しております。": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。",
                 "詳しくは": "详情请见",
+                "このコンテストでは、生成AIの使用に関して以下のルールが適用されます。": "在本次比赛中，以下规则适用于生成式 AI 的使用。",
+                "AtCoder Heuristic Contest 生成AI利用ルール - 20250616版": "AtCoder 启发式竞赛生成式 AI 使用规则 - 20250616 版本",
                 "こちらの記事": "这篇文章",
                 "Unrated参加の場合にもこのルールは適用されます。": "这条规则也适用于 Unrated 参与者。",
                 "をご覧ください。": "。",
@@ -508,6 +510,7 @@
                 "My Score": "我的得分",
                 "Virtual Standings": "虚拟排名",
                 "Standings": "排名",
+                "Rating Changes": "Rating 变化",
                 "Custom Test": "自定义测试",
                 "Editorial": "题解",
                 "Discuss": "讨论",
@@ -519,14 +522,15 @@
                 "Profile": "个人资料",
                 "Competition History": "比赛记录",
                 "General Settings": "常规设置",
+                "AI Training Settings": "AI 训练设置",
                 "Settings": "设置",
                 "Change/Verify Email address": "更改 / 验证电子邮件地址",
-                "Remind Username": "提醒用户名",
+                "Remind Username": "找回用户名",
                 "Change Username": "更改用户名",
                 "Delete Account": "删除账户",
                 "Change Photo": "更改头像",
                 "Change Password": "更改密码",
-                "Manage Fav": "管理收藏",
+                "Manage Fav": "管理关注",
                 "Other": "其他"
             }
         },
@@ -541,7 +545,7 @@
                 "General Settings": "常规设置",
                 "Change Photo": "更改照片",
                 "Change Password": "更改密码",
-                "Manage Fav": "管理收藏",
+                "Manage Fav": "管理关注",
                 "Sign Out": "退出登录"
             }
         },
@@ -640,7 +644,8 @@
                 "I'd like to talk to you first.": "我想先和您交谈。",
                 "Department name": "部门名称",
                 "What kind of work do you currently do?": "您目前从事什么样的工作？",
-                "How can the Algorithms Group of the Digital Transformation Office help?": "数字转型办公室的算法组可以如何帮助您？"
+                "How can the Algorithms Group of the Digital Transformation Office help?": "数字转型办公室的算法组可以如何帮助您？",
+                "Do not allow any of my submissions to be licensed or used for AI training.": "禁止将我的任何提交授权给或用于 AI 训练。"
             }
         },
         "#category-btn-group": {
@@ -688,7 +693,8 @@
             "rules": {
                 "Permanent Contests": "永久比赛",
                 "Upcoming Contests": "即将举行的比赛",
-                "Recent Contests": "最近的比赛"
+                "Recent Contests": "最近的比赛",
+                "Daily Contests": "每日比赛"
             }
         },
         ".editor-buttons": {
@@ -723,7 +729,11 @@
                 "Request a clarification": "请求澄清",
                 "Search": "搜索",
                 "Update Registration": "更新报名信息",
-                "Cancel": "取消"
+                "Cancel": "取消",
+                "Opt out of AI training/licensing for this submission": "禁止将该提交授权给或用于 AI 训练",
+                "Opt out of AI training/licensing": "禁止授权或用于 AI 训练",
+                "Go to the task list page": "前往题目列表",
+                "Close": "关闭"
             }
         },
         "#navbar-collapse": {
@@ -779,13 +789,18 @@
                 "AtCoder Rules against Generative AI - Version 20251003": "AtCoder 对于生成式 AI 的规定 - 20251003 版本",
                 "It is prohibited to use generative AI in ongoing AtCoder contests.": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。",
                 " For details\\, please see ": "详情请见",
+                "In this contest, the following rules apply regarding the use of generative AI": "在本次比赛中，以下规则适用于生成式 AI 的使用",
+                "AtCoder Heuristic Contest Generative AI Usage Rules - Version 20250616": "AtCoder 启发式竞赛生成式 AI 使用规则 - 20250616 版本",
+                "For details\\, please see ": "详情请见",
                 "This rule also applies for Unrated participants.": "这条规则也适用于 Unrated 参与者。",
                 "\\.": "。",
                 "participant": "参与者",
                 "Registered": "已报名",
                 "Canceled registration": "已取消报名",
                 "Welcome, ": "欢迎，",
-                "the rules": "相关规则"
+                "the rules": "相关规则", 
+                "AI Training Settings": "AI 训练设置",
+                "To continue providing the AtCoder contest platform free of charge to all users, starting in August 2026, AtCoder will license user-submitted source code to companies and organizations for the purpose of training AI models. You may opt out of this on both a per-user basis and a per-submission basis. If you do not want any of your submissions to be used for AI training or licensing, please enable the following setting:": "为了继续向所有用户免费提供 AtCoder 竞赛平台，从 2026 年 8 月起，AtCoder 会将用户提交的源代码授权给公司及组织，用于训练 AI 模型。您可以选择按用户或按每次提交退出此项许可。若您不希望自己的任何提交被用于 AI 训练或许可，请启用以下设置："
             }
         },
         ".lang-en": {
@@ -856,15 +871,59 @@
                 "Detail": "详情"
             }
         },
-        "modal-dialog": {
+        "modal-content": {
             "class": [
-                ".modal-dialog"
+                ".modal-content"
             ],
             "description": "",
             "isStrict": true,
             "rules": {
+                "Confirm": "确认",
                 "Are you sure you want to cancel registration?": "您确定要取消报名吗？",
-                "Confirm": "确认"
+                "Contest started": "比赛开始",
+                "Contest is over": "比赛结束",
+                "Per-Submission AI Training Settings": "逐提交 AI 训练设置",
+                "Do you want to opt this submission out of AI training and licensing? You can configure a global opt-out for all of your submissions from your user settings.": "是否要禁止将该提交授权给或用于 AI 训练？您可以在用户设置中为所有提交配置全局退出。"
+            }
+        },
+        "modal-content-part": {
+            "class": [
+                ".modal-content"
+            ],
+            "description": "",
+            "isStrict": false,
+            "rules": {
+                "has begun.": "开始了。",
+                "has ended.": "结束了。"
+            }
+        },
+        "required": {
+            "class": [
+                ".required"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Required": "必填"
+            }
+        },
+        "standings-header": {
+            "class": [
+                ".panel-heading"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Customize": "自定义",
+                "Country/Region": "国家/地区",
+                "Username": "用户名",
+                "Affiliation": "机构",
+                "Show affiliation": "显示机构",
+                "Show rated only": "仅显示 Rated",
+                "Show in original rating": "以原始 Rating 显示",
+                "Show fav button": "显示关注按钮",
+                "Show favs only": "仅显示关注",
+                "Manage Fav": "管理关注"
             }
         }
     },
