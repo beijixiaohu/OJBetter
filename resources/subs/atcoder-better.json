@@ -525,12 +525,12 @@
                 "AI Training Settings": "AI 训练设置",
                 "Settings": "设置",
                 "Change/Verify Email address": "更改 / 验证电子邮件地址",
-                "Remind Username": "提醒用户名",
+                "Remind Username": "找回用户名",
                 "Change Username": "更改用户名",
                 "Delete Account": "删除账户",
                 "Change Photo": "更改头像",
                 "Change Password": "更改密码",
-                "Manage Fav": "管理收藏",
+                "Manage Fav": "管理关注",
                 "Other": "其他"
             }
         },
@@ -545,7 +545,7 @@
                 "General Settings": "常规设置",
                 "Change Photo": "更改照片",
                 "Change Password": "更改密码",
-                "Manage Fav": "管理收藏",
+                "Manage Fav": "管理关注",
                 "Sign Out": "退出登录"
             }
         },
@@ -905,6 +905,25 @@
             "isStrict": true,
             "rules": {
                 "Required": "必填"
+            }
+        },
+        "standings-header": {
+            "class": [
+                ".panel-heading"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Customize": "自定义",
+                "Country/Region": "国家/地区",
+                "Username": "用户名",
+                "Affiliation": "机构",
+                "Show affiliation": "显示机构",
+                "Show rated only": "仅显示 Rated",
+                "Show in original rating": "以原始 Rating 显示",
+                "Show fav button": "显示关注按钮",
+                "Show favs only": "仅显示关注",
+                "Manage Fav": "管理关注"
             }
         }
     },
