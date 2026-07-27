@@ -732,7 +732,8 @@
                 "Cancel": "取消",
                 "Opt out of AI training/licensing for this submission": "禁止将该提交授权给或用于 AI 训练",
                 "Opt out of AI training/licensing": "禁止授权或用于 AI 训练",
-                "Go to the task list page": "前往题目列表"
+                "Go to the task list page": "前往题目列表",
+                "Close": "关闭"
             }
         },
         "#navbar-collapse": {
