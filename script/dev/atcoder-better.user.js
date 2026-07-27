@@ -6229,7 +6229,7 @@ const translation_settings_HTML = `
         <input type="checkbox" id="enableLinkProtection" name="enableLinkProtection">
     </div>
     <hr>
-    <h4>ChatGPT</h4>
+    <h4>AI 翻译（OpenAI）</h4>
     <div id="chatgpt_config" class="config"></div>
     <div class='OJBetter_setting_list'>
         <label for="openai_isStream" data-i18n="settings:translation.chatgpt.isStream.name"></label>
@@ -16864,7 +16864,7 @@ ${raw}
 }
 
 /**
- * ChatGPT
+ * AI 翻译（OpenAI）
  * @param {string} raw 原文
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
@@ -16894,7 +16894,7 @@ async function translate_openai(raw) {
 }
 
 /**
- * ChatGPT 流式传输
+ * AI 翻译（OpenAI） 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
  * @returns {Promise<TransRawData>} 翻译结果对象
