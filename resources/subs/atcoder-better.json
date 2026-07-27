@@ -692,7 +692,8 @@
             "rules": {
                 "Permanent Contests": "永久比赛",
                 "Upcoming Contests": "即将举行的比赛",
-                "Recent Contests": "最近的比赛"
+                "Recent Contests": "最近的比赛",
+                "Daily Contests": "每日比赛"
             }
         },
         ".editor-buttons": {
