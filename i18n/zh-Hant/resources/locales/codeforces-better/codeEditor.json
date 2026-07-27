@@ -41,6 +41,11 @@
         "running": "測試中",
         "success": "全部透過"
     },
+    "langSetup": {
+        "pinned": "常用语言",
+        "others": "其他语言",
+        "showAll": "顯示全部"
+    },
     "submitButton": "提交（Ctrl+Enter）",
     "moreSettings": {
         "title": "更多设置",
@@ -104,6 +109,16 @@
                 "emptyOutput": "空输出",
                 "summary": "{{index}} 个 token: yes 的数量是 {{yesCount}}, no 的数量是 {{noCount}}"
             }
+        },
+        "langSetup": {
+            "title": "语言设置",
+            "searchPlaceholder": "搜索并添加常用语言",
+            "addBtnTitle": "添加",
+            "noPinned": "暂无常用语言，请在下方搜索添加",
+            "setDefaultTitle": "设置为默认语言",
+            "removeTitle": "移除",
+            "noLangDetected": "未检测到编程语言，请在下方搜索添加",
+            "noMatchAlert": "未找到匹配的编程语言"
         }
     }
 }

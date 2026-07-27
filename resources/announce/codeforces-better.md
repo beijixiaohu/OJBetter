@@ -1,3 +1,50 @@
+## 1.87.0
+
+### What's Changed
+- Propose a contest/problems 添加本地化 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/408
+- fix(Codeforces & AtCoder): 修复代码块中的公式无法正确显示的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/9c99188
+- fix(Codeforces & AtCoder): 修复“替换原文”模式下机器翻译的兼容性问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/d57a8c1
+- feat(Codeforces): 新增题目页面全文操作按钮 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/ff7d0a3
+- fix(Codeforces): 修复新旧公式混合页面的翻译 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/0a82e35
+- feat: 支持 DeepSeek Chat Completions 思考模式 (#412) by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/417
+- fix: 修复配置右键菜单滚动后偏移 (#418) by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/418
+- feat: 添加微软edge翻译 (#419) by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/419
+- fix(Codeforces): 支持 G++23 Monaco 语法高亮 by @AceYKN in https://github.com/beijixiaohu/OJBetter/pull/421
+- fix(Codeforces): 修复暗色模式下图片公式显示 by @AceYKN in https://github.com/beijixiaohu/OJBetter/pull/423
+
+### New Contributors
+- @AceYKN made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/421
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/codeforces-better-v1.86.0...codeforces-better-v1.87.0
+
+## 1.86.0
+
+### What's Changed
+
+* fix(Codeforces): 完善网站本地化规则 by @qjwh in https://github.com/beijixiaohu/OJBetter/pull/340
+* feat(Codeforces): 添加显示Codeforces同比赛题目列表功能 by @Sam5440 in https://github.com/beijixiaohu/OJBetter/pull/346
+* feat(Codeforces): 添加有关参赛规则的本地化 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/354
+* fix(Codeforces, AtCoder): 修复洛谷题目跳转功能误判问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/6b7ae1d
+* feat(Codeforces): 添加Problemset和Contest题目互相跳转 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/367
+* fix: 规则文本本地化更新和修复代码块相关问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/377
+* feat(openai): 增加 Responses API 与 think_level 支持 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/378
+* feat(translation): 增加原文替换模式 by @MoYeRanqianzhi in https://github.com/beijixiaohu/OJBetter/pull/379
+* fix: 完善代码语言识别 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/391
+* fix: 修复 addButtonWithHTML2MD 类型判断问题 by @MZMTab in https://github.com/beijixiaohu/OJBetter/pull/393
+* fix(Codeforces): 修复黑暗模式 logo 问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/395
+* fix: 支持自定义请求 data 的 JSON 参数 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/commit/f576c9c
+* fix: 关于ai翻译的一些修复 by @MoYuToGo in https://github.com/beijixiaohu/OJBetter/pull/398
+* fix: 实现 #397，添加默认语言选取功能 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/400
+
+### New Contributors
+
+* @Sam5440 made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/346
+* @MoYeRanqianzhi made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/378
+* @MZMTab made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/391
+* @MoYuToGo made their first contribution in https://github.com/beijixiaohu/OJBetter/pull/398
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/3d5aa4c...codeforces-better-v1.86.0
+
 ## 1.80.0
 
 - 新增 "翻译文本颜色" 自定义功能，可在设置中配置翻译结果的文本颜色，感谢 **@wrk-123** 的贡献

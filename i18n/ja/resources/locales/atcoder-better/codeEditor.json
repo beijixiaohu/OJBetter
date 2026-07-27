@@ -41,6 +41,11 @@
         "running": "テスト中",
         "success": "すべて合格"
     },
+    "langSetup": {
+        "pinned": "常用语言",
+        "others": "其他语言",
+        "showAll": "すべて表示"
+    },
     "submitButton": "送信 (Ctrl+Enter)",
     "moreSettings": {
         "title": "その他の設定",
@@ -104,6 +109,16 @@
                 "emptyOutput": "空の出力",
                 "summary": "{{index}} {{yesCount}} {{noCount}}トークンの数：「はい」、「いいえ"
             }
+        },
+        "langSetup": {
+            "title": "语言设置",
+            "searchPlaceholder": "搜索并添加常用语言",
+            "addBtnTitle": "追加",
+            "noPinned": "暂无常用语言，请在下方搜索添加",
+            "setDefaultTitle": "设置为默认语言",
+            "removeTitle": "移除",
+            "noLangDetected": "未检测到编程语言，请在下方搜索添加",
+            "noMatchAlert": "未找到匹配的编程语言"
         }
     }
 }

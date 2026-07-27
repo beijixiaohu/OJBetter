@@ -41,6 +41,11 @@
         "running": "en cours de test",
         "success": "Tous adoptés"
     },
+    "langSetup": {
+        "pinned": "常用语言",
+        "others": "其他语言",
+        "showAll": "Afficher tout"
+    },
     "submitButton": "Soumettre (Ctrl+Entrée)",
     "moreSettings": {
         "title": "Plus de paramètres",
@@ -104,6 +109,16 @@
                 "emptyOutput": "sortie vide",
                 "summary": "{{index}} {{yesCount}} {{noCount}}Le nombre de jetons : oui est , non est"
             }
+        },
+        "langSetup": {
+            "title": "语言设置",
+            "searchPlaceholder": "搜索并添加常用语言",
+            "addBtnTitle": "augmenter",
+            "noPinned": "暂无常用语言，请在下方搜索添加",
+            "setDefaultTitle": "设置为默认语言",
+            "removeTitle": "移除",
+            "noLangDetected": "未检测到编程语言，请在下方搜索添加",
+            "noMatchAlert": "未找到匹配的编程语言"
         }
     }
 }

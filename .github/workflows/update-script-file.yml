@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -22,13 +24,18 @@ jobs:
       - name: Read versions and update JSON
         run: |
           node .github/scripts/update-version.js
-          git add script/versions.json
+          git add script/versions.json script/dev/*.user.js script/release/*.user.js
 
       - name: Sync with remote main branch
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git stash push -m "Temporarily stash changes for rebase"
+          if git diff --cached --quiet && git diff --quiet; then
+            git fetch origin main
+            git rebase origin/main
+            exit 0
+          fi
+          git stash push -m "Temporarily stash version updates for rebase"
           git fetch origin main
           git rebase origin/main
           git stash pop
@@ -36,7 +43,7 @@ jobs:
       - name: Commit and push if changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Update script versions file"
+          commit_message: "Update script versions"
   sync_to_oss:
     needs: update-version-json
     runs-on: ubuntu-latest

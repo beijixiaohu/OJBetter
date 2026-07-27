@@ -77,6 +77,20 @@
                 "label": "模型:",
                 "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
             },
+            "thinkingMode": {
+                "label": "思考模式:",
+                "tipText": "<p>仅对兼容的 Chat Completions 服务商生效，例如 DeepSeek</p><p>DeepSeek 的 Proxy API 应填写完整地址 <code>https://api.deepseek.com/chat/completions</code>，不能使用 <code>/v1/responses</code></p><p>选择“跟随模型默认值”时不会自动添加 <code>thinking</code> 参数</p>",
+                "options": {
+                    "default": "跟随模型默认值",
+                    "enabled": "开启",
+                    "disabled": "关闭"
+                }
+            },
+            "thinkLevel": {
+                "label": "思考强度:",
+                "tipText": "<p><code>/v1/responses</code> 使用 <code>reasoning.effort</code>；Chat Completions 使用 <code>reasoning_effort</code></p><p>OpenAI 常见取值包括 <code>none</code>、<code>minimal</code>、<code>low</code>、<code>medium</code>、<code>high</code>、<code>xhigh</code>；DeepSeek 推荐 <code>high</code> 或 <code>max</code>，<code>low</code>/<code>medium</code> 会映射为 <code>high</code>，<code>xhigh</code> 会映射为 <code>max</code>，不适用 <code>none</code>/<code>minimal</code></p><p>留空则跟随模型默认值</p>",
+                "placeholder": "none / minimal / low / medium / high / xhigh / max"
+            },
             "key": {
                 "label": "KEY:",
                 "placeholder": "请输入KEY",

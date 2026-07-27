@@ -41,6 +41,11 @@
         "running": "테스트 중",
         "success": "모두 통과"
     },
+    "langSetup": {
+        "pinned": "常用语言",
+        "others": "其他语言",
+        "showAll": "모두 보기"
+    },
     "submitButton": "제출(Ctrl+Enter)",
     "moreSettings": {
         "title": "추가 설정",
@@ -104,6 +109,16 @@
                 "emptyOutput": "빈 출력",
                 "summary": "{{index}} {{yesCount}} {{noCount}}토큰 수: 예는 , 아니요는"
             }
+        },
+        "langSetup": {
+            "title": "语言设置",
+            "searchPlaceholder": "搜索并添加常用语言",
+            "addBtnTitle": "증가",
+            "noPinned": "暂无常用语言，请在下方搜索添加",
+            "setDefaultTitle": "设置为默认语言",
+            "removeTitle": "移除",
+            "noLangDetected": "未检测到编程语言，请在下方搜索添加",
+            "noMatchAlert": "未找到匹配的编程语言"
         }
     }
 }

@@ -325,15 +325,15 @@
                 "に違反する行為です。": "的行为。",
                 "どのような投稿がルールに違反するかはこちらの": "什么样的投稿违反规则请看这里的",
                 "もお読みください。": ".",
-                "このコンテストでは、生成AIの使用を禁止しております。詳しくは以下のルールをご確認ください。": "Die Verwendung von generativer KI in laufenden AtCoder-Wettbewerben ist untersagt. Einzelheiten entnehmen Sie bitte den unten stehenden Regeln.",
                 "AtCoder生成AI対策ルール - 20251003版": "AtCoder's Bestimmungen für generative KI - Version 20251003",
-                "2025/10/03 にルールの更新が行われましたのでご注意ください。": "Beachten Sie, dass diese Vorschrift mit Wirkung vom 3. Oktober 2025 aktualisiert worden ist.",
+                "このコンテストでは、生成AIの使用を禁止しております。": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。",
                 "詳しくは": "Weitere Informationen finden Sie unter",
                 "こちらの記事": "dieser Artikel",
+                "Unrated参加の場合にもこのルールは適用されます。": "这条规则也适用于 Unrated 参与者。",
                 "をご覧ください。": ".",
-                "現在": "zugewandt sein (uns)",
-                "で参加登録しています。詳細は": "haben sich zur Teilnahme angemeldet. Für weitere Informationen lesen Sie bitte",
-                "こちら": "hier sind",
+                "現在": "您已经报名参加了这场比赛，作为一个 ",
+                "で参加登録しています。詳細は": " 参与者。详情请阅读 ",
+                "こちら": "dieser Artikel",
                 "参加登録しました。": "Eingeschrieben.",
                 "参加登録を取り消しました。": "Die Anmeldung wurde storniert.",
                 "ログアウトしました。": "Ausgeloggt.",
@@ -769,17 +769,17 @@
             "description": "",
             "isStrict": false,
             "rules": {
+                "Until ": "在 ",
+                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
                 "You have registered for this contest as an": "Sie haben sich für dieses Rennen angemeldet als",
                 "You have registered for this contest as a": "Sie haben sich für dieses Rennen angemeldet als",
                 "participant. Please refer to": "Teilnehmer. Bitte beziehen Sie sich auf",
                 "this post": "dieser Artikel",
                 "for details.": "Erfahren Sie mehr.",
-                "Until ": "在 ",
-                ", posting problem content, impressions, or solution approaches on social media is prohibited by ": " 之前，禁止在社交媒体上发布题目的题面、思路或解法，详情请见",
-                "It is prohibited to use generative AI in ongoing AtCoder contests. Please refer to the following rules for more details.": "Die Verwendung von generativer KI in laufenden AtCoder-Wettbewerben ist untersagt. Einzelheiten entnehmen Sie bitte den unten stehenden Regeln.",
                 "AtCoder Rules against Generative AI - Version 20251003": "AtCoder's Bestimmungen für generative KI - Version 20251003",
-                "Please note that the rules were updated on October 3\\, 2025.": "Beachten Sie, dass diese Vorschrift mit Wirkung vom 3. Oktober 2025 aktualisiert worden ist.",
-                "For details\\, please see ": "Weitere Informationen finden Sie unter",
+                "It is prohibited to use generative AI in ongoing AtCoder contests.": "禁止在正在进行的 AtCoder 比赛中使用生成式 AI。",
+                " For details\\, please see ": "Weitere Informationen finden Sie unter",
+                "This rule also applies for Unrated participants.": "这条规则也适用于 Unrated 参与者。",
                 "\\.": ".",
                 "participant": "Teilnehmer",
                 "Registered": "Eingeschrieben",
@@ -888,7 +888,3 @@
     },
     "dynamicReplacements": {}
 }
-
-
-
-
