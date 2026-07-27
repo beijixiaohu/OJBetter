@@ -521,6 +521,7 @@
                 "Profile": "个人资料",
                 "Competition History": "比赛记录",
                 "General Settings": "常规设置",
+                "AI Training Settings": "AI 训练设置",
                 "Settings": "设置",
                 "Change/Verify Email address": "更改 / 验证电子邮件地址",
                 "Remind Username": "提醒用户名",
@@ -642,7 +643,8 @@
                 "I'd like to talk to you first.": "我想先和您交谈。",
                 "Department name": "部门名称",
                 "What kind of work do you currently do?": "您目前从事什么样的工作？",
-                "How can the Algorithms Group of the Digital Transformation Office help?": "数字转型办公室的算法组可以如何帮助您？"
+                "How can the Algorithms Group of the Digital Transformation Office help?": "数字转型办公室的算法组可以如何帮助您？",
+                "Do not allow any of my submissions to be licensed or used for AI training.": "禁止将我的任何提交授权给或用于 AI 训练。"
             }
         },
         "#category-btn-group": {
@@ -725,7 +727,8 @@
                 "Request a clarification": "请求澄清",
                 "Search": "搜索",
                 "Update Registration": "更新报名信息",
-                "Cancel": "取消"
+                "Cancel": "取消",
+                "Opt out of AI training/licensing for this submission": "禁止将该提交授权给或用于 AI 训练"
             }
         },
         "#navbar-collapse": {
@@ -790,7 +793,9 @@
                 "Registered": "已报名",
                 "Canceled registration": "已取消报名",
                 "Welcome, ": "欢迎，",
-                "the rules": "相关规则"
+                "the rules": "相关规则", 
+                "AI Training Settings": "AI 训练设置",
+                "To continue providing the AtCoder contest platform free of charge to all users, starting in August 2026, AtCoder will license user-submitted source code to companies and organizations for the purpose of training AI models. You may opt out of this on both a per-user basis and a per-submission basis. If you do not want any of your submissions to be used for AI training or licensing, please enable the following setting:": "为了继续向所有用户免费提供 AtCoder 竞赛平台，从 2026 年 8 月起，AtCoder 会将用户提交的源代码授权给公司及组织，用于训练 AI 模型。您可以选择按用户或按每次提交退出此项许可。若您不希望自己的任何提交被用于 AI 训练或许可，请启用以下设置："
             }
         },
         ".lang-en": {
