@@ -1,6 +1,6 @@
 {
     "version": "1.0.3",
-    "commonReplacements": {
+    "commonReplacements": { 
         ".header-inner": {
             "class": [
                 ".header-inner"
