@@ -890,10 +890,20 @@
                 ".modal-content"
             ],
             "description": "",
-            "isStrict": true,
+            "isStrict": false,
             "rules": {
                 "has begun.": "开始了。",
                 "has ended.": "结束了。"
+            }
+        },
+        "required": {
+            "class": [
+                ".required"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "Required": "必填"
             }
         }
     },
