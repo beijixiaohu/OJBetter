@@ -508,8 +508,9 @@
                 "All Submissions": "所有提交",
                 "My Submissions": "我的提交",
                 "My Score": "我的得分",
-                "Virtual Standings": "虚拟排名",
                 "Standings": "排名",
+                "Virtual Standings": "虚拟排名",
+                "Rating Changes": "Rating 变化",
                 "Custom Test": "自定义测试",
                 "Editorial": "题解",
                 "Discuss": "讨论",
@@ -730,7 +731,8 @@
                 "Update Registration": "更新报名信息",
                 "Cancel": "取消",
                 "Opt out of AI training/licensing for this submission": "禁止将该提交授权给或用于 AI 训练",
-                "Opt out of AI training/licensing": "禁止授权或用于 AI 训练"
+                "Opt out of AI training/licensing": "禁止授权或用于 AI 训练",
+                "Go to the task list page": "前往题目列表"
             }
         },
         "#navbar-collapse": {
@@ -878,11 +880,20 @@
                 "Confirm": "确认",
                 "Are you sure you want to cancel registration?": "您确定要取消报名吗？",
                 "Contest started": "比赛开始",
-                "has begun.": "开始了。",
                 "Contest is over": "比赛结束",
-                "has ended.": "结束了。",
                 "Per-Submission AI Training Settings": "逐提交 AI 训练设置",
                 "Do you want to opt this submission out of AI training and licensing? You can configure a global opt-out for all of your submissions from your user settings.": "是否要禁止将该提交授权给或用于 AI 训练？您可以在用户设置中为所有提交配置全局退出。"
+            }
+        },
+        "modal-content-part": {
+            "class": [
+                ".modal-content"
+            ],
+            "description": "",
+            "isStrict": true,
+            "rules": {
+                "has begun.": "开始了。",
+                "has ended.": "结束了。",
             }
         }
     },
