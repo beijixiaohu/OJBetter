@@ -893,7 +893,7 @@
             "isStrict": true,
             "rules": {
                 "has begun.": "开始了。",
-                "has ended.": "结束了。",
+                "has ended.": "结束了。"
             }
         }
     },
