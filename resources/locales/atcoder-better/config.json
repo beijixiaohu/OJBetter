@@ -75,7 +75,7 @@
             },
             "model": {
                 "label": "模型:",
-                "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅<a target=\"_blank\" href=\"https://platform.openai.com/docs/models\">OpenAI官方文档</a></p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
+                "tipText": "<p>留空则默认为：gpt-5.4</p><p>模型列表请查阅相关服务商文档</p><p><strong>此外，如果你使用的是服务商提供的代理API，请确认服务商是否支持对应模型</strong></p>"
             },
             "thinkingMode": {
                 "label": "思考模式:",
@@ -94,11 +94,11 @@
             "key": {
                 "label": "KEY:",
                 "placeholder": "请输入KEY",
-                "tipText": "<p>你需要输入自己的OpenAI key，<a target=\"_blank\" href=\"https://platform.openai.com/account/usage\">官网</a></p><p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>"
+                "tipText": "<p>你需要输入自己的API key</p><p><b>如果你使用的是服务商提供的代理API，则应该填写服务商提供的 Key</b></p>"
             },
             "proxy": {
                 "label": "Proxy API:",
-                "tipText": "<p>留空则默认为OpenAI官方API</p><p>你也可以填写指定的API来代理访问OpenAI的API，</p><p>如果你使用的是服务商提供的代理API和KEY，则这里应该填写其提供的<strong>完整</strong>API地址，详请阅读脚本说明</p><p><strong>由于你指定了自定义的API，Tampermonkey会对你的跨域请求进行警告，你需要自行授权</strong></p>"
+                "tipText": "<p>留空则使用默认API（OpenAI官方API）</p><p>你也可以填写指定的API地址以使用代理服务</p><p>如果你使用的是服务商提供的代理API和KEY，请填写其提供的<strong>完整</strong>API地址，详情请阅读脚本说明</p><p><strong>由于你指定了自定义API地址，Tampermonkey会对跨域请求进行警告，你需要自行授权</strong></p>"
             }
         },
         "advanced": {
