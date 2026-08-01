@@ -5882,6 +5882,9 @@ class LoadingMessage {
 
   /**
    * 更新提示信息
+   * @param {string} text 提示信息文本
+   * @param {string} type 提示信息类型，可选值：info, success, warning, error
+   * @param {number} timeout 提示信息显示的持续时间（毫秒）, 默认为无限长
    */
   updateStatus(text, type = "info", timeout = Infinity, isMarkdown = false) {
     if (isMarkdown) {
