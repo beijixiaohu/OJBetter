@@ -4454,6 +4454,62 @@ div.sp_clear_btn {
 #footer > div:nth-child(7) {
     left: 0px !important;
 }
+
+/* 消息弹窗总容器（固定在右下角，负责多条消息垂直堆叠） */
+#OJBetter_alert_container {
+    position: fixed !important;
+    bottom: 80px !important;             /* 距离底部位置 */
+    right: 20px !important;              /* 距离右侧位置 */
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-direction: column-reverse !important; /* 新消息在下方，旧消息自动向上顶 */
+    gap: 8px !important;                 /* 多条消息之间的间距 */
+    pointer-events: none !important;     /* 容器本身不挡鼠标 */
+    max-width: 360px !important;
+}
+
+/* 单条消息卡片 */
+.OJBetter_alert {
+    position: relative !important;       /* 在容器内相对排列 */
+    margin: 0 !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    word-break: break-word !important;
+    text-align: left;
+    pointer-events: auto !important;     /* 消息卡片可正常交互 */
+    opacity: 0.95 !important;            /* 默认 0.95 半透明 */
+    transition: opacity 0.2s ease !important;
+}
+
+/* 鼠标悬停时变为 1.0 完全清晰显示 */
+.OJBetter_alert:hover {
+    opacity: 1 !important;
+}
+
+/* 提示文本容器 */
+.OJBetter_alert .OJBetter_alert_content {
+    display: inline-block;
+    max-width: calc(100% - 20px);
+    vertical-align: middle;
+}
+
+/* 右侧关闭按钮 */
+.OJBetter_alert .OJBetter_alert_close {
+    cursor: pointer;
+    float: right;
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+    opacity: 0.6;
+}
+
+.OJBetter_alert .OJBetter_alert_close:hover {
+    opacity: 1;
+}
 `);
 
 /**
@@ -5750,6 +5806,7 @@ class LoadingMessage {
   constructor() {
     this._statusElement = null;
     this._isDisplayed = false;
+    this._timer = null;
     this.init();
   }
 
@@ -5767,31 +5824,43 @@ class LoadingMessage {
   createStatusElement() {
     const statusElement = $("<div></div>")
       .addClass("alert OJBetter_alert")
-      .css({
-        margin: "1em",
-        "text-align": "center",
-        position: "relative",
-      })
       .hide();
+
+    // 1. 文本内容容器
+    const contentElement = $("<div></div>").addClass("OJBetter_alert_content");
+
+    // 2. 右侧关闭按钮
+    const closeBtn = $("<span>&times;</span>")
+      .addClass("OJBetter_alert_close")
+      .on("click", (e) => {
+        e.stopPropagation();
+        this.hideStatus();
+      });
+
+    statusElement.append(contentElement).append(closeBtn);
     return statusElement;
   }
 
   /**
-   * 插入提示信息
-   * @returns {void}
+   * 插入提示信息到全局堆叠容器中
    */
   insertStatusElement() {
-    (OJBetter.typeOfPage.is_mSite
-      ? $("header")
-      : $(".menu-box:first").next()
-    ).after(this._statusElement);
+    // 检查并创建唯一的全局消息堆叠容器
+    let $container = $("#OJBetter_alert_container");
+    if ($container.length === 0) {
+      $container = $("<div></div>").attr("id", "OJBetter_alert_container");
+      $("body").append($container);
+    }
+    
+    // 将此条消息追加到堆叠容器中
+    $container.append(this._statusElement);
   }
 
   /**
    * 显示提示信息
    */
   showStatus() {
-    this._statusElement.show();
+    this._statusElement.stop(true, true).fadeIn(200);
     this._isDisplayed = true;
   }
 
@@ -5799,7 +5868,7 @@ class LoadingMessage {
    * 隐藏提示信息
    */
   hideStatus() {
-    this._statusElement.fadeOut(500);
+    this._statusElement.stop(true, true).fadeOut(300);
     this._isDisplayed = false;
   }
 
@@ -5813,9 +5882,6 @@ class LoadingMessage {
 
   /**
    * 更新提示信息
-   * @param {string} text 提示信息文本
-   * @param {string} type 提示信息类型，可选值：info, success, warning, error
-   * @param {number} timeout 提示信息显示的持续时间（毫秒）, 默认为无限长
    */
   updateStatus(text, type = "info", timeout = Infinity, isMarkdown = false) {
     if (isMarkdown) {
@@ -5824,15 +5890,24 @@ class LoadingMessage {
       });
       text = md.render(text);
     }
+
+    // 更新文本，保留关闭按钮
+    this._statusElement.find(".OJBetter_alert_content").html(text);
+
     this._statusElement
-      .html(text)
       .removeClass("alert-info alert-success alert-warning alert-error")
       .addClass(`alert-${type}`);
+
     if (!this._isDisplayed) {
       this.showStatus();
     }
+
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
+
     if (timeout !== Infinity) {
-      setTimeout(() => {
+      this._timer = setTimeout(() => {
         this.hideStatus();
       }, timeout);
     }
