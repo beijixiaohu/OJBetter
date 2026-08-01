@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.87.5
+// @version      1.87.6
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -14196,6 +14196,16 @@ function CommentPagination() {
 
     if (end >= elements.length) $("#next-page-btn").hide();
     else $("#next-page-btn").show();
+
+    // 触发 MathJax 重新排版，避免因 display:none 导致的公式错位
+    let MathJax = unsafeWindow.MathJax;
+
+    if (MathJax) {
+      if (MathJax.Hub) {
+        // 使用 Rerender 重新计算当前可见区域的公式尺寸
+        MathJax.Hub.Queue(["Rerender", MathJax.Hub, $(".comments")[0]]);
+      }
+    }
   }
 
   // 初始化
