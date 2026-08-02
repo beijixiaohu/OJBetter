@@ -4462,7 +4462,7 @@ div.sp_clear_btn {
     right: 20px !important;              /* 距离右侧位置 */
     z-index: 99999 !important;
     display: flex !important;
-    flex-direction: column-reverse !important; /* 新消息在下方，旧消息自动向上顶 */
+    flex-direction: column !important;         /* 新消息在下方，旧消息自动向上顶 */
     gap: 8px !important;                 /* 多条消息之间的间距 */
     pointer-events: none !important;     /* 容器本身不挡鼠标 */
     max-width: 360px !important;
@@ -4480,13 +4480,12 @@ div.sp_clear_btn {
     word-break: break-word !important;
     text-align: left;
     pointer-events: auto !important;     /* 消息卡片可正常交互 */
-    opacity: 0.95 !important;            /* 默认 0.95 半透明 */
-    transition: opacity 0.2s ease !important;
+    opacity: 0.95;                       /* 默认 0.95 半透明 */
 }
 
 /* 鼠标悬停时变为 1.0 完全清晰显示 */
 .OJBetter_alert:hover {
-    opacity: 1 !important;
+    opacity: 1;
 }
 
 /* 提示文本容器 */
