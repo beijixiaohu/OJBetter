@@ -1,0 +1,26 @@
+name: Check Line Endings
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  check-line-endings:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Reject CRLF line endings
+        shell: bash
+        run: |
+          if git grep -Il $'\r' HEAD -- . > /tmp/crlf-files; then
+            echo "::error::The following text files contain CR characters; use LF line endings:"
+            cat /tmp/crlf-files
+            exit 1
+          fi

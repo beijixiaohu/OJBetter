@@ -18,6 +18,7 @@ from qfluentwidgets import InfoBar, FluentIcon, InfoBarPosition
 import shutil
 import sys
 from PyQt5.QtGui import QFont
+from path_utils import resolve_path_within
 
 class ProcessManager:
     """
@@ -218,7 +219,12 @@ class MyCompletJsonHandler(websocket.WebSocketHandler):
     def get(self, *args):
         completfile = args[0]
         self.update_log_from_thread("success", f"MyCompletJsonHandler GET {completfile}")
-        with open(os.path.join(rootUri, 'mycomplet', completfile), 'r') as f:
+        try:
+            file_path = resolve_path_within(
+                os.path.join(self.rootUri, 'mycomplet'), completfile)
+        except (TypeError, ValueError) as exc:
+            raise web.HTTPError(400, reason="Invalid completion file path") from exc
+        with open(file_path, 'r') as f:
             self.write(f.read())
 
 
@@ -259,7 +265,15 @@ class FileServerWebSocketHandler(websocket.WebSocketHandler):
             file_extension = message['fileExtension']
             code = message['code']
             workspace = message['workspace']
-            file_path = os.path.join(rootUri, workspace, filename + file_extension) # the path of the file
+            try:
+                file_path = resolve_path_within(
+                    self.rootUri, workspace, filename + file_extension)
+            except (TypeError, ValueError):
+                self.write_message(json.dumps({
+                    'result': 'error',
+                    'description': 'invalid file path'
+                }))
+                return
             self.createdFiles[self.nowconnection] = file_path
             self.update_log_from_thread("info", f"File {file_path} has been updated or created.")  
             with open(file_path, 'w') as f:
