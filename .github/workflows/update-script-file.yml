@@ -45,7 +45,7 @@ jobs:
         with:
           commit_message: "Update script versions"
   sync_to_oss:
-    if: github.repository == 'beijixiaohu/OJBetter' 
+    if: github.repository == 'beijixiaohu/OJBetter'
     needs: update-version-json
     runs-on: ubuntu-latest
     steps:
