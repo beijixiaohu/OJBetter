@@ -1,18 +1,18 @@
 {
     "acwing-better": {
-        "dev": "3.29.0",
-        "release": "3.29.0"
+        "dev": "3.29.1",
+        "release": "3.29.1"
     },
     "atcoder-better": {
-        "dev": "1.25.6",
-        "release": "1.25.0"
+        "dev": "1.25.7",
+        "release": "1.25.1"
     },
     "codeforces-better": {
-        "dev": "1.87.8",
-        "release": "1.87.0"
+        "dev": "1.87.9",
+        "release": "1.87.1"
     },
     "nowcoder-better": {
-        "dev": "1.14.0",
-        "release": "1.12.0"
+        "dev": "1.14.1",
+        "release": "1.12.1"
     }
 }
