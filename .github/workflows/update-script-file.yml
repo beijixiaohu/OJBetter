@@ -10,6 +10,8 @@ on:
 jobs:
   update-version-json:
     runs-on: ubuntu-latest
+    outputs:
+      has_script_changes: ${{ steps.update_versions.outputs.has_script_changes }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,6 +24,7 @@ jobs:
           node-version: '20'
 
       - name: Read versions and update JSON
+        id: update_versions
         run: |
           node .github/scripts/update-version.js
           git add script/versions.json script/dev/*.user.js script/release/*.user.js
@@ -41,11 +44,12 @@ jobs:
           git stash pop
 
       - name: Commit and push if changes
+        if: steps.update_versions.outputs.has_script_changes == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update script versions"
   sync_to_oss:
-    if: github.repository == 'beijixiaohu/OJBetter'
+    if: needs['update-version-json'].outputs.has_script_changes == 'true' && github.repository == 'beijixiaohu/OJBetter'
     needs: update-version-json
     runs-on: ubuntu-latest
     steps:
