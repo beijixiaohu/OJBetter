@@ -8,6 +8,8 @@ from pylsp_jsonrpc import streams
 import ujson as json
 import pkg_resources
 import shutil
+from path_utils import resolve_path_within
+
 print("\033[1;34m" + """
     ╔══════════════════════════════════════════════════════════╗
     ║              Welcome to OJBetter_Bridge                  ║
@@ -76,7 +78,12 @@ class MyCompletJsonHandler(websocket.WebSocketHandler):
     def get(self, *args):
         completfile = args[0]
         print(f"MyCompletJsonHandler GET {completfile}")
-        with open(os.path.join(rootUri, 'mycomplet', completfile), 'r') as f:
+        try:
+            file_path = resolve_path_within(
+                os.path.join(self.rootUri, 'mycomplet'), completfile)
+        except (TypeError, ValueError) as exc:
+            raise web.HTTPError(400, reason="Invalid completion file path") from exc
+        with open(file_path, 'r') as f:
             self.write(f.read())
 
 
@@ -110,7 +117,15 @@ class FileServerWebSocketHandler(websocket.WebSocketHandler):
             file_extension = message['fileExtension']
             code = message['code']
             workspace = message['workspace']
-            file_path = os.path.join(rootUri, workspace, filename + file_extension) # the path of the file
+            try:
+                file_path = resolve_path_within(
+                    self.rootUri, workspace, filename + file_extension)
+            except (TypeError, ValueError):
+                self.write_message(json.dumps({
+                    'result': 'error',
+                    'description': 'invalid file path'
+                }))
+                return
             self.createdFiles[self.nowconnection] = file_path
             with open(file_path, 'w') as f:
                 f.write(code)
