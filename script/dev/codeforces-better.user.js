@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.87.9
+// @version      1.87.10
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -9111,6 +9111,18 @@ async function initSettingsPanel() {
   });
 }
 
+function OJB_createMarkdownCodeSpan(value) {
+  const content = String(value ?? "").replace(/\r?\n|\r/g, " ");
+  if (!content) return "";
+
+  const backtickRuns = content.match(/`+/g) || [];
+  let delimiter = "`";
+  while (backtickRuns.includes(delimiter)) delimiter += "`";
+
+  const padding = /^`|^ .*?[^ ].* $|`$/.test(content) ? " " : "";
+  return delimiter + padding + content + padding + delimiter;
+}
+
 /**
  * 初始化html2markdown转换器
  */
@@ -9196,8 +9208,8 @@ async function initHTML2MarkDown() {
     },
   });
 
-  // texFontStyle
-  OJBetter.common.turndownService.addRule("texFontStyle", {
+  // tex-font-style-*
+  OJBetter.common.turndownService.addRule("tex-bf", {
     filter: function (node) {
       return (
         node.nodeName === "SPAN" && node.classList.contains("tex-font-style-bf")
@@ -9207,9 +9219,61 @@ async function initHTML2MarkDown() {
       return "**" + content + "**";
     },
   });
+  OJBetter.common.turndownService.addRule("tex-it", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-it")
+      );
+    },
+    replacement: function (content) {
+      return "*" + content + "*";
+    },
+  });
+  OJBetter.common.turndownService.addRule("tex-sl", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-sl")
+      );
+    },
+    replacement: function (content) {
+      return "*" + content + "*";
+    },
+  });
+  OJBetter.common.turndownService.addRule("tex-tt", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-tt")
+      );
+    },
+    replacement: function (_content, node) {
+      return OJB_createMarkdownCodeSpan(node.textContent);
+    },
+  });
+  OJBetter.common.turndownService.addRule("tex-striked", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-striked")
+      );
+    },
+    replacement: function (content) {
+      return "~~" + content + "~~";
+    },
+  });
 
-  // sectionTitle
-  OJBetter.common.turndownService.addRule("sectionTitle", {
+  // text-verb
+  OJBetter.common.turndownService.addRule("text-verb", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("text-verb")
+      );
+    },
+    replacement: function (_content, node) {
+      return OJB_createMarkdownCodeSpan(node.textContent);
+    },
+  });
+
+  // section-title
+  OJBetter.common.turndownService.addRule("section-title", {
     filter: function (node) {
       return (
         node.nodeName === "DIV" && node.classList.contains("section-title")

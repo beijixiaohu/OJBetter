@@ -21,5 +21,7 @@ tools/unit/test/replaceOriginal/*
 !tools/unit/test/edge/index.node.js
 !tools/unit/test/codeforcesMathJax/
 !tools/unit/test/codeforcesMathJax/index.node.js
+!tools/unit/test/codeforcesHtml2Markdown/
+!tools/unit/test/codeforcesHtml2Markdown/index.node.js
 !tools/unit/test/contextMenu/
 !tools/unit/test/contextMenu/index.test.js
