@@ -9111,6 +9111,18 @@ async function initSettingsPanel() {
   });
 }
 
+function OJB_createMarkdownCodeSpan(value) {
+  const content = String(value ?? "").replace(/\r?\n|\r/g, " ");
+  if (!content) return "";
+
+  const backtickRuns = content.match(/`+/g) || [];
+  let delimiter = "`";
+  while (backtickRuns.includes(delimiter)) delimiter += "`";
+
+  const padding = /^`|^ .*?[^ ].* $|`$/.test(content) ? " " : "";
+  return delimiter + padding + content + padding + delimiter;
+}
+
 /**
  * 初始化html2markdown转换器
  */
@@ -9233,8 +9245,8 @@ async function initHTML2MarkDown() {
         node.nodeName === "SPAN" && node.classList.contains("tex-font-style-tt")
       );
     },
-    replacement: function (content) {
-      return "`" + content + "`";
+    replacement: function (_content, node) {
+      return OJB_createMarkdownCodeSpan(node.textContent);
     },
   });
   OJBetter.common.turndownService.addRule("tex-striked", {
@@ -9247,7 +9259,7 @@ async function initHTML2MarkDown() {
       return "~~" + content + "~~";
     },
   });
-  
+
   // text-verb
   OJBetter.common.turndownService.addRule("text-verb", {
     filter: function (node) {
@@ -9255,8 +9267,8 @@ async function initHTML2MarkDown() {
         node.nodeName === "SPAN" && node.classList.contains("text-verb")
       );
     },
-    replacement: function (content) {
-      return content.length === 0 ? "" : "`" + content + "`";
+    replacement: function (_content, node) {
+      return OJB_createMarkdownCodeSpan(node.textContent);
     },
   });
 
