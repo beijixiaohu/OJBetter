@@ -37,22 +37,22 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/atcoder.png
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/crypto-js/4.2.0/crypto-js.min.js#sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/chroma-js/2.4.2/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dexie/4.0.7/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next/23.11.5/i18next.min.js#sha512-3RSGkmT48HnO+hlmzGYDx5/w2LIBX0O5hSuYX6KWAxmvVlSjFgoxIaWa2tlMExheGvt3lLyxeTsXfpC47yb8CQ==
+// @require      https://registry.npmmirror.com/turndown/7.2.0/files/dist/turndown.js#sha512-J0bvAX6gfqsaV2fRA6s7yzslKWJr4EhgWNxp9oxMXU3ankvQG9MvZuaUxlnBE/ihFGYgwQFC4a80LeHNyMAtQw==
+// @require      https://registry.npmmirror.com/markdown-it/13.0.2/files/dist/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://registry.npmmirror.com/crypto-js/4.2.0/files/crypto-js.js#sha512-XRbFQ+ZhXm1gOO0z66M5IEMivMr+rXWYM9DrNkqgpGQ29XY7/E9PVov++wzIXa2Lt4Zv2gLDi3f1UKFlL60HFQ==
+// @require      https://registry.npmmirror.com/chroma-js/2.4.2/files/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
+// @require      https://registry.npmmirror.com/%40xterm%2Fxterm/5.5.0/files/lib/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
+// @require      https://registry.npmmirror.com/dexie/4.0.7/files/dist/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
+// @require      https://registry.npmmirror.com/i18next/23.11.5/files/i18next.min.js#sha512-00T1JxOw4CvOWv+GSaKmOqBonDKKSOuVbdrPt+53lM4g2lf6bdUi4M3nDe8B8nx4zAm4/2jyTsMVocYH2mnwTA==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next-http-backend/2.5.2/i18nextHttpBackend.min.js#sha512-bBb+wrGRTx4MvHpksYb1Iv5oJ1o8ineCqpc0cnTgdJQhuAFJJ93SEVXxUOCptvt0vAqYdjzWO5emorYUBt6Ceg==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
+// @require      https://registry.npmmirror.com/%40highlightjs%2Fcdn-assets/11.9.0/files/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
+// @require      https://registry.npmmirror.com/dialog-polyfill/0.5.6/files/dist/dialog-polyfill.js#sha512-d1gAoN6CLVn7aa5fmtO42WW0wVKp7EoZe/pE+MsJHHNn98TL/+fIMbe6O1DfeGxt3BsMFFawEkKINNgXOCqb9w==
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
+// @resource     xtermcss https://registry.npmmirror.com/%40xterm%2Fxterm/5.5.0/files/css/xterm.css#sha512-AbNrj/oSHJaILgcdnkYm+DQ08SqVbZ8jlkJbFyyS1WDcAaXAcAfxJnCH69el7oVgTwVwyA5u5T+RdFyUykrV3Q==
 // @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css#sha512-cRXJfA2tEcAxHEKylJfxteY17N7j9fia3waahHOVnvl63uVZT9OQ7jjjpofZMVZ4JSX3BRET+mI8UvKnsXd3NA==
-// @resource     dialogpolyfillcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css#sha512-J2+1q+RsZuJXabBfH1q/fgRr6jMy9By5SwVLk7bScEW7NFJkMUXxfeOyyxtDe6fsaJ4jsciexSlGrPYn9YbBIg==
+// @resource     dialogpolyfillcss https://registry.npmmirror.com/dialog-polyfill/0.5.6/files/dist/dialog-polyfill.css#sha512-FH8aHFPbx/WeYvio2Fe/pZZTLwMe6TogMgQhXSspTK13X/mSwUdg+CGuqi/00POqqGWe/FlvtDFk+D9TFJYtPw==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -284,6 +284,8 @@ OJBetter.monaco = {
     beautifyPreBlocks: undefined,
     /** @type {boolean} Monaco编辑器加载完成标志 */
     loaderOnload: false,
+    /** @type {Promise<boolean>?} Monaco编辑器加载任务 */
+    loaderPromise: null,
     lsp: {
         /** @type {Array?} LSP套接字数组 */
         socket: [],
@@ -1766,33 +1768,42 @@ function darkModeStyleAdjustment() {
  * 初始化monaco编辑器资源
  */
 async function initMonacoEditor() {
-    if (OJBetter.monaco.enableOnProblemPage || OJBetter.monaco.beautifyPreBlocks) {
+    if (!OJBetter.monaco.enableOnProblemPage && !OJBetter.monaco.beautifyPreBlocks) return false;
+    if (OJBetter.monaco.loaderOnload) return true;
+    if (OJBetter.monaco.loaderPromise) return OJBetter.monaco.loaderPromise;
+
+    OJBetter.monaco.loaderPromise = (async () => {
         try {
+            const baseUrl = "https://registry.npmmirror.com/monaco-editor/0.49.0/files/min";
             // 等待Monaco Editor加载器脚本加载完成
             // 此处和 atcoder 自带的编辑器存在冲突，已知/submit界面的 Customize 功能无法使用
-            await OJB_LoadJS("https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js", "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==");
+            await OJB_LoadJS(`${baseUrl}/vs/loader.js`, "sha512-6dtQR1kh86ea5Ftfqr5sdSVH07/mOH8z/YIBm4AxPOdoMzu0YNhQ5eDqZnKd0rAW7uBDVnZ1UictClaa+/9Ocw==");
             // 配置Monaco Editor
             require.config({
-                paths: { vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs" },
+                paths: { vs: `${baseUrl}/vs` },
                 "vs/nls": { availableLanguages: { "*": "zh-cn" } },
             });
 
             // 加载Monaco Editor主脚本
-            require(["vs/editor/editor.main"], () => {
-                OJBetter.monaco.loaderOnload = true;
+            await new Promise((resolve, reject) => {
+                require(["vs/editor/editor.main"], resolve, reject);
             });
+            OJBetter.monaco.loaderOnload = true;
+            return true;
         } catch (error) {
             console.error("Failed to load Monaco Editor: ", error);
+            return false;
         }
-    }
+    })();
+
+    return OJBetter.monaco.loaderPromise;
 }
 
 /**
  * 美化代码块
  */
 async function beautifyPreBlocksWithMonaco() {
-    // 等待 MonacoLoader 加载完毕
-    await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
+    if (!(await initMonacoEditor())) return;
 
     const LINE_HEIGHT = 20; // 每行代码的高度
     const MIN_HEIGHT = 100; // 容器的最小高度
@@ -12513,8 +12524,7 @@ function parseMonacoCompleter(rules, range) {
  * 创建monaco编辑器的一个实例
  */
 async function createMonacoEditor(language, form, support) {
-    // 判断monacoLoader是否加载完毕
-    await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
+    if (!(await initMonacoEditor())) return;
 
     /**
      * 通用参数
@@ -15708,6 +15718,9 @@ async function runCode(event, runButton, sourceDiv) {
  * @returns
  */
 async function addProblemPageCodeEditor() {
+    // Monaco加载失败时保留AtCoder原生编辑器。
+    if (!(await initMonacoEditor())) return;
+
     const href = window.location.href;
     // 获取提交表单的绝对地址
     let submitUrl = OJBetter.common.hostAddress + $('.form-code-submit').attr('action');
