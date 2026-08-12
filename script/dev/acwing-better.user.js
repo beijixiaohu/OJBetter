@@ -13,8 +13,7 @@
 // @grant        GM_setClipboard
 // @connect      greasyfork.org
 // @run-at       document-end
-// @connect      sustech.edu.cn
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
+// @require      https://registry.npmmirror.com/turndown/7.2.0/files/dist/turndown.js#sha512-J0bvAX6gfqsaV2fRA6s7yzslKWJr4EhgWNxp9oxMXU3ankvQG9MvZuaUxlnBE/ihFGYgwQFC4a80LeHNyMAtQw==
 // @license      MIT
 // @namespace    https://greasyfork.org/users/747162
 // @downloadURL https://update.greasyfork.org/scripts/464981/AcWing%20Better%21.user.js

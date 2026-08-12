@@ -20,10 +20,9 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @grant        GM_setClipboard
-// @connect      sustech.edu.cn
 // @icon         https://aowuucdn.oss-cn-beijing.aliyuncs.com/nowcoder.png
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://registry.npmmirror.com/turndown/7.2.0/files/dist/turndown.js#sha512-J0bvAX6gfqsaV2fRA6s7yzslKWJr4EhgWNxp9oxMXU3ankvQG9MvZuaUxlnBE/ihFGYgwQFC4a80LeHNyMAtQw==
+// @require      https://registry.npmmirror.com/markdown-it/13.0.2/files/dist/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
