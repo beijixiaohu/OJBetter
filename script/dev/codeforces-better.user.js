@@ -188,6 +188,8 @@ OJBetter.typeOfPage = {
   is_problemset: undefined,
   /** @type {boolean?} 是否是Codeforces排名页面 */
   is_cfStandings: undefined,
+  /** @type {boolean?} 是否是Codeforces Room页面 */
+  is_cfRoom: undefined,
   /** @type {boolean?} 是否是提交页面 */
   is_submitPage: undefined,
   /** @type {boolean?} 是否是代码状态页面 */
@@ -1023,6 +1025,7 @@ async function initVar() {
       })
       .get()
       .every((score) => /^[0-9]+$/.test(score));
+  OJBetter.typeOfPage.is_cfRoom = href.includes("/room/");
   OJBetter.localization.websiteLang = OJB_getGMValue(
     "localizationLanguage",
     "zh"
@@ -1379,8 +1382,8 @@ async function ShowSameContestProblems() {
         }
 
         // 构建完整链接
-        const fullHref = problemHref.startsWith('http') 
-          ? problemHref 
+        const fullHref = problemHref.startsWith('http')
+          ? problemHref
           : `${window.location.origin}${problemHref}`;
 
         problems.push({
@@ -5860,7 +5863,7 @@ class LoadingMessage {
       $container = $("<div></div>").attr("id", "OJBetter_alert_container");
       $("body").append($container);
     }
-    
+
     // 将此条消息追加到堆叠容器中
     $container.append(this._statusElement);
   }
@@ -7698,7 +7701,7 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
         </div>
         <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
-    </div>    
+    </div>
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
                 data-i18n="settings:codeEditor.preferences.submitButtonPosition.label"></span></label>
@@ -16259,7 +16262,7 @@ async function createMonacoEditor(language, form, support) {
             <i class="iconfont">&#xe643;</i>
             <span class="popover_content">${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</span>
         </div>`);
-        
+
     //在追加按钮前先检查是否已存在，如果存在则直接退出函数，防止所有按钮重复生成
     if (form.topRightDiv.find('.ojb_btn_settings').length > 0) {
         console.log('[OJB-Debug] 检测到设置按钮已存在，跳过重复初始化。');
@@ -16281,7 +16284,7 @@ async function createMonacoEditor(language, form, support) {
             </div>
         </dialog>`);
     OJB_addDraggable(moreSettingPopover);
-    
+
     //在向 body 追加新弹窗前，先移除可能残留的旧弹窗，防止 DOM 中出现重复的 ID
     $('#moreSettingPopover').remove();
     $('body').append(moreSettingPopover);
@@ -16307,8 +16310,8 @@ async function createMonacoEditor(language, form, support) {
       { ns: "codeEditor" }
     )}</div>
             </div>
-            <input type='number' id='fontSizeInput' class='no_default' 
-                require=true 
+            <input type='number' id='fontSizeInput' class='no_default'
+                require=true
                 placeholder="${i18next.t(
       "moreSettings.fontSizeInput.placeholder",
       { ns: "codeEditor" }
@@ -16378,17 +16381,17 @@ async function createMonacoEditor(language, form, support) {
           <label style='margin-bottom: 8px; font-weight: bold;'>
               <span>${i18next.t('moreSettings.langSetup.title', { ns: 'codeEditor' })}</span>
           </label>
-          
+
           <!-- 已置顶语言列表 -->
           <div id='pinnedLangList' style='width: 100%; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px;'></div>
-          
+
           <!-- 搜索与添加区 -->
           <div style='width: 100%; display: flex; gap: 5px; align-items: center; position: relative;'>
-              <input type="text" id="addPinnedSearch" list="ojb_lang_datalist" 
-                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor' })}" 
+              <input type="text" id="addPinnedSearch" list="ojb_lang_datalist"
+                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor' })}"
                   style="flex: 1; max-width: calc(100% - 40px); box-sizing: border-box;" autocomplete="off">
               <datalist id="ojb_lang_datalist"></datalist>
-              <button id='addPinnedBtn' class='ojb_btn' type='button' style='padding: 2px 8px; min-width: 30px;' 
+              <button id='addPinnedBtn' class='ojb_btn' type='button' style='padding: 2px 8px; min-width: 30px;'
                   title="${i18next.t('moreSettings.langSetup.addBtnTitle', { ns: 'codeEditor' })}">
                   <span style="font-weight:bold;">+</span>
               </button>
@@ -16401,7 +16404,7 @@ async function createMonacoEditor(language, form, support) {
     const searchInput = langSettingDiv.find('#addPinnedSearch');
     const dataList = langSettingDiv.find('#ojb_lang_datalist');
     const addBtn = langSettingDiv.find('#addPinnedBtn');
-    let localOriginalOptions = []; 
+    let localOriginalOptions = [];
 
     /**
      * 重新渲染设置面板中的已置顶语言列表和待选推荐 datalist
@@ -16419,7 +16422,7 @@ async function createMonacoEditor(language, form, support) {
                 const opt = localOriginalOptions.find(o => String(o.value) === String(val));
                 const text = opt ? opt.text : val;
                 const isDefault = (defaultLang === val) ? 'checked' : '';
-                
+
                 // 采用声明式构建，确保语言名称中的特殊符号（如 > 符号）不会破坏 DOM 结构
                 const itemNode = $('<div>').css({
                     display: 'flex',
@@ -16429,7 +16432,7 @@ async function createMonacoEditor(language, form, support) {
                     padding: '4px 8px',
                     'border-radius': '4px'
                 });
-                
+
                 const label = $('<label>').css({
                     display: 'flex',
                     'align-items': 'center',
@@ -16439,7 +16442,7 @@ async function createMonacoEditor(language, form, support) {
                     flex: '1',
                     overflow: 'hidden'
                 }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor' }));
-                
+
                 const radio = $('<input>', {
                     type: 'radio',
                     name: 'ojb_default_lang',
@@ -16447,16 +16450,16 @@ async function createMonacoEditor(language, form, support) {
                     value: val
                 });
                 if (isDefault) radio.prop('checked', true);
-                
+
                 const span = $('<span>').css({
                     'white-space': 'nowrap',
                     overflow: 'hidden',
                     'text-overflow': 'ellipsis',
                     'font-size': '13px'
                 }).text(text).attr('title', text); // 纯文本安全赋值
-                
+
                 label.append(radio, span);
-                
+
                 const removeBtn = $('<i>', {
                     class: 'iconfont remove-pinned-btn',
                     'data-val': val,
@@ -16467,7 +16470,7 @@ async function createMonacoEditor(language, form, support) {
                     'font-size': '14px',
                     'margin-left': '8px'
                 }).html('&#xe614;');
-                
+
                 itemNode.append(label, removeBtn);
                 listContainer.append(itemNode);
             });
@@ -16479,7 +16482,7 @@ async function createMonacoEditor(language, form, support) {
         unpinned.forEach(opt => {
             dataList.append(`<option value="${opt.text}"></option>`);
         });
-        
+
         searchInput.val('');
     };
 
@@ -16487,7 +16490,7 @@ async function createMonacoEditor(language, form, support) {
     moreSetting.on('click', () => {
         let options = [];
         const rawSelect = $('select[name="programTypeId"]').not('#OJBetter_SubmitForm select').first();
-        
+
         if (rawSelect.length > 0 && rawSelect[0].options) {
             const opts = rawSelect[0].options;
             for (let i = 0; i < opts.length; i++) {
@@ -16501,7 +16504,7 @@ async function createMonacoEditor(language, form, support) {
         }
 
         localOriginalOptions = options.length > 0 ? options : (window.OJB_originalOptions || []);
-        
+
         if (localOriginalOptions.length > 0) {
             renderLangSettingsUI();
             searchInput.prop('disabled', false);
@@ -16517,12 +16520,12 @@ async function createMonacoEditor(language, form, support) {
     addBtn.on('click', () => {
         const rawSearchText = searchInput.val().trim();
         if (!rawSearchText) return;
-        
+
         const searchText = rawSearchText.toLowerCase();
         let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
-        
+
         // 模糊匹配搜索文本
-        const unpinnedOptions = localOriginalOptions.filter(o => !pinnedLangs.includes(String(o.value))); 
+        const unpinnedOptions = localOriginalOptions.filter(o => !pinnedLangs.includes(String(o.value)));
         const matchedOption = unpinnedOptions.find(o => o.text.toLowerCase().includes(searchText));
 
         if (!matchedOption) {
@@ -16532,15 +16535,15 @@ async function createMonacoEditor(language, form, support) {
         }
 
         const val = String(matchedOption.value);
-        
+
         if (!pinnedLangs.includes(val)) {
             pinnedLangs.push(val);
             GM_setValue('pinnedLanguages', pinnedLangs);
             // 如果是第一个添加的置顶语言，默认设为首选语言
             if (pinnedLangs.length === 1) GM_setValue('defaultLanguage', val);
-            
+
             renderLangSettingsUI();
-            
+
             // 派发自定义原生事件，通知页面左侧主界面重绘
             document.dispatchEvent(new CustomEvent('OJB_TriggerRebuild'));
         }
@@ -16556,18 +16559,18 @@ async function createMonacoEditor(language, form, support) {
 
     // 移除常用语言置顶项
     listContainer.on('click', '.remove-pinned-btn', function() {
-        const val = String($(this).attr('data-val')); 
-        
+        const val = String($(this).attr('data-val'));
+
         let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
         pinnedLangs = pinnedLangs.filter(v => String(v) !== val);
         GM_setValue('pinnedLanguages', pinnedLangs);
-        
+
         // 如果移除的正好是当前的默认语言，重置默认语言为剩余常用语言的第一个
         if (String(OJB_getGMValue('defaultLanguage', '')) === val) {
             GM_setValue('defaultLanguage', pinnedLangs.length > 0 ? pinnedLangs[0] : '');
         }
         renderLangSettingsUI();
-        
+
         // 同步派发重绘事件更新主页面视图
         document.dispatchEvent(new CustomEvent('OJB_TriggerRebuild'));
     });
@@ -19784,7 +19787,7 @@ async function addProblemPageCodeEditor() {
             })}`,
             "error"
         );
-        return; 
+        return;
     }
 
     // Monaco加载失败时保留Codeforces原生编辑器。
@@ -19818,19 +19821,19 @@ async function addProblemPageCodeEditor() {
     // 【功能模块】：语言快捷标签(Tabs) 与 隐藏式下拉框重构
     // =========================================================
 
-    selectLang.addClass('ojb-language-select'); 
-    
+    selectLang.addClass('ojb-language-select');
+
     // 提取原始选项
     const originalOptions = [];
     if (selectLang.length > 0 && selectLang[0].options) {
         for (let i = 0; i < selectLang[0].options.length; i++) {
-            originalOptions.push({ 
+            originalOptions.push({
                 value: String(selectLang[0].options[i].value),
-                text: selectLang[0].options[i].text 
+                text: selectLang[0].options[i].text
             });
         }
     }
-    
+
     // 备份至全局窗口
     window.OJB_originalOptions = originalOptions;
     selectLang.css({ 'min-width': '300px', 'width': 'auto' });
@@ -19878,7 +19881,7 @@ async function addProblemPageCodeEditor() {
             selectLang.empty();
             let pinnedHtml = '';
             let unpinnedHtml = '';
-            
+
             optionsToUse.forEach(opt => {
                 if (pinnedLangs.includes(opt.value)) {
                     pinnedHtml += `<option value="${opt.value}">${opt.text}</option>`;
@@ -19907,7 +19910,7 @@ async function addProblemPageCodeEditor() {
             let realVal = selectLang.val();
             if (realVal !== currentVal) {
                 currentVal = realVal;
-                selectLang.trigger('change'); 
+                selectLang.trigger('change');
             }
 
             quickTabsContainer.empty();
@@ -19915,19 +19918,19 @@ async function addProblemPageCodeEditor() {
                 const opt = optionsToUse.find(o => o.value === val);
                 if (opt) {
                     const isActive = currentVal === val;
-                    let shortName = opt.text.split(' (')[0].split(' ')[0]; 
+                    let shortName = opt.text.split(' (')[0].split(' ')[0];
                     if(opt.text.toLowerCase().includes('python')) shortName = 'Py';
                     if(opt.text.toLowerCase().includes('c++')) shortName = 'C++';
-                    
+
                     const btn = $('<button>', {
                         type: 'button',
                         class: `ojb-quick-tab ${isActive ? 'active' : ''}`,
                         'data-val': val
                     });
-                    
-                    btn.text(shortName); 
-                    btn.attr('title', opt.text); 
-                    
+
+                    btn.text(shortName);
+                    btn.attr('title', opt.text);
+
                     btn.css({
                         padding: '2px 8px',
                         border: '1px solid var(--border-color, #ccc)',
@@ -19939,7 +19942,7 @@ async function addProblemPageCodeEditor() {
                         color: isActive ? '#fff' : 'inherit',
                         transition: 'all 0.2s'
                     });
-                    
+
                     quickTabsContainer.append(btn);
                 }
             });
@@ -19955,16 +19958,16 @@ async function addProblemPageCodeEditor() {
     // 监听下拉框改变
     selectLang.on('change', () => {
         const currentVal = selectLang.val();
-        
+
         if (currentVal === 'ojb_show_all') {
             isShowAllLangs = true;
             let prevActiveVal = quickTabsContainer.find('.ojb-quick-tab.active').attr('data-val');
             let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
             if (!prevActiveVal) prevActiveVal = pinnedLangs.length > 0 ? String(pinnedLangs[0]) : '';
-            
-            selectLang.val(String(prevActiveVal)); 
-            rebuildSelectLang();           
-            return; 
+
+            selectLang.val(String(prevActiveVal));
+            rebuildSelectLang();
+            return;
         }
 
         quickTabsContainer.find('.ojb-quick-tab').each(function() {
@@ -19974,15 +19977,15 @@ async function addProblemPageCodeEditor() {
                 $(this).css({ 'background': 'transparent', 'color': 'inherit' }).removeClass('active');
             }
         });
-        
-        changeMonacoLanguage(form); 
+
+        changeMonacoLanguage(form);
     });
 
     rebuildSelectLang();
-    
+
     // 监听原生自定义重绘事件
     document.addEventListener('OJB_TriggerRebuild', () => {
-        isShowAllLangs = false; 
+        isShowAllLangs = false;
         rebuildSelectLang();
     });
 
@@ -19991,15 +19994,15 @@ async function addProblemPageCodeEditor() {
 
     // 恢复默认语言选择，如果没设置过则 fallback 至 CF 历史语言选择
     let defaultLang = String(OJB_getGMValue('defaultLanguage', ''));
-    let initLang = (defaultLang && selectLang.find(`option[value="${defaultLang}"]`).length > 0) 
-        ? defaultLang 
+    let initLang = (defaultLang && selectLang.find(`option[value="${defaultLang}"]`).length > 0)
+        ? defaultLang
         : OJBetter.monaco.compilerSelection;
-    
+
     selectLang.val(initLang).trigger('change');
 
     // 样例测试 (CF 专属)
     runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv)).setHoverRedo();
-    
+
     // 提交 (CF 专属)
     submitButton.on('click', async function (event) {
         event.preventDefault();
@@ -21657,7 +21660,7 @@ async function initializeSequentially(loadingMessage) {
   if (OJBetter.translation.auto.enabled) {
     await initTransWhenViewable(); // 自动翻译
   }
-  if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
+  if (OJBetter.basic.standingsRecolor && (OJBetter.typeOfPage.is_cfStandings || OJBetter.typeOfPage.is_cfRoom)) {
     await recolorStandings(); // cf赛制榜单重新着色
   }
   if (OJBetter.preference.showLoading) {
