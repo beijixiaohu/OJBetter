@@ -9835,7 +9835,7 @@ class TranslateDiv {
      */
     registerCopyButtonEvent(text) {
         this.copyButton.on("click", () => {
-            GM_setClipboard(text);
+            GM_setClipboard(OJB_unescapeHtml(text));
             this.copyButton.setButtonState('success', i18next.t('copy.copied', { ns: 'button' }));
             // 复制提示
             setTimeout(() => {
