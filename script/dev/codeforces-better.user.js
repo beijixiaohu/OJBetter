@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.87.12
+// @version      1.87.13
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
@@ -12298,7 +12298,7 @@ class TranslateDiv {
    */
   registerCopyButtonEvent(text) {
     this.copyButton.on("click", () => {
-      GM_setClipboard(text);
+      GM_setClipboard(OJB_unescapeHtml(text));
       this.copyButton.setButtonState(
         "success",
         i18next.t("copy.copied", { ns: "button" })
