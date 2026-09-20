@@ -6,9 +6,11 @@
         "test:edge": "node --test test/edge/index.node.js",
         "test:codeforces-mathjax": "node --test test/codeforcesMathJax/index.node.js",
         "test:codeforces-html2markdown": "node --test test/codeforcesHtml2Markdown/index.node.js",
+        "test:code-blocks": "node --test test/codeBlocks/index.node.js",
         "test:update-version": "node --test ../../.github/scripts/update-version.test.js"
     },
     "devDependencies": {
-        "jest": "^29.7.0"
+        "jest": "^29.7.0",
+        "jsdom": "^26.1.0"
     }
 }
