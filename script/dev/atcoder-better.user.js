@@ -14723,8 +14723,26 @@ function officialCompilerArgsChange(nowSelect) {
     $('#CompilerArgsInput').prop("disabled", true);
 }
 
-// codeforces编译器通信
+// AtCoder 自定义测试结果没有任务 ID，跨标签页必须串行完成提交和轮询。
 async function officialCompiler(code, input) {
+    const language = officialLanguage;
+    if (!navigator.locks?.request) {
+        return {
+            Errors: 'This browser cannot safely coordinate AtCoder custom tests. Please use a browser with Web Locks support or another compiler.',
+            Result: '',
+            Stats: ''
+        };
+    }
+    try {
+        return await navigator.locks.request('OJBetter:atcoder:official-custom-test', () =>
+            submitOfficialCompiler(code, input, language)
+        );
+    } catch (error) {
+        return { Errors: error.message || String(error), Result: '', Stats: '' };
+    }
+}
+
+async function submitOfficialCompiler(code, input, language) {
     // const data = new FormData();
     // data.append('csrf_token', OJBetter.common.cf_csrf_token);
     const data = new URLSearchParams();
@@ -14732,7 +14750,7 @@ async function officialCompiler(code, input) {
     // data.append('source', code);
     // data.append('tabSize', '4');
     // data.append('programTypeId', officialLanguage);
-    data.append('data.LanguageId', officialLanguage);
+    data.append('data.LanguageId', language);
     data.append('input', input);
     // data.append('output', '');
     // data.append('communityCode', '');
