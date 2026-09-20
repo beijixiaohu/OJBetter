@@ -9465,6 +9465,13 @@ class TaskQueue {
 const isEmptyText = (text) => text.trim() === "";
 
 /**
+ * Codeforces 的异步题解尚未加载，不能将占位文字固定为翻译原文。
+ */
+function isPendingTutorialMarkdown(markdown) {
+  return /Tutorial\s+is\s+loading(?:\.{3}|…)/i.test(markdown);
+}
+
+/**
  * 加载按钮相关函数
  */
 async function initButtonFunc() {
@@ -9553,7 +9560,9 @@ async function initButtonFunc() {
       const newMarkdown = OJB_normalizeCodeforcesLatexDelimiters(
         OJBetter.common.turndownService.turndown(htmlContent)
       );
-      this.data("markdown", newMarkdown);
+      if (!isPendingTutorialMarkdown(newMarkdown)) {
+        this.data("markdown", newMarkdown);
+      }
       return newMarkdown;
     }
     return markdown;
@@ -10652,7 +10661,10 @@ function cacheTranslationMarkdown(element) {
   blocks.each((i, block) => {
     if (!containsLegacyLatex(block)) $(block).getMarkdown();
   });
-  $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
+  // 异步题解加载后会替换或新增段落；加载期间继续从当前 DOM 查找。
+  if (!isPendingTutorialMarkdown(markdown)) {
+    $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
+  }
   return markdown;
 }
 
