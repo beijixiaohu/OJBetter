@@ -9382,6 +9382,16 @@ async function initHTML2MarkDown() {
       }
     },
   });
+
+  // 最后注册以优先于格式规则，避免隐藏文字因带有加粗、代码等类名被保留。
+  OJBetter.common.turndownService.addRule("text-hidden", {
+    filter: function (node) {
+      return node.classList.contains("text-hidden");
+    },
+    replacement: function () {
+      return "";
+    },
+  });
 }
 
 /**

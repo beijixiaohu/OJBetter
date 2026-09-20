@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
+const TurndownService = require('turndown');
 
 const SCRIPT_PATH = path.resolve(
     __dirname,
@@ -60,4 +61,37 @@ test('reads raw DOM text for both Codeforces code-style rules', () => {
             /replacement: function \(_content, node\) \{\s*return OJB_createMarkdownCodeSpan\(node\.textContent\);/
         );
     }
+});
+
+async function loadConverter() {
+    const start = SOURCE.indexOf('async function initHTML2MarkDown()');
+    const end = SOURCE.indexOf('\n/**\n * 任务队列', start);
+    assert.ok(start >= 0 && end > start);
+    const context = vm.createContext({
+        TurndownService,
+        OJBetter: { common: {} },
+        OJB_createMarkdownCodeSpan: loadCodeSpanHelper(),
+    });
+    vm.runInContext(SOURCE.slice(start, end), context);
+    await context.initHTML2MarkDown();
+    return context.OJBetter.common.turndownService;
+}
+
+test('excludes text-hidden content from Markdown regardless of formatting (#447)', async () => {
+    const converter = await loadConverter();
+    for (const hidden of [
+        '<span class="text-hidden">hidden instructions</span>',
+        '<div class="extra text-hidden"><p>hidden <strong>instructions</strong></p></div>',
+        '<span class="text-hidden tex-font-style-bf">hidden instructions</span>',
+        '<span class="text-hidden text-verb">hidden instructions</span>',
+    ]) {
+        assert.equal(converter.turndown(`<div>before${hidden}after</div>`), 'beforeafter');
+    }
+});
+
+test('keeps collapsed content, hidden original code and raw formula sources', async () => {
+    const converter = await loadConverter();
+    assert.equal(converter.turndown('<div class="spoiler-content" style="display:none"><p>Editorial</p></div>'), 'Editorial');
+    assert.match(converter.turndown('<pre style="display:none"><code>int x = 1;</code></pre>'), /int x = 1;/);
+    assert.equal(converter.turndown('<p>Formula: <script type="math/tex">x+1</script></p>'), 'Formula: $x+1$');
 });
