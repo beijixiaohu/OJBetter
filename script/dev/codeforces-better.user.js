@@ -5541,10 +5541,10 @@ function OJB_getCodeFromPre(element) {
     if (code.classList.contains("linenums")) {
       return getCodeFromPrettyPre(element);
     } else {
-      // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+      // 同一个 pre 可能包含多个 code 和穿插的链接，必须读取整个代码块。
       // 用 DOMParser 转换 HTML 代码，正确替换换行。
       const parser = new DOMParser();
-      const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+      const doc = parser.parseFromString(element.innerHTML.replace(/<br\s*\/?>/gi, "\n"), "text/html");
       return doc.body.textContent;
     }
   };
