@@ -27,3 +27,6 @@ tools/unit/test/replaceOriginal/*
 !tools/unit/test/codeBlocks/index.node.js
 !tools/unit/test/contextMenu/
 !tools/unit/test/contextMenu/index.test.js
+
+!tools/unit/test/atcoderCompiler/
+!tools/unit/test/atcoderCompiler/index.node.js

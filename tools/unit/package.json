@@ -3,6 +3,7 @@
         "test": "jest",
         "test:replace-original": "node --test test/replaceOriginal/index.node.js",
         "test:openai": "node --test test/openai/index.node.js",
+        "test:atcoder-compiler": "node --test test/atcoderCompiler/index.node.js",
         "test:edge": "node --test test/edge/index.node.js",
         "test:codeforces-mathjax": "node --test test/codeforcesMathJax/index.node.js",
         "test:codeforces-html2markdown": "node --test test/codeforcesHtml2Markdown/index.node.js",
