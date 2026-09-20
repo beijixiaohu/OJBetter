@@ -11,6 +11,7 @@
     },
     "devDependencies": {
         "jest": "^29.7.0",
-        "jsdom": "^26.1.0"
+        "jsdom": "^26.1.0",
+        "turndown": "^7.2.0"
     }
 }
