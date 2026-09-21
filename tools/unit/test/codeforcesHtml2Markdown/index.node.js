@@ -168,3 +168,40 @@ test('does not freeze a parent containing a pending tutorial or an initially emp
         dom.window.close();
     }
 });
+
+test('emits MathJax source exactly once across output modes (#451)', async () => {
+    const converter = await loadConverter();
+    const latex = String.raw`f(a) = \max (0, \smash{\displaystyle\max_{1 \leq i \leq l}} \sum_{j=1}^{i} a_j )`;
+    for (const [inline, display] of [
+        ['<span class="MathJax">rendered n</span>', '<div class="MathJax_Display"><span class="MathJax">rendered formula</span></div>'],
+        ['<span class="MathJax_CHTML mjx-chtml"><span class="mjx-math">rendered n</span></span>', '<span class="MJXc-display"><span class="MathJax_CHTML mjx-chtml">rendered formula</span></span>'],
+        ['<span class="MathJax_SVG"><svg></svg></span>', '<div class="MathJax_SVG_Display"><span class="MathJax_SVG"><svg></svg></span></div>'],
+        ['', ''],
+    ]) {
+        for (const preview of ['', '<span class="MathJax_Preview">preview</span>']) {
+            const html = `<p>Number ${preview}${inline}<script type="math/tex">n</script>.</p>${preview}${display}<script type="math/tex; mode=display">${latex}</script>`;
+            assert.equal(converter.turndown(html), `Number $n$.\n\n$$\n${latex}\n$$`);
+        }
+    }
+});
+
+test('preserves adjacent formulas, operators and ignores assistive duplicates', async () => {
+    const converter = await loadConverter();
+    assert.equal(converter.turndown('<span class="MathJax_CHTML">x<span class="MJX_Assistive_MathML"><math>x</math></span></span><script type="math/tex">x</script> and <script type="math/tex">a < b > c</script>'), '$x$ and $a &lt; b &gt; c$');
+});
+
+test('converts actual MathJax 2.7.9 browser output with preview and assistive MathML', async () => {
+    // Captured from MathJax 2.7.9, whose core and CommonHTML files match Codeforces byte-for-byte.
+    const fixtures = require('./mathjax-2.7.9.json');
+    const converter = await loadConverter();
+    for (const fixture of fixtures) {
+        assert.equal(converter.turndown(fixture.html), fixture.expected, fixture.renderer);
+    }
+});
+
+test('preserves readable rendered content when another plugin removes the TeX source', async () => {
+    const converter = await loadConverter();
+    assert.equal(converter.turndown('<span class="MathJax_CHTML">x+1</span>'), 'x+1');
+    assert.equal(converter.turndown('<span class="MathJax_Preview">x+1</span>'), 'x+1');
+    assert.equal(converter.turndown('<span class="MJXc-display"><span class="MathJax_CHTML">x+1</span></span>'), 'x+1');
+});
