@@ -9170,7 +9170,7 @@ async function initHTML2MarkDown() {
       return "";
     },
   });
-  // MathJax 未完成渲染时直接使用源码；已有渲染节点时由对应规则处理。
+  // 始终从 MathJax 源码读取一次公式，避免不同输出模式重复提取。
   OJBetter.common.turndownService.addRule("math-source", {
     filter: function (node, options) {
       return (
@@ -9179,9 +9179,6 @@ async function initHTML2MarkDown() {
       );
     },
     replacement: function (content, node) {
-      const previousElement = node.previousElementSibling;
-      if (previousElement?.matches(".MathJax, .MathJax_Display")) return "";
-
       const latex = String(node.textContent || "")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
@@ -9191,33 +9188,24 @@ async function initHTML2MarkDown() {
     },
   });
 
-  // inline math
-  OJBetter.common.turndownService.addRule("inline-math", {
-    filter: function (node, options) {
-      if (node.tagName.toLowerCase() !== "span") return false;
-      return node.className && /\bMathJax(_\w+)?\b/.test(node.className);
+  // MathJax 2 将展示节点放在 source script 前，只丢弃仍有源码的展示副本。
+  const mathRenderedSelector =
+    ".MathJax, .MathJax_Display, .MathJax_Preview, .MathJax_CHTML, " +
+    ".mjx-chtml, .MJXc-display, .MathJax_SVG, .MathJax_SVG_Display, .MJX_Assistive_MathML";
+  OJBetter.common.turndownService.addRule("math-rendered", {
+    filter: function (node) {
+      return node.matches(mathRenderedSelector);
     },
     replacement: function (content, node) {
-      var latex = $(node).next().text();
-      // 替换防止 < >
-      latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      return "$" + latex + "$";
-    },
-  });
-
-  // block math
-  OJBetter.common.turndownService.addRule("block-math", {
-    filter: function (node, options) {
-      return (
-        node.tagName.toLowerCase() == "div" &&
-        node.classList.contains("MathJax_Display")
-      );
-    },
-    replacement: function (content, node) {
-      var latex = $(node).next().text();
-      // 替换防止 < >
-      latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      return "\n$$\n" + latex + "\n$$\n";
+      let root = node;
+      while (root.parentElement?.matches(mathRenderedSelector)) {
+        root = root.parentElement;
+      }
+      let next = root.nextElementSibling;
+      while (next?.matches(mathRenderedSelector)) next = next.nextElementSibling;
+      if (next?.matches('script[type^="math/tex"]')) return "";
+      // 其他插件可能移除源码；此时保留可读内容，不能静默丢掉公式。
+      return content;
     },
   });
 
