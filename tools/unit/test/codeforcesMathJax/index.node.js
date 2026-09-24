@@ -216,6 +216,11 @@ function loadProductionApi(clock) {
             normalize: OJB_normalizeCodeforcesLatexDelimiters,
             getLatexRegex: OJB_getTranslationLatexRegex,
             protectMarkdownCode: OJB_protectMarkdownCodeForFormatting,
+            useLegacyReplaceAll() {
+                String.prototype.replaceAll = function (search, replacement) {
+                    return this.split(search).join(replacement);
+                };
+            },
             containsModernMathJax,
             containsUnrenderedCodeforcesLatex,
             waitForMathJaxIdle,
@@ -311,6 +316,20 @@ test('restores code exactly after dollar-sign formatting', () => {
 
         assert.doesNotMatch(restored, /OJBetterMarkdownCode\d+Slot/);
         assert.equal(restored, expected);
+    }
+});
+
+test('restores arrays and literal code when the page overrides replaceAll', () => {
+    const api = loadProductionApi(new FakeClock());
+    api.useLegacyReplaceAll();
+    for (const source of [
+        '数组 `[-1,-1]`，`f([1,1,-1,-1]) = 2`',
+        '`$& $$ $1` and ``$` $\\\'``',
+        '```cpp\nstd::cout << \"$&\";\n```',
+    ]) {
+        const protectedCode = api.protectMarkdownCode(source);
+        assert.equal(protectedCode.recover(protectedCode.text), source);
+        assert.equal(protectedCode.recover(protectedCode.text + protectedCode.text), source + source);
     }
 });
 

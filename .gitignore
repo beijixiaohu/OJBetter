@@ -32,3 +32,5 @@ tools/unit/test/replaceOriginal/*
 !tools/unit/test/atcoderCompiler/index.node.js
 
 !tools/unit/test/codeforcesHtml2Markdown/mathjax-2.7.9.json
+!tools/unit/test/google/
+!tools/unit/test/google/index.node.js
