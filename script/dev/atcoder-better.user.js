@@ -13,7 +13,7 @@
 // @connect      www.iflyrec.com
 // @connect      dict.youdao.com
 // @connect      api.interpreter.caiyunai.com
-// @connect      translate.google.com
+// @connect      translate.googleapis.com
 // @connect      openai.api2d.net
 // @connect      api.openai.com
 // @connect      www.luogu.com.cn
@@ -16405,13 +16405,36 @@ async function translate_youdao_mobile(raw) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_gg(raw) {
-    const params = `tl=${getTargetLanguage('google')}&q=${encodeURIComponent(raw)}`;
-    const options = {
-        method: "GET",
-        url: `https://translate.google.com/m?${params}`,
-    }
-    return await BaseTranslate(options,
-        res => $(res).filter('.result-container').text() || $(res).find('.result-container').text());
+    const params = new URLSearchParams({
+        client: "gtx",
+        sl: "auto",
+        tl: getTargetLanguage("google"),
+        dt: "t",
+        q: raw,
+    });
+    return await BaseTranslate(
+        { method: "GET", url: `https://translate.googleapis.com/translate_a/single?${params}` },
+        (res) => {
+            const data = JSON.parse(res);
+            const segments = Array.isArray(data) ? data[0] : null;
+            if (!Array.isArray(segments) || segments.length === 0 ||
+                    segments.some(segment => !Array.isArray(segment) || typeof segment[0] !== "string")) {
+                throw new Error("Google Translate returned an invalid translation response.");
+            }
+            const text = segments.map(segment => segment[0]).join("");
+            if (!text.trim()) {
+                throw new Error("Google Translate returned no translation.");
+            }
+            return text;
+        },
+        undefined,
+        (response) => {
+            if (response.status < 200 || response.status >= 300) {
+                throw new Error(`Google Translate request failed: HTTP ${response.status}`);
+            }
+            return response.responseText;
+        }
+    );
 }
 
 /**
