@@ -1,3 +1,19 @@
+## 1.26.0
+
+### What's Changed
+
+- 调整 AI 翻译设置，将“ChatGPT”标题统一为“AI 翻译（OpenAI）” by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/425
+- 将加载提示改为右下角悬浮窗 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/430
+- 将可迁移的外部依赖切换至 npmmirror，并改进 Monaco 编辑器加载 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/440
+- 修复复制译文时出现 HTML 转义字符的问题 by @wrk-123 in https://github.com/beijixiaohu/OJBetter/pull/445
+- 修复代码块重渲染时内容被截断的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/453
+- 修复多个标签页同时测试代码时结果互相干扰的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/456
+- 修复 Google 翻译不可用的问题 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/458
+- 修复 DeepL 免费翻译接口过时的问题，支持长文本分段并校验异常响应 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/468
+- 修复代码中的公式和实体转义异常；AI 翻译前保护整块代码以减少 token 消耗，支持流式恢复，并为打印题解页添加翻译、复制和 Markdown 操作 by @beijixiaohu in https://github.com/beijixiaohu/OJBetter/pull/470
+
+**Full Changelog**: https://github.com/beijixiaohu/OJBetter/compare/atcoder-better-v1.25.0...atcoder-better-v1.26.0
+
 ## 1.25.0
 
 ### What's Changed
