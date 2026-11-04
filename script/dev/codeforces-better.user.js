@@ -6,7 +6,7 @@
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
 // @run-at       document-start
-// @connect      www2.deepl.com
+// @connect      oneshot-free.www.deepl.com
 // @connect      api-free.deepl.com
 // @connect      api.deepl.com
 // @connect      api.deeplx.org
@@ -20113,62 +20113,73 @@ function convertLinksHTMLToMarkdown(html) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl(raw) {
-  const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
-  const data = {
-    jsonrpc: "2.0",
-    method: "LMT_handle_texts",
-    id,
-    params: {
-      splitting: "newlines",
-      lang: {
-        source_lang_user_selected: "auto",
-        target_lang: getTargetLanguage("deepl"),
-      },
-      texts: [
-        {
-          text: raw,
-          requestAlternatives: 3,
-        },
-      ],
-      timestamp: getTimeStamp(raw.split("i").length - 1),
-    },
-  };
-  let postData = JSON.stringify(data);
-  if ((id + 5) % 29 === 0 || (id + 3) % 13 === 0) {
-    postData = postData.replace('"method":"', '"method" : "');
-  } else {
-    postData = postData.replace('"method":"', '"method": "');
-  }
-  const options = {
-    method: "POST",
-    url: "https://www2.deepl.com/jsonrpc",
-    data: postData,
-    headers: {
-      "Content-Type": "application/json",
-      Host: "www2.deepl.com",
-      Origin: "https://www.deepl.com",
-      Referer: "https://www.deepl.com/",
-    },
-    anonymous: true,
-    nocache: true,
-  };
-
-  return await BaseTranslate(
-    options,
-    (res) => JSON.parse(res)?.result?.texts?.[0]?.text || res,
-    (res) => {
-      const resObj = {
-        status: true,
-        message: "ok",
-      };
-      if (res.includes('"message":"Too many requests"')) {
-        resObj.status = false;
-        resObj.message = i18next.t("error.deepl429", { ns: "translator" }); // Too many requests 提示
-        return resObj;
-      }
-      return resObj;
+  // oneshot 匿名请求按 UTF-16 计数，上限为 1500；分段时保留占位符和代理对。
+  const limit = 1500;
+  const tokens = [...raw.matchAll(/(?:【\s*\d+\s*】|\\?\[\s*\d+\s*\\?\]|\{\s*\d+\s*\})/g)];
+  const chunks = [];
+  for (let start = 0; start < raw.length;) {
+    let end = Math.min(start + limit, raw.length);
+    if (end < raw.length) {
+      const window = raw.slice(start, end);
+      const boundary = Math.max(window.lastIndexOf("\n"), window.lastIndexOf(" "));
+      if (boundary >= limit / 2) end = start + boundary + 1;
+      const token = tokens.find(token => token.index < end && token.index + token[0].length > end);
+      if (token && token.index > start) end = token.index;
+      if (/[\uD800-\uDBFF]/.test(raw[end - 1]) && /[\uDC00-\uDFFF]/.test(raw[end])) end--;
     }
-  );
+    chunks.push(raw.slice(start, end));
+    start = end;
+  }
+
+  const language = getTargetLanguage("deepl");
+  const targetLang = { ZH: "zh-Hans", EN: "en-US", PT: "pt-BR" }[language] || language;
+  let text = "";
+  let result = { done: true, checkPassed: { status: true, message: "ok" }, text: raw };
+  // 顺序发送，避免长段落产生并发请求；任何一段失败都不返回部分成功结果。
+  for (const chunk of chunks) {
+    const [, leading, content, trailing] = chunk.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if (!content) {
+      text += chunk;
+      continue;
+    }
+    let responseError = "";
+    result = await BaseTranslate(
+      {
+        method: "POST",
+        url: "https://oneshot-free.www.deepl.com/v1/translate",
+        data: JSON.stringify({ text: [content], target_lang: targetLang }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "None",
+        },
+        anonymous: true,
+        nocache: true,
+        timeout: 30000,
+      },
+      (res) => {
+        if (responseError) return "";
+        const data = JSON.parse(res);
+        const translations = data?.translations;
+        if (!Array.isArray(translations) || translations.length !== 1 ||
+            typeof translations[0]?.text !== "string" || !translations[0].text.trim()) {
+          throw new Error("DeepL returned an invalid translation response.");
+        }
+        return translations[0].text;
+      },
+      () => ({ status: !responseError, message: responseError || "ok" }),
+      (response) => {
+        responseError = response.status >= 200 && response.status < 300
+          ? ""
+          : response.status === 429
+            ? i18next.t("error.deepl429", { ns: "translator" })
+            : `DeepL request failed: HTTP ${response.status}`;
+        return response.responseText;
+      }
+    );
+    if (!result.done) return { ...result, text: "" };
+    text += leading + result.text + trailing;
+  }
+  return { ...result, text };
 }
 
 /**
