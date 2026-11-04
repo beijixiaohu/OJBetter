@@ -36,3 +36,5 @@ tools/unit/test/replaceOriginal/*
 !tools/unit/test/google/index.node.js
 !tools/unit/test/deepl/
 !tools/unit/test/deepl/index.node.js
+!tools/unit/test/atcoderTranslation/
+!tools/unit/test/atcoderTranslation/index.node.js

@@ -1,5 +1,5 @@
 {
-    "version": "1.0.3",
+    "version": "1.0.4",
     "commonReplacements": {
         ".header-inner": {
             "class": [
@@ -721,6 +721,7 @@
                 "Unrated Register": "非评级报名",
                 "Register": "报名",
                 "Virtual Participation": "虚拟参加",
+                "Editorial for printing": "打印版题解",
                 "Editorial": "题解",
                 "New 题解": "新题解",
                 "New Editorial": "新题解",

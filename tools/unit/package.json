@@ -4,6 +4,7 @@
         "test:replace-original": "node --test test/replaceOriginal/index.node.js",
         "test:openai": "node --test test/openai/index.node.js",
         "test:atcoder-compiler": "node --test test/atcoderCompiler/index.node.js",
+        "test:atcoder-translation": "node --test test/atcoderTranslation/index.node.js",
         "test:google": "node --test test/google/index.node.js",
         "test:deepl": "node --test test/deepl/index.node.js",
         "test:edge": "node --test test/edge/index.node.js",
@@ -16,6 +17,7 @@
         "jest": "^29.7.0",
         "jquery": "^3.7.1",
         "jsdom": "^26.1.0",
+        "markdown-it": "13.0.2",
         "turndown": "^7.2.0"
     }
 }
