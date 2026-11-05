@@ -1,19 +1,19 @@
 // ==UserScript==
 // @name         Codeforces Better!
 // @namespace    https://greasyfork.org/users/747162
-// @version      1.87.1
+// @version      1.88.0
 // @author       北极小狐
 // @match        *://*.codeforces.com/*
 // @match        *://*.codeforc.es/*
 // @run-at       document-start
-// @connect      www2.deepl.com
+// @connect      oneshot-free.www.deepl.com
 // @connect      api-free.deepl.com
 // @connect      api.deepl.com
 // @connect      api.deeplx.org
 // @connect      www.iflyrec.com
 // @connect      dict.youdao.com
 // @connect      api.interpreter.caiyunai.com
-// @connect      translate.google.com
+// @connect      translate.googleapis.com
 // @connect      openai.api2d.net
 // @connect      api.openai.com
 // @connect      www.luogu.com.cn
@@ -39,22 +39,22 @@
 // @grant        GM_setClipboard
 // @grant        GM_getResourceText
 // @icon         https://aowuucdn.oss-accelerate.aliyuncs.com/codeforces.png
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/turndown/7.2.0/turndown.min.js#sha512-sJzEecN5Nk8cq81zKtGq6/z9Z/r3q38zV9enY75IVxiG7ybtlNUt864sL4L1Kf36bYIwxTMVKQOtU4VhD7hGrw==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/markdown-it/13.0.2/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/crypto-js/4.2.0/crypto-js.min.js#sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/chroma-js/2.4.2/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dexie/4.0.7/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next/23.11.5/i18next.min.js#sha512-3RSGkmT48HnO+hlmzGYDx5/w2LIBX0O5hSuYX6KWAxmvVlSjFgoxIaWa2tlMExheGvt3lLyxeTsXfpC47yb8CQ==
+// @require      https://registry.npmmirror.com/turndown/7.2.0/files/dist/turndown.js#sha512-J0bvAX6gfqsaV2fRA6s7yzslKWJr4EhgWNxp9oxMXU3ankvQG9MvZuaUxlnBE/ihFGYgwQFC4a80LeHNyMAtQw==
+// @require      https://registry.npmmirror.com/markdown-it/13.0.2/files/dist/markdown-it.js#sha512-2LtYcLGnCbAWz9nDIrfG2pHFiFu9n+3oGecQlzLuYsLgen/oxiYscGWnDST9J9EZanlsQkDD0ZP2n/6peDuALQ==
+// @require      https://registry.npmmirror.com/crypto-js/4.2.0/files/crypto-js.js#sha512-XRbFQ+ZhXm1gOO0z66M5IEMivMr+rXWYM9DrNkqgpGQ29XY7/E9PVov++wzIXa2Lt4Zv2gLDi3f1UKFlL60HFQ==
+// @require      https://registry.npmmirror.com/chroma-js/2.4.2/files/chroma.min.js#sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==
+// @require      https://registry.npmmirror.com/%40xterm%2Fxterm/5.5.0/files/lib/xterm.js#sha512-Gujw5GajF5is3nMoGv9X+tCMqePLL/60qvAv1LofUZTV9jK8ENbM9L+maGmOsNzuZaiuyc/fpph1KT9uR5w3CQ==
+// @require      https://registry.npmmirror.com/dexie/4.0.7/files/dist/dexie.min.js#sha512-882VotT07mOQRzqIxsyxHzJX0XUaoeee3qXp4THg1A0KI0XFnWFAaLFQm0x6OW3pHSIipVZW+gzQ1w9b6uvkVw==
+// @require      https://registry.npmmirror.com/i18next/23.11.5/files/i18next.min.js#sha512-00T1JxOw4CvOWv+GSaKmOqBonDKKSOuVbdrPt+53lM4g2lf6bdUi4M3nDe8B8nx4zAm4/2jyTsMVocYH2mnwTA==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/i18next-http-backend/2.5.2/i18nextHttpBackend.min.js#sha512-bBb+wrGRTx4MvHpksYb1Iv5oJ1o8ineCqpc0cnTgdJQhuAFJJ93SEVXxUOCptvt0vAqYdjzWO5emorYUBt6Ceg==
 // @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery-i18next/1.2.1/jquery-i18next.min.js#sha512-79RgNpOyaf8AvNEUdanuk1x6g53UPoB6Fh2uogMkOMGADBG6B0DCzxc+dDktXkVPg2rlxGvPeAFKoZxTycVooQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/highlight.js/11.9.0/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
-// @require      https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.js#sha512-qUIG93zKzcLBVD5RGRbx2PBmbVRu+tJIl+EPLTus0z8I1AMru9sQYdlf6cBacSzYmZVncB9rcc8rYBnazqgrxA==
+// @require      https://registry.npmmirror.com/%40highlightjs%2Fcdn-assets/11.9.0/files/highlight.min.js#sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==
+// @require      https://registry.npmmirror.com/dialog-polyfill/0.5.6/files/dist/dialog-polyfill.js#sha512-d1gAoN6CLVn7aa5fmtO42WW0wVKp7EoZe/pE+MsJHHNn98TL/+fIMbe6O1DfeGxt3BsMFFawEkKINNgXOCqb9w==
 // @resource     acwing_cpp_code_completer https://aowuucdn.oss-accelerate.aliyuncs.com/acwing_cpp_code_completer-0.0.11.json#sha512-DQVpao4qMMExToRdid0g/S0nbO/C9hwCECjI5aW8A0g7nvi8hEcD2Lw3QIqdJBV7haP15oJOocfwuiw7ryTO9w==
 // @resource     wandboxlist https://wandbox.org/api/list.json
-// @resource     xtermcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/xterm/5.5.0/xterm.min.css#sha512-XpXUuzg5afNt1bsgnrOesXP70TLH8tXYYK5sK+Y0UV+YBvJn9EfRFYWy4HT3TVDfH0nl1CO0lwOxIrt2gk9qjg==
+// @resource     xtermcss https://registry.npmmirror.com/%40xterm%2Fxterm/5.5.0/files/css/xterm.css#sha512-AbNrj/oSHJaILgcdnkYm+DQ08SqVbZ8jlkJbFyyS1WDcAaXAcAfxJnCH69el7oVgTwVwyA5u5T+RdFyUykrV3Q==
 // @resource     selectpagecss https://aowuucdn.oss-accelerate.aliyuncs.com/css/selectpage.css#sha512-cRXJfA2tEcAxHEKylJfxteY17N7j9fia3waahHOVnvl63uVZT9OQ7jjjpofZMVZ4JSX3BRET+mI8UvKnsXd3NA==
-// @resource     dialogpolyfillcss https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/dialog-polyfill/0.5.6/dialog-polyfill.min.css#sha512-J2+1q+RsZuJXabBfH1q/fgRr6jMy9By5SwVLk7bScEW7NFJkMUXxfeOyyxtDe6fsaJ4jsciexSlGrPYn9YbBIg==
+// @resource     dialogpolyfillcss https://registry.npmmirror.com/dialog-polyfill/0.5.6/files/dist/dialog-polyfill.css#sha512-FH8aHFPbx/WeYvio2Fe/pZZTLwMe6TogMgQhXSspTK13X/mSwUdg+CGuqi/00POqqGWe/FlvtDFk+D9TFJYtPw==
 // @license      GPL3
 // @compatible	 Chrome
 // @compatible	 Firefox
@@ -188,6 +188,8 @@ OJBetter.typeOfPage = {
   is_problemset: undefined,
   /** @type {boolean?} 是否是Codeforces排名页面 */
   is_cfStandings: undefined,
+  /** @type {boolean?} 是否是Codeforces Room页面 */
+  is_cfRoom: undefined,
   /** @type {boolean?} 是否是提交页面 */
   is_submitPage: undefined,
   /** @type {boolean?} 是否是代码状态页面 */
@@ -290,6 +292,8 @@ OJBetter.monaco = {
   beautifyPreBlocks: undefined,
   /** @type {boolean} Monaco编辑器加载完成标志 */
   loaderOnload: false,
+  /** @type {Promise<boolean>?} Monaco编辑器加载任务 */
+  loaderPromise: null,
   lsp: {
     /** @type {Array?} LSP套接字数组 */
     socket: [],
@@ -1021,6 +1025,7 @@ async function initVar() {
       })
       .get()
       .every((score) => /^[0-9]+$/.test(score));
+  OJBetter.typeOfPage.is_cfRoom = href.includes("/room/");
   OJBetter.localization.websiteLang = OJB_getGMValue(
     "localizationLanguage",
     "zh"
@@ -1377,8 +1382,8 @@ async function ShowSameContestProblems() {
         }
 
         // 构建完整链接
-        const fullHref = problemHref.startsWith('http') 
-          ? problemHref 
+        const fullHref = problemHref.startsWith('http')
+          ? problemHref
           : `${window.location.origin}${problemHref}`;
 
         problems.push({
@@ -2339,40 +2344,48 @@ function darkModeStyleAdjustment() {
  */
 async function initMonacoEditor() {
   if (
-    OJBetter.monaco.enableOnProblemPage ||
-    OJBetter.monaco.beautifyPreBlocks
-  ) {
+    !OJBetter.monaco.enableOnProblemPage &&
+    !OJBetter.monaco.beautifyPreBlocks
+  ) return false;
+  if (OJBetter.monaco.loaderOnload) return true;
+  if (OJBetter.monaco.loaderPromise) return OJBetter.monaco.loaderPromise;
+
+  OJBetter.monaco.loaderPromise = (async () => {
     try {
+      const baseUrl =
+        "https://registry.npmmirror.com/monaco-editor/0.49.0/files/min";
       // 等待Monaco Editor加载器脚本加载完成
       await OJB_LoadJS(
-        "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs/loader.min.js",
-        "sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw=="
+        `${baseUrl}/vs/loader.js`,
+        "sha512-6dtQR1kh86ea5Ftfqr5sdSVH07/mOH8z/YIBm4AxPOdoMzu0YNhQ5eDqZnKd0rAW7uBDVnZ1UictClaa+/9Ocw=="
       );
 
       // 配置Monaco Editor
       require.config({
-        paths: {
-          vs: "https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/monaco-editor/0.49.0/min/vs",
-        },
+        paths: { vs: `${baseUrl}/vs` },
         "vs/nls": { availableLanguages: { "*": "zh-cn" } },
       });
 
       // 加载Monaco Editor主脚本
-      require(["vs/editor/editor.main"], () => {
-        OJBetter.monaco.loaderOnload = true;
+      await new Promise((resolve, reject) => {
+        require(["vs/editor/editor.main"], resolve, reject);
       });
+      OJBetter.monaco.loaderOnload = true;
+      return true;
     } catch (error) {
       console.error("Failed to load Monaco Editor: ", error);
+      return false;
     }
-  }
+  })();
+
+  return OJBetter.monaco.loaderPromise;
 }
 
 /**
  * 美化代码块
  */
 async function beautifyPreBlocksWithMonaco() {
-  // 判断monacoLoader是否加载完毕
-  await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
+  if (!(await initMonacoEditor())) return;
 
   // 用于替换 <pre> 标签为 Monaco 编辑器的函数
   function replacePreWithMonaco(preElement) {
@@ -4454,6 +4467,61 @@ div.sp_clear_btn {
 #footer > div:nth-child(7) {
     left: 0px !important;
 }
+
+/* 消息弹窗总容器（固定在右下角，负责多条消息垂直堆叠） */
+#OJBetter_alert_container {
+    position: fixed !important;
+    bottom: 80px !important;             /* 距离底部位置 */
+    right: 20px !important;              /* 距离右侧位置 */
+    z-index: 99999 !important;
+    display: flex !important;
+    flex-direction: column !important;         /* 新消息在下方，旧消息自动向上顶 */
+    gap: 8px !important;                 /* 多条消息之间的间距 */
+    pointer-events: none !important;     /* 容器本身不挡鼠标 */
+    max-width: 360px !important;
+}
+
+/* 单条消息卡片 */
+.OJBetter_alert {
+    position: relative !important;       /* 在容器内相对排列 */
+    margin: 0 !important;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    word-break: break-word !important;
+    text-align: left;
+    pointer-events: auto !important;     /* 消息卡片可正常交互 */
+    opacity: 0.95;                       /* 默认 0.95 半透明 */
+}
+
+/* 鼠标悬停时变为 1.0 完全清晰显示 */
+.OJBetter_alert:hover {
+    opacity: 1;
+}
+
+/* 提示文本容器 */
+.OJBetter_alert .OJBetter_alert_content {
+    display: inline-block;
+    max-width: calc(100% - 20px);
+    vertical-align: middle;
+}
+
+/* 右侧关闭按钮 */
+.OJBetter_alert .OJBetter_alert_close {
+    cursor: pointer;
+    float: right;
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+    opacity: 0.6;
+}
+
+.OJBetter_alert .OJBetter_alert_close:hover {
+    opacity: 1;
+}
 `);
 
 /**
@@ -4730,7 +4798,9 @@ function OJB_protectMarkdownCodeForFormatting(markdown) {
     recover(value) {
       let result = String(value ?? "");
       replacements.forEach(([marker, code]) => {
-        result = result.replaceAll(marker, () => code);
+        // 部分页面覆盖了 replaceAll，不能依赖其支持函数参数。
+        // split/join 也能原样保留代码中的 $&、$` 等替换字符串。
+        result = result.split(marker).join(code);
       });
       return result;
     },
@@ -5473,10 +5543,10 @@ function OJB_getCodeFromPre(element) {
     if (code.classList.contains("linenums")) {
       return getCodeFromPrettyPre(element);
     } else {
-      // return element.querySelector("code.prettyprint").textContent;//这个把<br>换行丢了
+      // 同一个 pre 可能包含多个 code 和穿插的链接，必须读取整个代码块。
       // 用 DOMParser 转换 HTML 代码，正确替换换行。
       const parser = new DOMParser();
-      const doc = parser.parseFromString(code.innerHTML.replace(/<br\s*\/?>/g, "\n"), "text/html");
+      const doc = parser.parseFromString(element.innerHTML.replace(/<br\s*\/?>/gi, "\n"), "text/html");
       return doc.body.textContent;
     }
   };
@@ -5750,6 +5820,7 @@ class LoadingMessage {
   constructor() {
     this._statusElement = null;
     this._isDisplayed = false;
+    this._timer = null;
     this.init();
   }
 
@@ -5767,31 +5838,43 @@ class LoadingMessage {
   createStatusElement() {
     const statusElement = $("<div></div>")
       .addClass("alert OJBetter_alert")
-      .css({
-        margin: "1em",
-        "text-align": "center",
-        position: "relative",
-      })
       .hide();
+
+    // 1. 文本内容容器
+    const contentElement = $("<div></div>").addClass("OJBetter_alert_content");
+
+    // 2. 右侧关闭按钮
+    const closeBtn = $("<span>&times;</span>")
+      .addClass("OJBetter_alert_close")
+      .on("click", (e) => {
+        e.stopPropagation();
+        this.hideStatus();
+      });
+
+    statusElement.append(contentElement).append(closeBtn);
     return statusElement;
   }
 
   /**
-   * 插入提示信息
-   * @returns {void}
+   * 插入提示信息到全局堆叠容器中
    */
   insertStatusElement() {
-    (OJBetter.typeOfPage.is_mSite
-      ? $("header")
-      : $(".menu-box:first").next()
-    ).after(this._statusElement);
+    // 检查并创建唯一的全局消息堆叠容器
+    let $container = $("#OJBetter_alert_container");
+    if ($container.length === 0) {
+      $container = $("<div></div>").attr("id", "OJBetter_alert_container");
+      $("body").append($container);
+    }
+
+    // 将此条消息追加到堆叠容器中
+    $container.append(this._statusElement);
   }
 
   /**
    * 显示提示信息
    */
   showStatus() {
-    this._statusElement.show();
+    this._statusElement.stop(true, true).fadeIn(200);
     this._isDisplayed = true;
   }
 
@@ -5799,7 +5882,7 @@ class LoadingMessage {
    * 隐藏提示信息
    */
   hideStatus() {
-    this._statusElement.fadeOut(500);
+    this._statusElement.stop(true, true).fadeOut(300);
     this._isDisplayed = false;
   }
 
@@ -5824,15 +5907,24 @@ class LoadingMessage {
       });
       text = md.render(text);
     }
+
+    // 更新文本，保留关闭按钮
+    this._statusElement.find(".OJBetter_alert_content").html(text);
+
     this._statusElement
-      .html(text)
       .removeClass("alert-info alert-success alert-warning alert-error")
       .addClass(`alert-${type}`);
+
     if (!this._isDisplayed) {
       this.showStatus();
     }
+
+    if (this._timer) {
+      clearTimeout(this._timer);
+    }
+
     if (timeout !== Infinity) {
-      setTimeout(() => {
+      this._timer = setTimeout(() => {
         this.hideStatus();
       }, timeout);
     }
@@ -7326,7 +7418,7 @@ const translation_settings_HTML = `
         <input type="checkbox" id="enableLinkProtection" name="enableLinkProtection">
     </div>
     <hr>
-    <h4>ChatGPT</h4>
+    <h4>AI 翻译（OpenAI）</h4>
     <div id="chatgpt_config" class="config"></div>
     <div class='OJBetter_setting_list'>
         <label for="openai_isStream" data-i18n="settings:translation.chatgpt.isStream.name"></label>
@@ -7611,7 +7703,7 @@ const code_editor_settings_HTML = `
             <div class="tip_text" data-i18n="settings:codeEditor.preferences.autoMemoryCode.helpText"></div>
         </div>
         <input type="checkbox" id="autoMemoryCode" name="autoMemoryCode">
-    </div>    
+    </div>
     <div class='OJBetter_setting_list'>
         <label for="submitButtonPosition"><span
                 data-i18n="settings:codeEditor.preferences.submitButtonPosition.label"></span></label>
@@ -9034,6 +9126,18 @@ async function initSettingsPanel() {
   });
 }
 
+function OJB_createMarkdownCodeSpan(value) {
+  const content = String(value ?? "").replace(/\r?\n|\r/g, " ");
+  if (!content) return "";
+
+  const backtickRuns = content.match(/`+/g) || [];
+  let delimiter = "`";
+  while (backtickRuns.includes(delimiter)) delimiter += "`";
+
+  const padding = /^`|^ .*?[^ ].* $|`$/.test(content) ? " " : "";
+  return delimiter + padding + content + padding + delimiter;
+}
+
 /**
  * 初始化html2markdown转换器
  */
@@ -9068,7 +9172,7 @@ async function initHTML2MarkDown() {
       return "";
     },
   });
-  // MathJax 未完成渲染时直接使用源码；已有渲染节点时由对应规则处理。
+  // 始终从 MathJax 源码读取一次公式，避免不同输出模式重复提取。
   OJBetter.common.turndownService.addRule("math-source", {
     filter: function (node, options) {
       return (
@@ -9077,9 +9181,6 @@ async function initHTML2MarkDown() {
       );
     },
     replacement: function (content, node) {
-      const previousElement = node.previousElementSibling;
-      if (previousElement?.matches(".MathJax, .MathJax_Display")) return "";
-
       const latex = String(node.textContent || "")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
@@ -9089,38 +9190,29 @@ async function initHTML2MarkDown() {
     },
   });
 
-  // inline math
-  OJBetter.common.turndownService.addRule("inline-math", {
-    filter: function (node, options) {
-      if (node.tagName.toLowerCase() !== "span") return false;
-      return node.className && /\bMathJax(_\w+)?\b/.test(node.className);
+  // MathJax 2 将展示节点放在 source script 前，只丢弃仍有源码的展示副本。
+  const mathRenderedSelector =
+    ".MathJax, .MathJax_Display, .MathJax_Preview, .MathJax_CHTML, " +
+    ".mjx-chtml, .MJXc-display, .MathJax_SVG, .MathJax_SVG_Display, .MJX_Assistive_MathML";
+  OJBetter.common.turndownService.addRule("math-rendered", {
+    filter: function (node) {
+      return node.matches(mathRenderedSelector);
     },
     replacement: function (content, node) {
-      var latex = $(node).next().text();
-      // 替换防止 < >
-      latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      return "$" + latex + "$";
+      let root = node;
+      while (root.parentElement?.matches(mathRenderedSelector)) {
+        root = root.parentElement;
+      }
+      let next = root.nextElementSibling;
+      while (next?.matches(mathRenderedSelector)) next = next.nextElementSibling;
+      if (next?.matches('script[type^="math/tex"]')) return "";
+      // 其他插件可能移除源码；此时保留可读内容，不能静默丢掉公式。
+      return content;
     },
   });
 
-  // block math
-  OJBetter.common.turndownService.addRule("block-math", {
-    filter: function (node, options) {
-      return (
-        node.tagName.toLowerCase() == "div" &&
-        node.classList.contains("MathJax_Display")
-      );
-    },
-    replacement: function (content, node) {
-      var latex = $(node).next().text();
-      // 替换防止 < >
-      latex = latex.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      return "\n$$\n" + latex + "\n$$\n";
-    },
-  });
-
-  // texFontStyle
-  OJBetter.common.turndownService.addRule("texFontStyle", {
+  // tex-font-style-*
+  OJBetter.common.turndownService.addRule("tex-bf", {
     filter: function (node) {
       return (
         node.nodeName === "SPAN" && node.classList.contains("tex-font-style-bf")
@@ -9130,9 +9222,61 @@ async function initHTML2MarkDown() {
       return "**" + content + "**";
     },
   });
+  OJBetter.common.turndownService.addRule("tex-it", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-it")
+      );
+    },
+    replacement: function (content) {
+      return "*" + content + "*";
+    },
+  });
+  OJBetter.common.turndownService.addRule("tex-sl", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-sl")
+      );
+    },
+    replacement: function (content) {
+      return "*" + content + "*";
+    },
+  });
+  OJBetter.common.turndownService.addRule("tex-tt", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-tt")
+      );
+    },
+    replacement: function (_content, node) {
+      return OJB_createMarkdownCodeSpan(node.textContent);
+    },
+  });
+  OJBetter.common.turndownService.addRule("tex-striked", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("tex-font-style-striked")
+      );
+    },
+    replacement: function (content) {
+      return "~~" + content + "~~";
+    },
+  });
 
-  // sectionTitle
-  OJBetter.common.turndownService.addRule("sectionTitle", {
+  // text-verb
+  OJBetter.common.turndownService.addRule("text-verb", {
+    filter: function (node) {
+      return (
+        node.nodeName === "SPAN" && node.classList.contains("text-verb")
+      );
+    },
+    replacement: function (_content, node) {
+      return OJB_createMarkdownCodeSpan(node.textContent);
+    },
+  });
+
+  // section-title
+  OJBetter.common.turndownService.addRule("section-title", {
     filter: function (node) {
       return (
         node.nodeName === "DIV" && node.classList.contains("section-title")
@@ -9228,6 +9372,16 @@ async function initHTML2MarkDown() {
       }
     },
   });
+
+  // 最后注册以优先于格式规则，避免隐藏文字因带有加粗、代码等类名被保留。
+  OJBetter.common.turndownService.addRule("text-hidden", {
+    filter: function (node) {
+      return node.classList.contains("text-hidden");
+    },
+    replacement: function () {
+      return "";
+    },
+  });
 }
 
 /**
@@ -9299,6 +9453,13 @@ class TaskQueue {
  * @returns {boolean} 是否为空文本
  */
 const isEmptyText = (text) => text.trim() === "";
+
+/**
+ * Codeforces 的异步题解尚未加载，不能将占位文字固定为翻译原文。
+ */
+function isPendingTutorialMarkdown(markdown) {
+  return /Tutorial\s+is\s+loading(?:\.{3}|…)/i.test(markdown);
+}
 
 /**
  * 加载按钮相关函数
@@ -9389,7 +9550,9 @@ async function initButtonFunc() {
       const newMarkdown = OJB_normalizeCodeforcesLatexDelimiters(
         OJBetter.common.turndownService.turndown(htmlContent)
       );
-      this.data("markdown", newMarkdown);
+      if (!isPendingTutorialMarkdown(newMarkdown)) {
+        this.data("markdown", newMarkdown);
+      }
       return newMarkdown;
     }
     return markdown;
@@ -10488,7 +10651,10 @@ function cacheTranslationMarkdown(element) {
   blocks.each((i, block) => {
     if (!containsLegacyLatex(block)) $(block).getMarkdown();
   });
-  $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
+  // 异步题解加载后会替换或新增段落；加载期间继续从当前 DOM 查找。
+  if (!isPendingTutorialMarkdown(markdown)) {
+    $(element).data(OJB_TRANSLATION_BLOCK_CACHE_KEY, blocks.get());
+  }
   return markdown;
 }
 
@@ -12144,7 +12310,7 @@ class TranslateDiv {
    */
   registerCopyButtonEvent(text) {
     this.copyButton.on("click", () => {
-      GM_setClipboard(text);
+      GM_setClipboard(OJB_unescapeHtml(text));
       this.copyButton.setButtonState(
         "success",
         i18next.t("copy.copied", { ns: "button" })
@@ -14196,6 +14362,16 @@ function CommentPagination() {
 
     if (end >= elements.length) $("#next-page-btn").hide();
     else $("#next-page-btn").show();
+
+    // 触发 MathJax 重新排版，避免因 display:none 导致的公式错位
+    let MathJax = unsafeWindow.MathJax;
+
+    if (MathJax) {
+      if (MathJax.Hub) {
+        // 使用 Rerender 重新计算当前可见区域的公式尺寸
+        MathJax.Hub.Queue(["Rerender", MathJax.Hub, $(".comments")[0]]);
+      }
+    }
   }
 
   // 初始化
@@ -15880,8 +16056,7 @@ function parseMonacoCompleter(rules, range) {
  * 创建monaco编辑器的一个实例
  */
 async function createMonacoEditor(language, form, support) {
-  // 判断monacoLoader是否加载完毕
-  await OJB_waitUntilTrue(() => OJBetter.monaco.loaderOnload);
+  if (!(await initMonacoEditor())) return;
 
   /**
    * 通用参数
@@ -16099,7 +16274,7 @@ async function createMonacoEditor(language, form, support) {
             <i class="iconfont">&#xe643;</i>
             <span class="popover_content">${i18next.t('moreSettings.title', { ns: 'codeEditor' })}</span>
         </div>`);
-        
+
     //在追加按钮前先检查是否已存在，如果存在则直接退出函数，防止所有按钮重复生成
     if (form.topRightDiv.find('.ojb_btn_settings').length > 0) {
         console.log('[OJB-Debug] 检测到设置按钮已存在，跳过重复初始化。');
@@ -16121,7 +16296,7 @@ async function createMonacoEditor(language, form, support) {
             </div>
         </dialog>`);
     OJB_addDraggable(moreSettingPopover);
-    
+
     //在向 body 追加新弹窗前，先移除可能残留的旧弹窗，防止 DOM 中出现重复的 ID
     $('#moreSettingPopover').remove();
     $('body').append(moreSettingPopover);
@@ -16147,8 +16322,8 @@ async function createMonacoEditor(language, form, support) {
       { ns: "codeEditor" }
     )}</div>
             </div>
-            <input type='number' id='fontSizeInput' class='no_default' 
-                require=true 
+            <input type='number' id='fontSizeInput' class='no_default'
+                require=true
                 placeholder="${i18next.t(
       "moreSettings.fontSizeInput.placeholder",
       { ns: "codeEditor" }
@@ -16218,17 +16393,17 @@ async function createMonacoEditor(language, form, support) {
           <label style='margin-bottom: 8px; font-weight: bold;'>
               <span>${i18next.t('moreSettings.langSetup.title', { ns: 'codeEditor' })}</span>
           </label>
-          
+
           <!-- 已置顶语言列表 -->
           <div id='pinnedLangList' style='width: 100%; margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px;'></div>
-          
+
           <!-- 搜索与添加区 -->
           <div style='width: 100%; display: flex; gap: 5px; align-items: center; position: relative;'>
-              <input type="text" id="addPinnedSearch" list="ojb_lang_datalist" 
-                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor' })}" 
+              <input type="text" id="addPinnedSearch" list="ojb_lang_datalist"
+                  placeholder="${i18next.t('moreSettings.langSetup.searchPlaceholder', { ns: 'codeEditor' })}"
                   style="flex: 1; max-width: calc(100% - 40px); box-sizing: border-box;" autocomplete="off">
               <datalist id="ojb_lang_datalist"></datalist>
-              <button id='addPinnedBtn' class='ojb_btn' type='button' style='padding: 2px 8px; min-width: 30px;' 
+              <button id='addPinnedBtn' class='ojb_btn' type='button' style='padding: 2px 8px; min-width: 30px;'
                   title="${i18next.t('moreSettings.langSetup.addBtnTitle', { ns: 'codeEditor' })}">
                   <span style="font-weight:bold;">+</span>
               </button>
@@ -16241,7 +16416,7 @@ async function createMonacoEditor(language, form, support) {
     const searchInput = langSettingDiv.find('#addPinnedSearch');
     const dataList = langSettingDiv.find('#ojb_lang_datalist');
     const addBtn = langSettingDiv.find('#addPinnedBtn');
-    let localOriginalOptions = []; 
+    let localOriginalOptions = [];
 
     /**
      * 重新渲染设置面板中的已置顶语言列表和待选推荐 datalist
@@ -16259,7 +16434,7 @@ async function createMonacoEditor(language, form, support) {
                 const opt = localOriginalOptions.find(o => String(o.value) === String(val));
                 const text = opt ? opt.text : val;
                 const isDefault = (defaultLang === val) ? 'checked' : '';
-                
+
                 // 采用声明式构建，确保语言名称中的特殊符号（如 > 符号）不会破坏 DOM 结构
                 const itemNode = $('<div>').css({
                     display: 'flex',
@@ -16269,7 +16444,7 @@ async function createMonacoEditor(language, form, support) {
                     padding: '4px 8px',
                     'border-radius': '4px'
                 });
-                
+
                 const label = $('<label>').css({
                     display: 'flex',
                     'align-items': 'center',
@@ -16279,7 +16454,7 @@ async function createMonacoEditor(language, form, support) {
                     flex: '1',
                     overflow: 'hidden'
                 }).attr('title', i18next.t('moreSettings.langSetup.setDefaultTitle', { ns: 'codeEditor' }));
-                
+
                 const radio = $('<input>', {
                     type: 'radio',
                     name: 'ojb_default_lang',
@@ -16287,16 +16462,16 @@ async function createMonacoEditor(language, form, support) {
                     value: val
                 });
                 if (isDefault) radio.prop('checked', true);
-                
+
                 const span = $('<span>').css({
                     'white-space': 'nowrap',
                     overflow: 'hidden',
                     'text-overflow': 'ellipsis',
                     'font-size': '13px'
                 }).text(text).attr('title', text); // 纯文本安全赋值
-                
+
                 label.append(radio, span);
-                
+
                 const removeBtn = $('<i>', {
                     class: 'iconfont remove-pinned-btn',
                     'data-val': val,
@@ -16307,7 +16482,7 @@ async function createMonacoEditor(language, form, support) {
                     'font-size': '14px',
                     'margin-left': '8px'
                 }).html('&#xe614;');
-                
+
                 itemNode.append(label, removeBtn);
                 listContainer.append(itemNode);
             });
@@ -16319,7 +16494,7 @@ async function createMonacoEditor(language, form, support) {
         unpinned.forEach(opt => {
             dataList.append(`<option value="${opt.text}"></option>`);
         });
-        
+
         searchInput.val('');
     };
 
@@ -16327,7 +16502,7 @@ async function createMonacoEditor(language, form, support) {
     moreSetting.on('click', () => {
         let options = [];
         const rawSelect = $('select[name="programTypeId"]').not('#OJBetter_SubmitForm select').first();
-        
+
         if (rawSelect.length > 0 && rawSelect[0].options) {
             const opts = rawSelect[0].options;
             for (let i = 0; i < opts.length; i++) {
@@ -16341,7 +16516,7 @@ async function createMonacoEditor(language, form, support) {
         }
 
         localOriginalOptions = options.length > 0 ? options : (window.OJB_originalOptions || []);
-        
+
         if (localOriginalOptions.length > 0) {
             renderLangSettingsUI();
             searchInput.prop('disabled', false);
@@ -16357,12 +16532,12 @@ async function createMonacoEditor(language, form, support) {
     addBtn.on('click', () => {
         const rawSearchText = searchInput.val().trim();
         if (!rawSearchText) return;
-        
+
         const searchText = rawSearchText.toLowerCase();
         let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
-        
+
         // 模糊匹配搜索文本
-        const unpinnedOptions = localOriginalOptions.filter(o => !pinnedLangs.includes(String(o.value))); 
+        const unpinnedOptions = localOriginalOptions.filter(o => !pinnedLangs.includes(String(o.value)));
         const matchedOption = unpinnedOptions.find(o => o.text.toLowerCase().includes(searchText));
 
         if (!matchedOption) {
@@ -16372,15 +16547,15 @@ async function createMonacoEditor(language, form, support) {
         }
 
         const val = String(matchedOption.value);
-        
+
         if (!pinnedLangs.includes(val)) {
             pinnedLangs.push(val);
             GM_setValue('pinnedLanguages', pinnedLangs);
             // 如果是第一个添加的置顶语言，默认设为首选语言
             if (pinnedLangs.length === 1) GM_setValue('defaultLanguage', val);
-            
+
             renderLangSettingsUI();
-            
+
             // 派发自定义原生事件，通知页面左侧主界面重绘
             document.dispatchEvent(new CustomEvent('OJB_TriggerRebuild'));
         }
@@ -16396,18 +16571,18 @@ async function createMonacoEditor(language, form, support) {
 
     // 移除常用语言置顶项
     listContainer.on('click', '.remove-pinned-btn', function() {
-        const val = String($(this).attr('data-val')); 
-        
+        const val = String($(this).attr('data-val'));
+
         let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
         pinnedLangs = pinnedLangs.filter(v => String(v) !== val);
         GM_setValue('pinnedLanguages', pinnedLangs);
-        
+
         // 如果移除的正好是当前的默认语言，重置默认语言为剩余常用语言的第一个
         if (String(OJB_getGMValue('defaultLanguage', '')) === val) {
             GM_setValue('defaultLanguage', pinnedLangs.length > 0 ? pinnedLangs[0] : '');
         }
         renderLangSettingsUI();
-        
+
         // 同步派发重绘事件更新主页面视图
         document.dispatchEvent(new CustomEvent('OJB_TriggerRebuild'));
     });
@@ -19624,8 +19799,11 @@ async function addProblemPageCodeEditor() {
             })}`,
             "error"
         );
-        return; 
+        return;
     }
+
+    // Monaco加载失败时保留Codeforces原生编辑器。
+    if (!(await initMonacoEditor())) return;
 
     // 获取提交页链接与计算绝对地址 (CF 专属)
     const href = window.location.href;
@@ -19655,19 +19833,19 @@ async function addProblemPageCodeEditor() {
     // 【功能模块】：语言快捷标签(Tabs) 与 隐藏式下拉框重构
     // =========================================================
 
-    selectLang.addClass('ojb-language-select'); 
-    
+    selectLang.addClass('ojb-language-select');
+
     // 提取原始选项
     const originalOptions = [];
     if (selectLang.length > 0 && selectLang[0].options) {
         for (let i = 0; i < selectLang[0].options.length; i++) {
-            originalOptions.push({ 
+            originalOptions.push({
                 value: String(selectLang[0].options[i].value),
-                text: selectLang[0].options[i].text 
+                text: selectLang[0].options[i].text
             });
         }
     }
-    
+
     // 备份至全局窗口
     window.OJB_originalOptions = originalOptions;
     selectLang.css({ 'min-width': '300px', 'width': 'auto' });
@@ -19715,7 +19893,7 @@ async function addProblemPageCodeEditor() {
             selectLang.empty();
             let pinnedHtml = '';
             let unpinnedHtml = '';
-            
+
             optionsToUse.forEach(opt => {
                 if (pinnedLangs.includes(opt.value)) {
                     pinnedHtml += `<option value="${opt.value}">${opt.text}</option>`;
@@ -19744,7 +19922,7 @@ async function addProblemPageCodeEditor() {
             let realVal = selectLang.val();
             if (realVal !== currentVal) {
                 currentVal = realVal;
-                selectLang.trigger('change'); 
+                selectLang.trigger('change');
             }
 
             quickTabsContainer.empty();
@@ -19752,19 +19930,19 @@ async function addProblemPageCodeEditor() {
                 const opt = optionsToUse.find(o => o.value === val);
                 if (opt) {
                     const isActive = currentVal === val;
-                    let shortName = opt.text.split(' (')[0].split(' ')[0]; 
+                    let shortName = opt.text.split(' (')[0].split(' ')[0];
                     if(opt.text.toLowerCase().includes('python')) shortName = 'Py';
                     if(opt.text.toLowerCase().includes('c++')) shortName = 'C++';
-                    
+
                     const btn = $('<button>', {
                         type: 'button',
                         class: `ojb-quick-tab ${isActive ? 'active' : ''}`,
                         'data-val': val
                     });
-                    
-                    btn.text(shortName); 
-                    btn.attr('title', opt.text); 
-                    
+
+                    btn.text(shortName);
+                    btn.attr('title', opt.text);
+
                     btn.css({
                         padding: '2px 8px',
                         border: '1px solid var(--border-color, #ccc)',
@@ -19776,7 +19954,7 @@ async function addProblemPageCodeEditor() {
                         color: isActive ? '#fff' : 'inherit',
                         transition: 'all 0.2s'
                     });
-                    
+
                     quickTabsContainer.append(btn);
                 }
             });
@@ -19792,16 +19970,16 @@ async function addProblemPageCodeEditor() {
     // 监听下拉框改变
     selectLang.on('change', () => {
         const currentVal = selectLang.val();
-        
+
         if (currentVal === 'ojb_show_all') {
             isShowAllLangs = true;
             let prevActiveVal = quickTabsContainer.find('.ojb-quick-tab.active').attr('data-val');
             let pinnedLangs = OJB_getGMValue('pinnedLanguages', []).map(v => String(v));
             if (!prevActiveVal) prevActiveVal = pinnedLangs.length > 0 ? String(pinnedLangs[0]) : '';
-            
-            selectLang.val(String(prevActiveVal)); 
-            rebuildSelectLang();           
-            return; 
+
+            selectLang.val(String(prevActiveVal));
+            rebuildSelectLang();
+            return;
         }
 
         quickTabsContainer.find('.ojb-quick-tab').each(function() {
@@ -19811,15 +19989,15 @@ async function addProblemPageCodeEditor() {
                 $(this).css({ 'background': 'transparent', 'color': 'inherit' }).removeClass('active');
             }
         });
-        
-        changeMonacoLanguage(form); 
+
+        changeMonacoLanguage(form);
     });
 
     rebuildSelectLang();
-    
+
     // 监听原生自定义重绘事件
     document.addEventListener('OJB_TriggerRebuild', () => {
-        isShowAllLangs = false; 
+        isShowAllLangs = false;
         rebuildSelectLang();
     });
 
@@ -19828,15 +20006,15 @@ async function addProblemPageCodeEditor() {
 
     // 恢复默认语言选择，如果没设置过则 fallback 至 CF 历史语言选择
     let defaultLang = String(OJB_getGMValue('defaultLanguage', ''));
-    let initLang = (defaultLang && selectLang.find(`option[value="${defaultLang}"]`).length > 0) 
-        ? defaultLang 
+    let initLang = (defaultLang && selectLang.find(`option[value="${defaultLang}"]`).length > 0)
+        ? defaultLang
         : OJBetter.monaco.compilerSelection;
-    
+
     selectLang.val(initLang).trigger('change');
 
     // 样例测试 (CF 专属)
     runButton.on('click', (event) => runCode(event, runButton, form.sourceDiv, form.submitDiv)).setHoverRedo();
-    
+
     // 提交 (CF 专属)
     submitButton.on('click', async function (event) {
         event.preventDefault();
@@ -19935,62 +20113,73 @@ function convertLinksHTMLToMarkdown(html) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_deepl(raw) {
-  const id = (Math.floor(Math.random() * 99999) + 100000) * 1000;
-  const data = {
-    jsonrpc: "2.0",
-    method: "LMT_handle_texts",
-    id,
-    params: {
-      splitting: "newlines",
-      lang: {
-        source_lang_user_selected: "auto",
-        target_lang: getTargetLanguage("deepl"),
-      },
-      texts: [
-        {
-          text: raw,
-          requestAlternatives: 3,
-        },
-      ],
-      timestamp: getTimeStamp(raw.split("i").length - 1),
-    },
-  };
-  let postData = JSON.stringify(data);
-  if ((id + 5) % 29 === 0 || (id + 3) % 13 === 0) {
-    postData = postData.replace('"method":"', '"method" : "');
-  } else {
-    postData = postData.replace('"method":"', '"method": "');
-  }
-  const options = {
-    method: "POST",
-    url: "https://www2.deepl.com/jsonrpc",
-    data: postData,
-    headers: {
-      "Content-Type": "application/json",
-      Host: "www2.deepl.com",
-      Origin: "https://www.deepl.com",
-      Referer: "https://www.deepl.com/",
-    },
-    anonymous: true,
-    nocache: true,
-  };
-
-  return await BaseTranslate(
-    options,
-    (res) => JSON.parse(res)?.result?.texts?.[0]?.text || res,
-    (res) => {
-      const resObj = {
-        status: true,
-        message: "ok",
-      };
-      if (res.includes('"message":"Too many requests"')) {
-        resObj.status = false;
-        resObj.message = i18next.t("error.deepl429", { ns: "translator" }); // Too many requests 提示
-        return resObj;
-      }
-      return resObj;
+  // oneshot 匿名请求按 UTF-16 计数，上限为 1500；分段时保留占位符和代理对。
+  const limit = 1500;
+  const tokens = [...raw.matchAll(/(?:【\s*\d+\s*】|\\?\[\s*\d+\s*\\?\]|\{\s*\d+\s*\})/g)];
+  const chunks = [];
+  for (let start = 0; start < raw.length;) {
+    let end = Math.min(start + limit, raw.length);
+    if (end < raw.length) {
+      const window = raw.slice(start, end);
+      const boundary = Math.max(window.lastIndexOf("\n"), window.lastIndexOf(" "));
+      if (boundary >= limit / 2) end = start + boundary + 1;
+      const token = tokens.find(token => token.index < end && token.index + token[0].length > end);
+      if (token && token.index > start) end = token.index;
+      if (/[\uD800-\uDBFF]/.test(raw[end - 1]) && /[\uDC00-\uDFFF]/.test(raw[end])) end--;
     }
-  );
+    chunks.push(raw.slice(start, end));
+    start = end;
+  }
+
+  const language = getTargetLanguage("deepl");
+  const targetLang = { ZH: "zh-Hans", EN: "en-US", PT: "pt-BR" }[language] || language;
+  let text = "";
+  let result = { done: true, checkPassed: { status: true, message: "ok" }, text: raw };
+  // 顺序发送，避免长段落产生并发请求；任何一段失败都不返回部分成功结果。
+  for (const chunk of chunks) {
+    const [, leading, content, trailing] = chunk.match(/^(\s*)([\s\S]*?)(\s*)$/);
+    if (!content) {
+      text += chunk;
+      continue;
+    }
+    let responseError = "";
+    result = await BaseTranslate(
+      {
+        method: "POST",
+        url: "https://oneshot-free.www.deepl.com/v1/translate",
+        data: JSON.stringify({ text: [content], target_lang: targetLang }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "None",
+        },
+        anonymous: true,
+        nocache: true,
+        timeout: 30000,
+      },
+      (res) => {
+        if (responseError) return "";
+        const data = JSON.parse(res);
+        const translations = data?.translations;
+        if (!Array.isArray(translations) || translations.length !== 1 ||
+            typeof translations[0]?.text !== "string" || !translations[0].text.trim()) {
+          throw new Error("DeepL returned an invalid translation response.");
+        }
+        return translations[0].text;
+      },
+      () => ({ status: !responseError, message: responseError || "ok" }),
+      (response) => {
+        responseError = response.status >= 200 && response.status < 300
+          ? ""
+          : response.status === 429
+            ? i18next.t("error.deepl429", { ns: "translator" })
+            : `DeepL request failed: HTTP ${response.status}`;
+        return response.responseText;
+      }
+    );
+    if (!result.done) return { ...result, text: "" };
+    text += leading + result.text + trailing;
+  }
+  return { ...result, text };
 }
 
 /**
@@ -20339,18 +20528,35 @@ async function translate_youdao_web(raw) {
  * @returns {Promise<TransRawData>} 翻译结果对象
  */
 async function translate_gg(raw) {
-  const params = `tl=${getTargetLanguage("google")}&q=${encodeURIComponent(
-    raw
-  )}`;
-  const options = {
-    method: "GET",
-    url: `https://translate.google.com/m?${params}`,
-  };
+  const params = new URLSearchParams({
+    client: "gtx",
+    sl: "auto",
+    tl: getTargetLanguage("google"),
+    dt: "t",
+    q: raw,
+  });
   return await BaseTranslate(
-    options,
-    (res) =>
-      $(res).filter(".result-container").text() ||
-      $(res).find(".result-container").text()
+    { method: "GET", url: `https://translate.googleapis.com/translate_a/single?${params}` },
+    (res) => {
+      const data = JSON.parse(res);
+      const segments = Array.isArray(data) ? data[0] : null;
+      if (!Array.isArray(segments) || segments.length === 0 ||
+          segments.some(segment => !Array.isArray(segment) || typeof segment[0] !== "string")) {
+        throw new Error("Google Translate returned an invalid translation response.");
+      }
+      const text = segments.map(segment => segment[0]).join("");
+      if (!text.trim()) {
+        throw new Error("Google Translate returned no translation.");
+      }
+      return text;
+    },
+    undefined,
+    (response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(`Google Translate request failed: HTTP ${response.status}`);
+      }
+      return response.responseText;
+    }
   );
 }
 
@@ -20952,7 +21158,7 @@ ${raw}
 }
 
 /**
- * ChatGPT
+ * AI 翻译（OpenAI）
  * @param {string} raw 原文
  * @param {TranslationSource} translationSource 本次任务的翻译源上下文
  * @returns {Promise<TransRawData>} 翻译结果对象
@@ -20985,7 +21191,7 @@ async function translate_openai(raw, translationSource) {
 }
 
 /**
- * ChatGPT 流式传输
+ * AI 翻译（OpenAI） 流式传输
  * @param {string} raw 原文
  * @param {TranslateDiv} translateDiv 翻译结果面板
  * @param {TranslationSource} translationSource 本次任务的翻译源上下文
@@ -21494,7 +21700,7 @@ async function initializeSequentially(loadingMessage) {
   if (OJBetter.translation.auto.enabled) {
     await initTransWhenViewable(); // 自动翻译
   }
-  if (OJBetter.basic.standingsRecolor && OJBetter.typeOfPage.is_cfStandings) {
+  if (OJBetter.basic.standingsRecolor && (OJBetter.typeOfPage.is_cfStandings || OJBetter.typeOfPage.is_cfRoom)) {
     await recolorStandings(); // cf赛制榜单重新着色
   }
   if (OJBetter.preference.showLoading) {
