@@ -9600,7 +9600,7 @@ async function addConversionButton() {
         if (editorial.length > 0) {
             const id = "_editorial_1_" + OJB_getRandomNumber(8);
             const panel = addButtonPanel(editorial, id, "this_level");
-            if (editorial.hasClass('row')) panel.panel.addClass('col-sm-12');
+            if (panel.panel.parent().hasClass('row')) panel.panel.addClass('col-sm-12');
             promises.push(addButtonWithHTML2MD(panel.viewButton, editorial, id, "this_level"));
             promises.push(addButtonWithCopy(panel.copyButton, editorial, id, "this_level"));
             promises.push(addButtonWithTranslation(panel.translateButton, editorial, "this_level"));
