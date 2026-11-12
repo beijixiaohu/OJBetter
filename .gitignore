@@ -5,6 +5,10 @@ OJBetter_Bridge/jdt-language-server
 OJBetter_Bridge/python_workspace/*.py
 OJBetter_Bridge/pylsp_jsonrpc
 OJBetter_Bridge/server_gui.exe
+OJBetter_Bridge/workspaces/
+OJBetter_Bridge/__pycache__/
+OJBetter_Bridge/tests/__pycache__/
+dist/
 tools
 !tools/
 tools/*
@@ -38,3 +42,5 @@ tools/unit/test/replaceOriginal/*
 !tools/unit/test/deepl/index.node.js
 !tools/unit/test/atcoderTranslation/
 !tools/unit/test/atcoderTranslation/index.node.js
+!tools/unit/test/bridgeSecurity/
+!tools/unit/test/bridgeSecurity/index.node.js

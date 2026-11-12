@@ -1,11 +1,8 @@
 import asyncio
 import os
-import subprocess
 import threading
 import yaml
-from tornado import ioloop, process, web, websocket, httpserver
-from pylsp_jsonrpc import streams
-import ujson as json
+from tornado import ioloop, httpserver
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtCore import pyqtSignal, QMutex, QMutexLocker
@@ -18,58 +15,8 @@ from qfluentwidgets import InfoBar, FluentIcon, InfoBarPosition
 import shutil
 import sys
 from PyQt5.QtGui import QFont
-from path_utils import resolve_path_within
-
-class ProcessManager:
-    """
-    A class that manages all subprocesses created by the program and provides a method to stop them all.
-    """
-    def __init__(self):
-        self.processes = {}
-
-    def create_process(self, name, command):
-        """
-        Create a subprocess with the given command and add it to the collection.
-        """
-        process = subprocess.Popen(command, shell=True)
-        self.processes[name] = process
-
-    def load_thread(self, name, thread):
-        """
-        Load a thread into an existing process.
-        """
-        process = self.processes.get(name)
-        if process:
-            thread.start()
-            process_threads = self.processes.get(name + "_threads")
-            if process_threads:
-                process_threads.append(thread)
-            else:
-                self.processes[name + "_threads"] = [thread]
-        else:
-            raise ValueError("Process not found.")
-        
-    def kill_process(self, name, update_log):
-        """
-        Stop the subprocess with the given name.
-        """
-        process = self.processes.get(name)
-        if process:
-            process.kill()
-            update_log("warn", f"Process {name} killed.")
-            del self.processes[name]
-
-
-class JsonRpcStreamLogWriter(streams.JsonRpcStreamWriter):
-    """
-    A class that formats json messages with the correct LSP headers.
-    """
-    def write(self, ip, message):
-        """
-        Write the message to the stream.
-        """
-        return super().write(message)
-
+from bridge_handlers import create_application
+from bridge_security import require_loopback_host
 
 class Config:
     """
@@ -181,326 +128,100 @@ class StartupRun():
             StartupRun.set_startup_run()
 
 
-class HomeRequestHandler(web.RequestHandler):
-    """
-    A class that handles the home request.
-    """
-    update_log = None
-
-    def initialize(self, update_log) -> None:
-        self.update_log = update_log
-        pass
-
-    def get(self):
-        """
-        Handle the GET request.
-        """
-        self.update_log("success", "HomeRequestHandler GET")
-        self.write("""
-        <h1>Welcome to CFBetter_MonacoLSPBridge</h1>
-        """)
-
-
-class MyCompletJsonHandler(websocket.WebSocketHandler):
-    """
-    A class that handles the mycomplet json in the mycomplt file.
-    """
-    rootUri = None
-    update_log_from_thread = None
-    
-
-    def initialize(self, rootUri, update_log_from_thread) -> None:
-        """
-        Initialize the class with the given root URI.
-        """
-        self.rootUri = rootUri
-        self.update_log_from_thread = update_log_from_thread
-
-    def get(self, *args):
-        completfile = args[0]
-        self.update_log_from_thread("success", f"MyCompletJsonHandler GET {completfile}")
-        try:
-            file_path = resolve_path_within(
-                os.path.join(self.rootUri, 'mycomplet'), completfile)
-        except (TypeError, ValueError) as exc:
-            raise web.HTTPError(400, reason="Invalid completion file path") from exc
-        with open(file_path, 'r') as f:
-            self.write(f.read())
-
-
-class FileServerWebSocketHandler(websocket.WebSocketHandler):
-    """
-    A class that handles the file server web socket.
-    """
-    rootUri = None
-    createdFiles = {} # the files that are created by the client
-    nowconnection = None # the connection that is now being used
-    update_log_from_thread = None
-    connections = None
-    
-
-    def initialize(self, rootUri, update_log_from_thread, connections) -> None:
-        """
-        Initialize the class with the given root URI.
-        """
-        self.rootUri = rootUri
-        self.update_log_from_thread = update_log_from_thread
-        self.connections = connections
-
-    def open(self, *args, **kwargs):
-        """
-        Handle the open event.
-        """
-        self.connections.append(self)
-        self.nowconnection = self
-        self.update_log_from_thread("success", "A new connection about FileServer has been created")
-
-    def on_message(self, message):
-        """
-        Handle the message event.
-        """
-        message = json.loads(message)
-        if message.get('type') == 'update':
-            filename = message['filename']
-            file_extension = message['fileExtension']
-            code = message['code']
-            workspace = message['workspace']
-            try:
-                file_path = resolve_path_within(
-                    self.rootUri, workspace, filename + file_extension)
-            except (TypeError, ValueError):
-                self.write_message(json.dumps({
-                    'result': 'error',
-                    'description': 'invalid file path'
-                }))
-                return
-            self.createdFiles[self.nowconnection] = file_path
-            self.update_log_from_thread("info", f"File {file_path} has been updated or created.")  
-            with open(file_path, 'w') as f:
-                f.write(code)
-            self.write_message(json.dumps({'result': 'ok'}))
-        else:
-            self.write_message(json.dumps({'result': 'error', 'description': 'no such type'}))
-
-    def on_close(self):
-        """
-        Handle the close event.
-        """
-        self.connections.remove(self)
-        self.update_log_from_thread("warn", "A connection about FileServer has been closed")
-        
-        # delete the file that is created by the client
-        self.update_log_from_thread("warn", "Removing the file that is created by the client...")
-        for connection in self.createdFiles:
-            if connection == self:
-                file_path = self.createdFiles[connection]
-                os.remove(file_path)
-                self.update_log_from_thread("info", f"File {file_path} has been removed.")
-                del self.createdFiles[connection]
-                break
-        self.update_log_from_thread("success", "The file that is created by the client has been removed.")
-
-    def check_origin(self, origin):
-        """
-        Check the origin of the request.
-        """
-        self.set_header("Access-Control-Allow-Origin", "*")
-        return True
-
-
-
-class LanguageServerWebSocketHandler(websocket.WebSocketHandler):
-    """
-    A class that handles the language server web socket.
-    """
-    writer = None
-    lang = None
-    commands = None
-    uri = None
-    proc = None
-    language = None
-    update_log_from_thread = None
-    connections = None
-    
-    def initialize(self, commands, update_log_from_thread, connections) -> None:
-        """
-        Initialize the class with the given commands.
-        """
-        self.commands = commands
-        self.update_log_from_thread = update_log_from_thread
-        self.connections = connections
-
-    def open(self, *args, **kwargs):
-        """
-        Handle the open event.
-        """
-        self.connections.append(self)
-        self.update_log_from_thread("success", "A new connection about LanguageServer has been created")
-
-        self.language = args[0]
-        if args[0] not in self.commands:
-            self.close(1001, "language {} is not supported".format((args[0])))
-            return
-
-        self.lang = args[0]
-        self.proc = process.Subprocess(
-            self.commands[self.lang], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
-
-        self.writer = JsonRpcStreamLogWriter(self.proc.stdin)
-
-        # create a process to manage the std thread
-        processManger.create_process("stdConsumeProcess", "")
-
-        # start a thread to consume the stdout of the language server
-        def consume_stdout():
-            """
-            Consume the stdout of the language server.
-            """
-            self.update_log_from_thread("success", "The stdout of the language server associated with this connection is opened.")
-            ioloop.IOLoop()
-            reader = streams.JsonRpcStreamReader(self.proc.stdout)
-            reader.listen(lambda msg: self.write_message(json.dumps(msg)))
-
-            self.update_log_from_thread("warn", "The stdout of the language server associated with this connection is closed.")
-
-        thread1 = threading.Thread(target=consume_stdout)
-        thread1.daemon = True
-        processManger.load_thread("stdConsumeProcess", thread1)
-        
-
-        # start a thread to consume the stderr of the language server
-        def consume_stderr():
-            """
-            Consume the stderr of the language server.
-            """
-            self.update_log_from_thread("success", "The stderr of the language server associated with this connection is opened.")
-            for line in iter(self.proc.stderr.readline, b''):
-                self.update_log_from_thread("info", line.decode('utf-8'))
-
-            self.update_log_from_thread("warn", "The stderr of the language server associated with this connection is closed.")
-
-        thread2 = threading.Thread(target=consume_stderr)
-        thread2.daemon = True
-        processManger.load_thread("stdConsumeProcess", thread2)
-        
-
-    def on_message(self, message):
-        """
-        Handle the message event.
-        """
-        message = json.loads(message)
-        self.writer.write("", message)
-
-    def on_close(self):
-        """
-        Handle the close event.
-        """
-        self.connections.remove(self)
-        self.update_log_from_thread("warn", "A connection about LanguageServer has been closed")
-        self.proc.proc.terminate() # terminate the process
-
-    def check_origin(self, origin):
-        """
-        Check the origin of the request.
-        """
-        self.set_header("Access-Control-Allow-Origin", "*")
-        return True
-
-
-class WebServer():
-    """
-    A class that handles the web server.
-    """
-    webserver = None
-    connections = []
-    update_log_from_thread = None
-    update_log = None
-    createInfoBar_from_thread = None
+class WebServer:
+    """Serialize server lifecycle operations on one background IOLoop."""
 
     def __init__(self, update_log, update_log_from_thread, createInfoBar_from_thread):
-        self.update_log = update_log
         self.update_log_from_thread = update_log_from_thread
         self.createInfoBar_from_thread = createInfoBar_from_thread
+        self.connections = []
+        self.webserver = None
+        self.server_loop = None
+        self.server_thread = None
+        self._pending = False
+
+    def _listen(self):
+        server = None
+        try:
+            require_loopback_host(config.host)
+            CommandChecker(self.update_log_from_thread).check_command()
+            app = create_application(
+                rootUri, config.commands, self.connections,
+                self.update_log_from_thread)
+            server = httpserver.HTTPServer(app)
+            server.listen(config.port, config.host)
+            self.webserver = server
+        except (ValueError, OSError) as exc:
+            if server is not None:
+                server.stop()
+            self.update_log_from_thread("error", f"Cannot start bridge: {exc}")
+            self.createInfoBar_from_thread('error', 'Cannot start bridge', str(exc))
+        else:
+            self.update_log_from_thread(
+                "info", "Userscript Bridge path: " + os.path.join(rootUri, "workspaces"))
+            self.update_log_from_thread("success", f"Listening on {config.host}:{config.port}")
+            self.createInfoBar_from_thread('success', 'Server started', 'Enjoy coding! !>_<')
+        finally:
+            self._pending = False
 
     def start_server(self):
-        """
-        Start the server.
-        """
-        
-        if self.webserver is not None:
-            self.createInfoBar_from_thread('error', 'Server already started', f"Please stop the server first.")
+        if self._pending or self.webserver is not None:
+            self.createInfoBar_from_thread(
+                'error', 'Server already started', 'Please wait or stop the server first.')
             return
-        
-        # check the commands
-        commandChecker = CommandChecker(self.update_log_from_thread)
-        commandChecker.check_command()
+        self._pending = True
+        if self.server_loop is not None:
+            self.server_loop.add_callback(self._listen)
+            return
 
-        # start the web server
-        self.update_log("info", "Starting server...")
-        def start_web():
+        def run():
             asyncio.set_event_loop(asyncio.new_event_loop())
-            webapp = web.Application([
-                    (r"/", HomeRequestHandler, dict(update_log = self.update_log)),
-                    (r"/mycomplet/(.*)", MyCompletJsonHandler,
-                     dict(rootUri=rootUri, update_log_from_thread = self.update_log_from_thread)),
-                    (r"/file", FileServerWebSocketHandler,
-                    dict(rootUri=rootUri, update_log_from_thread = self.update_log_from_thread, connections = self.connections)),
-                    (r"/(.*)", LanguageServerWebSocketHandler,
-                    dict(commands=config.commands, update_log_from_thread = self.update_log_from_thread, connections = self.connections))
-                ])
-
-            self.webserver = httpserver.HTTPServer(webapp)
-            # if this port is used, asked to change the port
+            self.server_loop = ioloop.IOLoop.current()
+            self.server_loop.add_callback(self._listen)
             try:
-                self.webserver.listen(config.port, config.host)
-            except OSError:
-                self.webserver = None
-                self.update_log_from_thread("error", f"Port {config.port} already in use")
-                self.createInfoBar_from_thread('error', 'Port already in use', f"Please change the port.")
-                return
-            
-            self.update_log_from_thread("success", f"Listening on {config.host}:{config.port}")
+                self.server_loop.start()
+            finally:
+                self.server_loop.close(all_fds=True)
 
-            # success!
-            self.createInfoBar_from_thread('success', 'Server started', f"Enjoy coding! !>_<")
+        self.server_thread = threading.Thread(target=run, daemon=True)
+        self.server_thread.start()
 
-            # run until the stop event is set
-            ioloop.IOLoop.current().start()
-
-
-        processManger.create_process("webProcess", "")
-        thread = threading.Thread(target=start_web)
-        thread.daemon = True
-        processManger.load_thread("webProcess", thread)
-        
+    def _shutdown(self):
+        self.webserver.stop()
+        self.webserver = None
+        for connection in list(self.connections):
+            connection.close()
 
     def stop_server(self):
-        """
-        Stop the server and all related threads.
-        """
-        self.update_log("warn", "Stopping server...")
-        if self.webserver is not None:
-            self.webserver.stop()
-            self.webserver = None
-            for connection in self.connections:
-                connection.close()
-            self.update_log("warn", "Server stopped")
-            self.createInfoBar_from_thread('warn', 'Server stopped', f"now the server is stopped.")
-        else:
-            self.createInfoBar_from_thread('error', 'Server not started', f"Please start the server first.")
+        if self._pending or self.webserver is None:
+            self.createInfoBar_from_thread(
+                'error', 'Server not ready', 'Please wait or start the server first.')
+            return
+        self._pending = True
 
+        def stop():
+            try:
+                self._shutdown()
+                self.update_log_from_thread("warn", "Server stopped")
+                self.createInfoBar_from_thread('warn', 'Server stopped', 'Server stopped.')
+            finally:
+                self._pending = False
+
+        self.server_loop.add_callback(stop)
 
     def restart_server(self):
-        """
-        Restart the server.
-        """
-        if self.webserver is not None:
-            self.stop_server()
-            self.start_server()
-            self.update_log("success", "Server restarted")
-        else:
-            self.createInfoBar_from_thread('error', 'Server not started', f"Please start the server first.")
-        
+        if self._pending or self.webserver is None:
+            self.createInfoBar_from_thread(
+                'error', 'Server not ready', 'Please wait or start the server first.')
+            return
+        self._pending = True
+
+        def restart():
+            self._shutdown()
+            self._listen()
+
+        self.server_loop.add_callback(restart)
+
 
 class MainWindow(QMainWindow):
     """
@@ -753,7 +474,6 @@ if __name__ == "__main__":
     app.setWindowIcon(QIcon(os.path.join(rootUri, "src", "icon.svg")))
     config = Config()
     config.load()
-    processManger = ProcessManager()
     main_window = MainWindow()
     # if is startup run then hide the window
     if "/background" in sys.argv:

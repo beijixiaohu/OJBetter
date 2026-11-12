@@ -1252,7 +1252,7 @@ async function initVar() {
   );
   OJBetter.monaco.lsp.workUri = OJB_getGMValue(
     "OJBetter_Bridge_WorkUri",
-    "C:/OJBetter_Bridge"
+    "C:/OJBetter_Bridge/workspaces"
   );
   OJBetter.monaco.lsp.socketUrl = OJB_getGMValue(
     "OJBetter_Bridge_SocketUrl",
@@ -16053,10 +16053,125 @@ function parseMonacoCompleter(rules, range) {
 }
 
 /**
+ * 为本地 Bridge 创建连接，并限制目标为本机回环地址。
+ * @param {string} baseUrl Bridge 地址
+ * @param {string} endpoint 语言或 file
+ * @returns {WebSocket} 已发起握手的连接
+ */
+function OJB_createBridgeSocket(baseUrl, endpoint) {
+    const url = new URL(baseUrl);
+    if (!["ws:", "wss:"].includes(url.protocol) ||
+        !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) ||
+        url.username || url.password || url.search || url.hash || url.pathname !== "/") {
+        throw new Error("Bridge 地址必须是本机回环地址，例如 ws://127.0.0.1:2323/。");
+    }
+    if (!["cpp", "python", "java", "file"].includes(endpoint)) {
+        throw new Error("Unsupported Bridge endpoint.");
+    }
+    url.pathname = "/" + endpoint;
+    return new WebSocket(url.href);
+}
+
+/** 校验 Bridge 返回的协议能力与绝对工作路径。 */
+function OJB_validateBridgeInfo(info) {
+    if (!info || info.type !== "info" || info.bridge !== "OJBetter_Bridge" ||
+        info.protocolVersion !== 1 || typeof info.version !== "string" ||
+        !/^\d+\.\d+\.\d+$/.test(info.version) ||
+        !Array.isArray(info.capabilities) || !info.capabilities.includes("workspace-info") ||
+        !Array.isArray(info.languages) ||
+        info.languages.some(language => !["cpp", "python", "java"].includes(language)) ||
+        typeof info.workspaceRoot !== "string") {
+        throw new Error("无法识别 Bridge 版本，请更新 Bridge 后重试。");
+    }
+    const path = info.workspaceRoot.replace(/\\/g, "/").replace(/\/+$/, "");
+    if (!/^(?:[A-Za-z]:\/|\/)/.test(path) || /[\u0000-\u001f\u007f]/.test(path) ||
+        path.split("/").some(part => part === "." || part === "..") ||
+        !path.endsWith("/workspaces")) {
+        throw new Error("Bridge 返回的工作路径无效，原设置未修改。");
+    }
+    return { ...info, workspaceRoot: path };
+}
+
+/** 只查询信息；超时或无法识别的响应不视为旧版，也不写入文件。 */
+function OJB_detectBridge(baseUrl, timeoutMs = 2500) {
+    return new Promise((resolve, reject) => {
+        let socket;
+        let opened = false;
+        let finished = false;
+        const finish = (error, info) => {
+            if (finished) return;
+            finished = true;
+            clearTimeout(timer);
+            if (socket) {
+                socket.onopen = socket.onmessage = socket.onerror = socket.onclose = null;
+                socket.close();
+            }
+            if (error) reject(error);
+            else resolve(info);
+        };
+        const unavailable = () => new Error(opened
+            ? "Bridge 版本检测失败，原设置未修改，请更新或重启 Bridge。"
+            : "无法连接 Bridge，请确认已启动且地址正确；原设置未修改。");
+        const timer = setTimeout(() => finish(unavailable()), timeoutMs);
+        try {
+            socket = OJB_createBridgeSocket(baseUrl, "file");
+            socket.onopen = () => {
+                opened = true;
+                socket.send(JSON.stringify({ type: "info" }));
+            };
+            socket.onmessage = event => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data && data.result === "error" && data.description === "no such type") {
+                        finish(new Error("检测到旧版 Bridge，请升级 Bridge 并重启；普通编辑器仍可使用。"));
+                        return;
+                    }
+                    finish(null, OJB_validateBridgeInfo(data));
+                } catch (error) {
+                    finish(new Error("无法识别 Bridge 响应，原设置未修改，请更新 Bridge。"));
+                }
+            };
+            socket.onerror = socket.onclose = () => finish(unavailable());
+        } catch (error) {
+            finish(error);
+        }
+    });
+}
+
+/** 新版 Bridge 提供实际目录；保存前备份已有设置，重复连接不重复迁移。 */
+function OJB_migrateBridgeWorkspace(info) {
+    const path = OJB_validateBridgeInfo(info).workspaceRoot;
+    const previous = GM_getValue("OJBetter_Bridge_WorkUri");
+    if (previous !== path) {
+        if (previous !== undefined &&
+            GM_getValue("OJBetter_Bridge_WorkUri_Backup") === undefined) {
+            GM_setValue("OJBetter_Bridge_WorkUri_Backup", previous);
+        }
+        GM_setValue("OJBetter_Bridge_WorkUri", path);
+    }
+    return path;
+}
+
+/**
  * 创建monaco编辑器的一个实例
  */
 async function createMonacoEditor(language, form, support) {
   if (!(await initMonacoEditor())) return;
+
+  let bridgeInfo;
+  let bridgeDetectionError;
+  if (support && OJBetter.monaco.lsp.enabled) {
+      try {
+          bridgeInfo = await OJB_detectBridge(OJBetter.monaco.lsp.socketUrl);
+          if (!bridgeInfo.languages.includes(language)) {
+              throw new Error("Bridge 未配置当前语言的服务器，请检查 Bridge 配置。");
+          }
+          OJBetter.monaco.lsp.workUri = OJB_migrateBridgeWorkspace(bridgeInfo);
+          $("#OJBetter_Bridge_WorkUri").val(OJBetter.monaco.lsp.workUri);
+      } catch (error) {
+          bridgeDetectionError = error;
+      }
+  }
 
   /**
    * 通用参数
@@ -16988,8 +17103,14 @@ async function createMonacoEditor(language, form, support) {
   /**
    * languageSocket
    */
+  if (bridgeDetectionError) {
+      lspStateButton.setButtonState("error", bridgeDetectionError.message);
+      pushLSPLogMessage("error", bridgeDetectionError.message);
+      return;
+  }
+  pushLSPLogMessage("info", "Bridge " + bridgeInfo.version + " · " + bridgeInfo.workspaceRoot);
   var url = OJBetter.monaco.lsp.socketUrl;
-  var languageSocket = new WebSocket(url + language);
+  var languageSocket = OJB_createBridgeSocket(url, language);
   OJBetter.monaco.lsp.socket.push(languageSocket);
   var languageSocketState = false;
   var responseHandlers = new Map(); // 映射表，需要等待返回数据的请求 -> 对应的事件触发函数
@@ -17122,7 +17243,7 @@ async function createMonacoEditor(language, form, support) {
   /**
    * 代码文件更新fileWebSocket
    */
-  var fileWebSocket = new WebSocket(url + "file");
+  var fileWebSocket = OJB_createBridgeSocket(url, "file");
   var fileWebSocketState = false;
   OJBetter.monaco.lsp.socket.push(fileWebSocket);
   fileWebSocket.onopen = () => {
@@ -17374,8 +17495,8 @@ async function createMonacoEditor(language, form, support) {
         trace: "off",
         workspaceFolders: [
           {
-            uri: "file:///" + OJBetter.monaco.lsp.workUri + workspace,
-            name: "file:///" + OJBetter.monaco.lsp.workUri + workspace,
+            uri: monaco.Uri.file(rootUri).toString(),
+            name: monaco.Uri.file(rootUri).toString(),
           },
         ],
       },

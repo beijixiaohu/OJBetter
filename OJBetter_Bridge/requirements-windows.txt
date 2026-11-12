@@ -1,0 +1,6 @@
+-r requirements.txt
+PyQt5==5.15.11
+PyQt-Fluent-Widgets==1.11.3
+pyinstaller==6.22.3
+pywinauto==0.6.9
+Pillow==13.0.0

@@ -310,12 +310,12 @@
             },
             "OJBetter_Bridge_WorkUri": {
                 "label": "工作路径:",
-                "helpText": "<p>你需要填写 OJBetter_Bridge 所在的路径</p><p>使用正斜杠或反斜杠均可</p><p>默认路径：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge</p></div>",
+                "helpText": "<p>新版 Bridge 连接成功后会自动填写实际工作路径，并备份原设置，无需手动迁移</p><p>手动配置时填写安装目录下 workspaces 的路径</p><p>使用正斜杠或反斜杠均可</p><p>默认路径：</p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>C:/OJBetter_Bridge/workspaces</p></div>",
                 "placeholder": "请输入路径，注意分隔符为为/"
             },
             "OJBetter_Bridge_SocketUrl": {
                 "label": "Server:",
-                "helpText": "<p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p><p>默认的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>注意，你通常不需要更改这里，如需更改，请与默认URL格式一致</p>",
+                "helpText": "<p>你需要填写你本机中 OJBetter_Bridge 的 Server URL</p><p>默认的URL: </p><div style=\"border: 1px solid #795548; padding: 10px;\"><p>ws://127.0.0.1:2323/</p></div><p>只允许本机回环地址；请与 Bridge 的监听地址和端口保持一致</p>",
                 "placeholder": "请输入路径，注意严格按照格式填写"
             }
         },
