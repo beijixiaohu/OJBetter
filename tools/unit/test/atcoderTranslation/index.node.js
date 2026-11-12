@@ -270,30 +270,36 @@ test('retains normal editorial targeting and ignores unrelated navigation-free p
     assert.equal(other.context.getAtCoderEditorialContent().length, 0);
 });
 
-test('print editorial receives all three existing conversion actions', async t => {
-    const h = await harness(t, {
-        url: 'https://atcoder.jp/contests/abc481/editorial/27922/print',
-        html: '<div id="main-container"><div class="row"><div class="col-sm-12"><h2>Title</h2><hr><div id="body"><p>Explanation</p><pre><code>int secret_source;</code></pre></div></div></div></div>'
+for (const isPrint of [false, true]) {
+    test(`${isPrint ? 'print' : 'normal'} editorial keeps conversion actions in the correct grid container (#471)`, async t => {
+        const h = await harness(t, {
+            url: `https://atcoder.jp/contests/abc483/editorial/28634${isPrint ? '/print' : ''}`,
+            html: `<div id="main-container"><div class="row">${isPrint ? '' : '<div id="contest-nav-tabs" class="col-sm-12"></div>'}<div id="editorial" class="col-sm-12"><h2>Title</h2><hr><div id="body"><p>Explanation</p><pre><code>int secret_source;</code></pre></div></div></div></div>`
+        });
+        h.OJBetter.typeOfPage.is_problem = false;
+        vm.runInContext(section('function getTranslationButtonDefaultText()', 'class TranslateDiv {'), h.context);
+        await h.context.addConversionButton();
+        const target = h.context.getAtCoderEditorialContent();
+        const panel = target.prev('.html2md-panel');
+        assert.equal(target.attr('id'), isPrint ? 'body' : 'editorial');
+        assert.equal(panel.parent().hasClass('row'), !isPrint);
+        assert.equal(panel.hasClass('col-sm-12'), !isPrint);
+        assert.equal(panel.find('button').length, 3);
+        assert.equal(h.$('button[type=submit]').length, 0);
+        h.$('[id^=html2md-cb]').trigger('click');
+        assert.match(h.clipboard(), /Explanation/);
+        assert.match(h.clipboard(), /int secret_source;/);
+        h.$('[id^=html2md-view]').trigger('click');
+        assert.equal(target.attr('viewmd'), 'true');
+        h.$('[id^=html2md-view]').trigger('click');
+        assert.equal(target.attr('viewmd'), 'false');
+        await h.$('.translateButton').data('translatedItBy')();
+        assert.equal(h.requests.length, 1);
+        assert.doesNotMatch(JSON.stringify(h.requests), /secret_source/);
+        assert.equal(h.$('.translate-problem-statement p').first().text(), '说明');
+        assert.equal(h.$('.translate-problem-statement pre code').text(), 'int secret_source;\n');
     });
-    h.OJBetter.typeOfPage.is_problem = false;
-    vm.runInContext(section('function getTranslationButtonDefaultText()', 'class TranslateDiv {'), h.context);
-    await h.context.addConversionButton();
-    assert.equal(h.context.getAtCoderEditorialContent().attr('id'), 'body');
-    assert.equal(h.$('#body').prev('.html2md-panel').find('button').length, 3);
-    assert.equal(h.$('button[type=submit]').length, 0);
-    h.$('[id^=html2md-cb]').trigger('click');
-    assert.match(h.clipboard(), /Explanation/);
-    assert.match(h.clipboard(), /int secret_source;/);
-    h.$('[id^=html2md-view]').trigger('click');
-    assert.equal(h.$('#body').attr('viewmd'), 'true');
-    h.$('[id^=html2md-view]').trigger('click');
-    assert.equal(h.$('#body').attr('viewmd'), 'false');
-    await h.$('.translateButton').data('translatedItBy')();
-    assert.equal(h.requests.length, 1);
-    assert.doesNotMatch(JSON.stringify(h.requests), /secret_source/);
-    assert.equal(h.$('.translate-problem-statement p').first().text(), '说明');
-    assert.equal(h.$('.translate-problem-statement pre code').text(), 'int secret_source;\n');
-});
+}
 
 test('localizes the editorial print link (#465)', async t => {
     const h = await harness(t, {
